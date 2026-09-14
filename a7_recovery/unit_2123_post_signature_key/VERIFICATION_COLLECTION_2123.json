@@ -1,0 +1,209 @@
+{
+ "scope": "The two source-key rechecks, CALLED and collected through the existing owners. No signer, no lock publication, no grader call.",
+ "rows": [
+  {
+   "name": "collect2123_a",
+   "tag": "core_collect2123_a",
+   "exit": 0,
+   "stdout_sha256": "cc42a2c9e5d09cb248ab0606896479abbf28c73c2a8594a780c226d0d7e740b4",
+   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "name": "evid2123_e",
+   "tag": "core_evid2123_e",
+   "exit": 0,
+   "stdout_sha256": "1527be3fd5ea4e4f3dfab8adfcb826c61b7bb426e6008da3b31ce636266aec6c",
+   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+ ],
+ "calls": [
+  {
+   "label": "0000898173-26-000006",
+   "run_id": "wf_084b6ebc-b70",
+   "agent_id": "afc3282938bfb89df",
+   "declared": [
+    "opus",
+    "high",
+    "lean-probe"
+   ],
+   "observed_runtime_model_ids": [
+    "claude-opus-5"
+   ],
+   "tool_calls": 0,
+   "status": "completed",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "state_sha256": "743bd4e647c9c15d66267d38aac6ccf64a9a9ab40a93e0b431b1f0adbb506f9c",
+   "transcript_sha256": "46d2d4c212e610edd01aa4c6e1e15d04c06fed303c117624442a37fa56dd4d05",
+   "prompt_sha256": "c9008c82550214e4907176b3f1b9174fb714506ddaf152f3eba2361eb588d632"
+  },
+  {
+   "label": "0001104659-26-017090",
+   "run_id": "wf_1fe45543-565",
+   "agent_id": "a6ebf582b56a25dbc",
+   "declared": [
+    "opus",
+    "high",
+    "lean-probe"
+   ],
+   "observed_runtime_model_ids": [
+    "claude-opus-5"
+   ],
+   "tool_calls": 0,
+   "status": "completed",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "state_sha256": "ebacc3ab858adf2983544fa3797cb219e7a2a13d7cacf2e14641581ca8eb320e",
+   "transcript_sha256": "85efd09b2cf6e8784e2f4b39d4b7d1e703acf9cc15d18d040d6907c078a5d902",
+   "prompt_sha256": "c718049bc6480b5430766fb07121c605712e5edd52a9cffed7871d07bcccb191"
+  }
+ ],
+ "packet": {
+  "run_dir": "a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet",
+  "receipt_sha256_before": "ef16bf579e354ef9758b6f6b4465d7cf90e3aae6da39ced9015ae6cfb8ca2537",
+  "receipt_sha256_after": "472a4b7f6905bf68084ff253fb3de3870afed446fd78288633052ebcd634a80d",
+  "finalization_sha256": "c8e2bd22d380ed138997d0d3df1d7842cfdffda078b6f888989370f94399f87e",
+  "paid_raw": {
+   "0000898173-26-000006.attempt1.proved.json": "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7",
+   "0001104659-26-017090.attempt1.proved.json": "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa",
+   "wf_084b6ebc-b70.raw.json": "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7",
+   "wf_1fe45543-565.raw.json": "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa"
+  },
+  "outcomes": [
+   [
+    "0000898173-26-000006",
+    "valid",
+    ""
+   ],
+   [
+    "0001104659-26-017090",
+    "valid",
+    ""
+   ]
+  ],
+  "ledger": {
+   "scheduled": 2,
+   "valid": 2,
+   "invalid_response": 0,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "missing": 0
+  },
+  "retry": [],
+  "phase_complete": true,
+  "problems": []
+ },
+ "accounting": {
+  "before": 668,
+  "scheduled": 2,
+  "valid": 2,
+  "invalid_response": 0,
+  "retries_used": 0,
+  "after": 670,
+  "ceiling_for_this_task": 672
+ },
+ "key": {
+  "sources": 33,
+  "changed": [
+   "0000898173-26-000006",
+   "0001104659-26-017090"
+  ],
+  "origins_changed": [
+   "0000898173-26-000006",
+   "0001104659-26-017090"
+  ],
+  "other_sources_unchanged": true,
+  "other_origins_unchanged": true,
+  "open_issues": 0,
+  "gate_ok": true,
+  "gate_stops": [],
+  "counts": {
+   "abstentions": 44,
+   "accepted_facts": 163,
+   "controls": 34,
+   "distinct_rows_per_tag": {
+    "ambiguous_menus": 35,
+    "corrections_and_amendments": 7,
+    "expectation_routing": 18,
+    "favourable_unfavourable_direction": 16,
+    "losses_and_sign": 27,
+    "measurement_wording": 60,
+    "point_range_floor_ceiling": 136,
+    "portion_versus_whole": 38,
+    "sequential_comparison": 41,
+    "slices_and_unknown_axes": 67
+   },
+   "du_worthy_facts": 163,
+   "duplicate_gold_facts": 0,
+   "events_accounted": 33,
+   "exclusions": 10,
+   "open_issues": 0,
+   "phase1_ambiguities": 0,
+   "record_kind_conflicts": 11,
+   "rows_accounted": 191,
+   "sequential_rows": 41,
+   "tag_floor": 5,
+   "tags_below_floor": []
+  }
+ },
+ "decisions": {
+  "0000898173-26-000006": {
+   "event_index": 9,
+   "origin": [
+    "a4_final_v5_correction",
+    "a4_final_v6_correction"
+   ],
+   "raw_sha256": [
+    "3c23be441a171ece9cc217c1e812252ef346a2d79c6ab8fe3fb76f0a5e705fdd",
+    "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7"
+   ],
+   "outcomes_unchanged": true,
+   "rows_that_moved": [],
+   "parsed_blocks_that_differ": [
+    "rows",
+    "review",
+    "lead_reconciliation"
+   ],
+   "prose_fields_that_moved": [
+    "abstentions.reason",
+    "polarity_proof.evidence",
+    "review.ambiguity_note",
+    "lead_reconciliation.why"
+   ],
+   "measured_values_that_moved": []
+  },
+  "0001104659-26-017090": {
+   "event_index": 20,
+   "origin": [
+    "a4_final_v5_correction",
+    "a4_final_v6_correction"
+   ],
+   "raw_sha256": [
+    "cead92e11f8c597f5a1cdef38ed20310d2ccd66c411dd6eb4b75c16561a5aedf",
+    "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa"
+   ],
+   "outcomes_unchanged": true,
+   "rows_that_moved": [],
+   "parsed_blocks_that_differ": [
+    "rows",
+    "review",
+    "lead_reconciliation"
+   ],
+   "prose_fields_that_moved": [
+    "abstentions.reason",
+    "polarity_proof.evidence",
+    "review.ambiguity_note",
+    "lead_reconciliation.why"
+   ],
+   "measured_values_that_moved": []
+  }
+ },
+ "artifacts": {
+  "collection": "a7_recovery/unit_2123_post_signature_key/core_collect2123_a/COLLECTION_2123.json",
+  "collection_sha256": "39a0c98db1ea5a59416e13ea3da628ae1fe206336aaab1821ab8c629b697a057",
+  "evidence": "a7_recovery/unit_2123_post_signature_key/core_evid2123_e/RECHECK_EVIDENCE_2123.json",
+  "evidence_sha256": "4d76c480ed5d0972e98973b1d363a48c71dd7167d241a9beb09e5a46a1a58387",
+  "collector_sha256": "97dcdafd5bf656273f857ba807eeea9661e7404345e43f6bb996b08492a9c5c6",
+  "evidence_caller_sha256": "df7609b5488d874b98474ba6c091392e31c0422ff54dd487058829c8ab45652e",
+  "owner_sha256": "2210a3eed623de9c3a53ebde529eb34d3e79643510977b50ef635c4807ba715a"
+ },
+ "model_calls_here": 2
+}

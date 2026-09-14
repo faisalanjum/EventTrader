@@ -4,7 +4,24 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision166: two-source preparation VERIFIED;
+Current checkpoint,work-order Revision168: owner confirmation received and
+both exact subscription calls completed, with all12 original rows and no
+retry. Receipt472a4b7f, existing finalization2 valid/0 invalid/0 missing.
+Own native proofd8052182 is VERIFIED: both actual results, all8 identity reuse
+negatives, all33 key sources and31 unchanged others; raw exit0/stdout61786eb1.
+Source meaning and the actual key/grading consequences remain under review.
+Reuse both completed answers. Codex2124 assigns Core only the two precise
+source/rule questions; it is the only in-flight task. The full checklist is
+SOURCE_RECHECK_COLLECTION_REVIEW_2124.md; native preservation copies are exact.
+
+Previous checkpoint,work-order Revision167: verified source-recheck preparation
+and raw proof pushed asad3861e1, tree069755a1; fresh remote matches. Actual
+source calls have NOT started: live Core is at its direct Workflow-confirmation
+prompt from22:55:22 Eastern. No approval was forged or route changed. The one
+Codex2123 collection task remains active; actual source decisions, any new key,
+corrective grading/final score and END-only offline local setup remain OPEN.
+
+Previous checkpoint,work-order Revision166: two-source preparation VERIFIED;
 Core is authorized to collect only the two independent source reviews, with
 one invalid-only retry each. Detailed five-item checklist, exact raw proof
 and limitations: POST_SIGNATURE_REVIEW_2123.md. Own14-check preparation,

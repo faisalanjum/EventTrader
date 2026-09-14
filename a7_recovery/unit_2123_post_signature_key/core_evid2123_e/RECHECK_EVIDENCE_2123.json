@@ -1,0 +1,623 @@
+{
+ "caller_sha256": "df7609b5488d874b98474ba6c091392e31c0422ff54dd487058829c8ab45652e",
+ "decisions": {
+  "0000898173-26-000006": {
+   "event_index": 9,
+   "lead_fields_that_moved": [
+    {
+     "after": "\"It reaches the same substance as mine on rows 1, 3 and 5, but it routes 'our expectations' to consensus when the possessive names the company's own expectation, it stores an increased state plus a prior-year comparison on row 4 using a figure that sits outside that row's located quote, it reuses geography:us for a domestic population this event shows includes Puerto Rico, and on row 6 it settles the adjacent completed split instead of the served presentation-adjustment target.\"",
+     "at": "sokc-008/b1",
+     "before": "\"It matches my settlements on rows 1, 3 and 5 in substance, but it routes 'our expectations' to consensus when the possessive names the company's own expectation, it stores an increased state plus a prior-year comparison on row 4 using a figure that sits outside that row's located quote, it reuses geography:us for a domestic population that the event shows includes Puerto Rico, and on row 6 it settles the adjacent completed split instead of the served presentation-adjustment target.\"",
+     "field": "why"
+    },
+    {
+     "after": "\"It reaches the same substance as mine on rows 1, 4 and 5, but it likewise maps 'our expectations' to consensus rather than the company's own expectation, reuses geography:us for the domestic store count, and on row 6 both settles the adjacent split rather than the served target and stores the 15-for-1 ratio as a numeric 'x' level that the 'for-1' phrasing does not safely support.\"",
+     "at": "sokc-008/b2",
+     "before": "\"It matches me on rows 1, 4 and 5 in substance, but it likewise maps 'our expectations' to consensus rather than the company's own expectation, reuses geography:us for the domestic store count, and on row 6 both settles the adjacent split rather than the served target and stores the 15-for-1 ratio as a numeric 'x' level that the 'for-1' phrasing does not safely support.\"",
+     "field": "why"
+    }
+   ],
+   "open_issues": [
+    0,
+    0
+   ],
+   "origin": [
+    "a4_final_v5_correction",
+    "a4_final_v6_correction"
+   ],
+   "parse_problems": [
+    [],
+    []
+   ],
+   "parsed_blocks_that_differ": [
+    "rows",
+    "review",
+    "lead_reconciliation"
+   ],
+   "raw_changed": true,
+   "raw_sha256": [
+    "3c23be441a171ece9cc217c1e812252ef346a2d79c6ab8fe3fb76f0a5e705fdd",
+    "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7"
+   ],
+   "review_fields_that_moved": [
+    {
+     "after": "\"'our expectations' is the company's own possessive expectation rather than the Street, so own-target phrasing fixes previous_guidance even though this event publishes no numeric SG&A guide to point at.\"",
+     "at": [
+      2,
+      1
+     ],
+     "before": "\"'our expectations' is unmistakably the company's own expectation rather than the Street, so the own-target mapping fixes previous_guidance even though this event publishes no numeric SG&A guide to point at.\"",
+     "field": "ambiguity_note"
+    },
+    {
+     "after": "\"'Domestic' is plainly geographic, but the event's own arithmetic (6,447 + 112 Mexico + 26 Canada = 6,585 stores across 48 U.S. states, Puerto Rico, Mexico and Canada) shows the domestic population includes Puerto Rico, so it is not demonstrably the same meaning as the menu value geography:us and I coined the off-menu part rather than near-snapping.\"",
+     "at": [
+      3,
+      0
+     ],
+     "before": "\"'Domestic' is plainly geographic but the event's own arithmetic (6,447 + 112 Mexico + 26 Canada = 6,585 across 48 U.S. states and Puerto Rico) shows it includes Puerto Rico, so it is not demonstrably the menu value geography:us and I coined the off-menu part instead of reusing.\"",
+     "field": "ambiguity_note"
+    },
+    {
+     "after": "\"The located quote stops immediately after the 2025 figure, so the prior-year total that would support a direction and a comparison is not lawfully available inside this row's evidence and the state stays reported.\"",
+     "at": [
+      4,
+      0
+     ],
+     "before": "\"The located quote stops immediately after the 2025 figure, so the prior-year total that would support a direction and a comparison is not lawfully available and the state stays reported.\"",
+     "field": "ambiguity_note"
+    }
+   ],
+   "rows_after": [
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "earnings_per_share",
+       "driver_state": "increased",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#050",
+     "row_index": 1
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "sga_expenses",
+       "driver_state": "unknown",
+       "fact_type": "metric"
+      },
+      {
+       "driver_name": "sga_expenses_surprise",
+       "driver_state": "missed",
+       "fact_type": "surprise"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#051",
+     "row_index": 2
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "store_count",
+       "driver_state": "reported",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#052",
+     "row_index": 3
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "shareholders_equity",
+       "driver_state": "reported",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#053",
+     "row_index": 4
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "control",
+     "row": "0000898173-26-000006#054",
+     "row_index": 5
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "exclusion",
+     "row": "0000898173-26-000006#055",
+     "row_index": 6
+    }
+   ],
+   "rows_asked": [
+    "0000898173-26-000006#050",
+    "0000898173-26-000006#051",
+    "0000898173-26-000006#052",
+    "0000898173-26-000006#053",
+    "0000898173-26-000006#054",
+    "0000898173-26-000006#055"
+   ],
+   "rows_before": [
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "earnings_per_share",
+       "driver_state": "increased",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#050",
+     "row_index": 1
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "sga_expenses",
+       "driver_state": "unknown",
+       "fact_type": "metric"
+      },
+      {
+       "driver_name": "sga_expenses_surprise",
+       "driver_state": "missed",
+       "fact_type": "surprise"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#051",
+     "row_index": 2
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "store_count",
+       "driver_state": "reported",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#052",
+     "row_index": 3
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "shareholders_equity",
+       "driver_state": "reported",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0000898173-26-000006#053",
+     "row_index": 4
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "control",
+     "row": "0000898173-26-000006#054",
+     "row_index": 5
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "exclusion",
+     "row": "0000898173-26-000006#055",
+     "row_index": 6
+    }
+   ],
+   "rows_that_moved": [],
+   "same_decision": true,
+   "settled_fields_that_moved": [
+    {
+     "facts_after": 2,
+     "facts_before": 2,
+     "item_fields_that_moved": [
+      {
+       "after": "{\"basis\":\"source_framing\",\"evidence\":\"The source itself attributes the overage to 'pressure from heightened inflation in team member health care and casualty claim costs' and calls them 'cost pressures' it is working to mitigate, framing the higher-than-expected expense as adverse; an expense line has a mainstream counter-story, so the source's own framing carries the polarity rather than metric meaning.\",\"polarity\":\"unfavorable\",\"sentence\":\"SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs.\"}",
+       "before": "{\"basis\":\"source_framing\",\"evidence\":\"The source itself attributes the overage to 'pressure from heightened inflation in team member health care and casualty claim costs', framing the higher-than-expected expense as an adverse cost outcome; an expense line has a mainstream counter-story, so the source's own framing, not metric meaning, carries the polarity.\",\"polarity\":\"unfavorable\",\"sentence\":\"SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs.\"}",
+       "fact_index": 1,
+       "field": "polarity_proof"
+      }
+     ],
+     "row": "0000898173-26-000006#051",
+     "row_index": 2
+    },
+    {
+     "abstentions": [
+      "[{\"occurrence_in_part\":null,\"part_ref\":\"exhibit_99_1\",\"quote\":\"The Company claims the protection of the safe-harbor for forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995.\",\"reason\":\"The target is a statutory safe-harbor claim for forward-looking statements under the Private Securities Litigation Reform Act of 1995 \\u2014 generic legal boilerplate that states no driver level, change, expectation comparison, outlook, or discrete action, so the gate returns no fact.\"}]",
+      "[{\"occurrence_in_part\":null,\"part_ref\":\"exhibit_99_1\",\"quote\":\"The Company claims the protection of the safe-harbor for forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995.\",\"reason\":\"The target is a statutory safe-harbor claim for forward-looking statements under the Private Securities Litigation Reform Act of 1995 - generic legal boilerplate that states no driver level, change, expectation comparison, outlook, or discrete action, so the gate returns no fact.\"}]"
+     ],
+     "facts_after": 0,
+     "facts_before": 0,
+     "item_fields_that_moved": [],
+     "row": "0000898173-26-000006#054",
+     "row_index": 5
+    },
+    {
+     "abstentions": [
+      "[{\"occurrence_in_part\":null,\"part_ref\":\"exhibit_99_1\",\"quote\":\"The Company completed a 15-for-1 forward stock split on June 10, 2025, and accordingly all share and per share data in current and comparable periods have been adjusted to reflect the split.\",\"reason\":\"The served target is 'all share and per share data in current and comparable periods have been adjusted to reflect the split' \\u2014 a retroactive presentation restatement of how share data is displayed, which is an accounting-presentation construct rather than a driver's state, change, surprise, guidance, or action; the completed 15-for-1 split named in the same sentence is an adjacent claim this row does not select, so this target yields no fact.\"}]",
+      "[{\"occurrence_in_part\":null,\"part_ref\":\"exhibit_99_1\",\"quote\":\"The Company completed a 15-for-1 forward stock split on June 10, 2025, and accordingly all share and per share data in current and comparable periods have been adjusted to reflect the split.\",\"reason\":\"The named target is 'all share and per share data in current and comparable periods have been adjusted to reflect the split' - a retroactive restatement of how share data is PRESENTED, which is an accounting/presentation construct and a measurement qualifier on share-based metrics, not a driver's state, change, surprise, guidance, or action; the completed 15-for-1 forward split named earlier in the same sentence is a different claim that this row's target does not select, so this target yields no fact.\"}]"
+     ],
+     "facts_after": 0,
+     "facts_before": 0,
+     "item_fields_that_moved": [],
+     "row": "0000898173-26-000006#055",
+     "row_index": 6
+    }
+   ]
+  },
+  "0001104659-26-017090": {
+   "event_index": 20,
+   "lead_fields_that_moved": [
+    {
+     "after": "\"It matches my rows 1, 2, 5 and 6 in substance, but its row 3 emits a grounded surprise with no home sibling in the same event, and its row 4 omits the prior-year baseline the located line states explicitly.\"",
+     "at": "sokc-019/b1",
+     "before": "\"It matches my rows 1, 2, 5 and 6 in substance, but its row 3 emits a grounded surprise with no home sibling in the same event, and its row 4 omits the source-stated prior-year baseline on both comparable-sales facts.\"",
+     "field": "why"
+    },
+    {
+     "after": "\"It matches my rows 1, 2, 3, 5 and 6 in substance, but its row 4 omits the source-stated 'vs. prior year' comparison baseline that the rules permit and the located line supports.\"",
+     "at": "sokc-019/b2",
+     "before": "\"It matches my rows 1, 2, 3, 5 and 6 in substance, but its row 4 omits the prior-year baseline that the located line states explicitly ('vs. prior year'), which the rules permit and the source supports.\"",
+     "field": "why"
+    }
+   ],
+   "open_issues": [
+    0,
+    0
+   ],
+   "origin": [
+    "a4_final_v5_correction",
+    "a4_final_v6_correction"
+   ],
+   "parse_problems": [
+    [],
+    []
+   ],
+   "parsed_blocks_that_differ": [
+    "rows",
+    "review",
+    "lead_reconciliation"
+   ],
+   "raw_changed": true,
+   "raw_sha256": [
+    "cead92e11f8c597f5a1cdef38ed20310d2ccd66c411dd6eb4b75c16561a5aedf",
+    "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa"
+   ],
+   "review_fields_that_moved": [
+    {
+     "after": "\"The sentence carries two measurement flavours - the contiguous qualifier 'adjusted' and the separate 'Excluding the after-tax impact of these and certain other items' clause - and I kept only the contiguous qualifier token.\"",
+     "at": [
+      1,
+      0
+     ],
+     "before": "\"The sentence carries two measurement flavours - the contiguous qualifier 'adjusted' and the separate 'Excluding the after-tax impact of these and certain other items' clause - and I kept only the contiguous qualifier token 'adjusted'.\"",
+     "field": "ambiguity_note"
+    },
+    {
+     "after": "\"This row's own quote states no revenue value, so the required home sibling is numberless and carries driver_state unknown to match its numberless surprise twin.\"",
+     "at": [
+      3,
+      0
+     ],
+     "before": "\"The home sibling is numberless because this row's own quote states no revenue value, so it carries driver_state unknown to match its numberless surprise twin.\"",
+     "field": "ambiguity_note"
+    },
+    {
+     "after": "\"The four columns are unlabelled inside the quote; read against the table header I take the two current-period columns as the reported quarter and reported year and left the two year-ago comparative columns unemitted as restatements of the periods this line is measured against.\"",
+     "at": [
+      4,
+      0
+     ],
+     "before": "\"The line's four columns are unlabelled inside the quote; I read the two current-period columns as the reported quarter and the reported full year and left the two year-ago comparative columns unemitted because they restate the prior periods this line is measured against rather than adding a distinct current observation.\"",
+     "field": "ambiguity_note"
+    },
+    {
+     "after": "\"This is the annual column of the same line, kept as its own period rather than merged with the quarter, and on an annual period the growth basis pins to percent_yoy.\"",
+     "at": [
+      4,
+      1
+     ],
+     "before": "\"This is the annual column of the same line, kept as a separate period rather than merged with the quarter, and on an annual period the growth basis pins to percent_yoy.\"",
+     "field": "ambiguity_note"
+    },
+    {
+     "after": "\"'now expects' is update-flavoured framing but the source states no prior Flower Child opening guide and no raised/lowered/reaffirmed/withdrawn wording, so the movement stays unknown and is left to read-time derivation.\"",
+     "at": [
+      5,
+      0
+     ],
+     "before": "\"'now expects' is update-flavoured framing but the source states no prior Flower Child opening guide and no raised/lowered/reaffirmed/withdrawn wording, so the movement stays unknown and is left to the read-time mechanical derivation rather than being written as introduced.\"",
+     "field": "ambiguity_note"
+    }
+   ],
+   "rows_after": [
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "net_income",
+       "driver_state": "reported",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#112",
+     "row_index": 1
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "exclusion",
+     "row": "0001104659-26-017090#113",
+     "row_index": 2
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "revenue",
+       "driver_state": "unknown",
+       "fact_type": "metric"
+      },
+      {
+       "driver_name": "revenue_surprise",
+       "driver_state": "in_line",
+       "fact_type": "surprise"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#114",
+     "row_index": 3
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "comparable_restaurant_sales",
+       "driver_state": "decreased",
+       "fact_type": "metric"
+      },
+      {
+       "driver_name": "comparable_restaurant_sales",
+       "driver_state": "decreased",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#115",
+     "row_index": 4
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "fact_type": "guidance"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#116",
+     "row_index": 5
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "control",
+     "row": "0001104659-26-017090#117",
+     "row_index": 6
+    }
+   ],
+   "rows_asked": [
+    "0001104659-26-017090#112",
+    "0001104659-26-017090#113",
+    "0001104659-26-017090#114",
+    "0001104659-26-017090#115",
+    "0001104659-26-017090#116",
+    "0001104659-26-017090#117"
+   ],
+   "rows_before": [
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "net_income",
+       "driver_state": "reported",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#112",
+     "row_index": 1
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "exclusion",
+     "row": "0001104659-26-017090#113",
+     "row_index": 2
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "revenue",
+       "driver_state": "unknown",
+       "fact_type": "metric"
+      },
+      {
+       "driver_name": "revenue_surprise",
+       "driver_state": "in_line",
+       "fact_type": "surprise"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#114",
+     "row_index": 3
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "comparable_restaurant_sales",
+       "driver_state": "decreased",
+       "fact_type": "metric"
+      },
+      {
+       "driver_name": "comparable_restaurant_sales",
+       "driver_state": "decreased",
+       "fact_type": "metric"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#115",
+     "row_index": 4
+    },
+    {
+     "abstentions": 0,
+     "facts": [
+      {
+       "driver_name": "restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "fact_type": "guidance"
+      }
+     ],
+     "final_outcome": "fact",
+     "row": "0001104659-26-017090#116",
+     "row_index": 5
+    },
+    {
+     "abstentions": 1,
+     "facts": [],
+     "final_outcome": "control",
+     "row": "0001104659-26-017090#117",
+     "row_index": 6
+    }
+   ],
+   "rows_that_moved": [],
+   "same_decision": true,
+   "settled_fields_that_moved": [
+    {
+     "abstentions": [
+      "[{\"occurrence_in_part\":null,\"part_ref\":\"exhibit_99_1\",\"quote\":\"The Company recorded a pre-tax net expense of $24.6 million related to impairment of assets and lease termination expenses, Fox Restaurant Concepts (\\u201cFRC\\u201d) acquisition-related items, gift card breakage and gift card inventory adjustments.\",\"reason\":\"The $24.6 million is one NET pre-tax total fusing four independent causes named in the same sentence (impairment of assets and lease termination expenses, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); one name may carry only one cause and independent causes must be split, yet the quote states no per-cause amount and no single cause owns the netted figure, so the value cannot lawfully be attached to any driver and an aggregate catch-all name would be a bare accounting-category label.\"}]",
+      "[{\"occurrence_in_part\":null,\"part_ref\":\"exhibit_99_1\",\"quote\":\"The Company recorded a pre-tax net expense of $24.6 million related to impairment of assets and lease termination expenses, Fox Restaurant Concepts (\\u201cFRC\\u201d) acquisition-related items, gift card breakage and gift card inventory adjustments.\",\"reason\":\"The $24.6 million is a single NET pre-tax total fusing four independent causes named in the same sentence (impairment of assets and lease termination expenses, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); a name may carry only one cause and independent causes must be split, yet the quote states no per-cause amount and no one cause owns the netted figure, so the value cannot lawfully be attached to any driver and an aggregate catch-all would be a bare accounting-category label.\"}]"
+     ],
+     "facts_after": 0,
+     "facts_before": 0,
+     "item_fields_that_moved": [],
+     "row": "0001104659-26-017090#113",
+     "row_index": 2
+    }
+   ]
+  }
+ },
+ "gate": {
+  "counts": {
+   "abstentions": 44,
+   "accepted_facts": 163,
+   "controls": 34,
+   "distinct_rows_per_tag": {
+    "ambiguous_menus": 35,
+    "corrections_and_amendments": 7,
+    "expectation_routing": 18,
+    "favourable_unfavourable_direction": 16,
+    "losses_and_sign": 27,
+    "measurement_wording": 60,
+    "point_range_floor_ceiling": 136,
+    "portion_versus_whole": 38,
+    "sequential_comparison": 41,
+    "slices_and_unknown_axes": 67
+   },
+   "du_worthy_facts": 163,
+   "duplicate_gold_facts": 0,
+   "events_accounted": 33,
+   "exclusions": 10,
+   "open_issues": 0,
+   "phase1_ambiguities": 0,
+   "record_kind_conflicts": 11,
+   "rows_accounted": 191,
+   "sequential_rows": 41,
+   "tag_floor": 5,
+   "tags_below_floor": []
+  },
+  "ok": true,
+  "stops": []
+ },
+ "key": {
+  "changed": [
+   "0000898173-26-000006",
+   "0001104659-26-017090"
+  ],
+  "origins_changed": [
+   "0000898173-26-000006",
+   "0001104659-26-017090"
+  ],
+  "sources_after": 33,
+  "sources_before": 33
+ },
+ "ledger_after_this_collection": 668,
+ "model_calls_started_here": 0,
+ "runtime_identities": [
+  {
+   "agent_id": "afc3282938bfb89df",
+   "declared": [
+    "opus",
+    "high",
+    "lean-probe"
+   ],
+   "label": "0000898173-26-000006",
+   "observed_runtime_model_ids": [
+    "claude-opus-5"
+   ],
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "prompt_sha256_recorded": "c9008c82550214e4907176b3f1b9174fb714506ddaf152f3eba2361eb588d632",
+   "run_id": "wf_084b6ebc-b70",
+   "script_bytes_persisted": 134157,
+   "session_is_the_frozen_one": true,
+   "state_sha256": "743bd4e647c9c15d66267d38aac6ccf64a9a9ab40a93e0b431b1f0adbb506f9c",
+   "status": "completed",
+   "tool_calls": 0,
+   "transcript_sha256": "46d2d4c212e610edd01aa4c6e1e15d04c06fed303c117624442a37fa56dd4d05"
+  },
+  {
+   "agent_id": "a6ebf582b56a25dbc",
+   "declared": [
+    "opus",
+    "high",
+    "lean-probe"
+   ],
+   "label": "0001104659-26-017090",
+   "observed_runtime_model_ids": [
+    "claude-opus-5"
+   ],
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "prompt_sha256_recorded": "c718049bc6480b5430766fb07121c605712e5edd52a9cffed7871d07bcccb191",
+   "run_id": "wf_1fe45543-565",
+   "script_bytes_persisted": 120598,
+   "session_is_the_frozen_one": true,
+   "state_sha256": "ebacc3ab858adf2983544fa3797cb219e7a2a13d7cacf2e14641581ca8eb320e",
+   "status": "completed",
+   "tool_calls": 0,
+   "transcript_sha256": "85efd09b2cf6e8784e2f4b39d4b7d1e703acf9cc15d18d040d6907c078a5d902"
+  }
+ ],
+ "scope": "read-only evidence for the two collected rechecks; no call, no record, no finalization"
+}

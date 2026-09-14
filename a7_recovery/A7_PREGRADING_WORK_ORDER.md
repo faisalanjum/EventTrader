@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 166, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 168, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -60,6 +60,74 @@ main; main is not edited during this task. This does not waive coverage, pass
 bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
+
+COLLECTION REVIEW COMPLETE,Revision168: Core2124/hash524d8ab5 is independently
+verified for collection and the exact unchanged-value comparison. Own
+codex_sources2124_a/COMPLETED_SOURCE_RECHECKS_2124.json/d8052182 passes the real
+native consumers and all8 used-identity negatives with intact controls; raw
+exit0/stdout61786eb1. Source ledger668+2=670, other31 sources unchanged.
+The source/rule decisions are NOT yet approved. Codex2124/hashafc77762 is
+byte-identically archived and assigns Core only the two named source-scope
+questions, including the second ORLY row affected by the same state boundary.
+No further AI call, signer or key change is authorized. Native state, transcript,
+journal and metadata copies are preserved byte-for-byte under
+unit_2020_codex_check/completed_source_rechecks_2124, with original paths intact.
+Full bounded checklist: SOURCE_RECHECK_COLLECTION_REVIEW_2124.md. Root is
+preserving this verified collection increment; Core replies once, then waits.
+
+LIVE COLLECTION,Revision168: the previous confirmation wait is CLEARED.
+Core's native AskUserQuestion has the owner's affirmative result at04:38:32UTC.
+The exact approved subscription scripts launched at04:39:12/16UTC as
+wf_084b6ebc-b70 (ORLY) and wf_1fe45543-565 (CAKE). Both now have durable
+raw answers; no retry was needed. All12 original rows are present. The
+packet receipt is472a4b7f6905bf68084ff253fb3de3870afed446fd78288633052ebcd634a80d;
+its existing finalizer reports2 scheduled/2 valid/0 missing/0 invalid and
+phase_complete=true. These are collection results, NOT source-truth approval.
+Codex is independently comparing every field and the source/rule support;
+the ORLY state and CAKE period-coverage questions are not yet closed merely
+because the new source owner repeats the earlier decisions. Do not reroll
+either completed response. Core2123 is still the one task; await its one
+report and verify native evidence through the existing owner. No signer,
+new lock or grading call is authorized by this note. Published preparation
+ad3861e1 and all382 evaluated replies remain unchanged. Goal is active again.
+
+PUBLICATION AND LIVE WAIT,Revision167: the verified two-source preparation
+is committed/pushed as ad3861e1e2190ac0b73e30a2c034e2b99c4df946, exact tree
+069755a18af7fec67b772f79df4bdd3fe1563eb4, parent2ac64a76. Fresh remote matches.
+POST_SIGNATURE_PUBLICATION_2123.json/008a6cdf pins89 exact staged paths,
+about934 KB of code and real proof, excluding Core's active receipt/results/
+new collector and unrelated work. Index is empty. Main2dc0ad39 and unrelated
+file2ec3bd33 are unchanged. This status-only update follows that commit.
+
+IMPORTANT: the two reviews are AUTHORIZED BY CODEX BUT HAVE NOT STARTED.
+At02:55:22UTC (22:55:22 Eastern), live Core called AskUserQuestion
+toolu_01Gxmu2oTAs6S96A58dzYxaR asking for direct Workflow opt-in for these
+two SOURCE-KEY reviews. It says the earlier owner opt-in named G2/G3 grading,
+not this source-key task. Its transcript is paused at that prompt; Core,
+watcher and monitor remain live. The original packet receipt is still ef16bf57,
+states[], no finalization. Do not forge a user answer, change transport/model
+or bypass that prompt. No second Codex task or interrupt has been sent.
+Codex2123 remains the one incoming task. This is the first observed turn of
+this specific external confirmation wait, not a reason to mark the goal blocked
+immediately. Goal remains active. Ask the owner to confirm in Core:
+"Run the subscription Workflow for the two source-key reviews and their
+permitted invalid-only retries, as Codex approved. No paid API calls."
+
+WAIT RECHECK,03:13UTC: second consecutive goal-turn observation of this
+confirmation wait. Same pending tool id, no tool result, same22:55:23 Eastern
+transcript timestamp; Core/watcher/monitor freshly proved live. Packet states
+remain empty. Existing watcher handle85562 waited30s with no event. No new
+task, duplicate watcher, model call or restart. The already-verified code is
+pushed; no further source/key/grading step can proceed without these decisions.
+Goal remains active on this second observation.
+
+Core's unreported collect_two_source_rechecks_2123.py/97dcdafd was read
+completely, not executed or accepted. It binds existing record/finalize owners
+and preserves the prior signature. Review its actual collection evidence and
+any eligible child-retry handling after Core's one report; do not treat its
+compile-only check or primary-only counters as completed collection. No new
+source/key/grading correctness claim is made from it. The corrected-score
+time window is conditional on the pending confirmation, not a rolling promise.
 
 SOURCE COLLECTION AUTHORIZED,Revision166: Core2123/d71f060d and its exact
 2210a3ee successor/e7458e74 preparer/532c0a74 packet are independently VERIFIED

@@ -1,0 +1,1 @@
+COLLECTION_2123 {"outcomes": [["0000898173-26-000006", "valid"], ["0001104659-26-017090", "valid"]], "phase_complete": true, "ledger": {"scheduled": 2, "valid": 2, "invalid_response": 0, "transport_no_answer": 0, "unproved": 0, "missing": 0}, "retry": [], "key_sources": 33, "key_problems": [], "report_sha256": "39a0c98db1ea5a59416e13ea3da628ae1fe206336aaab1821ab8c629b697a057"}
