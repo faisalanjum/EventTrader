@@ -1,0 +1,7 @@
+attempt	codex_currentg232157_c
+payload	../../unit_2020_codex_check/prepare_current_g23_2157.py
+map	../unit_2020_codex_check/map_current_key_2148.tsv
+wrapper_pid	3310511
+payload_pid	3310515
+started_utc	2026-09-14T21:15:30Z
+state	finished exit 0

@@ -1,0 +1,1 @@
+Current full G1 consumer: 191 valid; 1 exhausted invalid. Deriving actual G2/G3 inputs.

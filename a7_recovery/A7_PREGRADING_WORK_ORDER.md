@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 207, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 212, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,172 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision207: ACTUAL G1 REUSE CONSUMER VERIFIED, no new AI call/score.
+CURRENT,Revision212: real current-key proof codex_currentg232157_c completes
+with raw exit0. Four gp_UNDEF route warnings are retained, not hidden or called
+empty stderr; all99 no-write routes complete and no event is unroutable.
+CURRENT_G23_PREPARATION.jsond726f246 and full candidate020f4550 bind the
+CURRENT denominator:310 G2 questions/92 groups;116 G3 questions/35 groups.
+G1 report88d1a5b1 is191valid+1originalexhausted of192. Current G1 and BASE G2
+are byte-identical to b's saved artifacts; full candidate/prompt identities
+and all question counts were independently recomputed. This verifies G1 and
+BASE input preparation, not corrected grading, new calls or an A7 score.
+The old renderer's71G2/16G3 batches are NOT the corrective call ceiling.
+Native stdoutd71efa90/stderrea6c9ccb; no model call. Verification checkpoint
+publication is next; keep exact already completed answers.
+
+Core2154/a8b67167's plan1789b6bf contains useful existing-entry and canonical
+comparison findings, but its blanket no-reuse conclusion is NOT accepted.
+Global key/G1 hashes or the original consumer rejecting an old handle do not
+prove every actual question/instruction changed materially. Its map-only
+context claim is false: REUSE.evaluate proves the original lifecycle BEFORE
+CURRENT.current_key/INPUT.approved_inputs in the SAME process. Its missing
+literal-key-check claim ignores the separately checked producer identity's
+lock/receipt/A6 bindings; no wrong accept was reproduced and no extra validator
+is authorized on that basis. Preserve the original plan as diagnostic history,
+not new law. b's21:01:06 was its start time, not completion.
+
+Codex2158/9c021f4d gives Core ONE task: determine the full310-question G2
+materiality inventory from source-bound inputs, not old scores/verdicts.
+Partition changed input, materially affected rule, proved unaffected rule,
+and uncertain; every row has its exact binding and reason. Root owns mechanical
+reuse checks and any minimal connection. The292 base-equal/138 whole-prompt-
+equal counts are NOT yet eligible verdict counts. Preserve original instructions
+for any eventual carry; a format-only clarification does not change meaning
+of a previously valid typed answer. G3's missing full source/contract and wrong
+comparison-pool instructions are material to the task, so its116 required
+questions need the corrected existing renderer; freeze the fitted budget first.
+No model-worker call or owner edit is authorized in Core's current task.
+
+Use existing renderer32e2f650, preparer50f9298c, revisiondd708431 and final
+counter375cc483. Do not implement an unrelated key validator, speculative
+framework, batching optimization or production code. Remaining: exact
+materiality/full-binding selection, minimal real consumer connection, corrected
+input preparation/collection, score and every finding cause; END-only offline
+model setup then STOP/WAIT. Target6–8p.m. Eastern remains provisional.
+
+PREVIOUS,Revision211,21:20UTC: native codex_currentg232157_b reached the
+actual192-lane lifecycle/resolution consumer and99 real no-write routes;
+CURRENT_G1_VERIFIED.json88d1a5b1 records191valid+the original1exhausted-invalid.
+It then wrote a310-question BASE G2 candidate18ec3da8 but the caller's direct
+Python equality check rejected its own tuple-to-JSON-list roundtrip. Raw
+exit1/stderre0fee35f; four existing gp_UNDEF route warnings also remain in the
+raw log. This is a reproduced CHECKING-SCRIPT error, not another failed AI
+answer, and the failed job is not final approval. Its exact caller bytes are
+preserved in prepare_current_g23_2157.failed_b.py.txt/e6033fc0.
+
+One-line correction uses G._plain on BOTH complete candidates, the same
+canonical whole-document comparison the existing completion consumer uses;
+no field, identity or safety check is skipped. The full base document is now
+written before per-kind reports so a reporting failure loses no derived
+inventory. Two new positive/negative controls first fail then pass; all5 report
+checks pass, and full affected regression68passes/29subtests in1.03s,exit0.
+Caller d91c30f3/test2ff6f728; unchanged input391f7e3d. Fresh native
+codex_currentg232157_c is RUNNING from21:15:30UTC; root owns it, Core2157
+continues the independent bounded connection plan. No model call was repeated.
+
+Read-only BASE comparison, NOT a reuse decision: old306/new310 G2 questions;
+292 have equal question/context/original-rules,7 same-id questions changed,
+11 ids are new and7 old ids disappear;138 have the same WHOLE old-renderer
+prompt. The corrected renderer is not applied in this diagnostic. Key-only
+equality does not decide applicability of the already-approved grader fixes.
+Actual completed current G3/remaining corrective call count is still OPEN.
+The prior corrected70G2/30G3 batches contain ZERO repeated event contexts
+within a batch: the existing one-source-event-per-batch owner already prevents
+that duplication, so there is no batching-optimization task to add.
+
+Target6–8p.m. Eastern today remains provisional. Verified transport/G1 evidence
+needs its next checkpoint; corrected G2/G3 reuse/calls, score/every finding
+cause and END-only offline setup remain. A7 only then STOP/WAIT.
+
+PREVIOUS,Revision210,21:03UTC: all30 new G1 readings are now admitted by the
+UNCHANGED native auditor/parser/ingestion path: codex_g1ingest2156_a exit0,
+empty stderr,30valid/0invalid/0retry/0uncalled; stdout1cf17a6b. Core's
+2153/dc3b0ce5 independent pre-call preservation is verified: manifest7abf8b57,
+27 files and7 original pins freshly rehashed. Root earlier matched19 raw
+parent lines and62 preserved native files to their originals. Native
+diagnostic28267779 preserves the original path refusal and proves the
+path-only correction with every other audit/parser check unchanged.
+
+Codex2157/b21a033d EXPLICITLY approves this separately pinned execution-
+location repair under the owner's delegated A7 repair authority. Do not say
+amendment3 expressly authorizes operator errors, or that the original exact
+path instruction was followed. The original deviation/both outcomes remain.
+Code05264639 wraps AUD.g1_state_audit receiving G's OWN expected record;
+it changes ONLY script_path for the exact content-pinned state. Bindingee2c22b8
+preserves pre-call evidence and both paths; code+binding are external G1 pins.
+Every other native identity/answer check still runs. No new semantic rule,
+partial-policy waiver, inode/samefile claim, raw edit or successful-call repeat.
+Live-state/transcript namespace dependency remains; no cleanup is allowed.
+
+Actual full-current G1 job codex_currentg232157_a passed its192/191+1
+lifecycle assertions and called B.official_resolutions, then failed while
+serializing tuple keys in its REPORT (stderrfcdb0e9c). No output was written.
+The caller-only fix serializes exact key/value rows, preserving null and0;
+3 focused regression checks first reproduced the problem then passed.
+Caller e6033fc0; input391f7e3d unchanged. Fresh no-AI job
+codex_currentg232157_b is RUNNING; do not claim its final proof yet. It will
+derive a BASE current-key post-G1 population with the original GR.freeze,
+NOT corrected prompts or launch permission. Never use those old-renderer
+prompts for the corrective G2/G3 calls.
+
+Core has one read-only task2157: review the smallest old/new-key G2/G3 reuse
+connection while root owns this job. Reuse ALREADY published2ac64a76 owners:
+unit_2020_codex_check/a7_grading_input_correction_2114.py32e2f650,
+unit_2118_correction_native/a7_correction_candidate_2118.py50f9298c,
+unit_2020_codex_check/a7_grading_revision_2115.pydd708431; final score must
+use a7_duplicate_accounting_2116.py375cc483. The existing subset-revision
+consumer proves one producer/G1 identity; it does not by itself prove reuse
+across the changed key. Derive the ACTUAL current population, full compatible
+question/rule bindings and minimum missing proof before authorizing new calls.
+Historical306G2/117G3 and the122 affected-class diagnostic are NOT current
+denominators or call approval. No second scorer, blanket re-audit or382 redo.
+
+Score target remains6–8p.m. Eastern TODAY, provisional until actual remaining
+meaning-question scope is established; do not restart a rolling2–4h estimate.
+Corrected score/every finding cause and END-only offline model setup remain
+OPEN. A7 only, then STOP/WAIT; no later step or production work.
+
+PREVIOUS,Revision209: Codex2155/1a6e3cd9 INTERRUPTS2154. Core's combined
+report is pending; no further call, ingest or owner edit is authorized. The
+ONE30-agent runwf_d965de9c-9ba completed20:21:57UTC; root independently
+verified30 distinct done agents, exact frozen30 args, persisted scriptba2bfbbc
+and all62 native copies against their originals. Returned-payload validity is
+NOT established yet. First invocationwf_50e5d395-fb2 failed its row-count guard
+with1 argument,0 agents/0 tokens; preserve it, do not hide or count it as a
+model retry. The successful launch preceded interrupt delivery; no repeat.
+
+Actual execution used scratchpad/g1seg01_2154/grade_batch.seg01.js, a different
+file from the approved durable script despite identical bytes. The native
+audit intentionally rejects this difference. Core's original pre-call record
+db48422d and parent transcript tool-result2437627c at20:13:00.402Z prove the
+copy/hash was recorded BEFORE either launch; actual full launch was20:14:52Z,
+not the later20:15:13 launch-record write time. Both original receipt and
+native state must remain unchanged. NO after-the-fact hardlink, edited raw
+state/receipt, blanket hash allowance or repeated successful call. Root is
+assessing a separately approved, exact pre-call transport binding followed
+by the UNCHANGED native transcript/input/parser checks. This is OPEN, not an
+accepted answer or waived identity failure. Core preserves evidence and waits.
+
+Updated score target6–8p.m. Eastern today is provisional; previous5–6p.m.
+was too optimistic. Remaining: truthful transport admission/native ingestion,
+actual combined G1 proof, derive/reuse changed G2/G3 inputs and required
+readings, corrected score and every actual error cause. END-only offline model
+setup still follows; A7 only, then STOP/WAIT. No unrelated work or new framework.
+
+PREVIOUS,Revision208: G1 reuse/preparation COMMITTED AND PUSHEDde5782384dc9dfa5
+ae4848001b2c2d307ab6ea06, tree39735e7d55d2d7dd9ef4ab29cb67fff10695aae8;
+exact remote/all55 committed paths verified. Freeze7f1fc34f covers53 files,
+plus manifest/path list. No main/unrelated change. Core task2154/14934a15
+authorizes ONLY the already published30-row primary segment1, scriptba2bfbbc,
+receipta49f52dd, full-roota4bbb4f0. Core preserves native evidence in fresh
+unit_2154_g1_collection and advances only current g1 capture/finalization.
+No repeat of161 valid carried readings or382 producer answers; old exhausted-
+invalid remains unchanged. No retry/second primary segment until the next
+exact evidence ruling. Do not use generic prepare/next_admissible. Root owns
+review/next current-key G2/G3 derivation AFTER actual G1 completion. No
+overlapping native job while Core collects. Score/causes/offline setup OPEN.
+
+PREVIOUS,Revision207: ACTUAL G1 REUSE CONSUMER VERIFIED, no new AI call/score.
 codex_g1reuse2153_a exits0/empty stderr; native report5429ce24 proves161
 carried valid readings,1 original exhausted-invalid and30 changed uncalled;
 31 missing selections. The real grading consumer refuses precisely the first

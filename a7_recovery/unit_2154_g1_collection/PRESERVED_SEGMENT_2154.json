@@ -1,0 +1,114 @@
+{
+ "scope": "durable preservation of the ONE 30-row G1 segment; NO ingest, no finalization, no validity judgment - the parser owns that",
+ "run_id": "wf_d965de9c-9ba",
+ "state_sha256": "1cb144fb86d34b6ad23487f15b759b66fecc6edf170c5fefb2b0279756bfb304",
+ "journal_sha256": "fc2763f2dbc88cc36539409a2ba77bc530d8afe8f9c149ac1f7f664d2c7ff4cd",
+ "returned_payload_sha256": "05fb6d7a41efa27edc88f92196dde2031e651a419dd179bc872d7509d554c959",
+ "files_preserved": 63,
+ "transcripts_preserved": 30,
+ "every_copy_matches_original": true,
+ "status": "completed",
+ "agent_count": 30,
+ "agent_rows": 30,
+ "agent_states": {
+  "done": 30
+ },
+ "agent_ids": [
+  "a003c5c934c5d5728",
+  "a0447ca95ad13f648",
+  "a05c819f3072d3bbb",
+  "a061c570564625723",
+  "a1b9476c5b9c5266d",
+  "a2a5dfb7a9aab036e",
+  "a2aed114d0c1bb3ea",
+  "a2b9827cf2de0bc85",
+  "a2d3da670753b5e24",
+  "a36ac2e7226a683d0",
+  "a38388f0502e3fafd",
+  "a3c6540b1eece8d14",
+  "a3ef59e5c1443c26a",
+  "a3fe58ae752b8ec2f",
+  "a479085bc4c8cda56",
+  "a47f5e407b330abd2",
+  "a53ba01fa783e50da",
+  "a53c642a58f8ed13f",
+  "a6dadc8650d0956a1",
+  "a8bcdcd62b658c96c",
+  "a9bf66f770339bc75",
+  "a9d323325da313182",
+  "aac52010433cc1272",
+  "aba7de97b615cd21c",
+  "ad7983b7f0e62241a",
+  "ad9b244fe826b6b14",
+  "adc379d3de56661bd",
+  "ae0de0c264f6f2bc0",
+  "ae23f5c3bc641e36d",
+  "aedb828a1cd936746"
+ ],
+ "distinct_agent_ids": 30,
+ "models_in_rows": [
+  "claude-sonnet-5"
+ ],
+ "tool_calls_total": 0,
+ "duration_ms": 424633,
+ "total_tokens": 590762,
+ "returned_rows": 30,
+ "returned_calls": 30,
+ "results_with_error": [],
+ "results_with_empty_text": [],
+ "lane_ids_returned": [
+  "G1-006/G1a",
+  "G1-006/G1b",
+  "G1-008/G1a",
+  "G1-008/G1b",
+  "G1-013/G1a",
+  "G1-013/G1b",
+  "G1-016/G1a",
+  "G1-016/G1b",
+  "G1-019/G1a",
+  "G1-019/G1b",
+  "G1-038/G1a",
+  "G1-038/G1b",
+  "G1-040/G1a",
+  "G1-040/G1b",
+  "G1-045/G1a",
+  "G1-045/G1b",
+  "G1-048/G1a",
+  "G1-048/G1b",
+  "G1-051/G1a",
+  "G1-051/G1b",
+  "G1-070/G1a",
+  "G1-070/G1b",
+  "G1-072/G1a",
+  "G1-072/G1b",
+  "G1-077/G1a",
+  "G1-077/G1b",
+  "G1-080/G1a",
+  "G1-080/G1b",
+  "G1-083/G1a",
+  "G1-083/G1b"
+ ],
+ "lanes_match_invocation_exactly": true,
+ "every_prompt_sha_matches_invocation": true,
+ "every_invocation_sha_matches": [
+  "719095958e2406256218e5c045d568e1340c604c464a4225ab4c7ec2f93f5345"
+ ],
+ "every_candidate_sha_matches": [
+  "48d01dced57656748a35a358b8f66ee29aef8e259f64b49745e57b18fbd7e5f8"
+ ],
+ "runtime_models_returned": [
+  "claude-sonnet-5"
+ ],
+ "efforts_returned": [
+  "high"
+ ],
+ "agent_types_returned": [
+  "lean-probe"
+ ],
+ "attempts_returned": [
+  1
+ ],
+ "ingested": false,
+ "finalized": false,
+ "model_calls": 30
+}

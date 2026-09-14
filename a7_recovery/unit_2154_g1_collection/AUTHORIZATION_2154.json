@@ -1,0 +1,89 @@
+{
+ "scope": "authorization and launch identity for ONE 30-row G1 primary segment, recorded BEFORE any call",
+ "authority": "Codex SEQ 2154",
+ "authority_path": "/home/faisal/.core827-orchestrator/CODEX_TO_CORE.md",
+ "authority_sha256": "14934a1549eccbb01e4d44edba2de5116daf711ac44fa9139fdd75d78f0c3c20",
+ "launch_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/REUSE_LAUNCH_2152.json",
+ "launch_record_sha256": "a8d774cfe6b614bc9f1c24a9beb00c7de77b2c6c601a0be9ae4a9cec51906f8a",
+ "candidate_sha256": "48d01dced57656748a35a358b8f66ee29aef8e259f64b49745e57b18fbd7e5f8",
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/g1",
+ "root_sha256": "a4bbb4f08b1a37e379641fa0bd5c636e57b22c0136aaffa54960dd34f890303b",
+ "segment": 1,
+ "receipt_sha256": "a49f52dda815d38363a020b04219cfcdf460b1e79927b69e6bfd8e0b3e3cde9b",
+ "invocation_sha256": "719095958e2406256218e5c045d568e1340c604c464a4225ab4c7ec2f93f5345",
+ "frozen_script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/g1/grade_batch.seg01.js",
+ "frozen_script_sha256": "ba2bfbbc3f32ed3d2466df3ed994669e3ec1e6464830feb892ef7a66ffed38ec",
+ "frozen_script_bytes": 439688,
+ "staged_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1seg01_2154/grade_batch.seg01.js",
+ "staged_script_sha256": "ba2bfbbc3f32ed3d2466df3ed994669e3ec1e6464830feb892ef7a66ffed38ec",
+ "frozen_equals_staged": true,
+ "args_rows": 30,
+ "args_are_the_frozen_invocation_array": true,
+ "lane_ids": [
+  "G1-006/G1a",
+  "G1-006/G1b",
+  "G1-008/G1a",
+  "G1-008/G1b",
+  "G1-013/G1a",
+  "G1-013/G1b",
+  "G1-016/G1a",
+  "G1-016/G1b",
+  "G1-019/G1a",
+  "G1-019/G1b",
+  "G1-038/G1a",
+  "G1-038/G1b",
+  "G1-040/G1a",
+  "G1-040/G1b",
+  "G1-045/G1a",
+  "G1-045/G1b",
+  "G1-048/G1a",
+  "G1-048/G1b",
+  "G1-051/G1a",
+  "G1-051/G1b",
+  "G1-070/G1a",
+  "G1-070/G1b",
+  "G1-072/G1a",
+  "G1-072/G1b",
+  "G1-077/G1a",
+  "G1-077/G1b",
+  "G1-080/G1a",
+  "G1-080/G1b",
+  "G1-083/G1a",
+  "G1-083/G1b"
+ ],
+ "all_attempt_1": true,
+ "declared_model": [
+  "sonnet"
+ ],
+ "declared_runtime_model": [
+  "claude-sonnet-5"
+ ],
+ "declared_effort": [
+  "high"
+ ],
+ "declared_agent_type": [
+  "lean-probe"
+ ],
+ "declared_max_output": [
+  "128000"
+ ],
+ "expected_input": {
+  "payload_field": "attachment",
+  "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+  "record_index": 1,
+  "record_type": "attachment"
+ },
+ "input_profile_sha256": "78b58fe7fd5ba60b9199ada86fe27d90101ceb57cd7617db158e2ea724e2da18",
+ "no_repeat_search": {
+  "workflow_states_scanned": 1362,
+  "states_whose_script_matches_this_pin": 0,
+  "conclusion": "this exact script has never been invoked"
+ },
+ "preflight_attempt": "core_g1pre2154_a",
+ "preflight_exit": 0,
+ "authorized_primary_calls": 30,
+ "retries_authorized": 0,
+ "second_segment_authorized": false,
+ "launched_utc": "2026-09-14T20:13:00Z",
+ "model_calls_started_before_this_record": 0
+}

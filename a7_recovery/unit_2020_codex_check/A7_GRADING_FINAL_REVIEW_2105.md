@@ -4,7 +4,62 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision207: REAL saved-reading consumer PASSES,
+Current checkpoint,work-order Revision212: actual complete native proof PASSES,
+codex_currentg232157_c exit0; four route warnings retained. Reportd726f246,
+full candidate020f4550:310 G2/116 G3 questions,99 no-write routes,0 unroutable;
+G1 remains191valid+1exhausted. All candidate/prompt hashes and question counts
+independently rechecked; G1/base G2 exactly reproduce the failed b artifacts.
+The saved BASE prompts are not corrected-call approval. Core task2158 performs
+only the full G2 rule-materiality inventory; a changed global hash does not
+establish that every old judgment needs repeating. No new model call.
+
+| Requirement | Current evidence and limit |
+|---|---|
+| Generality and rules | One exact evidence-backed location correction and lossless canonical reporting; no semantic heuristic or answer edit. All legacy instructions/raw evidence stay labelled as originally served. |
+| Complete affected workflow | Native script/response audit, actual30-row ingest, combined192-lane consumer,310/116 full base populations and99 public no-write routes pass. Corrected G2/G3 consumer connection and grading are still open. |
+| One owner and organization | Original auditor/parser/finalizer/G1/route/scorer retained; existing renderer/preparer/revision/counter corrections are mandatory for their affected tasks, not recreated. |
+| Simplicity | No repeat of valid model calls, map-only context shortcut, new key validator or speculative batching change. Whole canonical JSON comparison retains every field. |
+| Verification and limits |68 affected checks/29subtests,5 report checks,4 transport mutation classes caught; full native exit0. Failed a/b callers and raw logs preserved. No final score, A7 PASS, universal reliability or live local-model claim. |
+
+Previous checkpoint,work-order Revision211: actual full G1 report88d1a5b1,
+191valid/1exhausted, and99 no-write routes saved. Caller-only tuple/list
+comparison failure is reproduced; G._plain whole-document comparison fixes
+it without omitting fields. Old callere6033fc0 preserved, currentd91c30f3.
+All5 reporting tests and68 affected checks/29subtests pass. Native job
+codex_currentg232157_c is RUNNING; failed b's310-question base G2 is diagnostic,
+not final approval. Core reviews the existing corrected-renderer/current-key
+reuse connection. No source/model-result change or successful-call repeat.
+The existing one-source-event-per-batch rule already avoids repeated context;
+no speculative batching optimization is needed. All other open limits below
+remain, including corrected G2/G3 evidence, final score and every error cause.
+
+Previous checkpoint,work-order Revision210: all30 changed G1 replies pass the
+actual unchanged native ingestion,0invalid/0retry. Exact script-location
+repair is independently evidenced and explicitly approved in Codex2157;
+Core2153 preservation manifest7abf8b57 independently rehashed. Full192-lane
+consumer job reached reporting, exposed a tuple-key JSON reporting error;
+3 focused checks reproduce/pass its two-line caller-only correction. Fresh
+native codex_currentg232157_b is RUNNING. The resulting GR.freeze population
+is a BASE comparison, NOT corrected G2/G3 call approval. Core reviews only the
+smallest old/new-key reuse connection. Existing renderer32e2f650,
+preparer50f9298c, revisiondd708431 and counter375cc483 must be reused.
+
+| Requirement | Current change and verification |
+|---|---|
+| Generality and legitimate rules | Only the externally proved script location changes for the exact content-pinned native state. No semantic rule, model answer, grader verdict or original receipt is changed. |
+| Complete affected workflow | Original native path refusal reproduced; original auditor plus actual30-row parser/ingest pass. Combined current-key proof/base G2/G3 population is running, not yet declared complete. |
+| One owner and organization | Wrapper receives G's own expected input and calls the unchanged native auditor. Existing parser, finalization, partial accounting and grading owners remain sole owners. |
+| Simplicity | Two external pins name code and evidence binding; no new identity registry, samefile fiction or repeated successful model call. Report fix converts tuple-keyed mappings to lossless JSON rows only. |
+| Verification and limits |9 focused transport checks,4 assertion-killed mutation classes; full affected rerun including3 report checks:66 passed/24 subtests,0.96s,exit0. Commands/results:SCRIPT_BINDING_VERIFICATION_2157.json. Corrected G2/G3 reuse/calls, score, every error cause and END-only offline setup remain OPEN. |
+
+Previous checkpoint,work-order Revision208: verified reuse/preparation published
+de5782384d, exact remote and55 committed files verified; freeze7f1fc34f.
+Core2154/14934a15 has ONE task: execute/preserve/ingest/finalize the published
+30 changed primary readings, no retries or generic next-primary scheduling.
+No final score yet. Root reviews the exact returned evidence before the next
+task; no overlapping native job. Current horizon remains A7 only then STOP.
+
+Previous checkpoint,work-order Revision207: REAL saved-reading consumer PASSES,
 native report5429ce24, exit0/empty stderr.161 valid carried,1 exhausted-invalid,
 30 changed uncalled; the real resolution consumer refuses unfinished work.
 Published unfinalized evidence is refused separately.54 affected native-path

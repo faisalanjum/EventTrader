@@ -1,0 +1,34 @@
+{
+  "scope": "Current full G1 evidence into unchanged G2/G3 preparation; no new model call",
+  "report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_keygrading2150_a/KEY_GRADING_INPUTS.json",
+  "report_sha256": "d7571670fc3ae38a4dc732a7e377f23c385a0ee59aad3eb38d52151cd590e9f7",
+  "launch_report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/REUSE_LAUNCH_2152.json",
+  "launch_report_sha256": "a8d774cfe6b614bc9f1c24a9beb00c7de77b2c6c601a0be9ae4a9cec51906f8a",
+  "g1": {
+    "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_keygrading2150_a/g1_candidate",
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/g1",
+    "pins": {
+      "candidate_sha256": "48d01dced57656748a35a358b8f66ee29aef8e259f64b49745e57b18fbd7e5f8",
+      "git_head": "2dc0ad39f30dba4756078573f5e80038465939cc",
+      "git_tree": "a45f8d0c2802e0d482ddefc5d330a4774d25a787",
+      "partial_grading_policy_sha256": "1a465b94ff57789bee9bc210b36e7b892768156975702160fe22cd46b16db959",
+      "partial_grading_rule_sha256": "05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b",
+      "prompt_tree_sha256": "956d741b6b9f423bd97b56a0589a642d76acb04c97fb0e8640623786dd0f16bf",
+      "root_sha256": "a4bbb4f08b1a37e379641fa0bd5c636e57b22c0136aaffa54960dd34f890303b",
+      "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+      "run_file_count": 69,
+      "run_tree_sha256": "f6af648170ab1018e7afa7ea6d3fc5ce65b4b42961bc27250aea14bbd0a30663",
+      "g1_key_reuse_owner_sha256": "10af3e7e1c490bd6280f0c403e342205aa0a38eec0df24ac65beefdb079052c5",
+      "g1_key_reuse_selection_sha256": "343ccc85c01e06c9270ee5b0e9e938306885eabce402cf07e94c999b30438290",
+      "g1_key_reuse_inputs_sha256": "d7571670fc3ae38a4dc732a7e377f23c385a0ee59aad3eb38d52151cd590e9f7",
+      "grading_script_binding_owner_sha256": "052646398f73421fe6da1690ad5c19e3e4e335a061e3a4186a55b676f6628858",
+      "grading_script_binding_sha256": "ee2c22b8b2bd19c9b618b2b6cdcbe0035049090d365df482863161ac0068beb5"
+    }
+  },
+  "script_binding": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/EXECUTED_SCRIPT_BINDING_2156.json",
+  "expected_total_lanes": 192,
+  "expected_valid_lanes": 191,
+  "expected_exhausted_invalid_lanes": [
+    "G1-050/G1a"
+  ]
+}

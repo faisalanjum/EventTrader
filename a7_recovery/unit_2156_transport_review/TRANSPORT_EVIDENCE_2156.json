@@ -1,0 +1,389 @@
+{
+ "args_field_types": [
+  "str"
+ ],
+ "args_rows_per_launch": [
+  1,
+  30
+ ],
+ "authorization_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2154_g1_collection/AUTHORIZATION_2154.json",
+ "authorization_sha256": "db48422dc0fc7a7516ffb8eb0d0790dbc044d4bdec442dd0f97ef8b85485291d",
+ "completed_run_agent_transcript_dir_exists": true,
+ "copies": [
+  {
+   "bytes": 500356,
+   "preserved_as": "wf_50e5d395-fb2.json",
+   "sha256": "6ccd577dc5d0f50201736edb4078a8c7ac04dce1145dfc4e239d39a6384e9a83",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_50e5d395-fb2.json"
+  },
+  {
+   "bytes": 439688,
+   "preserved_as": "grade_batch.seg01.js",
+   "sha256": "ba2bfbbc3f32ed3d2466df3ed994669e3ec1e6464830feb892ef7a66ffed38ec",
+   "source": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1seg01_2154/grade_batch.seg01.js"
+  },
+  {
+   "bytes": 12432,
+   "preserved_as": "args.json",
+   "sha256": "b2d2643769f35c5158176c6c16f769d5af80408df1f39304e33a71839d743f31",
+   "source": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1seg01_2154/args.json"
+  }
+ ],
+ "edits_to_existing_files": 0,
+ "every_launch_used_the_staged_copy": true,
+ "failed_run_agent_transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_50e5d395-fb2",
+ "failed_run_agent_transcript_dir_exists": false,
+ "failed_run_id": "wf_50e5d395-fb2",
+ "frozen_script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/g1/grade_batch.seg01.js",
+ "full_launch_args_equal_frozen_invocation": [
+  false,
+  true
+ ],
+ "kind": "PRE-CALL transport evidence, preserved and independently verified",
+ "launch_count": 2,
+ "model_calls": 0,
+ "record_order": [
+  "BASH",
+  "RESULT",
+  "BASH",
+  "RESULT",
+  "WORKFLOW",
+  "RESULT",
+  "WORKFLOW",
+  "RESULT",
+  "INTERRUPT_NOTICE",
+  "INTERRUPT_NOTICE",
+  "INTERRUPT_NOTICE",
+  "BASH",
+  "RESULT",
+  "BASH",
+  "RESULT",
+  "BASH",
+  "RESULT",
+  "BASH",
+  "RESULT"
+ ],
+ "records": [
+  {
+   "detail": {
+    "command_bytes": 3539,
+    "command_sha256": "455f212c3cea0067dec58a11e6fc1ad6fb1d32dc80ef962132743e50b47ffa9c",
+    "copies_the_frozen_script": true,
+    "writes_the_authorization_record": true
+   },
+   "kind": "BASH",
+   "order": 1,
+   "preserved_as": "01_bash_71bef259-f02c-48ad-90a0-1854320e145e.jsonl",
+   "raw_line_bytes": 5182,
+   "raw_line_sha256": "cd2f49a51de93b49fe2053fef0ea691a97639b79adef5af61c870fd1174fda61",
+   "timestamp": "2026-09-14T20:12:58.442Z",
+   "tool_use_id": "toolu_016PL9ootCH2EenoMs8DLuwq",
+   "uuid": "71bef259-f02c-48ad-90a0-1854320e145e"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": false,
+    "names_refused_run_id": false,
+    "reports_authorization_sha256": true,
+    "reports_frozen_script_sha256": true,
+    "reports_staged_script_sha256": true
+   },
+   "kind": "RESULT",
+   "order": 2,
+   "preserved_as": "02_result_2437627c-b831-43a6-817a-4df4d72ecd45.jsonl",
+   "raw_line_bytes": 1759,
+   "raw_line_sha256": "bb0866c0cacc5049bd38fb045bc61bbc59790c7e717b019044b43adfc9f227ab",
+   "timestamp": "2026-09-14T20:13:00.402Z",
+   "tool_use_id": "toolu_016PL9ootCH2EenoMs8DLuwq",
+   "uuid": "2437627c-b831-43a6-817a-4df4d72ecd45"
+  },
+  {
+   "detail": {
+    "command_bytes": 478,
+    "command_sha256": "9bb7e642347a258e194ad1803274c9041e2a67762b926185b212ff861002b2cc",
+    "copies_the_frozen_script": false,
+    "writes_the_authorization_record": false
+   },
+   "kind": "BASH",
+   "order": 3,
+   "preserved_as": "03_bash_387a944e-ac7c-4d17-9250-d74dcaf14fc8.jsonl",
+   "raw_line_bytes": 2031,
+   "raw_line_sha256": "04b7e8e8315f14b0a676b9e369e47c3c2eaae8ae498d4031e22c0afb32af8620",
+   "timestamp": "2026-09-14T20:13:07.282Z",
+   "tool_use_id": "toolu_01GfRnyKGWtqd8gBFcSMtJNP",
+   "uuid": "387a944e-ac7c-4d17-9250-d74dcaf14fc8"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": false,
+    "names_refused_run_id": false,
+    "reports_authorization_sha256": false,
+    "reports_frozen_script_sha256": false,
+    "reports_staged_script_sha256": false
+   },
+   "kind": "RESULT",
+   "order": 4,
+   "preserved_as": "04_result_96c3fab3-d7c2-4d08-b216-6de7cdf1705e.jsonl",
+   "raw_line_bytes": 1807,
+   "raw_line_sha256": "34ce7ea6b7e3e95d525301708121b6b2c5e309881010d8509c10dacd4eb48e6b",
+   "timestamp": "2026-09-14T20:13:09.588Z",
+   "tool_use_id": "toolu_01GfRnyKGWtqd8gBFcSMtJNP",
+   "uuid": "96c3fab3-d7c2-4d08-b216-6de7cdf1705e"
+  },
+  {
+   "detail": {
+    "args_canonical_sha256": "02c661bffbb85003fe711d64073323416f05d0c0fde31ab6af9214d9c9d88034",
+    "args_equal_frozen_invocation": false,
+    "args_field_type": "str",
+    "args_rows_decoded": 1,
+    "frozen_invocation_args_sha256": "49cc87464e98f3488572f343e8f87f94f8bb3b001f6edfa60eb1a307d7f4b27b",
+    "input_keys": [
+     "args",
+     "scriptPath"
+    ],
+    "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1seg01_2154/grade_batch.seg01.js",
+    "scriptPath_is_the_staged_copy": true
+   },
+   "kind": "WORKFLOW",
+   "order": 5,
+   "preserved_as": "05_workflow_973950c5-2d07-4607-a05f-d7b8b60d12b5.jsonl",
+   "raw_line_bytes": 2057,
+   "raw_line_sha256": "7527bc5090acb0161f289eea4c39e43312ca4c546f1349e3a5fc955f57be2be4",
+   "timestamp": "2026-09-14T20:13:15.018Z",
+   "tool_use_id": "toolu_01KjFnnhHyfVj41K6Gk2TyYe",
+   "uuid": "973950c5-2d07-4607-a05f-d7b8b60d12b5"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": false,
+    "names_refused_run_id": true,
+    "reports_authorization_sha256": false,
+    "reports_frozen_script_sha256": false,
+    "reports_staged_script_sha256": false
+   },
+   "kind": "RESULT",
+   "order": 6,
+   "preserved_as": "06_result_8041302c-5d45-4fde-bcae-70cfde7d7094.jsonl",
+   "raw_line_bytes": 2381,
+   "raw_line_sha256": "c956e29d038fb0ebca28e62346a600d22eefcd615afb14c26d2301492d9726c5",
+   "timestamp": "2026-09-14T20:13:15.687Z",
+   "tool_use_id": "toolu_01KjFnnhHyfVj41K6Gk2TyYe",
+   "uuid": "8041302c-5d45-4fde-bcae-70cfde7d7094"
+  },
+  {
+   "detail": {
+    "args_canonical_sha256": "49cc87464e98f3488572f343e8f87f94f8bb3b001f6edfa60eb1a307d7f4b27b",
+    "args_equal_frozen_invocation": true,
+    "args_field_type": "str",
+    "args_rows_decoded": 30,
+    "frozen_invocation_args_sha256": "49cc87464e98f3488572f343e8f87f94f8bb3b001f6edfa60eb1a307d7f4b27b",
+    "input_keys": [
+     "args",
+     "scriptPath"
+    ],
+    "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1seg01_2154/grade_batch.seg01.js",
+    "scriptPath_is_the_staged_copy": true
+   },
+   "kind": "WORKFLOW",
+   "order": 7,
+   "preserved_as": "07_workflow_cf409f12-5ef0-405c-a601-1f25d52f0308.jsonl",
+   "raw_line_bytes": 14662,
+   "raw_line_sha256": "9f0f2b9c1ccfdb417062a313abb80c44d6cc1c02a3df23a08cadf18e243b4637",
+   "timestamp": "2026-09-14T20:14:52.389Z",
+   "tool_use_id": "toolu_012U5xFrbEZAW3Wn9hiWqoRw",
+   "uuid": "cf409f12-5ef0-405c-a601-1f25d52f0308"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": true,
+    "names_refused_run_id": false,
+    "reports_authorization_sha256": false,
+    "reports_frozen_script_sha256": false,
+    "reports_staged_script_sha256": false
+   },
+   "kind": "RESULT",
+   "order": 8,
+   "preserved_as": "08_result_849d0b15-c04d-448c-bff0-7791a57ce8e1.jsonl",
+   "raw_line_bytes": 2381,
+   "raw_line_sha256": "3fba45f56cbd812c2ffc8fa2cdc304a731513c63c2654443c5b6822f3526a841",
+   "timestamp": "2026-09-14T20:14:53.004Z",
+   "tool_use_id": "toolu_012U5xFrbEZAW3Wn9hiWqoRw",
+   "uuid": "849d0b15-c04d-448c-bff0-7791a57ce8e1"
+  },
+  {
+   "detail": {
+    "names_the_interrupt": "CODEX MAILBOX CHANGED SEQ 2155"
+   },
+   "kind": "INTERRUPT_NOTICE",
+   "order": 9,
+   "preserved_as": "09_interrupt_notice_no-uuid.jsonl",
+   "raw_line_bytes": 546,
+   "raw_line_sha256": "e5a93e6f323d76f2ca23bb4fec448cd13a8e54c308202309e3c247336fb6b648",
+   "timestamp": "2026-09-14T20:15:01.955Z",
+   "tool_use_id": null,
+   "uuid": null
+  },
+  {
+   "detail": {
+    "names_the_interrupt": "CODEX MAILBOX CHANGED SEQ 2155"
+   },
+   "kind": "INTERRUPT_NOTICE",
+   "order": 10,
+   "preserved_as": "10_interrupt_notice_f2f55abb-e0a7-434f-b3ba-ad65a36f6c6c.jsonl",
+   "raw_line_bytes": 947,
+   "raw_line_sha256": "7640f1b561420db3621403dc08677187880741e2118fdcea6b603c2e920496da",
+   "timestamp": "2026-09-14T20:15:01.955Z",
+   "tool_use_id": null,
+   "uuid": "f2f55abb-e0a7-434f-b3ba-ad65a36f6c6c"
+  },
+  {
+   "detail": {
+    "names_the_interrupt": "CODEX MAILBOX CHANGED SEQ 2155"
+   },
+   "kind": "INTERRUPT_NOTICE",
+   "order": 11,
+   "preserved_as": "11_interrupt_notice_no-uuid.jsonl",
+   "raw_line_bytes": 574,
+   "raw_line_sha256": "40214fb0fc4cd733ad9785cd88176f525d35e48c5f02e3d55a806f6947d3a671",
+   "timestamp": "2026-09-14T20:15:14.200Z",
+   "tool_use_id": null,
+   "uuid": null
+  },
+  {
+   "detail": {
+    "command_bytes": 781,
+    "command_sha256": "abfc658895e7e8db52df0f85c3e1b0b412d61510d676b11e7c57b47beddf312b",
+    "copies_the_frozen_script": false,
+    "writes_the_authorization_record": false
+   },
+   "kind": "BASH",
+   "order": 12,
+   "preserved_as": "12_bash_44c63a04-349e-44be-ba36-df3821226cb8.jsonl",
+   "raw_line_bytes": 2347,
+   "raw_line_sha256": "f8c1ce67974140f161a7e13690fa585152b45054db8027a6b791945093f9bca9",
+   "timestamp": "2026-09-14T20:16:08.100Z",
+   "tool_use_id": "toolu_01FbBFZ7BfHiXPtrhfQeoW7D",
+   "uuid": "44c63a04-349e-44be-ba36-df3821226cb8"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": false,
+    "names_refused_run_id": false,
+    "reports_authorization_sha256": false,
+    "reports_frozen_script_sha256": false,
+    "reports_staged_script_sha256": false
+   },
+   "kind": "RESULT",
+   "order": 13,
+   "preserved_as": "13_result_491eb1e5-34b6-40ec-9196-de9f58f181ee.jsonl",
+   "raw_line_bytes": 2775,
+   "raw_line_sha256": "762423ee2a399a03fa2616c859d777776530e2aeaedfb99db73997048f393ef1",
+   "timestamp": "2026-09-14T20:16:11.151Z",
+   "tool_use_id": "toolu_01FbBFZ7BfHiXPtrhfQeoW7D",
+   "uuid": "491eb1e5-34b6-40ec-9196-de9f58f181ee"
+  },
+  {
+   "detail": {
+    "command_bytes": 1218,
+    "command_sha256": "1a64f86841dc786bc197b0e5182800300da94c77949b2a77faef107efd78e4ab",
+    "copies_the_frozen_script": false,
+    "writes_the_authorization_record": false
+   },
+   "kind": "BASH",
+   "order": 14,
+   "preserved_as": "14_bash_bb5ef7c1-957d-473f-847c-0290bbe7db1b.jsonl",
+   "raw_line_bytes": 2800,
+   "raw_line_sha256": "52c7b93c140d769cf7caa9d3b09f439743fac6e76006caab44235fdc4e626fdc",
+   "timestamp": "2026-09-14T20:16:38.475Z",
+   "tool_use_id": "toolu_01NZ5PUN5gEHaxLVGS8gFsu9",
+   "uuid": "bb5ef7c1-957d-473f-847c-0290bbe7db1b"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": false,
+    "names_refused_run_id": false,
+    "reports_authorization_sha256": false,
+    "reports_frozen_script_sha256": false,
+    "reports_staged_script_sha256": false
+   },
+   "kind": "RESULT",
+   "order": 15,
+   "preserved_as": "15_result_e71b513a-5677-4963-a827-b0eaeef9a8b7.jsonl",
+   "raw_line_bytes": 1575,
+   "raw_line_sha256": "99a87e274c997835c8690646cde75070acd6f8a2adf9179cd9b1a2584a662638",
+   "timestamp": "2026-09-14T20:16:40.712Z",
+   "tool_use_id": "toolu_01NZ5PUN5gEHaxLVGS8gFsu9",
+   "uuid": "e71b513a-5677-4963-a827-b0eaeef9a8b7"
+  },
+  {
+   "detail": {
+    "command_bytes": 7402,
+    "command_sha256": "ba5df1c95f7224e4f79e73ea1f4ef44c70432f4733cb08360b88779b494ab586",
+    "copies_the_frozen_script": false,
+    "writes_the_authorization_record": true
+   },
+   "kind": "BASH",
+   "order": 16,
+   "preserved_as": "16_bash_908e8261-c930-4271-9596-af544e904a1d.jsonl",
+   "raw_line_bytes": 9165,
+   "raw_line_sha256": "8f0e91b68a3667bc993d83cf9da0b429e778991930cdf1deea12004e98fc0a14",
+   "timestamp": "2026-09-14T20:18:51.874Z",
+   "tool_use_id": "toolu_01CwBD2h5YF2maaBNQwqwYjJ",
+   "uuid": "908e8261-c930-4271-9596-af544e904a1d"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": false,
+    "names_refused_run_id": false,
+    "reports_authorization_sha256": false,
+    "reports_frozen_script_sha256": false,
+    "reports_staged_script_sha256": false
+   },
+   "kind": "RESULT",
+   "order": 17,
+   "preserved_as": "17_result_d99a6c9e-b4f7-43bf-bf50-a361e7c4948f.jsonl",
+   "raw_line_bytes": 1299,
+   "raw_line_sha256": "3f4ffcc9fb49c7c1a32396ff9dd3b14d243410a82ba04888c4965a2add451100",
+   "timestamp": "2026-09-14T20:18:58.110Z",
+   "tool_use_id": "toolu_01CwBD2h5YF2maaBNQwqwYjJ",
+   "uuid": "d99a6c9e-b4f7-43bf-bf50-a361e7c4948f"
+  },
+  {
+   "detail": {
+    "command_bytes": 742,
+    "command_sha256": "2e5dc288bdca286a32ad738ef218d7053b4c14a9e8707628ffe4b00e67ef20f8",
+    "copies_the_frozen_script": false,
+    "writes_the_authorization_record": false
+   },
+   "kind": "BASH",
+   "order": 18,
+   "preserved_as": "18_bash_b62ccd7c-abac-4635-85fc-94997efdf2c3.jsonl",
+   "raw_line_bytes": 2341,
+   "raw_line_sha256": "90e28dc95987edccf06c381c7e1918603cc158f6bb44cb25e004a816f43b6f53",
+   "timestamp": "2026-09-14T20:33:46.669Z",
+   "tool_use_id": "toolu_01FPovdSAqqxx3ygduW3Hoan",
+   "uuid": "b62ccd7c-abac-4635-85fc-94997efdf2c3"
+  },
+  {
+   "detail": {
+    "names_accepted_run_id": false,
+    "names_refused_run_id": true,
+    "reports_authorization_sha256": false,
+    "reports_frozen_script_sha256": false,
+    "reports_staged_script_sha256": false
+   },
+   "kind": "RESULT",
+   "order": 19,
+   "preserved_as": "19_result_f58c38c6-080f-4c77-9fd3-b1ab4124f2eb.jsonl",
+   "raw_line_bytes": 1971,
+   "raw_line_sha256": "55c2105e0456f6574932b9eff879152cf20ba5395b121d3730f0c08a13769540",
+   "timestamp": "2026-09-14T20:33:49.016Z",
+   "tool_use_id": "toolu_01FPovdSAqqxx3ygduW3Hoan",
+   "uuid": "f58c38c6-080f-4c77-9fd3-b1ab4124f2eb"
+  }
+ ],
+ "selection_rule": "records naming the staged directory 'g1seg01_2154' or AUTHORIZATION_2154.json, plus the results of exactly those tool ids, plus the interrupt notice",
+ "staged_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1seg01_2154/grade_batch.seg01.js",
+ "transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+ "transcript_bytes": 529628101
+}

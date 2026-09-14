@@ -1,0 +1,26 @@
+{
+ "scope": "the returned Workflow identities for the ONE authorized 30-row segment, recorded immediately on launch, before any result is read",
+ "authorization_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2154_g1_collection/AUTHORIZATION_2154.json",
+ "authorization_sha256": "db48422dc0fc7a7516ffb8eb0d0790dbc044d4bdec442dd0f97ef8b85485291d",
+ "accepted_run_id": "wf_d965de9c-9ba",
+ "accepted_task_id": "wnued4yh2",
+ "accepted_args_rows": 30,
+ "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_d965de9c-9ba.json",
+ "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_d965de9c-9ba",
+ "launched_utc": "2026-09-14T20:15:13Z",
+ "refused_first_invocation": {
+  "run_id": "wf_50e5d395-fb2",
+  "task_id": "whz2ajhl7",
+  "args_rows_sent": 1,
+  "outcome": "failed at the script guard before any agent started",
+  "error": "this publication has 30 rows, not 1",
+  "agent_count": 0,
+  "agents_done": 0,
+  "subagent_tokens": 0,
+  "duration_ms": 38,
+  "model_calls": 0,
+  "cause": "MY ERROR: I passed only the first row of the frozen invocation args array instead of all 30. The script refused on its own row count; no agent ran and no model was called.",
+  "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_50e5d395-fb2"
+ },
+ "model_calls_before_the_accepted_launch": 0
+}
