@@ -1,0 +1,7 @@
+attempt	core_a2143_absent
+payload	../../unit_2143_source_authority/test_authority_2143.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2702972
+payload_pid	2702976
+started_utc	2026-09-14T16:38:00Z
+state	finished exit 0

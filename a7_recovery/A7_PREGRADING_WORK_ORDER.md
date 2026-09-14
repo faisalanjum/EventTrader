@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 188, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 198, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,263 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision188: preparation and the collection command are VERIFIED for
+CURRENT,Revision198: one-source preparation/collection VERIFIED. The final
+native CLI codex_cli2146_a/b9b613d4 returned exit0/empty stderr and full
+recorddde2755b exactly equals the first CLI. Probe AND unlaunched real packet
+retain every exact file/hash. Three loader tests and six actual diagnostic
+input-boundary controls pass. Both Core findings are closed without changing
+any model answer or grading rule. Review/checklist and exact results are in
+unit_2143_source_authority/SOURCE_AUTHORITY_REVIEW_2146.md and
+VERIFIED_PREPARATION_2146.json. All eight completed native pairs are preserved.
+Core's2145 read-only task is finished (Core2143/68756e71); Core waits. Root
+owns publication of this verified preparation/evidence, then the one lawful
+source task. No source answer, signature or corrected score is newly claimed.
+
+HISTORY,Revision197: the shared native remaining checks finished exit0 with
+empty stderr; report0df246293bbf40a16f090d38596129a7e442b3e97a7842a273a503a6
+509bd49e. Actual preparation serves one event/six rows/one question;32 other
+source raws and origins exactly match root's33-source proof. Empty collection
+and resume count1 missing/0 accepted, no retry; wrong authority and missing
+historical prefix refuse. All16 native copies of the8 completed calls match
+the originals AND root's independent277268c4 proof. The real packet remains
+unlaunched/unfinalized; report9741960128b2639f5ac126bb50f67638271453e3eab897
+07e4ca10354be861e7, script60e46245bbd10cb1dcc8482f4de2599310d0fd97e5a6eeb6
+135a29a84b914d8a,124814 bytes. Source call ledger685 before; existing retry
+owner permits invalid_response only. Signer is a separate later call.
+
+The actual CLI also passed, raw exit0/empty stderr, full recorddde2755b7aa011
+735fd55fd41c9b7df4d93a4be85f5e04e9fdf5b91facc4cebc. It explicitly records
+empty input/receipt state lists, no per-state attempts,1 missing/0 valid.
+Core2143/68756e718512560b24b6f86605e2e86b81318b8fc4eb6a441af1c4c84cbda897
+is its completed static review of task2145; no Core jobs remain.
+
+Two narrow follow-ups: the diagnostic now asserts/reports its explicit empty
+state list (actual completed command already supplied[]); a focused real-main
+loader test reproduced rejection of a hash-matching source with no Python
+suffix. The entry now uses the same explicit SourceFileLoader as its siblings.
+Three focused tests pass, including the ordinary.py control and wrong-hash
+refusal. Final entryb9b613d466f985f7c7dce0c4638ccbdadb1ee48dea4df03bcd10f220
+e98e677b is running as codex_cli2146_a against the same isolated probe.
+Original callers are byte-preserved as .py.txt evidence (not discoverable
+active tests) under preserved_core2143 and preserved_root2144. Do not redo
+preservation or completed semantic calls. No new source answer/signature/score.
+
+Next: compare final CLI bytes/unchanged packets, freeze and normally publish
+verified preparation plus completed-eight evidence; then authorize the one
+source-rule closeout through the approved subscription route. Reuse every
+success. After its independent source check: sign/lock, corrected-key consumer,
+only affected grading, every miss/wrong-accept cause, END-only offline model
+setup, STOP/WAIT. No A8, production or inference-engine work.
+
+HISTORY,Revision196: Core2142/0f2878f72ac296909fdb861857754d0b707750f18bb450
+a0b5dbe2b5f65e68bc is the verified combined reply to interrupt2144. Both
+Core cases ended naturally; root verified no native task remains. Root now
+owns serial recovery edits/tests. Core task2145/c90ef15cc6e09ef0d3a471a827
+e41f49adbda5ddb5954000919cf818e6c18509 is read-only review of the collection
+delta; no Core native job, edit or call is allowed. Both mailbox archives,
+unchanged HEADs and the one existing watcher were rechecked. No new session.
+
+The second actual wording proof c40132138b918789cee313f17f39c4d8ccaef7d40e
+0417b4056c970b6439bc26 is also verified: raw exit0/empty stderr, task4cc2d3f6,
+117511 bytes, only the290-byte trusted authority insertion. Both completed
+cases are reused. Core's exact original test/preservation callers are saved
+byte-identically in unit_2143_source_authority/preserved_core2143 (9c816b62,
+8ba28e83). Prefixff48b6e5 and bindingc0bfcc03 remain unchanged.
+
+Actual collector absence reproduced with exit2 before implementation. The
+new thin collect_authority_2143 entry binds the unchanged2136 collector to
+this round's shared binding/renderer and explicit report/hash/states. The
+remaining preparation, carry, empty-answer/resume, authority and missing-prefix
+checks now share one native setup; preservation reuses the existing owner.
+Then execute the actual CLI against that isolated probe and compare outputs.
+Do not finalize the unlaunched deliverable. This necessary CLI smoke is not
+a repeat of every full case. No source call, signer, approval or score yet.
+
+HISTORY,Revision195: Codex2144/e9646419487f17ff2e7cd8e9c72b4dbd7f1fa4a15f54
+ece38b78960598bf6910 INTERRUPTS task2143 to avoid unnecessary cold reloads.
+Core's new test_authority_2143.py says the accepted-shard cache omits wording
+and requires one cold process per case. The pinnedb544dabd owner already
+includes SHA256(F.v6_prefix(...)) in the existing expectation key; the2134
+same-operation missing-prefix proof already verifies that repair. Both
+assembled-task variants here retain the predecessor's own wording. No new
+cache or repeat of the entire setup per case is required by this task.
+
+The first send validation correctly refused when the observed absent-case
+process had already finished; nothing was sent then. Its actual result is
+VALID completed work: core_a2143_absent exit0/empty stderr, CASE result
+72f2d7cd2e39bd74a17b8b79de9091f973be2d3712c2acd253e5802946e977c3,
+assembled old-rule task3f6eb13f972d27f6f7d57c495723c1bad468f037d85a36b8dff4d
+06cdb82284b (117221 bytes, missing clause, one anchor). Preserve/reuse it.
+The interrupt was sent only after fresh proof of current case core_a2143_served,
+launcher2708363/wrapper2708365/boundary2708369 and ancestry to Core1037924.
+Root signaled nothing and is WAITING for Core's combined stop report before
+taking serial ownership. No overlapping native work or edits to Core's files.
+
+Keep Core's useful prefixff48b6e5 and bindingc0bfcc03; they are not rejected.
+Root will finish the bounded proof in one setup after the report, preserving
+all results. Also verify a command for the REAL prepared packet: the current
+cmd_collect.sh tests an isolated probe, not collection of the actual packet.
+Do not lose the real entry requirement again. No call/signature/grading or
+publication is yet authorized. The source-rule ruling, eight successful
+source calls,33-source proof91f0f1b3 and publisheda379681c all stand.
+
+HISTORY,Revision194: the existing source-event rule resolves the one scope
+question; no new product policy or older-filing search is required. Core2141/
+3b2e2d79 withdrew its gap claim after checking the omitted frozen authority.
+Root independently rejects the proposed extra corpus check: prior publication
+is not an admission prerequisite under either the ordinary fact gate or the
+restatement rule. Ruling: unit_2020_codex_check/EIGHT_SCOPE_DISPOSITION_2143.md.
+The old raw/open issue is still untouched and the key remains unsigned.
+
+Codex2143/04c1c5c313aedacdfb870ce57e37ea87fc804d10cf57203c645ab7e3f29b7fed
+assigns Core only preparation/proof of one source-owner closeout: one event,
+six frozen rows, one question; add only the omitted existing authority to
+the trusted task, preserve every source/locator and historical prompt/raw,
+reuse the existing owners and32 unaffected results. Preserve the completed
+eight native state/transcript pairs durably. Core owns serial native checks;
+root does not overlap. No model call yet. Freeze/review the actual prepared
+entry before authorizing one call plus at most one existing invalid-only or
+proved-transport retry:685 before, at most687 before a separate signer.
+No stage/commit/push, signer, lock or grading in this Core task. The full
+corrected-key consumer, affected grading, final score and END-only offline
+model setup still follow. A7 only, then STOP/WAIT. Published HEADa379681c.
+
+HISTORY,Revision193: all eight successful source-review calls are collected
+and preserved; ledger685, no retry or signer. Independent full-input/native
+identities and the complete52-row inventory are in
+unit_2020_codex_check/EIGHT_NATIVE_AND_ROW_AUDIT_2141.json. Per-row source
+decisions are in EIGHT_SOURCE_MEANING_REVIEW_2142.json:51 checked, one open
+scope question at0001104659-26-017090#115. All four printed rates/periods
+are real and distinct; the open issue concerns which periods the selected
+target admits. Neither earlier model output establishes the governing rule.
+
+Core2140/89927cbddd14c75de916727c1e32420386bd83d0e3c94a5ea12291e7a36f7578
+gave a read-only opinion that no rule settles it. Codex2142/ddbfb9ed68b034b9
+asks it to check the omitted owner-ratified restatement rule in
+15_CandidateFactPacket.md Part C item3, line90 (aa7239edf069dec611678dc9981
+cebfa6760dedbc79faada95d4bc5c66b7e98c), against the actual target/quote.
+Core owns only that read-only task; root owns serial native verification.
+No new policy, raw-answer edit, successful call repeat or key approval.
+
+Root attempt codex_eight2141_a stopped on its own incorrect test expectation
+that re-recording a saved state returns no warning. K.record_state correctly
+returns "that state is already recorded"; repeated finalization and raw-file
+equality already passed. The exact failed caller7cf40f2b is preserved under
+codex_eight2141_a/FAILED_CALLER.py with raw logs. Only that diagnostic assertion
+was corrected (callerf8323e55). codex_eight2141_b then finished with raw
+exit0 and empty stderr. Its EIGHT_SOURCE_REVIEW_2141.json measures
+91f0f1b3454a938834242b05a4f23c9d9addf90491598e21269651fd7a1d4bf1:
+all33 current source raws match,25 unaffected raws/origins are identical,
+repeated finalization is identical and the packet is byte-unchanged. The
+actual signing gate accounts191 rows,165 provisional key facts,34 controls,
+10 exclusions, all hard-class floors met and zero exact duplicates. Its
+ONLY stops are the same one unresolved source open issue. Thus the native
+path is proved through this gate, but the key is NOT signable. This was a
+diagnostic correction, not a grader repair. No root native job remains live.
+Published HEADa379681c remains unchanged.
+
+Next remains bounded: resolve this one source question using live authority,
+verify current key materialization, sign/lock through existing owners, prove
+the corrected-key consumer with full input identity, grade only affected
+questions while reusing proved completions, check the corrected score,
+END-only offline model setup, then STOP/WAIT. No A8 or later step.
+
+HISTORY,Revision192: launch wait CLEARED. The actual Core transcript records
+the owner's Yes at15:28:24UTC; eight workflows launched15:29:13-15:29:41UTC
+and all completed by15:33:45UTC. Root independently compared every frozen
+script, route-staged copy and official workflow script byte-for-byte; all
+eight match their prelaunch hashes. Eight distinct native agents/messages/
+requests report claude-opus-5, one agent and zero tool calls per workflow.
+The staged paths are transport copies, not new prompts or replacement calls.
+
+Core's actual core_collect2140_a/COLLECTION_2138.json measures
+d61ef95466997a6a4f2dce0d9c672f9379eb4b7d9887215bada04e3260df93c8:
+eight valid, zero invalid/missing/unproved/transport, no retry; finalization
+ba63116b32db38a905612ab53f7ff93a51f0a06e42e363f1626d2f834fa7a003.
+Root read the payload exit0 and empty stderr. This establishes collection
+evidence, NOT independent approval of all52 source rows or a signed key.
+Raw/native/full-input checks and source-meaning review are underway. Preserve
+all eight successes; ledger677->685, no signer launched. Codex2140 remains
+the sole bounded Core task until its one complete reply; root launches no
+overlapping native process. The same goal is active and watcher reused.
+Published HEADa379681c and all runtime pins remain unchanged. Next: source
+approval, existing signed-key/consumer connection, affected corrected grading,
+END-only offline model setup, then STOP/WAIT. No A8 or later step.
+
+HISTORY,Revision191: goal marked BLOCKED on the third consecutive direct
+confirmation of the same external launch-approval wait. At13:41:53UTC,
+Core pane%12/PID1037924 still displays the unanswered "Yes — launch the8
+calls" question; no new packet workflow exists, Core2138/5a47ad97 is unchanged,
+and recovery HEAD remains publisheda379681c. Direct preceding observations
+were13:34UTC and13:37:48UTC on separate goal turns. This is an actual pending
+user choice, not an inference from slow output or an expired observation.
+
+Unblock: owner selects option1 in Core, then resumes this SAME Codex goal.
+Read current mail and actual workflow records on resume; missed watcher events
+are not replayed. Keep task2140/2dce2c66 unchanged and reuse every successful
+result. No new handover, duplicate watcher, replacement goal or duplicate call.
+Core and the single watcher/monitor remain live and were not signaled. Root
+has no live native verifier, no staged changes and no authorization to answer
+Core's user-confirmation prompt on the owner's behalf. No code, key or prompt
+change can supply the missing independent source results. The prepared batch
+is already verified/pushed; source truth, new signature/key/consumer,
+corrected grading and END-only offline local setup remain OPEN. After A7's
+required correction/setup package, STOP/WAIT; the broad goal is not complete.
+
+HISTORY,Revision190: the launch pause is now IDENTIFIED, not a code failure
+or a reported provider refusal. At13:34UTC root read the existing driver-core
+tmux pane%12, whose pane PID1037924 exactly matches the bound Core process.
+It displays an unanswered launch question: "Codex has authorised collecting
+the8 source-question reviews. This needs8 real AI calls via Workflow, which
+I can't start without you asking for it. Launch now?" Option1 is "Yes —
+launch the8 calls", ledger677->685, at most693 with invalid-only retries,
+no signer. This is the exact already-approved Codex2140 task, not another
+project-scope decision. Owner was asked to select option1 in Core.
+
+Root sent NO keystroke, changed no permission/route/hook, launched no model
+or Core process, and did not supersede Codex2140. Its archive remains exact.
+The Core application, sole watcher and sole monitor are live. Last durable
+Core transcript action is still the successful13:04UTC invocation check;
+no new workflow was observed. Keep the same task and reuse completed results.
+This is the first direct UI proof of the specific approval wait; earlier
+turns proved liveness/silence but did not establish its cause. Observe the same
+pane/worker handles, never restart solely after an observation timeout.
+
+Blocked audit: the same unanswered launch question was directly confirmed
+again at13:37:48UTC on the next goal turn (second consecutive confirmed turn).
+Core2138 and Codex2140 remain unchanged; Core/pane and the one watcher/monitor
+are live. No new task or call is authorized beyond2140. Goal remains active;
+the exact missing external action is the owner's answer to Core's launch
+question, not another repository change or permission-mode workaround.
+
+HISTORY,Revision189: verified preparation is COMMITTED AND PUSHED as
+a379681c5ea1aba74dbc7f17231fd93a3873ccce, tree91f24cf4, parentc379d1bf.
+Fresh remote matches;172 changed files,178 manifest entries. Frozen manifest
+SOURCE_QUESTION_FREEZE_2138.json/5c94f3f6 describes that immutable commit's
+snapshot, including Revision188 of this evolving status note. Main and the
+unrelated dirty build_inventory_review.py/2ec3bd33 were preserved.
+
+Codex2140/2dce2c662d1532dd9b51964e7fe22c9bf46afeda37acb7463f880fb622e331d4
+answers Core2138/5a47ad97 and authorizes ONE task: the exact eight source-only
+jobs from packet_2136 and collection with the verified executable. Its archive
+is byte-exact. At most8 primaries plus8 invalid-only retries, prior count677,
+at most693 including this task; the planned signer is NOT authorized. Core
+owns SERIAL native collection until its single reply. Root does not overlap
+native jobs, edit runtime pins or move HEAD. Core's own transcript confirms
+all eight invocation and prompt hashes/args/attempts checked at13:04:12UTC;
+no new launch/result is yet independently observed. Wait on the existing
+watcher, not a mailbox-poll loop. No new handover, watcher or goal.
+
+Root's next review is the actual returned evidence plus source meaning over
+all52 rows, retaining25 unaffected sources and the four lawful unknowns.
+Then use the existing candidate/sign/lock and actual new-key grading consumer;
+NEXT_SIGNED_KEY_CONNECTION_2130.md remains the bounded execution outline.
+Historical2081/2084 callers pin667 calls/old source runs/signature and are not
+generic next-run commands; do not weaken or execute them as a new key. No
+new framework, production audit or local inference. Corrected score and
+END-only offline local setup remain OPEN; finish A7, then STOP/WAIT, no A8.
+
+HISTORY,Revision188: preparation and the collection command are VERIFIED for
 the eight source calls. Actual CLI codex_cli2138_a exited0 with empty stderr;
 COLLECTION_2138.json/4447081c is identical in every field to the callable
 proofad99d5f3. Eight missing/zero accepted, false completion, no retry/child,
@@ -3071,6 +3327,11 @@ attempt records. Do not build another status database or proof framework.
 Owner instructions,2026-09-13: do not stop at the baseline number. Determine
 what caused the actual problems, make justified corrections, deliver the
 final checked A7 result, prove model-switch reuse, then stop for the owner.
+Owner clarification,2026-09-14: cover EVERY missed fact (recall) and wrongly
+accepted fact (precision), not just a sample of error flags. Reuse the same
+test/grading owners for other supported models; only justified connection and
+model settings vary. A perfect tested-model score is a hypothesis, not a
+required finding or a reason to alter evidence.
 Corrections target the test/key/grading, not the tested model's intelligence.
 Source-confirmed model mistakes remain in the score and need no automatic
 producer-prompt change or new answer call. This is not a promise of A7 PASS.

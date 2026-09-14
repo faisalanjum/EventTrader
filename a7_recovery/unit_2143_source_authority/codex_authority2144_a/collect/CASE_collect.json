@@ -1,0 +1,32 @@
+{
+ "before_this_round": 685,
+ "caller_sha256": "a9dec376e7d30bca04eec8b577f3ddae34ac72419b3de7637710e19cfa7fb8b3",
+ "case": "collect",
+ "child": null,
+ "completed_packet_unchanged": true,
+ "deliverable_untouched_by_this_case": true,
+ "finalization_sha256": "62184c1b71c74c7e110d0d9ab4113a2ca0ac4c12bfee6b0b4d934992e2ab4ac4",
+ "ledger": {
+  "invalid_response": 0,
+  "missing": 1,
+  "scheduled": 1,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "valid": 0
+ },
+ "model_calls": 0,
+ "outcomes": [
+  "missing"
+ ],
+ "paid_raw_files": [],
+ "phase_complete": false,
+ "pinned_files_unchanged": true,
+ "probe_events": 1,
+ "probe_run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/codex_authority2144_a/collect/zero_answer_probe_packet",
+ "reasons": [
+  "no official state"
+ ],
+ "resume_identical": true,
+ "resume_states_still_empty": true,
+ "retry": []
+}

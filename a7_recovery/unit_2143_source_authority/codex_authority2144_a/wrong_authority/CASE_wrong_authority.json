@@ -1,0 +1,13 @@
+{
+ "caller_sha256": "a9dec376e7d30bca04eec8b577f3ddae34ac72419b3de7637710e19cfa7fb8b3",
+ "case": "wrong_authority",
+ "completed_packet_unchanged": true,
+ "control_after": true,
+ "control_clause_sha256": "b9013beddb49d0150f1bc11accd362687d498e1eab01d3bd1f43ddc8c5eb5c6d",
+ "control_reads": true,
+ "model_calls": 0,
+ "pinned_files_unchanged": true,
+ "refusal_wrong_clause_pin": "the pinned clause appears 0 times in /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md, not once",
+ "refusal_wrong_owner_pin": "the authority owner is aa7239edf069dec611678dc9981cebfa6760dedbc79faada95d4bc5c66b7e98c, not the pinned 0000000000000000000000000000000000000000000000000000000000000000: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md",
+ "refusal_wrong_version": "the served version is /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2127_source_context/a7_source_context_2127.py, not the pinned renderer unit_2143_source_authority/a7_source_authority_2143.py"
+}

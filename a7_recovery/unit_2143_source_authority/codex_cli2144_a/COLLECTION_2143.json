@@ -1,0 +1,55 @@
+{
+ "accounting": {
+  "before_this_round": 685,
+  "invalid_response": 0,
+  "missing": 1,
+  "retry_offered": [],
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "scheduled": 1,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "valid": 0
+ },
+ "events": [
+  "0001104659-26-017090"
+ ],
+ "finalization": {
+  "child": null,
+  "harvested_raw": [],
+  "ledger": {
+   "invalid_response": 0,
+   "missing": 1,
+   "scheduled": 1,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "valid": 0
+  },
+  "outcomes": [
+   [
+    "0001104659-26-017090",
+    "missing",
+    "no official state"
+   ]
+  ],
+  "phase_complete": false,
+  "problems": [],
+  "retry": [],
+  "sha256": "62184c1b71c74c7e110d0d9ab4113a2ca0ac4c12bfee6b0b4d934992e2ab4ac4"
+ },
+ "model_calls_started_here": 0,
+ "paid_raw_files": {},
+ "pinned_identities": {
+  "binding_sha256": "c0bfcc03caeb9507e09e0719d3f566538b55d269fda6fba049f29c7375ef9858",
+  "owner_sha256": "b544dabd31074d32d4379820994092eec4f88b739a3df0e8d869e4b219a50732",
+  "renderer_sha256": "ff48b6e5d44304bb8246365ee49207e379fda22e86ecb32fb6bb25c26b4c5a0f"
+ },
+ "receipt_states_after": [],
+ "receipt_states_before": [],
+ "recorded_states": [],
+ "report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/codex_authority2144_a/collect/PROBE_REPORT.json",
+ "report_sha256": "847cd88368c74bf58552b7c4f3b6808ec28041218213818e900b35d35860cb6d",
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/codex_authority2144_a/collect/zero_answer_probe_packet",
+ "scope": "collection/resume through F.record_state and F.finalize; no semantic decision, no retry rule, no key edit"
+}

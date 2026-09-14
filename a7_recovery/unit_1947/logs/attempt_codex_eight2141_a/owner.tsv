@@ -1,0 +1,7 @@
+attempt	codex_eight2141_a
+payload	../../unit_2020_codex_check/verify_eight_source_results_2141.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2632978
+payload_pid	2632982
+started_utc	2026-09-14T15:49:00Z
+state	finished exit 1

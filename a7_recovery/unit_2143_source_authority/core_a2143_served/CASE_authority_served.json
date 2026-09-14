@@ -1,0 +1,19 @@
+{
+ "bytes_added": 290,
+ "bytes_after": 117511,
+ "bytes_before": 117221,
+ "caller_sha256": "9c816b626715e1ad5c9ef57103c24966eb76bb515bbde097302df81240886991",
+ "case": "authority_served",
+ "clause_occurrences": 1,
+ "clause_owner_sha256": "aa7239edf069dec611678dc9981cebfa6760dedbc79faada95d4bc5c66b7e98c",
+ "compared_against": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/assembled_2143/ASSEMBLED_UNDER_2127.txt",
+ "compared_against_sha256": "3f6eb13f972d27f6f7d57c495723c1bad468f037d85a36b8dff4d06cdb82284b",
+ "completed_packet_unchanged": true,
+ "inserted_block_sha256": "f190a591335da99c850ee283339e0488b903e57a0ff07ea5db5e32a4788a347f",
+ "label": "0001104659-26-017090",
+ "model_calls": 0,
+ "only_difference_is_the_inserted_block": true,
+ "pinned_files_unchanged": true,
+ "served_block": "5. Emit each distinct fact exactly ONCE \u2014 never restate one fact as two\n   records.\n\n**Restatement across events (governing contract, quoted verbatim; binding).**\n- Same-value multi-source records (8-K + 10-Q restating one number) = separate facts on separate events BY DESIGN; read-time collapse (8k > transcript > 10q > 10k > news) merges the view. No channel-side dedup.\n",
+ "stored_sha256": "4cc2d3f6f30916558d8135b9a58d5971631591fbe5138e89c855e12294bd6ae4"
+}

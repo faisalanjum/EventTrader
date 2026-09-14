@@ -1,0 +1,10 @@
+{
+ "caller_sha256": "a9dec376e7d30bca04eec8b577f3ddae34ac72419b3de7637710e19cfa7fb8b3",
+ "case": "missing_prefix",
+ "completed_packet_unchanged": true,
+ "control_clean": true,
+ "control_key_sources": 33,
+ "model_calls": 0,
+ "pinned_files_unchanged": true,
+ "refusal": "the current merged key does not read cleanly: ['receipt.prompts is not the expected value', \"7 events have no accepted shard: ['0000027904-26-000020', '0000092380-26-000044', '0000898173-26-000006']\"]"
+}

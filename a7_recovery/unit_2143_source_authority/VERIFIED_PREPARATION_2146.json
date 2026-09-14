@@ -1,0 +1,101 @@
+{
+  "scope": "Verified source-authority preparation and real collection entry only; NOT a signed key, source-meaning closure, corrected score or A7 completion",
+  "core_review_sha256": "68756e718512560b24b6f86605e2e86b81318b8fc4eb6a441af1c4c84cbda897",
+  "completed_native_cases": {
+    "absent": "72f2d7cd2e39bd74a17b8b79de9091f973be2d3712c2acd253e5802946e977c3",
+    "served": "c40132138b918789cee313f17f39c4d8ccaef7d40e0417b4056c970b6439bc26",
+    "remaining": "0df246293bbf40a16f090d38596129a7e442b3e97a7842a273a503a6509bd49e"
+  },
+  "final_cli": {
+    "full_collection_sha256": "dde2755b7aa011735fd55fd41c9b7df4d93a4be85f5e04e9fdf5b91facc4cebc",
+    "final_entry_sha256": "b9b613d466f985f7c7dce0c4638ccbdadb1ee48dea4df03bcd10f220e98e677b",
+    "full_cli_record_identical": true,
+    "both_probe_and_real_packet_byte_unchanged": true,
+    "recorded_states": [],
+    "ledger": {
+      "invalid_response": 0,
+      "missing": 1,
+      "scheduled": 1,
+      "transport_no_answer": 0,
+      "unproved": 0,
+      "valid": 0
+    },
+    "raw_native_attempts_all_exit_0_empty_stderr": true
+  },
+  "diagnostic_input_boundary": {
+    "scope": "execute the actual three-line empty-probe input boundary only; native collection is proved separately",
+    "caller_sha256": "253d9c9b8735971f46708443a7eb811878aab5396eb34a23be46999d053ffd67",
+    "boundary_sha256": "bd5b6a98b4b3dc86ed79210c6517a1a72c23c30f4bba61cfdd3838159982c08a",
+    "checks": [
+      {
+        "input": "[]",
+        "expected_accept": true,
+        "outcome": "accept"
+      },
+      {
+        "input": " [ ] ",
+        "expected_accept": true,
+        "outcome": "accept"
+      },
+      {
+        "input": "[\"old-state\"]",
+        "expected_accept": false,
+        "outcome": "AssertionError"
+      },
+      {
+        "input": "{}",
+        "expected_accept": false,
+        "outcome": "AssertionError"
+      },
+      {
+        "input": "null",
+        "expected_accept": false,
+        "outcome": "AssertionError"
+      },
+      {
+        "input": null,
+        "expected_accept": false,
+        "outcome": "KeyError"
+      }
+    ]
+  },
+  "loader_tdd": {
+    "before": {
+      "chunk_id": "f9b650",
+      "wall_time_seconds": 0.0000054,
+      "exit_code": 1,
+      "original_token_count": 743,
+      "output": "test_pinned_source_is_not_selected_by_filename_suffix (__main__.CollectionLoaderTest.test_pinned_source_is_not_selected_by_filename_suffix) ... \n  test_pinned_source_is_not_selected_by_filename_suffix (__main__.CollectionLoaderTest.test_pinned_source_is_not_selected_by_filename_suffix) (name='owner') ... ERROR\n  test_pinned_source_is_not_selected_by_filename_suffix (__main__.CollectionLoaderTest.test_pinned_source_is_not_selected_by_filename_suffix) (name='owner.saved') ... ERROR\ntest_python_path_positive_control (__main__.CollectionLoaderTest.test_python_path_positive_control) ... ok\ntest_wrong_pin_refuses_before_loading (__main__.CollectionLoaderTest.test_wrong_pin_refuses_before_loading) ... ok\n\n======================================================================\nERROR: test_pinned_source_is_not_selected_by_filename_suffix (__main__.CollectionLoaderTest.test_pinned_source_is_not_selected_by_filename_suffix) (name='owner')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/test_collection_loader_2146.py\", line 56, in test_pinned_source_is_not_selected_by_filename_suffix\n    self.run_entry(name)\n  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/test_collection_loader_2146.py\", line 46, in run_entry\n    C.main()\n  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/collect_authority_2143.py\", line 38, in main\n    E.X = importlib.util.module_from_spec(spec)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 570, in module_from_spec\nAttributeError: 'NoneType' object has no attribute 'loader'\n\n======================================================================\nERROR: test_pinned_source_is_not_selected_by_filename_suffix (__main__.CollectionLoaderTest.test_pinned_source_is_not_selected_by_filename_suffix) (name='owner.saved')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/test_collection_loader_2146.py\", line 56, in test_pinned_source_is_not_selected_by_filename_suffix\n    self.run_entry(name)\n  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/test_collection_loader_2146.py\", line 46, in run_entry\n    C.main()\n  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/collect_authority_2143.py\", line 38, in main\n    E.X = importlib.util.module_from_spec(spec)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 570, in module_from_spec\nAttributeError: 'NoneType' object has no attribute 'loader'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (errors=2)\n"
+    },
+    "after": {
+      "chunk_id": "239003",
+      "wall_time_seconds": 0.000002695,
+      "exit_code": 0,
+      "original_token_count": 117,
+      "output": "test_pinned_source_is_not_selected_by_filename_suffix (__main__.CollectionLoaderTest.test_pinned_source_is_not_selected_by_filename_suffix) ... ok\ntest_python_path_positive_control (__main__.CollectionLoaderTest.test_python_path_positive_control) ... ok\ntest_wrong_pin_refuses_before_loading (__main__.CollectionLoaderTest.test_wrong_pin_refuses_before_loading) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nOK\n"
+    }
+  },
+  "unchanged_affected_regressions": "Published2134 seven focused cases, actual cold/warm input/history guards,33-source31-prompt seven-negative regression,11 signed-artifact mutations; none of those owners changed here.",
+  "core_findings_disposition": {
+    "empty_probe": "Added explicit required-empty input assertion and recorded supplied list. Completed actual commands already supplied[]; actual CLI also records empty before/after/attempt lists. The strengthened three-line boundary passes two empty controls and refuses four nonempty/wrong-type/missing inputs. No old result is relabelled.",
+    "source_loader": "Independently reproduced with actual main and a hash-matching harmless source fixture: .py control passes, unsuffixed/saved files raise AttributeError before fix. One existing SourceFileLoader argument fixes both; wrong hash still refuses. Final actual native CLI is byte-identical to the first real CLI.",
+    "preservation": "Write-once evidence preserved once, not repeated. Original callers retain exact bytes as .py.txt historical evidence, not active alternate implementations."
+  },
+  "prepared_packet": {
+    "report_sha256": "9741960128b2639f5ac126bb50f67638271453e3eab89707e4ca10354be861e7",
+    "script_sha256": "60e46245bbd10cb1dcc8482f4de2599310d0fd97e5a6eeb6135a29a84b914d8a",
+    "prompt_sha256": "4cc2d3f6f30916558d8135b9a58d5971631591fbe5138e89c855e12294bd6ae4",
+    "script_bytes": 124814,
+    "events": 1,
+    "rows": 6,
+    "question_rows": 1,
+    "before_source_call": 685,
+    "source_call_ceiling": 2,
+    "retryable_outcomes": [
+      "invalid_response"
+    ],
+    "actual_calls_started_here": 0,
+    "states": []
+  },
+  "next": "Publish exact verified preparation and completed-eight native/raw evidence, then one approved-source-rule call plus at most one existing invalid_response-only retry. Source review, independent signer/lock, corrected-key consumer and affected grading still follow. Keep every recall miss/wrong accept visible; END-only offline model setup, then STOP/WAIT."
+}

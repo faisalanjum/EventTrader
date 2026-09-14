@@ -1,0 +1,39 @@
+{
+ "accounting": {
+  "after_planned": 687,
+  "before_this_round": 685,
+  "global_ceiling": 6000,
+  "max_attempts_per_call": 2,
+  "planned_corrections": 1,
+  "planned_signer": 1,
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "worst_case_after": 689
+ },
+ "binding_sha256": "c0bfcc03caeb9507e09e0719d3f566538b55d269fda6fba049f29c7375ef9858",
+ "caller_sha256": "a9dec376e7d30bca04eec8b577f3ddae34ac72419b3de7637710e19cfa7fb8b3",
+ "capacity_problems": [],
+ "case": "prepare",
+ "completed_packet_unchanged": true,
+ "declared_scope": {
+  "question_row": "0001104659-26-017090#115",
+  "source_id": "0001104659-26-017090",
+  "work_order": "Codex SEQ 2143"
+ },
+ "events": 1,
+ "findings_served": 1,
+ "largest_script_bytes": 124814,
+ "model_calls": 0,
+ "pinned_files_unchanged": true,
+ "proved_assembly": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/assembled_2143/ASSEMBLED_UNDER_2143.txt",
+ "receipt_states": [],
+ "renderer_sha256": "ff48b6e5d44304bb8246365ee49207e379fda22e86ecb32fb6bb25c26b4c5a0f",
+ "report_sha256": "9741960128b2639f5ac126bb50f67638271453e3eab89707e4ca10354be861e7",
+ "round_event_rows": {
+  "0001104659-26-017090": 6
+ },
+ "rows_served": 6,
+ "served_prompt_matches_proved_assembly": true,
+ "served_prompt_sha256": "4cc2d3f6f30916558d8135b9a58d5971631591fbe5138e89c855e12294bd6ae4"
+}

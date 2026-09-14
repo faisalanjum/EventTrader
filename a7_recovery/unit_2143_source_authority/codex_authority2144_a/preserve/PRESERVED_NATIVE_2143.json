@@ -1,0 +1,85 @@
+{
+ "all_copies_match_originals": true,
+ "caller_sha256": "61ab71adf389027d34417d9dd748126c3b9123d13ebf94feb0188432c3de554a",
+ "checked_against_root": [
+  {
+   "agent_id": "a8d32d83b2d7a6a17",
+   "agent_matches_root": true,
+   "run_id": "wf_aa2ae772-866",
+   "source_id": "0000027904-26-000020",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  },
+  {
+   "agent_id": "ac7d159bac1035e55",
+   "agent_matches_root": true,
+   "run_id": "wf_d75c055c-1f5",
+   "source_id": "0000092380-26-000044",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  },
+  {
+   "agent_id": "acabc97499b72360a",
+   "agent_matches_root": true,
+   "run_id": "wf_97e11f9d-a52",
+   "source_id": "0000898173-26-000006",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  },
+  {
+   "agent_id": "ab7fabbe365b573e6",
+   "agent_matches_root": true,
+   "run_id": "wf_fd2481b1-766",
+   "source_id": "0001041061-26-000003",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  },
+  {
+   "agent_id": "aa1cbe3333f867582",
+   "agent_matches_root": true,
+   "run_id": "wf_0f72a946-77a",
+   "source_id": "0001104659-25-102611",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  },
+  {
+   "agent_id": "a6e91cdc2c76fbd07",
+   "agent_matches_root": true,
+   "run_id": "wf_bec5cebd-ee9",
+   "source_id": "0001104659-26-017090",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  },
+  {
+   "agent_id": "abafdcae30d3fdf0d",
+   "agent_matches_root": true,
+   "run_id": "wf_a7a3a4ed-411",
+   "source_id": "0001104659-26-027061",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  },
+  {
+   "agent_id": "a4b56eb743aa5c772",
+   "agent_matches_root": true,
+   "run_id": "wf_e58621b3-241",
+   "source_id": "BBY_2026-03-03T08.00",
+   "state_matches_root": true,
+   "transcript_matches_root": true
+  }
+ ],
+ "completed_packet_unchanged": true,
+ "copy_owner": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/preserve_native_2136.py",
+ "copy_owner_scope_label_is_stale": "durable copies of the seven completed calls native bytes; no call re-run, no re-finalization, originals untouched",
+ "copy_owner_sha256": "4b84eaae50b9c2f140ed4ca32a6628487cd7876650774c614f0a4cdd68f01026",
+ "every_copy_matches_root": true,
+ "finalization_sha256": "ba63116b32db38a905612ab53f7ff93a51f0a06e42e363f1626d2f834fa7a003",
+ "model_calls": 0,
+ "preserved_calls": 8,
+ "preserved_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/native_evidence_2143",
+ "preserved_files": 16,
+ "receipt_sha256": "1ee97945182e54c411f8d795f0b5bcc4014386e7777c57858ef1221b793f8b86",
+ "root_proof": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/EIGHT_NATIVE_AND_ROW_AUDIT_2141.json",
+ "root_proof_sha256": "277268c492ee042d0417b1a472361442b2c73124d7f355203bb6ae0ed5e45d8d",
+ "root_sources": 8,
+ "scope": "durable copies of the EIGHT completed calls native bytes, checked against root's own identities; no call re-run, no re-finalization, originals untouched"
+}

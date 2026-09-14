@@ -4,7 +4,115 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision188: preparation/collection VERIFIED
+Current checkpoint,work-order Revision198: source-authority preparation and
+collection VERIFIED. Final CLIb9b613d4 returned raw exit0/empty stderr and
+whole-recorddde2755b exactly equals the first CLI. All packet files unchanged.
+3 focused loader tests and6 actual empty-input-boundary cases pass. Complete
+five-item delta checklist: unit_2143_source_authority/SOURCE_AUTHORITY_REVIEW_2146.md;
+commands/raw results: VERIFIED_PREPARATION_2146.json. Freeze/publish now, then
+one source-rule call. Source truth/signature, new-key consumer, corrected score,
+every finding's cause and END-only offline reuse setup remain OPEN.
+
+Previous checkpoint,work-order Revision197: actual remaining-case report
+0df24629 passes, exit0/empty stderr; actual CLI reportdde2755b passes and
+confirms explicit empty input/receipt lists and1 missing/0 valid. Core2143/
+68756e71 agrees the connection uses the correct owners. Root reproduced its
+loader finding, applied the existing explicit loader idiom and passed3 focused
+tests. The final CLIb9b613d4 is now running as codex_cli2146_a. The diagnostic
+also asserts/reports the empty list already used by the completed command.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Verified authority-only insertion and unchanged source/configuration; focused real-main tests cover .py, unsuffixed/saved source and wrong hash. No answer-specific semantic code. |
+| Complete workflow | Native preparation,33-source carry, empty collection/resume,4 authority/history negative checks and8-call/16-file preservation pass. First real CLI passes; final loader-only CLI recheck OPEN. |
+| One owner and organization | Shared binding and existing collect/record/finalize/copy owners remain. Historical callers preserved as non-executable text evidence, not alternative active implementations. |
+| Simplicity | Reuse completed wording/native proofs and unchanged2134 affected regressions. Only input assertion and explicit-loader follow-ups; no cache/framework or duplicate successful call. |
+| Verification and limits | Final CLI equality and publication pending. Actual source settlement, signature, corrected-key consumer, corrected score/every finding disposition and END-only model setup remain OPEN. |
+
+Previous checkpoint,work-order Revision196: Core2142/0f2878f7 closes the
+interrupt; both jobs ended naturally and no native task remains. Root owns
+serial edits/tests; Core task2145/c90ef15c independently reads the small
+collection delta without edits or native execution. Both wording proofs72f2d7cd/c4013213
+are verified and reused. Exact Core callers preserved before editing.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Existing authority inserted verbatim; measured only290 bytes changed in the full one-event task. No expected answer or company-specific semantic branch added. |
+| Complete workflow | Missing actual collection entry reproduced with exit2. New thin entry uses the existing collector and this round's shared binding. Native remaining cases and actual CLI proof OPEN. |
+| One owner and organization | Existing prefix, binding, collect, record/finalize and native-copy owners retained. No new cache, parser, retry or grading owner. |
+| Simplicity | Replace redundant per-case cold setup with shared remaining checks; reuse completed wording proofs and unchanged regressions. |
+| Verification and limits | Core's cache rationale withdrawn and original callers preserved. Source settlement, signature, corrected-key consumer, score and END-only setup remain OPEN. |
+
+Previous checkpoint,work-order Revision195: task2143 interrupted by2144/e9646419
+to remove separate cold reloads based on the already-fixed prefix-cache defect.
+The useful prefix/binding remain; actual missing-authority case72f2d7cd passed
+and must be reused. Root awaits the exact combined stop report before edits
+or native tests. Finish remaining proof in one setup and verify the REAL
+packet collection entry, not only the isolated-probe test. No model result,
+source decision or safety check is waived. No new call/signature/score yet.
+
+Previous checkpoint,work-order Revision194: existing Part C item3 settles the
+scope question; Core2141 withdraws the policy gap. Root rejects the additional
+earlier-filing search as unnecessary. EIGHT_SCOPE_DISPOSITION_2143.md records
+the exact authority, target and two-case reasoning without changing the raw.
+Core task2143 prepares/proves only one6-row source-owner closeout with that
+omitted authority; no call yet. Root does not overlap its serial native tests.
+The actual33-source native proof91f0f1b3 and all eight successes remain valid.
+Raw settlement/signature, corrected-key consumer, corrected score and END-only
+setup remain OPEN; no new product policy or production work is required.
+
+Previous checkpoint,work-order Revision193: eight successful source calls are
+collected without retry; independent identities and all52 rows are recorded
+in EIGHT_NATIVE_AND_ROW_AUDIT_2141.json. EIGHT_SOURCE_MEANING_REVIEW_2142.json
+checks51 source decisions and leaves one explicit target/period scope question
+open. Core2140's opinion omitted the live restatement rule; task2142 requests
+only that read-only check. Root native codex_eight2141_b finished exit0,
+empty stderr; report91f0f1b3 proves33 sources/25 untouched/191 rows, all
+hard-class floors met, zero exact duplicate facts and only the same one
+source open issue blocking signature. No native job remains live.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Existing source/identity rules retained. No current-period-only filter or company-specific fix. One scope question remains OPEN. |
+| Complete workflow | Actual Core collection8 valid; independent native/prompt/raw identities checked. Root real33-source/signing-gate diagnostic VERIFIED through the honest refusal on one remaining open issue. |
+| One owner and organization | Existing record/finalize/materialize owners unchanged. K.record_state already owns duplicate-append refusal; root corrected only its mistaken test assertion. |
+| Simplicity | No new grading framework, production dependency or unnecessary model repeat. Preserve all valid completed results and only investigate the actual open question. |
+| Verification and limits | Exact failed diagnostic7cf40f2b preserved; correctedf8323e55 passes with report91f0f1b3. Raw source open issue, signature, corrected-key consumer, final score and END-only setup remain OPEN. |
+
+Previous checkpoint,work-order Revision192: the launch wait cleared at
+15:28:24UTC. All8 actual workflows completed by15:33:45UTC; frozen/staged/
+workflow script bytes match, with8 distinct native agents/messages/requests.
+Actual collector d61ef954 reports8 valid/zero other outcomes/no retry; root
+read exit0/empty stderr. The source decisions over52 rows still need the
+independent meaning review; collection is not key approval. Goal active,
+same watcher and task2140, HEADa379681c unchanged. No successful call repeat,
+signer, new key, corrected score or END-only setup is claimed complete.
+
+Previous checkpoint,work-order Revision191: goal BLOCKED after three separate
+goal turns directly confirmed the same unanswered Core launch question.
+Latest13:41:53UTC: pane%12/PID1037924, no new workflow, same Core2138 and
+Codex2140, HEADa379681c. Owner selects option1 in Core and resumes this same
+goal. Core/watcher/monitor are preserved; no duplicate launch or permission
+workaround. Prepared code/evidence stay verified and pushed; actual source
+truth/new signed key/consumer/corrected score/END-only setup remain OPEN.
+
+Previous checkpoint,work-order Revision190: root's read-only capture of Core's
+actual tmux pane%12/PID1037924 identifies the wait: an unanswered request to
+launch the exact eight approved source workflows. No code defect or provider
+refusal is reported. Owner was told to select option1; no keystroke, permission
+change, new mailbox instruction or call was made by root. Existing task2140,
+publisheda379681c and all runtime pins remain unchanged. Source/key/corrected
+score/END-only offline setup remain OPEN.
+
+Previous checkpoint,work-order Revision189: preparation and completed-seven
+evidence are committed/pusheda379681c, exact remote verified. Codex2140/
+2dce2c66 authorizes only eight source reviews plus permitted invalid-only
+retries and collection; Core owns serial native checks until its one report.
+Its live pre-launch checks matched all eight frozen invocations. Actual new
+answers/source meaning, signed corrected key/consumer, corrected score and
+END-only offline model setup remain OPEN. No A7 PASS or completion claim.
+
+Previous checkpoint,work-order Revision188: preparation/collection VERIFIED
 for the eight source calls. Actual command result4447081c equals the complete
 callable resultad99d5f3, raw exits0/empty stderr; no answers fabricated and
 actual packet unchanged. SOURCE_QUESTION_REVIEW_2138.md records the completed

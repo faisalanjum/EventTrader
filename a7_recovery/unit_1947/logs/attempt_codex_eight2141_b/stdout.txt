@@ -1,0 +1,3 @@
+Repeated actual collection agrees in every finalization field
+All current source raws and unaffected origins agree
+EIGHT_SOURCE_REVIEW_2141 {"sources": 33, "unaffected": 25, "gate_ok": false, "stops": ["1 open issues block the signature", "1 events return a non-empty open_issues and the final decision permits none: ['0001104659-26-017090']"], "packet_unchanged": true}

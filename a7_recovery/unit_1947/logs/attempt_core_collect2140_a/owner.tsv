@@ -1,0 +1,7 @@
+attempt	core_collect2140_a
+payload	../../unit_2136_source_questions/collect_questions_2136.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2609917
+payload_pid	2609921
+started_utc	2026-09-14T15:33:57Z
+state	finished exit 0

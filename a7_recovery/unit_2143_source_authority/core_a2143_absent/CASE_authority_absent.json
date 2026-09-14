@@ -1,0 +1,15 @@
+{
+ "anchor_occurrences": 1,
+ "caller_sha256": "9c816b626715e1ad5c9ef57103c24966eb76bb515bbde097302df81240886991",
+ "case": "authority_absent",
+ "clause_occurrences": 0,
+ "clause_sha256": "b9013beddb49d0150f1bc11accd362687d498e1eab01d3bd1f43ddc8c5eb5c6d",
+ "completed_packet_unchanged": true,
+ "label": "0001104659-26-017090",
+ "label_occurrences": 0,
+ "model_calls": 0,
+ "pinned_files_unchanged": true,
+ "prompt_bytes": 117221,
+ "stored": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/assembled_2143/ASSEMBLED_UNDER_2127.txt",
+ "stored_sha256": "3f6eb13f972d27f6f7d57c495723c1bad468f037d85a36b8dff4d06cdb82284b"
+}

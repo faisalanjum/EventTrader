@@ -1,0 +1,77 @@
+{
+ "accounting": {
+  "after_planned": 687,
+  "before_this_round": 685,
+  "global_ceiling": 6000,
+  "max_attempts_per_call": 2,
+  "planned_corrections": 1,
+  "planned_signer": 1,
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "worst_case_after": 689
+ },
+ "binding_sha256": "c0bfcc03caeb9507e09e0719d3f566538b55d269fda6fba049f29c7375ef9858",
+ "capacity_problems": [],
+ "events": [
+  "0001104659-26-017090"
+ ],
+ "findings_served": {
+  "0001104659-26-017090": 1
+ },
+ "input_declarations": [
+  {
+   "prompt_sha256": "4cc2d3f6f30916558d8135b9a58d5971631591fbe5138e89c855e12294bd6ae4",
+   "source_id": "0001104659-26-017090"
+  }
+ ],
+ "largest_script_bytes": 124814,
+ "model_calls_started_here": 0,
+ "owner_sha256": "b544dabd31074d32d4379820994092eec4f88b739a3df0e8d869e4b219a50732",
+ "pointers": {
+  "affected_sources": [
+   "0001104659-26-017090"
+  ],
+  "declared_full_event_rows": 52,
+  "declared_question_count": 13,
+  "frozen_event_order_positions": [
+   19
+  ],
+  "predecessor_finalization_sha256": "ba63116b32db38a905612ab53f7ff93a51f0a06e42e363f1626d2f834fa7a003",
+  "predecessor_receipt_sha256": "1ee97945182e54c411f8d795f0b5bcc4014386e7777c57858ef1221b793f8b86",
+  "predecessor_run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136",
+  "prefix_rounds": [
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136"
+  ],
+  "prior_rounds": [
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet"
+  ],
+  "question_rows": 1,
+  "round_declared_scope": {
+   "question_row": "0001104659-26-017090#115",
+   "source_id": "0001104659-26-017090",
+   "work_order": "Codex SEQ 2143"
+  },
+  "round_event_rows": {
+   "0001104659-26-017090": 6
+  },
+  "round_question_rows": 1,
+  "signatures": {
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/candidate"
+  }
+ },
+ "receipt_sha256": "66663b49c45c534b4215e85befc0e04630cf9107251d3a9d977df8ab45a46dbd",
+ "receipt_states": [],
+ "renderer_sha256": "ff48b6e5d44304bb8246365ee49207e379fda22e86ecb32fb6bb25c26b4c5a0f",
+ "rows_served": {
+  "0001104659-26-017090": 6
+ },
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143",
+ "scope": "source-question packet, prepared and UNRUN; no call, no key edit, no signer, no grading",
+ "transport_limit": 524288
+}

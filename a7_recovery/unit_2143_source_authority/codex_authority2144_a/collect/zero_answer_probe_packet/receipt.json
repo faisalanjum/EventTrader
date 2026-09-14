@@ -1,17 +1,10 @@
 {
- "run_id": "packet_2136",
+ "run_id": "zero_answer_probe_packet",
  "door": "a4_source_only_key_1997",
  "phase": "decision_correction_v6",
  "attempt": 1,
  "allowed": [
-  "0000027904-26-000020",
-  "0000092380-26-000044",
-  "0000898173-26-000006",
-  "0001041061-26-000003",
-  "0001104659-25-102611",
-  "0001104659-26-017090",
-  "0001104659-26-027061",
-  "BBY_2026-03-03T08.00"
+  "0001104659-26-017090"
  ],
  "parent": null,
  "transport": {
@@ -102,11 +95,11 @@
    "recovery.json": "18da812a2c748810222f93f68489690fc98c6f8cce73ad95ce8036ee158d29e9"
   },
   "v6": {
-   "receipt.json": "e34d1332e4db9f172382b493459ed1c173178b1609bd37f49a9209d18b5bd6a0",
-   "finalization.json": "50c56b33d90f97c0b615a4f7a8976bed5cc9ed80ba9cf776bdd08ad185bcc04e",
+   "receipt.json": "1ee97945182e54c411f8d795f0b5bcc4014386e7777c57858ef1221b793f8b86",
+   "finalization.json": "ba63116b32db38a905612ab53f7ff93a51f0a06e42e363f1626d2f834fa7a003",
    "raw_tree": {
-    "files": 14,
-    "sha256": "d08c18e582e07bc657bb5f0888b41ab7ff7cad0de5bab9c877c65b6e50e0dc0c"
+    "files": 16,
+    "sha256": "5fa5d01ad72d79488be2f2eb3598add8d0a7b591e4c38db37d2badd52d0a4ebc"
    }
   },
   "v6_round1": {
@@ -141,6 +134,14 @@
     "sha256": "62611caeb1ced6292ffd667e948a96217487854806daded41e17c9c6409be2ee"
    }
   },
+  "v6_round5": {
+   "receipt.json": "e34d1332e4db9f172382b493459ed1c173178b1609bd37f49a9209d18b5bd6a0",
+   "finalization.json": "50c56b33d90f97c0b615a4f7a8976bed5cc9ed80ba9cf776bdd08ad185bcc04e",
+   "raw_tree": {
+    "files": 14,
+    "sha256": "d08c18e582e07bc657bb5f0888b41ab7ff7cad0de5bab9c877c65b6e50e0dc0c"
+   }
+  },
   "signature": {
    "key_identity": "e77684b2472f583cce116a1cadc845bcadcfd5b84a808ddbaec8139adaf13635",
    "sidecar": "7cc31690134040d453c3bb01dc36f810b62f18984e86b0f6cea59e5b12677b62",
@@ -160,23 +161,7 @@
   }
  },
  "prompts": {
-  "0000027904-26-000020": "650433b0c3ac2b2c6fbef916d634279b7d05316b008a68bdec63298a6b583a69",
-  "0000092380-26-000044": "71bbfda56335b083f7492e9481b6fec8da393d0880f6f50c396467aa8660d224",
-  "0000898173-26-000006": "b7f576bed89c669c87004cf359938075c83e74ff980a38b12122f6bfc4aa4a9d",
-  "0001041061-26-000003": "298d8470ff8bb7de3b754151c576199dd6095813c238c323d0161c8e1cc31e15",
-  "0001104659-25-102611": "7cf49dbdc83630f2e7a9c5a7f00db94fff9c963085cdd2178ff24e5f10960fe3",
-  "0001104659-26-017090": "8c541f230f4a18a046e32b426764241c8813e4533aba6bfa1400f2bf0e5067be",
-  "0001104659-26-027061": "2766e007ecdd461b0d556b2a4cd518aa1bcd776490b0bef8ff6b98e513d090e1",
-  "BBY_2026-03-03T08.00": "b84064257d39e799301f5b538db1266c3f42770a9099d28328ac1dd48d6d18d1"
+  "0001104659-26-017090": "4cc2d3f6f30916558d8135b9a58d5971631591fbe5138e89c855e12294bd6ae4"
  },
- "states": [
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_aa2ae772-866.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_d75c055c-1f5.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_97e11f9d-a52.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_fd2481b1-766.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_0f72a946-77a.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_bec5cebd-ee9.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_a7a3a4ed-411.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e58621b3-241.json"
- ]
+ "states": []
 }

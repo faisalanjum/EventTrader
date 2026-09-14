@@ -1,0 +1,7 @@
+attempt	codex_authority2144_a
+payload	../../unit_2143_source_authority/test_authority_2143.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2731516
+payload_pid	2731520
+started_utc	2026-09-14T17:00:07Z
+state	finished exit 0

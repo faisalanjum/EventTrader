@@ -1,0 +1,215 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "lifo_cost",
+              "driver_state": "increased",
+              "level_low": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["non-cash"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the target states a re-readable LIFO cost level of $64.0 million this year against the $40.0 million benefit the source itself names as the prior-year value, which is a stated prior value beside the value and therefore one increased metric carrying a prior_year baseline."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "vendor_purchase_concentration",
+              "driver_state": "reported",
+              "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_high": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: a single vendor supplying 13 percent of total purchases is a stated, standing supply-concentration level that can be re-read period to period, not a bare topic mention."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "increased",
+              "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["product:failure and maintenance related categories"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the roughly 85% share of total sales is a stated re-readable mix level for one combined population of the company's own product categories, and the source states a direction for that same population, so the state is increased rather than a bare reported value."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "change_value": {"value": 329.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:us", "unknown:commercial"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item, but as ONE record: the $329.5 million and the 6.7% are the same stated year-over-year movement expressed in two units, and the split rule covers growth BASES rather than dollars versus percent, so the dollar movement is stored once and the percent stays in the quote."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_low": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["of our total Domestic sales"],
+              "slice_parts": ["geography:us", "unknown:commercial"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the located target is the 31.7% commercial share of domestic sales, a stated re-readable mix level whose numerator population rides the slice parts while the stated denominator qualifier is preserved in the never-drop measurement sink."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence states only undifferentiated ordinary-course involvement in lawsuits, regulatory investigations and other legal proceedings, with no specific matter, party, stage, amount, direction or outcome, so it is a bare topic mention and generic risk boilerplate that yields no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and settled as a control: nothing in the located sentence names a specific proceeding or any state, change or action the gate would admit, so no litigation record is written."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "non-cash LIFO impact",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source's only label for this driver pairs the polarity nouns 'charge' and 'benefit' with the effect word 'impact', none of which a name may carry, so I coined a neutral cost name and applied the signed axis myself with the charge positive and the benefit negative."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "one individual vendor",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "A vendor-axis token exists in this company's menu, but a vendor is never a slice, so the vendor role stays inside the name and no slice part is emitted."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole", "measurement_wording"],
+      "reference_name": "failure and maintenance related categories",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The 85% is one COMBINED share, so reusing the two separate menu product values would read as an intersection rather than a union and I coined a single source-grounded product part, while the direction comes from the source's own stated slight increase in the maintenance and failure categories whose two-year comparison is not a lawful one-year baseline."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "Domestic commercial sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two readings were live - one stated movement carried in two units versus a two-record split - and I stored the dollar movement as the single record while 'commercial' remains plausible both as the company's own customer population and as its selling channel, so that part is coined unknown:commercial."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole", "measurement_wording"],
+      "reference_name": "31.7% of our total Domestic sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated share is of total Domestic sales while the slice parts describe the commercial numerator, and because no field holds a denominator I kept the denominator qualifier verbatim in the never-drop measurement sink rather than assuming the geography part carried it losslessly."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-016/b1",
+      "agrees": false,
+      "why": "It lands where I land only on rows 2 and 6: on row 1 it names the driver with the forbidden effect word 'impact', on row 3 it stores the single combined 85% share as two separate menu product parts that read as an intersection of failure and maintenance, on row 4 it splits one stated movement into a dollar record and a percent record, and on rows 4 and 5 it assigns 'commercial' the customer kind where two kinds remain reasonable."
+    },
+    {
+      "lead_id": "sokc-016/b2",
+      "agrees": false,
+      "why": "It agrees in substance only on rows 2 and 6: it repeats the 'lifo_impact' effect-word name on row 1, stores row 3 as two intersecting menu product parts and drops the 'approximately' modifier, splits row 4's single movement into two records, names row 5's share as net_sales although its level is a percentage share rather than a sales level, and guesses customer:commercial on rows 4 and 5; it also records no direction for row 3 despite the source stating one."
+    }
+  ],
+  "open_issues": []
+}
+```

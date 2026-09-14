@@ -1,0 +1,28 @@
+{
+ "affected": [
+  "0001104659-26-017090"
+ ],
+ "caller_sha256": "a9dec376e7d30bca04eec8b577f3ddae34ac72419b3de7637710e19cfa7fb8b3",
+ "case": "predecessor",
+ "completed_packet_unchanged": true,
+ "key_sources": 33,
+ "model_calls": 0,
+ "origin_mismatches_vs_root": [],
+ "pinned_files_unchanged": true,
+ "predecessor_run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136",
+ "prefix_rounds": [
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136"
+ ],
+ "prior_rounds": [
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet"
+ ],
+ "raw_mismatches_vs_root": [],
+ "root_sources": 33,
+ "unaffected_carry_matches_root": true,
+ "unaffected_sources": 32
+}

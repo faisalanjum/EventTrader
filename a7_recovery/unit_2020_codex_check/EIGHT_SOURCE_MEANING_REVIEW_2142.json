@@ -1,0 +1,603 @@
+{
+  "scope": "Independent source-meaning review of the actual eight completed source-question results. This is review evidence, not a replacement model result, signed key, coverage-floor approval or final score.",
+  "current_authority_question": {
+    "row": "0001104659-26-017090#115",
+    "core_opinion_seq": 2140,
+    "codex_followup_seq": 2142,
+    "authority": "15_CandidateFactPacket.md Part C item 3",
+    "authority_sha256": "aa7239edf069dec611678dc9981cebfa6760dedbc79faada95d4bc5c66b7e98c"
+  },
+  "sources": [
+    {
+      "source_id": "0000027904-26-000020",
+      "raw_sha256": "1d77651e5c26dcf9da7f327da56307d1f8a726a270fc9e356fef6213a9037fc0",
+      "prompt_sha256": "650433b0c3ac2b2c6fbef916d634279b7d05316b008a68bdec63298a6b583a69",
+      "state_sha256": "f348c8e8214161c77ffda05139ff618b2aac3d56dd9dbc25ecf06d2b5e735bf6",
+      "native_sha256": "2d681ed991980b0729a5d4b20019926b95d2429388578084ff4260e82ecdb30d"
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "raw_sha256": "3a17686901ed9b8226c1717d917b5633a3dbbe9cc368880ad9d0722a9ccc1c59",
+      "prompt_sha256": "71bbfda56335b083f7492e9481b6fec8da393d0880f6f50c396467aa8660d224",
+      "state_sha256": "b05de1d5e3e7e782c0b404157a934aa82c3953feb69cf241bfed6321c2f10bda",
+      "native_sha256": "23feb976af152680457d663972976b45616cc048de980062e8a9b7a6d4f1ea2f"
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "raw_sha256": "cfc2b4a1de9278eea6855c90258bd67f9093490cb54ad1e900bc3b6f7c08cf18",
+      "prompt_sha256": "b7f576bed89c669c87004cf359938075c83e74ff980a38b12122f6bfc4aa4a9d",
+      "state_sha256": "35bb5b78decdf0aa08988f6cdbf8c5423051537a93e6f00108447a50bd548a81",
+      "native_sha256": "f45d011f9b22a6fb796c7aefd2494bc7b4575099c2fba92b3cc61e15f85a7cd6"
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "raw_sha256": "02ef0723dde5a4e503d79212c13ea863960ce7bf53a209cb7f1ee372d0336e06",
+      "prompt_sha256": "298d8470ff8bb7de3b754151c576199dd6095813c238c323d0161c8e1cc31e15",
+      "state_sha256": "0261c717f18c41888d1448f74711f25f4f6d5decd51a28c65460f7c8c0cab7c1",
+      "native_sha256": "63447b12c7c7fd8ecda8affa7b5d85f1a851862eb4bc0cd79975148fbb298d84"
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "raw_sha256": "26783093c4333992ae678c024345639b746f164f95d807a32ad68251d8eee2b3",
+      "prompt_sha256": "7cf49dbdc83630f2e7a9c5a7f00db94fff9c963085cdd2178ff24e5f10960fe3",
+      "state_sha256": "49956b3b330fd122e8c2ef8335d8a21e23667e1710cf8171e0d2f2bc61167624",
+      "native_sha256": "86c1c5d8368f219aa1403f2b82ab0166049c637f638b77f7e7a089da57100389"
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "raw_sha256": "bb8645b8cf2efd4aef38b4a7e13c4d2e78e172f7f576bce0b56ddabef0487bc7",
+      "prompt_sha256": "8c541f230f4a18a046e32b426764241c8813e4533aba6bfa1400f2bf0e5067be",
+      "state_sha256": "061766f70226e3058bc7035bcabcf1425a6a16ad1d8a37c3bc5fa68dbb2ae1e0",
+      "native_sha256": "7e985ed759929aad8b544bda2ac7bbd747ada5ac1a597ef6c89555c8ab034f2f"
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "raw_sha256": "46a11c2e3462d8c83b9c9fa12337db735f0dcdaab01f6afc7aa6d644bba760ab",
+      "prompt_sha256": "2766e007ecdd461b0d556b2a4cd518aa1bcd776490b0bef8ff6b98e513d090e1",
+      "state_sha256": "d9ac318aee3a1ccfa740c636348c081b4aab4dd5047fb17592a4436072ea85f7",
+      "native_sha256": "b6971e2b8ea48fb67a4e595cb90fd2b9c63e705ab457446bb20032bc596f577a"
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "raw_sha256": "e42b914539e048b54297ffa9b1ac66ddd6c710a47e504d2783ff4e47cc2cb4e1",
+      "prompt_sha256": "b84064257d39e799301f5b538db1266c3f42770a9099d28328ac1dd48d6d18d1",
+      "state_sha256": "6781e16aff7c3bd1610bf2b53996e4b6fe4ea6b8b4603e2549eeea709a1010cf",
+      "native_sha256": "5ea32bc9ff6f864e5e074d2976a5dbdfe18a1de298e5ef354674917afb952a61"
+    }
+  ],
+  "summary": {
+    "total_rows": 52,
+    "source_decisions_checked": 51,
+    "open_rows": 1,
+    "all_four_values_in_open_row_source_supported": true,
+    "raw_files_changed": false,
+    "source_owner_calls_repeated": 0
+  },
+  "rows": [
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#019",
+      "row_index": 1,
+      "quote_sha256": "2cdd488b0c0ef65ed961a1e3c3ad0a752a75564e6f5304cfb5984081956bd265",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Pre-tax loss is negative; the full reconciliation compares it with prior-year positive pre-tax income, so decreased is supported. Preserve quote-backed million scaling; do not invent an outside-quote scaled comparator."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#020",
+      "row_index": 2,
+      "quote_sha256": "23344ec2b69a3bb9f691fed16b31cf13dd733b8691d3a0d67becdaf577ed79ca",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The company's next-quarter operating-margin range is guidance with a real target period. No source-stated change to that guide is proved, so unknown is lawful."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#021",
+      "row_index": 3,
+      "quote_sha256": "cb93d9026c9cc7c68d8a5d8fe2618839d57199bc923fe321c6a0ef134649bebd",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Adjusted per-share earnings use the source's prior-year comparison and increased state, with adjusted measurement preserved."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#022",
+      "row_index": 4,
+      "quote_sha256": "ca42d9e6ca681780cfa918295cb842406a2e80af58c3118d5cdcd4270229c3d3",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The actual per-share earnings sit within the company's stated prior guidance; in_line and the separate matching metric home are supported."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#023",
+      "row_index": 5,
+      "quote_sha256": "f32bf0eac30f786750e06ef327abcbdd57757f1b431ad390afb56b5ff4c7768d",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Current total revenue, its stated year-over-year movement and adjusted measurement come from the source; do not treat an algebraically derivable change as an independently stated delta."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#024",
+      "row_index": 6,
+      "quote_sha256": "a5f751b03fc6a9c16400ea2a5ba3d975e8866f9995e8ce7cd431509117fbeb9b",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The source's above-outlook statement concerns the selected revenue result; the matching metric home and source-grounded surprise framing are present."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#025",
+      "row_index": 7,
+      "quote_sha256": "0116e5054d87cb9b616537b5fe06e739ef5a68d7eee11617982b1dcdda46bc8c",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Hypothetical aircraft-accident risk boilerplate, not an observed state or action; the control is correctly empty."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#026",
+      "row_index": 8,
+      "quote_sha256": "2cff6d4a01d7cacd6463e45a15d99246055c3c2be9aceb820f3710d33c4a9f6c",
+      "outcome": "exclusion",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Specific third-party survey expectations do not satisfy the company-guidance confirmation contract. The response share is not a value of corporate travel spending; no guessed replacement metric."
+    },
+    {
+      "source_id": "0000027904-26-000020",
+      "row_id": "0000027904-26-000020#027",
+      "row_index": 9,
+      "quote_sha256": "1791c0a15fed4fbdc0a62efcaf663b3f2c3296995e99780c04244e0c16fbfbbf",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Adjusted net debt is the stated current balance; the document supplies the immediately preceding balance and the direction is down. Preserve the sequential baseline and do not duplicate a derivable delta."
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "row_id": "0000092380-26-000044#038",
+      "row_index": 1,
+      "quote_sha256": "9a964bcc069469280c6a053d2224920ca00abad7984289295bf5360435beaacb",
+      "outcome": "fact",
+      "fact_count": 2,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The actual EPS is up versus either stated prior-year presentation and in line with guidance. Keep metric and surprise separate; no forced measurement or prior operand where the presentation is ambiguous."
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "row_id": "0000092380-26-000044#039",
+      "row_index": 2,
+      "quote_sha256": "19703f2457198b0eb09ae11529c6d6d346e953391c9073388da364c7b9dda82a",
+      "outcome": "fact",
+      "fact_count": 2,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Fuel cost increased versus the matching prior-year cost, not the different unhedged measure. The source describes the above-guide cost as a headwind. Its approximate guide need not be asserted as an exact comparison number."
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "row_id": "0000092380-26-000044#040",
+      "row_index": 3,
+      "quote_sha256": "b310fe490c6f966d81e74c7e02f1b6b81564378e2edb0de01d1e9059f5c3c0e5",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The freight target measures the company's own business population; retain the lawful unresolved slice kind rather than guessing between plausible kinds."
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "row_id": "0000092380-26-000044#041",
+      "row_index": 4,
+      "quote_sha256": "be4cefa6911f53c80493dc4733b1944d77dcf406da3ab3fe64209b8005ae0df8",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "A stated planned fleet Wi-Fi deployment is an announced action. The selected action is not a license to extract every adjacent future aircraft-count outlook as an additional fact."
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "row_id": "0000092380-26-000044#042",
+      "row_index": 5,
+      "quote_sha256": "5ae836564a68d4ee668f980555f9dc6bb6db838295428d1221d5d405de2df5d6",
+      "outcome": "fact",
+      "fact_count": 2,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "CASM-X's stated year-over-year increase is a metric, and below-guide cost has a distinct source-supported surprise with its matching home. Preserve the per-seat-mile and excluded-cost measurement meaning."
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "row_id": "0000092380-26-000044#043",
+      "row_index": 6,
+      "quote_sha256": "6f78340b0bdc87eb3440f290a483ea41bcb6597704c31333620ef388650afe2c",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Hypothetical fuel-price, volatility and availability risks state no actual fact; the control is correctly empty."
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "row_id": "0000092380-26-000044#044",
+      "row_index": 7,
+      "quote_sha256": "b698d58a9454c6f8049bde81800ddea1a5aa307a74b73e531b1b4794318c2b4d",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Net loss is the negative region of net income, not a new loss driver; the signed value and prior-period comparison are source-supported."
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "row_id": "0000898173-26-000006#050",
+      "row_index": 1,
+      "quote_sha256": "12344e2e3b508f343aa0b9827db4b4471d72f805cf38eda8f1975ed973428943",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Diluted EPS retains its per-share meaning and diluted measurement, current period and source-supported numeric value."
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "row_id": "0000898173-26-000006#051",
+      "row_index": 2,
+      "quote_sha256": "e9e4a7aedd729aca377b33e4db4069b2147990735f7bd23f89e2d6f3b5b328fa",
+      "outcome": "fact",
+      "fact_count": 2,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Numberless SG&A exceeding expectations has a lawful numberless metric home with unknown state and a source-supported adverse surprise. Do not require a number from elsewhere in the event."
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "row_id": "0000898173-26-000006#052",
+      "row_index": 3,
+      "quote_sha256": "1d1091943305001ace3c83672eb7c318e6b4178e74c2bb98fa8650008f0f58e1",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The domestic ending store count includes the source's stated population, not a silent United-States-only replacement. Its prior count supports increased; an unresolved slice kind stays unresolved."
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "row_id": "0000898173-26-000006#053",
+      "row_index": 4,
+      "quote_sha256": "b7c7b6e65f4ee62bcd2f16f1b79ceec11da1cf5faf8b85f6a4aa6fa0926c6349",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The negative equity balance narrows versus the prior negative balance, hence increased; retain thousand scaling, the stated balance date and no separate deficit driver."
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "row_id": "0000898173-26-000006#054",
+      "row_index": 5,
+      "quote_sha256": "9d6ef329b908020e8300347ea7916ce297d6c3215535ed0b3815645af78d11df",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The statutory safe-harbor statement is boilerplate, not a business fact."
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "row_id": "0000898173-26-000006#055",
+      "row_index": 6,
+      "quote_sha256": "dbebdb20a3ca53c5b5c8772ba680b5e672cc5aa57b1e2a8b007c5ee5a451f835",
+      "outcome": "exclusion",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The selected target is a split-adjusted presentation convention, not the adjacent completed stock split itself. Excluding the selected non-fact does not remove or rewrite another target."
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "row_id": "0001041061-26-000003#077",
+      "row_index": 1,
+      "quote_sha256": "97361d4376b38e16dd1050208a3291883f3b5807811fdb32c9c96f7a49ec34ba",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "EPS excluding Special Items is up versus the matching prior-year EPS; do not substitute the differently adjusted extra-week comparison."
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "row_id": "0001041061-26-000003#078",
+      "row_index": 2,
+      "quote_sha256": "bd01966ec2a0c37aa3ae9a77722fe50c954a81bb12a01e8945cd3cc20949278a",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The acquisition is one stated action with its source-backed approximate consideration; restaurant count is not an independent second acquisition. Preserve the business segment and lawful ambiguous U.S. slice kind."
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "row_id": "0001041061-26-000003#079",
+      "row_index": 3,
+      "quote_sha256": "d4736ed716bfc0ca4e650312952574bf469804a0455bcd5619510b4af33d05d3",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The digital system-sales amount is a stated floor for the qualified systemwide sales population, not total consolidated company revenue."
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "row_id": "0001041061-26-000003#080",
+      "row_index": 4,
+      "quote_sha256": "d4736ed716bfc0ca4e650312952574bf469804a0455bcd5619510b4af33d05d3",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The digital mix is a stated upper bound for a distinct share measure, not a second copy of the digital sales-dollar fact."
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "row_id": "0001041061-26-000003#081",
+      "row_index": 5,
+      "quote_sha256": "a67859fdbf1c568df2c74b4bc504ab8b0e643e2214d95d23bbb46ae0d37efa29",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Hypothetical severe-weather/climate effects in the risk list are correctly empty."
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "row_id": "0001104659-25-102611#094",
+      "row_index": 1,
+      "quote_sha256": "01ae069c57018ab53858d66d48750145ea25c15be3c839553f646296d0f09568",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The LIFO charge is positive and the prior benefit negative; direction is increased. Preserve the noncash measurement and neutral charge meaning rather than judging favorability."
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "row_id": "0001104659-25-102611#095",
+      "row_index": 2,
+      "quote_sha256": "a19ca1b1d1ecc57c2157fd0cde1f8106092a834e062e33365037cdf292a9dcb0",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Vendor concentration is a measured company exposure; the vendor is not the company's own business slice."
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "row_id": "0001104659-25-102611#096",
+      "row_index": 3,
+      "quote_sha256": "d146e63fe2edb921a1cd8a7ba07f8c401482f9a303af81b89e2ffa896eef546b",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The approximate failure/maintenance sales share slightly increased against the stated two-year comparison. Do not relabel that comparison as prior-year."
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "row_id": "0001104659-25-102611#097",
+      "row_index": 4,
+      "quote_sha256": "cbdc6470533c6bbfc475ee4544adbf7cca336d46f2c37a903e0c182b71e74fbb",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The domestic commercial sales increase has a stated dollar change and growth rate; preserve one fact rather than duplicate the same change in two units. The commercial population's ambiguous kind remains lawful."
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "row_id": "0001104659-25-102611#098",
+      "row_index": 5,
+      "quote_sha256": "aeaf311f236e04fd528d1f9f8567f371ca9ed0c29ae08cf91b1ca90ffc6cb840",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The share denominator is total Domestic sales. The verbatim denominator qualifier must survive because numerator slices alone do not preserve that meaning."
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "row_id": "0001104659-25-102611#099",
+      "row_index": 6,
+      "quote_sha256": "bc013000f7c7d2a820a1d38007b6e3438e4c90c998b172e317b134aadd180b56",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Undifferentiated ordinary-course legal involvement with no stated case, stage, amount or change is the selected boilerplate control."
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "row_id": "0001104659-26-017090#112",
+      "row_index": 1,
+      "quote_sha256": "5efe11fc2883a8d24952addb98e2db8d2af4327d6f8384b205e17c130476074c",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Quarterly adjusted net income is down versus the matching prior-year quarter; annual values are separate periods. Do not copy thousand-scale table operands into a million-scaled quote without required evidence."
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "row_id": "0001104659-26-017090#113",
+      "row_index": 2,
+      "quote_sha256": "c35f390a53f3e0ab34bdd60f5fd1904acb3241ef2ec6e40e4ec392e21562ada3",
+      "outcome": "exclusion",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The selected net expense blends four independent causes without per-cause figures in the located quote. Exclusion avoids inventing per-cause values or an impermissible catch-all driver."
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "row_id": "0001104659-26-017090#114",
+      "row_index": 3,
+      "quote_sha256": "197917096f4043f9553ae8150ac72e55b2f06e3ec92afbc1eff0bd6363956b3d",
+      "outcome": "fact",
+      "fact_count": 2,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Within-range revenue supports an in_line surprise and a numberless unknown-state metric home. This lawful cautious answer is complete under served Rule 9.6."
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "row_id": "0001104659-26-017090#115",
+      "row_index": 4,
+      "quote_sha256": "15baa5923ef63db6645697ce16ed64639d905091ea97aec84ebb9b5b7432a94b",
+      "outcome": "fact",
+      "fact_count": 4,
+      "status": "OPEN_SCOPE_QUESTION",
+      "review": "All four printed YoY rates and their quarter/year periods are real and distinct; the prior-year rates are not raw-sales operands. Selection/event-restatement scope is still under authority review; no signature approval or raw open-issue deletion."
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "row_id": "0001104659-26-017090#116",
+      "row_index": 5,
+      "quote_sha256": "86d152b39509ec8c8f0554f6c338fd2a0206f970c57845b29132825afa283758",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The company states next-year Flower Child opening guidance. No prior-guide change is established, so unknown is lawful; do not force a raised or introduced state."
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "row_id": "0001104659-26-017090#117",
+      "row_index": 6,
+      "quote_sha256": "9199cc8136717fc06f4671e78c968fdfb4220df4d07ce6e08c12a317296c71c9",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Hypothetical adverse-weather/natural-disaster risk boilerplate is correctly empty."
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "row_id": "0001104659-26-027061#118",
+      "row_index": 1,
+      "quote_sha256": "6d55863997476297fba0cad7b8c4ae79994ef9320b9550c4dd02c859920341a2",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The source states gross margin declining from 38.2 to 38.1 percent; this is a static margin unit with a prior-year comparison, not a growth-unit level."
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "row_id": "0001104659-26-027061#119",
+      "row_index": 2,
+      "quote_sha256": "8490b47bb40a64365492ed349e7b98a45263b86dab3391e260fb41f13dd6f925",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The reported repurchase is one completed action with the stated share count and annual period; adjacent dollars are not a second action."
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "row_id": "0001104659-26-027061#120",
+      "row_index": 3,
+      "quote_sha256": "54f058d6d4c1a9b12ed08599623aa98476f713c5af0d4474b5efb773d4029bf0",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The company's next-year comparable-sales range is guidance on a year-over-year basis; absent stated movement, unknown is lawful."
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "row_id": "0001104659-26-027061#121",
+      "row_index": 4,
+      "quote_sha256": "ab92b3c9e351dc5c94e35834f0e53a1ddf9d62f89ab650ba6f71a1ed3a4eb242",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The reported international company-operated ending-store balance has no reliable matching prior ending balance established by the supplied net changes and acquisition. Reported is lawful; preserve the population qualifiers."
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "row_id": "0001104659-26-027061#122",
+      "row_index": 5,
+      "quote_sha256": "237cfae6152054c5bebb0233dd351e24f41d9dc2e927e5e65d7c3d4810fcdfc9",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Hypothetical macroeconomic/inflation/interest-rate risks are correctly empty."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#142",
+      "row_index": 1,
+      "quote_sha256": "1207c4284d8e07b84d0ac34a2f201e7399e69371438a87c3f9527a61471dc0fb",
+      "outcome": "fact",
+      "fact_count": 2,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Adjusted operating margin is up versus its stated prior-year margin and better than plan. Preserve the distinct metric/surprise pair, adjusted measurement and source-stated comparison."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#143",
+      "row_index": 2,
+      "quote_sha256": "2714a65abba2a23c7c67eecaa4b6a301166f200c623fb48ed3710872a83ad028",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The selected negative comparable-sales rate is the metric home, with the year-over-year basis and real reported period."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#144",
+      "row_index": 3,
+      "quote_sha256": "2714a65abba2a23c7c67eecaa4b6a301166f200c623fb48ed3710872a83ad028",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The companion target states the actual comparable-sales result within guidance. It is a distinct surprise, not a duplicate of the matching metric home at the same locator."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#145",
+      "row_index": 4,
+      "quote_sha256": "5fa24a639767d3ea16baa75a4e6a6842c67e0cfdeef69d25be4fb17e9d581ad4",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "Business revenue exceeding the stated amount is reported as a floor for the company's measured business population. A next-year 'again' forecast does not prove a current-year movement."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#146",
+      "row_index": 5,
+      "quote_sha256": "b513d1ead9bbb2cc18a016aa3a458ebae3e09b66de8f4eda81d303bcc650e76e",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "International revenue and its stated year-over-year increase are source-supported. Ambiguous international slice kind remains unresolved rather than guessed."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#147",
+      "row_index": 6,
+      "quote_sha256": "4e658db98a5a6b2548b1d4c2f07d672aaf4876fd4a8edf2b441378395f41386f",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The statutory forward-looking risks disclaimer is correctly empty."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#148",
+      "row_index": 7,
+      "quote_sha256": "c6f7e7043bd3af75fee00aa4c2fcf876c53dff2249e937c54a3b3e1b700b3c50",
+      "outcome": "fact",
+      "fact_count": 1,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The company states a next-year revenue guidance range. No source-stated movement is proved, so unknown remains lawful."
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "row_id": "BBY_2026-03-03T08.00#149",
+      "row_index": 8,
+      "quote_sha256": "36752294cf213348644912bf6028d20ab57a36540744c7f1effa227258b175cf",
+      "outcome": "control",
+      "fact_count": 0,
+      "status": "SOURCE_DECISION_CHECKED",
+      "review": "The selected industry-wide below-expectations remark lacks a grounded company value, safe expectation baseline and matching company home. The control correctly earns no fact."
+    }
+  ],
+  "limits": [
+    "Actual current 33-source materialization/signing-gate diagnostic is running separately; do not infer it from source reading.",
+    "Raw open issue remains unchanged. Core advice cannot substitute for the required independent source-owner settlement.",
+    "Signature, lock, corrected-key consumer, affected grading, corrected score and end-only offline model setup remain open."
+  ]
+}
