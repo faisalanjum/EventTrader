@@ -1,0 +1,24 @@
+{
+  "schema": "a7-g2-key-reuse/v1",
+  "code_sha256": "629817ecf1029f39c90dd0c09dcca5e9c0b246007518ff4fdda0f91990c62ecb",
+  "selection": {
+    "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/G2_REUSE_SELECTION_2159.json",
+    "sha256": "9603626914cdddd79461ad8150d4a054dbde5776cb6af4f58057b21dd48228c2"
+  },
+  "original_proof": {
+    "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_keyreuse2123_a/KEY_GRADING_REUSE_BASE.json",
+    "sha256": "cce187e23262708ba05e419368d49054304a2fdadfe796e2111909aad94e6847"
+  },
+  "current_preparation": {
+    "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_currentg232157_c/CURRENT_G23_PREPARATION.json",
+    "sha256": "d726f2464ead0b8100d1bdc58368a806268609c1dd7f35299c4bcc09ab9f144b"
+  },
+  "g1_reuse_report": {
+    "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_keygrading2150_a/KEY_GRADING_INPUTS.json",
+    "sha256": "d7571670fc3ae38a4dc732a7e377f23c385a0ee59aad3eb38d52151cd590e9f7"
+  },
+  "format": {
+    "code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+    "rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b"
+  }
+}

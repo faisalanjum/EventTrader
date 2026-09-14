@@ -1,0 +1,3 @@
+Native original G2 -> current-key consumer proved: 228 selected tasks; 228 with any established fields. Preparing only corrections.
+Corrected G2 preparation: 82 questions; 19 batches; 38 primary lanes; 521213 max script bytes.
+Native G2 reuse and corrective preparation complete; no model call.

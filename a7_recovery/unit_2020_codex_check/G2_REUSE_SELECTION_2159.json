@@ -1,0 +1,1572 @@
+{
+ "schema": "a7-g2-reuse-selection/v1",
+ "reviewer_session": "01a05829-3086-73e0-89c9-e5773b322d80",
+ "review": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/G2_MATERIALITY_REVIEW_2159.md",
+  "sha256": "a0ea2c66ab7dfd73655abdcf48be3e0319f35a9c2223eac58a5385dfced7f73c"
+ },
+ "renderer": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a7_grading_input_correction_2114.py",
+  "sha256": "32e2f650f56cb77b20c89199bc8cf120181dbc7ff92bdd60014d7abc95a16a2d"
+ },
+ "original_candidate": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g23partial2098_fit/G2/a7_g1_candidate.json",
+  "sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb"
+ },
+ "current_candidate": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_currentg232157_c/G2/a7_g1_candidate.json",
+  "sha256": "18ec3da8713e811b727f8fc97c5f85a793c734a6b057612d0d6cbcc8d605b23d"
+ },
+ "rows": [
+  {
+   "question_id": "M00ecbc6e81dd5284",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M011aedfe5770024b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M016be8813253ad71",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M02b07af753a517ef",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M02d957fa99800507",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M02dd1d33369df31b",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M05a0426b99cc6edf",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M05f6ac5ac72ab8bb",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M06fbbc20be8eff83",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M07bccfc1f9f03ec5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M08f98c68011966f4",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M0a51fce4dd855b65",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M0c5dd9bbeece43b0",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M0d11a0029b0b0718",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M0de45b05b3884472",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M0e085961f8057af7",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M0fa273105b8bcf8a",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M0fb38696c153d6f8",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M10ce98c4b9b80aa1",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1190a2305161d201",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M12f0e3b0f622a71c",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M155d065a49c7695b",
+   "decision": "correct",
+   "reason": "closed_operand_change_instruction"
+  },
+  {
+   "question_id": "M15a4fe7f7f566593",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M16b855d95ff36181",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M16c32ef759346e0a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M16e5547d3350a121",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M1a1d8504821bf26a",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M1aa19982f56a2a96",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1b698b1ec9b0c1d6",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M1bd499dd6d3860ed",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1c4c23ebd184f0cc",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1cc002a6431725fe",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1d1e2b191c165491",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M1d96bbbc9fdd6147",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1e4b6cd09563f250",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1f4102adb8cdb0b1",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M1ff094f118e22d74",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M206c7e8a11af3c3f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M20bf61063ac29515",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M227ed2f3b94a6629",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M22ede9a4b555fd5b",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M2340bbdb4b9ef356",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M235ca9d8f83aa1f1",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M24065e66c77fea00",
+   "decision": "correct",
+   "reason": "closed_operand_change_instruction"
+  },
+  {
+   "question_id": "M25685d07827234a2",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M25a3c0332278688d",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2631bbcafac8881d",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M265b7554e70f66e3",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M292ac8520c3978ff",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M29bb54bb6f349c17",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M29d7ecb1954bd124",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2a81c745481f2ebc",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2ad3c19c55a33b22",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2badc2f344015152",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2c147d86c788aab4",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M2dd38ea8166761eb",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2e22ae8245cd4280",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2e3002c881fc434b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2e58ae4e8cfd6435",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2e94246659324fa7",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2efc93f359529c0b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M2fc403e126b61f37",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M30d5d757ba3409a4",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M318f83b764fa0551",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M31b20a4a0b7e5203",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M31b9468dbba21f6c",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M3267fda9050619b6",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M340cd96cab48c901",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M341ed3bdf05f28cf",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M34257810d4d23607",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M357a5ef0bb7e36e6",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M35b5be11f3dac0be",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M35df46a5d2795d66",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M37c3fd00330d665b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M38757d908e703ecf",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M39ea21b3a6adc755",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M3c01992f2e58d996",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M3d3bf43c6b9baad8",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M3e5aa7f1ebcc7dae",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M3f9d9d0d4512b849",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M40c9264a220ea3e1",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M426b2d4f83a776af",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M42b29840407e0051",
+   "decision": "correct",
+   "reason": "changed_record_display"
+  },
+  {
+   "question_id": "M42c321d822ac47f4",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M4391065085a27e2a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M43cfef5e4a9944f6",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M43e87509e5cc819b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M480abb5b3f613e1c",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M48176346f1082ca4",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M49ccb6aa2eb4a6c5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M4b4e22abcaa8d591",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M4be2201467e52b28",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M4c7103daca170dcc",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M4ca257814a3d2655",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M4e236380221db347",
+   "decision": "correct",
+   "reason": "changed_record_display"
+  },
+  {
+   "question_id": "M4e5b3f2256646925",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M4ea4d7f5cd26d81a",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M4ee9337472e91555",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M4f731135a40dab8b",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M51fe2eb8ba3ffada",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M53a13722243e356b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M53a1b3ba077cabd8",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M54c69cfbbfb770fe",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M558257457a55f3be",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M56692399adb07bf0",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M56c06d3363b328c0",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M58a292b9b8e315f9",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M58f5060eedb7a8c6",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5ac362fadf8bf806",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5aeb2352c3aae25f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5b2ecf7412ac6ecb",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M5bb3d300ea194bd7",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5bfe5bdf236475e6",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5d144e1666edf465",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5da15f425e4d9b10",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5e086dfe139e25f5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M5f733feacaa92ecd",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6077f569317f1f81",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M61563d2abc07f74c",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M619427b099934206",
+   "decision": "correct",
+   "reason": "closed_operand_change_instruction"
+  },
+  {
+   "question_id": "M61beee43a203dd9f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M61f1a43573a6836b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6221427dec8dc14b",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M62a85f0d06c8aa5c",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M63a211408d38ee40",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M63c05645b2228cf4",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M645d780bfaa2241b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M66e7557e3b1064dd",
+   "decision": "correct",
+   "reason": "changed_record_display"
+  },
+  {
+   "question_id": "M673147c1d86816fa",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6a52868797fca479",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6aaed09074df8395",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6b218cbff4a78d0f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6b47edb7bc68c5fb",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6b93c6940b2be9e0",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6c349838c34d5aee",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6c722b0ca333185b",
+   "decision": "correct",
+   "reason": "changed_record_display"
+  },
+  {
+   "question_id": "M6d2b09a6d78a96e6",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6d9dd25a44c4125e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6eca39edb54086d3",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6fd88e81bd646c18",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6fdeee55db09c5ae",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M6ff710d6120fb2cb",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M700afaa8868c8f08",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M70f663f593c28775",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M71a7dd9d10cc76f3",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M726673b0f7719042",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M72caa9bf890c910b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M72d67ba2e2c5d512",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M72e4aef467cb286e",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M733ebab7ba30bb0f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M74ee782ce4554785",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M752301ecc84d4207",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M752dab6e0c48afa8",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M75813437a92cf998",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M765d517b782cfa01",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M76b7557972096ab4",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M786fc3fe140b5899",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M78a5c6360c93a561",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7a5e4a77f0c4c495",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7b666c83f5a85ea2",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M7bd698ec86f673ae",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7c647e1cedf0a3e3",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7c7c1ecb69bbe2c9",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7d108e2b58d24396",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7d7177600917b880",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7f09e480a7710fcf",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M7ff400be016d0141",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M8222e982fe3cfda8",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M8351d2825bae0891",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M838398e01dc7b3d7",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M841625afc3bb541b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M84f7bd7ab2bad82f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M8574c1ed58214a6e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M85b17ecaa1bc123d",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M8624b63494238990",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M86be1a27f32dbaf2",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M86edaa1155c3b0d6",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M884c4845393d55ce",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M884f0d41f757f7bc",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M89298db1b2082404",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M89349f9d421cb374",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M8d392b03ceaf4b7a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M8f3cb6b387ec8ba9",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "M9016aa97b872556a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M9176d0f5d99a2a38",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "M92afa94c159eb5e0",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M9421addcc8b5eec2",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M9484933efd39aaa7",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M94c0b5e28cf36305",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M95c73e1ef95ea6d0",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M961a664de76b0d2d",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M96e4fc2ed3155b3b",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M97687ce178b7517e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M98d240dfaa7a7526",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M990e3e1bcb642c43",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "M992cde76841a593a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M9a51df2bd16d7344",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M9ac184b07624a590",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M9c978dc353a235b8",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "M9edc11e050df4f8a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Ma04215d8a4d68dbe",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Ma0a6445d4ac518c0",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Ma31af1665347b9ec",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Ma529b8a7aa02495d",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Ma5d5cffc07c4dd0c",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Maab35fb20cc371a5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mab3c1cc44faa7224",
+   "decision": "correct",
+   "reason": "changed_record_display"
+  },
+  {
+   "question_id": "Mabd80961830fa09a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mad083fb51409521b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Maea7c65b7628c57e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mb0773afb058b29b3",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mb18c07ecdfc63be7",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "Mb22c2a72f4424c7e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mb2d4aa3ce9f9cd04",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "Mb3f1ca0e645be073",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "Mb440e706885e6f10",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mb65ece4291c4b307",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mb6660dcce1356528",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mb693cbc83edbc2b9",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mb81fc1be7b290e6b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mba17df14d96f594b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mba3e48c6e9efd4f9",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mbbbad21e2ccc2af7",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mbc20137b9967b569",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mbcadb2079632a153",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mbd2f0b3e4c535961",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mbde8235f83e49a93",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc00952c368d8b096",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc0f0ddce1137557e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc0fee81b5ffc9975",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc17055ff4a7a52dd",
+   "decision": "correct",
+   "reason": "closed_operand_change_instruction"
+  },
+  {
+   "question_id": "Mc2c7e279f1be760e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc3faae8812cd07d3",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc428a88a58bd94f1",
+   "decision": "correct",
+   "reason": "closed_operand_change_instruction"
+  },
+  {
+   "question_id": "Mc562cb4596db6b95",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc666c76ff3657bc1",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mc6c32dee91400e91",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc7890bf18242f3ee",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mc79809b979b20d53",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc8b6f7dd212ec289",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mc99eeb7a83140a80",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mcb1fb316d377bb0a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mcedf6ff6e7dc43bd",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mcfb3a4b2975d211e",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Md061467de5b6ca9c",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Md1b56847528f639c",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "Md2061d63bedc8f75",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Md493b607e9f607e3",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Md51d433bdbbf21c8",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Md537d4751f505235",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Md5b6c966cbdbf15c",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Md5b6d93a0e42868a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Md5def2bc09fe22d8",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Md6e308ee74cdf815",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mdb9090926047d818",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mdce0d30d712dcd83",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "Mdcf1d03950dd4702",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "Mde7d5e39712de0c7",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mdeaf9591a2dcc241",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mdf432700399897a5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me2615b2c555ed925",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me283ca1f2067854f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me2f731a704f57d75",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me35ea17f29972c9f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me35f4178e598dcb5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me36640ff3213b7f2",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me41517754e358a49",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Me83d11be2c9b62d4",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me8ba12d5cb70f4da",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me9adff0c6d62ed44",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Me9e14acbd9f77007",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mea4cf23970b9ae92",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mea888420e38231f5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mea91bf3171f0511f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Meaab12906816245d",
+   "decision": "correct",
+   "reason": "closed_operand_change_instruction"
+  },
+  {
+   "question_id": "Meae5deb8e54cd4dc",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mec9e16d57c989430",
+   "decision": "correct",
+   "reason": "signed_axis_instruction"
+  },
+  {
+   "question_id": "Mecc6f80e11ee1f6e",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mece90a618a058690",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Medaf936df04cd393",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mee82318cbe88a420",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf01ecd20b2b41f8c",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf17b1316b60436d3",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf1aca8c5849b0770",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf1c41a01fa7b1847",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf21bd5959134fc54",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf2eec24a8d847ee5",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf2f33b201f73e18d",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf3f2ee3a17e5b2ec",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf465bfe9429c40c4",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf4f67944a7e5e549",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf6ae20255741f5af",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf6bf097c465003eb",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf74bd5a258f4c57b",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf779fb08c3d45f27",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf8cecf2c5aa99602",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf8dc0510a0ba179c",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf8e5b413ab229c35",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mf91a92c59065852f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mfaf02208a2ac48aa",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "Mfd11133db92c03f0",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mfd30cdb6d130e25f",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mfd3a9491b84b8814",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mfdc3b99ab640f039",
+   "decision": "correct",
+   "reason": "changed_task_input"
+  },
+  {
+   "question_id": "Mfe6f9cd55ddfdb17",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mfe7fec741c481d3a",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mfea65de589d06fec",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mfeb0c103032e5aba",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  },
+  {
+   "question_id": "Mff46eed2c64e8d13",
+   "decision": "correct",
+   "reason": "guidance_instruction"
+  },
+  {
+   "question_id": "Mffc29b8ff785d499",
+   "decision": "carry",
+   "reason": "unchanged_task_under_original_instructions"
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 212, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 216, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,128 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision212: real current-key proof codex_currentg232157_c completes
+CURRENT,Revision216: VERIFIED root G2 connection and corrected input package.
+codex_g2reuse2159_a raw exit0, empty stderr; exit marker22:35:36UTC. Report
+75612fc5, candidate10290181, plan64d1c2a1, owner629817ec and caller d392af74.
+Independent original-completion-to-report comparison228/228, current full
+question/context/record/card input comparison82/82, disjoint coverage310/310.
+The carried rows preserve128 complete7-aspect judgments and100 partial ones:
+1435 established aspects(1396true/39false),161 missing aspect positions.
+Twenty-three carried questions contain an established false field. This is
+NOT228 correct facts and NOT a score; nothing was silently filled or dropped.
+The82 correction questions fit19batches/38primary lanes, with at most38
+existing invalid-only retries; all76 full script variants fit, maximum521213.
+The final affected suite is142passed +24subtests in2.29s, including6 new
+mutation kills. G2_REUSE_REVIEW_2159.md records the full checklist and commands.
+Root is freezing/publishing this verified preparation, not partial grades.
+
+Core2156/16aded60 reports G3 candidate088902eb,116 questions/35groups, full310
+matched-pair inventory,30batches/60primary+60invalid-only retry ceiling. It is
+NOT yet verified: real full source/card/pool comparison and bound-script sizes
+remain. Codex2160/90e89a15 authorizes ONE completion of that proof using the
+saved c package. Root's native job is finished; no new root job is active.
+Use G._plain, not copied default=str. No mid-run file edits or queued work
+after Core's one reply. Core now confirms its e never started: its waiter
+matched its own command line; it stopped that waiter. Do not repeat that
+polling pattern, start another monitor, or call the model for a checker defect.
+The earlier overlap does not by itself prove causation of d's missing file.
+No later-step production cleanup is an A7 prerequisite.
+
+Next: finish/publish G3 preparation and exact runtime/durable script/receipt
+bindings, authorize98 total primary grader calls with existing invalid-only
+retries, native final scoring and cause report, END-only offline model setup,
+STOP/WAIT. Original382 producer answers remain untouched. No new owner
+permission is required for this bounded work; no production/DB activation.
+
+PREVIOUS,Revision215: scoped regression passes134 tests and24 subtests in2.25s,
+including6 deliberately faulty connection/task variants rejected by the SAME
+positive controls. This covers G2 reuse, existing revision, G1 reuse, corrected
+input renderer, duplicate counter and the exact script-binding seam. The
+native codex_g2reuse2159_a check remains RUNNING; do not turn these tests into
+a claim of completed native proof or corrected grading.
+
+Root independently reproduced a concrete limitation in Core's new checker
+g3_checks_2159.py5f211706: native Decimal('1.25') versus the SAME model-facing
+JSON string '1.25' is falsely called a comparator mismatch; the string positive
+control passes. G._pretty and G._plain already serialize Decimal to its exact
+string. This proves the checker needs canonical-byte comparison for supported
+typed values, NOT that the3 actual reported differences are all that cause.
+Do not edit the renderer or rerun AI to fix a checker representation mismatch.
+Core's d attempt separately refused in historical signature reconstruction;
+its time overlapped root's native job. Concurrency causation is NOT proved:
+boundary.py uses private user/mount namespaces, though4 rw map targets exist.
+Core is waiting for root's job; avoid another simultaneous native preparation
+pending its report, but do not invent a new lock/framework from this observation.
+
+PREVIOUS,Revision214: root finished the complete310-question G2 task review,
+not a verdict/score review. G2_MATERIALITY_REVIEW_2159.mda0ea2c66 and
+G2_REUSE_SELECTION_2159.json96036269, both in unit_2020_codex_check, freeze
+228 candidate carries and82 corrections. Core2155/4063a0f6's112/177/3/18
+proposal is NOT accepted wholesale: the actual display changes5 records,
+not134; the closed-operand rule reaches6, not24;18 signed-axis metric
+comparisons need corrected instructions; the3 surprise questions keep their
+original task. Only13 tasks genuinely changed, not18:5 changed opaque ids
+retain the exact source/record/card/produced occurrence, of which2 are carries
+and3 still need the guidance correction. No old verdict was read to choose.
+
+The deterministic complete-task check independently reproduces306 original,
+310 current,228 carries/82 corrections/56 corrective groups,146 exact file
+pins. The disjoint82 are40 guidance +18 signed comparisons +6 closed deltas
++5 changed displays +13 actual changed/new tasks. Models made the task-
+materiality decisions; no semantic field-trigger classifier was put in code.
+New a7_g2_key_reuse_2159.py629817ec owns ONLY old/current task binding and
+native source-context connection. Existing native completion, format recovery,
+G1/current-key context, revision and scoring owners remain unchanged. Only
+original G2 is reread natively: old G3 is never reused, so rereading it would
+provide no data. Missing/partial old judgments stay missing/partial. The
+original gold index is not assumed to be the current one.
+
+TDD: initial missing module failed collection; after task binding16passed.
+Then10 connection tests failed because evaluate did not yet exist; implemented
+the smallest context connection, then29focused tests pass, including real
+revision-owner composition with boundary doubles. This is NOT native proof.
+G2_KEY_REUSE_PLAN_2159.json64d1c2a1 and caller prove_g2_key_reuse_2159.pyd392af74
+are frozen for native job codex_g2reuse2159_a, started22:26:54UTC, owned wrapper
+3404003/payload3404007, log unit_1947/logs/attempt_codex_g2reuse2159_a. It proves
+original whole G2 evidence -> current key/G1 -> actual official verdict consumer,
+then prepares only82 corrected G2 questions via existing C2118. OPEN until raw
+exit/report and independent checks; no AI call or final score claimed.
+
+Core's single task is Codex2159/ffbdb7ea: prepare/prove full116 corrected G3
+questions using full310 matched G2 inventory, zero calls. Its current2159_c
+attempt reached its own comparator audit and refused; Core is diagnosing the
+actual byte difference, not cleared to change owners or call models. Root
+does not assume the checker or renderer is wrong. Exactly one watcher reused.
+Next: finish native connection and G3 checks, freeze actual execution paths and
+bounded call inventories, publish verified preparation, collect corrections,
+score and explain every actual cause; END-only offline model setup, STOP/WAIT.
+No later steps, no new scorer/framework, no repeated successful model calls.
+Owner ETA is8–10p.m.Eastern Sep14, provisional, not an unchanged rolling promise.
+
+PREVIOUS,Revision213: VERIFIED checkpoint committed and normally pushed as
+36082d3fab8b153eedc904ccf5764f16d903c068, tree
+dd76a68da3251c9cc11bf4de53d35b8c8d259651, parentde5782384d. Exact remote
+branch equality verified21:39:56UTC. Freeze d643dbad covers567 evidence/code
+files plus its manifest and path list; all569 approved index paths matched
+live bytes before commit, and the exact resulting commit tree matched that
+review.564 paths changed; most are saved prompts/results/audits, not new code.
+Only the explicitly frozen small evidence logs needed git add -f because the
+logs directory is ignored; largest file1,309,390 bytes. No force push, history
+rewrite, main edit or unrelated change. The owner's dirty build_inventory_review
+still hashes2ec3bd33 and remains unstaged. Failed-a source was reconstructed
+from the preserved b source and exact recorded edits, then matched its
+original507668be hash before being stored; no false pre-call timestamp claim.
+
+This saves completed G1 recovery and the current310/116 BASE population, not
+corrected G2/G3 judgments or the final A7 score. Core's sole task remains2158/
+9c021f4d: decide the source-backed G2 instruction-materiality inventory.
+Root independently verifies bindings and keeps the existing original-context
+proof/current-key context/consumer owners. No blanket rerun, index-only carry
+or new parser/scorer. Next: the smallest required saved-judgment connection,
+corrected input preparation and bounded calls, score/every actual cause, then
+END-only offline model setup and STOP/WAIT. No later step or owner approval wait.
+
+PREVIOUS,Revision212: real current-key proof codex_currentg232157_c completes
 with raw exit0. Four gp_UNDEF route warnings are retained, not hidden or called
 empty stderr; all99 no-write routes complete and no event is unroutable.
 CURRENT_G23_PREPARATION.jsond726f246 and full candidate020f4550 bind the

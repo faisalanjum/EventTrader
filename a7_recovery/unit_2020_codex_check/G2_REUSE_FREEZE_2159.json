@@ -1,0 +1,182 @@
+{
+  "schema": "A7-reviewed-preparation-checkpoint/v1",
+  "parent": "36082d3fab8b153eedc904ccf5764f16d903c068",
+  "scope": "Verified G2 saved-judgment connection and82-question corrective preparation; no new model call, no final score",
+  "files": [
+    {
+      "path": "a7_recovery/A7_PREGRADING_WORK_ORDER.md",
+      "sha256": "21c9d3a4b7eef612d0d2143f4a0dd3732f102b9f7a9ec58e70d7b1d9657ffe49",
+      "bytes": 266287
+    },
+    {
+      "path": "a7_recovery/unit_1947/logs/attempt_codex_g2reuse2159_a/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "a7_recovery/unit_1947/logs/attempt_codex_g2reuse2159_a/owner.tsv",
+      "sha256": "104bc0416ddc67fbd285567582e162ba80b165bd600054d5934a34556c811e62",
+      "bytes": 240
+    },
+    {
+      "path": "a7_recovery/unit_1947/logs/attempt_codex_g2reuse2159_a/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "a7_recovery/unit_1947/logs/attempt_codex_g2reuse2159_a/stdout.txt",
+      "sha256": "9b6e014efc7e4ba857a51d8b9d0ed8a324ff0f6862e4e6e1129228466cc1896f",
+      "bytes": 295
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/G2_KEY_REUSE_PLAN_2159.json",
+      "sha256": "64d1c2a1f3f9073884705045392d00ee3a7b166c3f3c6f2ef1c2ccdbe1115322",
+      "bytes": 1292
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/G2_MATERIALITY_REVIEW_2159.md",
+      "sha256": "a0ea2c66ab7dfd73655abdcf48be3e0319f35a9c2223eac58a5385dfced7f73c",
+      "bytes": 7286
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/G2_REUSE_INDEPENDENT_CHECK_2159.sh",
+      "sha256": "1a4ac8c16873fbf92bd8f96a597f43c542d75db2fd05bc089e6661a9ce406a05",
+      "bytes": 4306
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/G2_REUSE_NATIVE_COMMAND_2159.sh",
+      "sha256": "3c541bca7031dca90a9ddec28d944197803440a315038ea07e294956a0e00c07",
+      "bytes": 5550
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/G2_REUSE_REVIEW_2159.md",
+      "sha256": "24f6f224b3902deaa0098559ff00e359f614ebd0f40e684667ee476747676418",
+      "bytes": 6246
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/G2_REUSE_SELECTION_2159.json",
+      "sha256": "9603626914cdddd79461ad8150d4a054dbde5776cb6af4f58057b21dd48228c2",
+      "bytes": 39824
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/a7_g2_key_reuse_2159.py",
+      "sha256": "629817ecf1029f39c90dd0c09dcca5e9c0b246007518ff4fdda0f91990c62ecb",
+      "bytes": 11213
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/a7_g1_candidate.json",
+      "sha256": "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb",
+      "bytes": 30641
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-000.prompt.txt",
+      "sha256": "55572d947ada5036e53e3767428f2dca1c14511327af1ed425f9f9325ef72324",
+      "bytes": 418121
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-001.prompt.txt",
+      "sha256": "62e246c88035148f7337510ea0dd43ba666fd3d83c46dce2fab4b1b85998b344",
+      "bytes": 288102
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-002.prompt.txt",
+      "sha256": "da8bfacdbd4c1fdfa6bd399dd5806664543122d90df2e72f3741b85d077fda67",
+      "bytes": 331038
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-003.prompt.txt",
+      "sha256": "ab75b6d8b06c5346c04fafad480921f6f713f9913cd27fd3e4a867e45ba175a6",
+      "bytes": 336745
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-004.prompt.txt",
+      "sha256": "0974a03b8605b604251fb3d26d1b69bb9494ca25a07fcf0526e4c6624b6c1a3c",
+      "bytes": 319114
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-005.prompt.txt",
+      "sha256": "f1c3104902d4529468aeca89c072ce5b24d47682cf5bc3a287ee84dba7878707",
+      "bytes": 404066
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-006.prompt.txt",
+      "sha256": "63ecacec238c00f4a4ef6946b4f597f66ceaa87ee2212dd5f7653fd1e1965768",
+      "bytes": 140212
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-007.prompt.txt",
+      "sha256": "f7add3877b5c654be46f492b21896465f264ef8aaf06a7426112459fd38eff4c",
+      "bytes": 427789
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-008.prompt.txt",
+      "sha256": "5bcc9d6c83a541402d38f6fdc3245c71d9823e47b29c7eb20e80f3f6240d7387",
+      "bytes": 244730
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-009.prompt.txt",
+      "sha256": "3339bd8904ffdcdc6feda471c05f17045660c3f7f7a2c9626ce6bc102e3a3720",
+      "bytes": 499846
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-010.prompt.txt",
+      "sha256": "fd8b28c8eeedcfaa4555262666e7cd0da6c6ad1900b023fe5dc0b0f8f13e5902",
+      "bytes": 398923
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-011.prompt.txt",
+      "sha256": "5c5f9effff3610e7a196795ad762fd15fb1c71e118b3e1310f099dd582ab0f29",
+      "bytes": 340337
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-012.prompt.txt",
+      "sha256": "52b9df114dff4508ad127a5d6d46ba7755edbc8cab45950d87b3632bee69c916",
+      "bytes": 438080
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-013.prompt.txt",
+      "sha256": "08c7f6997a17ea27216f9b8cbf9e2e75bcff273d914419d840aa09b5c8e571a5",
+      "bytes": 265512
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-014.prompt.txt",
+      "sha256": "790286cf47e512da56a658794953da167775507c91e5bbc3a27f12184c459c31",
+      "bytes": 462115
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-015.prompt.txt",
+      "sha256": "bbff1ce0093d4d2f34cfe5ed85cb08906429ced41600f8fd414d61af99397a3c",
+      "bytes": 499268
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-016.prompt.txt",
+      "sha256": "d327b2da7cbd58e90a0a7ec594311b2cf3d5938311ac51291fd4545dfecd7082",
+      "bytes": 216735
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-017.prompt.txt",
+      "sha256": "ad0125baa9a84dc333b0ef303379718f27f0db5000ad739cf1ef3964230efb05",
+      "bytes": 270925
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-018.prompt.txt",
+      "sha256": "f40c2f2ffa884d9d1d96f98bc5a8bbcd9a9a84bdd685361185d5c733fb83ba74",
+      "bytes": 44587
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2_REUSE_AND_CORRECTION_2159.json",
+      "sha256": "75612fc52044e167a50b6aa6476fae3cfdb12d1dddd6c564c4381a6d325b7175",
+      "bytes": 126309
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/prove_g2_key_reuse_2159.py",
+      "sha256": "d392af746a6e58e6e05f817d39df6373e23ca998f625f9641be6fffb6bc8cfa5",
+      "bytes": 6892
+    },
+    {
+      "path": "a7_recovery/unit_2020_codex_check/test_g2_key_reuse_2159.py",
+      "sha256": "5ef65f06ef989e6210832916ed12ace3e2dd756fbf9098789a0439076bed1888",
+      "bytes": 21213
+    }
+  ]
+}
