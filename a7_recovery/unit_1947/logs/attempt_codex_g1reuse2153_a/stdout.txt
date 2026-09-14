@@ -1,0 +1,2 @@
+Native carry proved: 161 valid; 1 exhausted invalid; 30 changed uncalled. Consumer refuses as required.
+Native G1 reuse/preflight review complete; no model call or score.

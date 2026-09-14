@@ -4,7 +4,25 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision205: real new-key preparation VERIFIED,
+Current checkpoint,work-order Revision207: REAL saved-reading consumer PASSES,
+native report5429ce24, exit0/empty stderr.161 valid carried,1 exhausted-invalid,
+30 changed uncalled; the real resolution consumer refuses unfinished work.
+Published unfinalized evidence is refused separately.54 affected native-path
+tests and10 subtests pass; four meaningful faulty variants are caught. All81
+carried parser bindings are equal, including6 hidden-key-only changes. Core's
+independent review found no demonstrated defect; no redundant runtime rule
+was added. Collection operator/preparation publication are next; no new call
+or corrected score yet. Detailed five-item checklist:G1_REUSE_REVIEW_2153.md.
+
+Previous checkpoint,work-order Revision206: signed-key/preparation published
+4c1f4591d; exact remote and all168 manifest files verified. Core2152 prepares
+only30 changed lanes on the full root; root owns the saved-judgment consumer.
+Input selection has one shared owner. Native proof, transport equivalence,
+uncalled/unreserved carry checks and existing partial accounting are required;
+no new parser/scorer/subset candidate. This consumer and new preparation are
+OPEN, as are the actual corrected score, error causes and END-only model setup.
+
+Previous checkpoint,work-order Revision205: real new-key preparation VERIFIED,
 codex_keygrading2150_a exit0/empty stderr, KEY_GRADING_INPUTS.json/d7571670.
 Existing owners prove the new saved evaluation,382 unchanged answers/trace,
 reference inventory and424 current G1 questions against165 signed key facts.

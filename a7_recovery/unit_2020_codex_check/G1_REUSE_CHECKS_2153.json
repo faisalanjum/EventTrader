@@ -1,0 +1,43 @@
+{
+  "scope": "G1 saved-reading reuse: focused and affected checks. Native verification PASSES separately in G1_REUSE_NATIVE_CHECKS_2153.json; corrected score still pending.",
+  "unit_command": "env A4_SOURCE_KEY_HARNESS=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3 PYTHONPATH=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_warm:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness /home/faisal/EventMarketDB/venv/bin/python3 -B -W ignore::ResourceWarning -m unittest test_g1_key_reuse_2152",
+  "expected_missing_module": {
+    "chunk_id": "0fbb50",
+    "wall_time_seconds": 0.024561437,
+    "exit_code": 1,
+    "original_token_count": 209,
+    "output": "E\n======================================================================\nERROR: test_g1_key_reuse_2152 (unittest.loader._FailedTest.test_g1_key_reuse_2152)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_g1_key_reuse_2152\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.11/unittest/loader.py\", line 162, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/test_g1_key_reuse_2152.py\", line 12, in <module>\n    import a7_g1_key_reuse_2152 as REUSE\nModuleNotFoundError: No module named 'a7_g1_key_reuse_2152'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n"
+  },
+  "initial_fixture_error": "After implementation, 7 controls passed and one test fixture tried to assign into a tuple. Corrected only that fixture to use a list; no runtime defect was inferred from the fixture error.",
+  "focused": {
+    "command": "env A4_SOURCE_KEY_HARNESS=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3 PYTHONPATH=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_warm:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness /home/faisal/EventMarketDB/venv/bin/python3 -B -W ignore::ResourceWarning -m unittest test_g1_key_reuse_2152 test_g1_key_reuse_original_2153",
+    "result": {
+      "chunk_id": "5417dd",
+      "wall_time_seconds": 0.050940827,
+      "exit_code": 0,
+      "original_token_count": 29,
+      "output": "................\n----------------------------------------------------------------------\nRan 16 tests in 0.013s\n\nOK\n"
+    }
+  },
+  "affected_regression": {
+    "command": "env A4_SOURCE_KEY_HARNESS=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3 PYTHONPATH=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_warm:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness /home/faisal/EventMarketDB/venv/bin/python3 -B -W ignore::ResourceWarning -m pytest -q -p no:cacheprovider test_g1_key_reuse_2152.py test_g1_key_reuse_original_2153.py test_partial_grading_2095.py",
+    "result": {
+      "chunk_id": "73fd05",
+      "wall_time_seconds": 0.699294117,
+      "exit_code": 0,
+      "original_token_count": 28,
+      "output": "........................................                       [100%]\n40 passed, 10 subtests passed in 0.33s\n"
+    }
+  },
+  "mutations": {
+    "command": "env A4_SOURCE_KEY_HARNESS=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3 PYTHONPATH=/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_warm:/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness /home/faisal/EventMarketDB/venv/bin/python3 -B -W ignore::ResourceWarning mutate_g1_key_reuse_2153.py",
+    "result": {
+      "chunk_id": "6566d9",
+      "wall_time_seconds": 0.076725286,
+      "exit_code": 0,
+      "original_token_count": 342,
+      "output": "{\n  \"scope\": \"In-memory only; native evidence proof is separate\",\n  \"checks\": [\n    {\n      \"control\": true,\n      \"tests\": 16,\n      \"failures\": 0,\n      \"errors\": 0\n    },\n    {\n      \"mutation\": \"ignore new reservations\",\n      \"tests\": 16,\n      \"failures\": 1,\n      \"errors\": 0,\n      \"failed_tests\": [\n        \"test_g1_key_reuse_2152.MergeProof.test_any_new_reservation_on_carried_task_refuses_even_without_answer\"\n      ]\n    },\n    {\n      \"mutation\": \"ignore added runtime input\",\n      \"tests\": 16,\n      \"failures\": 1,\n      \"errors\": 0,\n      \"failed_tests\": [\n        \"test_g1_key_reuse_2152.MergeProof.test_every_runtime_rule_and_transport_drift_refuses (field='expected_input')\"\n      ]\n    },\n    {\n      \"mutation\": \"ignore unproved native diagnostics\",\n      \"tests\": 16,\n      \"failures\": 2,\n      \"errors\": 0,\n      \"failed_tests\": [\n        \"test_g1_key_reuse_2152.MergeProof.test_unrelated_native_error_is_never_filtered\",\n        \"test_g1_key_reuse_2152.PublicEntry.test_native_problem_reaches_the_public_consumer_without_becoming_credit\"\n      ]\n    },\n    {\n      \"mutation\": \"hide new carried-task evidence\",\n      \"tests\": 16,\n      \"failures\": 1,\n      \"errors\": 0,\n      \"failed_tests\": [\n        \"test_g1_key_reuse_2152.MergeProof.test_carry_cannot_hide_any_new_attempt_or_relation\"\n      ]\n    }\n  ],\n  \"restored_control_tests\": 16\n}\n"
+    }
+  },
+  "limitations": "These unit fixtures exercise the real partial-policy and resolution consumer but mock the native evidence input. The actual original/current native proof is the separately passed codex_g1reuse2153_a run, report5429ce24. Actual-runtime affected suite:54 tests and10 subtests pass. No new model answer or corrected score is claimed."
+}

@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 205, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 207, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,43 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision205: REAL NEW-KEY GRADING PREPARATION PASSES, exit0/empty
+CURRENT,Revision207: ACTUAL G1 REUSE CONSUMER VERIFIED, no new AI call/score.
+codex_g1reuse2153_a exits0/empty stderr; native report5429ce24 proves161
+carried valid readings,1 original exhausted-invalid and30 changed uncalled;
+31 missing selections. The real grading consumer refuses precisely the first
+uncalled changed lane. Published-but-unfinalized root is separately refused.
+All54 affected tests plus10 subtests pass under the actual runtime owners,
+including complete81-batch parser-binding equivalence. Four faulty in-memory
+variants are caught and controls restored. Code10af3e7e remains unchanged.
+Core2151/af67169b independently found no demonstrated defect. Its suggested
+extra runtime binding comparison is unnecessary: selected items already bind
+each question's gold_idx and candidate pool; the existing writer derives the
+parser binding from those fields. Full-population test now records this
+dependency explicitly. No extra rule or semantic hardcoding was added.
+Existing collection operator also PASSES against the exact new30-lane packet,
+codex_g1operator2153_a exit0/empty stderr. Root freezes/publishes this preparation
+before authorizing ONE30-call segment.
+Never use its generic prepare/next_admissible on this partial new root; that
+would repeat the162 carried lanes. Ingest/finalize use the unchanged owner;
+any permitted invalid-only retry is restricted to the changed set. Corrected
+G2/G3 population, final score/causes and END-only offline setup remain OPEN.
+
+PREVIOUS,Revision206: signed-key/preparation checkpoint COMMITTED AND PUSHED
+4c1f4591dfd7be364dcec80101b477ae345f7ec8, treea10babcc10ab259c30d0077a490f972bcf164df0.
+Exact remote verified; all168 manifest files rehashed from the commit,159
+changed paths including20 native logs. Main/unrelated work remain unchanged.
+Core task2152/ebc06461 prepares ONLY the30 changed G1 lanes on the existing
+FULL192-lane root in unit_2152_g1_reuse. No subset candidate or model call.
+Root owns the disjoint consumer: original native proof in original context,
+current native proof, exact input/transport reuse, then the existing partial
+policy over the combined evidence. Never hide a new reservation/call on a
+carried lane. One common input-selection owner; no second parser or scorer.
+Consumer focused/native proof and Core preparation verification remain OPEN.
+No concurrent native job while Core owns preparation. Preserve161 valid old
+readings and the one exhausted-invalid lane; do not rerun successful calls.
+Target5–6p.m. Eastern remains provisional, not a renewed rolling estimate.
+
+PREVIOUS,Revision205: REAL NEW-KEY GRADING PREPARATION PASSES, exit0/empty
 stderr, codex_keygrading2150_a. KEY_GRADING_INPUTS.json/d7571670fc3ae38a4dc
 732a7e377f23c385a0ee59aad3eb38d52151cd590e9f7 binds evaluation72850446,
 reference113b55aa and G1 candidate48d01dce. Original382 answers, whole trace,

@@ -1,0 +1,21 @@
+{
+ "candidate_sha256": "48d01dced57656748a35a358b8f66ee29aef8e259f64b49745e57b18fbd7e5f8",
+ "evidence_attempts_shapes": [
+  "{}"
+ ],
+ "evidence_problems": [],
+ "evidence_uncalled_lanes": 192,
+ "kind": "Prelaunch negative on a fresh unpublished root; no AI call, no score",
+ "lane_states": {},
+ "lifecycle_refusal": "ValueError: the approved G1 lifecycle does not hold: ['G1-000/G1a has no selected valid attempt', 'G1-000/G1b has no selected valid attempt']",
+ "model_calls": 0,
+ "partial_policy_refusal": "ValueError: G1-000/G1a is not an exhausted, fully evidenced invalid reading",
+ "partial_policy_sha256": "1a465b94ff57789bee9bc210b36e7b892768156975702160fe22cd46b16db959",
+ "refuse_problem_count": 192,
+ "refuse_problems_are_all_missing_valid": true,
+ "refuse_returned_state": true,
+ "root_lanes": 192,
+ "root_sha256": "7164d9715402f3801371a136e7d4f8c08e1f7690800c58cf31072dc00d555d41",
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/g1_negative",
+ "segments_published": 0
+}
