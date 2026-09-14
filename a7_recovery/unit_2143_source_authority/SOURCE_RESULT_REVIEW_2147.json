@@ -1,0 +1,195 @@
+{
+  "scope": "Independent native/raw/located-row comparison, and manual source-meaning review recorded separately; no signature or score claimed",
+  "paths": {
+    "state": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e1ea0793-2c1.json",
+    "native": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_e1ea0793-2c1/agent-a8de531fc1ad74e54.jsonl",
+    "script": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143/scripts/0001104659-26-017090.attempt1.js",
+    "raw": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143/raw/0001104659-26-017090.attempt1.proved.json",
+    "harvested": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143/raw/wf_e1ea0793-2c1.raw.json",
+    "receipt": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143/receipt.json",
+    "finalization": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143/finalization.json",
+    "collection": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/core_collect2146_a/COLLECTION_2143.json"
+  },
+  "hashes": {
+    "state": "62396d74b8facaf8c4b4656bc20d0350296e8b4e679791fc4736159cfb6683d2",
+    "native": "1d95c65a210ebddfed131b36c625e8ced810645bf9a2c43157cc9ce80d47abeb",
+    "script": "60e46245bbd10cb1dcc8482f4de2599310d0fd97e5a6eeb6135a29a84b914d8a",
+    "raw": "75e17285f365c0c19f2f0dec381203f667bb869d4794b45c33552759883447c3",
+    "harvested": "75e17285f365c0c19f2f0dec381203f667bb869d4794b45c33552759883447c3",
+    "receipt": "6c994ba8a335fb399e25f601a20225b4e9b55fe5ad100e13c8f5e1ada12384ba",
+    "finalization": "657012e282d92c0d10779e75f7fec8e658bb22953729ffb3f9785506f35d8844",
+    "collection": "cb538aac792011789ba07660fe02c9e1414dcc1dfc6a5ceb03986ac6b4a28835"
+  },
+  "session": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "run": "wf_e1ea0793-2c1",
+  "agent": "a8de531fc1ad74e54",
+  "request": "req_011Cf3jb9t1XpxjZevHbyAbd",
+  "message": "msg_011Cf3jbAR1CxzYfzQyHPsFu",
+  "actual_model": "claude-opus-5",
+  "declared_model": "opus",
+  "effort": "high",
+  "agent_type": "lean-probe",
+  "started": "2026-09-14T17:35:06.408Z",
+  "completed": "2026-09-14T17:38:34.113Z",
+  "prompt_sha256": "4cc2d3f6f30916558d8135b9a58d5971631591fbe5138e89c855e12294bd6ae4",
+  "source_id": "0001104659-26-017090",
+  "source_text_sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a",
+  "source_text_characters": 22759,
+  "previous_raw_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/raw/0001104659-26-017090.attempt1.proved.json",
+  "previous_raw_sha256": "bb8645b8cf2efd4aef38b4a7e13c4d2e78e172f7f576bce0b56ddabef0487bc7",
+  "previous_open_issues": [
+    {
+      "what": "Whether a prior-period comparative column restated inside a current filing's table (here the 13 weeks and 52 weeks ended December 31, 2024 comparable-sales rates) is in scope as a fact of THIS event, or belongs only to the earlier event that first stated it.",
+      "why": "The rules fix period resolution and forbid duplicate facts within a reply, but no rule states a scope filter for restated comparatives; I settled the row by emitting every stated period value with its own explicit period framing, yet a contract decision is needed so this choice is uniform across events rather than reader-by-reader."
+    }
+  ],
+  "current_open_issues": [],
+  "all_six_fact_arrays_identical": true,
+  "all_six_outcomes_identical": true,
+  "changed_full_row_indexes": [
+    1,
+    2,
+    3,
+    4,
+    6
+  ],
+  "located_rows": [
+    {
+      "local_row": 1,
+      "quote": "Excluding the after-tax impact of these and certain other items, adjusted net income and adjusted diluted net income per share for the fourth quarter of fiscal 2025 were $48.3 million and $1.00, respectively.",
+      "raw_label_or_claim": "adjusted net income",
+      "start_character": 1073,
+      "end_character": 1281,
+      "quote_sha256": "5efe11fc2883a8d24952addb98e2db8d2af4327d6f8384b205e17c130476074c",
+      "outcome": "fact",
+      "fact_count": 1
+    },
+    {
+      "local_row": 2,
+      "quote": "The Company recorded a pre-tax net expense of $24.6 million related to impairment of assets and lease termination expenses, Fox Restaurant Concepts (“FRC”) acquisition-related items, gift card breakage and gift card inventory adjustments.",
+      "raw_label_or_claim": "pre-tax net expense of $24.6 million",
+      "start_character": 834,
+      "end_character": 1072,
+      "quote_sha256": "c35f390a53f3e0ab34bdd60f5fd1904acb3241ef2ec6e40e4ec392e21562ada3",
+      "outcome": "exclusion",
+      "fact_count": 0
+    },
+    {
+      "local_row": 3,
+      "quote": "revenue for the quarter finished within our expected range.",
+      "raw_label_or_claim": "revenue for the quarter finished within our expected range",
+      "start_character": 1849,
+      "end_character": 1908,
+      "quote_sha256": "197917096f4043f9553ae8150ac72e55b2f06e3ec92afbc1eff0bd6363956b3d",
+      "outcome": "fact",
+      "fact_count": 2
+    },
+    {
+      "local_row": 4,
+      "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+      "raw_label_or_claim": "North Italia operating information: Comparable restaurant sales vs. prior year",
+      "start_character": 17124,
+      "end_character": 17222,
+      "quote_sha256": "15baa5923ef63db6645697ce16ed64639d905091ea97aec84ebb9b5b7432a94b",
+      "outcome": "fact",
+      "fact_count": 4
+    },
+    {
+      "local_row": 5,
+      "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+      "raw_label_or_claim": "six to seven Flower Child locations",
+      "start_character": 3467,
+      "end_character": 3716,
+      "quote_sha256": "86d152b39509ec8c8f0554f6c338fd2a0206f970c57845b29132825afa283758",
+      "outcome": "fact",
+      "fact_count": 1
+    },
+    {
+      "local_row": 6,
+      "quote": "adverse weather conditions and natural disasters in regions in which the Company’s restaurants are located",
+      "raw_label_or_claim": "adverse weather conditions and natural disasters",
+      "start_character": 9452,
+      "end_character": 9558,
+      "quote_sha256": "9199cc8136717fc06f4671e78c968fdfb4220df4d07ce6e08c12a317296c71c9",
+      "outcome": "control",
+      "fact_count": 0
+    }
+  ],
+  "review_fact_count": 8,
+  "groups": [],
+  "model_calls": 1,
+  "retries": 0,
+  "tools": 0,
+  "before_round": 685,
+  "after_round": 686,
+  "collection_finalization": {
+    "child": null,
+    "harvested_raw": [
+      "wf_e1ea0793-2c1.raw.json"
+    ],
+    "ledger": {
+      "invalid_response": 0,
+      "missing": 0,
+      "scheduled": 1,
+      "transport_no_answer": 0,
+      "unproved": 0,
+      "valid": 1
+    },
+    "outcomes": [
+      [
+        "0001104659-26-017090",
+        "valid",
+        ""
+      ]
+    ],
+    "phase_complete": true,
+    "problems": [],
+    "retry": [],
+    "sha256": "657012e282d92c0d10779e75f7fec8e658bb22953729ffb3f9785506f35d8844"
+  },
+  "reviewed_by": {
+    "role": "Codex independent reviewer",
+    "session": "01a05829-3086-73e0-89c9-e5773b322d80"
+  },
+  "semantic_review": {
+    "authority_disposition": "a7_recovery/unit_2020_codex_check/EIGHT_SCOPE_DISPOSITION_2143.md",
+    "reused_source_review": "a7_recovery/unit_2020_codex_check/EIGHT_SOURCE_MEANING_REVIEW_2142.json",
+    "reused_source_review_sha256": "c69da3d1523526b14932ce916fd7445ffe6a3ece2308d45c366d70ad9d24b217",
+    "contract_sha256": "aa7239edf069dec611678dc9981cebfa6760dedbc79faada95d4bc5c66b7e98c",
+    "served_clause_sha256": "b9013beddb49d0150f1bc11accd362687d498e1eab01d3bd1f43ddc8c5eb5c6d",
+    "rows": [
+      {
+        "row": 112,
+        "result": "verified",
+        "reason": "The located sentence states adjusted net income 48.3 million for fiscal 2025 Q4. Full-source reconciliation headers and adjacent 48,305 / 51,785 support decreased and prior_year. The table scale is outside the located quote, so comparison operands stay absent. Only the in-quote adjusted qualifier is carried."
+      },
+      {
+        "row": 113,
+        "result": "verified lawful exclusion",
+        "reason": "The target is the one net 24.6-million aggregate across four independent causes, not a request to discover other targets in the complete filing. No individual cause owns this amount; permitted abstention preserves the real but unresolved aggregate without creating a catch-all driver. New wording changes no factual settlement or outcome."
+      },
+      {
+        "row": 114,
+        "result": "verified",
+        "reason": "Within our expected range compares actual quarterly revenue with the company's own guidance. Served Rule 9.6 explicitly requires the numberless unknown-state home sibling for a numberless surprise. No value is imported from elsewhere to change that quoted target."
+      },
+      {
+        "row": 115,
+        "result": "verified; historical open issue resolved",
+        "reason": "The exact table headers are 13 weeks / 13 weeks / 52 weeks / 52 weeks, ending December 30 2025 / December 31 2024 / December 30 2025 / December 31 2024. The located rates -4, +1, -2, +2 are separate period rates, not another rate's raw-sales operands. The target contains no current-period selector. The explicitly served restatement clause keeps facts on this source event; no search for earlier publication is required. Existing eight-source factual settlement is unchanged."
+      },
+      {
+        "row": 116,
+        "result": "verified",
+        "reason": "The located target states six to seven Flower Child locations in fiscal 2026. Menu-first reuse yields the exact existing segment:flowerchild token. No source-stated movement or prior comparable guide licenses raised/lowered; unknown is required. The company confirms its own range."
+      },
+      {
+        "row": 117,
+        "result": "verified negative control",
+        "reason": "The exact located fragment is a hypothetical safe-harbor risk factor. It states no current weather state or occurrence. A separate realized-weather phrase elsewhere cannot replace this target."
+      }
+    ],
+    "result": "All six source rows independently reviewed, eight facts retained, one exclusion and one control counted; no remaining demonstrated source or contract defect in this closeout. Prior 32 source reviews are reused, not re-opened.",
+    "limitations": "This record does not establish the complete new 33-source signing gate, new candidate, independent signature/lock, corrected-key grading connection, corrected score or local-model execution. Those remain separate measured gates. No perfect model score is promised."
+  }
+}

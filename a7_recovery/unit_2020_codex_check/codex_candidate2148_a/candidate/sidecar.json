@@ -1,0 +1,5833 @@
+{
+ "schema": "a4-final-key-candidate/1511/sidecar",
+ "sidecar": {
+  "door": "a4_source_only_key_1997",
+  "packet_to_gold": [
+   {
+    "packet_id": "0000006201-26-000031#000",
+    "source_id": "0000006201-26-000031",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#001",
+    "source_id": "0000006201-26-000031",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#002",
+    "source_id": "0000006201-26-000031",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#003",
+    "source_id": "0000006201-26-000031",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#004",
+    "source_id": "0000006201-26-000031",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#005",
+    "source_id": "0000006201-26-000031",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#006",
+    "source_id": "0000006201-26-000031",
+    "row_index": 7,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#007",
+    "source_id": "0000006201-26-000032",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#008",
+    "source_id": "0000006201-26-000032",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#009",
+    "source_id": "0000006201-26-000032",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#010",
+    "source_id": "0000006201-26-000032",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#011",
+    "source_id": "0000006201-26-000032",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#012",
+    "source_id": "0000027904-26-000013",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#013",
+    "source_id": "0000027904-26-000013",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#014",
+    "source_id": "0000027904-26-000013",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#015",
+    "source_id": "0000027904-26-000013",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#016",
+    "source_id": "0000027904-26-000013",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#017",
+    "source_id": "0000027904-26-000013",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#018",
+    "source_id": "0000027904-26-000013",
+    "row_index": 7,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#019",
+    "source_id": "0000027904-26-000020",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#020",
+    "source_id": "0000027904-26-000020",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#021",
+    "source_id": "0000027904-26-000020",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#022",
+    "source_id": "0000027904-26-000020",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#023",
+    "source_id": "0000027904-26-000020",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#024",
+    "source_id": "0000027904-26-000020",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#025",
+    "source_id": "0000027904-26-000020",
+    "row_index": 7,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#026",
+    "source_id": "0000027904-26-000020",
+    "row_index": 8,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#027",
+    "source_id": "0000027904-26-000020",
+    "row_index": 9,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#028",
+    "source_id": "0000027904-26-000022",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#029",
+    "source_id": "0000027904-26-000022",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#030",
+    "source_id": "0000027904-26-000022",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#031",
+    "source_id": "0000027904-26-000022",
+    "row_index": 4,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#032",
+    "source_id": "0000027904-26-000022",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#033",
+    "source_id": "0000063908-26-000032",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#034",
+    "source_id": "0000063908-26-000032",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#035",
+    "source_id": "0000063908-26-000032",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000063908-26-000032#036",
+    "source_id": "0000063908-26-000032",
+    "row_index": 4,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000063908-26-000032#037",
+    "source_id": "0000063908-26-000032",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#038",
+    "source_id": "0000092380-26-000044",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#039",
+    "source_id": "0000092380-26-000044",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#040",
+    "source_id": "0000092380-26-000044",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#041",
+    "source_id": "0000092380-26-000044",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#042",
+    "source_id": "0000092380-26-000044",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#043",
+    "source_id": "0000092380-26-000044",
+    "row_index": 6,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#044",
+    "source_id": "0000092380-26-000044",
+    "row_index": 7,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#045",
+    "source_id": "0000764478-25-000057",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#046",
+    "source_id": "0000764478-25-000057",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#047",
+    "source_id": "0000764478-25-000057",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#048",
+    "source_id": "0000764478-25-000057",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#049",
+    "source_id": "0000764478-25-000057",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#050",
+    "source_id": "0000898173-26-000006",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#051",
+    "source_id": "0000898173-26-000006",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#052",
+    "source_id": "0000898173-26-000006",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#053",
+    "source_id": "0000898173-26-000006",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#054",
+    "source_id": "0000898173-26-000006",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#055",
+    "source_id": "0000898173-26-000006",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000940944-25-000038#056",
+    "source_id": "0000940944-25-000038",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-25-000038#057",
+    "source_id": "0000940944-25-000038",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-25-000038#058",
+    "source_id": "0000940944-25-000038",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-25-000038#059",
+    "source_id": "0000940944-25-000038",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#060",
+    "source_id": "0000940944-26-000005",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#061",
+    "source_id": "0000940944-26-000005",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#062",
+    "source_id": "0000940944-26-000005",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#063",
+    "source_id": "0000940944-26-000005",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#064",
+    "source_id": "0000940944-26-000005",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000940944-26-000005#065",
+    "source_id": "0000940944-26-000005",
+    "row_index": 6,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#066",
+    "source_id": "0000940944-26-000009",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#067",
+    "source_id": "0000940944-26-000009",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#068",
+    "source_id": "0000940944-26-000009",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#069",
+    "source_id": "0000940944-26-000009",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#070",
+    "source_id": "0000940944-26-000009",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#071",
+    "source_id": "0000940944-26-000009",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0001041061-25-000109#072",
+    "source_id": "0001041061-25-000109",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-25-000109#073",
+    "source_id": "0001041061-25-000109",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-25-000109#074",
+    "source_id": "0001041061-25-000109",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-25-000109#075",
+    "source_id": "0001041061-25-000109",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-25-000109#076",
+    "source_id": "0001041061-25-000109",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#077",
+    "source_id": "0001041061-26-000003",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#078",
+    "source_id": "0001041061-26-000003",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#079",
+    "source_id": "0001041061-26-000003",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#080",
+    "source_id": "0001041061-26-000003",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#081",
+    "source_id": "0001041061-26-000003",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#082",
+    "source_id": "0001041061-26-000084",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#083",
+    "source_id": "0001041061-26-000084",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#084",
+    "source_id": "0001041061-26-000084",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#085",
+    "source_id": "0001041061-26-000084",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#086",
+    "source_id": "0001041061-26-000084",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#087",
+    "source_id": "0001041061-26-000084",
+    "row_index": 6,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#088",
+    "source_id": "0001058090-26-000007",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#089",
+    "source_id": "0001058090-26-000007",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#090",
+    "source_id": "0001058090-26-000007",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#091",
+    "source_id": "0001058090-26-000007",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#092",
+    "source_id": "0001058090-26-000007",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#093",
+    "source_id": "0001058090-26-000007",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#094",
+    "source_id": "0001104659-25-102611",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#095",
+    "source_id": "0001104659-25-102611",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#096",
+    "source_id": "0001104659-25-102611",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#097",
+    "source_id": "0001104659-25-102611",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#098",
+    "source_id": "0001104659-25-102611",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#099",
+    "source_id": "0001104659-25-102611",
+    "row_index": 6,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#100",
+    "source_id": "0001104659-25-105631",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#101",
+    "source_id": "0001104659-25-105631",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#102",
+    "source_id": "0001104659-25-105631",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#103",
+    "source_id": "0001104659-25-105631",
+    "row_index": 4,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#104",
+    "source_id": "0001104659-25-105631",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#105",
+    "source_id": "0001104659-25-118458",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#106",
+    "source_id": "0001104659-25-118458",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#107",
+    "source_id": "0001104659-25-118458",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#108",
+    "source_id": "0001104659-25-118458",
+    "row_index": 4,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#109",
+    "source_id": "0001104659-25-118458",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#110",
+    "source_id": "0001104659-25-118458",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#111",
+    "source_id": "0001104659-25-118458",
+    "row_index": 7,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#112",
+    "source_id": "0001104659-26-017090",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#113",
+    "source_id": "0001104659-26-017090",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#114",
+    "source_id": "0001104659-26-017090",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#115",
+    "source_id": "0001104659-26-017090",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 4,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#116",
+    "source_id": "0001104659-26-017090",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#117",
+    "source_id": "0001104659-26-017090",
+    "row_index": 6,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#118",
+    "source_id": "0001104659-26-027061",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#119",
+    "source_id": "0001104659-26-027061",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#120",
+    "source_id": "0001104659-26-027061",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#121",
+    "source_id": "0001104659-26-027061",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#122",
+    "source_id": "0001104659-26-027061",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#123",
+    "source_id": "0001104659-26-032757",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#124",
+    "source_id": "0001104659-26-032757",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#125",
+    "source_id": "0001104659-26-032757",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#126",
+    "source_id": "0001104659-26-032757",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#127",
+    "source_id": "0001104659-26-032757",
+    "row_index": 5,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001171843-26-001288#128",
+    "source_id": "0001171843-26-001288",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001171843-26-001288#129",
+    "source_id": "0001171843-26-001288",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001171843-26-001288#130",
+    "source_id": "0001171843-26-001288",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001171843-26-001288#131",
+    "source_id": "0001171843-26-001288",
+    "row_index": 4,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#132",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#133",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#134",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#135",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#136",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#137",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#138",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 7,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#139",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 8,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#140",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 9,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#141",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 10,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#142",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#143",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#144",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#145",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#146",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#147",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 6,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#148",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 7,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#149",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 8,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#150",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#151",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#152",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#153",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#154",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 5,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#155",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#156",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 7,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#157",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#158",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#159",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#160",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#161",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#162",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 6,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#163",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 7,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#164",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#165",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#166",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#167",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 4,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#168",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#169",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#170",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#171",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#172",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#173",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#174",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 6,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#175",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#176",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#177",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#178",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#179",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 5,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#180",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#181",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 7,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#182",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#183",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#184",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#185",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 2,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#186",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#187",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#188",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 7,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_42014391#189",
+    "source_id": "bzNews_42014391",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_50877032#190",
+    "source_id": "bzNews_50877032",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   }
+  ],
+  "record_kind_conflicts": [
+   {
+    "packet_id": "0000027904-26-000020#026",
+    "source_id": "0000027904-26-000020",
+    "row_index": 8,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000027904-26-000022#032",
+    "source_id": "0000027904-26-000022",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#033",
+    "source_id": "0000063908-26-000032",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#034",
+    "source_id": "0000063908-26-000032",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000898173-26-000006#055",
+    "source_id": "0000898173-26-000006",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000940944-26-000005#064",
+    "source_id": "0000940944-26-000005",
+    "row_index": 5,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0000940944-26-000009#071",
+    "source_id": "0000940944-26-000009",
+    "row_index": 6,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#106",
+    "source_id": "0001104659-25-118458",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#113",
+    "source_id": "0001104659-26-017090",
+    "row_index": 2,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#162",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 6,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#184",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": true
+   }
+  ],
+  "controls": [
+   {
+    "packet_id": "0000006201-26-000031#006",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000006201-26-000032#011",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000027904-26-000013#018",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000027904-26-000020#025",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000027904-26-000022#031",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000063908-26-000032#036",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000092380-26-000044#043",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000764478-25-000057#049",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000898173-26-000006#054",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000940944-25-000038#058",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000940944-26-000005#065",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000940944-26-000009#070",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001041061-25-000109#074",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001041061-26-000003#081",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001041061-26-000084#087",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001058090-26-000007#092",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-25-102611#099",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-25-105631#103",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-25-118458#108",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-26-017090#117",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-26-027061#122",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-26-032757#127",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001171843-26-001288#131",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#139",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#147",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#149",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#154",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#156",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#163",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#167",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#174",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#179",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#181",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#188",
+    "proposed_record_kind": "negative_control"
+   }
+  ],
+  "exclusions": [
+   {
+    "packet_id": "0000027904-26-000020#026",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0000027904-26-000022#032",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0000063908-26-000032#033",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0000063908-26-000032#034",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0000898173-26-000006#055",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0000940944-26-000005#064",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0000940944-26-000009#071",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0001104659-25-118458#106",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "0001104659-26-017090#113",
+    "proposed_record_kind": "real_item"
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#184",
+    "proposed_record_kind": "real_item"
+   }
+  ],
+  "abstentions": [
+   {
+    "packet_id": "0000006201-26-000031#006",
+    "reason": "Generic risk boilerplate from the forward-looking-statements caution: 'we may be a party to litigation in the normal course of business or otherwise, which could affect our financial position and liquidity' names no specific current matter and no state, change, guidance or action, so the gate drops it."
+   },
+   {
+    "packet_id": "0000006201-26-000032#011",
+    "reason": "Catch-all risk-factor boilerplate that unknown or currently-immaterial risks 'could also materially adversely affect our business' names no driver, no level, no direction, no action and no outlook, so the fact gate fails at Rule 1.2 (generic risk boilerplate)."
+   },
+   {
+    "packet_id": "0000027904-26-000013#018",
+    "reason": "Generic risk boilerplate: a hypothetical crash that 'could expose us to significant liability' states no driver state, change, guidance, surprise or discrete action, and flags no specific current source-flagged adverse threat, so the gate yields no fact."
+   },
+   {
+    "packet_id": "0000027904-26-000020#025",
+    "reason": "The quote is one hypothetical entry in the forward-looking-statements risk list, naming possible effects of serious accidents with no stated state, change, surprise, guidance or action, so the gate drops it as generic risk boilerplate."
+   },
+   {
+    "packet_id": "0000027904-26-000020#026",
+    "reason": "The sentence is specific and non-boilerplate, but no lawful lane resolves it: the outlook verb 'expect' routes the forward claim to guidance, where the expecting party is surveyed third-party respondents rather than Delta or its management, so company_confirmed cannot be true and false is a reserved value; the metric route also fails because the 85 percent measures the share of respondents choosing the answer 'increase or stay the same', not any readable level of corporate travel spend, and no lawful name can carry that direction-conditioned response without the direction words the naming rule forbids."
+   },
+   {
+    "packet_id": "0000027904-26-000022#031",
+    "reason": "The sentence only reports that the risk factors described in the Form 10-K have not materially changed; it names no driver and reports no state, change, surprise, guidance or action, so it is bare boilerplate and the fact gate yields nothing."
+   },
+   {
+    "packet_id": "0000027904-26-000022#032",
+    "reason": "The target describes a change in how the company PRESENTS its adjusted (non-GAAP) results and restates prior-period reconciliations on the same basis; its subject is a measurement/presentation construct, not any driver's state, change, surprise, guidance or discrete business action, and a measurement flavour may never itself become a driver name, so no lawful fact can be coined."
+   },
+   {
+    "packet_id": "0000063908-26-000032#033",
+    "reason": "The sentence states a real, non-boilerplate quantity - pre-tax charges of $80 million - but it attributes that TOTAL only 'primarily' to restructuring charges associated with Accelerating the Organization, leaving an unnamed, unquantified remainder inside the same figure; naming the fact after restructuring would assign the whole amount to one component the source never sized, and no lawful name exists for the undifferentiated whole because stripping the measurement qualifier 'pre-tax' leaves only the bare category word 'charges', so the item is real but cannot be lawfully resolved into a fact."
+   },
+   {
+    "packet_id": "0000063908-26-000032#034",
+    "reason": "The located target is a prior-year NETTED aggregate ($71 million of net pre-tax gains for the quarter and $70 million of net pre-tax charges for the year) that the same sentence says primarily consisted of property sale gains, transaction costs and non-cash impairment charges tied to the SALE of the South Korea business together with transaction costs tied to the ACQUISITION of the Israel business - at least two independent causes plus an unattributed remainder implied by 'primarily' - with no per-cause amount stated, so one cause name cannot lawfully carry the mixed figure and any split would invent numbers the source does not state."
+   },
+   {
+    "packet_id": "0000063908-26-000032#036",
+    "reason": "The sentence only announces that the release contains forward-looking statements reflecting management's expectations and that they speak as of the date hereof; it names no driver and states no level, change, outlook value, expectation comparison or action, so it is generic legal boilerplate and fails the fact gate."
+   },
+   {
+    "packet_id": "0000092380-26-000044#043",
+    "reason": "The located text is one entry in the cautionary forward-looking-statements factor list, naming fuel price changes, fuel price volatility and fuel availability only as things that could affect the Company's business plans and results of operations; it states no level, direction, guide, comparison or action, so it is generic risk boilerplate and yields no fact."
+   },
+   {
+    "packet_id": "0000764478-25-000057#049",
+    "reason": "The located sentence only defines the reporting term \"constant currency\" as results adjusted to exclude foreign currency impacts; it states no driver level, change, surprise, guidance or action, so it fails the Rule 1 gate as a methodology definition rather than a fact."
+   },
+   {
+    "packet_id": "0000898173-26-000006#054",
+    "reason": "The target is a statutory safe-harbor claim for forward-looking statements under the Private Securities Litigation Reform Act of 1995: generic legal boilerplate that states no driver level, no change, no expectation comparison, no outlook and no discrete action, so the fact gate returns nothing."
+   },
+   {
+    "packet_id": "0000898173-26-000006#055",
+    "reason": "The named target is that all share and per share data in current and comparable periods have been adjusted to reflect the split, which is a retroactive change in how share and per-share figures are PRESENTED: a measurement qualifier riding on other facts, not any driver's own state, change, surprise, guidance or action. The completed 15-for-1 forward split named earlier in the same sentence is a different claim that this row's target does not select, so interpreting only the served target yields no fact."
+   },
+   {
+    "packet_id": "0000940944-25-000038#058",
+    "reason": "The located sentence is conditional litigation risk-factor wording — litigation 'may adversely affect our business, financial condition and results of operations' — stating no level, direction, size, outlook or completed action; it is exactly the generic risk boilerplate the fact gate drops, so it yields no record."
+   },
+   {
+    "packet_id": "0000940944-26-000005#064",
+    "reason": "The sentence states only a presentation convention - which reporting segment carries Chuy's sales and profits from the acquisition date forward - and names no level, direction, change, surprise, guidance or action for any driver, so the Rule 1 fact gate drops it."
+   },
+   {
+    "packet_id": "0000940944-26-000005#065",
+    "reason": "This phrase is generic risk-factor boilerplate inside the safe-harbor forward-looking-statements list, naming litigation and adverse publicity only as things that could happen, with no stated state, change or action, so the gate drops it."
+   },
+   {
+    "packet_id": "0000940944-26-000009#070",
+    "reason": "The target is one bullet in the forward-looking-statements risk list naming categories of possible future harm (climate change, adverse weather conditions, natural disasters) with no stated level, direction, size, period, or specific current source-flagged threat to this company, so it is generic risk boilerplate and fails the fact gate."
+   },
+   {
+    "packet_id": "0000940944-26-000009#071",
+    "reason": "The target claim states only that prior-year figures were recast after the company redefined how segment profit is computed; that is a measurement/presentation basis statement about an accounting construct, carrying no driver level, direction, outlook, expectation comparison or business outcome, and the real metrics it affects (segment profit margin, pre-opening costs) are stated on their own lines elsewhere, so this row yields no lawful fact."
+   },
+   {
+    "packet_id": "0001041061-25-000109#074",
+    "reason": "The sentence is standard risk-factor boilerplate asserting no material change from the prior Form 10-K; it names no driver state, change, surprise, guidance or action, so it fails the fact gate and yields nothing."
+   },
+   {
+    "packet_id": "0001041061-26-000003#081",
+    "reason": "The phrase is one entry in the safe-harbor forward-looking-statements risk list: it names a topic that could affect results, with no stated level, direction, change, outlook or company action, so it is generic risk boilerplate and yields no fact."
+   },
+   {
+    "packet_id": "0001041061-26-000084#087",
+    "reason": "Generic food-safety risk boilerplate: saying illnesses and food safety issues 'have occurred and may occur within our system from time to time' names an undifferentiated industry hazard with no stated level, direction, size, period, guide, expectation comparison, or identified discrete incident, and it is not a specific, current, source-flagged adverse threat, so Rule 1.2 and the gate drop it."
+   },
+   {
+    "packet_id": "0001058090-26-000007#092",
+    "reason": "A generic risk-topic mention inside the standard forward-looking-statements risk list; it states no company-specific state, change, guide or action, and names no specific current source-flagged adverse threat, so the gate drops it."
+   },
+   {
+    "packet_id": "0001104659-25-102611#099",
+    "reason": "The sentence states only undifferentiated ordinary-course involvement in lawsuits, regulatory investigations and other legal proceedings, with no specific matter, party, stage, amount, direction or outcome, so it is a bare topic mention and generic risk boilerplate that yields no fact."
+   },
+   {
+    "packet_id": "0001104659-25-105631#103",
+    "reason": "The located sentence only points the reader to risk-factor descriptions held in the Annual Report and an earlier Form 10-Q; it asserts no state, change, surprise, guidance or action of any driver, so under the gate it is a bare cross-reference and yields no fact."
+   },
+   {
+    "packet_id": "0001104659-25-118458#106",
+    "reason": "The located target is the Mexico joint venture itself, and the Overview sentence only names it as one of the structures through which the company's international presence exists; no level, direction, size, date, or discrete step is stated about that joint venture, so it is a bare topic mention the fact gate drops, and I record that the descriptive verb 'is expanding' in surrounding business-model prose is the only thing that could be read otherwise."
+   },
+   {
+    "packet_id": "0001104659-25-118458#108",
+    "reason": "A hypothetical caveat inside the forward-looking-statements list ('the possibility that we will not realize the anticipated benefits ... for any reason'), stating no occurrence, value, direction, or specific current source-flagged adverse threat, so it is generic risk boilerplate the gate drops."
+   },
+   {
+    "packet_id": "0001104659-26-017090#113",
+    "reason": "The $24.6 million is one NETTED pre-tax total fusing four independent causes named in the same sentence (impairment of assets and lease termination expenses, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); one name may carry only one cause and independent causes must be split, but the located quote states no per-cause amount, no single cause owns the netted figure, and an aggregate catch-all would be a forbidden bare accounting-construct label, so this real disclosure cannot be lawfully resolved into a fact."
+   },
+   {
+    "packet_id": "0001104659-26-017090#117",
+    "reason": "This located text is one entry in the safe-harbor list of factors that may affect forward-looking statements; it names a hypothetical adverse condition category with no stated current state, severity, direction, size, period or company action, which is exactly the generic weather/risk boilerplate the gate drops."
+   },
+   {
+    "packet_id": "0001104659-26-027061#122",
+    "reason": "This is one bullet of the forward-looking-statements risk list, naming macroeconomic conditions, inflation, elevated interest rates and possible future labor, transportation and shipping cost pressures as hypothetical things that could affect results; it states no level, direction, outlook, surprise or action for this company, so it is generic risk boilerplate and yields no fact."
+   },
+   {
+    "packet_id": "0001104659-26-032757#127",
+    "reason": "Standard filing boilerplate stating there have been no material changes in the risk factors already disclosed in the prior Form 10-K; it reports no driver state, change, surprise, guidance or action and names no specific current adverse threat, so the fact gate yields the single abstention."
+   },
+   {
+    "packet_id": "0001171843-26-001288#131",
+    "reason": "The located text is one undifferentiated entry in the safe-harbor forward-looking-statements risk list, naming weather, extreme temperatures and natural disasters only as topics that could affect future results; it states no driver state, change, surprise, guidance or action, so the gate drops it as generic risk boilerplate."
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#139",
+    "reason": "Standard safe-harbor wording that risks and uncertainties could cause actual results to differ from projections; it names no driver state, change, surprise, guidance or action, so it is generic boilerplate and yields no fact."
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#147",
+    "reason": "Standard Private Securities Litigation Reform Act safe-harbor language about forward-looking statements and unspecified risks and uncertainties; it names no driver's state, change, surprise, guidance or action, so this generic risk boilerplate returns the one abstention."
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#149",
+    "reason": "A numberless 'below expectations' remark framed 'from an industry perspective': it states no company value, names no expectation that could be lawfully resolved as consensus or as the company's own prior guide, and no home metric fact for television revenue or units exists anywhere in this event, so this ungrounded expectation comparison cannot be settled."
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#154",
+    "reason": "'The results we issued this afternoon were in line with expectations and guidance for the full year' names no metric, value, unit or slice, so it is an ungrounded actual-versus-expectation claim with no possible home sibling and yields no lawful fact."
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#156",
+    "reason": "Standard safe-harbor language directing listeners to the 10-K and 10-Q risk-factor sections states no driver state, change, surprise, guidance or action; it is exactly the generic risk boilerplate the gate drops."
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#163",
+    "reason": "Standard safe-harbor forward-looking-statements disclaimer: it names no driver state, change, surprise, guide or action, only generic risk-and-uncertainty language pointing at SEC filings, so the gate drops it as boilerplate."
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#167",
+    "reason": "Standard safe-harbor wording that actual results could differ from expectations and projections: it names no driver, no level, no change, no expectation comparison, no guide and no action, so the fact gate yields the one abstention."
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#174",
+    "reason": "A generic safe-harbour sentence extending the earnings release and 8-K forward-looking-statements disclaimer to the call; it names no driver and states no state, change, surprise, guidance or action, so it fails the fact gate as boilerplate."
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#179",
+    "reason": "'beat and raised' plus 'exceeded on all metrics' names no driver, no value, no comparison operand and no period, so it is an ungrounded expectation claim with no identifiable home fact and cannot be lawfully resolved into any record."
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#181",
+    "reason": "Standard safe-harbor legal language about not revising forward-looking statements; it states nothing about any driver's state, change, surprise, guidance or action, so the gate drops it."
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#184",
+    "reason": "The $40 million is stated only as the 'special expenses' component of reported G&A: its measured population is an accounting reporting construct, and 'special expenses' is a filing-taxonomy category word rather than a cause, so it is not a lawful driver name; the only cause the source names is 'primarily related to the pizza hut strategic options review', and 'primarily' leaves that cause's share of the $40 million unstated, so neither a review-cost name nor a Pizza Hut slice can lawfully carry the whole amount. Real but not lawfully resolvable, so the row parks."
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#188",
+    "reason": "An administrative scheduling notice giving the date of the next earnings release and its conference call; it states nothing about any driver's state, change, surprise, guidance or action, so it fails the Rule 1 fact gate."
+   }
+  ],
+  "group_collapses": [
+   {
+    "source_id": "0001041061-26-000003",
+    "members": [
+     "0001041061-26-000003#079",
+     "0001041061-26-000003#080"
+    ],
+    "member_row_indexes": [
+     3,
+     4
+    ],
+    "members_are_one_fact": false,
+    "reason": "The one sentence carries two different measures with different units and different meanings - a dollar level of digitally placed system sales (floor $11 billion) and the percentage share of system sales that is digital (ceiling 60%) - so they are distinct facts that merely share a locator.",
+    "accepted_facts": 2
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "members": [
+     "0001104659-25-118458#109",
+     "0001104659-25-118458#111"
+    ],
+    "member_row_indexes": [
+     5,
+     7
+    ],
+    "members_are_one_fact": false,
+    "reason": "The one sentence states two alternative, independently priced borrowing elections with different reference rates and different stated values (base rate plus 0.5%-1.0% versus Term Secured Overnight Financing Rate plus 1.5%-2.0%), so they are two distinct facts that merely share a locator.",
+    "accepted_facts": 2
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "members": [
+     "BBY_2026-03-03T08.00#143",
+     "BBY_2026-03-03T08.00#144"
+    ],
+    "member_row_indexes": [
+     2,
+     3
+    ],
+    "members_are_one_fact": false,
+    "reason": "The single sentence states two different things - a delivered comparable-sales level against last year, and that result's placement inside the company's own prior guidance range - and the expectation-comparison rule requires exactly two records for that pairing: the metric home and its surprise twin.",
+    "accepted_facts": 2
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "members": [
+     "CMG_2026-02-03T16.30#152",
+     "CMG_2026-02-03T16.30#153"
+    ],
+    "member_row_indexes": [
+     3,
+     4
+    ],
+    "members_are_one_fact": false,
+    "reason": "The one sentence states two different things about the same population: a present measured share of combined sales (metric level, open ceiling at 3%) and a separate forward longer-term aspiration of a double-digit share (numberless guidance), differing in lane, state and period.",
+    "accepted_facts": 2
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "members": [
+     "YUM_2026-02-04T08.15#182",
+     "YUM_2026-02-04T08.15#183"
+    ],
+    "member_row_indexes": [
+     1,
+     2
+    ],
+    "members_are_one_fact": false,
+    "reason": "The single sentence attributes the same 10% divisional core operating profit growth separately to two different divisions, so the two readings differ by slice and are two distinct facts, one per division.",
+    "accepted_facts": 2
+   }
+  ],
+  "review_rows": [
+   {
+    "packet_id": "0000006201-26-000031#000",
+    "fact_index": 0,
+    "reference_name": "Loss per common share: Basic and diluted",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000031#001",
+    "fact_index": 0,
+    "reference_name": "Adjusted earnings (loss) per diluted share3",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000031#002",
+    "fact_index": 0,
+    "reference_name": "increase in expense related to higher prices for jet fuel",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000031#003",
+    "fact_index": 0,
+    "reference_name": "Total unit revenue",
+    "hard_classes": [
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000031#004",
+    "fact_index": 0,
+    "reference_name": "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000031#005",
+    "fact_index": 0,
+    "reference_name": "Regional (4) 32,500 30,700 5.9 %",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000032#007",
+    "fact_index": 0,
+    "reference_name": "CASM excluding net special items, fuel and profit sharing",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000032#008",
+    "fact_index": 0,
+    "reference_name": "Income tax benefit",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000032#009",
+    "fact_index": 0,
+    "reference_name": "Pre-tax loss excluding net special items",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000032#010",
+    "fact_index": 0,
+    "reference_name": "mainline full-time equivalent employees",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#012",
+    "fact_index": 0,
+    "reference_name": "operating income, adjusted",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#013",
+    "fact_index": 0,
+    "reference_name": "Loss on extinguishment of debt",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#014",
+    "fact_index": 0,
+    "reference_name": "Non-fuel unit costs",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "sequential_comparison",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#014",
+    "fact_index": 1,
+    "reference_name": "in line with our long-term target of low-single digit growth",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "sequential_comparison",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#015",
+    "fact_index": 0,
+    "reference_name": "annual effective tax rate",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#016",
+    "fact_index": 0,
+    "reference_name": "equity stake in Grupo Aeroméxico",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#017",
+    "fact_index": 0,
+    "reference_name": "option to purchase up to an additional 30 of the same aircraft",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#019",
+    "fact_index": 0,
+    "reference_name": "Pre-tax loss",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#020",
+    "fact_index": 0,
+    "reference_name": "Operating Margin",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "corrections_and_amendments"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#021",
+    "fact_index": 0,
+    "reference_name": "Earnings per share",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#022",
+    "fact_index": 0,
+    "reference_name": "earnings of $0.64 per share, within our initial guidance range",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#023",
+    "fact_index": 0,
+    "reference_name": "March quarter total revenue",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#024",
+    "fact_index": 0,
+    "reference_name": "growing several points above our initial outlook",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#027",
+    "fact_index": 0,
+    "reference_name": "Adjusted net debt",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000022#028",
+    "fact_index": 0,
+    "reference_name": "refinery generated an operating loss",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000022#029",
+    "fact_index": 0,
+    "reference_name": "Total revenue, adjusted",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000022#030",
+    "fact_index": 0,
+    "reference_name": "Atlantic",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#035",
+    "fact_index": 0,
+    "reference_name": "U.S. increased 6.8%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#037",
+    "fact_index": 0,
+    "reference_name": "owned and operated by independent local business owners",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#038",
+    "fact_index": 0,
+    "reference_name": "$0.45 EPS",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "losses_and_sign"
+    ],
+    "tags_dropped_by_final": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#038",
+    "fact_index": 1,
+    "reference_name": "in line with guidance",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "measurement_wording"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#039",
+    "fact_index": 0,
+    "reference_name": "fuel costs were $2.73 per gallon",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#039",
+    "fact_index": 1,
+    "reference_name": "above prior guidance of approximately $2.40",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#040",
+    "fact_index": 0,
+    "reference_name": "Freight",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#041",
+    "fact_index": 0,
+    "reference_name": "Announced planned deployment of Starlink",
+    "hard_classes": [],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "point_range_floor_ceiling"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#042",
+    "fact_index": 0,
+    "reference_name": "CASM-X increased 2.3 percent year-over-year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#042",
+    "fact_index": 1,
+    "reference_name": "below prior guidance",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "favourable_unfavourable_direction",
+     "measurement_wording",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#044",
+    "fact_index": 0,
+    "reference_name": "NET INCOME (LOSS)",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000764478-25-000057#045",
+    "fact_index": 0,
+    "reference_name": "Goodwill and intangible asset impairments",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000764478-25-000057#046",
+    "fact_index": 0,
+    "reference_name": "The 7.6% comparable sales growth",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000764478-25-000057#047",
+    "fact_index": 0,
+    "reference_name": "The 3.6% comparable sales growth",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000764478-25-000057#048",
+    "fact_index": 0,
+    "reference_name": "Online revenue as a % of total segment revenue",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000764478-25-000057#048",
+    "fact_index": 1,
+    "reference_name": "Online revenue as a % of total segment revenue",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000898173-26-000006#050",
+    "fact_index": 0,
+    "reference_name": "Diluted earnings per common share",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000898173-26-000006#051",
+    "fact_index": 0,
+    "reference_name": "SG&A expenses",
+    "hard_classes": [
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000898173-26-000006#051",
+    "fact_index": 1,
+    "reference_name": "SG&A expenses again exceeded our expectations",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000898173-26-000006#052",
+    "fact_index": 0,
+    "reference_name": "Ending domestic store count",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000898173-26-000006#053",
+    "fact_index": 0,
+    "reference_name": "Total shareholders’ deficit",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-25-000038#056",
+    "fact_index": 0,
+    "reference_name": "LongHorn Steakhouse",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-25-000038#057",
+    "fact_index": 0,
+    "reference_name": "Olive Garden’s eight Canadian restaurants",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-25-000038#059",
+    "fact_index": 0,
+    "reference_name": "adjusted debt to EBITDAR ratio",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000005#060",
+    "fact_index": 0,
+    "reference_name": "blended same-restaurant sales1",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000005#061",
+    "fact_index": 0,
+    "reference_name": "adjusted diluted net earnings per share from continuing operations",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000005#062",
+    "fact_index": 0,
+    "reference_name": "Impairment due to restaurant closures3",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000005#063",
+    "fact_index": 0,
+    "reference_name": "Gain on Olive Garden Canada sale",
+    "hard_classes": [
+     "losses_and_sign",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000009#066",
+    "fact_index": 0,
+    "reference_name": "Losses from discontinued operations, net of tax",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000009#067",
+    "fact_index": 0,
+    "reference_name": "Earnings from continuing operations",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000009#068",
+    "fact_index": 0,
+    "reference_name": "Fine Dining",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000009#069",
+    "fact_index": 0,
+    "reference_name": "87 franchised restaurants",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-25-000109#072",
+    "fact_index": 0,
+    "reference_name": "minority investment in Devyani International Limited",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-25-000109#073",
+    "fact_index": 0,
+    "reference_name": "pre-tax investment losses",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-25-000109#075",
+    "fact_index": 0,
+    "reference_name": "283 KFC",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-25-000109#075",
+    "fact_index": 1,
+    "reference_name": "254 Pizza Hut restaurants in Turkey",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-25-000109#076",
+    "fact_index": 0,
+    "reference_name": "reversal of a reserve due to a favorable audit resolution",
+    "hard_classes": [],
+    "proposed_tags": [
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "losses_and_sign"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000003#077",
+    "fact_index": 0,
+    "reference_name": "EPS excluding Special Items",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000003#078",
+    "fact_index": 0,
+    "reference_name": "acquisition of 128 Taco Bell U.S. restaurants from a franchisee",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000003#079",
+    "fact_index": 0,
+    "reference_name": "digital system sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000003#080",
+    "fact_index": 0,
+    "reference_name": "digital mix",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000084#082",
+    "fact_index": 0,
+    "reference_name": "quarterly dividend of $0.75 per share of Common Stock",
+    "hard_classes": [
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "sequential_comparison"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000084#083",
+    "fact_index": 0,
+    "reference_name": "net Operating Loss of $11 million",
+    "hard_classes": [
+     "losses_and_sign",
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000084#084",
+    "fact_index": 0,
+    "reference_name": "Company same-store sales growth of 5%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [
+     "measurement_wording"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000084#085",
+    "fact_index": 0,
+    "reference_name": "$41 million of expense associated with a correction in the timing of capital loss utilization",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "corrections_and_amendments"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000084#086",
+    "fact_index": 0,
+    "reference_name": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001058090-26-000007#088",
+    "fact_index": 0,
+    "reference_name": "Adjusted diluted earnings per share",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001058090-26-000007#089",
+    "fact_index": 0,
+    "reference_name": "Restaurant level operating margin",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001058090-26-000007#090",
+    "fact_index": 0,
+    "reference_name": "Gain on restaurant lease termination",
+    "hard_classes": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001058090-26-000007#091",
+    "fact_index": 0,
+    "reference_name": "350 to 370 new restaurant openings",
+    "hard_classes": [
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001058090-26-000007#093",
+    "fact_index": 0,
+    "reference_name": "Chipotlanes continue to perform well",
+    "hard_classes": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-102611#094",
+    "fact_index": 0,
+    "reference_name": "non-cash LIFO impact",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-102611#095",
+    "fact_index": 0,
+    "reference_name": "one individual vendor",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-102611#096",
+    "fact_index": 0,
+    "reference_name": "failure and maintenance related categories",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-102611#097",
+    "fact_index": 0,
+    "reference_name": "Domestic commercial sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-102611#098",
+    "fact_index": 0,
+    "reference_name": "31.7% of our total Domestic sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-105631#100",
+    "fact_index": 0,
+    "reference_name": "North Italia sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-105631#101",
+    "fact_index": 0,
+    "reference_name": "loss on early debt extinguishment",
+    "hard_classes": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-105631#102",
+    "fact_index": 0,
+    "reference_name": "366 restaurants",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-105631#104",
+    "fact_index": 0,
+    "reference_name": "Fourth Amended and Restated Loan Agreement",
+    "hard_classes": [],
+    "proposed_tags": [
+     "corrections_and_amendments"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "corrections_and_amendments"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#105",
+    "fact_index": 0,
+    "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#107",
+    "fact_index": 0,
+    "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#109",
+    "fact_index": 0,
+    "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+    "hard_classes": [
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#110",
+    "fact_index": 0,
+    "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+    "hard_classes": [],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "corrections_and_amendments"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "point_range_floor_ceiling",
+     "corrections_and_amendments"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#111",
+    "fact_index": 0,
+    "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+    "hard_classes": [
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#112",
+    "fact_index": 0,
+    "reference_name": "adjusted net income",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#114",
+    "fact_index": 0,
+    "reference_name": "revenue for the quarter",
+    "hard_classes": [
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#114",
+    "fact_index": 1,
+    "reference_name": "revenue for the quarter finished within our expected range",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#115",
+    "fact_index": 0,
+    "reference_name": "Comparable restaurant sales vs. prior year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#115",
+    "fact_index": 1,
+    "reference_name": "Comparable restaurant sales vs. prior year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#115",
+    "fact_index": 2,
+    "reference_name": "Comparable restaurant sales vs. prior year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#115",
+    "fact_index": 3,
+    "reference_name": "Comparable restaurant sales vs. prior year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#116",
+    "fact_index": 0,
+    "reference_name": "six to seven Flower Child locations",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-027061#118",
+    "fact_index": 0,
+    "reference_name": "gross profit decreased to 38.1% compared to 38.2%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-027061#119",
+    "fact_index": 0,
+    "reference_name": "repurchased 2.0 million shares",
+    "hard_classes": [
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-027061#120",
+    "fact_index": 0,
+    "reference_name": "Comparable sales growth",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "corrections_and_amendments"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-027061#121",
+    "fact_index": 0,
+    "reference_name": "International (Company-operated)",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-032757#123",
+    "fact_index": 0,
+    "reference_name": "unfavorable non-cash LIFO charge",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-032757#124",
+    "fact_index": 0,
+    "reference_name": "failure and maintenance related categories",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-032757#125",
+    "fact_index": 0,
+    "reference_name": "6,709 stores in the U.S.",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-032757#126",
+    "fact_index": 0,
+    "reference_name": "total company same store sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001171843-26-001288#128",
+    "fact_index": 0,
+    "reference_name": "Domestic Same Store Sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001171843-26-001288#129",
+    "fact_index": 0,
+    "reference_name": "non-cash LIFO charge",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001171843-26-001288#130",
+    "fact_index": 0,
+    "reference_name": "approximately 350-360 stores for the full fiscal year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "expectation_routing"
+    ],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#132",
+    "fact_index": 0,
+    "reference_name": "Total revenue grew 10.8% year-over-year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#133",
+    "fact_index": 0,
+    "reference_name": "Revenue performance in the quarter",
+    "hard_classes": [
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#133",
+    "fact_index": 1,
+    "reference_name": "exceeded our initial expectations",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#134",
+    "fact_index": 0,
+    "reference_name": "adjusted loss per diluted share of 40 cents",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#135",
+    "fact_index": 0,
+    "reference_name": "$320 million revenue impact from winter storms",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#136",
+    "fact_index": 0,
+    "reference_name": "London up 25%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#137",
+    "fact_index": 0,
+    "reference_name": "TMC performance is up 11%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#138",
+    "fact_index": 0,
+    "reference_name": "recapture rate would be in the 90s",
+    "hard_classes": [
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#140",
+    "fact_index": 0,
+    "reference_name": "just versus the fourth quarter was up you know something less than 10 percent",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#141",
+    "fact_index": 0,
+    "reference_name": "we saw it increase sequentially up into March for double digits",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#142",
+    "fact_index": 0,
+    "reference_name": "adjusted operating income rate of 5%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#142",
+    "fact_index": 1,
+    "reference_name": "adjusted operating income rate of 5% was better than planned",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#143",
+    "fact_index": 0,
+    "reference_name": "Q4 comparable sales were down 0.8% versus last year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "expectation_routing"
+    ],
+    "tags_dropped_by_final": [
+     "portion_versus_whole"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#144",
+    "fact_index": 0,
+    "reference_name": "within our guidance range",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#145",
+    "fact_index": 0,
+    "reference_name": "Best Buy business team generated more than $1.1 billion",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#146",
+    "fact_index": 0,
+    "reference_name": "International revenue of $1.2 billion increased 0.5%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "ambiguous_menus",
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#148",
+    "fact_index": 0,
+    "reference_name": "Revenue in the range of $41.2 to $42.1 billion",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "corrections_and_amendments"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#150",
+    "fact_index": 0,
+    "reference_name": "underlying effective tax rate",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#151",
+    "fact_index": 0,
+    "reference_name": "openings in Canada",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#152",
+    "fact_index": 0,
+    "reference_name": "these two group occasions represent less than 3% of combined sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#153",
+    "fact_index": 0,
+    "reference_name": "could be double-digit percentage of sales longer term",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#155",
+    "fact_index": 0,
+    "reference_name": "a $4 million reduction in legal contingencies",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_dropped_by_final": [
+     "measurement_wording"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#157",
+    "fact_index": 0,
+    "reference_name": "earnings of 64 cents per share",
+    "hard_classes": [
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#158",
+    "fact_index": 0,
+    "reference_name": "within our initial guidance range",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#159",
+    "fact_index": 0,
+    "reference_name": "the MRO revenue in the first quarter",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#160",
+    "fact_index": 0,
+    "reference_name": "an estimated $300 million benefit from our refinery",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "measurement_wording",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#161",
+    "fact_index": 0,
+    "reference_name": "unit revenue growth",
+    "hard_classes": [
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#162",
+    "fact_index": 0,
+    "reference_name": "earnings that were 40% higher than last year",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [],
+    "tags_added_by_final": [
+     "point_range_floor_ceiling",
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#164",
+    "fact_index": 0,
+    "reference_name": "same-restaurant sales growth of 4.2%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#165",
+    "fact_index": 0,
+    "reference_name": "adjusted diluted net earnings per share of $10.57 to $10.67",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [
+     "corrections_and_amendments"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#166",
+    "fact_index": 0,
+    "reference_name": "segment profit margin of 23%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#168",
+    "fact_index": 0,
+    "reference_name": "14 locations will permanently close",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#168",
+    "fact_index": 1,
+    "reference_name": "the remaining 14 will be converted to other Darden brands",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#169",
+    "fact_index": 0,
+    "reference_name": "system-wide sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "sequential_comparison",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "portion_versus_whole"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#170",
+    "fact_index": 0,
+    "reference_name": "comp sales",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#170",
+    "fact_index": 1,
+    "reference_name": "above our expectations",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#171",
+    "fact_index": 0,
+    "reference_name": "total adjusted operating margin",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#171",
+    "fact_index": 1,
+    "reference_name": "in line with our expectations",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "expectation_routing",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#172",
+    "fact_index": 0,
+    "reference_name": "about 750 of these in our U.S. and IOM segments",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "measurement_wording",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [
+     "ambiguous_menus"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#173",
+    "fact_index": 0,
+    "reference_name": "about 1,000 in China",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus",
+     "measurement_wording",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#175",
+    "fact_index": 0,
+    "reference_name": "diluted EPS",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording",
+     "corrections_and_amendments"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#176",
+    "fact_index": 0,
+    "reference_name": "SG&A growth for the quarter",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#177",
+    "fact_index": 0,
+    "reference_name": "active members",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "portion_versus_whole",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#178",
+    "fact_index": 0,
+    "reference_name": "stores in the UK and Ireland",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "ambiguous_menus"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#180",
+    "fact_index": 0,
+    "reference_name": "sales",
+    "hard_classes": [
+     "expectation_routing",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#180",
+    "fact_index": 1,
+    "reference_name": "sales above the high end of our guidance by about 85 million",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#182",
+    "fact_index": 0,
+    "reference_name": "Taco Bell",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#183",
+    "fact_index": 0,
+    "reference_name": "KFC",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "sequential_comparison",
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#185",
+    "fact_index": 0,
+    "reference_name": "x special gna",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "sequential_comparison",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison"
+    ],
+    "tags_dropped_by_final": [
+     "favourable_unfavourable_direction"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#185",
+    "fact_index": 1,
+    "reference_name": "in line with our guidance",
+    "hard_classes": [
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "measurement_wording",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "expectation_routing",
+     "favourable_unfavourable_direction",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#186",
+    "fact_index": 0,
+    "reference_name": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign",
+     "sequential_comparison",
+     "measurement_wording",
+     "slices_and_unknown_axes",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [
+     "sequential_comparison",
+     "measurement_wording",
+     "corrections_and_amendments"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#187",
+    "fact_index": 0,
+    "reference_name": "approximately 250 targeted closures of underperforming units",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "measurement_wording",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [
+     "measurement_wording"
+    ],
+    "tags_dropped_by_final": [
+     "ambiguous_menus"
+    ],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "bzNews_42014391#189",
+    "fact_index": 0,
+    "reference_name": "spooked diners away",
+    "hard_classes": [],
+    "proposed_tags": [],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "bzNews_50877032#190",
+    "fact_index": 0,
+    "reference_name": "17 new gates",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [
+     "slices_and_unknown_axes"
+    ],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   }
+  ],
+  "phase1_ambiguities": [],
+  "open_issues": [],
+  "lead_reconciliation": [
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "sokc-000/b1",
+    "agrees": false,
+    "why": "It reaches the same meaning on rows 1, 2, 5 and 7 and its 'aircraft_fuel_expense_guidance' is a lawful synonym of my row-3 name, but it reuses the menu value 'product:regionalcarrier' for a Regional headcount the source narrows to wholly-owned subsidiaries, drops the 'greater than' floor modifier that the never-drop measurement sink requires on row 3, and states no sequential baseline on row 4."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "sokc-000/b2",
+    "agrees": false,
+    "why": "It asserts a per-available-seat-mile denominator and name for the bare phrase 'Total unit revenue' that the located quote never states, drops the verbatim measurement qualifiers on rows 1 and 2, reuses 'product:regionalcarrier' for the narrower Regional headcount, and drops the 'greater than' modifier on row 3, though its row-5, row-6 values and row-7 abstention match mine."
+   },
+   {
+    "source_id": "0000006201-26-000032",
+    "lead_id": "sokc-001/b1",
+    "agrees": false,
+    "why": "It reaches the same lanes, names, values, slice and abstention, but it records 'decreased' for both the income tax benefit and the pre-tax loss excluding special items, which contradicts the signed-axis reading I settled from the source (-94 above -175 and -327 above -530 are increases)."
+   },
+   {
+    "source_id": "0000006201-26-000032",
+    "lead_id": "sokc-001/b2",
+    "agrees": false,
+    "why": "It matches my lanes, names, values, both signed-axis directions and the abstention, but it leaves unit_scale_evidence null on the 3.9% headcount change even though the '%' marker sits inside that row's own quote, which the evidence rule does not allow when a marker exists."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "lead_id": "sokc-002/b1",
+    "agrees": false,
+    "why": "It matches my lane and broad encoding on rows 1, 2, 4, 6 and 7, but on row 3 it stores the 2.4% actual growth in the surprise's change_value (a slot reserved for a source-stated non-derivable delta) and pairs that surprise with a cents-level home it cannot match on normalized value and unit, and it reports explicit favorability wording for the neutral phrase 'in line with'; it also asserts fiscal_year 2025 on row 5 where the quote says only 'currently', and leaves unit_scale_evidence null on the row-4 and row-5 percentages even though '%' sits inside those quotes."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "lead_id": "sokc-002/b2",
+    "agrees": false,
+    "why": "It repeats the same row-3 misuse of the surprise change_value, the same value/unit-unmatched surprise-home pair and the same favorability claim; it names the row-5 driver 'equity_ownership_percentage', which carries a unit word the naming rules keep out of a name; and it trims the row-1 measurement span to 'adjusted' alone, dropping the contiguous non-GAAP qualifier — although its periodless row-5 period reading and its row-2, row-4 and row-6 encodings match what the source supports."
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "lead_id": "sokc-003/b1",
+    "agrees": false,
+    "why": "It records rows 1 and 3 as bare 'reported' although the event's own GAAP and adjusted tables state each measure's prior-year value beside it, which the ordered metric-state rule turns into decreased and increased; on row 6 it emits a numberless surprise carrying a percent_yoy level unit, asserts favorability wording the quote does not contain and supplies no polarity proof, so it also fails to value-match its own row-5 home; and on row 9 it stores the $(760) change that is merely derivable from the stated closed points while omitting the stated $14,300 prior balance."
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "lead_id": "sokc-003/b2",
+    "agrees": false,
+    "why": "It shares the same 'reported' error on rows 1 and 3 against the prior-year values the source states beside each measure; on row 6 it emits a surprise with no level at all, so it does not value-match its value-bearing row-5 home, and rests the beat on a metric_meaning polarity basis where the sentence's own record and demand-strength framing supplies source framing; and on row 9 it stores both the closed comparison point and a change_value that the closed shape already derives."
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "lead_id": "sokc-004/b1",
+    "agrees": true,
+    "why": "Settling the event first from its own text I reached the same five outcomes this lead reports - facts on rows 1, 2 and 3 and no fact on rows 4 and 5 - and my independently chosen name, state, values, baseline, slice and period land in the same place, so I record agreement without adopting its evidence or wording."
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "lead_id": "sokc-004/b2",
+    "agrees": false,
+    "why": "It matches what I settled on rows 1, 2, 4 and 5, but it voids row 3 entirely for a missing scale marker, whereas that marker is missing only for the dollar figure I did not encode; the 11% carries its own marker inside the located quote at multiplier 1, so a lawful fact survives there."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "lead_id": "sokc-005/b1",
+    "agrees": false,
+    "why": "It matches my outcomes on rows 2, 3 and 4, but it emits a $80 million restructuring_costs fact for row 1 where the quote says the charges were only PRIMARILY restructuring, which assigns a whole to one unsized component, and it drops row 5 as company-profile boilerplate although that sentence states a quantified standing level and the gate excludes recurrence."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "lead_id": "sokc-005/b2",
+    "agrees": false,
+    "why": "It matches my outcomes on rows 2, 3 and 4, but for row 1 it names the whole $80 million after the Accelerating the Organization restructuring programme despite the source's 'primarily' hedge, and it drops row 5 expressly because the sentence repeats across releases - recurrence, which the gate names as NOT part of the test - where I settled a real fact."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "lead_id": "sokc-006/b1",
+    "agrees": false,
+    "why": "It matches my settlement on rows 3, 6 and 7 and on the twin structure of rows 1, 2 and 5, but it leaves rows 1 and 2 at reported when the source states a prior value beside each value, it records favourability wording on row 1 where \"in line with guidance\" names no favourable or unfavourable direction, it stores the hedged $2.40 guide as an exact point and rests its row 2 and row 5 polarity calls on metric_meaning when the release's own headwind and cost-discipline sentences supply source framing, and it names row 5 casm_x so the per-ASM denominator is never written out and the stated exclusions are dropped while its row 5 surprise is numberless against a value-bearing home."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "lead_id": "sokc-006/b2",
+    "agrees": false,
+    "why": "It matches me on rows 3, 6 and 7 and on the row 1 and row 2 twin structure, but it leaves rows 1 and 2 at reported despite the stated prior values, records favourability wording on row 1, hangs \"approximately\" as a measurement span on the row 2 surprise alone so home and surprise no longer share a measurement while still storing the hedged guide as an exact point, drops the named provider and stores a forward 300-aircraft count as an instant level on the row 4 action fact, and on row 5 puts the actual growth rate into the surprise's beat-size slot while calling that surprise unknown despite the source stating the below-guidance direction."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "lead_id": "sokc-007/b1",
+    "agrees": false,
+    "why": "It reaches the same lane, value and period as I did on rows 1, 2 and 3 and the same abstention on row 5, but it names row 4's driver `revenue` when the quoted figure is a share-of-revenue ratio, records only one of row 4's two differing windows, carries no segment population on rows 2, 3 and 4 (leaving the Domestic category fact indistinguishable from the International one), attaches no Best Buy Health population to the impairment, and keeps a glue word in the row 1 name."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "lead_id": "sokc-007/b2",
+    "agrees": false,
+    "why": "It matches my rows 2, 3 and 5 readings and my revenue_mix reading on row 4, but it encodes row 1's prior-period dash as a stated zero comparison with a prior_year baseline when the source states no number there, keeps a glue word in the row 1 name, omits the Best Buy Health population and every segment part, and records only one of row 4's two differing windows."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "lead_id": "sokc-008/b1",
+    "agrees": false,
+    "why": "It lands on the same substance as mine for rows 1, 4 and 5, but it routes 'our expectations' to consensus when the possessive names the company's own expectation, it leaves the domestic store count as a bare reported level although the same table states that population's prior December figure beside it, it reuses geography:us for a domestic population this event shows also covers Puerto Rico, and on row 6 it settles the adjacent completed split instead of the served presentation-adjustment target."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "lead_id": "sokc-008/b2",
+    "agrees": false,
+    "why": "It lands on the same substance as mine for rows 1 and 5 and on my row 3 value, but it maps 'our expectations' to consensus rather than the company's own expectation, leaves both the store count and the shareholders' deficit as bare reported levels although the source states each prior-year level beside it, reuses geography:us for the domestic count, and on row 6 both settles the adjacent split and stores the 15-for-1 ratio as a numeric 'x' level that the 'for-1' phrasing does not safely support."
+   },
+   {
+    "source_id": "0000940944-25-000038",
+    "lead_id": "sokc-009/b1",
+    "agrees": false,
+    "why": "Its lanes, names, states and values coincide with what I settled from the source and its row-3 abstention is right, but it stores the longer '...segment' variants of both brand slice values where the stated labels match the shorter menu values exactly, and it dates row 2 to fourth quarter fiscal 2025 — a window that labels the agreement, not the closing whose stage it records as occurred."
+   },
+   {
+    "source_id": "0000940944-25-000038",
+    "lead_id": "sokc-009/b2",
+    "agrees": false,
+    "why": "It reaches the same row-3 abstention and the same lanes, and its 2025-07-14 instant for row 2 coincides with the closing date I settled from the event's own sentence, but it stores 'segment:longhornsteakhousesegment' and 'segment:olivegardensegment' where the stated labels match the shorter menu values exactly, which changes the stored fact identity."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "lead_id": "sokc-010/b1",
+    "agrees": false,
+    "why": "It lands where I do on rows 1, 2, 5 and 6, but on row 3 it drops the stated 24.7 charge entirely while attaching a Bahama Breeze segment slice the located quote never names and the footnote qualifies only as 'primarily', and on row 4 it stores the (0.26) per-share reconciliation adjustment as the divestiture's own dollar level."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "lead_id": "sokc-010/b2",
+    "agrees": false,
+    "why": "It matches my rows 1, 2, 5 and 6 and my 24.7 million reading of the impairment, but it leaves that figure unbound to its pre-tax column and asserts the unstated Bahama Breeze slice, and on row 4 it again stores the (0.26) per-share reconciliation figure as the gain's level."
+   },
+   {
+    "source_id": "0000940944-26-000009",
+    "lead_id": "sokc-011/b1",
+    "agrees": true,
+    "why": "Its six outcomes land where mine do — four real metrics with signed point levels, prior-year point comparisons, no derived change numbers, the climate bullet yielding nothing and the recast sentence yielding nothing — and it diverges only in stopping row 1's name at the population qualifier without an earnings noun and in giving row 4 neither the stated as-of date nor the sentence's United States scoping."
+   },
+   {
+    "source_id": "0000940944-26-000009",
+    "lead_id": "sokc-011/b2",
+    "agrees": false,
+    "why": "It stores percentage changes on rows 2 and 3 that are fully derivable from the two stated closed points, where the change-number rule requires null, and it writes row 6's reporting-basis recast as an action_event on a methodology name, which I settle as an exclusion; it does match me in substance on rows 1, 4 (apart from the missing geography part) and 5."
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "lead_id": "sokc-012/b1",
+    "agrees": false,
+    "why": "It reaches the same lanes and stored values on rows 1 and 2 and the same control on row 3, but it labels the row-2 cumulative window with a quarter number the source never framed for that window and gives no endpoints, names the row-4 closures after a franchise termination this sentence does not state, and puts the resolution stage inside the row-5 name where the state field already carries it."
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "lead_id": "sokc-012/b2",
+    "agrees": false,
+    "why": "It diverges materially on two rows: it recasts the row-2 stated loss amount as a change on a fair-value level with a decreased state the sentence does not state, and it collapses the row-4 closures into a single numberless fact carrying two parts, discarding both stated counts."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "lead_id": "sokc-013/b1",
+    "agrees": false,
+    "why": "It matches me on lanes, values, shapes, periods, the row-1 measurement span and the row-5 abstention, but it settles row 1 as a bare reported value while the release states the same measure's prior-year $1.61 beside the $1.73 (direction stated, so increased with a prior_year baseline), it picks geography:us for a label this company's menu carries under two kinds with no framing here selecting one, and on row 4 it keeps the sales channel inside the name (digital_mix with no slice) where the own-measured-part rule sends that word to the slice."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "lead_id": "sokc-013/b2",
+    "agrees": false,
+    "why": "It also matches on lanes, values, periods and the row-5 abstention, but it likewise settles row 1 as reported despite the stated same-period prior, takes geography:us on row 2 where the two-kind menu label forces the honest unknown:us, names the cause with the broader restaurant_acquisition rather than the franchise-specific form the quote supports, drops the number modifier \"approximately\" that the never-drop measurement sink keeps, and on row 4 keeps digital in the name with no slice."
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "lead_id": "sokc-014/b1",
+    "agrees": false,
+    "why": "It lands on the same lanes for rows 2, 3, 4 and the row 6 control, but it records the dividend baseline as sequential_period where the source anchors the prior rate to the year 2025, it names row 5 'unit_count' with a percent level while also carrying entity_ownership:companyownedstores as a slice (which makes the fact read as the company-owned share of company-owned units), and it omits the Special-item measurement spans I kept on rows 2 and 4."
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "lead_id": "sokc-014/b2",
+    "agrees": false,
+    "why": "It matches my prior_year anchor and February 2026 period on row 1 but stores a 6% change_value that is derivable from the two stated closed points, marks row 3 'reported' although the source states growth and drops the Company-owned population entirely, names row 5 'unit_count' in percent under the alternative 'segment:habitdivision' label, and omits the Special-item measurement spans on rows 2 and 4."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "lead_id": "sokc-015/b1",
+    "agrees": false,
+    "why": "It reaches the same substance on rows 1, 2, 3 and 5, but it records the bare 2026 opening guide as 'introduced' where the source states no movement, types the lease-termination gain as 'instant' where the gain is a flow recognized over the stated window, and abstains on row 6 where the sentence asserts a real ongoing qualitative condition."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "lead_id": "sokc-015/b2",
+    "agrees": false,
+    "why": "It matches rows 1, 3, 4 and 5, but on row 2 it moves 'Restaurant level' out of the name into a measurement span, collapsing a distinct source-defined cost population into the bare operating margin, and it abstains on row 6 where a lawful numberless condition is stated."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "lead_id": "sokc-016/b1",
+    "agrees": false,
+    "why": "It lands where I land only on rows 2 and 6: on row 1 it names the driver with the forbidden effect word 'impact', on row 3 it stores the single combined 85% share as two separate menu product parts that read as an intersection of failure and maintenance, on row 4 it splits one stated movement into a dollar record and a percent record, and on rows 4 and 5 it assigns 'commercial' the customer kind where two kinds remain reasonable."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "lead_id": "sokc-016/b2",
+    "agrees": false,
+    "why": "It agrees in substance only on rows 2 and 6: it repeats the 'lifo_impact' effect-word name on row 1, stores row 3 as two intersecting menu product parts and drops the 'approximately' modifier, splits row 4's single movement into two records, names row 5's share as net_sales although its level is a percentage share rather than a sales level, and guesses customer:commercial on rows 4 and 5; it also records no direction for row 3 despite the source stating one."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "lead_id": "sokc-017/b1",
+    "agrees": false,
+    "why": "It reaches the same settlement I did on rows 1, 2 and 4, but on row 3 it drops the owned-and-operated population qualifier the quote's own and operate states and pins the count to an exact 2025-11-03 instant the quote never states, and on row 5 it names the Revolver Facility while the located claim is about the loan agreement that amends and restates the prior credit agreement."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "lead_id": "sokc-017/b2",
+    "agrees": false,
+    "why": "It matches my settlement on rows 1, 4 and the row-5 name, but it stores the extinguishment amount as positive against the quote's own loss noun and the signed-loss axis, and it pins the row-3 count to fiscal Q3 2025 although the quote says only currently."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "lead_id": "sokc-018/b1",
+    "agrees": false,
+    "why": "It lands on the same fact/no-fact split for all seven rows and the same revocation reading of row 6, but it encodes row 1's combined U.K.-and-Ireland population as two separate geography parts (an intersection that no store satisfies), attaches non-population variable-rate axis tokens as slices on rows 5 and 7 and a repurchase-programme token on row 6, names row 3 as an achieved interest_coverage_ratio rather than the contractual minimum, and drops the '%' scale evidence sitting inside the rate quotes."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "lead_id": "sokc-018/b2",
+    "agrees": false,
+    "why": "Its outcomes match mine in shape on rows 1-5 and 7, but it settles row 6 on the wrong target by recording the new October 2024 authorization as 'announced' instead of the revocation the raw label names, splits row 1's combined geography into two conjunctive parts, omits the '%' unit-scale evidence present in the row 5 and row 7 quotes, names row 3 as an achieved ratio rather than a covenant floor, and drops the Space NK ownership slice from rows 5-7 reasoning while keeping it inconsistently elsewhere."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "lead_id": "sokc-019/b1",
+    "agrees": false,
+    "why": "It matches my rows 2, 5 and 6 in substance, but its row 1 records 'reported' although the reconciliation states the year-ago adjusted figure directly beside the selected one, its row 3 emits a grounded surprise with no home sibling in the same event, and its row 4 omits both the explicitly stated 'vs. prior year' baseline and the two restated comparative-column periods."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "lead_id": "sokc-019/b2",
+    "agrees": false,
+    "why": "It matches my rows 2, 3, 5 and 6 in substance, but its row 1 records 'reported' despite the adjacent prior-year adjusted figure in the reconciliation, and its row 4 omits the source-stated 'vs. prior year' baseline and the two restated comparative-column periods the located line prints."
+   },
+   {
+    "source_id": "0001104659-26-027061",
+    "lead_id": "sokc-020/b1",
+    "agrees": false,
+    "why": "It reads rows 1, 2 and 5 the same way I did, but it records the bare fiscal 2026 comparable-sales guide as \"introduced\" although the source states no movement word (a bare guide is unknown), and on row 4 it uses a bare store_count while pushing the company-operated population restriction into a measurement span, which drops that restriction from the driver identity."
+   },
+   {
+    "source_id": "0001104659-26-027061",
+    "lead_id": "sokc-020/b2",
+    "agrees": false,
+    "why": "It repeats the same \"introduced\" state on the bare row 3 guide and the bare store_count name on row 4, additionally drops the company-operated restriction altogether, nulls the percent scale evidence even though \"%\" sits inside the row 1 and row 3 quotes, and omits the end-of-fiscal-2025 instant date."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "lead_id": "sokc-021/b1",
+    "agrees": false,
+    "why": "It matches my lane, name, state and period on rows 3 and 4 and my abstention on row 5, but it stores the $59.0 million as the LIFO charge's LEVEL when the sentence states it only as the impact on the operating profit comparison, it splits the single measured failure-and-maintenance population into two separate product parts, it leaves unit_scale_evidence null on percentage slots whose own quotes contain the '%' marker, and it gives only period_end_date for the row 3 instant."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "lead_id": "sokc-021/b2",
+    "agrees": false,
+    "why": "It matches my lane, name, state, period and percent scale evidence on rows 2 to 4 and my abstention on row 5, but it likewise stores the $59.0 million as the charge LEVEL rather than the stated comparison impact, splits the combined failure-and-maintenance population into two product parts, drops the 'approximately' number modifier on row 2, and gives only period_end_date for the row 3 instant."
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "lead_id": "sokc-022/b1",
+    "agrees": false,
+    "why": "It coincides with my independent settlement on rows 1 and 4, but it lanes the 138 basis point non-cash LIFO charge as action_event/occurred where the ordered persistence test led me to metric/reported, and its row-3 guidance drops the stated number modifier 'approximately' that the never-drop measurement sink keeps."
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "lead_id": "sokc-022/b2",
+    "agrees": false,
+    "why": "It coincides with my settlement on rows 1, 3 and 4, including the percent_yoy basis with geography:us, the 350-360 count range with 'approximately' and company_confirmed true, and the boilerplate abstention, but it lanes the LIFO charge as action_event/occurred where I settled metric/reported."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "lead_id": "sokc-023/b1",
+    "agrees": false,
+    "why": "It reads the same as I did on the revenue change slot, the per-share loss, the London unit-revenue rise, the Q4 recapture guide and the row 8 control, but it differs where I settled otherwise: row 2 asserts favorability wording with no polarity proof, row 4 puts the storm magnitude in the change slot instead of the event's stated level, row 6 assigns a channel kind I judge unresolvable, row 9 drops the stated 'less than 10 percent' bound and picks the loyalty-marketing menu part instead of the other-revenue line the question and answer are about, and row 10 uses a sequential growth unit with quarter framing where I read a March year-over-year rate."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "lead_id": "sokc-023/b2",
+    "agrees": false,
+    "why": "It matches my settlement on the per-share loss, the London and Q4 recapture readings, the row 8 control and the ceiling shape and other-revenue population on row 9, but it differs on rows 1 and 5 (growth placed in the level slots on drivers whose own level is absolute), row 2 (favorability wording asserted with no polarity proof), row 4 (a coined metric name carrying the affected line and an effect rather than an event on the named cause), row 6 (a channel kind I judge unresolvable), and row 10 (sequential unit and quarter framing rather than the March year-over-year rate)."
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "lead_id": "sokc-024/b1",
+    "agrees": false,
+    "why": "It matches my outcome on rows 2, 3, 6, 7 and 8, but on row 1 it emits only the surprise with no home metric sibling in the event, which the twin rule forbids, and it asserts confident slice kinds (customer:best_buy_business, geography:international) where the quote supplies no selector and 'international' carries two kinds in this company's menu."
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "lead_id": "sokc-024/b2",
+    "agrees": false,
+    "why": "It matches my lane routing on row 1's twin pair and on rows 2, 3, 6 and 8, but it stores the row 1 home metric as 'reported' when the same speaker states the rate increased 10 basis points versus last year, stores the bare fiscal 27 guide as 'introduced' where the source states no movement, leaves unit_scale_evidence null for percentage values whose '%' marker sits inside the quote, and picks slice kinds the menu and prose leave genuinely unselected."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "lead_id": "sokc-025/b1",
+    "agrees": false,
+    "why": "It matches what I settled independently on rows 1, 2, 5, 6 and 7, but on rows 3 and 4 it asserts 'product:group_occasions' where product and channel both stay reasonable and the ladder forbids a guessed kind, and it states no time_type on row 3."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "lead_id": "sokc-025/b2",
+    "agrees": false,
+    "why": "It likewise coincides with my rows 1, 2, 5, 6 and 7, but it guesses the same 'product:group_occasions' kind on rows 3 and 4 instead of the honest unknown value, and it types the group-occasions share of sales as 'instant' where a share of sales flows is a duration."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "lead_id": "sokc-026/b1",
+    "agrees": false,
+    "why": "It matches me on rows 1, 3, 6 and 7, but it emits the row-1 per-share level a second time inside row 2, restating one fact as two records; it names the row-4 amount with the polarity word 'benefit' while also applying the negative sign and attaches a refinery segment slice the source never measures; and it stores row 5 on a sequential growth basis, which changes which variable is measured."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "lead_id": "sokc-026/b2",
+    "agrees": false,
+    "why": "Its surprise-only handling of row 2 and its rows 1 and 7 match mine, but it puts the maintenance business into the driver name while also carrying the same maintenance slice, writes the row-4 refinery amount as a positive value with a polarity word in the name and a refinery segment slice, stores row 5 on a sequential basis, and renames the row-6 'earnings' claim to net income beyond what that quote states."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "lead_id": "sokc-027/b1",
+    "agrees": false,
+    "why": "It lands where I did on rows 1, 3 (value shape), 4 and 5, but it records the bare full-year per-share guide as raised, a movement the target never states and which cannot be derived from a non-immediate initial guide, and it picks segment:olivegardensegment on row 3 where I judged segment:olivegarden the same-meaning value matching the brand the quote names."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "lead_id": "sokc-027/b2",
+    "agrees": false,
+    "why": "It matches my unknown guidance state on row 2, but it puts the 4.2% comparable-sales growth in change_value with no level even though the driver is itself the growth rate, picks segment:olivegardensegment on row 3, and abstains entirely on row 5, dropping two real company-announced actions the gate admits."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "lead_id": "sokc-028/b1",
+    "agrees": false,
+    "why": "It matches my reading of rows 1, 4 and 6 and of the twin structure on rows 2 and 3, but it puts the 6.8% comparable-sales figure in the change slot although comparable sales is itself the growth metric whose value belongs in the level slots, it maps the company's own \"our expectations\" to consensus where own-expectation wording maps to previous_guidance, its surprise twins omit the home-matching value, unit and measurement, and it drops the stated approximation modifiers."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "lead_id": "sokc-028/b2",
+    "agrees": false,
+    "why": "It matches my level-slot and previous_guidance settlement on rows 2 and 3 and my reading of rows 1, 4 and 6, but it marks \"above our expectations\" as explicit favourability wording and so ships a wordless beat with no polarity proof, it reuses entity_ownership:chinaandhongkong for a China-only opening count whose population is narrower, it drops the gross qualifier from the openings name, and it drops the stated approximation modifiers."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "lead_id": "sokc-029/b1",
+    "agrees": false,
+    "why": "It lands on the same substance for rows 1, 2, 5 and 7, but on row 4 it coins an off-menu 'entity_ownership:spacenk' part although the menu already carries a same-meaning Space NK token and it pins that count to fiscal 2025 although the event states no window for it, on rows 2 and 3 it leaves the '%' marker uncited although '%' sits inside those quotes, it drops the 'about' number modifier on rows 2 and 6, and on row 6 it writes the surprise with no home sibling in the event."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "lead_id": "sokc-029/b2",
+    "agrees": false,
+    "why": "It lands on the same substance for rows 2 (apart from the uncited '%' and the dropped 'about'), 5, 7 and on reusing the menu Space NK token, but it records row 1 as 'introduced' where the source states no movement, attaches a guessed 'customer:loyalty_program' slice on row 3, adds separate UK and Ireland geography parts plus an invented fiscal-2025 period to the single combined 80-store count on row 4, and writes the row-6 surprise with no home sibling."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "lead_id": "sokc-030/b1",
+    "agrees": false,
+    "why": "It matches my lanes on the two divisional growth facts, the G&A metric-plus-surprise twin, the 250-closure action and the row-7 abstention, but it diverges materially: it writes the $40M as an action_event named strategic_options_review and slices the whole amount to the Pizza Hut division despite 'primarily', where I find no lawful cause name or slice and park the row; it encodes the Pizza Hut Q1 guide as change_value with driver_state 'introduced' where a bare guide stores 'unknown' and percent-only guidance belongs in the level slots; it keeps 'core' inside the driver name instead of the measurement span; it drops the '%'/'percent' scale evidence on stated percentages; and it omits 'approximately' from the never-drop measurement sink on rows 5 and 6."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "lead_id": "sokc-030/b2",
+    "agrees": false,
+    "why": "It agrees on the divisional growth lanes, the G&A metric-plus-surprise twin, the closure action and the row-7 abstention, but it diverges: it names the $40M 'strategic_review_costs' and slices it to the Pizza Hut division on a 'primarily' qualifier, where I park the row as an accounting-construct population with an unstated cause share; it sets has_favorability_wording true for 'in line with our guidance' where in-line is neutral position, not favorability; it encodes the Pizza Hut Q1 guide as change_value with 'introduced' rather than level-slot percent_yoy with 'unknown'; it keeps 'core' in the driver name; it abbreviates the G&A name to g_and_a; and it omits the 'approximately' modifier from measurement."
+   },
+   {
+    "source_id": "bzNews_42014391",
+    "lead_id": "sokc-031/b1",
+    "agrees": true,
+    "why": "Independently of the lead, I settled the same meaning from the quote alone - a numberless decline in diner traffic named as a metric with state decreased and no period, slice, or numeric slots - which is what this lead reports."
+   },
+   {
+    "source_id": "bzNews_42014391",
+    "lead_id": "sokc-031/b2",
+    "agrees": true,
+    "why": "This lead is byte-identical to the other and likewise matches what I settled from the quote alone; its agreement with its twin adds no evidence, but its content is independently correct."
+   },
+   {
+    "source_id": "bzNews_50877032",
+    "lead_id": "sokc-032/b1",
+    "agrees": false,
+    "why": "It abstains by treating the 17 gates as period-less guidance, but the quote records a decided, company-announced construction project rather than a forward outlook on a driver level, and an action fact is lawfully periodless, so abstention was not required."
+   },
+   {
+    "source_id": "bzNews_50877032",
+    "lead_id": "sokc-032/b2",
+    "agrees": true,
+    "why": "Independently of the lead I settled the same lane (action_event), the same state (announced, the company's own stated action), and the same point level of 17 with unit count and null scale evidence, so its record matches what the evidence supports."
+   }
+  ]
+ }
+}

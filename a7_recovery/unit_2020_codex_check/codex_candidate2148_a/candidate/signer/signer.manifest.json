@@ -1,0 +1,218 @@
+{
+ "schema": "a4-final-key-candidate/1511/signer",
+ "door": "a4_final_key_signature",
+ "authority": "Codex SEQ 1510 item 4",
+ "state": "frozen, unrun",
+ "signer_owner": {
+  "module": "build_kfields_final",
+  "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "functions": [
+   "signer_prompt",
+   "render_signer",
+   "read_signature"
+  ]
+ },
+ "materializer_owner": {
+  "module": "build_kfields_final",
+  "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+ },
+ "transport": {
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+ },
+ "label": "a4-final-signer",
+ "shards": [
+  {
+   "shard": "0000006201-26-000031",
+   "sha256": "ffb427362e8fee99bb991993eea9c256d3c58e28d05933e89e51ef08a3a2e12a"
+  },
+  {
+   "shard": "0000006201-26-000032",
+   "sha256": "9acf4148b978ff5ceb05c7aa98847336a60639192c6b1d0ac15332ae7a7e383c"
+  },
+  {
+   "shard": "0000027904-26-000013",
+   "sha256": "cade0230381801623f6b2c8ceafa8cc6f5525a98f722105ee12b125ad1e9ce1e"
+  },
+  {
+   "shard": "0000027904-26-000020",
+   "sha256": "1d77651e5c26dcf9da7f327da56307d1f8a726a270fc9e356fef6213a9037fc0"
+  },
+  {
+   "shard": "0000027904-26-000022",
+   "sha256": "f57b30d1481d52eea9a3384967b47d0b5505d9b17bf5053d1d58ec0acaf19728"
+  },
+  {
+   "shard": "0000063908-26-000032",
+   "sha256": "fc64ba789bc552b115b06e2ca62363bc4ea5314570c1d9c508fb79c6676ba1a7"
+  },
+  {
+   "shard": "0000092380-26-000044",
+   "sha256": "3a17686901ed9b8226c1717d917b5633a3dbbe9cc368880ad9d0722a9ccc1c59"
+  },
+  {
+   "shard": "0000764478-25-000057",
+   "sha256": "9c950bed386b158886af10cfa993b4a2e54b00080d00bbb2f681f72724e1e382"
+  },
+  {
+   "shard": "0000898173-26-000006",
+   "sha256": "cfc2b4a1de9278eea6855c90258bd67f9093490cb54ad1e900bc3b6f7c08cf18"
+  },
+  {
+   "shard": "0000940944-25-000038",
+   "sha256": "bdb6adbe0beaf50a1baf56346781eea9e0df65e86994720b6fb40d342a9779ef"
+  },
+  {
+   "shard": "0000940944-26-000005",
+   "sha256": "2808b861cecefd8d49ef14b73788e0a9e46c5d5fa700790bd083f48a4d2287d5"
+  },
+  {
+   "shard": "0000940944-26-000009",
+   "sha256": "9edf154ae947af2b7485cd02858db82aeee929c721617c3de34004a360e4689f"
+  },
+  {
+   "shard": "0001041061-25-000109",
+   "sha256": "232bd4f3cb1f5ecdcd3e8b4415079a9074076d3d06150574e55138a51690b5e5"
+  },
+  {
+   "shard": "0001041061-26-000003",
+   "sha256": "02ef0723dde5a4e503d79212c13ea863960ce7bf53a209cb7f1ee372d0336e06"
+  },
+  {
+   "shard": "0001041061-26-000084",
+   "sha256": "eff3bde2730f6f026c88b3510e1f70fc397f9cf535817d62643c75c2ef532156"
+  },
+  {
+   "shard": "0001058090-26-000007",
+   "sha256": "6f592b37f2fada15f88d9ef86d7a168803c11d84c62c8da1324660ce63aff9cd"
+  },
+  {
+   "shard": "0001104659-25-102611",
+   "sha256": "26783093c4333992ae678c024345639b746f164f95d807a32ad68251d8eee2b3"
+  },
+  {
+   "shard": "0001104659-25-105631",
+   "sha256": "0f68f5fa0468607b45de501006af0344d1faaf8e1cc4046f38dfef528e41c06e"
+  },
+  {
+   "shard": "0001104659-25-118458",
+   "sha256": "7e7b77b52adafc14834b6c82320f49f1c37782d181f76ac1919014756f882840"
+  },
+  {
+   "shard": "0001104659-26-017090",
+   "sha256": "75e17285f365c0c19f2f0dec381203f667bb869d4794b45c33552759883447c3"
+  },
+  {
+   "shard": "0001104659-26-027061",
+   "sha256": "46a11c2e3462d8c83b9c9fa12337db735f0dcdaab01f6afc7aa6d644bba760ab"
+  },
+  {
+   "shard": "0001104659-26-032757",
+   "sha256": "63417b0e60d8580fdf1c0bbd7e47e37442b49e53dc713f15e950d835692bd09f"
+  },
+  {
+   "shard": "0001171843-26-001288",
+   "sha256": "0c719fe8498ab3c36cbf7eb5c48e65214e6a5dbec18bf8ac1346ba63c4f9bbea"
+  },
+  {
+   "shard": "AAL_2026-04-23T08.30",
+   "sha256": "555d2b044f6ef2456bcf482ef162cd9e77d26af19405eaf784235542d04542f5"
+  },
+  {
+   "shard": "BBY_2026-03-03T08.00",
+   "sha256": "e42b914539e048b54297ffa9b1ac66ddd6c710a47e504d2783ff4e47cc2cb4e1"
+  },
+  {
+   "shard": "CMG_2026-02-03T16.30",
+   "sha256": "d67edcf0ea377c129bedc7b8fbd8dcd069b8e02b3f5b27db7d913dd11b5a6e1d"
+  },
+  {
+   "shard": "DAL_2026-04-08T10.00",
+   "sha256": "4d661c36cbb4922aef896a102f4e4553ac22a900f66e14ed182bce97984a9588"
+  },
+  {
+   "shard": "DRI_2026-03-19T08.30",
+   "sha256": "94790960b07e20f3303f68d51c54a51a5ea0fb72e07b82c1edf34ce1e773fc45"
+  },
+  {
+   "shard": "MCD_2026-02-11T16.30",
+   "sha256": "c100c700b3ccb944e305b756a11e3280e730c84164d8ed792f4c474e85261491"
+  },
+  {
+   "shard": "ULTA_2026-03-12T16.30",
+   "sha256": "37ff33f670d7b1baf08b830bd6db12b0580dff76812607dc63af09cf91fdfb67"
+  },
+  {
+   "shard": "YUM_2026-02-04T08.15",
+   "sha256": "c7efe2dce7d2a5226941d3391f0cea1c31d7c47cb5bcfd01634820399c189a6e"
+  },
+  {
+   "shard": "bzNews_42014391",
+   "sha256": "687d8e7e8adec5cdbd710808403d22c5b26d32bc3909b77e108dd96402ac1e13"
+  },
+  {
+   "shard": "bzNews_50877032",
+   "sha256": "e2c2dd2598a51a960a6da4a50b6d5c62302cec1828dc325e8769af5c2b80ae4b"
+  }
+ ],
+ "prompt_sha256": "6caba0e128fbf287a2e94a898e0336135eb4254fc751552ef11425463c2196d6",
+ "prompt_bytes": 365917,
+ "script_sha256": "cbf1d2a69dbee3aa4e006cc1cb99c1b9ae5a7f03e5de6cb5af78e636e3611196",
+ "script_bytes": 394213,
+ "transport_limit_bytes": 524288,
+ "head_sha256": "0d709a0173bb1b84b06ea95cea1cfb53d23ff0da474e5d7c18bb3640acdd9f2a",
+ "count_block_sha256": "16e1a68ed1a6bf196890e08d5453d0b43a896f1cce56565d4c3d6c06c980925a",
+ "composition_map_events": 0,
+ "budget": {
+  "before": 686,
+  "primaries": 1,
+  "retry_cap": 1,
+  "after_clean": 687,
+  "worst": 688,
+  "ceiling": 6000
+ },
+ "retry_law": {
+  "owner": "build_kfields_final.RETRYABLE",
+  "retryable": [
+   "invalid_response"
+  ]
+ },
+ "gate": {
+  "success": "read_signature(text) returns an object with signed true and blocked [] (build_kfields_final.read_signature)",
+  "failure": "signed false with nonempty blocked - a lawful refusal, FINAL, never retried",
+  "transport_no_answer": "a genuine transport/no-answer refusal is retained and reported and is FINAL: no second call (build_kfields_final.RETRYABLE)",
+  "retry": "at most one identical-bytes retry, only for a structurally invalid reply (invalid_response: build_kfields_final.read_signature refuses the shape); never for meaning"
+ },
+ "scripts": [
+  {
+   "attempt": 1,
+   "sha256": "cbf1d2a69dbee3aa4e006cc1cb99c1b9ae5a7f03e5de6cb5af78e636e3611196",
+   "bytes": 394213
+  },
+  {
+   "attempt": 2,
+   "sha256": "ff53f6609195a7722bd49c844047795742d7341483af9215d6767ec62c5efef8",
+   "bytes": 394213
+  }
+ ],
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1"
+ },
+ "expected_input_source": {
+  "path": "/tmp/a7_input_profile_2068.json",
+  "sha256": "78b58fe7fd5ba60b9199ada86fe27d90101ceb57cd7617db158e2ea724e2da18"
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "all_copies_match": true,
+ "completed_packet_unchanged": true,
+ "completed_run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143",
+ "finalization_sha256": "657012e282d92c0d10779e75f7fec8e658bb22953729ffb3f9785506f35d8844",
+ "model_calls": 0,
+ "native_identity_proof": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/SOURCE_RESULT_REVIEW_2147.json",
+ "native_identity_proof_sha256": "dfecc9e55b76e82ec5145912574fdf97fed7d98a715f11ad2bd7ebf7a82060d2",
+ "preserved": [
+  {
+   "agent_id": "a8de531fc1ad74e54",
+   "files": [
+    {
+     "bytes": 152332,
+     "copy_matches_original": true,
+     "copy_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_authority2147_a/native_evidence/wf_e1ea0793-2c1.state.json",
+     "kind": "state",
+     "original_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e1ea0793-2c1.json",
+     "sha256": "62396d74b8facaf8c4b4656bc20d0350296e8b4e679791fc4736159cfb6683d2"
+    },
+    {
+     "bytes": 189954,
+     "copy_matches_original": true,
+     "copy_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_authority2147_a/native_evidence/wf_e1ea0793-2c1.transcript.jsonl",
+     "kind": "transcript",
+     "original_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_e1ea0793-2c1/agent-a8de531fc1ad74e54.jsonl",
+     "sha256": "1d95c65a210ebddfed131b36c625e8ced810645bf9a2c43157cc9ce80d47abeb"
+    }
+   ],
+   "label": "0001104659-26-017090",
+   "run_id": "wf_e1ea0793-2c1",
+   "status": "completed"
+  }
+ ],
+ "preserved_calls": 1,
+ "preserved_files": 2,
+ "proof_scope": "Independent native/raw/located-row comparison, and manual source-meaning review recorded separately; no signature or score claimed",
+ "receipt_sha256": "6c994ba8a335fb399e25f601a20225b4e9b55fe5ad100e13c8f5e1ada12384ba",
+ "scope": "durable copies of the seven completed calls native bytes; no call re-run, no re-finalization, originals untouched"
+}

@@ -1,0 +1,7 @@
+attempt	codex_candidate2148_a
+payload	../../unit_2143_source_authority/build_candidate_2148.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2817178
+payload_pid	2817182
+started_utc	2026-09-14T18:07:00Z
+state	finished exit 0

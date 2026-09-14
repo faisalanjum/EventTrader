@@ -1,0 +1,68 @@
+{
+ "accounting": {
+  "before_this_round": 685,
+  "invalid_response": 0,
+  "missing": 0,
+  "retry_offered": [],
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "scheduled": 1,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "valid": 1
+ },
+ "events": [
+  "0001104659-26-017090"
+ ],
+ "finalization": {
+  "child": null,
+  "harvested_raw": [
+   "wf_e1ea0793-2c1.raw.json"
+  ],
+  "ledger": {
+   "invalid_response": 0,
+   "missing": 0,
+   "scheduled": 1,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "valid": 1
+  },
+  "outcomes": [
+   [
+    "0001104659-26-017090",
+    "valid",
+    ""
+   ]
+  ],
+  "phase_complete": true,
+  "problems": [],
+  "retry": [],
+  "sha256": "657012e282d92c0d10779e75f7fec8e658bb22953729ffb3f9785506f35d8844"
+ },
+ "model_calls_started_here": 0,
+ "paid_raw_files": {
+  "0001104659-26-017090.attempt1.proved.json": "75e17285f365c0c19f2f0dec381203f667bb869d4794b45c33552759883447c3",
+  "wf_e1ea0793-2c1.raw.json": "75e17285f365c0c19f2f0dec381203f667bb869d4794b45c33552759883447c3"
+ },
+ "pinned_identities": {
+  "binding_sha256": "c0bfcc03caeb9507e09e0719d3f566538b55d269fda6fba049f29c7375ef9858",
+  "owner_sha256": "b544dabd31074d32d4379820994092eec4f88b739a3df0e8d869e4b219a50732",
+  "renderer_sha256": "ff48b6e5d44304bb8246365ee49207e379fda22e86ecb32fb6bb25c26b4c5a0f"
+ },
+ "receipt_states_after": [
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e1ea0793-2c1.json"
+ ],
+ "receipt_states_before": [],
+ "recorded_states": [
+  {
+   "problems": [],
+   "state": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e1ea0793-2c1.json",
+   "state_sha256": "62396d74b8facaf8c4b4656bc20d0350296e8b4e679791fc4736159cfb6683d2"
+  }
+ ],
+ "report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/AUTHORITY_PACKET_2143.json",
+ "report_sha256": "9741960128b2639f5ac126bb50f67638271453e3eab89707e4ca10354be861e7",
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143",
+ "scope": "collection/resume through F.record_state and F.finalize; no semantic decision, no retry rule, no key edit"
+}

@@ -1,0 +1,7 @@
+attempt	core_collect2146_a
+payload	../../unit_2143_source_authority/collect_authority_2143.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2780319
+payload_pid	2780323
+started_utc	2026-09-14T17:39:23Z
+state	finished exit 0

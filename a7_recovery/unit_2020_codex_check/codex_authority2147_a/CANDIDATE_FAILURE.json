@@ -1,0 +1,7 @@
+{
+ "model_calls": 0,
+ "ordinary": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_authority2147_a/ordinary_bound.json",
+ "packet_unchanged": true,
+ "reason": "the completed signature does not verify: ['the candidate no longer re-derives: the candidate cannot be re-derived (SystemExit: the signing gate is not clean: receipt.allowed is not the expected value; receipt.v1_evidence is not the expected value;); the ordinary binding it was built from must be served as A7_ORDINARY_BOUND']",
+ "type": "ValueError"
+}

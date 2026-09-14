@@ -4,7 +4,66 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision198: source-authority preparation and
+Current checkpoint,work-order Revision202: the REAL corrected candidate build
+and full verification pass, exit0/empty stderr, report7d0d9a6f. The historical
+input fix at the existing callable boundary is sufficient without changing a
+validator. Full current gate:33 events/191 rows/165 facts,0 open issues or
+duplicates, all floors met;32 unchanged source pairs and native evidence reused.
+The existing saved-call selector independently returns launch for the exact
+new signer, with no prior matching call. Preparation is verified; signer is
+still UNRUN. Final signature/lock, actual new-key grading connection, affected
+judgments, corrected score/each-error cause and END-only model setup remain.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Verified for this complete declared history: each signature receives its own recorded input; no semantic hardcoding or model-answer edits. |
+| Complete workflow | Source/key gate and actual C.build/C.verify pass with exact artifact, raw, origin and accounting comparisons. Signature and downstream new-key consumer remain open. |
+| One owner and organization | Existing validators and materializer unchanged. The next lock/consumer must reuse the tested historical-input boundary, not invent another validator. |
+| Simplicity | One necessary invocation correction; reuse completed evidence and unaffected regression proof. No new key format, cache, grader or production layer. |
+| Verification and limits | Four focused controls pass; binding-removal mutant fails as intended; real native candidate and selector exit0/empty stderr. This is unsigned preparation, not a final A7 score or universal reliability claim. |
+
+Previous checkpoint,work-order Revision201: actual full-key gate22b15e24 passes:
+33 events/191 rows,165 facts,34 controls,10 exclusions,0 open issues/duplicates,
+all floors met;32 raw/origin pairs carried unchanged. New native pair preserved
+18d8c2c2. Subsequent C.build fails CLOSED on the older signature receiving the
+new ordinary input; c75f8964 and original callerffd98003 retain the evidence.
+Invocation-only fix0aab3a73 supplies the historical signature's own proved
+input through the existing X boundary. Four focused tests pass; binding-removal
+mutation fails4 assertions for the intended reason. Actual rerun
+codex_candidate2148_a is running. No new model call, signature, lock or score.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Source truth verified. Context selection uses proved candidate/input identities, never semantic strings or model-answer changes. |
+| Complete workflow | Full key gate and durable preservation pass. First candidate attempt reproduces the input leak; fixed actual candidate build/verify OPEN. |
+| One owner and organization | Existing signature/candidate validators unchanged; supply each historical input at the existing signature boundary. Reuse this boundary for later signing/grading instead of duplicating it. |
+| Simplicity | No new signer, key format, cache or scoring framework. Reuse completed source/native proof and prior unaffected regression evidence. |
+| Verification and limits | Four focused tests and meaningful context-removal mutation pass. Full candidate/signature/lock/new-key consumer/corrected score/each-error cause/END-only setup remain OPEN. |
+
+Previous checkpoint,work-order Revision200: the one source call and independent
+meaning review are VERIFIED, SOURCE_RESULT_REVIEW_2147.json/dfecc9e55. Exact
+native proof and actual collectorcb538aac agree:1 valid/no retry,686 calls,
+all8 facts and grading metadata unchanged, historical scope question closed.
+Root runs codex_authority2147_a for full current-key gate/durable preservation/
+existing candidate and UNRUN signer. Core task2147/0235cfd5 is read-only review.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Verified source-only restatement authority reached the call. All6 located targets rechecked; no semantic hardcoding or answer edits. |
+| Complete workflow | Actual collection/native/source meaning verified. Complete33-source gate, current candidate and historical signature/ordinary-binding interaction are being measured. |
+| One owner and organization | Reuse shared B2143, existing materializer/candidate/verifier/signer/copy owners. No new grading or meaning implementation. |
+| Simplicity | Reuse all successful calls,32 unchanged source reviews and prior unaffected regressions. New code is only a bounded invocation and checks. |
+| Verification and limits | Candidate/signature/lock, corrected-key consumer, corrected score/every finding cause and END-only offline model setup remain OPEN. No guaranteed high score or live local inference claim. |
+
+Previous checkpoint,work-order Revision199: verified source-authority preparation
+and completed-eight evidence committed/pushed3d571ca74, exact remote verified.
+Codex2146/f834b74c authorizes only the one new source-rule call and collection
+with the existing invalid_response-only retry law. Core UI shows launch
+wf_e1ea0793-2c1; completed native evidence/source approval remain pending.
+Root does not overlap Core's native collection. All remaining A7 source/key/
+consumer/score/each-error-cause/END-only setup limits remain unchanged.
+
+Previous checkpoint,work-order Revision198: source-authority preparation and
 collection VERIFIED. Final CLIb9b613d4 returned raw exit0/empty stderr and
 whole-recorddde2755b exactly equals the first CLI. All packet files unchanged.
 3 focused loader tests and6 actual empty-input-boundary cases pass. Complete

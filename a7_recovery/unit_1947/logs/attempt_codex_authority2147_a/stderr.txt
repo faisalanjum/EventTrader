@@ -1,0 +1,52 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2143_source_authority/build_candidate_2147.py", line 164, in <module>
+    E.with_prepared_inputs(build)
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 81, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/prepare_g23_partial_2097.py", line 92, in with_prepared_inputs
+    result = action(producer, inputs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2143_source_authority/build_candidate_2147.py", line 124, in build
+    hashes, full_counts, counts, manifest = C.build(str(candidate))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py", line 219, in build
+    key, sidecar, shards, raws, prov, counts, problems = compose()
+                                                         ^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py", line 118, in compose
+    return compose_ordinary()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py", line 99, in compose_ordinary
+    gate = F.signing_gate(b.events, b)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 81, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 2147, in signing_gate
+    shards, raws, origins, problems = v6_shards(bound)
+                                      ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 81, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 3806, in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2134.py", line 487, in base_shards
+    return first_round_key(b, first_run, first_findings, previous, prior,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2134.py", line 331, in first_round_key
+    with first_round_scope(bound, first_run, first_findings, previous,
+  File "/usr/local/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2134.py", line 301, in first_round_scope
+    with R._using(F, **_ORIGINAL), inner:
+  File "/usr/local/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2134.py", line 455, in successor_scope
+    completed[run] = signature_accounting(signatures[run])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2134.py", line 192, in signature_accounting
+    raise ValueError("the completed signature does not verify: %s"
+ValueError: the completed signature does not verify: ['the candidate no longer re-derives: the candidate cannot be re-derived (SystemExit: the signing gate is not clean: receipt.allowed is not the expected value; receipt.v1_evidence is not the expected value;); the ordinary binding it was built from must be served as A7_ORDINARY_BOUND']

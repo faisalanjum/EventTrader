@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 198, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 202, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,110 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision198: one-source preparation/collection VERIFIED. The final
+CURRENT,Revision202: CURRENT KEY AND UNSIGNED CANDIDATE PREPARATION VERIFIED.
+Actual codex_candidate2148_a finishes exit0 with empty stderr. Existing
+C.build and full C.verify rederive every candidate byte; CANDIDATE_PREPARATION
+.json/7d0d9a6f94fa7d97a0d3347ad581ae39ea94a4c573916c973942b035c750fef7.
+The full33-source gate is clean:191 rows,165 accepted facts,34 controls,
+10 exclusions,44 abstentions,0 duplicate gold/open issues, every tag floor met.
+All32 carried raw/origin pairs and the completed new native evidence are reused.
+The invocation-only input fix is sufficient in the REAL nested path; Core2145's
+contrary caller-impossibility inference is disproved, not adopted. No existing
+signature/candidate validator was changed or weakened. Four focused controls
+pass and the binding-removal mutation fails for the intended wrong input.
+
+The existing saved-call selector also passes natively, codex_signselect2148_a,
+exit0/empty stderr: launch, no prior call, exact prompt6caba0e1/scriptcbf1d2a6/
+manifesta9f4705d. No AI call yet. The independent signature is the next bounded
+Core task after publishing this verified preparation; then its actual lock
+and corrected-key grading connection. Signer accounting before686 is the
+SOURCE/KEY chain, not a claim about all historical grading calls. No corrected
+score or new-key grading result is claimed. Full-input comparison, not matching
+question ids alone, decides reuse of every valid saved grading judgment.
+Original382 answers remain unchanged. A7 error causes and END-only offline
+model setup remain required, then STOP/WAIT. Root owns code/native work;
+Core still waits after2145 until its one next mailbox task.
+
+HISTORY,Revision201: FULL CURRENT SOURCE KEY GATE PASSES, actual report
+codex_authority2147_a/CURRENT_KEY_GATE.json/22b15e24. All33 events/191 rows
+accounted,165 accepted facts,34 controls,10 exclusions,0 duplicate facts,
+0 open issues and every difficult-case floor met;32 source raw/origin pairs
+are unchanged. The1 native state/transcript pair is durably preserved against
+root's hashes, PRESERVED_NATIVE.json/18d8c2c2. Reuse it, do not recopy or rerun.
+
+The same native run then reproduced the predicted candidate-input defect:
+the new C.ORDINARY leaks through nested F.v5_shards into verification of an
+older signature. Existing signature verification refuses, exit1; no candidate
+or call produced. CANDIDATE_FAILURE.json/c75f8964 preserves the exact reason.
+Core2145 confirms this from the actual trace (reply to2147). Its additional
+claim that a caller cannot reach the nested boundary is not established:
+X.successor_scope calls the live X.signature_accounting attribute, so the
+same existing _using boundary can supply the earlier candidate's own input.
+
+Root native codex_candidate2148_a now tests that smallest invocation fix,
+build_candidate_2148.py/0aab3a73. The actual historical-candidate/input map is
+derived from E's independently proved original result and exactly covers the
+signature history. Existing signature/candidate owners are unchanged. Four
+focused context/order/unknown/exception tests pass; removing the binding switch
+makes all4 fail on the wrong input. SIGNATURE_CONTEXT_CHECKS_2148.json records
+both runs and the discarded test-draft naming error honestly. New full native
+candidate proof remains OPEN. Root owns serial tests; Core has finished its
+read-only2147 task and waits. No signer or grading call authorized yet.
+Reuse the same historical-input boundary in the next signer/lock/consumer
+invocation; do not duplicate it or relax any original-context proof. Source
+truth is checked; signature/lock/corrected-key consumer/final score still
+remain. Every recall/precision cause, END-only offline setup, then STOP/WAIT.
+
+HISTORY,Revision200: source-authority closeout VERIFIED. Core2144/d906d87c
+answers2146; real collectorcb538aac, exit0/empty stderr,1 valid/no retry,
+ledger685->686. Root independently matched the native prompt/script/raw,
+session/model/agent/request/message and reread all6 source targets. All8 fact
+arrays and all outcome/grading fields are unchanged; only review prose and
+the former open issue changed. SOURCE_RESULT_REVIEW_2147.json/dfecc9e55 records
+the exact evidence and six meaning decisions. No remaining demonstrated source
+or contract issue in this closeout; do not repeat its successful call.
+
+Root owns the one native run codex_authority2147_a, caller
+unit_2143_source_authority/build_candidate_2147.py/ffd98003: preserve the1
+native state/transcript pair, rederive the full33-source gate with32 unchanged
+raw/origin pairs, derive the new ordinary binding and use existing C.build/
+C.verify to prepare its UNRUN signer. CANDIDATE_COMMAND_2147.json is the exact
+command. Core task2147/0235cfd5 is read-only independent review of this caller
+and its candidate/history boundary; no overlapping native job or edit.
+Specifically measure whether historical signature verification retains its
+own ordinary binding while the new candidate is built. Do not assume success
+or add a framework. Candidate/signature/lock/new-key consumer/corrected score
+remain OPEN. Every miss/wrong accept still gets a documented cause; no perfect
+score is promised. END-only offline model setup, then STOP/WAIT.
+
+HISTORY,Revision199: verified preparation and completed-eight evidence are
+COMMITTED/PUSHED3d571ca742fb29a6934bd5fe54dee82f5f37edb1, exact tree33bca5e
+864dbaf66b4b12c766e3fd64479ef90d0, parenta379681c. Remote branch exact match
+was measured. Freeze9779b8bd8cc5eecc3f2f995b49bd874daed809cf7a3871da72943f
+5eb469e33d covers130 files/5853398 bytes;124 changed paths committed. Only
+unrelated dirty build_inventory_review.py remains outside that checkpoint;
+its identical runtime bytes already exist committed under unit_2008. Raw
+stdout whitespace is preserved as evidence; code/document whitespace checks
+are clean. No raw log was edited to satisfy style checks.
+
+Codex2146/f834b74c7d33cc0b66c1084a3cd400a126e1dfd24ec6d1d33a3783e0494f6eb4
+is the one current Core task: exact one-source authority call and existing
+collection, at most one existing invalid_response-only retry. No signer,
+key edit, grading, publication or later-step work in that task. Core owns
+serial native collection; root does not overlap. The mailbox/archive match.
+At17:36UTC Core's UI showed the call launched as wf_e1ea0793-2c1 after its
+pin checks. This is a LAUNCH observation, not native output or source approval;
+the completed official state was not yet present at17:37UTC. Preserve/reuse
+the result when it arrives. No new goal, session handover or watcher.
+
+The live continuity notes evolve after publication: historical freeze entries
+for these notes describe the COMMITTED checkpoint. Runtime source/code/packet
+pins still require exact live bytes. The next stages remain independent source
+review, existing candidate/signer/lock, corrected-key consumer, only affected
+grading, every recall/precision finding's cause, END-only offline model setup,
+then STOP/WAIT. A high or perfect model score is not promised or manufactured.
+
+HISTORY,Revision198: one-source preparation/collection VERIFIED. The final
 native CLI codex_cli2146_a/b9b613d4 returned exit0/empty stderr and full
 recorddde2755b exactly equals the first CLI. Probe AND unlaunched real packet
 retain every exact file/hash. Three loader tests and six actual diagnostic

@@ -1,0 +1,44 @@
+{
+ "scope": "the one launch identity, recorded BEFORE any answer is read",
+ "authorised_by": "Codex SEQ 2146 (one primary call, invalid_response-only retry) under the owner's standing instruction; no new project approval requested",
+ "frozen_report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/AUTHORITY_PACKET_2143.json",
+ "frozen_report_sha256": "9741960128b2639f5ac126bb50f67638271453e3eab89707e4ca10354be861e7",
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143",
+ "initial_receipt_sha256": "66663b49c45c534b4215e85befc0e04630cf9107251d3a9d977df8ab45a46dbd",
+ "initial_receipt_states": [],
+ "route": "Claude Code Workflow agent(), subscription; script declares opus / high / lean-probe, Read disallowed",
+ "launched_utc": "2026-09-14T17:35:29Z",
+ "primary_calls": 1,
+ "ledger_before": 685,
+ "signer_authorised": false,
+ "authorized_ceiling_including_retries": 687,
+ "launches": [
+  {
+   "source_id": "0001104659-26-017090",
+   "event_index": 20,
+   "run_id": "wf_e1ea0793-2c1",
+   "task_id": "wrefed09n",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e1ea0793-2c1.json",
+   "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_e1ea0793-2c1",
+   "frozen_script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143/scripts/0001104659-26-017090.attempt1.js",
+   "frozen_script_sha256": "60e46245bbd10cb1dcc8482f4de2599310d0fd97e5a6eeb6135a29a84b914d8a",
+   "staged_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/authority_2146/0001104659-26-017090.attempt1.js",
+   "staged_script_sha256": "60e46245bbd10cb1dcc8482f4de2599310d0fd97e5a6eeb6135a29a84b914d8a",
+   "receipt_prompt_sha256": "4cc2d3f6f30916558d8135b9a58d5971631591fbe5138e89c855e12294bd6ae4",
+   "original_row_count": 6,
+   "rows": [
+    "0001104659-26-017090#112",
+    "0001104659-26-017090#113",
+    "0001104659-26-017090#114",
+    "0001104659-26-017090#115",
+    "0001104659-26-017090#116",
+    "0001104659-26-017090#117"
+   ],
+   "attempt": 1
+  }
+ ],
+ "model_calls_started_here": 1,
+ "frozen_equals_staged": true,
+ "no_prior_invocation_of_this_script": true,
+ "answers_read_before_this_record": 0
+}
