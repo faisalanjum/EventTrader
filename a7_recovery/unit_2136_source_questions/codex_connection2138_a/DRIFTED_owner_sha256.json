@@ -1,0 +1,129 @@
+{
+ "accounting": {
+  "after_planned": 686,
+  "before_this_round": 677,
+  "global_ceiling": 6000,
+  "max_attempts_per_call": 2,
+  "planned_corrections": 8,
+  "planned_signer": 1,
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "worst_case_after": 695
+ },
+ "binding_sha256": "d2bec8c29c49af7bc51ceb92235560a2ec1ce33199852a4d179245547d7e8723",
+ "capacity_problems": [],
+ "events": [
+  "0000027904-26-000020",
+  "0000092380-26-000044",
+  "0000898173-26-000006",
+  "0001041061-26-000003",
+  "0001104659-25-102611",
+  "0001104659-26-017090",
+  "0001104659-26-027061",
+  "BBY_2026-03-03T08.00"
+ ],
+ "findings_served": {
+  "0000027904-26-000020": 2,
+  "0000092380-26-000044": 2,
+  "0000898173-26-000006": 1,
+  "0001041061-26-000003": 1,
+  "0001104659-25-102611": 2,
+  "0001104659-26-017090": 2,
+  "0001104659-26-027061": 1,
+  "BBY_2026-03-03T08.00": 2
+ },
+ "input_declarations": [
+  {
+   "prompt_sha256": "650433b0c3ac2b2c6fbef916d634279b7d05316b008a68bdec63298a6b583a69",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "prompt_sha256": "71bbfda56335b083f7492e9481b6fec8da393d0880f6f50c396467aa8660d224",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "prompt_sha256": "b7f576bed89c669c87004cf359938075c83e74ff980a38b12122f6bfc4aa4a9d",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "prompt_sha256": "298d8470ff8bb7de3b754151c576199dd6095813c238c323d0161c8e1cc31e15",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "prompt_sha256": "7cf49dbdc83630f2e7a9c5a7f00db94fff9c963085cdd2178ff24e5f10960fe3",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "prompt_sha256": "8c541f230f4a18a046e32b426764241c8813e4533aba6bfa1400f2bf0e5067be",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "prompt_sha256": "2766e007ecdd461b0d556b2a4cd518aa1bcd776490b0bef8ff6b98e513d090e1",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "prompt_sha256": "b84064257d39e799301f5b538db1266c3f42770a9099d28328ac1dd48d6d18d1",
+   "source_id": "BBY_2026-03-03T08.00"
+  }
+ ],
+ "largest_script_bytes": 256466,
+ "model_calls_started_here": 0,
+ "owner_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+ "pointers": {
+  "affected_sources": [
+   "0000027904-26-000020",
+   "0000092380-26-000044",
+   "0000898173-26-000006",
+   "0001041061-26-000003",
+   "0001104659-25-102611",
+   "0001104659-26-017090",
+   "0001104659-26-027061",
+   "BBY_2026-03-03T08.00"
+  ],
+  "declared_full_event_rows": 52,
+  "declared_question_count": 13,
+  "frozen_event_order_positions": [
+   3,
+   6,
+   8,
+   13,
+   16,
+   19,
+   20,
+   24
+  ],
+  "predecessor_finalization_sha256": "50c56b33d90f97c0b615a4f7a8976bed5cc9ed80ba9cf776bdd08ad185bcc04e",
+  "predecessor_receipt_sha256": "e34d1332e4db9f172382b493459ed1c173178b1609bd37f49a9209d18b5bd6a0",
+  "predecessor_run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet",
+  "prefix_rounds": [
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet"
+  ],
+  "prior_rounds": [
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet"
+  ],
+  "question_rows": 13,
+  "signatures": {
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/candidate"
+  }
+ },
+ "receipt_sha256": "f1a2b1e4cdd7a743da715846fe4614a0658f0922677fa8b27f8bf81722a3d5f5",
+ "receipt_states": [],
+ "renderer_sha256": "002001473da073b21dfa6e5db7aed620d0da7da96d787a5127b292e7014d7c33",
+ "rows_served": {
+  "0000027904-26-000020": 9,
+  "0000092380-26-000044": 7,
+  "0000898173-26-000006": 6,
+  "0001041061-26-000003": 5,
+  "0001104659-25-102611": 6,
+  "0001104659-26-017090": 6,
+  "0001104659-26-027061": 5,
+  "BBY_2026-03-03T08.00": 8
+ },
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/codex_connection2138_a/UNLAUNCHED_ZERO_ANSWER_PROBE",
+ "scope": "source-question packet, prepared and UNRUN; no call, no key edit, no signer, no grading",
+ "transport_limit": 524288
+}

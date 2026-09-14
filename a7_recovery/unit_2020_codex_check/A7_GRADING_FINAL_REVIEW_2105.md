@@ -4,7 +4,151 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision174: preparation plus actual collection
+Current checkpoint,work-order Revision188: preparation/collection VERIFIED
+for the eight source calls. Actual command result4447081c equals the complete
+callable resultad99d5f3, raw exits0/empty stderr; no answers fabricated and
+actual packet unchanged. SOURCE_QUESTION_REVIEW_2138.md records the completed
+five-item delta checklist. Freeze/publish this scope before any new call.
+Source truth, new signed key/consumer, corrected grading and END-only offline
+model setup remain OPEN; this is not A7 completion or approval of source truth.
+
+Previous checkpoint,work-order Revision187: actual collection/resume proof
+ad99d5f3 passes with raw exit0/empty stderr. The executable itself is now
+running as codex_cli2138_a against that isolated probe; source truth and the
+new signed-key/grader handoff are not yet closed.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | VERIFIED for this delta: no source prompt or meaning rule changed; explicit report/state inputs replace the missing executable entry. |
+| Complete workflow | Actual preparation plus collection/resume and33-source carry pass. Final executable check remains OPEN until its raw result is compared. |
+| One owner and organization | VERIFIED: unchanged collect function, shared binding, existing receipt/record/finalize owners; Core2138 found no concrete counterexample. |
+| Simplicity | VERIFIED: one small command entry, no new parser, scorer, retry policy or production layer. Reuse already verified affected2134 regressions. |
+| Verification and limits | Missing-entry test fails before/passes after; native proof preserves33 sources, counts8 missing/0 accepted, checks repeated collection and all3 dependency pins, leaves actual packet untouched. Source truth/new key/corrected score/END-only setup remain OPEN. |
+
+Previous checkpoint,work-order Revision185: Core2136/eed4d942 accepted the
+interrupt; its jobs ended and root owns serial recovery edits/tests. Plain
+packet checks prove eight source inputs,52 original rows,13 exact questions,
+task text, current raw hashes and transport. All14 durable native copies match
+the original evidence and9ed0b1ee. Evidence: PACKET_BYTE_CHECK_2138.json,
+NATIVE_COPY_CHECK_2138.json, PLAIN_CHECK_COMMANDS_2138.json.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Source questions and prompts unchanged; inherited old state paths caused the failed empty-answer test. No new semantic rule is needed. |
+| Complete workflow | OPEN: real executable collection entry and pristine empty-input/resume proof. Missing-entry test reproduced silent success; smallest entry now uses existing owners. Native configured proof follows. |
+| One owner and organization | Shared2136 binding and existing record/finalize owners retained. No new parser, scorer, cache or model runtime. |
+| Simplicity | Reuse valid2134 regressions and source-binding controls; fix only the current collection gap, not production carry notes. |
+| Verification and limits | Eleven Core checks returned0, original collection1 and interrupted collection143; neither collection nor populated-packet unrun_refusal is a zero-answer proof. Source truth, signed key/consumer, final score and END-only reuse check remain OPEN. |
+
+Previous checkpoint,work-order Revision184: round-input repair VERIFIED at
+b544dabd. Final native05f7372b, affected regressiona8d5a305 and all11 actual
+signed-artifact mutationsb5173026 pass, raw exits0/empty stderr. Core2135
+review71a39891 found no demonstrated defect. Its builder-shape dependency is
+the stated pure bound-only API, not a new introspection requirement.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | VERIFIED for this delta; pure source-task builder, no semantic or example-specific code. Existing source and field laws unchanged. |
+| Complete workflow | VERIFIED cold/current/history/next-round preparation boundary with33 sources,19 historical prompts and677 calls; actual new signed-key/grader handoff remains OPEN. |
+| One owner and organization | VERIFIED existing succession/prefix/cache seams; no second cache, rule owner or lifecycle. Core's broad H wrapper is not on the new path. |
+| Simplicity | VERIFIED narrow prefix-call lifetime. Do not add signature introspection or turn Core's production carry notes into pre-grading scope. |
+| Verification and limits | Seven focused tests, actual wrong-input/order refusals, guard-removal mutation,33-source/31-prompt/seven-negative regression and11 actual signed-artifact mutations pass. Source truth/new key/corrected score/END-only setup remain OPEN. |
+
+Next: Codex2136 assigns Core only the8-event/52-original-row source-question
+packet preparation/resume proof and preservation of completed native evidence.
+No new call or publication yet. Core owns serial native verification until its
+one report; root will independently review and publish before any launch.
+
+Previous checkpoint,work-order Revision183: final native round-input proof
+05f7372b passes at ownerb544dabd/caller9fc36f7f, raw exit0/empty stderr.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Renderer is now only the pure bound-only task text; existing owner formats body keys. No company/field/direction logic. |
+| Complete workflow | Fresh33 raw hashes, warm missing-prefix and reordered-finding refusals, return to valid reading, real unlaunched next-round preparation7 scripts, ledger677 and19 historical prompts all pass. |
+| One owner and organization | Per-round recursion plus existing cache key; no H restoration-wrapper dependency on the final path. Seven isolated seam tests pass, including scope restoration and declaration failures. |
+| Simplicity | Keep body, receipt, native proof, merge, signature and lifecycle owners unchanged. Guard-removal mutation actually restores the wrong accept. No second cache. |
+| Verification and limits | Affected native regression is in flight; Core2135 task is static read-only review. No source-key approval, new calls, publication or corrected score yet. Source/key/consumer/final grading and END-only setup remain OPEN. |
+
+Previous checkpoint,work-order Revision182: verified interrupt/ownership chain
+ends at Core2134/cc8c0128; Core waits, root owns serial edits/native tests.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | New candidate carries per-round input explicitly, not a company/example/version guess. No semantic changes. Existing lawful unknown-home ruling retained. |
+| Complete workflow | Actual fresh-process Core candidate accepts the33 external expected raw hashes (corecold2134_a exit0/empty stderr). Same-operation missing-input test wrongly accepts (corewarm2134_a intended exit1); smallest repair in progress. |
+| One owner and organization | Extend existing succession owner and existing cache key; no second cache or lifecycle. Original owners and Core candidate preserved. |
+| Simplicity | Eliminate the need for two broad prompt-restoration wrappers by carrying the input through the existing recursion. Verify before accepting this simplification. |
+| Verification and limits | Actual next-round preparation,19 historical prompts, relevant negatives/mutations and affected regressions remain under test. Source truth, signature/key, corrected final score and END-only reuse check still OPEN. |
+
+Previous checkpoint,work-order Revision181: Codex2133/370daf9c interrupts the
+unit_2132 repair for a serial checkpoint. Core's overlapping diagnostic/native
+suite contaminated its own verification; its warm positive does not establish
+cold correctness, and the real next-round and prompt cases still refuse.
+Root waits for the combined stopped/finished-job report before taking native
+ownership. Source findings650bb5ae and all38 dispositions64c9a620 are saved;
+13 source-question rows/8 events/52 original rows,16 exact source excerpts
+independently byte-checked. No call launch or final key/score is claimed.
+
+Previous checkpoint,work-order Revision180: root's four unknown-home findings
+are WITHDRAWN. Served Rule9.6 and WorkOrder:429 expressly permit/require their
+unknown companion state. Inventory remains38; source passages do not prove
+those four states wrong. Do not launch new AAL/ULTA transcript corrections.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Read specific surprise-home rule alongside the ordinary state rule. Nine confirmed reported-state findings remain;25 other reported cases checked through source occurrences, with two narrow context questions kept distinct from confirmed errors. |
+| Complete workflow | Seven-result collection/native/full-row evidence remains verified. Cold reconstruction is still Core's one repair; new signed-key-to-grader proof remains OPEN. |
+| One owner and organization | No semantic code or rule duplication. Existing source-only findings carry exact source evidence/questions; four invalid reviewer demands are explicitly removed. |
+| Simplicity | Do not redo two source transcripts for lawful unknowns. Keep approximation/period ambiguity honest; no new fields or output-driven tuning. |
+| Verification and limits | Actual cold repair, source dispositions, signature/key, affected final grading and END-only setup remain OPEN. The prior13-direction claim was too broad and is superseded. |
+
+Previous checkpoint,work-order Revision179: same saved seven responses and
+all47 full rows independently checked; actual collection and native identities
+verified. Cold historical reconstruction is a reproduced failure4347ec1a,
+assigned to Core alone as Codex2132/2f8c7616. Source truth remains OPEN.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Default-state class derived from all33 current source raws:34 reported +4 unknown.13 source-backed direction findings across9 events; no quote-distance or company rule.25 prior supported decisions and three other field questions are being reconciled. |
+| Complete workflow | Real seven-result collector37f2aedc and native/full-row proof9ed0b1ee verified. Cold historical reading refuses the same completed responses; repair and actual new-key consumer proof remain OPEN. |
+| One owner and organization | Core repairs only the existing round/input boundary in a new immutable candidate. Root owns source findings and this checklist; serial native verification belongs to Core until its reply. |
+| Simplicity | Keep legitimate scale spans and lawful naming; no cosmetic rollback. Existing source-only finding seam suffices. No new framework, prompt-rule rewrite, or repeat of382 evaluated answers. |
+| Verification and limits | Same33 source identities,19 historical prompts,677 calls, signature boundaries and negative controls are the current repair gates. Source truth, signed key, affected grading/corrected score and END-only offline setup remain OPEN. |
+
+Previous checkpoint,work-order Revision178: goal ACTIVE; seven real responses
+collected, not seven pending jobs. Independent actual collector37f2aedc passes
+with seven valid/zero other outcomes, no retry and unchanged finalization
+50c56b33. Source meaning remains OPEN. Codex2131/dd52c7b6 assigns Core only
+read-only reconciliation; root owns independent full-row/native checks.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Existing owners unchanged. Resolve nine state disagreements against the served complete source and ordered rule; no company-specific code or expected-answer reroll. Vendor name and CAKE period are questions, not assumed defects. |
+| Complete workflow | Real collector CLI passes all seven saved results, full denominator and repeatable finalization. Native identity and all47 full-row comparisons are in progress; collection validity is not semantic approval. |
+| One owner and organization | No new runtime layer. Existing source reader, signature and grading owners remain authoritative. Correct the evidence limitation: the prior three-field view was not a full-row comparison. |
+| Simplicity | Only source reconciliation, actual new-key consumer proof, affected grading and the final offline setup check remain. No broad production audit or repeat of the382 evaluated answers. |
+| Verification and limits | Prior frozen preparation tests remain valid. New source meaning, new signed key, affected final grading/score and END-only offline setup remain OPEN. No universal reliability or completion claim. |
+
+Previous checkpoint,work-order Revision177: three consecutive live checks
+confirm the same unanswered Core launch question. Goal marked BLOCKED pending
+that external response; watcher/Core preserved, actual packet still unrun,
+published preparationc379d1bf intact. No test or grading failure is newly
+reported. Resume the same task after confirmation, not a new set of calls.
+
+Previous checkpoint,work-order Revision176: preparation is published, but the
+seven calls have not been proved launched. Core opened its owner-confirmation
+question at03:14:53 Eastern, after receiving Codex2130. No new code defect or
+lost work; same frozen task remains. Actual source truth, signed corrected key
+and affected grading/final score remain open. Do not claim a completed score.
+
+Previous checkpoint,work-order Revision175: verified preparation committed and
+pushedc379d1bf, treec51ea8d9, freeze6c0ac6c0; fresh remote matches. Codex2130
+authorizes ONLY the seven frozen source calls/collection, exact archived hash
+5b96dcb2. Real source results and meaning, new signed key, affected grading,
+corrected final score and END-only offline setup are still OPEN.
+
+Previous checkpoint,work-order Revision174: preparation plus actual collection
 entry VERIFIED for launch. Own zero-call/resume proof2409b0bc and actual
 CLI reporte75c4ed5 both exit0 with empty stderr; seven missing/zero valid,
 no raw answer, no retry, false completion and idempotent finalization505e6f4c.

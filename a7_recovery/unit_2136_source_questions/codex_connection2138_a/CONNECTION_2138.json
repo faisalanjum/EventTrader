@@ -1,0 +1,203 @@
+{
+ "actual_packet_files": {
+  "receipt.json": "c749f69bc8625176024bd2ba59b1a30703fd9f57509be2a4edf183a0f28feb1b",
+  "scripts/0000027904-26-000020.attempt1.js": "fb19f48530355cd4c16cd0870938b638bfcb6b67d191a031e31c4e691df55514",
+  "scripts/0000092380-26-000044.attempt1.js": "72fceca6ed3b8e67c9c9bdaea6bfa7a38f3cabce31b134ba79001d633c1022e6",
+  "scripts/0000898173-26-000006.attempt1.js": "fca0a42d25b65a2799f75146472a8ba3b04a1682e414905409cfc69f6c5823c9",
+  "scripts/0001041061-26-000003.attempt1.js": "325a46033eea746e46b35b4e2e0489901235847f39faefe6c41b658093932de0",
+  "scripts/0001104659-25-102611.attempt1.js": "4f851708ae6975eb88e3a58ffa68f9aeb835cb5482b9e38dc74d7f29c762d8a7",
+  "scripts/0001104659-26-017090.attempt1.js": "38e5b60ba5a7ee9278acce52a82b228ade9ebde60af48fddff05800cffaf0671",
+  "scripts/0001104659-26-027061.attempt1.js": "bb1549a284728ba0024acf075f39a2ae58f30cb28262200af6384f559dbc71e6",
+  "scripts/BBY_2026-03-03T08.00.attempt1.js": "5bec6727f160ae9f05c3da37c1f34c98a7bafad0a732b1ca9b5fc8ec4cd26d8a"
+ },
+ "actual_packet_unchanged": true,
+ "all_current_sources": 33,
+ "before_this_round": 677,
+ "binding_sha256": "d2bec8c29c49af7bc51ceb92235560a2ec1ce33199852a4d179245547d7e8723",
+ "caller_sha256": "d0772a66fe860970b82db42f5ebfd2b6cdee97d6302c88d658a00a4a0776e521",
+ "collector_sha256": "af3abd25a1a1726c70b829f2772c1d62253cd4a10f044f364966adcb5107bcf7",
+ "current_raw_hashes": {
+  "0000006201-26-000031": "ffb427362e8fee99bb991993eea9c256d3c58e28d05933e89e51ef08a3a2e12a",
+  "0000006201-26-000032": "9acf4148b978ff5ceb05c7aa98847336a60639192c6b1d0ac15332ae7a7e383c",
+  "0000027904-26-000013": "cade0230381801623f6b2c8ceafa8cc6f5525a98f722105ee12b125ad1e9ce1e",
+  "0000027904-26-000020": "6225c4f67f3b9730782eb4f168a6842208570a2ad172a7642ba9ac08f398e905",
+  "0000027904-26-000022": "f57b30d1481d52eea9a3384967b47d0b5505d9b17bf5053d1d58ec0acaf19728",
+  "0000063908-26-000032": "fc64ba789bc552b115b06e2ca62363bc4ea5314570c1d9c508fb79c6676ba1a7",
+  "0000092380-26-000044": "423eb142ca93fedf2a65a315f0bcac5bfd1877564bcc12ad41b062d08635acee",
+  "0000764478-25-000057": "9c950bed386b158886af10cfa993b4a2e54b00080d00bbb2f681f72724e1e382",
+  "0000898173-26-000006": "dc741c9fc2ebba342f52646f3896f4277fbb76a680199194f1d327d4d4cfb89b",
+  "0000940944-25-000038": "bdb6adbe0beaf50a1baf56346781eea9e0df65e86994720b6fb40d342a9779ef",
+  "0000940944-26-000005": "2808b861cecefd8d49ef14b73788e0a9e46c5d5fa700790bd083f48a4d2287d5",
+  "0000940944-26-000009": "9edf154ae947af2b7485cd02858db82aeee929c721617c3de34004a360e4689f",
+  "0001041061-25-000109": "232bd4f3cb1f5ecdcd3e8b4415079a9074076d3d06150574e55138a51690b5e5",
+  "0001041061-26-000003": "e7ee39b164626d96e301dc081198d5388091204091fe172d0cdddd076b36e10a",
+  "0001041061-26-000084": "eff3bde2730f6f026c88b3510e1f70fc397f9cf535817d62643c75c2ef532156",
+  "0001058090-26-000007": "6f592b37f2fada15f88d9ef86d7a168803c11d84c62c8da1324660ce63aff9cd",
+  "0001104659-25-102611": "eb17cde2fa9b1e89fc068ab930004ef0ca331505fbba439f52bd901dad949d9c",
+  "0001104659-25-105631": "0f68f5fa0468607b45de501006af0344d1faaf8e1cc4046f38dfef528e41c06e",
+  "0001104659-25-118458": "7e7b77b52adafc14834b6c82320f49f1c37782d181f76ac1919014756f882840",
+  "0001104659-26-017090": "d810ea62a1a8312465f90ba996baeaf4c82cb7d6efe56bf8ee216bfc69568317",
+  "0001104659-26-027061": "73948a44272d4b7bd6914e1500d7c4c1442f16d4e25eaca7cad7ff1533aff731",
+  "0001104659-26-032757": "63417b0e60d8580fdf1c0bbd7e47e37442b49e53dc713f15e950d835692bd09f",
+  "0001171843-26-001288": "0c719fe8498ab3c36cbf7eb5c48e65214e6a5dbec18bf8ac1346ba63c4f9bbea",
+  "AAL_2026-04-23T08.30": "555d2b044f6ef2456bcf482ef162cd9e77d26af19405eaf784235542d04542f5",
+  "BBY_2026-03-03T08.00": "cc1d841d7f23640dfd2fa55a21cdfdf6ccb8307e8c764a825ed8ad88364d07c0",
+  "CMG_2026-02-03T16.30": "d67edcf0ea377c129bedc7b8fbd8dcd069b8e02b3f5b27db7d913dd11b5a6e1d",
+  "DAL_2026-04-08T10.00": "4d661c36cbb4922aef896a102f4e4553ac22a900f66e14ed182bce97984a9588",
+  "DRI_2026-03-19T08.30": "94790960b07e20f3303f68d51c54a51a5ea0fb72e07b82c1edf34ce1e773fc45",
+  "MCD_2026-02-11T16.30": "c100c700b3ccb944e305b756a11e3280e730c84164d8ed792f4c474e85261491",
+  "ULTA_2026-03-12T16.30": "37ff33f670d7b1baf08b830bd6db12b0580dff76812607dc63af09cf91fdfb67",
+  "YUM_2026-02-04T08.15": "c7efe2dce7d2a5226941d3391f0cea1c31d7c47cb5bcfd01634820399c189a6e",
+  "bzNews_42014391": "687d8e7e8adec5cdbd710808403d22c5b26d32bc3909b77e108dd96402ac1e13",
+  "bzNews_50877032": "e2c2dd2598a51a960a6da4a50b6d5c62302cec1828dc325e8769af5c2b80ae4b"
+ },
+ "dependency_pin_refusals": [
+  {
+   "pin": "owner_sha256",
+   "reason": "owner_sha256 drifted: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2134.py is b544dabd31074d32d4379820994092eec4f88b739a3df0e8d869e4b219a50732, not the reported 0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+   "pin": "binding_sha256",
+   "reason": "binding_sha256 drifted: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/a7_round_binding_2136.py is d2bec8c29c49af7bc51ceb92235560a2ec1ce33199852a4d179245547d7e8723, not the reported 0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+   "pin": "renderer_sha256",
+   "reason": "renderer_sha256 drifted: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2127_source_context/a7_source_context_2127.py is 002001473da073b21dfa6e5db7aed620d0da7da96d787a5127b292e7014d7c33, not the reported 0000000000000000000000000000000000000000000000000000000000000000"
+  }
+ ],
+ "empty_resume_identical": true,
+ "entire_key_and_origins_carried": true,
+ "external_expected_sha256": "05f7372bc0807aeb45f3fdcd229424ea4063bf05c5ff2fa13050e007084729ff",
+ "first_collection": {
+  "accounting": {
+   "before_this_round": 677,
+   "invalid_response": 0,
+   "missing": 8,
+   "retry_offered": [],
+   "retryable_outcomes": [
+    "invalid_response"
+   ],
+   "scheduled": 8,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "valid": 0
+  },
+  "events": [
+   "0000027904-26-000020",
+   "0000092380-26-000044",
+   "0000898173-26-000006",
+   "0001041061-26-000003",
+   "0001104659-25-102611",
+   "0001104659-26-017090",
+   "0001104659-26-027061",
+   "BBY_2026-03-03T08.00"
+  ],
+  "finalization": {
+   "child": null,
+   "harvested_raw": [],
+   "ledger": {
+    "invalid_response": 0,
+    "missing": 8,
+    "scheduled": 8,
+    "transport_no_answer": 0,
+    "unproved": 0,
+    "valid": 0
+   },
+   "outcomes": [
+    [
+     "0000027904-26-000020",
+     "missing",
+     "no official state"
+    ],
+    [
+     "0000092380-26-000044",
+     "missing",
+     "no official state"
+    ],
+    [
+     "0000898173-26-000006",
+     "missing",
+     "no official state"
+    ],
+    [
+     "0001041061-26-000003",
+     "missing",
+     "no official state"
+    ],
+    [
+     "0001104659-25-102611",
+     "missing",
+     "no official state"
+    ],
+    [
+     "0001104659-26-017090",
+     "missing",
+     "no official state"
+    ],
+    [
+     "0001104659-26-027061",
+     "missing",
+     "no official state"
+    ],
+    [
+     "BBY_2026-03-03T08.00",
+     "missing",
+     "no official state"
+    ]
+   ],
+   "phase_complete": false,
+   "problems": [],
+   "retry": [],
+   "sha256": "4df72c0b89dbe2f150f685b6342827206eb85215538b0dcfce6feb3b2401242f"
+  },
+  "model_calls_started_here": 0,
+  "paid_raw_files": {},
+  "pinned_identities": {
+   "binding_sha256": "d2bec8c29c49af7bc51ceb92235560a2ec1ce33199852a4d179245547d7e8723",
+   "owner_sha256": "b544dabd31074d32d4379820994092eec4f88b739a3df0e8d869e4b219a50732",
+   "renderer_sha256": "002001473da073b21dfa6e5db7aed620d0da7da96d787a5127b292e7014d7c33"
+  },
+  "receipt_states_after": [],
+  "receipt_states_before": [],
+  "recorded_states": [],
+  "report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/codex_connection2138_a/PROBE_REPORT.json",
+  "report_sha256": "82401c600066da59200dffc86ba6dc219ef03a015aeb0760587267574fd8a07f",
+  "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/codex_connection2138_a/UNLAUNCHED_ZERO_ANSWER_PROBE",
+  "scope": "collection/resume through F.record_state and F.finalize; no semantic decision, no retry rule, no key edit"
+ },
+ "full_rows": 52,
+ "model_calls": 0,
+ "owner_sha256": "b544dabd31074d32d4379820994092eec4f88b739a3df0e8d869e4b219a50732",
+ "probe_report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/codex_connection2138_a/PROBE_REPORT.json",
+ "probe_report_sha256": "82401c600066da59200dffc86ba6dc219ef03a015aeb0760587267574fd8a07f",
+ "probe_run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/codex_connection2138_a/UNLAUNCHED_ZERO_ANSWER_PROBE",
+ "question_rows": 13,
+ "scope": "actual preparation/collection/resume on an isolated unlaunched probe; not source-truth or A7 approval",
+ "unchanged_sources": [
+  "0000006201-26-000031",
+  "0000006201-26-000032",
+  "0000027904-26-000013",
+  "0000027904-26-000022",
+  "0000063908-26-000032",
+  "0000764478-25-000057",
+  "0000940944-25-000038",
+  "0000940944-26-000005",
+  "0000940944-26-000009",
+  "0001041061-25-000109",
+  "0001041061-26-000084",
+  "0001058090-26-000007",
+  "0001104659-25-105631",
+  "0001104659-25-118458",
+  "0001104659-26-032757",
+  "0001171843-26-001288",
+  "AAL_2026-04-23T08.30",
+  "CMG_2026-02-03T16.30",
+  "DAL_2026-04-08T10.00",
+  "DRI_2026-03-19T08.30",
+  "MCD_2026-02-11T16.30",
+  "ULTA_2026-03-12T16.30",
+  "YUM_2026-02-04T08.15",
+  "bzNews_42014391",
+  "bzNews_50877032"
+ ]
+}

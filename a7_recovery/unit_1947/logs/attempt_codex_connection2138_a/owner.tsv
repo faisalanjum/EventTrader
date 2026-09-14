@@ -1,0 +1,7 @@
+attempt	codex_connection2138_a
+payload	../../unit_2136_source_questions/verify_collection_connection_2138.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2403210
+payload_pid	2403214
+started_utc	2026-09-14T12:33:43Z
+state	finished exit 0

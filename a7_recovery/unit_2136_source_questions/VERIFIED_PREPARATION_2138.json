@@ -1,0 +1,116 @@
+{
+  "scope": "Verified mechanical repair, real preparation and actual no-answer executable/resume only. Not new source truth, signed key, corrected grading or A7 completion.",
+  "connection_sha256": "ad99d5f31a4d9ca6109c8a8e56ff1684beee0ffcc84c8e6a171d7898e6a346d7",
+  "executable_result_sha256": "4447081cd08c2a67eb9c2af9c0494b700997eda983bc6a6cdc21adca6ebf6d5e",
+  "executable_record_identical_to_callable": true,
+  "actual_packet_unchanged": true,
+  "collector_sha256": "af3abd25a1a1726c70b829f2772c1d62253cd4a10f044f364966adcb5107bcf7",
+  "binding_sha256": "d2bec8c29c49af7bc51ceb92235560a2ec1ce33199852a4d179245547d7e8723",
+  "packet_report_sha256": "8f8739445058e4874643648c68795bd7a7b79b77f770cf3b7accc03d8114420d",
+  "initial_receipt_sha256": "c749f69bc8625176024bd2ba59b1a30703fd9f57509be2a4edf183a0f28feb1b",
+  "logs": {
+    "codex_connection2138_a": {
+      "exit": 0,
+      "stderr_bytes": 0,
+      "files": {
+        "exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "owner.tsv": "d62b5e660e1c1e645051d8f8d951c5ef3139f1413d4064fc56c4a9c08a21fdd9",
+        "stdout.txt": "40d9085fc4ad4e8d2ff3ff82522443e00360a520ba1011ff510ade1f5f975dab",
+        "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "codex_cli2138_a": {
+      "exit": 0,
+      "stderr_bytes": 0,
+      "files": {
+        "exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "owner.tsv": "2dfe3927aceaadb32f76a510ca6755e842cdb96a52b2a3305fa1d13ad6d7b5fb",
+        "stdout.txt": "900dda8f6f45c01d51d1e333f7a79562cbf580bea5521ba4375d5b4e6501eed1",
+        "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "invocations": [
+    {
+      "label": "0000027904-26-000020",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/0000027904-26-000020.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "fb19f48530355cd4c16cd0870938b638bfcb6b67d191a031e31c4e691df55514",
+      "prompt_sha256": "650433b0c3ac2b2c6fbef916d634279b7d05316b008a68bdec63298a6b583a69",
+      "original_row_count": 9
+    },
+    {
+      "label": "0000092380-26-000044",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/0000092380-26-000044.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "72fceca6ed3b8e67c9c9bdaea6bfa7a38f3cabce31b134ba79001d633c1022e6",
+      "prompt_sha256": "71bbfda56335b083f7492e9481b6fec8da393d0880f6f50c396467aa8660d224",
+      "original_row_count": 7
+    },
+    {
+      "label": "0000898173-26-000006",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/0000898173-26-000006.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "fca0a42d25b65a2799f75146472a8ba3b04a1682e414905409cfc69f6c5823c9",
+      "prompt_sha256": "b7f576bed89c669c87004cf359938075c83e74ff980a38b12122f6bfc4aa4a9d",
+      "original_row_count": 6
+    },
+    {
+      "label": "0001041061-26-000003",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/0001041061-26-000003.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "325a46033eea746e46b35b4e2e0489901235847f39faefe6c41b658093932de0",
+      "prompt_sha256": "298d8470ff8bb7de3b754151c576199dd6095813c238c323d0161c8e1cc31e15",
+      "original_row_count": 5
+    },
+    {
+      "label": "0001104659-25-102611",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/0001104659-25-102611.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "4f851708ae6975eb88e3a58ffa68f9aeb835cb5482b9e38dc74d7f29c762d8a7",
+      "prompt_sha256": "7cf49dbdc83630f2e7a9c5a7f00db94fff9c963085cdd2178ff24e5f10960fe3",
+      "original_row_count": 6
+    },
+    {
+      "label": "0001104659-26-017090",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/0001104659-26-017090.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "38e5b60ba5a7ee9278acce52a82b228ade9ebde60af48fddff05800cffaf0671",
+      "prompt_sha256": "8c541f230f4a18a046e32b426764241c8813e4533aba6bfa1400f2bf0e5067be",
+      "original_row_count": 6
+    },
+    {
+      "label": "0001104659-26-027061",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/0001104659-26-027061.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "bb1549a284728ba0024acf075f39a2ae58f30cb28262200af6384f559dbc71e6",
+      "prompt_sha256": "2766e007ecdd461b0d556b2a4cd518aa1bcd776490b0bef8ff6b98e513d090e1",
+      "original_row_count": 5
+    },
+    {
+      "label": "BBY_2026-03-03T08.00",
+      "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136/scripts/BBY_2026-03-03T08.00.attempt1.js",
+      "args": null,
+      "attempt": 1,
+      "script_sha256": "5bec6727f160ae9f05c3da37c1f34c98a7bafad0a732b1ca9b5fc8ec4cd26d8a",
+      "prompt_sha256": "b84064257d39e799301f5b538db1266c3f42770a9099d28328ac1dd48d6d18d1",
+      "original_row_count": 8
+    }
+  ],
+  "ledger": {
+    "invalid_response": 0,
+    "missing": 8,
+    "scheduled": 8,
+    "transport_no_answer": 0,
+    "unproved": 0,
+    "valid": 0
+  },
+  "model_calls": 0
+}

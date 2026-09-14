@@ -1,0 +1,1 @@
+CONNECTION_2138 {"sources": 33, "unchanged": 25, "ledger": {"scheduled": 8, "valid": 0, "invalid_response": 0, "transport_no_answer": 0, "unproved": 0, "missing": 8}, "pin_refusals": 3, "resume_identical": true, "actual_packet_unchanged": true}

@@ -1,0 +1,1018 @@
+{
+  "scope": "Independent read-only native identity and full-row comparison; not source-meaning approval",
+  "receipt_sha256": "e34d1332e4db9f172382b493459ed1c173178b1609bd37f49a9209d18b5bd6a0",
+  "finalization_sha256": "50c56b33d90f97c0b615a4f7a8976bed5cc9ed80ba9cf776bdd08ad185bcc04e",
+  "all_native_bindings_verified": true,
+  "events": 7,
+  "rows": 47,
+  "full_rows_changed": 43,
+  "review_rows_changed": 25,
+  "proof": [
+    {
+      "source_id": "0000027904-26-000020",
+      "run_id": "wf_211e0377-bee",
+      "agent_id": "a2a0b753ef71df325",
+      "message_id": "msg_011Cf34NwmsKeoSBLZJGapn4",
+      "request_id": "req_011Cf34NwH6wskvFBxaQqDAp",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_211e0377-bee.json",
+      "state_sha256": "363653bbc2deb449140fe8518ea2dc449e2632e985356b45d319b9ef9230b377",
+      "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_211e0377-bee/agent-a2a0b753ef71df325.jsonl",
+      "transcript_sha256": "686b1d9f425b82b3aa2340fc6c4e7d3e70005461924a951b4fea74229ec03ac8",
+      "prompt_sha256": "bf12457cf4ef193cc53eb2ca41a1567cc38c53dd705252b3049d4ef212fbfa3d",
+      "script_sha256": "a89c4c1e086287773d3275545facf953a082dfe37e38efa33ccd20b00155b83c",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000027904-26-000020.attempt1.proved.json",
+      "raw_sha256": "6225c4f67f3b9730782eb4f168a6842208570a2ad172a7642ba9ac08f398e905",
+      "prior_raw_sha256": "0577de538d01eafb4bf324d2fca2428e7b350ba96cdcc6eee5cc1aa8a1b66438",
+      "rows": 9,
+      "group_changes": [],
+      "open_issue_changes": []
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "run_id": "wf_a49e34cd-dea",
+      "agent_id": "ab4942317c844ed5c",
+      "message_id": "msg_011Cf34PDMjvhCxrxX9zXmKM",
+      "request_id": "req_011Cf34PCxgCZnsgeSG43Wtd",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_a49e34cd-dea.json",
+      "state_sha256": "688b5baec6ddc3fa4545725efeb75449575bab23749680253976d9e3eb1a3780",
+      "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_a49e34cd-dea/agent-ab4942317c844ed5c.jsonl",
+      "transcript_sha256": "ccf73516e4f1d1d63521f68d5e6cfc5c515b11d007999ea01ae3a82b7a6c36ed",
+      "prompt_sha256": "9f6e01a3219c890d4397aa1b38960a4ebdc5654c460993544423fc12a7a85771",
+      "script_sha256": "5ae839615f48f9a1e32909fe5c87945cf3d1e9e12da7fd07570fe241577719f0",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000092380-26-000044.attempt1.proved.json",
+      "raw_sha256": "423eb142ca93fedf2a65a315f0bcac5bfd1877564bcc12ad41b062d08635acee",
+      "prior_raw_sha256": "7bdddd592eab9c9bb9c506a101cc34c70a0a9a3d02132b37ff547ba7cdd1ce83",
+      "rows": 7,
+      "group_changes": [],
+      "open_issue_changes": []
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "run_id": "wf_92eda279-ac7",
+      "agent_id": "a095f2224f8cc8117",
+      "message_id": "msg_011Cf34PLrCRt9o4YSQgMfwB",
+      "request_id": "req_011Cf34PLMB5zqSFWnVaQV2J",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_92eda279-ac7.json",
+      "state_sha256": "4b8b8e1da67efc889de7cc950f8a7914dc7451448613c6d122116f9a77c96e3d",
+      "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_92eda279-ac7/agent-a095f2224f8cc8117.jsonl",
+      "transcript_sha256": "bae798af6cb403aa5189b893bc6fdde14bf5d4867155a94bb77109f1f49b7a91",
+      "prompt_sha256": "33ab5c74972e1b8fa991190182bd3afc6ae4bbec6afc11cc69fd3f72acb0c90a",
+      "script_sha256": "e21cb130659dd4f4a8a701436834ce889bcd2866edb6bc7ff0725f77d4bee555",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000898173-26-000006.attempt1.proved.json",
+      "raw_sha256": "dc741c9fc2ebba342f52646f3896f4277fbb76a680199194f1d327d4d4cfb89b",
+      "prior_raw_sha256": "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7",
+      "rows": 6,
+      "group_changes": [],
+      "open_issue_changes": []
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "run_id": "wf_6f8c4dc5-875",
+      "agent_id": "ac3e19bbe62cd62a0",
+      "message_id": "msg_011Cf34PadfoNDzA4Gc5z7fD",
+      "request_id": "req_011Cf34Pa6fZDC1Gypu7hyCn",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_6f8c4dc5-875.json",
+      "state_sha256": "14ea1d15b06d3351460e76be50121af441f616d08378d4252cd7a28ab2fab565",
+      "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_6f8c4dc5-875/agent-ac3e19bbe62cd62a0.jsonl",
+      "transcript_sha256": "a36f777e1e5b96b61ec51cf2d88a42699556d8c1a236ba13530534d260377816",
+      "prompt_sha256": "c4177ebf1cefece95027d081cfc91e978320161b3738e84618ec40da51d89085",
+      "script_sha256": "7d31f496e2993b887849e00969ce07171787cbd6bea57da72f84caeb0785fad4",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001041061-26-000003.attempt1.proved.json",
+      "raw_sha256": "e7ee39b164626d96e301dc081198d5388091204091fe172d0cdddd076b36e10a",
+      "prior_raw_sha256": "ef9972c811d5376d20968441aa47589dd4c710075752403299472c15ec049d18",
+      "rows": 5,
+      "group_changes": [
+        {
+          "path": "/0/reason",
+          "before": "The single sentence carries two different measures with different units and different meanings - a dollar level of digitally placed system sales (floor $11 billion) and the percentage share of system sales that is digital (ceiling 60%) - so they are distinct facts sharing one locator.",
+          "after": "The one sentence carries two different measures with different units and different meanings - a dollar level of digitally placed system sales (floor $11 billion) and the percentage share of system sales that is digital (ceiling 60%) - so they are distinct facts that merely share a locator."
+        }
+      ],
+      "open_issue_changes": []
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "run_id": "wf_5d78b22b-ff6",
+      "agent_id": "ada242b9de7da51ed",
+      "message_id": "msg_011Cf34PtkpyXrMeboXvxTH3",
+      "request_id": "req_011Cf34PtPzbSRdvXUQKQ1HR",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_5d78b22b-ff6.json",
+      "state_sha256": "3acd6c006783e0454d52a7c695d7db296432488918656f0d08d095709905f58a",
+      "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_5d78b22b-ff6/agent-ada242b9de7da51ed.jsonl",
+      "transcript_sha256": "9f615638f3c1a4c9577513a73ad23e81d6a5bbce286490ee99ee917d0b5cda2f",
+      "prompt_sha256": "834f83ac664349c84b599d77045ec5f32808a715302fa423fb48c8a87eb87d09",
+      "script_sha256": "daee971fa28a08c6a2f250cff986c01290c0690f026147b2dc2bf55159d638a3",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-25-102611.attempt1.proved.json",
+      "raw_sha256": "eb17cde2fa9b1e89fc068ab930004ef0ca331505fbba439f52bd901dad949d9c",
+      "prior_raw_sha256": "953d3a7367728c249a46a1c3804b990e19ecd58d54ad070bbca5d96cc17db03b",
+      "rows": 6,
+      "group_changes": [],
+      "open_issue_changes": []
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "run_id": "wf_2dee2ae4-0e6",
+      "agent_id": "a9e9ac3bfb5f0f543",
+      "message_id": "msg_011Cf34Q98XU4g7aFDNyg1nG",
+      "request_id": "req_011Cf34Q8ckt5UBNoVwxs7SU",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_2dee2ae4-0e6.json",
+      "state_sha256": "838b4f88e0d105ad8230c45a230027032537338710aa23b8850b9d4da4e48b9d",
+      "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_2dee2ae4-0e6/agent-a9e9ac3bfb5f0f543.jsonl",
+      "transcript_sha256": "5f83319150920c9f3074d4a2cfbdf6dd8741c2547bb5d9d5ed5b86348016a3b1",
+      "prompt_sha256": "f89336b449040fde7f5520071412d3c1a114a04b69d9db740ba7e63cd73497ae",
+      "script_sha256": "77e5382790dc9a0f2eaa4661cdd62f28fc1898bd5e0ec49873a70f10c224bb5d",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-26-017090.attempt1.proved.json",
+      "raw_sha256": "d810ea62a1a8312465f90ba996baeaf4c82cb7d6efe56bf8ee216bfc69568317",
+      "prior_raw_sha256": "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa",
+      "rows": 6,
+      "group_changes": [],
+      "open_issue_changes": []
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "run_id": "wf_55cf36c1-880",
+      "agent_id": "ab4ea8c7e9df69559",
+      "message_id": "msg_011Cf34QQG6jnr2onyLFHtFb",
+      "request_id": "req_011Cf34QPf8rgvp1rB2ghmvq",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_55cf36c1-880.json",
+      "state_sha256": "de4fea574db815bed29b707dfea9e71bc2b0d174c9165dfc64b9c5f74716420f",
+      "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_55cf36c1-880/agent-ab4ea8c7e9df69559.jsonl",
+      "transcript_sha256": "8288b2f3cda9efe07acca56e06b54ec67d01030c34eaf57a444c9e0030cfb954",
+      "prompt_sha256": "e5e0ed51282a421880e2104c738c23420ae6d17b3becfcef46b7e081a30a692b",
+      "script_sha256": "be213c49fd2569448c017506e6de5fa3d28a157db3cea243b69c79d04b806564",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/BBY_2026-03-03T08.00.attempt1.proved.json",
+      "raw_sha256": "cc1d841d7f23640dfd2fa55a21cdfdf6ccb8307e8c764a825ed8ad88364d07c0",
+      "prior_raw_sha256": "374ef34f51518fd0f86c6cd0a24308d6774a1550228dd5d8377fe5588153120f",
+      "rows": 8,
+      "group_changes": [
+        {
+          "path": "/0/reason",
+          "before": "The single sentence states two different things - a delivered comparable-sales level against last year, and that result's placement inside the company's own prior guidance range - and the expectation-comparison rule requires exactly two records for that pairing: the metric home and its surprise twin.",
+          "after": "The one sentence states two different things - a delivered comparable-sales level against last year, and that result's placement inside the company's own prior guidance range - and the expectation-comparison rule requires exactly two records for that pairing: the metric home and its surprise twin."
+        }
+      ],
+      "open_issue_changes": []
+    }
+  ],
+  "rowDiffs": [
+    {
+      "row": "0000027904-26-000020#019",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as a real fact: the target states a March-quarter pre-tax loss of $214 million, which is the negative region of pre-tax income, so the proposal and my outcome agree.",
+          "after": "Frozen as real_item and it settles as a real fact: the target states a completed March-quarter pre-tax loss of $214 million, which is the negative region of pre-tax income, so the proposal and my outcome agree."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The quote states no measurement basis even though the same event also reports an adjusted pre-tax income of $532 million, so the basis of this loss is not visible inside the located quote and measurement stays empty without asserting GAAP.",
+          "after": "The quote carries no measurement label while the same event also reports an adjusted pre-tax income of $532 million, so measurement stays empty rather than asserting GAAP."
+        },
+        {
+          "path": "/0/hard_classes/2",
+          "after": "measurement_wording"
+        }
+      ]
+    },
+    {
+      "row": "0000027904-26-000020#020",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as a real fact: the company's own June-quarter financial guidance table states a closed 6% to 8% operating-margin range with no stated movement, so the proposal and my outcome agree.",
+          "after": "Frozen as real_item and it settles as a real fact: the company's own June-quarter guidance table states a closed 6% to 8% operating-margin range with no stated movement, so the proposal and my outcome agree."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The quote itself names no period, so the guidance target period had to be taken from the guidance table's own 2Q26 heading in the surrounding event.",
+          "after": "The quote itself names no period, so the guidance target period had to be taken from the guidance table's own 2Q26 heading in the supplied source."
+        }
+      ]
+    },
+    {
+      "row": "0000027904-26-000020#021",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as a real fact: a bare stated per-share earnings level of $0.64 for the March 2026 quarter, which also serves as the in-event home sibling of the row-4 surprise.",
+          "after": "Frozen as real_item and it settles as a real fact: a bare stated per-share earnings level of $0.64 for the March 2026 quarter, which also serves as the in-event home sibling for the row-4 surprise."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "This $0.64 is the non-GAAP figure but that label sits in a section heading outside the quote, so measurement stays empty and the quote alone does not separate it from the GAAP loss per share of ($0.44).",
+          "after": "This $0.64 is the event's non-GAAP figure but that label sits in a section heading outside the quote, so measurement stays empty and the quote alone does not separate it from the GAAP loss per share of ($0.44)."
+        }
+      ]
+    },
+    {
+      "row": "0000027904-26-000020#022",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as a real fact, but only its surprise half: the delivered $0.64 is placed inside the company's own initial guidance range, and its metric home is already settled at row 3, so the same level is never written twice.",
+          "after": "Frozen as real_item and it settles as a real fact, but only its surprise half: the delivered $0.64 is placed inside the company's own initial guidance range, and the metric home for that same level is already settled at row 3, so the level is never written twice."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0000027904-26-000020#023",
+      "changes": [],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The $14.2 billion is the adjusted revenue that excludes third-party refinery sales while the quote carries no qualifier, so measurement stays empty even though the same event also reports $15.9 billion of GAAP total revenue.",
+          "after": "The $14.2 billion is the refinery-adjusted revenue while the quote carries no qualifier, so measurement stays empty even though the same event also reports $15.9 billion of GAAP total revenue."
+        }
+      ]
+    },
+    {
+      "row": "0000027904-26-000020#024",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as a real fact: the target is an actual-versus-company's-own-prior-outlook revenue comparison whose value-bearing metric home is the total-revenue fact settled at row 5.",
+          "after": "Frozen as real_item and it settles as a real fact: the target is a delivered-actual versus the company's own prior outlook comparison, whose value-bearing metric home is the total-revenue fact settled at row 5."
+        },
+        {
+          "path": "/settled/facts/0/item/polarity_proof/evidence",
+          "before": "The same sentence frames the outcome as a March quarter record achieved on broad demand strength across corporate and leisure, so landing several points above the company's own initial outlook is presented by the source as a good result rather than a bare position word.",
+          "after": "The same sentence presents the outcome as a March quarter record achieved on broad demand strength across corporate and leisure, so landing several points above the company's own initial outlook is framed by the source itself as a good result rather than a bare position word."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0000027904-26-000020#025",
+      "changes": [
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "The quote is one hypothetical entry in the forward-looking-statements risk list, naming the possible effects of serious accidents with no stated state, change, surprise, guidance or action, so it is generic risk boilerplate that the gate drops.",
+          "after": "The quote is one hypothetical entry in the forward-looking-statements risk list, naming the possible effects of serious accidents with no stated state, change, surprise, guidance or action, so it is generic risk boilerplate the gate drops."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0000027904-26-000020#026",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item but it settles as a named exclusion rather than silently: the sentence is real and non-boilerplate, yet the stated number belongs to third-party respondents and no lawful combination of lane, name and value stores it, so I record the abstention explicitly instead of forcing a fact.",
+          "after": "Frozen as real_item but it settles as a named exclusion rather than passing silently: the statement is real, yet the number belongs to third-party respondents' own expectations and no lawful combination of lane, name and value stores it, so I record the abstention explicitly instead of forcing a fact."
+        },
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "The sentence is specific rather than boilerplate, but no lawful lane resolves it: the outlook verb 'expect' routes the forward claim to guidance, and there the expecting party is surveyed third-party respondents rather than Delta or its management, so company_confirmed cannot be true and false is a reserved value, which under the guidance-attribution rule is an abstention (the visible form of the counted skip); the metric route also fails because the 85 percent measures the share of respondents whose answer was 'increase or stay the same', not any level of corporate travel spend, and a name preserving that response condition would have to carry direction words the naming rule forbids, so recording 85 percent against a travel-spend driver would be a wrong value.",
+          "after": "The sentence is specific and non-boilerplate, but no lawful lane resolves it: the outlook verb 'expect' routes the forward claim to guidance, and there the expecting party is surveyed third-party respondents rather than Delta or its management, so company_confirmed cannot be true and false is a reserved value, which makes this the guidance-attribution abstention; the metric route also fails because the 85 percent measures the share of respondents choosing the answer 'increase or stay the same', not any readable level of corporate travel spend, and no lawful name can carry that direction-conditioned response without the direction words the naming rule forbids."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0000027904-26-000020#027",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as a real fact: the reconciliation states adjusted net debt of $13,540 million at March 31, 2026 against $14,300 million at December 31, 2025 under the table's own '1Q26 vs 4Q25 $ Change' of $(760).",
+          "after": "Frozen as real_item and it settles as a real fact: the reconciliation states adjusted net debt of $13,540 million at March 31, 2026 against $14,300 million at December 31, 2025 under the table's own '1Q26 vs 4Q25 $ Change' column."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "A March 31, 2025 column and a December 31, 2019 column also sit in the table, but the only comparison the table itself computes is the headline '1Q26 vs 4Q25 $ Change' of $(760), which fixes the sequential baseline and the 13,540-versus-14,300 operands.",
+          "after": "A March 31, 2025 column and a December 31, 2019 column also sit in the table, but the only comparison the table itself computes is the headline '1Q26 vs 4Q25 $ Change', which fixes the sequential baseline and the 13,540-versus-14,300 operands while making the $(760) change derivable and therefore unstored."
+        }
+      ]
+    },
+    {
+      "row": "0000092380-26-000044#038",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a fact: a delivered per-share result is stated against the company's own prior guide, so the row yields the metric home plus the surprise twin that an actual-versus-expectation comparison requires.",
+          "after": "Proposed as real_item and settled as a fact: the row states a delivered per-share result measured against the company's own prior guide, which the rules route as a metric home plus its surprise twin."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The located words say only \"$0.45 EPS\" while the guide referenced elsewhere in the release is an adjusted measure, so no measurement qualifier was invented and the empty measurement asserts nothing about GAAP.",
+          "after": "The located words say only \"$0.45 EPS\" while the guide the release elsewhere frames is an adjusted measure, so no measurement qualifier was invented and the empty measurement asserts nothing about GAAP."
+        },
+        {
+          "path": "/1/ambiguity_note",
+          "before": "\"In line with guidance\" states the position outcome but names no favourable or unfavourable direction, so the required boolean is false while the source-stated in_line verdict stands and the guide's own number, never given, stays unstored.",
+          "after": "\"In line with guidance\" states the position outcome but names no favourable or unfavourable direction, so the required boolean is false while the stated in_line verdict stands and the guide's own number, never given, is left unstored."
+        }
+      ]
+    },
+    {
+      "row": "0000092380-26-000044#039",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a fact: an exact delivered per-gallon fuel price is stated as above the company's own prior guide, giving the metric home plus its surprise twin, with the guide's hedged figure left in the quote rather than stored as an exact operand.",
+          "after": "Proposed as real_item and settled as a fact: an exact delivered per-gallon price is stated as above the company's own prior guide, so the row yields the metric home and the surprise twin that comparison requires."
+        },
+        {
+          "path": "/settled/facts/1/item/comparison_high",
+          "after": {
+            "value": 2.4,
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$"
+          }
+        },
+        {
+          "path": "/settled/facts/1/item/comparison_low",
+          "after": {
+            "value": 2.4,
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$"
+          }
+        },
+        {
+          "path": "/settled/facts/1/item/comparison_shape_hint",
+          "after": "point"
+        },
+        {
+          "path": "/settled/facts/1/item/polarity_proof/evidence",
+          "before": "The release itself frames the above-guide fuel price as adverse, stating it increased fuel expense by $164 million and was a headwind to EPS, so the unfavorable side is stated by the source rather than inferred from the metric alone.",
+          "after": "The release itself frames the above-guide per-gallon fuel price as adverse, saying it increased fuel expense by $164 million and was a headwind to EPS, so the unfavorable side is stated by the source rather than assumed from the metric."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/1/ambiguity_note",
+          "before": "Only the guide is hedged with \"approximately\" while the actual is exact, and the served fields offer no per-comparison modifier: storing 2.40 as a bare point would assert a precision the source withholds, and parking the hedge in measurement would either be dropped or would falsely qualify the exact actual and break the shared home measurement, so the comparison operand is left null with the baseline kept and the figure carried by the quote.",
+          "after": "The guide is hedged with \"approximately\" while the actual is exact: the stated 2.40 is kept as the comparison operand because it is a source-stated number, and the hedge is left in the quote rather than written into measurement, since a measurement span on the surprise alone would break the home-sibling match and on both facts would falsely qualify the exact actual."
+        }
+      ]
+    },
+    {
+      "row": "0000092380-26-000044#040",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a fact: the Freight revenue line states this quarter's value beside its prior-year value on one of the company's own sold service lines, a real metric change.",
+          "after": "Proposed as real_item and settled as a fact: the Freight revenue line states this quarter's value beside the prior-year value for one of the company's own sold service lines, a real metric change carried on a slice."
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_high/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_low/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        },
+        {
+          "path": "/settled/facts/0/item/level_high/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        },
+        {
+          "path": "/settled/facts/0/item/level_low/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0000092380-26-000044#041",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a fact: the target meaning is one discrete company announcement, the fleet deployment of an outside provider's Wi-Fi service, which settles on the action lane with its schedule and aircraft-count scope staying inside the quote.",
+          "after": "Proposed as real_item and settled as a fact: the target meaning is one discrete announced action, the fleet deployment of a named outside provider's Wi-Fi service, with its timing and aircraft-count scope left inside the quote."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The same sentence carries a forward fleet target of at least 300 aircraft by year-end 2026, but that is scope and timing of the one announced deployment rather than an independent cause, and no rule requires a split, so it stays inside the quote.",
+          "after": "The same sentence carries a forward fleet target of at least 300 aircraft by year-end 2026, but that is the scope and timing of the one announced deployment rather than an independent cause, and no rule requires a split, so it stays inside the quote."
+        }
+      ]
+    },
+    {
+      "row": "0000092380-26-000044#042",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a fact: a delivered unit-cost growth rate is stated against the company's own prior guide, producing the metric home that carries the stated 2.3 percent change and a surprise twin whose expectation operand the source never states as a number.",
+          "after": "Proposed as real_item and settled as a fact: a delivered unit-cost growth rate is stated against the company's own prior guide, giving the metric home that carries the stated change and the surprise twin whose guided operand the source never states as a number."
+        },
+        {
+          "path": "/settled/facts/1/item/level_high",
+          "after": {
+            "value": 2.3,
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent"
+          }
+        },
+        {
+          "path": "/settled/facts/1/item/level_low",
+          "after": {
+            "value": 2.3,
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent"
+          }
+        },
+        {
+          "path": "/settled/facts/1/item/level_shape_hint",
+          "after": "point"
+        },
+        {
+          "path": "/settled/facts/1/item/level_unit",
+          "after": "percent_yoy"
+        },
+        {
+          "path": "/settled/facts/1/item/polarity_proof/evidence",
+          "before": "The release presents this same 2.3 percent unit-cost figure as evidence of strong cost discipline, so the source itself frames a lower-than-guided unit cost as the favorable side.",
+          "after": "The release presents this same 2.3 percent unit-cost figure as evidence of cost discipline, so the source itself frames a lower-than-guided unit cost as the favorable side."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "Writing the per-ASM denominator out in the name leaves the \"-X\" exclusions (fuel, special items, profit sharing) with no lossless home but the measurement sink, so the verbatim acronym is kept there.",
+          "after": "Writing the per-ASM denominator out in the name leaves the \"-X\" exclusions, which the release's own footnote defines as fuel, special items and profit sharing, with no lossless home but the measurement sink, so the verbatim acronym is kept there."
+        },
+        {
+          "path": "/1/ambiguity_note",
+          "before": "The guided level is never given as a number and the located quote states a change rather than a level, so the surprise carries no numeric slots even though its home does: putting 2.3 in a level slot would recast a growth rate as an absolute unit-cost level, and putting it in change_value would claim a beat size the source never states.",
+          "after": "The compared quantity here is a growth rate, so the surprise carries 2.3 on a percent_yoy level rather than in change_value, which on a surprise would claim a beat size the source never states; the guided level itself is never given as a number and so stays absent."
+        },
+        {
+          "path": "/1/hard_classes/1",
+          "before": "favourable_unfavourable_direction",
+          "after": "sequential_comparison"
+        },
+        {
+          "path": "/1/hard_classes/2",
+          "before": "measurement_wording",
+          "after": "favourable_unfavourable_direction"
+        },
+        {
+          "path": "/1/hard_classes/3",
+          "before": "expectation_routing",
+          "after": "measurement_wording"
+        },
+        {
+          "path": "/1/hard_classes/4",
+          "after": "expectation_routing"
+        }
+      ]
+    },
+    {
+      "row": "0000092380-26-000044#043",
+      "changes": [
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "The located text is one entry in the cautionary forward-looking-statements factor list, naming fuel price changes, fuel price volatility and fuel availability only as things that could affect the Company's business plans and results of operations; it states no level, no direction, no guide, no comparison and no action, so it is generic risk boilerplate and yields no fact.",
+          "after": "The located text is one entry in the cautionary forward-looking-statements factor list, naming fuel price changes, fuel price volatility and fuel availability only as things that could affect the Company's business plans and results of operations; it states no level, direction, guide, comparison or action, so it is generic risk boilerplate and yields no fact."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0000092380-26-000044#044",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a fact: the bottom-line result for the quarter is stated beside its parenthesised prior-year loss on the same line, a real signed metric change.",
+          "after": "Proposed as real_item and settled as a fact: the bottom-line quarterly result is stated beside its parenthesised prior-year loss on the same line, a real signed metric change."
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_high/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_low/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        },
+        {
+          "path": "/settled/facts/0/item/level_high/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        },
+        {
+          "path": "/settled/facts/0/item/level_low/unit_scale_evidence",
+          "before": "in millions",
+          "after": "millions"
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0000898173-26-000006#050",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as one real fact: the quote states a closed full-year per-share earnings level of $2.97 with the source's own prior-year $2.71 stated beside it, a lawful metric with a prior_year baseline.",
+          "after": "Frozen as real_item and it settles as a real fact: the target states a closed full-year per-share earnings level of $2.97 with the company's own prior-year $2.71 stated beside it, so it is a metric with a prior_year comparison and the stated 10% is left unstored because it is derivable from the two closed points."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The stated 10% increase is left unstored because it is derivable from the two closed point values, even though the source's rounded 10% does not exactly equal the ~9.6% those points imply.",
+          "after": "The stated 10% increase is left unstored as derivable from the two closed point values, even though the source's rounded 10% does not exactly equal the ~9.6% those points imply."
+        }
+      ]
+    },
+    {
+      "row": "0000898173-26-000006#051",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as one: a delivered actual measured against the company's own stated expectation, which routes to a surprise plus the required numberless home metric sibling in the same event.",
+          "after": "Frozen as real_item and it settles as one: a delivered fourth-quarter actual measured against the company's own stated expectation, which routes to a surprise plus its required numberless home metric sibling in the same event."
+        },
+        {
+          "path": "/settled/facts/1/item/polarity_proof/evidence",
+          "before": "The source itself attributes the overage to 'pressure from heightened inflation in team member health care and casualty claim costs' and calls them 'cost pressures' it is working to mitigate, framing the higher-than-expected expense as adverse; an expense line has a mainstream counter-story, so the source's own framing carries the polarity rather than metric meaning.",
+          "after": "The source itself attributes the overage to 'pressure from heightened inflation in team member health care and casualty claim costs', framing spending above the company's own expectation as adverse; an expense line has a mainstream counter-story (spending can signal investment), so the polarity rests on the source's own adverse framing rather than on metric meaning."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The home sibling is numberless because the quote states no SG&A level at all, so its state is unknown and the quote alone carries the content.",
+          "after": "The home sibling is numberless because the target states no SG&A level at all, so its state is unknown and the quote alone carries the content."
+        }
+      ]
+    },
+    {
+      "row": "0000898173-26-000006#052",
+      "changes": [],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "'Domestic' is plainly geographic, but the event's own arithmetic (6,447 + 112 Mexico + 26 Canada = 6,585 stores across 48 U.S. states, Puerto Rico, Mexico and Canada) shows the domestic population includes Puerto Rico, so it is not demonstrably the same meaning as the menu value geography:us and I coined the off-menu part rather than near-snapping.",
+          "after": "'Domestic' is plainly geographic, but the event's own arithmetic (6,447 domestic + 112 Mexico + 26 Canada = 6,585 stores across 48 U.S. states, Puerto Rico, Mexico and Canada) shows the domestic population includes Puerto Rico, so it is not demonstrably the same meaning as the menu value geography:us and I coined the off-menu part instead of near-snapping."
+        }
+      ]
+    },
+    {
+      "row": "0000898173-26-000006#053",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item and it settles as one: the quote states a dated balance-sheet level for total shareholders' equity, encoded as the negative region of that standard line rather than as a separate deficit driver.",
+          "after": "Frozen as real_item and it settles as one: the target is a dated balance-sheet level for total shareholders' equity, encoded as the negative region of that standard line rather than as a separate deficit driver, with the two-column statement supplying the prior-year level beside it."
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_baseline",
+          "after": "prior_year"
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_high",
+          "after": {
+            "value": -1370961,
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "thousands"
+          }
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_low",
+          "after": {
+            "value": -1370961,
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "thousands"
+          }
+        },
+        {
+          "path": "/settled/facts/0/item/comparison_shape_hint",
+          "after": "point"
+        },
+        {
+          "path": "/settled/facts/0/item/driver_state",
+          "before": "reported",
+          "after": "increased"
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The located quote stops immediately after the 2025 figure, so the prior-year total that would support a direction and a comparison is not lawfully available inside this row's evidence and the state stays reported.",
+          "after": "The located quote stops immediately after the 2025 figure while the complete supplied source states the December 31, 2024 total of (1,370,961) beside it in the same line, and since no rule restricts the state or comparison fields to the quote I read the narrowing deficit as increased rather than a bare reported level."
+        }
+      ]
+    },
+    {
+      "row": "0000898173-26-000006#054",
+      "changes": [],
+      "review_changes": []
+    },
+    {
+      "row": "0000898173-26-000006#055",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as real_item but it yields none: the served target names a presentation adjustment to displayed share data rather than a driver, so the row is excluded instead of being settled on the adjacent stock-split clause.",
+          "after": "Frozen as real_item but it yields none, and I say so plainly: the served target names a presentation adjustment to displayed share data rather than a driver, so the row is excluded rather than settled on the adjacent stock-split clause."
+        },
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "The named target is 'all share and per share data in current and comparable periods have been adjusted to reflect the split' - a retroactive restatement of how share data is PRESENTED, which is an accounting/presentation construct and a measurement qualifier on share-based metrics, not a driver's state, change, surprise, guidance, or action; the completed 15-for-1 forward split named earlier in the same sentence is a different claim that this row's target does not select, so this target yields no fact.",
+          "after": "The named target is 'all share and per share data in current and comparable periods have been adjusted to reflect the split' - a retroactive change in how share and per-share data are PRESENTED, i.e. an accounting/presentation construct and a measurement qualifier on other facts, not a driver's own state, change, surprise, guidance, or action; the completed 15-for-1 forward split named earlier in the same sentence is a different claim that this row's target does not select, so this target yields no fact."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0001041061-26-000003#077",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a real fact: the quote states a re-readable per-share earnings level of $1.73 on an excluding-Special-Items basis for the fourth quarter, which is a stated value, not a bare mention.",
+          "after": "Proposed as real_item and settled as a real fact: the quote states a re-readable per-share earnings level of $1.73 measured excluding Special Items for the fourth quarter, which is a stated value rather than a bare mention."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The quote says only \"EPS\" while the release's own reconciliation labels the same $1.73 as Diluted EPS excluding Special Items, so I kept only the qualifier the quote itself states and did not add \"diluted\".",
+          "after": "The quote says only \"EPS\" while the release's own reconciliation labels this same $1.73 as Diluted EPS excluding Special Items, so I kept only the qualifier the quote itself states and did not add \"diluted\"."
+        }
+      ]
+    },
+    {
+      "row": "0001041061-26-000003#078",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a real fact: the quote reports one discrete completed transaction with a stated size - buying 128 restaurants back from a franchisee for about $670 million - which is an action event, not boilerplate.",
+          "after": "Proposed as real_item and settled as a real fact: the quote reports one discrete completed transaction of a stated size - buying 128 restaurants back from a franchisee for about $670 million - which is an action event, not boilerplate."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "Two things stayed unresolvable to a single clean encoding: \"U.S.\" appears on this company's menu under two kinds (segment:us and geography:us) with no framing here selecting one, so I recorded the honest unknown:us beside the division part; and the row states two magnitudes (128 restaurants and approximately $670 million) against one level slot group, so I stored the transaction consideration and left the unit count inside the quote rather than duplicating one transaction.",
+          "after": "Two points stayed genuinely open: \"U.S.\" appears on this company's menu under two kinds (segment:us and geography:us) with nothing in this quote selecting one, so I recorded the honest unknown:us beside the division part, and the row states two magnitudes (128 restaurants and approximately $670 million) against one level slot group, so I stored the consideration and left the unit count in the quote rather than splitting one transaction into two records."
+        },
+        {
+          "path": "/0/hard_classes/4",
+          "before": "portion_versus_whole"
+        }
+      ]
+    },
+    {
+      "row": "0001041061-26-000003#079",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a real fact: the quote gives a systemwide sales level for digitally placed orders with a stated open floor of $11 billion, a level readable again over time.",
+          "after": "Proposed as real_item and settled as a real fact: the quote gives a systemwide sales level for digitally placed orders with a stated open floor of $11 billion, a level readable again in later periods."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "\"Digital\" has no menu counterpart, so I coined an off-menu channel part from the release's own definition of digital as how the order is placed, and the fourth-quarter period comes from the section heading rather than the sentence itself.",
+          "after": "\"Digital\" has no menu counterpart, so I coined an off-menu channel part from the release's own definition of digital as how the order is placed, and the fourth-quarter framing comes from the section heading rather than the sentence itself."
+        }
+      ]
+    },
+    {
+      "row": "0001041061-26-000003#080",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed as real_item and settled as a real fact: the share of system sales placed digitally is a standing level the company can read again over time, stated here as approaching 60 percent.",
+          "after": "Proposed as real_item and settled as a real fact: the share of system sales placed through the digital channel is a standing level the company can read again over time, stated here as approaching 60 percent."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The target phrase never names the denominator, so I took \"system sales\" from the same sentence into the name and put the company's own sales channel in the slice, as the own-measured-part role rule requires, instead of keeping \"digital\" in the name.",
+          "after": "The target phrase never names its denominator, so I took \"system sales\" from the same sentence into the name and put the company's own sales channel into the slice, as the own-measured-part role rule requires, instead of keeping \"digital\" in the name."
+        }
+      ]
+    },
+    {
+      "row": "0001041061-26-000003#081",
+      "changes": [],
+      "review_changes": []
+    },
+    {
+      "row": "0001104659-25-102611#094",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and settled as a real item: the target states a re-readable, signed LIFO amount of $64.0 million in the current year against a $40.0 million benefit in the prior year, which the source itself names as the comparison, so one metric with a prior-year baseline is written.",
+          "after": "Proposed as a real item and settled as a real item: the target states a re-readable LIFO cost level of $64.0 million in the current year against a $40.0 million benefit the source itself names as the prior-year comparison, so one metric with a prior-year baseline is written."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The signed axis had to be applied by me (charge positive, benefit negative) and the source's only label pairs the polarity words 'charge' and 'benefit' with the effect word 'impact', none of which a name may carry, so the stored name is a lawful neutral synonym.",
+          "after": "I had to apply the signed axis myself (charge positive, benefit negative) and the source's only label pairs the polarity nouns 'charge' and 'benefit' with the effect word 'impact', none of which a name may carry, so the stored name is a neutral lawful synonym."
+        }
+      ]
+    },
+    {
+      "row": "0001104659-25-102611#095",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and settled as a real item: a single vendor supplying 13 percent of total purchases is a stated, standing supply-concentration level rather than a bare topic mention.",
+          "after": "Proposed as a real item and settled as a real item: a single vendor supplying 13 percent of total purchases is a stated, standing supply-concentration level, not a bare topic mention."
+        },
+        {
+          "path": "/settled/facts/0/item/driver_name",
+          "before": "vendor_concentration",
+          "after": "vendor_purchase_concentration"
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0001104659-25-102611#096",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and settled as a real item: the roughly 85% share of total sales is a stated, re-readable mix level for one combined population of the company's own product categories.",
+          "after": "Proposed as a real item and settled as a real item: the roughly 85% share of total sales is a stated, re-readable mix level for one combined population of the company's own product categories."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The 85% is one COMBINED share, so reusing the two separate menu values would read as an intersection of failure and maintenance rather than their union, and I therefore coined a single source-grounded product part and kept the qualifier 'approximately' in the never-drop sink.",
+          "after": "The 85% is one COMBINED share, so reusing the two separate menu product values would read as an intersection of failure and maintenance rather than their union, and I therefore coined a single source-grounded product part and kept 'approximately' in the never-drop sink."
+        }
+      ]
+    },
+    {
+      "row": "0001104659-25-102611#097",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and settled as a real item, but as ONE record: the $329.5 million and the 6.7% are the same stated year-over-year movement carried on two units, and the rule that splits a value covers growth BASES, not dollars versus percent, so the dollar movement is stored and the percent stays in the quote.",
+          "after": "Proposed as a real item and settled as a real item, but as ONE record: the $329.5 million and the 6.7% are the same stated year-over-year movement expressed in two units, and the split rule covers growth BASES rather than dollars versus percent, so the stated dollar movement is stored and the percent stays in the quote."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "Two readings were live - one stated movement carried on two units versus a two-record split - and 'commercial' is plausible both as the company's own customer population and as its selling program/channel, so the part is coined unknown:commercial.",
+          "after": "Two readings were live - one stated movement carried in two units versus a two-record split - and 'commercial' is plausible both as the company's own customer population and as its selling program/channel, so the part is coined unknown:commercial."
+        }
+      ]
+    },
+    {
+      "row": "0001104659-25-102611#098",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and settled as a real item: the located target is the 31.7% commercial share, and because the stated base is total Domestic sales rather than total company sales, that base is kept verbatim in the never-drop measurement sink so the two shares stay distinct.",
+          "after": "Proposed as a real item and settled as a real item: the located target is the 31.7% commercial share of domestic sales, a stated re-readable mix level whose numerator population is carried by the domestic and commercial slice parts."
+        },
+        {
+          "path": "/settled/facts/0/item/measurement_raw_spans",
+          "before": [
+            "of our total Domestic sales"
+          ]
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "No field is designed to hold a share's denominator and per_x covers only per-something denominators, so the stated base 'of our total Domestic sales' rides the never-drop measurement sink to stop the share being read as a share of total company sales.",
+          "after": "No field is designed to hold a share's denominator, and I judged the stated base 'total Domestic sales' to be carried losslessly by the geography:us slice rather than needing the measurement sink."
+        },
+        {
+          "path": "/0/hard_classes/4",
+          "before": "measurement_wording"
+        }
+      ]
+    },
+    {
+      "row": "0001104659-25-102611#099",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a negative control and settled as a control: the sentence states only ordinary-course involvement in unspecified lawsuits, investigations and proceedings, which the gate drops, so no litigation metric is written.",
+          "after": "Proposed as a negative control and settled as a control: the sentence states only ordinary-course involvement in unspecified lawsuits, investigations and proceedings, which the gate drops, so no litigation record is written."
+        },
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "Undifferentiated ordinary-course legal-proceedings wording: no specific matter, party, stage, amount, direction or outcome is named, so the fact gate treats it as a bare topic mention and generic risk boilerplate and it yields no fact.",
+          "after": "Undifferentiated ordinary-course legal-proceedings wording: no specific matter, party, stage, amount, direction or outcome is stated, so the gate treats it as a bare topic mention and generic risk boilerplate and it yields no fact."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0001104659-26-017090#112",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and it settles as one: the quote states a company-measured adjusted net income level of $48.3 million for the fourth quarter of fiscal 2025, a standing variable re-readable over time, so the proposal and my outcome agree.",
+          "after": "Proposed as a real item and it settles as one: the quote states a company-measured adjusted net income level of $48.3 million for the fourth quarter of fiscal 2025, a standing variable re-readable over time, so proposal and outcome agree."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0001104659-26-017090#113",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item but it does not settle as one, and I state that disagreement openly: the disclosure is genuine and non-boilerplate, yet its one blended net figure spans four independent causes with no per-cause value inside the located quote, so the lawful outcome is a named exclusion rather than a fact.",
+          "after": "Proposed as a real item but it does NOT settle as one, and I state that disagreement openly: the disclosure is genuine and non-boilerplate, yet its single blended net figure spans four independent causes with no per-cause value, so the lawful outcome is a named exclusion rather than a fact."
+        },
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "The $24.6 million is a single NET pre-tax total fusing four independent causes named in the same sentence (impairment of assets and lease termination expenses, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); a name may carry only one cause and independent causes must be split, yet the quote states no per-cause amount and no one cause owns the netted figure, so the value cannot lawfully be attached to any driver and an aggregate catch-all would be a bare accounting-category label.",
+          "after": "The $24.6 million is one NET pre-tax total fusing four independent causes named in the same sentence (impairment of assets and lease termination expenses, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); a name may carry only one cause and independent causes must be split, yet no per-cause amount is stated and no single cause owns the netted figure, while an aggregate catch-all name would be a forbidden bare accounting-category label, so the fact is real but cannot be lawfully resolved."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0001104659-26-017090#114",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and it settles as one: a delivered quarterly revenue actual is placed against the company's own stated expected range, an expectation comparison that yields the numberless home metric plus its required numberless surprise sibling.",
+          "after": "Proposed as a real item and it settles as one: a delivered quarterly revenue actual is placed against the company's own stated expected range, an expectation comparison that yields the numberless home metric plus its required numberless surprise sibling."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "0001104659-26-017090#115",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and it settles as one: the located line states North Italia comparable restaurant sales measured explicitly against the prior year, and its two current-period columns (the reported 13-week quarter and the reported 52-week year) are two distinct real periods of that sliced metric.",
+          "after": "Proposed as a real item and it settles as one: the located line states North Italia comparable restaurant sales measured explicitly against the prior year, and its two current-period columns (the reported 13-week quarter and the reported 52-week year) are two distinct real periods of that sliced metric."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The four columns are unlabelled inside the quote; read against the table header I take the two current-period columns as the reported quarter and reported year and left the two year-ago comparative columns unemitted as restatements of the periods this line is measured against.",
+          "after": "The four columns are unlabelled inside the quote; read against the table header I take the two current-period columns as the reported quarter and reported year and left the two year-ago comparative columns unemitted, since they are the baseline this line is already measured against rather than new facts of this event."
+        }
+      ]
+    },
+    {
+      "row": "0001104659-26-017090#116",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a real item and it settles as one: the company states its own forward opening plan of six to seven Flower Child locations for fiscal 2026, a company-confirmed forward outlook carrying a closed numeric range.",
+          "after": "Proposed as a real item and it settles as one: the company states its own forward opening plan of six to seven Flower Child locations for fiscal 2026, a company-confirmed forward outlook carrying a closed numeric range."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "'now expects' is update-flavoured framing but the source states no prior Flower Child opening guide and no raised/lowered/reaffirmed/withdrawn wording, so the movement stays unknown and is left to read-time derivation.",
+          "after": "'now expects' is update-flavoured framing but the source states no prior Flower Child opening guide and no raised/lowered/reaffirmed/withdrawn wording, so the movement stays unknown and is left to read-time derivation; the menu's segment kind for Flower Child is reused although this event's footnote places the concept inside the Other segment."
+        }
+      ]
+    },
+    {
+      "row": "0001104659-26-017090#117",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Frozen as a negative control and it behaves as one: the located text is safe-harbor risk-factor boilerplate with no stated driver state, change or event, so it correctly yields nothing.",
+          "after": "Proposed as a negative control and it behaves as one: the located text is safe-harbor risk-factor boilerplate with no stated driver state, change or event, so it correctly yields nothing."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#142",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed real_item and it settles as real: a delivered 5% adjusted operating income rate judged against the company's own plan, which the expectation-comparison rule records as a surprise plus its home metric sibling carried by the same sentence.",
+          "after": "Proposed real_item and it settles as a real item: a delivered 5% adjusted operating income rate judged against the company's own plan, which the twin rule records as a surprise plus its home metric sibling in the same event."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The quote gives no period-over-period direction for the rate itself, so the home metric takes the bare-value state 'reported' while the versus-plan judgement rides only the surprise twin.",
+          "after": "The located quote gives no period-over-period direction for the rate itself, so the home metric takes the bare-value state 'reported' and the versus-plan judgement rides only the surprise twin."
+        },
+        {
+          "path": "/1/ambiguity_note",
+          "before": "'Planned' is the company's own internal expectation rather than a named Street number, so the baseline is recorded as previous_guidance under the own-target mapping and never as consensus.",
+          "after": "'Planned' is the company's own internal expectation rather than a named Street number, so the baseline records as previous_guidance under the own-target mapping and never as consensus."
+        }
+      ]
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#143",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed real_item and it settles as real: a stated, signed, dated comparable-sales level on an explicitly stated year-ago basis.",
+          "after": "Proposed real_item and it settles as a real item: a stated, signed, dated comparable-sales level carrying its own explicit year-ago basis."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#144",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed real_item and it settles as real: the delivered result is placed inside the company's own prior guidance range with no favorability wording, the expectation half of the twin whose home metric is row 2.",
+          "after": "Proposed real_item and it settles as a real item: the delivered result is placed inside the company's own prior guidance range with no favorability wording, the expectation half of the twin whose home metric is row 2."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#145",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed real_item and it settles as real: a source-stated full-year revenue floor for a named, non-consolidated part of the company, whose slice kind stays honestly unknown.",
+          "after": "Proposed real_item and it settles as a real item: a source-stated full-year revenue floor for a named non-consolidated part of the company, whose slice kind stays honestly unknown."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#146",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed real_item and it settles as real: a stated quarterly revenue level plus its own source-stated year-over-year change for a named part of the company.",
+          "after": "Proposed real_item and it settles as a real item: a stated quarterly revenue level with its own source-stated year-over-year change for a named part of the company."
+        }
+      ],
+      "review_changes": [
+        {
+          "path": "/0/ambiguity_note",
+          "before": "The label 'international' appears in this company's menu under both a geography kind and a segment kind and this quote's own framing selects neither, so the menu-ambiguous rung forces unknown:international.",
+          "after": "The label 'international' sits in this company's menu under both a geography kind and a segment kind and this quote's own framing selects neither, so the menu-ambiguous rung forces unknown:international."
+        }
+      ]
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#147",
+      "changes": [
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "Standard Private Securities Litigation Reform Act safe-harbor language about forward-looking statements and unspecified risks and uncertainties: it names no driver's state, change, surprise, guidance or action, so this generic risk boilerplate returns the one abstention.",
+          "after": "Standard Private Securities Litigation Reform Act safe-harbor language about forward-looking statements and unspecified risks and uncertainties; it names no driver's state, change, surprise, guidance or action, so this generic risk boilerplate returns the one abstention."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#148",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed real_item and it settles as real: the CFO states a closed full-year fiscal 27 revenue range, and because no movement wording is stated the stored guidance state stays unknown.",
+          "after": "Proposed real_item and it settles as a real item: the CFO states a closed full-year fiscal 27 revenue range, and with no movement wording stated the guidance state stays unknown."
+        }
+      ],
+      "review_changes": []
+    },
+    {
+      "row": "BBY_2026-03-03T08.00#149",
+      "changes": [
+        {
+          "path": "/record_kind_note",
+          "before": "Proposed lawful_abstention_control and it behaves as one: the remark is a real observation but cannot be lawfully resolved into a grounded surprise or a company metric, so it yields exactly one abstention.",
+          "after": "Proposed lawful_abstention_control and it behaves as one: the remark is a real observation but cannot be lawfully grounded as a surprise or resolved into a company metric, so it yields exactly one abstention."
+        },
+        {
+          "path": "/settled/abstentions/0/reason",
+          "before": "A numberless 'below expectations' remark framed 'from an industry perspective': it names no company value, states no whose-expectation that could be recorded as consensus or previous guidance, and no home metric fact for TV revenue or units exists anywhere in this event, so the ungrounded surprise cannot be lawfully resolved.",
+          "after": "A numberless 'below expectations' remark framed 'from an industry perspective': it states no company value, identifies no expectation that could be resolved as consensus or the company's own prior guide, and no home metric fact for TV revenue or units exists anywhere in this event, so this ungrounded surprise cannot be lawfully resolved."
+        }
+      ],
+      "review_changes": []
+    }
+  ],
+  "field_comparison_note": "Raw structured differences, not automatic judgments of semantic importance. Explanation text and optional field presence are preserved for review."
+}

@@ -1,5 +1,5 @@
 {
- "run_id": "seven_source_packet",
+ "run_id": "unlaunched_test_next_round",
  "door": "a4_source_only_key_1997",
  "phase": "decision_correction_v6",
  "attempt": 1,
@@ -101,11 +101,11 @@
    "recovery.json": "18da812a2c748810222f93f68489690fc98c6f8cce73ad95ce8036ee158d29e9"
   },
   "v6": {
-   "receipt.json": "472a4b7f6905bf68084ff253fb3de3870afed446fd78288633052ebcd634a80d",
-   "finalization.json": "c8e2bd22d380ed138997d0d3df1d7842cfdffda078b6f888989370f94399f87e",
+   "receipt.json": "e34d1332e4db9f172382b493459ed1c173178b1609bd37f49a9209d18b5bd6a0",
+   "finalization.json": "50c56b33d90f97c0b615a4f7a8976bed5cc9ed80ba9cf776bdd08ad185bcc04e",
    "raw_tree": {
-    "files": 4,
-    "sha256": "62611caeb1ced6292ffd667e948a96217487854806daded41e17c9c6409be2ee"
+    "files": 14,
+    "sha256": "d08c18e582e07bc657bb5f0888b41ab7ff7cad0de5bab9c877c65b6e50e0dc0c"
    }
   },
   "v6_round1": {
@@ -132,6 +132,14 @@
     "sha256": "63d4c9029488bc10acad1b7e54ab3905b09a15cdaa3a9b0642de4038f49331c2"
    }
   },
+  "v6_round4": {
+   "receipt.json": "472a4b7f6905bf68084ff253fb3de3870afed446fd78288633052ebcd634a80d",
+   "finalization.json": "c8e2bd22d380ed138997d0d3df1d7842cfdffda078b6f888989370f94399f87e",
+   "raw_tree": {
+    "files": 4,
+    "sha256": "62611caeb1ced6292ffd667e948a96217487854806daded41e17c9c6409be2ee"
+   }
+  },
   "signature": {
    "key_identity": "e77684b2472f583cce116a1cadc845bcadcfd5b84a808ddbaec8139adaf13635",
    "sidecar": "7cc31690134040d453c3bb01dc36f810b62f18984e86b0f6cea59e5b12677b62",
@@ -151,21 +159,13 @@
   }
  },
  "prompts": {
-  "0000027904-26-000020": "bf12457cf4ef193cc53eb2ca41a1567cc38c53dd705252b3049d4ef212fbfa3d",
-  "0000092380-26-000044": "9f6e01a3219c890d4397aa1b38960a4ebdc5654c460993544423fc12a7a85771",
-  "0000898173-26-000006": "33ab5c74972e1b8fa991190182bd3afc6ae4bbec6afc11cc69fd3f72acb0c90a",
-  "0001041061-26-000003": "c4177ebf1cefece95027d081cfc91e978320161b3738e84618ec40da51d89085",
-  "0001104659-25-102611": "834f83ac664349c84b599d77045ec5f32808a715302fa423fb48c8a87eb87d09",
-  "0001104659-26-017090": "f89336b449040fde7f5520071412d3c1a114a04b69d9db740ba7e63cd73497ae",
-  "BBY_2026-03-03T08.00": "e5e0ed51282a421880e2104c738c23420ae6d17b3becfcef46b7e081a30a692b"
+  "0000027904-26-000020": "dd219e99442d7d37ca0ad3d51a3b96c7148b1a5c9107a0152725c101d3299fa9",
+  "0000092380-26-000044": "4c47ef2d35d34e2b125d62911929709eea214a5f2bdd1877a3f391706cd9544f",
+  "0000898173-26-000006": "ecc812ae9d7950bd0878f5dfde448206ba8caaa731f7b1c6cada4dba3105fa07",
+  "0001041061-26-000003": "8d640ada06a438fb706c81dedb60371a32d03ccb48da906d566d5f854f8f8232",
+  "0001104659-25-102611": "ccfcbb93d0dddc1e7cd9eb1823d5fb990167321f048d29224c672d1ca4d2e11a",
+  "0001104659-26-017090": "7b9e7ca72eeea9dd1fdb6b6e9c3a4ad57a0306b57a808e91e19b7cb0dfcc601b",
+  "BBY_2026-03-03T08.00": "5939439f654d0dd6cdfed0c735591feea8454b350bf9b5502c12c795075a8879"
  },
- "states": [
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_211e0377-bee.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_a49e34cd-dea.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_92eda279-ac7.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_6f8c4dc5-875.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_5d78b22b-ff6.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_2dee2ae4-0e6.json",
-  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_55cf36c1-880.json"
- ]
+ "states": []
 }

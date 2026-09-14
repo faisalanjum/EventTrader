@@ -1,0 +1,104 @@
+{
+  "scope": "independent plain-byte packet audit; no harness imports and no model calls; not final native approval",
+  "report_sha256": "8f8739445058e4874643648c68795bd7a7b79b77f770cf3b7accc03d8114420d",
+  "evidence_sha256": "ce49deb956758915e8337a61bc9fd2fe004d3afe60b4b8be1b24e24ddb316424",
+  "events": [
+    {
+      "source_id": "0000027904-26-000020",
+      "event_index": 4,
+      "original_rows": 9,
+      "questions": 2,
+      "prompt_sha256": "650433b0c3ac2b2c6fbef916d634279b7d05316b008a68bdec63298a6b583a69",
+      "script_sha256": "fb19f48530355cd4c16cd0870938b638bfcb6b67d191a031e31c4e691df55514",
+      "current_raw_sha256": "6225c4f67f3b9730782eb4f168a6842208570a2ad172a7642ba9ac08f398e905",
+      "original_script_sha256": "a89c4c1e086287773d3275545facf953a082dfe37e38efa33ccd20b00155b83c"
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "event_index": 7,
+      "original_rows": 7,
+      "questions": 2,
+      "prompt_sha256": "71bbfda56335b083f7492e9481b6fec8da393d0880f6f50c396467aa8660d224",
+      "script_sha256": "72fceca6ed3b8e67c9c9bdaea6bfa7a38f3cabce31b134ba79001d633c1022e6",
+      "current_raw_sha256": "423eb142ca93fedf2a65a315f0bcac5bfd1877564bcc12ad41b062d08635acee",
+      "original_script_sha256": "5ae839615f48f9a1e32909fe5c87945cf3d1e9e12da7fd07570fe241577719f0"
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "event_index": 9,
+      "original_rows": 6,
+      "questions": 1,
+      "prompt_sha256": "b7f576bed89c669c87004cf359938075c83e74ff980a38b12122f6bfc4aa4a9d",
+      "script_sha256": "fca0a42d25b65a2799f75146472a8ba3b04a1682e414905409cfc69f6c5823c9",
+      "current_raw_sha256": "dc741c9fc2ebba342f52646f3896f4277fbb76a680199194f1d327d4d4cfb89b",
+      "original_script_sha256": "e21cb130659dd4f4a8a701436834ce889bcd2866edb6bc7ff0725f77d4bee555"
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "event_index": 14,
+      "original_rows": 5,
+      "questions": 1,
+      "prompt_sha256": "298d8470ff8bb7de3b754151c576199dd6095813c238c323d0161c8e1cc31e15",
+      "script_sha256": "325a46033eea746e46b35b4e2e0489901235847f39faefe6c41b658093932de0",
+      "current_raw_sha256": "e7ee39b164626d96e301dc081198d5388091204091fe172d0cdddd076b36e10a",
+      "original_script_sha256": "7d31f496e2993b887849e00969ce07171787cbd6bea57da72f84caeb0785fad4"
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "event_index": 17,
+      "original_rows": 6,
+      "questions": 2,
+      "prompt_sha256": "7cf49dbdc83630f2e7a9c5a7f00db94fff9c963085cdd2178ff24e5f10960fe3",
+      "script_sha256": "4f851708ae6975eb88e3a58ffa68f9aeb835cb5482b9e38dc74d7f29c762d8a7",
+      "current_raw_sha256": "eb17cde2fa9b1e89fc068ab930004ef0ca331505fbba439f52bd901dad949d9c",
+      "original_script_sha256": "daee971fa28a08c6a2f250cff986c01290c0690f026147b2dc2bf55159d638a3"
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "event_index": 20,
+      "original_rows": 6,
+      "questions": 2,
+      "prompt_sha256": "8c541f230f4a18a046e32b426764241c8813e4533aba6bfa1400f2bf0e5067be",
+      "script_sha256": "38e5b60ba5a7ee9278acce52a82b228ade9ebde60af48fddff05800cffaf0671",
+      "current_raw_sha256": "d810ea62a1a8312465f90ba996baeaf4c82cb7d6efe56bf8ee216bfc69568317",
+      "original_script_sha256": "77e5382790dc9a0f2eaa4661cdd62f28fc1898bd5e0ec49873a70f10c224bb5d"
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "event_index": 25,
+      "original_rows": 8,
+      "questions": 2,
+      "prompt_sha256": "b84064257d39e799301f5b538db1266c3f42770a9099d28328ac1dd48d6d18d1",
+      "script_sha256": "5bec6727f160ae9f05c3da37c1f34c98a7bafad0a732b1ca9b5fc8ec4cd26d8a",
+      "current_raw_sha256": "cc1d841d7f23640dfd2fa55a21cdfdf6ccb8307e8c764a825ed8ad88364d07c0",
+      "original_script_sha256": "be213c49fd2569448c017506e6de5fa3d28a157db3cea243b69c79d04b806564"
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "event_index": 21,
+      "original_rows": 5,
+      "questions": 1,
+      "prompt_sha256": "2766e007ecdd461b0d556b2a4cd518aa1bcd776490b0bef8ff6b98e513d090e1",
+      "script_sha256": "bb1549a284728ba0024acf075f39a2ae58f30cb28262200af6384f559dbc71e6",
+      "current_raw_sha256": "73948a44272d4b7bd6914e1500d7c4c1442f16d4e25eaca7cad7ff1533aff731",
+      "original_script_sha256": "2866802f37f0a6d232007e7b04210afa80427317afbf0b5235bc8619d8432b09"
+    }
+  ],
+  "original_rows": 52,
+  "questions": 13,
+  "unchanged_transport": {
+    "model_alias": "opus",
+    "runtime_model_id": "claude-opus-5",
+    "workflow_row_model": "claude-opus-5[1m]",
+    "effort": "high",
+    "agentType": "lean-probe",
+    "disallowedTools": [
+      "Read"
+    ],
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+    "transport": "Claude Code Workflow agent(), subscription",
+    "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "model_calls": 0
+}

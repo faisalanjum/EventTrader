@@ -1,0 +1,7 @@
+attempt	codex_cold2131_b
+payload	../../unit_2020_codex_check/probe_seven_cold_boundary_2131.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	2207908
+payload_pid	2207912
+started_utc	2026-09-14T10:25:03Z
+state	finished exit 0

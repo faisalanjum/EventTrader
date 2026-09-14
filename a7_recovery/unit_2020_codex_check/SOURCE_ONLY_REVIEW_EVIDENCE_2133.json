@@ -1,0 +1,280 @@
+{
+  "purpose": "Source-only questions for the existing A7 key correction seam; not an approved key or call authorization. No evaluated replies or grading results are inputs.",
+  "sources": [
+    {
+      "source_id": "0000027904-26-000020",
+      "full_source_rows": 9,
+      "raw_sha256": "6225c4f67f3b9730782eb4f168a6842208570a2ad172a7642ba9ac08f398e905",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000027904-26-000020.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000027904-26-000020.attempt1.js"
+    },
+    {
+      "source_id": "0000092380-26-000044",
+      "full_source_rows": 7,
+      "raw_sha256": "423eb142ca93fedf2a65a315f0bcac5bfd1877564bcc12ad41b062d08635acee",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000092380-26-000044.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000092380-26-000044.attempt1.js"
+    },
+    {
+      "source_id": "0000898173-26-000006",
+      "full_source_rows": 6,
+      "raw_sha256": "dc741c9fc2ebba342f52646f3896f4277fbb76a680199194f1d327d4d4cfb89b",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000898173-26-000006.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000898173-26-000006.attempt1.js"
+    },
+    {
+      "source_id": "0001041061-26-000003",
+      "full_source_rows": 5,
+      "raw_sha256": "e7ee39b164626d96e301dc081198d5388091204091fe172d0cdddd076b36e10a",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001041061-26-000003.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001041061-26-000003.attempt1.js"
+    },
+    {
+      "source_id": "0001104659-25-102611",
+      "full_source_rows": 6,
+      "raw_sha256": "eb17cde2fa9b1e89fc068ab930004ef0ca331505fbba439f52bd901dad949d9c",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-25-102611.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-25-102611.attempt1.js"
+    },
+    {
+      "source_id": "0001104659-26-017090",
+      "full_source_rows": 6,
+      "raw_sha256": "d810ea62a1a8312465f90ba996baeaf4c82cb7d6efe56bf8ee216bfc69568317",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-26-017090.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-26-017090.attempt1.js"
+    },
+    {
+      "source_id": "BBY_2026-03-03T08.00",
+      "full_source_rows": 8,
+      "raw_sha256": "cc1d841d7f23640dfd2fa55a21cdfdf6ccb8307e8c764a825ed8ad88364d07c0",
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/BBY_2026-03-03T08.00.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/BBY_2026-03-03T08.00.attempt1.js"
+    },
+    {
+      "source_id": "0001104659-26-027061",
+      "full_source_rows": 5,
+      "raw_sha256": "73948a44272d4b7bd6914e1500d7c4c1442f16d4e25eaca7cad7ff1533aff731",
+      "raw_path": "a7_recovery/unit_2068_input_recovery/proof_codex_in2068_d/closeout/raw/0001104659-26-027061.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2068_input_recovery/proof_codex_in2068_d/closeout/scripts/0001104659-26-027061.attempt1.js"
+    }
+  ],
+  "question_count": 13,
+  "full_event_row_count": 52,
+  "evidence": {
+    "0000027904-26-000020#019": {
+      "status": "source_correction",
+      "row_index": 1,
+      "target": {
+        "row_index": 1,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Pre-tax loss of $214 million with a pre-tax margin of (1.4) percent",
+        "raw_label_or_claim": "Pre-tax loss of $214 million"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000027904-26-000020.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000027904-26-000020.attempt1.js",
+      "script_sha256": "a89c4c1e086287773d3275545facf953a082dfe37e38efa33ccd20b00155b83c",
+      "prompt_sha256": "bf12457cf4ef193cc53eb2ca41a1567cc38c53dd705252b3049d4ef212fbfa3d"
+    },
+    "0000027904-26-000020#021": {
+      "status": "source_correction",
+      "row_index": 3,
+      "target": {
+        "row_index": 3,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Earnings per share of $0.64",
+        "raw_label_or_claim": "Earnings per share of $0.64"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000027904-26-000020.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000027904-26-000020.attempt1.js",
+      "script_sha256": "a89c4c1e086287773d3275545facf953a082dfe37e38efa33ccd20b00155b83c",
+      "prompt_sha256": "bf12457cf4ef193cc53eb2ca41a1567cc38c53dd705252b3049d4ef212fbfa3d"
+    },
+    "0000092380-26-000044#038": {
+      "status": "source_correction",
+      "row_index": 1,
+      "target": {
+        "row_index": 1,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "$0.45 EPS, in line with guidance",
+        "raw_label_or_claim": "$0.45 EPS, in line with guidance"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000092380-26-000044.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000092380-26-000044.attempt1.js",
+      "script_sha256": "5ae839615f48f9a1e32909fe5c87945cf3d1e9e12da7fd07570fe241577719f0",
+      "prompt_sha256": "9f6e01a3219c890d4397aa1b38960a4ebdc5654c460993544423fc12a7a85771"
+    },
+    "0000092380-26-000044#039": {
+      "status": "source_correction_and_modifier_question",
+      "row_index": 2,
+      "target": {
+        "row_index": 2,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+        "raw_label_or_claim": "fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000092380-26-000044.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000092380-26-000044.attempt1.js",
+      "script_sha256": "5ae839615f48f9a1e32909fe5c87945cf3d1e9e12da7fd07570fe241577719f0",
+      "prompt_sha256": "9f6e01a3219c890d4397aa1b38960a4ebdc5654c460993544423fc12a7a85771"
+    },
+    "0000898173-26-000006#052": {
+      "status": "source_correction",
+      "row_index": 3,
+      "target": {
+        "row_index": 3,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Ending domestic store count ​ 6,447",
+        "raw_label_or_claim": "Ending domestic store count"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0000898173-26-000006.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000898173-26-000006.attempt1.js",
+      "script_sha256": "e21cb130659dd4f4a8a701436834ce889bcd2866edb6bc7ff0725f77d4bee555",
+      "prompt_sha256": "33ab5c74972e1b8fa991190182bd3afc6ae4bbec6afc11cc69fd3f72acb0c90a"
+    },
+    "0001041061-26-000003#077": {
+      "status": "source_correction",
+      "row_index": 1,
+      "target": {
+        "row_index": 1,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was $1.73.",
+        "raw_label_or_claim": "EPS excluding Special Items was $1.73"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001041061-26-000003.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001041061-26-000003.attempt1.js",
+      "script_sha256": "7d31f496e2993b887849e00969ce07171787cbd6bea57da72f84caeb0785fad4",
+      "prompt_sha256": "c4177ebf1cefece95027d081cfc91e978320161b3738e84618ec40da51d89085"
+    },
+    "0001104659-25-102611#096": {
+      "status": "source_correction",
+      "row_index": 3,
+      "target": {
+        "row_index": 3,
+        "proposed_record_kind": "real_item",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "During fiscal 2025, failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales.",
+        "raw_label_or_claim": "failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-25-102611.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-25-102611.attempt1.js",
+      "script_sha256": "daee971fa28a08c6a2f250cff986c01290c0690f026147b2dc2bf55159d638a3",
+      "prompt_sha256": "834f83ac664349c84b599d77045ec5f32808a715302fa423fb48c8a87eb87d09"
+    },
+    "0001104659-25-102611#098": {
+      "status": "source_correction",
+      "row_index": 5,
+      "target": {
+        "row_index": 5,
+        "proposed_record_kind": "real_item",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+        "raw_label_or_claim": "represents 31.7% of our total Domestic sales"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-25-102611.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-25-102611.attempt1.js",
+      "script_sha256": "daee971fa28a08c6a2f250cff986c01290c0690f026147b2dc2bf55159d638a3",
+      "prompt_sha256": "834f83ac664349c84b599d77045ec5f32808a715302fa423fb48c8a87eb87d09"
+    },
+    "0001104659-26-017090#112": {
+      "status": "source_correction",
+      "row_index": 1,
+      "target": {
+        "row_index": 1,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Excluding the after-tax impact of these and certain other items, adjusted net income and adjusted diluted net income per share for the fourth quarter of fiscal 2025 were $48.3 million and $1.00, respectively.",
+        "raw_label_or_claim": "adjusted net income"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-26-017090.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-26-017090.attempt1.js",
+      "script_sha256": "77e5382790dc9a0f2eaa4661cdd62f28fc1898bd5e0ec49873a70f10c224bb5d",
+      "prompt_sha256": "f89336b449040fde7f5520071412d3c1a114a04b69d9db740ba7e63cd73497ae"
+    },
+    "0001104659-26-017090#115": {
+      "status": "period_scope_question",
+      "row_index": 4,
+      "target": {
+        "row_index": 4,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+        "raw_label_or_claim": "North Italia operating information: Comparable restaurant sales vs. prior year"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/0001104659-26-017090.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-26-017090.attempt1.js",
+      "script_sha256": "77e5382790dc9a0f2eaa4661cdd62f28fc1898bd5e0ec49873a70f10c224bb5d",
+      "prompt_sha256": "f89336b449040fde7f5520071412d3c1a114a04b69d9db740ba7e63cd73497ae"
+    },
+    "BBY_2026-03-03T08.00#142": {
+      "status": "source_correction",
+      "row_index": 1,
+      "target": {
+        "row_index": 1,
+        "proposed_record_kind": "real_item",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Despite the softer sales, our adjusted operating income rate of 5% was better than planned and included slightly favorable rates for both gross profit and SG&A.",
+        "raw_label_or_claim": "was better than planned"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/BBY_2026-03-03T08.00.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/BBY_2026-03-03T08.00.attempt1.js",
+      "script_sha256": "be213c49fd2569448c017506e6de5fa3d28a157db3cea243b69c79d04b806564",
+      "prompt_sha256": "e5e0ed51282a421880e2104c738c23420ae6d17b3becfcef46b7e081a30a692b"
+    },
+    "BBY_2026-03-03T08.00#145": {
+      "status": "context_question_not_assumed_error",
+      "row_index": 4,
+      "target": {
+        "row_index": 4,
+        "proposed_record_kind": "real_item",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our Best Buy business team generated more than $1.1 billion in revenue in fiscal 26",
+        "raw_label_or_claim": "Best Buy business team generated more than $1.1 billion"
+      },
+      "raw_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/raw/BBY_2026-03-03T08.00.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/BBY_2026-03-03T08.00.attempt1.js",
+      "script_sha256": "be213c49fd2569448c017506e6de5fa3d28a157db3cea243b69c79d04b806564",
+      "prompt_sha256": "e5e0ed51282a421880e2104c738c23420ae6d17b3becfcef46b7e081a30a692b"
+    },
+    "0001104659-26-027061#121": {
+      "status": "context_question_not_assumed_error",
+      "row_index": 4,
+      "target": {
+        "row_index": 4,
+        "proposed_record_kind": "real_item",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The following table presents the number of stores owned at the end of fiscal 2025: ​ ​ ​ ​ ​ ​ ​ ​ United States ​ International (Company-operated) Number of stores ​ 1,505 ​ 86",
+        "raw_label_or_claim": "International (Company-operated)"
+      },
+      "raw_path": "a7_recovery/unit_2068_input_recovery/proof_codex_in2068_d/closeout/raw/0001104659-26-027061.attempt1.proved.json",
+      "script_path": "a7_recovery/unit_2068_input_recovery/proof_codex_in2068_d/closeout/scripts/0001104659-26-027061.attempt1.js",
+      "script_sha256": "2866802f37f0a6d232007e7b04210afa80427317afbf0b5235bc8619d8432b09",
+      "prompt_sha256": "920bfd4dd83a96ebe0c8c30ea40fe446f6ec62283b2f1cea08252ee0eb7af146"
+    }
+  },
+  "withdrawn": [
+    "ORLY#051",
+    "CAKE#114",
+    "AAL#133",
+    "ULTA#180"
+  ],
+  "withdrawal_rule": "Served Rule9.6 and FableExperimentWorkOrder.md:429 expressly give numberless surprise homes unknown state; no new source call is required for those states."
+}

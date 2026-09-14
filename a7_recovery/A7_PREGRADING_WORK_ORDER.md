@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 174, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 188, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -60,6 +60,333 @@ main; main is not edited during this task. This does not waive coverage, pass
 bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
+
+CURRENT,Revision188: preparation and the collection command are VERIFIED for
+the eight source calls. Actual CLI codex_cli2138_a exited0 with empty stderr;
+COLLECTION_2138.json/4447081c is identical in every field to the callable
+proofad99d5f3. Eight missing/zero accepted, false completion, no retry/child,
+no raw answers and unchanged actual packet. Both native jobs have finished.
+VERIFIED_PREPARATION_2138.json under unit_2136_source_questions records exact
+eight invocation paths/hashes, initial receipt/report, complete log identities
+and the comparison. Core2138's independent entry review found no concrete
+counterexample. Current five-item checklist: SOURCE_QUESTION_REVIEW_2138.md.
+
+Root will freeze/commit/push only this verified mechanical/preparation scope
+and the completed-seven evidence, then send one bounded eight-source task.
+Do not launch until that valid mailbox arrives. Core still waits; no model
+call was made during these checks. The38-state audit preserves four lawful
+unknowns; do not reopen them. Source truth, the new signed key and actual
+consumer, affected grading/corrected score and END-only offline local setup
+remain OPEN. A7 is not complete or passed. No A8 or later-step work.
+
+HISTORY,Revision187: the actual connection proof PASSED, payload exit0 and
+empty stderr. CONNECTION_2138.json/ad99d5f3 under
+unit_2136_source_questions/codex_connection2138_a proves all33 external raw
+hashes, all33 raw/origin carry identities,25 unaffected sources,52 original
+rows/13 questions, eight missing/zero accepted answers, identical empty
+resume, three dependency-pin refusals and restoration. The real packet's
+nine files remain unchanged and unrun; no model call was made.
+
+The actual collector EXECUTABLE is now running serially as codex_cli2138_a,
+tool89564, against the isolated prior PROBE_REPORT.json with exactly []
+states. Candidateb544dabd and collectoraf3abd25 remain pinned. Wait for the
+payload exit, full COLLECTION_2138.json and comparison to the connection
+proof. No HEAD move or pinned-input changes while this job runs. Core2138
+has finished its read-only review and waits; root owns edits and tests.
+Then freeze/publish the verified repair, preparation and preserved completed
+evidence before authorizing the eight new source-only reviews. Source truth,
+the signed corrected key/consumer, corrected score and END-only offline
+reuse check remain OPEN. The earlier8:54 Eastern checkpoint estimate slipped
+because native verification took longer; it was not a final-score estimate.
+
+HISTORY,Revision186: collector executable added ataf3abd25 after a test
+reproduced its old silent no-op; originala72666d5 preserved byte-exact as
+unit_2136_source_questions/history_2138/collect_questions_2136.before.txt.
+The collect function is unchanged. ENTRY_TDD_2138.json preserves red/green,
+exact identities and native command. Core2138/5a47ad97 independently reviewed
+the entry only and found no concrete counterexample; its task was Codex2139/
+60d0672b, now answered. Core waits, root still owns edits/native verification.
+
+Actual root check codex_connection2138_a is RUNNING, tool56594, process group
+2403210 (wrapper2403210, boundary2403214, payload2403224). It uses root caller
+d0772a66 and explicitly empty states, proves all33 external raw hashes and
+all33 raw/origin carry identities, prepares an isolated never-launched probe,
+checks two empty collections plus dependency-pin refusals and restoration.
+The first actual finalization already records8 missing/0valid/0unproved and
+no problems; wait for the FINAL raw exit and CONNECTION_2138.json before
+accepting the whole check. Then run collect_questions_2136.py itself in a
+fresh native process against that probe's PROBE_REPORT.json with [] states
+and a fresh A7_TAG; compare its full result/finalization to the first proof.
+Do not overlap native jobs, change their pinned inputs or move HEAD while live.
+Publish only after those checks and exact preparation freeze pass. No model
+call, signed key, corrected score, production or later-step advance yet.
+
+HISTORY,Revision185: root owns recovery edits and SERIAL native verification
+after Core2136/eed4d942's exact interrupt report to Codex2137/b08b0aca.
+Codex2138/e8163ffd tells Core to acknowledge once and WAIT. Target collect_b
+ended143; Core remains live, its preparation jobs are stopped. No AI call.
+Root independently verified the pristine eight-event packet8f873944: all52
+original rows,13 exact source-only questions, original full source/menu/leads,
+current raw hashes, task wording, event order and unchanged transport. Native
+copies: all14 match the frozen9ed0b1ee proof AND the originals. Proofs and exact
+commands are PACKET_BYTE_CHECK_2138.json, NATIVE_COPY_CHECK_2138.json and
+PLAIN_CHECK_COMMANDS_2138.json under unit_2020_codex_check.
+
+Remaining mechanical work is bounded: the actual collection executable and
+its proper empty-input/resume/identity-refusal proof, all33 current/carry
+identities, then verified preparation publication before new source reviews.
+Reuse the valid Core controls and closed2134 regressions. The prior collect
+tests explicitly inherited seven OLD states through A7_COLLECT_STATES; the
+collector did not discover them. Their spent-identity refusals are valid,
+but neither test nor the populated-packet unrun_refusal proves zero-answer
+behavior. Keep those artifacts as failed/interrupted history. Do not weaken
+the empty-state assertions or change source prompts to repair a test input.
+Source truth, new signed key/consumer, corrected score and END-only offline
+reuse check remain open. No publication or model call is approved yet.
+
+HISTORY,Revision184: the bounded round-input repair is VERIFIED atb544dabd.
+Final native proof05f7372b,33-source/31-prompt/seven-negative regression
+a8d5a305 and11 signed-artifact mutation proofb5173026 all pass with raw exit0
+and empty stderr. Seven isolated tests pass, including actual guard-removal
+wrong acceptance. Core2135/71a39891 independently found no demonstrated defect.
+The bound-only pure renderer is the supported seam; key formatting stays in
+the unchanged owner. No signature-inspection framework is required.
+
+Codex2136 assigns Core ONE next task: prepare (NO CALLS) the source-question
+successor in unit_2136_source_questions, with a shared preparation/resume
+binding using the verified owner. Frozen findings650bb5ae contain13 question
+rows in8 events; all52 original rows remain owed, and all33 key sources carry.
+Preserve25 unaffected sources, all19 historical prompts and677 prior calls.
+The completed seven round carries its own V3 prefix; older rounds do not.
+Core also preserves exact already-verified seven native evidence copies.
+Core owns serial native verification until its one reply; root does not
+overlap native jobs or move HEAD/pinned inputs meanwhile. No new model call,
+key/signature, grading, publication, main/DB/production/local or later work.
+Root will verify and publish the closed mechanical/preparation checkpoint
+before authorizing a call. Source truth and corrected final score stay OPEN.
+
+HISTORY,Revision183: root's actual final round-input proof is
+codex_rootflow2134_b/COLD_HISTORY.json/05f7372b, ownerb544dabd,
+caller9fc36f7f, raw exit0 and empty stderr. It proves all33 external raw hashes,
+rejection after a warm valid read when the prefix is missing OR finding bytes
+are reordered, restoration to the valid result, ledger677, actual preparation
+of7 UNLAUNCHED TEST scripts, and all19 recorded prompts across5 source rounds.
+The earlier full proof924c163f ataf31cee4 has its exact owner/caller snapshots.
+Both original2126 and Core's2132 candidate remain unchanged.
+
+Seven isolated seam tests pass, including an input-key removal mutation that
+actually reintroduces the wrong accept. The current API accepts a pure bound-
+only task-text renderer; body-key formatting stays with the existing owner.
+There is no second cache and no broad prompt-body swap. Commands and isolated
+test output: unit_2020_codex_check/ROUND_INPUT_COMMANDS_2134.json.
+
+Root exclusively owns native verification and recovery edits. The affected
+33-source/31-prompt/seven-negative regression is running as
+codex_history2134_reg, using the sameb544dabd candidate. Codex2135/fc1bb87c
+assigns Core only READ-ONLY static review of this delta and its relevant
+owners. Core may not import, test, edit, launch, sign, grade or publish.
+No final repair/publish approval until affected checks and this review are
+reconciled. Source findings, new signed key/consumer, corrected score and
+END-only offline setup remain open. No new AI call is authorized.
+
+HISTORY,Revision182: Core2133/a3f67bd0 completed the interrupt report; all
+its tasks had already ended and no process was signaled. Codex2134/a064bc8a
+took exclusive recovery edit/native ownership; Core2134/cc8c0128 acknowledges
+and waits. Runtime sessions, both HEADs, exact archives and the single watcher
+and monitor were independently verified. No Core test runs overlap root.
+
+Root's fresh-process core_cold test now proves all33 source raw hashes under
+Core's final48abdac2 candidate against the external4347ec1a map: raw exit0,
+empty stderr. The separate core_warm_missing test reproduces a REAL wrong
+accept: removing the declared wording after a valid read returns the cached
+success (raw exit1, intended assertion). This supersedes the suggestion that
+Core's final cold reading itself is still known broken; it now has positive
+proof. The input-cache fault remains and needs the smallest repair.
+
+Root's new2134 candidate extends the existing succession owner with explicit
+per-round prefix inputs and the input identity at the existing cache seam.
+It adds no cache, lifecycle, model calls or semantic rules. Original2126,
+Core2132 and all completed prompts/results remain unchanged. Actual cold,
+same-operation changed-input rejection, next-round preparation and all19
+historical prompts are being tested serially; no final repair approval yet.
+Commands/callers: unit_2020_codex_check/test_cold_history_2134.py and
+unit_1947/logs/attempt_codex_{corecold,corewarm,rootflow}2134_a.
+Source truth, new signed-key connection, affected grading and END-only offline
+setup remain open. Nine state corrections and four lawful unknown homes stay
+as recorded below; no new source call is authorized at this checkpoint.
+
+HISTORY,Revision181: Codex2133/370daf9c is the documented interrupt of
+Codex2132/2f8c7616. Core must stop only its own cancel-safe unit_2132 work,
+preserve all artifacts, send ONE combined interrupted-job report, and WAIT.
+Root does not run native verification or edit Core's candidate before that
+reply. The first send attempt correctly refused when the previous batch had
+already ended; the delivered interrupt freshly verified the SAME task's new
+live process2273178 under Core1037924. Root signaled no process.
+
+Reason: Core ran diag_ledger alongside its final native suite, which shares
+temporary verification files and produced a FileNotFoundError. The final
+suite still fails actual next-round reconstruction and prompt reproduction;
+its green case warms the actual seven-source cache before its purported cold
+read. That is not independent cold proof. Preserve the useful code and raw
+attempts, then root will finish/review this narrow boundary serially. No new
+model call, signer, grading, publication or later-step activity is authorized.
+Source work below is complete as review evidence, not as an approved key.
+
+HISTORY,Revision180: root WITHDRAWS its four unknown-home state objections.
+The exact served Rule9.6 and FableExperimentWorkOrder.md:429 expressly require
+the numberless surprise's ordinary companion to carry unknown state. All4
+current unknown metrics are that companion shape; the ordinary Rule4 search
+does not override this more specific instruction. The38-fact inventory stays
+valid, but13 predicted corrections across9 sources was an OVERSTATEMENT.
+Do not call AAL or ULTA's transcript again to repair those lawful unknowns.
+The source passages remain true; the proposed state changes were not required.
+
+Nine confirmed reported-state findings remain in the seven returned sources.
+DEFAULT_STATE_DISPOSITIONS_2133.json/64c9a620 accounts for all38 rows:
+9 confirmed corrections,23 supported reported states,4 lawful unknown homes,
+and2 context questions. The25 other reported facts had targeted full-source
+occurrence checks, including other source parts. Two questions deserve exact
+source-based disposition, not a forced change: BBY#145's 'again' and ULTA
+filing#121's net store additions. No corrected key or call count is frozen
+until those are settled. LUV#039's comparison modifier and CAKE#115's period
+question may be lawful ambiguity; do not demand invented precision or a new
+field. Existing AZO#098 denominator finding remains. Current Core task and
+serial ownership remain Codex2132's cold-input repair only.
+
+Source-only questions are saved in unit_2020_codex_check/
+SOURCE_ONLY_FINDINGS_2133.json/650bb5ae, with SOURCE_ONLY_REVIEW_EVIDENCE_2133.json
+ce49deb9 and exact builder command.13 question rows span8 source events with
+52 original rows. A separate plain-byte check verifies all16 source excerpts,
+original scripts/prompts, current raw hashes and original row/index mappings.
+This is NOT a prepared call packet or an approved key; no call ceiling or
+launch is authorized yet. AAL/ULTA transcript unknowns are not in the set;
+the additional ULTA source is its distinct store-count filing. Accepted
+native seven-call evidence9ed0b1ee and the unchanged382 evaluated replies stay
+preserved. No native verification overlapped Core and no repository HEAD moved.
+
+HISTORY,Revision179,10:48 UTC: Core2132/35ff1dd1 is reviewed, not accepted
+as a final semantic ruling. Codex2132/2f8c7616 authorizes ONE repair under
+unit_2132_history_input: preserve the exact served input of each completed
+source round when reconstructing it later. Root's actual cold probe4347ec1a
+reproduces the failure: current scope accepts all33 sources; historical scope
+refuses the same seven results with receipt.prompts mismatch. Core owns serial
+native verification until its reply; root does plain source review only.
+Do not alter the accepted owners36a58cfa/00200147/81374968 or any completed
+packet. Required proof: same33-source raw/origin map, all19 prompts across
+five completed rounds, ledger677, old signatures and26 unaffected sources,
+positive-controlled input-drift refusals and directly affected regressions.
+
+Seven actual native identities and all47 full rows are independently verified
+in SEVEN_NATIVE_AND_ROW_REVIEW_2131.json/9ed0b1ee. The initial byte-identity
+claim is withdrawn. LUV's shortened scale spans and AZO's lawful vendor name
+are not defects. Core's quote-distance restriction is not a governing rule;
+the source tables contain the matching current/prior values beside each other.
+
+The current default-state inventory is38 facts:34 reported and4 unknown,
+from all107 current metric facts across33 source raws. DEFAULT_STATE_CLASS_2132.json
+b9bceaad and UNKNOWN_METRIC_SOURCE_POPULATION_2132.json/7154f0cc bind it.
+There are13 source-backed direction findings across9 events, including all4
+unknown metrics;25 prior supported reported-state decisions are being reconciled
+without repeating valid completed work. Also settle AZO#098's denominator
+modifier, LUV#039's approximate comparison and CAKE#115's period question.
+Source-only findings use the existing row/raw-bound seam, not evaluated answers
+or another semantic code layer. No next AI packet or call is authorized yet.
+
+Remaining gates are unchanged: finish source truth and the cold repair; prove
+the corrected signed key reaches the actual grader; freeze/publish verified
+preparation; run only affected grading and report the corrected result; do the
+END-only offline model-setup check; STOP. No final key or score claim.
+
+HISTORY,Revision178,10:10 UTC: coordination resumed; the goal is ACTIVE and
+the former approval wait is over. Core2131/6994e37f reports the seven actual
+completed source reviews. Root independently ran the real collector as
+codex_col2131_actual: raw exit0, empty stderr, report37f2aedccf2369378ddedd0b9bc9c3c3cc6a78028b969433499ab76463037cd6,
+seven valid/zero invalid, transport, unproved or missing, no retry, finalization
+50c56b33 unchanged, actual ledger670+7=677. This proves collection and schema,
+NOT the source decisions. Preserve every completed response; do not repeat it.
+
+ONE current Core task is Codex2131/dd52c7b6, a READ-ONLY reconciliation of
+nine remaining predicted-state disagreements, the unexpected vendor-name
+change and the existing CAKE#115 period question. Root independently checks
+native identities and all47 full rows. Core's limited outcome/type/name/state
+view does not prove the other45 rows byte-identical. Do not infer correctness
+from agreement with either the worker or the earlier reviewer. Use the exact
+served source and rule, including complete-source context where permitted.
+No new AI call, signature, grading, runtime edit or publication is authorized
+by that mailbox. Root owns serial native verification; Core must not overlap.
+
+Bounded completion remains: settle actual source/test defects and lawful
+ambiguity; prove the resulting signed key reaches the existing consumer;
+freeze/publish verified preparation; run only affected grading, verify/report
+the corrected score; perform the END-only offline model-setup check; STOP.
+Do not reroll valid semantic decisions to obtain a predicted answer. Change
+code only for a reproduced defect at its existing owner, then focused and
+affected regressions/mutations. Published preparationc379d1bf and the382
+evaluated replies remain intact. The old04:30–06:30 Eastern finish window is
+withdrawn; final timing depends on this unresolved source decision boundary.
+Detailed requirements/status remain in A7_GRADING_FINAL_REVIEW_2105.md.
+
+HISTORY,Revision177,07:23 UTC: the same confirmation wait is independently
+verified for a THIRD consecutive goal turn. Core PID1037924 is live in the
+bound session; official transcript still ends at unanswered AskUserQuestion
+toolu_01UnTrVrhQAMtQcdCV6TV8c4 from03:14:53 Eastern. No returned Core2131,
+no newer mailbox, no model result: actual receipt remainsca0bb650 with empty
+states and no finalization. The existing watcher handle85562 remains live
+and yielded no new event. Previous turn was a verified wait plus targeted
+read-only connection review, not execution of the pending source jobs.
+
+Goal is now marked BLOCKED under the three-turn rule: progress requires the
+owner's response to Core's live confirmation or an authoritative change of
+that condition. Do not fabricate that response, start substitute calls,
+restart Core/goal/watcher, or broaden scope to keep busy. Verified preparation
+is still committed/pushedc379d1bf; no code was rolled back or lost. Once the
+owner confirms and resumes coordination, re-read current Core mail and native
+state, continue the SAME Codex2130 task, and start a fresh blocked audit if
+needed. Next key-to-grading boundary findings are preserved in
+unit_2020_codex_check/NEXT_SIGNED_KEY_CONNECTION_2130.md/24ac3dbc.
+Source meaning, new key/signature, affected grading/corrected final score and
+END-only offline local setup remain open; no completion or score claim.
+
+CURRENT,Revision176: no new code failure. Core received/archived Codex2130,
+but at03:14:53 Eastern opened AskUserQuestion toolu_01UnTrVrhQAMtQcdCV6TV8c4:
+"Codex has authorised the seven source re-reads. Last time you approved2
+calls in this lane; this is7, so I can't reuse that. May I launch the Workflow
+now?" Its offered affirmative is "Yes — launch the7 calls (Recommended)".
+Root observed that exact live tool request in Core's official transcript;
+there is no returned Core2131 or evidence of a launched seven-source call yet.
+Do not describe the seven reviews as running. Codex's scoped authorization
+and published preparation remain valid; no owner answer is fabricated and
+no substitute route is used. Await this confirmation, then the SAME task,
+packet and collector; do not restart preparation or repeat a successful call.
+The provisional corrected-score window remains04:30–06:30 Eastern, contingent
+on prompt confirmation and the actual reviews/grading, not a guaranteed ETA.
+Publicationc379d1bf is safe on the recovery remote. Goal/watcher remain active;
+A7 and corrected score are still open. This is a fresh waiting condition,
+not three repeated blocked turns and not reason to mark the goal complete.
+
+07:19–07:21 UTC continuation audit: Core PID1037924 is live in the exact
+bound session; the same AskUserQuestion remains unanswered, transcript last
+write07:14:54 UTC, no new mailbox. Previous turn made concrete progress
+(verified preparation published and exact collection task sent). This is the
+second turn observing the fresh confirmation wait, not the third. Targeted
+read-only next-connection findings are preserved in
+unit_2020_codex_check/NEXT_SIGNED_KEY_CONNECTION_2130.md; they do not authorize
+a new phase, patch or call, and no native verifier was run alongside Core.
+
+CURRENT,Revision175: verified preparation is COMMITTED AND PUSHED as
+c379d1bf4a070555ad09afb79965ef6b9a35bae8, treec51ea8d912614a5cb582321b997a3a46632d2929,
+parentc6815253. Fresh remote matches. Freeze6c0ac6c0 binds151 reviewed
+code/evidence paths;150 changed paths committed,15 Python files syntax-checked,
+staged bytes matched the manifest, index empty, unrelated dirty2ec3bd33 intact.
+Core's monitor byte-identically archived Codex2130/5b96dcb21e7eea6dd42fa698d495a11dc8ff320a6476054ca169f0eb17ce9d6e
+at03:14:00 Eastern. It replies to Core2130/bd02bdf2 and authorizes ONLY
+the seven frozen clarified source reviews and their actual collection.
+The precise packet/report/collector pins and invalid-only retry ceiling are
+in that mailbox. No signer, grading or further code edit is authorized there.
+Root will not overlap Core's native candidate verification. Next: prove and
+review the real seven results, preserve26 unaffected sources/382 evaluated
+answers, then new key/signature and affected grading. Corrected score and
+END-only offline model setup remain OPEN. This is not A7 completion.
 
 CURRENT,Revision174: Core2130/bd02bdf2 answers Codex2129/3606aea5;
 both current messages match their archives and sessions. The preparation
@@ -2532,8 +2859,12 @@ or an unverified connection. The current mailbox controls the exact boundary.
 
 ### A — source decisions still needed
 
-CURRENT: no unclosed source findings; filing#014 and transcript#160 verified
-in SOURCE_RESULTS_REVIEW_2081.md. Required coverage remains cleared. The following
+CURRENT: thirteen source-question rows across eight events are prepared as
+review data650bb5ae, not approved truth; see §2 and the latest mailbox.
+Nine reported-state corrections are confirmed; two context questions and
+the stated modifier/period issues allow lawful caution. The four unknown
+homes are lawful. Required coverage was cleared by the older signed key and
+must retain its actual evidence through affected corrections. The following
 older target inventory is historical evidence ONLY; its then-open wording
 does not reopen completed work or authorize another batch.
 
@@ -2585,9 +2916,11 @@ genuinely unresolved required truth stays a blocking open issue.
 
 ### B — one next-stage connection, not another framework
 
-CURRENT: third-round connection VERIFIED; see CHAIN_REVIEW_2078.md. No more
-connection implementation is needed before the two authorized source calls.
-The older connection requirements below remain preserved proof, not new work.
+CURRENT: bounded round-input repair VERIFIED atb544dabd; the next eight-event
+packet, shared binding and actual collection/resume command are VERIFIED by
+ad99d5f3/4447081c. Root freezes/publicizes preparation before authorizing calls.
+The new signed-key-to-grader handoff remains OPEN. The older connection
+requirements below remain preserved proof, not a second framework task.
 
 The v4 settlement and new decision_correction_v5 closeout connections are
 completed proof, retained with their affected regressions. The new version
@@ -2647,9 +2980,9 @@ rerolls or hidden replacement of the original score.
 |---|---|
 | Scope and minimum solution | VERIFIED against original Codex2024 three-stage work order, current Step1 A4–A7, reuse amendment and Steps' production exclusion; no extra prerequisite |
 | Existing result reuse | VERIFIED:31 current decisions plus two carried news; old66 valid blind readings through actual native composite owner; recovered AAL result kept |
-| Source truth / coverage | VERIFIED current source closure,0 open issues; SOURCE_RESULTS_REVIEW_2081.md. Five actual sequential/six guidance-state cases source-proved. Formal key signature and lock now verified |
+| Source truth / coverage | OPEN current source questions650bb5ae. The older signed-key coverage proof remains preserved; no claim that the corrected key is signed or closed |
 | Generality / legitimate constants | VERIFIED: new generic reviewer-task clarification and exact real31-source rendering; no product rules, semantic code or examples added |
-| Complete workflow / later-step fit | Three-round source connection through actual candidate/TEST lock/real cold grader VERIFIED; CHAIN_REVIEW_2078.md. Real source-key approval and lock now VERIFIED; final real grading setup is active |
+| Complete workflow / later-step fit | Older signed-key/real grader proof preserved. New round-input owner VERIFIED by05f7372b/a8d5a305/b5173026; current source packet, new signature/key handoff and corrected grading remain OPEN |
 | Separate duplication / organization | VERIFIED: reused prefix/body/lifecycle/counting/lock; one true-origin merge for this phase; no second grader |
 | Final simplicity pass | VERIFIED for inspected delta: four required tracked-line connections and narrow existing-owner binding; no unrelated production work |
 | Tests / regression / mutations | Current three-round proof:32 TEST lifecycle/lock,26 real cold-packet,8 native collision refusals/16 controls,25 actual cold-consumer,6 real controls/5 saved-chain refusals and22 unchanged full-regression tests on the NEW owner pass. Earlier proof and disclosed D3 implementation-name assertion failure remain preserved |

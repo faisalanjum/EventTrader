@@ -1,0 +1,1 @@
+COLLECTION_2138 {"phase_complete": false, "ledger": {"scheduled": 8, "valid": 0, "invalid_response": 0, "transport_no_answer": 0, "unproved": 0, "missing": 8}, "retry": []}

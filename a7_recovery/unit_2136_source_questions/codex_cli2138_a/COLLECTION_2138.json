@@ -1,0 +1,97 @@
+{
+ "accounting": {
+  "before_this_round": 677,
+  "invalid_response": 0,
+  "missing": 8,
+  "retry_offered": [],
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "scheduled": 8,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "valid": 0
+ },
+ "events": [
+  "0000027904-26-000020",
+  "0000092380-26-000044",
+  "0000898173-26-000006",
+  "0001041061-26-000003",
+  "0001104659-25-102611",
+  "0001104659-26-017090",
+  "0001104659-26-027061",
+  "BBY_2026-03-03T08.00"
+ ],
+ "finalization": {
+  "child": null,
+  "harvested_raw": [],
+  "ledger": {
+   "invalid_response": 0,
+   "missing": 8,
+   "scheduled": 8,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "valid": 0
+  },
+  "outcomes": [
+   [
+    "0000027904-26-000020",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0000092380-26-000044",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0000898173-26-000006",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0001041061-26-000003",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0001104659-25-102611",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0001104659-26-017090",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0001104659-26-027061",
+    "missing",
+    "no official state"
+   ],
+   [
+    "BBY_2026-03-03T08.00",
+    "missing",
+    "no official state"
+   ]
+  ],
+  "phase_complete": false,
+  "problems": [],
+  "retry": [],
+  "sha256": "4df72c0b89dbe2f150f685b6342827206eb85215538b0dcfce6feb3b2401242f"
+ },
+ "model_calls_started_here": 0,
+ "paid_raw_files": {},
+ "pinned_identities": {
+  "binding_sha256": "d2bec8c29c49af7bc51ceb92235560a2ec1ce33199852a4d179245547d7e8723",
+  "owner_sha256": "b544dabd31074d32d4379820994092eec4f88b739a3df0e8d869e4b219a50732",
+  "renderer_sha256": "002001473da073b21dfa6e5db7aed620d0da7da96d787a5127b292e7014d7c33"
+ },
+ "receipt_states_after": [],
+ "receipt_states_before": [],
+ "recorded_states": [],
+ "report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/codex_connection2138_a/PROBE_REPORT.json",
+ "report_sha256": "82401c600066da59200dffc86ba6dc219ef03a015aeb0760587267574fd8a07f",
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/codex_connection2138_a/UNLAUNCHED_ZERO_ANSWER_PROBE",
+ "scope": "collection/resume through F.record_state and F.finalize; no semantic decision, no retry rule, no key edit"
+}
