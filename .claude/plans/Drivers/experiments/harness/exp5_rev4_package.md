@@ -45,8 +45,9 @@
 > — this line said "v5" while the artifact had moved on, the same transcription
 > rot the status counts were removed for) · `rev4_fresheyes_findings_archive.jsonl` (the
 > 35 fresh-eyes findings, 6 agent results verbatim from the workflow journal)
-> · `FableExperimentPlan_v2.md` (the SELF-CONTAINED versioned Plan successor,
-> O-b; the rejected delta form is a stub).
+> · [Plan Part II](../../FinalDesign/FableExperimentPlan.md#experiment-plan-pending-v2)
+> (the SELF-CONTAINED versioned Plan successor, O-b PENDING; the rejected delta
+> form is a stub; original V2 text preserved in the combined Plan).
 >
 > **The closed specification this revision implements:** the reviewer's 7
 > points (quote-local evidence · presence≠correctness · explicit outcome
@@ -739,7 +740,7 @@ owner approval)
 | F5 | BUILD_AND_OPERATIONS.md:35/:42/:80/:209/:227/:234-236/:775/:805/:810/:818 | writer contract v3.6 → v4 (34 total/32 model, O-d); ":80 boundary guards on" → multiply-only, no 999 on this path; step-3 build order + the 29+7 parity gate re-scoped (parity-vs-legacy dies by design); trap list: "missing hint" → missing/invalid multiplier or evidence, per-X trap moves kernel-side; hazard :775 rewritten to the kernel-side check; ten-slot signature note: unchanged (transport-only); rev-4f: the :25/:31/:35 packet-v1.0 mentions gain the "→ v2.0 RE-FREEZE PENDING [O-a]" marker and the :35 sha sentence states it is RE-STAMPED by the O-a sweep in the SAME atomic commit (no stale-pin window) [disposition=hunk] |
 | F6 | exp5_scoring_spec_v3.md:12/:14/:59/:64/:105/:110/:162 | quote-overlap matcher text → Part D law; PreparedFactV2 named; pooled formula field-group restated over the new schema (thresholds and formula UNCHANGED, O-c); stale code line numbers re-derived at implementation; rev-4f: §1 retitled to the Part-D law and the old fixpoint body converted to a `> **v3 (superseded)**` blockquote history block (its permutation/propagation regressions carry forward against the Part-D matcher) [disposition=hunk] |
 | F7 | FableExperimentWorkOrder.md:13/:206/:418/:634/:636-646 | v2.2 amendment block: 34/32 contract; the :646 GLOBAL occurrence pin superseded NARROWLY (event facts + abstentions only — chunk-era locator rules untouched, O-e); §4 field list regenerated; unit_resolver reference retired; rev-4f: "ORDER-FREE 1:1 fixpoint" → "ORDER-FREE exact one-to-one bijection" (the fixpoint vocabulary died with the algorithm) — **BLOCKED 2026-07-30: no hunks.** 13 of these 17 edits target wording that exists only in the Fiscal track's UNCOMMITTED WorkOrder, and that document is held by owner ruling (Fiscal re-pins it after freezing its own edits), so Core neither stages nor edits it. The patch therefore describes six documents, not seven. SUPERSEDED BY EVENTS (SEQ 904): the WorkOrder IS committed (DOC-EXP5, 214bc760), the `BLOCKED` entry is deleted, and the hunks did NOT return — the 17 edits are applied IN the document, so there is nothing left to patch. The row is now proven where it landed, by test_rev4_gate.test_landed_amendments_are_in_the_committed_document. [disposition=implementation] |
-| F8 | FableExperimentPlan.md:27/:37/:73/:76/:142/:145-149 | **O-b: versioned successor + re-pin (never permanent unpin; history kept)**: 24-field references → the v2 contract; shape-hint scoring rows → final-unit/object checks; Addendum-A bar field-group restated, value ≥98% threshold unchanged [disposition=artifact:FableExperimentPlan_v2.md] |
+| F8 | FableExperimentPlan.md:27/:37/:73/:76/:142/:145-149 | **O-b: versioned successor + re-pin (never permanent unpin; history kept)**: 24-field references → the v2 contract; shape-hint scoring rows → final-unit/object checks; Addendum-A bar field-group restated, value ≥98% threshold unchanged. The unapproved successor is preserved in [Plan Part II](../../FinalDesign/FableExperimentPlan.md#experiment-plan-pending-v2); O-b remains PENDING. [disposition=artifact:../../FinalDesign/FableExperimentPlan.md] |
 | F9 | keys/K-fields/protocol.md:23/:31/:74/:88/:98 | 37 → 32+fact-level; drafter served the regenerated live-law contract; key_lint exact-keys set updated; protocol re-sha'd AFTER edits [disposition=hunk] |
 | F10 | the contract GENERATOR + both manifests | naming block sourced from LIVE law only (never the archive); contract + launch manifests regenerated and verified; residue test: every naming sentence the builder serves must originate from LIVE LAW — the deferred broad-acronym sentence REMAINS LAWFULLY PRESENT while the owner's deferral stands (a violation only if sourced from the archive path); nothing silently retired [disposition=implementation] |
 | F11 | OWNER_DECISION_value_text_numeric.md | example rows corrected (Q3 passes · "1,5 %" flagged · ₹/CHF/R$ flagged); ruling unchanged [disposition=hunk] |
@@ -1200,7 +1201,7 @@ Counts: 188 total = change 68 · change-at-O-f 5 · history-only 10 · no-change
 | `harness/exp5_menu_mapping_v3.md` | **ACTIVE** — its `kind:value`/menu-ref rules matched locked law throughout |
 | exp5_scoring_spec_v3.md | **ACTIVE, patched** — carries the rev-4 matching law; fixpoint moved to HISTORY |
 | DESIGN_v3_diff / proposed_diffs / workorder_amendments (v3 era) | historical working papers — never served, never authority |
-| FableExperimentPlan_v2_DELTA.md | SUPERSEDED (stub) — replaced by the self-contained FableExperimentPlan_v2.md |
+| FableExperimentPlan_v2_DELTA.md | SUPERSEDED (stub) — the self-contained successor is preserved in [Plan Part II](../../FinalDesign/FableExperimentPlan.md#experiment-plan-pending-v2), PENDING O-b approval |
 
 ## PART M — APPROVAL STATUS TABLE (every A/O decision, exact and current)
 

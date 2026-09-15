@@ -1,6 +1,6 @@
 # WORKORDER_STATUS - FableExperimentWorkOrder v2.0 execution board
 
-> **CURRENT (2026-09-15):** WorkOrder v2.0 + A7 evidence-reuse amendment (sha `23854f459500e44d4ba238cc118bbd74bc1de405c071de2b43d9015875751343`) · Plan v1.0 + EXP-5 Addendum A + A7 reuse/partial-report amendments (sha `05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b`). Historical run pins below remain unchanged.
+> **CURRENT (2026-09-15):** WorkOrder v2.0 + A7 evidence-reuse amendment (sha `23854f459500e44d4ba238cc118bbd74bc1de405c071de2b43d9015875751343`) · combined Plan: Part I active amended V1; Part II PENDING V2 proposal (whole-file sha `7ee647382b6d53bdef4e55be3047eb864541745e7d4eff5388c26afc918e3a9b`). Historical run pins below remain unchanged.
 >
 > **A7 status (2026-09-15):** corrected calculation and bounded cause review
 > published on recovery at `8dacb463`, status follow-up `3340851`; FAIL, not

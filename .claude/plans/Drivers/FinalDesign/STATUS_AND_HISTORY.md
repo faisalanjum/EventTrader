@@ -94,6 +94,20 @@ on 2026-09-15. The checks above preceded publication and used temporary indexes;
 unrelated work is excluded. Compare local and remote tips using §1.1 to verify
 publication. This approval does not reopen project execution or activate V2.
 
+**2026-09-15 Plan consolidation:** [FableExperimentPlan.md](FableExperimentPlan.md)
+now holds amended V1 (active) and V2 (PENDING O-b approval). All 613 original
+lines retain their exact hashes; the standalone V2 file is removed. WorkOrder,
+saved answers, historical pins and the project STOP/WAIT state are unchanged.
+Verification in both worktrees: 14 direct checks pass, including removal of
+each of the 613 preserved lines and 10 damaged-boundary cases. The broader
+harness run has 515 passes and the same three pre-existing failures listed in
+§1.4; two live-only checks were excluded. Frozen evidence is unchanged.
+The owner approved commit and push of this layout-only change on 2026-09-15.
+Publication awaits the standing R8 independent document-reader result at
+`archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-09-15_PLAN_CONSOLIDATION.md`.
+A missing or failed record is not approval; no production or Step 6 readiness
+is claimed.
+
 **Protect unrelated local work.** Main has settings changes, market-data
 documentation, two old `receipts_827` inventories and deleted test-agent/skill
 files. Recovery has an unrelated edit to
@@ -624,7 +638,7 @@ the three pre-amendment/frozen-original snapshots sit beside them.
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
 | FableAdmissionKernelDesign | **RATIFIED working design (owner 2026-07-15; not activated)** | full mechanics → BUILD §8.1 + law-grade parts → FINAL_DESIGN (destination proof §7.1b); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
 | FableContextPack · WorkflowContextPack | stale navigation/code maps | ARCHIVED 2026-07-16 ✓ (the Workflow pack's 21b live-code re-audit PASSED pre-move — 34-claim verdict table; its one load-bearing residue carried into BUILD §4; links repaired) |
-| FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" were RATIFIED 2026-07-15 (operative mechanics = BUILD §8.1/§8.2; originals = archive evidence); its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
+| FableExperimentPlan · WorkOrder | active plan + pending proposal · runbook | BUILD §9; Plan Part I is active amended V1, Part II is PENDING O-b. Both original bodies remain byte-identical; new bindings hash the combined file. WorkOrder stays separate. Program retirement is unchanged. The original Plan's frozen authority ladder resolves externally: its "lock candidates" were RATIFIED 2026-07-15 (operative mechanics = BUILD §8.1/§8.2; originals = archive evidence); its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
 | FablePrompt · FablePromptv2 | executed briefs | provenance entries only; archive |
 | XBRLIntegrationDesign | **RATIFIED working design (owner 2026-07-15; DORMANT until P19 + gates + EXP-6)** | recipe + pin map + the ten amendments → BUILD §8.2 + owning law sections (gate-tagged); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
 | CONSOLIDATION.md | audit + migration map | MOVED into the dated archive at Phase-5 step 7 (2026-07-16) ✓ — never a fifth rule source |
@@ -756,7 +770,10 @@ repo-wide broken-reference scan came back clean (card step 8).
 - **The archive's contents, exactly (two distinct kinds — never conflate):** (a) **32 SOURCE COPIES** = 29
   source originals + 3 pre-amendment/frozen-original snapshots; (b) **EVIDENCE FILES, which are NOT source
   copies** = the audit file `CONSOLIDATION.md`, `MANIFEST.json`, `README.md`, and the `READER_TEST_RECORD_*`
-  files. Source 33, the byte-pinned `FableExperimentPlan.md`, remains at the root (manifest-verified in place).
+  files. Source 33 was the byte-pinned `FableExperimentPlan.md` at the root,
+  manifest-verified in that historical freeze. The current combined Plan
+  preserves amended V1 and the pending V2 proposal; its cover identifies both
+  exact original bodies. Historical hashes still name their recorded versions.
 - **Freeze manifest:** `archive/2026-07-15_pre-consolidation/MANIFEST.json` — all 33 sources sha-256-pinned
   (11,320 lines / 1,362,208 bytes verified), git provenance, commits `49f1cd8`/`87bc150`. Owner-amended
   live-continuing files verify against post-amendment hashes: ChannelContract (see git for current after the
