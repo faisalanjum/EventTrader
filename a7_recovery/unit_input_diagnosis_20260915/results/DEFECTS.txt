@@ -1,0 +1,24 @@
+DEFECT 1 - the key applies a period-window rule the served rules never state
+  key note (asset_impairment / revenue_mix) applies an "all-or-nothing window"
+    served rules contain 'all-or-nothing'               : 0
+    served rules contain 'all or nothing'               : 0
+    served rules contain 'both dates'                   : 0
+    served rules contain 'start and end'                : 0
+    served rules contain 'close the window'             : 0
+    served rules contain 'period_start_date is required' : 0
+    served rules contain 'requires both'                : 0
+    gold YTD record period_start_date = 2025-02-02 (inferred, not stated in the source)
+
+DEFECT 2 - the menu offers two interchangeable tokens for one business part
+    menu contains 'segment:domestic'               : True
+    menu contains 'segment:domesticsegment'        : True
+    menu contains 'segment:international'          : True
+    menu contains 'segment:internationalsegment'   : True
+    gold slice_parts for revenue_mix = ['segment:domestic', 'channel:online']
+
+DEFECT 3 - the menu and the key encode the same slice differently
+    menu shows  : unknown:us-gaap:ReportingUnitAxis__bestbuyhealth   present in served prompt: True
+    key expects : unknown:xbrlaxis_75732d676161703a5265706f7274696e67556e697441786973__bestbuyhealth
+    key token present in served prompt: False
+    key hex decodes to: us-gaap:ReportingUnitAxis
+    served rule says: "cite it as the menu's reference token string, exactly as the menu shows it" -> True

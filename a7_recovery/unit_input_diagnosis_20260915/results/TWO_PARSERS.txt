@@ -1,0 +1,3 @@
+parser A (lxml)   : 48 facts
+parser B (docling): 48 facts
+IDENTICAL         : True

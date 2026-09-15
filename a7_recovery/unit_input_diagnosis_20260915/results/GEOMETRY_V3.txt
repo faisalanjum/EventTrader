@@ -1,0 +1,5 @@
+tables with a header : 1186
+figures placed       : 43037
+  placement FORCED (<=1 cell per header row) : 41709  (96.91%)
+  no header covers it at any level           : 1328  (3.09%)
+  AMBIGUOUS (a header row has 2+ covering)   : 0  (0.00%)

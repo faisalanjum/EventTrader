@@ -1,0 +1,15 @@
+c03: Three Months Ended  c15: Nine Months Ended
+c03: November 1, 2025  c09: November 2, 2024  c15: November 1, 2025  c21: November 2, 2024
+c00: Revenue  c03: $  c04: 8,878  c09: $  c10: 8,697  c15: $  c16: 25,703  c21: $  c22: 25,523
+c00: Revenue % change  c03: 2.1  c05: %  c09: (3.3)  c11: %  c15: 0.7  c17: %  c21: (4.4)  c23: %
+c00: Comparable sales % change(1)  c03: 2.4  c05: %  c09: (2.8)  c11: %  c15: 1.0  c17: %  c21: (3.8)  c23: %
+c00: Gross profit  c03: $  c04: 2,067  c09: $  c10: 2,049  c15: $  c16: 6,008  c21: $  c22: 5,993
+c00: Gross profit as a % of revenue  c03: 23.3  c05: %  c09: 23.6  c11: %  c15: 23.4  c17: %  c21: 23.5  c23: %
+c00: Adjusted SG&A(2)  c03: $  c04: 1,707  c09: $  c10: 1,711  c15: $  c16: 4,968  c21: $  c22: 4,966
+c00: Adjusted SG&A as a % of revenue(3)  c03: 19.2  c05: %  c09: 19.7  c11: %  c15: 19.3  c17: %  c21: 19.5  c23: %
+c00: Adjusted operating income(2)  c03: $  c04: 360  c09: $  c10: 338  c15: $  c16: 1,040  c21: $  c22: 1,027
+c00: Adjusted operating income as a % of revenue(4)  c03: 4.1  c05: %  c09: 3.9  c11: %  c15: 4.0  c17: %  c21: 4.0  c23: %
+c00: Selected Online Revenue Data
+c00: Total online revenue  c03: $  c04: 2,823  c09: $  c10: 2,727  c15: $  c16: 8,258  c21: $  c22: 7,970
+c00: Online revenue as a % of total segment revenue  c03: 31.8  c05: %  c09: 31.4  c11: %  c15: 32.1  c17: %  c21: 31.2  c23: %
+c00: Comparable online sales % change(1)  c03: 3.5  c05: %  c09: (1.0)  c11: %  c15: 3.6  c17: %  c21: (2.9)  c23: %

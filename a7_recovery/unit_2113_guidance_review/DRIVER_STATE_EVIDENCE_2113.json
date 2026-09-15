@@ -1,0 +1,373 @@
+{
+ "scope": "the driver_state evidence for every guidance question, so the rule reading behind each verdict is visible",
+ "by_state_and_verdict": {
+  "introduced -> False": 4,
+  "raised -> True": 3,
+  "reaffirmed -> UNRESOLVED": 1,
+  "unknown -> False": 6,
+  "unknown -> True": 24,
+  "unknown -> UNRESOLVED": 2
+ },
+ "rows": [
+  {
+   "question_id": "M35df46a5d2795d66",
+   "batch_id": "G2-000",
+   "event_source_id": "0000006201-26-000031",
+   "produced_driver_state": "introduced",
+   "driver_state_verdict": "False",
+   "driver_name": "jet_fuel_expense",
+   "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel"
+  },
+  {
+   "question_id": "M40c9264a220ea3e1",
+   "batch_id": "G2-004",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "effective_tax_rate",
+   "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items."
+  },
+  {
+   "question_id": "M16e5547d3350a121",
+   "batch_id": "G2-005",
+   "event_source_id": "ULTA_2026-03-12T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "False",
+   "driver_name": "earnings_per_share",
+   "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively"
+  },
+  {
+   "question_id": "M63a211408d38ee40",
+   "batch_id": "G2-006",
+   "event_source_id": "0000006201-26-000031",
+   "produced_driver_state": "introduced",
+   "driver_state_verdict": "False",
+   "driver_name": "jet_fuel_expense",
+   "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel"
+  },
+  {
+   "question_id": "M7b666c83f5a85ea2",
+   "batch_id": "G2-012",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "effective_tax_rate",
+   "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items."
+  },
+  {
+   "question_id": "M765d517b782cfa01",
+   "batch_id": "G2-012",
+   "event_source_id": "ULTA_2026-03-12T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "False",
+   "driver_name": "earnings_per_share",
+   "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively"
+  },
+  {
+   "question_id": "Mc666c76ff3657bc1",
+   "batch_id": "G2-019",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "effective_tax_rate",
+   "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items."
+  },
+  {
+   "question_id": "M62a85f0d06c8aa5c",
+   "batch_id": "G2-019",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "gross_restaurant_openings",
+   "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments."
+  },
+  {
+   "question_id": "M42c321d822ac47f4",
+   "batch_id": "G2-019",
+   "event_source_id": "ULTA_2026-03-12T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "False",
+   "driver_name": "earnings_per_share",
+   "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively"
+  },
+  {
+   "question_id": "Mc7890bf18242f3ee",
+   "batch_id": "G2-021",
+   "event_source_id": "0000027904-26-000020",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "operating_margin",
+   "quote": "Operating Margin 6% - 8%"
+  },
+  {
+   "question_id": "Md537d4751f505235",
+   "batch_id": "G2-026",
+   "event_source_id": "DAL_2026-04-08T10.00",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "fuel_expense",
+   "quote": "This includes an estimated $300 million benefit from our refinery."
+  },
+  {
+   "question_id": "Mdeaf9591a2dcc241",
+   "batch_id": "G2-026",
+   "event_source_id": "DRI_2026-03-19T08.30",
+   "produced_driver_state": "raised",
+   "driver_state_verdict": "True",
+   "driver_name": "earnings_per_share",
+   "quote": "adjusted diluted net earnings per share of $10.57 to $10.67"
+  },
+  {
+   "question_id": "M2c147d86c788aab4",
+   "batch_id": "G2-026",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "gross_restaurant_openings",
+   "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments."
+  },
+  {
+   "question_id": "Me41517754e358a49",
+   "batch_id": "G2-027",
+   "event_source_id": "0000027904-26-000020",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "operating_margin",
+   "quote": "Operating Margin 6% - 8%"
+  },
+  {
+   "question_id": "M2631bbcafac8881d",
+   "batch_id": "G2-031",
+   "event_source_id": "DAL_2026-04-08T10.00",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "fuel_expense",
+   "quote": "This includes an estimated $300 million benefit from our refinery."
+  },
+  {
+   "question_id": "Mff46eed2c64e8d13",
+   "batch_id": "G2-032",
+   "event_source_id": "DRI_2026-03-19T08.30",
+   "produced_driver_state": "raised",
+   "driver_state_verdict": "True",
+   "driver_name": "earnings_per_share",
+   "quote": "adjusted diluted net earnings per share of $10.57 to $10.67"
+  },
+  {
+   "question_id": "M20bf61063ac29515",
+   "batch_id": "G2-032",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "gross_restaurant_openings",
+   "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments."
+  },
+  {
+   "question_id": "M6221427dec8dc14b",
+   "batch_id": "G2-033",
+   "event_source_id": "0000027904-26-000020",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "operating_margin",
+   "quote": "Operating Margin 6% - 8%"
+  },
+  {
+   "question_id": "Me74de620b82e56bf",
+   "batch_id": "G2-036",
+   "event_source_id": "0001104659-26-017090",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "restaurant_openings",
+   "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants."
+  },
+  {
+   "question_id": "Mbcadb2079632a153",
+   "batch_id": "G2-037",
+   "event_source_id": "DRI_2026-03-19T08.30",
+   "produced_driver_state": "raised",
+   "driver_state_verdict": "True",
+   "driver_name": "earnings_per_share",
+   "quote": "adjusted diluted net earnings per share of $10.57 to $10.67"
+  },
+  {
+   "question_id": "M4b4e22abcaa8d591",
+   "batch_id": "G2-037",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "restaurant_openings",
+   "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China."
+  },
+  {
+   "question_id": "M8f3cb6b387ec8ba9",
+   "batch_id": "G2-038",
+   "event_source_id": "YUM_2026-02-04T08.15",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "False",
+   "driver_name": "core_operating_profit",
+   "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK."
+  },
+  {
+   "question_id": "M1a1d8504821bf26a",
+   "batch_id": "G2-043",
+   "event_source_id": "0001104659-26-027061",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "False",
+   "driver_name": "comparable_sales",
+   "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%"
+  },
+  {
+   "question_id": "M22ede9a4b555fd5b",
+   "batch_id": "G2-043",
+   "event_source_id": "0001171843-26-001288",
+   "produced_driver_state": "reaffirmed",
+   "driver_state_verdict": "UNRESOLVED",
+   "driver_name": "store_openings",
+   "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year."
+  },
+  {
+   "question_id": "Mba3e48c6e9efd4f9",
+   "batch_id": "G2-044",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "restaurant_openings",
+   "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China."
+  },
+  {
+   "question_id": "M05a0426b99cc6edf",
+   "batch_id": "G2-045",
+   "event_source_id": "YUM_2026-02-04T08.15",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "False",
+   "driver_name": "core_operating_profit",
+   "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK."
+  },
+  {
+   "question_id": "M3e5aa7f1ebcc7dae",
+   "batch_id": "G2-045",
+   "event_source_id": "0000027904-26-000013",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "effective_tax_rate",
+   "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026."
+  },
+  {
+   "question_id": "M5b2ecf7412ac6ecb",
+   "batch_id": "G2-048",
+   "event_source_id": "0001104659-26-027061",
+   "produced_driver_state": "introduced",
+   "driver_state_verdict": "False",
+   "driver_name": "comparable_sales",
+   "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%"
+  },
+  {
+   "question_id": "M61563d2abc07f74c",
+   "batch_id": "G2-049",
+   "event_source_id": "0001171843-26-001288",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "store_openings",
+   "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year."
+  },
+  {
+   "question_id": "Mdb9090926047d818",
+   "batch_id": "G2-050",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "restaurant_openings",
+   "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China."
+  },
+  {
+   "question_id": "M8222e982fe3cfda8",
+   "batch_id": "G2-054",
+   "event_source_id": "0000027904-26-000013",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "effective_tax_rate",
+   "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026."
+  },
+  {
+   "question_id": "Ma529b8a7aa02495d",
+   "batch_id": "G2-056",
+   "event_source_id": "0001058090-26-000007",
+   "produced_driver_state": "introduced",
+   "driver_state_verdict": "False",
+   "driver_name": "restaurant_openings",
+   "quote": "350 to 370 new restaurant openings"
+  },
+  {
+   "question_id": "M93528853809ec3f4",
+   "batch_id": "G2-056",
+   "event_source_id": "0001104659-26-017090",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "restaurant_openings",
+   "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants."
+  },
+  {
+   "question_id": "Md2061d63bedc8f75",
+   "batch_id": "G2-057",
+   "event_source_id": "AAL_2026-04-23T08.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "UNRESOLVED",
+   "driver_name": "fuel_recapture_rate",
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s"
+  },
+  {
+   "question_id": "M72e4aef467cb286e",
+   "batch_id": "G2-060",
+   "event_source_id": "0001058090-26-000007",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "restaurant_openings",
+   "quote": "350 to 370 new restaurant openings"
+  },
+  {
+   "question_id": "Mfc55a0436aac4c78",
+   "batch_id": "G2-060",
+   "event_source_id": "0001104659-26-017090",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "restaurant_openings",
+   "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants."
+  },
+  {
+   "question_id": "M74ee782ce4554785",
+   "batch_id": "G2-061",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "group_occasion_sales_mix",
+   "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term."
+  },
+  {
+   "question_id": "M58a292b9b8e315f9",
+   "batch_id": "G2-062",
+   "event_source_id": "0000027904-26-000013",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "effective_tax_rate",
+   "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026."
+  },
+  {
+   "question_id": "M700afaa8868c8f08",
+   "batch_id": "G2-062",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "UNRESOLVED",
+   "driver_name": "group_occasion_sales_mix",
+   "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term."
+  },
+  {
+   "question_id": "Mb65ece4291c4b307",
+   "batch_id": "G2-065",
+   "event_source_id": "AAL_2026-04-23T08.30",
+   "produced_driver_state": "unknown",
+   "driver_state_verdict": "True",
+   "driver_name": "fuel_recapture_rate",
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s"
+  }
+ ]
+}

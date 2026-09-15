@@ -1,0 +1,2079 @@
+{
+ "scope": "review of the TEST over every G2 question whose produced fact_type is guidance; no grade rewritten, no key touched",
+ "population_sha256": "0fb5d26d7215a4bf450cabe3283ec9e5f624eb3a44da3c3c013295419b1eaa20",
+ "guidance_questions": 40,
+ "repeatability": {
+  "records_asked_more_than_once": 10,
+  "askings": 28,
+  "record_x_aspect_cells": 70,
+  "identical_across_askings": 57,
+  "decided_both_ways": 1,
+  "decided_once_unresolved_elsewhere": 12,
+  "rate": 0.8143,
+  "contradictions": [
+   {
+    "driver_name": "operating_margin",
+    "event_source_id": "0000027904-26-000020",
+    "aspect": "record_matches_source",
+    "verdicts": {
+     "Mc7890bf18242f3ee": "UNRESOLVED",
+     "Me41517754e358a49": "False",
+     "M6221427dec8dc14b": "True"
+    }
+   }
+  ]
+ },
+ "review_tally": {
+  "driver_name_meaning|cannot_establish": 40,
+  "driver_state|cannot_establish": 37,
+  "driver_state|disagree": 3,
+  "favorability|agree": 40,
+  "growth_basis|cannot_establish": 40,
+  "lane_routing|agree": 40,
+  "record_matches_source|cannot_establish": 40,
+  "slice_vs_menu|agree": 27,
+  "slice_vs_menu|cannot_establish": 13
+ },
+ "questions": [
+  {
+   "question_id": "M35df46a5d2795d66",
+   "batch_id": "G2-000",
+   "prompt_sha256": "aceb467cc7e79f4603b71c4747fc232bb2a11672f173375af4c82587c963bd72",
+   "event_source_id": "0000006201-26-000031",
+   "event_date": "2026-04-23",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "jet_fuel_expense",
+   "driver_state": "introduced",
+   "company_confirmed": true,
+   "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+   "reference_name": "increase in expense related to higher prices for jet fuel",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M40c9264a220ea3e1",
+   "batch_id": "G2-004",
+   "prompt_sha256": "41e3c1980722f7a60c8f073ec9b10a459aac8413a9c2dfad923d70d7fb148c03",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "event_date": "2026-02-03",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "effective_tax_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items.",
+   "reference_name": "underlying effective tax rate",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M16e5547d3350a121",
+   "batch_id": "G2-005",
+   "prompt_sha256": "5bdc36730e3a006a28f9058bd6378823215fd1f9e5274e8ba913524e21dd5dfe",
+   "event_source_id": "ULTA_2026-03-12T16.30",
+   "event_date": "2026-03-12",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "earnings_per_share",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+   "reference_name": "diluted EPS",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M63a211408d38ee40",
+   "batch_id": "G2-006",
+   "prompt_sha256": "d383c9e72825a83e9646076d95239f655dcbe2f051518d01eb6a6c6ceda6bdbd",
+   "event_source_id": "0000006201-26-000031",
+   "event_date": "2026-04-23",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "jet_fuel_expense",
+   "driver_state": "introduced",
+   "company_confirmed": true,
+   "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+   "reference_name": "increase in expense related to higher prices for jet fuel",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M7b666c83f5a85ea2",
+   "batch_id": "G2-012",
+   "prompt_sha256": "c1db9e6890d57e37784361c9748ba637b4a4b01e7f8f6ec2f7ef1f1336df3e57",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "event_date": "2026-02-03",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "effective_tax_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items.",
+   "reference_name": "underlying effective tax rate",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M765d517b782cfa01",
+   "batch_id": "G2-012",
+   "prompt_sha256": "c1db9e6890d57e37784361c9748ba637b4a4b01e7f8f6ec2f7ef1f1336df3e57",
+   "event_source_id": "ULTA_2026-03-12T16.30",
+   "event_date": "2026-03-12",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "earnings_per_share",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+   "reference_name": "diluted EPS",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mc666c76ff3657bc1",
+   "batch_id": "G2-019",
+   "prompt_sha256": "7cb10aa55faaba36ded6918390cb63188d1b064c615b9951a098515de67ace15",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "event_date": "2026-02-03",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "effective_tax_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items.",
+   "reference_name": "underlying effective tax rate",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M62a85f0d06c8aa5c",
+   "batch_id": "G2-019",
+   "prompt_sha256": "7cb10aa55faaba36ded6918390cb63188d1b064c615b9951a098515de67ace15",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "event_date": "2026-02-11",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "gross_restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments.",
+   "reference_name": "about 750 of these in our U.S. and IOM segments",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M42c321d822ac47f4",
+   "batch_id": "G2-019",
+   "prompt_sha256": "7cb10aa55faaba36ded6918390cb63188d1b064c615b9951a098515de67ace15",
+   "event_source_id": "ULTA_2026-03-12T16.30",
+   "event_date": "2026-03-12",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "earnings_per_share",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+   "reference_name": "diluted EPS",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mc7890bf18242f3ee",
+   "batch_id": "G2-021",
+   "prompt_sha256": "8641baff01e94dff77dd082bf98238d23af6d84a1361a589c31075a30e3755e5",
+   "event_source_id": "0000027904-26-000020",
+   "event_date": "2026-04-08",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "operating_margin",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Operating Margin 6% - 8%",
+   "reference_name": "Operating Margin",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Md537d4751f505235",
+   "batch_id": "G2-026",
+   "prompt_sha256": "ec34f46ba0bbc1787b26ab1e9fbac9220da0033095ff928a925544e37672f15f",
+   "event_source_id": "DAL_2026-04-08T10.00",
+   "event_date": "2026-04-08",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "fuel_expense",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "This includes an estimated $300 million benefit from our refinery.",
+   "reference_name": "an estimated $300 million benefit from our refinery",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mdeaf9591a2dcc241",
+   "batch_id": "G2-026",
+   "prompt_sha256": "ec34f46ba0bbc1787b26ab1e9fbac9220da0033095ff928a925544e37672f15f",
+   "event_source_id": "DRI_2026-03-19T08.30",
+   "event_date": "2026-03-19",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "earnings_per_share",
+   "driver_state": "raised",
+   "company_confirmed": true,
+   "quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "reference_name": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "disagree",
+     "ground": "the record states driver_state 'raised'; this event's qa part states the prior guide as $10.50 to $10.70 against the new $10.57 to $10.67, which narrows the range and leaves the midpoint unchanged. CONTRACT 'THE STATE, BY LANE' allows guidance movement ONLY where the source states it, and the source states an update, not a raise. Existing verdict credits it true."
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M2c147d86c788aab4",
+   "batch_id": "G2-026",
+   "prompt_sha256": "ec34f46ba0bbc1787b26ab1e9fbac9220da0033095ff928a925544e37672f15f",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "event_date": "2026-02-11",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "gross_restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments.",
+   "reference_name": "about 750 of these in our U.S. and IOM segments",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Me41517754e358a49",
+   "batch_id": "G2-027",
+   "prompt_sha256": "c0f7f342829fc9e9a105117fd192048e02d332802dd181a068e8ba0dbe365c34",
+   "event_source_id": "0000027904-26-000020",
+   "event_date": "2026-04-08",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "operating_margin",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Operating Margin 6% - 8%",
+   "reference_name": "Operating Margin",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M2631bbcafac8881d",
+   "batch_id": "G2-031",
+   "prompt_sha256": "bbb96c35c28c1534d7e0f172b7e9a47ae8d729c3c38ee689aab1e42e2f55c861",
+   "event_source_id": "DAL_2026-04-08T10.00",
+   "event_date": "2026-04-08",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "fuel_expense",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "This includes an estimated $300 million benefit from our refinery.",
+   "reference_name": "an estimated $300 million benefit from our refinery",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mff46eed2c64e8d13",
+   "batch_id": "G2-032",
+   "prompt_sha256": "f90bcfa6d3bdc8a14972185ace2a295a2b4d148b8d0b3304fd77ab738e215097",
+   "event_source_id": "DRI_2026-03-19T08.30",
+   "event_date": "2026-03-19",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "earnings_per_share",
+   "driver_state": "raised",
+   "company_confirmed": true,
+   "quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "reference_name": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "disagree",
+     "ground": "same record and event as Mdeaf9591a2dcc241; same ground."
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M20bf61063ac29515",
+   "batch_id": "G2-032",
+   "prompt_sha256": "f90bcfa6d3bdc8a14972185ace2a295a2b4d148b8d0b3304fd77ab738e215097",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "event_date": "2026-02-11",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "gross_restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments.",
+   "reference_name": "about 750 of these in our U.S. and IOM segments",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M6221427dec8dc14b",
+   "batch_id": "G2-033",
+   "prompt_sha256": "962eda67e48c1cc8033abfd9c6bc84689ed83f01e0c3b19891d000588d2a7929",
+   "event_source_id": "0000027904-26-000020",
+   "event_date": "2026-04-08",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "operating_margin",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Operating Margin 6% - 8%",
+   "reference_name": "Operating Margin",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Me74de620b82e56bf",
+   "batch_id": "G2-036",
+   "prompt_sha256": "459a687ced991ed074f5593496301256c6241c3d0696c52fe09b39bff80ad373",
+   "event_source_id": "0001104659-26-017090",
+   "event_date": "2026-02-18",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+   "reference_name": "six to seven Flower Child locations",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mbcadb2079632a153",
+   "batch_id": "G2-037",
+   "prompt_sha256": "45407fe5263c1bf4c553b7f9fb229a664e481fdd0b2cd1115c017e8c80bad94d",
+   "event_source_id": "DRI_2026-03-19T08.30",
+   "event_date": "2026-03-19",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "earnings_per_share",
+   "driver_state": "raised",
+   "company_confirmed": true,
+   "quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "reference_name": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "disagree",
+     "ground": "same record and event as Mdeaf9591a2dcc241; same ground."
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M4b4e22abcaa8d591",
+   "batch_id": "G2-037",
+   "prompt_sha256": "45407fe5263c1bf4c553b7f9fb229a664e481fdd0b2cd1115c017e8c80bad94d",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "event_date": "2026-02-11",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+   "reference_name": "about 1,000 in China",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M8f3cb6b387ec8ba9",
+   "batch_id": "G2-038",
+   "prompt_sha256": "bfef11759344f939144607fadc1e78e5769b7739cb86a04bc4701722bfe1cde0",
+   "event_source_id": "YUM_2026-02-04T08.15",
+   "event_date": "2026-02-04",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "core_operating_profit",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+   "reference_name": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M1a1d8504821bf26a",
+   "batch_id": "G2-043",
+   "prompt_sha256": "0909dad6370ac55a114d436dfd45c9a31b9b4e72fa39e61f8b1f8dee8b0f1d26",
+   "event_source_id": "0001104659-26-027061",
+   "event_date": "2026-03-12",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "comparable_sales",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%",
+   "reference_name": "Comparable sales growth",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M22ede9a4b555fd5b",
+   "batch_id": "G2-043",
+   "prompt_sha256": "0909dad6370ac55a114d436dfd45c9a31b9b4e72fa39e61f8b1f8dee8b0f1d26",
+   "event_source_id": "0001171843-26-001288",
+   "event_date": "2026-03-03",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "store_openings",
+   "driver_state": "reaffirmed",
+   "company_confirmed": true,
+   "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+   "reference_name": "approximately 350-360 stores for the full fiscal year",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mba3e48c6e9efd4f9",
+   "batch_id": "G2-044",
+   "prompt_sha256": "be366c17a2411d9841705cb58a043be453c9d193f1d679f111cb6b6e2f54cd68",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "event_date": "2026-02-11",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+   "reference_name": "about 1,000 in China",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M05a0426b99cc6edf",
+   "batch_id": "G2-045",
+   "prompt_sha256": "6d489d820b61eea9584ab0773ab84d3be9f8c349b69c6190a247550d7979572f",
+   "event_source_id": "YUM_2026-02-04T08.15",
+   "event_date": "2026-02-04",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "core_operating_profit",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+   "reference_name": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M3e5aa7f1ebcc7dae",
+   "batch_id": "G2-045",
+   "prompt_sha256": "6d489d820b61eea9584ab0773ab84d3be9f8c349b69c6190a247550d7979572f",
+   "event_source_id": "0000027904-26-000013",
+   "event_date": "2026-02-10",
+   "part_ref": "mdna",
+   "quote_verbatim_in_part": true,
+   "driver_name": "effective_tax_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+   "reference_name": "annual effective tax rate",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M5b2ecf7412ac6ecb",
+   "batch_id": "G2-048",
+   "prompt_sha256": "567af46bbe8c68981a90a6c6d34a85a23ef1de95ffdda580909b213ff4d79c43",
+   "event_source_id": "0001104659-26-027061",
+   "event_date": "2026-03-12",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "comparable_sales",
+   "driver_state": "introduced",
+   "company_confirmed": true,
+   "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%",
+   "reference_name": "Comparable sales growth",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M61563d2abc07f74c",
+   "batch_id": "G2-049",
+   "prompt_sha256": "18d6bda8524c5bdaa9e9a0608af20f0cc3685196003ebcfe6c70cad49058bb24",
+   "event_source_id": "0001171843-26-001288",
+   "event_date": "2026-03-03",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "store_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+   "reference_name": "approximately 350-360 stores for the full fiscal year",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mdb9090926047d818",
+   "batch_id": "G2-050",
+   "prompt_sha256": "b5eec38a55e5884b60d7a88e23b143c0fb62d458d36f235cf2424d3674191334",
+   "event_source_id": "MCD_2026-02-11T16.30",
+   "event_date": "2026-02-11",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+   "reference_name": "about 1,000 in China",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M8222e982fe3cfda8",
+   "batch_id": "G2-054",
+   "prompt_sha256": "6d3110d7fe899948d9f0971f767ce65d5afeedd124b0ae4c8408af5a1ad466b0",
+   "event_source_id": "0000027904-26-000013",
+   "event_date": "2026-02-10",
+   "part_ref": "mdna",
+   "quote_verbatim_in_part": true,
+   "driver_name": "effective_tax_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+   "reference_name": "annual effective tax rate",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Ma529b8a7aa02495d",
+   "batch_id": "G2-056",
+   "prompt_sha256": "c9bb85121122e1b2b8eed092c000c5aebdff333cf122a29c69f80a4c9b33db0f",
+   "event_source_id": "0001058090-26-000007",
+   "event_date": "2026-02-03",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "introduced",
+   "company_confirmed": true,
+   "quote": "350 to 370 new restaurant openings",
+   "reference_name": "350 to 370 new restaurant openings",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M93528853809ec3f4",
+   "batch_id": "G2-056",
+   "prompt_sha256": "c9bb85121122e1b2b8eed092c000c5aebdff333cf122a29c69f80a4c9b33db0f",
+   "event_source_id": "0001104659-26-017090",
+   "event_date": "2026-02-18",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+   "reference_name": "six to seven Flower Child locations",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Md2061d63bedc8f75",
+   "batch_id": "G2-057",
+   "prompt_sha256": "32cc5687bf09412f54e35dc867cfad22302e9dd23969cdfeb63a72bafc29d03b",
+   "event_source_id": "AAL_2026-04-23T08.30",
+   "event_date": "2026-04-23",
+   "part_ref": "qa",
+   "quote_verbatim_in_part": true,
+   "driver_name": "fuel_recapture_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+   "reference_name": "recapture rate would be in the 90s",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M72e4aef467cb286e",
+   "batch_id": "G2-060",
+   "prompt_sha256": "6c7e85acc472150d88370e11ad34c9c5be9a2eb9b7b5066140b64e8dafbb1c2d",
+   "event_source_id": "0001058090-26-000007",
+   "event_date": "2026-02-03",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "350 to 370 new restaurant openings",
+   "reference_name": "350 to 370 new restaurant openings",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mfc55a0436aac4c78",
+   "batch_id": "G2-060",
+   "prompt_sha256": "6c7e85acc472150d88370e11ad34c9c5be9a2eb9b7b5066140b64e8dafbb1c2d",
+   "event_source_id": "0001104659-26-017090",
+   "event_date": "2026-02-18",
+   "part_ref": "exhibit_99_1",
+   "quote_verbatim_in_part": true,
+   "driver_name": "restaurant_openings",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+   "reference_name": "six to seven Flower Child locations",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M74ee782ce4554785",
+   "batch_id": "G2-061",
+   "prompt_sha256": "a3ab91c8f9060c32c2ae2eb6f09042ce635f320d0cdea305777d2ff4497b9e00",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "event_date": "2026-02-03",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "group_occasion_sales_mix",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+   "reference_name": "could be double-digit percentage of sales longer term",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M58a292b9b8e315f9",
+   "batch_id": "G2-062",
+   "prompt_sha256": "eb5071a8b4fb073f75103750af762f8ab9e0eb03d47ceb19837febaa7a191cdb",
+   "event_source_id": "0000027904-26-000013",
+   "event_date": "2026-02-10",
+   "part_ref": "mdna",
+   "quote_verbatim_in_part": true,
+   "driver_name": "effective_tax_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+   "reference_name": "annual effective tax rate",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "M700afaa8868c8f08",
+   "batch_id": "G2-062",
+   "prompt_sha256": "eb5071a8b4fb073f75103750af762f8ab9e0eb03d47ceb19837febaa7a191cdb",
+   "event_source_id": "CMG_2026-02-03T16.30",
+   "event_date": "2026-02-03",
+   "part_ref": "prepared_remarks",
+   "quote_verbatim_in_part": true,
+   "driver_name": "group_occasion_sales_mix",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+   "reference_name": "could be double-digit percentage of sales longer term",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "False",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  },
+  {
+   "question_id": "Mb65ece4291c4b307",
+   "batch_id": "G2-065",
+   "prompt_sha256": "784b0291da7a0183ff2f4bcdeccd6becd34bc9388ff7e59e2acb4866e2a770e0",
+   "event_source_id": "AAL_2026-04-23T08.30",
+   "event_date": "2026-04-23",
+   "part_ref": "qa",
+   "quote_verbatim_in_part": true,
+   "driver_name": "fuel_recapture_rate",
+   "driver_state": "unknown",
+   "company_confirmed": true,
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+   "reference_name": "recapture rate would be in the 90s",
+   "aspects": {
+    "driver_state": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "driver_name_meaning": {
+     "existing_verdict": "True",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "lane_routing": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "favorability": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    },
+    "growth_basis": {
+     "existing_verdict": "UNRESOLVED",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "record_matches_source": {
+     "existing_verdict": "False",
+     "review": "cannot_establish",
+     "ground": "this event does not settle it for me"
+    },
+    "slice_vs_menu": {
+     "existing_verdict": "True",
+     "review": "agree",
+     "ground": "settled by the served contract"
+    }
+   }
+  }
+ ]
+}

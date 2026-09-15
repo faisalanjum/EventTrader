@@ -1,0 +1,983 @@
+{
+  "schema": "a7-diagnostic-handover-evidence-v1",
+  "date": "2026-09-15",
+  "authority": "Immutable evidence inventory only; STATUS_AND_HISTORY.md owns current interpretation and task. No A7 pass or production approval.",
+  "manifest_note": "Original 31-entry manifest reconstructed exactly from its unchanged rows; original SHA256 verified. Core later expanded MANIFEST.txt to 36 entries; it does not cover this full checkpoint. This index covers all listed evidence except itself.",
+  "files": [
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/ADDENDUM_2179.md",
+      "bytes": 4195,
+      "sha256": "cd6d6c44be7b1c68fa94232a9d86970c07bb921a72a32e901d29adb899d3b502"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/ANALYSIS.md",
+      "bytes": 12463,
+      "sha256": "06c85ac40de6d2edb350fd7cea8156fb91056d9cf21f1127577d3cef6a2bac81"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/MANIFEST.txt",
+      "bytes": 1502,
+      "sha256": "d9ed4ddb6d69543162e0aeb9c105615668c5c6f3380c651a77521b8b85b80f89"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/MANIFEST_original.txt",
+      "bytes": 1289,
+      "sha256": "11feecc54e0b83f87708564f38052e6345bf164c82df023e6fe4f39d853e4567"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap045a-5ffb568d30933e75.jsonl",
+      "bytes": 344968,
+      "sha256": "aff475e503e9419c3051f6a078925e6b692cbb680d7fcbc3c8eaf67688bae822"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap045a-5ffb568d30933e75.meta.json",
+      "bytes": 259,
+      "sha256": "78f51bfcb6a20d83018029fcbaa22ff6545f6ea1e2d7f680ad6de7a80f9f70e2"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap045b-bf4c5bbc598ee7dc.jsonl",
+      "bytes": 277664,
+      "sha256": "a70cf326c772d49a166beabc7823697474f85ef817be1b7b475459efd6e67adf"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap045b-bf4c5bbc598ee7dc.meta.json",
+      "bytes": 258,
+      "sha256": "8bb14cfba570fb1b22507945f2f8773941bd6254c482020c733ea143127a5fbb"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap048a-182177277476d7ca.jsonl",
+      "bytes": 409894,
+      "sha256": "3cc7e4688aea6bd34b019abbb9d4366a06cc83df68b415a69ffdabf09c58b5ef"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap048a-182177277476d7ca.meta.json",
+      "bytes": 261,
+      "sha256": "b236c342db24778785aebf3a7776c799475274db88389677d568d6ecac81bedd"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap048b-e87505693664750d.jsonl",
+      "bytes": 289254,
+      "sha256": "a451add61cca9a35de786045e5f485791a0f3ca39d293fdd09bad11d3c4dcf53"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/agent-ap048b-e87505693664750d.meta.json",
+      "bytes": 259,
+      "sha256": "82c4e54a1c11c5490e55bb75a82547be6b90fd91de08fabf2782e05834bd9065"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/archive_CODEX_2179.md",
+      "bytes": 3333,
+      "sha256": "5f13007939238dcf59677aeba15347f694050ea35092c4827f1248ef321efd14"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/archive_CORE_2175.md",
+      "bytes": 5695,
+      "sha256": "5616bf993e7f046f24244af427c1a5b1cb3e306ff3c4ca818e1b06039a99bc8e"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/evidence/parent_call_records.jsonl",
+      "bytes": 19494,
+      "sha256": "89f26e492706b32c24518c3586369f7d130a89b22640e4715c79ce537a657240"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/prompts/HEADFINAL_AAL.txt",
+      "bytes": 86340,
+      "sha256": "56c159ed420f698d08385bcea6844e8c026b30e4187fb0a45411d80671f25a40"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/prompts/HEADFINAL_BBY.txt",
+      "bytes": 83865,
+      "sha256": "40ac4b7ad578c55dce55cc40c7c4ebd952998783fb70f0b06ebfecf7cb6c1d8c"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/prompts/SEND_0000006201-26-000032_007.txt",
+      "bytes": 86767,
+      "sha256": "936556ac46b6a515708fbac7f5d135a9b6a308d9397aa7c07f3cbbb5f8d6b159"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/prompts/SEND_0000006201-26-000032_008.txt",
+      "bytes": 86940,
+      "sha256": "e16ba1f52f3cd5dec2c4a477196041649aed8472d040a0c90ac8921b438a7f3e"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/prompts/SEND_0000764478-25-000057_045.txt",
+      "bytes": 84670,
+      "sha256": "9855fb6a34c8679497cc454921541f8799741f18dca3cd0df788a705b973d5ce"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/prompts/SEND_0000764478-25-000057_048.txt",
+      "bytes": 84085,
+      "sha256": "8adc9ea68328e3ef6152bc3dafcd7aad4eb9c310b2a45dcc3af4c21b6b5ced50"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/DEFECTS.txt",
+      "bytes": 1523,
+      "sha256": "3295b51d3361575ba47656f391b50083fd3b4c5fb782448774ceeb85d31fc574"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/GEOMETRY.txt",
+      "bytes": 166,
+      "sha256": "5854f259b5c220644fc133ccc7b5e259795d96a984bddd72eb1bdd9eb1ede5f4"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/GEOMETRY_V2.txt",
+      "bytes": 239,
+      "sha256": "93331a451b82f99d0acd14f91f595a80f5bffcf551545ef075c783bdab7c23a7"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/GEOMETRY_V3.txt",
+      "bytes": 239,
+      "sha256": "f3a8c71d26d59e0da528bff4112d28c3c83ef51dd20b86b4c2ce711d7e1e1258"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/KEY.json",
+      "bytes": 6690,
+      "sha256": "ebd4fce48ee13d00f9317924d37dd4ede5a675e8ebf674065554085f345d9fce"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/TWO_PARSERS.txt",
+      "bytes": 83,
+      "sha256": "45323226c4e767f869a7e94de5388d6a156c5e4bfe3883e962646e332e7aa955"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/WELD_PRODUCTION.txt",
+      "bytes": 1009,
+      "sha256": "98265ce90fc8b9419d8fafc75fbee919e5147da3624e3828343aa70858274286"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/block.txt",
+      "bytes": 2085,
+      "sha256": "ef09962da4f550330e50309d3c0aecb5501095090ba628233d9887d954ee4eaa"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/results/grid.txt",
+      "bytes": 1488,
+      "sha256": "bbdfc312c7a3201d30301b5bd7465bf7901a12d8f45b7856cdc19170680c80f9"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/runs/p045a.json",
+      "bytes": 855,
+      "sha256": "bf7a9dbad97e3e05c4f903dc998ed7f8c164dfab0320082520b50a62e20f3efd"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/runs/p045b.json",
+      "bytes": 874,
+      "sha256": "b831de54951a24878da208636bd87db72377a9217d81c414d0d8cb3555575161"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/runs/p048a.json",
+      "bytes": 1414,
+      "sha256": "6260af512394aed9c8845e174389d4a81e4f3641c05b786ddd4cb2c08e3940f4"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/runs/p048b.json",
+      "bytes": 1414,
+      "sha256": "f9db289089f69542b26e0436af8efe35d8c81af1bcbe2792499b0cac46856da6"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/add_rule.py",
+      "bytes": 1353,
+      "sha256": "ab58d8e7542f6a0306fbd2c0b02ee732919f94ae7866d5d6f1b66697fefd7f31"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/docling_scale.py",
+      "bytes": 1194,
+      "sha256": "88590f9dbf99770a95cd2fb83a7e07551526969359db32d6de58464a3181fde4"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/filing_table.py",
+      "bytes": 2606,
+      "sha256": "230b31d032bebcf67a66abe3a1f37b6da5dc4da1849576a59d0fad41850ce0b2"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/geom_ambiguity.py",
+      "bytes": 2054,
+      "sha256": "90e0ec9a3de83e25d829930710632a260c326800df5413fc1f1b393ade57a270"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/geom_ambiguity_v2.py",
+      "bytes": 2399,
+      "sha256": "d2e944d73957f0516fface09cc91007a7508b04ce840c3171ab3a8921a7e400b"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/geom_ambiguity_v3.py",
+      "bytes": 2217,
+      "sha256": "93f426c999e270fc60311ccb439b69c2a36dafe02b3d960a6e57a8e2eee413a2"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/make_grid.py",
+      "bytes": 694,
+      "sha256": "debcaee8a755489ceaf719795b3a350933bdf633429553a09cc021acf6737b1c"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/match2.py",
+      "bytes": 938,
+      "sha256": "4db1c00b8e0ac9a8c9f1b8cf5b80382a7ddc81aaac1783ac2a53c16b5d0a708b"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/repair.py",
+      "bytes": 2408,
+      "sha256": "9a14ea31bdb29c588b0347880cc874241fe3d1e2ac2d7b0609c593d3926cdb14"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/repair_final.py",
+      "bytes": 2272,
+      "sha256": "aa4dea8d782291a0eae9628c3460c3f07e2d11d2e0548dd24ac049aaf10b5f6a"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/spans.py",
+      "bytes": 949,
+      "sha256": "1c0feb5349bad1f75fcc6acd5cdbd307efb7fa7a02a07b7058af7ebf47268c1e"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/two_parsers.py",
+      "bytes": 2392,
+      "sha256": "991e876e4f5e447520c9ca45d48ff01185596d8e59b20a0cca1b02b2ba5e7ae7"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/verify_all.py",
+      "bytes": 2381,
+      "sha256": "e1087843f095d1d7f8ae0e122c8328ef1a8d2c5ad6ce7dbdf5a0cfdcac2b770d"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/verify_defects.py",
+      "bytes": 2279,
+      "sha256": "b8bda9b34f4811549f56128c8417ed8691ce09949d4c1d73e617768fc1fcaa09"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/verify_final.py",
+      "bytes": 1931,
+      "sha256": "e552d1f1551f8bf854d14b271f8e19b6da5dec4cc6e0ccbce69934d00c640148"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/scripts/weld_production.py",
+      "bytes": 2225,
+      "sha256": "0cbe8ff17b7457bbb64eb7e056e0105972499013c1418ed57272e153deb30d2e"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/sources/0000006201-26-000032.htm",
+      "bytes": 1769040,
+      "sha256": "b2d1c900837059b8f8a88f7f368c8383fa2d05fbe909c41589429773dde8c160"
+    },
+    {
+      "path": "a7_recovery/unit_input_diagnosis_20260915/sources/0000764478-25-000057.htm",
+      "bytes": 1258262,
+      "sha256": "b1dacdefb7aa545ba8d837dbe06daa256c9dfd2c5aff990bdcbdc0b2d81ef5b0"
+    },
+    {
+      "path": "a7_recovery/unit_2113_guidance_review/DRIVER_STATE_EVIDENCE_2113.json",
+      "bytes": 15005,
+      "sha256": "ba856028357c26f31c41883c87b96e527ef1028034bef438e5678ba0529992c3"
+    },
+    {
+      "path": "a7_recovery/unit_2113_guidance_review/FINDINGS_2113.json",
+      "bytes": 7313,
+      "sha256": "ecd8d9b18bf9b8f533717ebaf19f75ae2c2a55a83006ff1ec561d292e4011788"
+    },
+    {
+      "path": "a7_recovery/unit_2113_guidance_review/GUIDANCE_POPULATION_2113.json",
+      "bytes": 1629532,
+      "sha256": "0fb5d26d7215a4bf450cabe3283ec9e5f624eb3a44da3c3c013295419b1eaa20"
+    },
+    {
+      "path": "a7_recovery/unit_2113_guidance_review/GUIDANCE_REVIEW_2113.json",
+      "bytes": 67556,
+      "sha256": "0ab9ff7f6fcc8fcf7f10199dee26c8b58d1abce7a6276dcf3c4613507331c100"
+    },
+    {
+      "path": "a7_recovery/unit_2113_guidance_review/build_review_2113.py",
+      "bytes": 6953,
+      "sha256": "5c7bb9a70792dd25fe2c5e5b438e773bbb797fbe6869e0c22740bf5066b5ae2f"
+    },
+    {
+      "path": "a7_recovery/unit_2113_guidance_review/extract_guidance_2113.py",
+      "bytes": 5047,
+      "sha256": "0b0edab4c9889dc3e9f5e2712d9a520685a365284dfc40819c2b5a88ca56df5b"
+    }
+  ],
+  "file_count": 58,
+  "total_bytes": 6690534,
+  "python_syntax_checked": 18,
+  "run_bindings": [
+    {
+      "run": "p045a",
+      "transcript": "evidence/agent-ap045a-5ffb568d30933e75.jsonl",
+      "input": "prompts/SEND_0000764478-25-000057_045.txt",
+      "response": "runs/p045a.json",
+      "observed_model": [
+        "claude-sonnet-5"
+      ],
+      "all_511_input_lines_matched": true,
+      "saved_json_equals_native_response": true,
+      "response_binding": "first SendMessage object",
+      "end_turn_utc": "2026-09-15T12:06:41.996Z"
+    },
+    {
+      "run": "p045b",
+      "transcript": "evidence/agent-ap045b-bf4c5bbc598ee7dc.jsonl",
+      "input": "prompts/SEND_0000764478-25-000057_045.txt",
+      "response": "runs/p045b.json",
+      "observed_model": [
+        "claude-sonnet-5"
+      ],
+      "all_511_input_lines_matched": true,
+      "saved_json_equals_native_response": true,
+      "response_binding": "final text JSON (markdown fences removed when present)",
+      "end_turn_utc": "2026-09-15T12:04:15.919Z"
+    },
+    {
+      "run": "p048a",
+      "transcript": "evidence/agent-ap048a-182177277476d7ca.jsonl",
+      "input": "prompts/SEND_0000764478-25-000057_048.txt",
+      "response": "runs/p048a.json",
+      "observed_model": [
+        "claude-sonnet-5"
+      ],
+      "all_511_input_lines_matched": true,
+      "saved_json_equals_native_response": true,
+      "response_binding": "final text JSON (markdown fences removed when present)",
+      "end_turn_utc": "2026-09-15T12:05:09.870Z"
+    },
+    {
+      "run": "p048b",
+      "transcript": "evidence/agent-ap048b-e87505693664750d.jsonl",
+      "input": "prompts/SEND_0000764478-25-000057_048.txt",
+      "response": "runs/p048b.json",
+      "observed_model": [
+        "claude-sonnet-5"
+      ],
+      "all_511_input_lines_matched": true,
+      "saved_json_equals_native_response": true,
+      "response_binding": "final text JSON (markdown fences removed when present)",
+      "end_turn_utc": "2026-09-15T12:04:58.064Z"
+    }
+  ],
+  "benchmark_sources": {
+    "cache_root": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache",
+    "measurement_counts": {
+      "geometry": 25,
+      "docling": 30,
+      "newline_proxy": 15
+    },
+    "roster": [
+      {
+        "filename": "0000005272-25-000012.htm",
+        "bytes": 12307024,
+        "sha256": "fe998f95f362c6bc04bca88f357b1ada79de965d28977daebd04b2da929a6d6b",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0000008818-23-000015.htm",
+        "bytes": 1122507,
+        "sha256": "b45e12de7b13d04b9eb9711c573f0bf12447c0de50f4a21d7b4ad2d86aa2077d",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000038777-26-000101.htm",
+        "bytes": 2084870,
+        "sha256": "b43c78784570b8f20ea9b175696fcc444c4b8227d5d3a457a229944a0c505988",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000051434-23-000022.htm",
+        "bytes": 1412710,
+        "sha256": "c8e85d8e0027dae25495855e45a28de71280097cdb5436d5141e01fb0af7e198",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0000051434-24-000067.htm",
+        "bytes": 1572364,
+        "sha256": "63b6e3ee499065a413ad4f6538e1d713b72da69f90ed3779b4d962914adbaab7",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000074208-24-000039.htm",
+        "bytes": 3529507,
+        "sha256": "a8559027c4fa50282bd430a9bcd32fcfce2777df666b89305785160b9c3e1c92",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000078003-24-000107.htm",
+        "bytes": 2322627,
+        "sha256": "4ca69ed23772a25938432b906f5676fed052aebf0c85dd6b5ee63d5c27c90767",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0000096021-25-000010.htm",
+        "bytes": 2753544,
+        "sha256": "2683c13c6bf8116ad9ff900fc9bdb72a01c14772e00b5d43a2587f49797a5226",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0000104169-25-000090.htm",
+        "bytes": 1224449,
+        "sha256": "0e74ec69de7a33c466a4f6e8f86f75473bd900cc7e2728327c88b64af9b9b50c",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0000107263-24-000063.htm",
+        "bytes": 1844286,
+        "sha256": "1b74a8e8206b677e06b982a95585f2afe89eb3227f6e6870d3b34662f59cbaa5",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0000107815-23-000196.htm",
+        "bytes": 3772683,
+        "sha256": "9e37037f666171cb5c0f3d453e2cc893baba77f8b0dedd6316741b2008cbab2e",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000320193-24-000123.htm",
+        "bytes": 1503780,
+        "sha256": "24a830a0f1256e371d36a1f7f72e5e85a38037d1de2f6f966eb8457db42ff6d6",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000717423-24-000038.htm",
+        "bytes": 1763197,
+        "sha256": "62d43241afafa08d7af1d0063f9db42d5aa8fdd8665c8401650c4839c4ba3af6",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0000731766-23-000064.htm",
+        "bytes": 1631581,
+        "sha256": "58475066eb7a233adb8b487b5f61d2635543809f0b3d4ea0594efa6b20e9db33",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0000771497-25-000022.htm",
+        "bytes": 1367063,
+        "sha256": "6458f48a493de57c1236951d05a57c9a1dfa9dc42ae093b2c9a4b33e8b9beacd",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000779152-24-000018.htm",
+        "bytes": 1020906,
+        "sha256": "b09fcf609f08ddc59f13f7e77ca6fe4e99fee42ded4aef89d528c4a8ad13908b",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0000783325-25-000030.htm",
+        "bytes": 4250324,
+        "sha256": "51abfc890d2e8fc3de0bac17f6d47f1050c0d0093b510985c7770575bd5fff51",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0000804328-25-000031.htm",
+        "bytes": 1169011,
+        "sha256": "145831dae148281829c770333ce3a2e905397d07d74a26fdf12eda22d65518e1",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000821189-25-000070.htm",
+        "bytes": 1391763,
+        "sha256": "d33a32800036f8b60d7037b901e1152c1fb382a4a9934a3e5c0e6c9938855d21",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000864749-25-000245.htm",
+        "bytes": 1499998,
+        "sha256": "45c37eca07117ff5fadc99164ba4bdb87a788498ccd246f7d27c2b32745613a5",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000872589-25-000019.htm",
+        "bytes": 2162902,
+        "sha256": "5e3c86dfc57c7bdad0c3cd4d5d35c59ce86c6e63f457263b22b6c45e7c932690",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000875320-25-000192.htm",
+        "bytes": 1243549,
+        "sha256": "3828eda6e94c4591da6aa39e3c274f0314eb3991460873116ece4fb62e1744b9",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000885725-23-000043.htm",
+        "bytes": 2179008,
+        "sha256": "4f7f7ce058b0e4779989dfc71e54b7e035cb21082510ea13da77bff2a28ce52e",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0000888491-25-000016.htm",
+        "bytes": 2631122,
+        "sha256": "83ba9d444869b189dfb6f79d37bf6fd1bdbf81ce48b5c663026f79a18f9c2e44",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0000888491-25-000025.htm",
+        "bytes": 3431267,
+        "sha256": "4e4c0b1a2f56c9a0c37d283c968e01554e9e01728800aefa55221d0f4194046c",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000891024-23-000009.htm",
+        "bytes": 838960,
+        "sha256": "a92821b8c35f03f89f4b015b34ddeea0eb299d6c50ffb418ed9f39202260bbce",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0000920148-23-000030.htm",
+        "bytes": 1270886,
+        "sha256": "f8f9dfbd7bb4b373ccfd6d2939f543dd493d389d8440005f03cd2895444b8ba2",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0000936395-23-000027.htm",
+        "bytes": 2607774,
+        "sha256": "a298b94e418e95b5d64f8d0ebdf363d5db74e99cee08b2f502651dbf65f6d168",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001022079-24-000099.htm",
+        "bytes": 885072,
+        "sha256": "9dd7fb126fb8b8ad33c5558154773afd340f8da0579f194f6ef88b23ce288eff",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001024478-23-000010.htm",
+        "bytes": 1426364,
+        "sha256": "02aeb3e5f09620c0b6d79da8231102e9cebc39610cb9e8cf6196c9d385518dbf",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001024478-24-000052.htm",
+        "bytes": 1619470,
+        "sha256": "1a407ec74d435c309a56ae963ca883f6e444c29850c26edcd1776100a3f73b1a",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001031296-23-000032.htm",
+        "bytes": 2317427,
+        "sha256": "e780827ed6313a80a066247d660ce72c86608cd7be6cf52cd72c68d60ece2bcd",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001039684-24-000035.htm",
+        "bytes": 1299592,
+        "sha256": "60a08b6b2df2c4e60d45c74f025f137b309df7fc32fb1ea22240761a3c91dc61",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001053507-25-000149.htm",
+        "bytes": 2722847,
+        "sha256": "d08c608eb377e2d3b7f0ed1896ee33270976c49b66d0d2ed2e7780968b8a4a2a",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001058090-25-000056.htm",
+        "bytes": 1031480,
+        "sha256": "54dde6153adcae99398c70ee19c2fb1d46dd2dea19c36decbb7ec2ff7369ea53",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001094285-25-000140.htm",
+        "bytes": 1861035,
+        "sha256": "2872f8993f5b97bab6b040688a2d827dc1d8bacc2e217f3e530d6dcf921b9704",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001124941-24-000049.htm",
+        "bytes": 1209241,
+        "sha256": "1a4b5f2146a1598a8ec9afb67623abab5cd8d20d64fc87992cc3c4b12d9598af",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001133421-23-000027.htm",
+        "bytes": 1477324,
+        "sha256": "2a391ad5ad5a8e1018325253bc71970b505e85c28722fd784adf4e27e58aeddd",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001166388-25-000098.htm",
+        "bytes": 1481091,
+        "sha256": "72167206155d0804ed68fa8d1ca876c9d69137e74818d43a6751ab0ae1894a41",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001166691-25-000036.htm",
+        "bytes": 1744963,
+        "sha256": "3fb7715963cb4cca8ff2170f9b371c71b047ad0da918e7b2760242a28199c0dd",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001299130-23-000098.htm",
+        "bytes": 1468798,
+        "sha256": "2f2e3e31abb8e2291793bdada8c26668ebd92bbfeceeae020611c0d727cbb5ef",
+        "measurements": [
+          "docling",
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001324424-24-000038.htm",
+        "bytes": 1509226,
+        "sha256": "59b12f92d6f2ae78e281af227665220cf3f15f574cdb4a25de3c0185268fb472",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001324424-25-000028.htm",
+        "bytes": 1161769,
+        "sha256": "3bd80cafeebc4f4affcf1b8450a2b1fee6686be1c52f82f902e5b89c734f1120",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001362468-25-000054.htm",
+        "bytes": 1359989,
+        "sha256": "2acf060a2f0aad1cd00302df9f8f80892819e06d8f639fe9675b21fec3b0bc11",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001370946-23-000023.htm",
+        "bytes": 1885083,
+        "sha256": "ce43c7a9fd30660eb0eccb77c9af1eefefbd92670c888b1643d9a7bf634b9134",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001383312-23-000024.htm",
+        "bytes": 2140498,
+        "sha256": "15d389a4d57f88504bb9c6f7a006c33395e4bf790856928ea01921044c9cac63",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001411579-25-000062.htm",
+        "bytes": 4170692,
+        "sha256": "cf450ca27f6cbbe3ad49df60fea09ed38e24ff6ce39d947b245edbd75ff0cf1f",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001488139-23-000121.htm",
+        "bytes": 2033035,
+        "sha256": "b16e3a8daa73403259b72e1bf8e8fbe8045bc1bd0f91fdc3835fcc62e777b3e9",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001524472-25-000022.htm",
+        "bytes": 1845626,
+        "sha256": "3184d56ea4b8ab61a0552d6cab67aa2547ae68a5b8ecd3831d3fdda6ca165059",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001546417-25-000111.htm",
+        "bytes": 2105687,
+        "sha256": "afb6630a9805100cc220339f909860597ea524c1ae325b34bc08b23b4755c005",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001552033-23-000022.htm",
+        "bytes": 1656753,
+        "sha256": "408c4db6b5c487e0ecaf45c09398ebb72be4d2d40646d09b1f939926753d212e",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001562401-23-000047.htm",
+        "bytes": 2360358,
+        "sha256": "46de6f1aa3cce54efbbf95f50ac1518f0c398f2b8a1587d16fbb119c26d5b8d1",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001562401-25-000067.htm",
+        "bytes": 2472731,
+        "sha256": "96d37a3d47e0d2660cfaf2bea8ea9dbd1dd69f308aa1b5f5a96e4a2a1b6c2d99",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001581068-23-000049.htm",
+        "bytes": 1508362,
+        "sha256": "34650c36d50bd69d0b6212868b4eb6aab013ec0899cd464f8e226e924fbf28bc",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001585689-24-000101.htm",
+        "bytes": 874927,
+        "sha256": "dd1ac353014a7ba42748db8a156085a7b4aa2103067384cbb0a08b508f8fc00b",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001602065-24-000063.htm",
+        "bytes": 1404684,
+        "sha256": "58803240a366424018323e844fd68401c69501d9aaed7cdbd3ed6ed459fcb763",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001609711-25-000154.htm",
+        "bytes": 1971730,
+        "sha256": "39a90c451293fb0a39dc275b4aafcb6d93854b700a34b4b94ce33edce054789b",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001627475-23-000057.htm",
+        "bytes": 1546196,
+        "sha256": "8954984d1382673539eb780b9273809c022c962fb67fa75be8ea5a19d2a3d44f",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001628280-25-037049.htm",
+        "bytes": 2331898,
+        "sha256": "9837953cb0712b30982c4492ea2d95d2970d8cc7a54f8361cf20f86d0d9ec5e2",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001640147-25-000110.htm",
+        "bytes": 1992390,
+        "sha256": "78decfbd21dde119bae65ca8a9a993538caa8af3723b4689edf4742973c6d5c2",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001690820-25-000312.htm",
+        "bytes": 1889893,
+        "sha256": "fb9d24dca57e8343fdca32e2d9d1297dd4a0d734487968c20623d4d3d9fe9805",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001720635-24-000059.htm",
+        "bytes": 1544163,
+        "sha256": "8efc0da03b9c5d2b3703628acd3b4b4d1765229a3bd15fa0c43b6624c9751299",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001723128-23-000020.htm",
+        "bytes": 1929740,
+        "sha256": "e82dbea24ca72ae75227a9f634b8be4df987acd4befe8c143e6ee1e88b4a78e8",
+        "measurements": [
+          "newline_proxy"
+        ]
+      },
+      {
+        "filename": "0001723128-25-000062.htm",
+        "bytes": 2046951,
+        "sha256": "5f6d7cd697188abe7dfe8c0e454bbd1e2cc4bc1533b64e84e1797ee7f2d03243",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001730168-25-000021.htm",
+        "bytes": 1421970,
+        "sha256": "44b97dd62885ba39a08ed4152f93e602a290ca260c1662a584c08dbb12fd1abf",
+        "measurements": [
+          "geometry"
+        ]
+      },
+      {
+        "filename": "0001786352-23-000072.htm",
+        "bytes": 1616476,
+        "sha256": "2705c40115128ed1b8e502e8440ea11b8647e84fa3a9ef5febb5d2a99bc11a0a",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001819994-25-000021.htm",
+        "bytes": 1625885,
+        "sha256": "a4739909c510ce243625b7c95a3f4ef371555ad5c086c2f5a7719dda90fb4090",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001820953-24-000035.htm",
+        "bytes": 3524222,
+        "sha256": "06c9f84062b502b1fd9beb104ed86395936f40c7aba60f0eb433fb1a2ada02a5",
+        "measurements": [
+          "docling"
+        ]
+      },
+      {
+        "filename": "0001858681-24-000096.htm",
+        "bytes": 8889470,
+        "sha256": "a56ea62b92527eae355bf88b2d92b097eb4a73da56995c5f33e34fc5d4ef66d2",
+        "measurements": [
+          "geometry"
+        ]
+      }
+    ],
+    "packaging": "Only the two selected-case original HTML sources are bundled under sources/. The scale runs still need the pinned cache population and, for the newline proxy, the live read-only section text. The timing output was recovered from the native parent transcript, not rerun."
+  },
+  "limitations": [
+    "Selected, modified-prompt diagnostics do not replace the 382 official answers or qualify A7.",
+    "Core 2175 incorrectly reported missing child records and parser output; both were recovered without new calls.",
+    "Core 2175 miscounted tmux sessions as monitors; exact checks found one Codex watcher and one Core monitor.",
+    "The v3 geometry script makes non-overlapping intervals by construction and ignores row spans; its zero-overlap count does not prove correct semantic placement.",
+    "The original analysis and Core addendum remain historical bytes, including claims narrowed or withdrawn by the current status.",
+    "Historical materializer/pre-A2-lock scratchpad seams could not be identified by Core; no preservation or completion claim is made, and they are not current A7 prerequisites."
+  ],
+  "parent_excerpt_provenance": {
+    "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+    "rows": [
+      {
+        "line": 309078,
+        "uuid": "5d802080-3637-481b-b206-09ebd84ae51c",
+        "sha256": "4a444c0f38813f2f3c85add9c58f3f8c436dbaf01bbcfd95f7c55ab7a0181f07"
+      },
+      {
+        "line": 309079,
+        "uuid": "c2dafad9-8dd5-4179-be4e-c2cdf3f67930",
+        "sha256": "a0134c8067e3415291ae998227ed92c3e8bb2137f203ddda35b611ad800a909d"
+      },
+      {
+        "line": 309623,
+        "uuid": "8f135a13-6182-4350-8b79-8f2c15ba4223",
+        "sha256": "4f5069bebea9cb77d952c726e54229e35e0ce56e9c0a9ee8ba6eca8cf8768c0d"
+      },
+      {
+        "line": 309624,
+        "uuid": "af35a7d6-8b3c-4266-81da-1470ad09bac6",
+        "sha256": "32183f1038c8c490e01fde6dbb212f792cd25610d862a6ca3cc64436ee9d6537"
+      },
+      {
+        "line": 309625,
+        "uuid": "e0fb4d47-3929-4799-8104-d335ebeaf359",
+        "sha256": "f56f2ac916031dcc8e29928bbed57cb9ffaa3fd940d07fa6589461ccadc84e7a"
+      },
+      {
+        "line": 309626,
+        "uuid": "48878e6c-9ab4-4794-be9e-c4abc1d9cda0",
+        "sha256": "2a439f8116f51101b2ca64067e74b466169d76f3f56bd1ee6ea6d58eada2e523"
+      },
+      {
+        "line": 309627,
+        "uuid": "b5ab942d-9351-40b1-ba45-0637234e15f7",
+        "sha256": "c00fe329056ff57f8853e9de5f30b613aaa95060590075015c27990163280055"
+      },
+      {
+        "line": 309628,
+        "uuid": "ec4738db-8bf3-4e12-9b52-41556caaf056",
+        "sha256": "633f5f50c190368a1578b45d3f5461952483346c8d6024ac68f5344d1cfe4a25"
+      },
+      {
+        "line": 309629,
+        "uuid": "f61d3aad-8604-4551-aa61-b12dd1f6ac66",
+        "sha256": "3fb66ee80080d29b90eced82fe3f52a718fc11542f5cee921b5e20d62a81aa64"
+      },
+      {
+        "line": 309630,
+        "uuid": "a1b77ebb-6284-45b2-911b-ac98b28b2c31",
+        "sha256": "22c50f1fa4bff54ccd870f97b86d3f1e523a9545a3dd766396726aae2dfe21ab"
+      }
+    ],
+    "unrelated_malformed_rows_skipped": 1
+  }
+}

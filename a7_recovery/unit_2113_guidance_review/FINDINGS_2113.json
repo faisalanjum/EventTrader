@@ -1,0 +1,120 @@
+{
+ "scope": "findings of the guidance-question review of the TEST; no grade rewritten, no key signed, no prompt or scorer changed",
+ "population": "every G2 question whose produced fact_type is guidance: 40 of 306, selected by the produced record's own fact_type, not by outcome",
+ "method": "frozen saved evidence only - the G2 candidate cc9d51f5, its 70 served prompt batches and the whole-review input 59d54d97. No replay, no model call, no preparer imported.",
+ "controls": {
+  "positive": "all 40 produced quotes verify verbatim inside the very source part the record names; 24 of 24 bare level guides stating unknown are credited, and the repeated tax-rate and openings records agree across every asking",
+  "negative": "F4 - I disagree with a credited verdict, on the same aspect where F3 upholds the grader"
+ },
+ "findings": [
+  {
+   "id": "F1",
+   "class": "PROVED TEST DEFECT - grader is not repeatable",
+   "claim": "10 produced records were graded 2-3 times under IDENTICAL evidence (same event, same source, same date, byte-identical record). 57 of 70 record x aspect cells agree; 1 is decided BOTH ways and 12 are decided in one asking and unresolved in another.",
+   "evidence": {
+    "records_asked_more_than_once": 10,
+    "askings": 28,
+    "record_x_aspect_cells": 70,
+    "identical_across_askings": 57,
+    "decided_both_ways": 1,
+    "decided_once_unresolved_elsewhere": 12,
+    "rate": 0.8143,
+    "contradictions": [
+     {
+      "driver_name": "operating_margin",
+      "event_source_id": "0000027904-26-000020",
+      "aspect": "record_matches_source",
+      "verdicts": {
+       "Mc7890bf18242f3ee": "UNRESOLVED",
+       "Me41517754e358a49": "False",
+       "M6221427dec8dc14b": "True"
+      }
+     }
+    ]
+   },
+   "why_it_matters": "A grader that answers the same question differently makes part of the arm-to-arm disagreement a property of the TEST, not of the model under test."
+  },
+  {
+   "id": "F2",
+   "class": "PROVED PROMPT DEFECT - the reply format the parser refuses",
+   "claim": "All 70 served G2 prompts end with an OUTPUT template whose three values are QUOTED: \"<true | false | null>\". The model returned quoted literals and the strict parser refused them; 93 of 141 attempts needed the approved format recovery.",
+   "evidence": {
+    "prompts_served": 70,
+    "prompts_quoting_the_literals": 70,
+    "recovered_attempts_reported_by_the_run": 93,
+    "template": "\"<true | false | null>\""
+   },
+   "why_it_matters": "The template asks for the shape the parser rejects, so the format failures are prompt-induced, not model error."
+  },
+  {
+   "id": "F3",
+   "class": "YOUR LEAD DOES NOT HOLD - consistent reading, ambiguous rule",
+   "claim": "ULTA gold0 driver_state=false is not a grader slip. Across all 40 the reading is applied without exception: every bare LEVEL guide stated unknown is credited (24 of 24), and every unknown whose own quote states a direction or growth for the claim is refused (6 of 6). The served sentence \"Guidance: movement only where the source states it; a bare guide is unknown\" does not say whether movement means the GUIDE moving against its prior guide or the CLAIM moving; the grader took the second reading and held it.",
+   "evidence": {
+    "by_state_and_verdict": {
+     "introduced -> False": 4,
+     "raised -> True": 3,
+     "reaffirmed -> UNRESOLVED": 1,
+     "unknown -> False": 6,
+     "unknown -> True": 24,
+     "unknown -> UNRESOLVED": 2
+    },
+    "every_unknown_refused_states_a_direction_in_its_own_quote": [
+     "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+     "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+     "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+     "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+     "Comparable sales growth \u200b \u200b 2.5% to 3.5%",
+     "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK."
+    ],
+    "contrast_the_metric_lane": "the CONTRACT enumerates six metric state distinctions and names no guidance state vocabulary at all"
+   },
+   "smallest_clarification_proposed": "In the served CONTRACT, THE STATE BY LANE, say which movement the guidance state reports - the guide against its own prior guide, or the claim the guide is about - and name the guidance state set the way the metric lane already names its distinctions. One sentence, in the existing rule block, no example and no word list."
+  },
+  {
+   "id": "F4",
+   "class": "SOURCE-GROUNDED DISAGREEMENT - a state credited that the source does not state",
+   "claim": "The DRI adjusted diluted EPS guide states driver_state \"raised\" and is credited true in all three askings. The same event's qa part states the prior guide as $10.50 to $10.70 against the new $10.57 to $10.67: the low end rises, the high end falls, the midpoint is unchanged. That is a narrowed guide, and the prepared remarks say only \"we have updated our guidance\" and \"we now expect\". Guidance movement is allowed ONLY where the source states it; the source states an update, not a raise.",
+   "evidence": {
+    "question_ids": [
+     "Mdeaf9591a2dcc241",
+     "Mff46eed2c64e8d13",
+     "Mbcadb2079632a153"
+    ],
+    "event_source_id": "DRI_2026-03-19T08.30",
+    "produced_quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+    "prior_guide_in_the_same_event_qa": "we said our guidance was $10.50 to $10.70",
+    "existing_driver_state_verdict": "True x3"
+   },
+   "this_is_the_negative_control": "it runs opposite to F3: there I uphold the grader against your lead, here I disagree with it on the same aspect."
+  },
+  {
+   "id": "F5",
+   "class": "CORRECTLY REFUSED - nothing rescued",
+   "claim": "The four bare guides stating \"introduced\" are all refused, as the served rule requires for a bare guide. I rescue none of them.",
+   "evidence": {
+    "introduced_to_False": 4
+   }
+  }
+ ],
+ "per_question_inventory": "GUIDANCE_REVIEW_2113.json, all 40, each aspect marked agree / disagree / cannot_establish with its ground",
+ "review_tally": {
+  "driver_name_meaning|cannot_establish": 40,
+  "driver_state|cannot_establish": 37,
+  "driver_state|disagree": 3,
+  "favorability|agree": 40,
+  "growth_basis|cannot_establish": 40,
+  "lane_routing|agree": 40,
+  "record_matches_source|cannot_establish": 40,
+  "slice_vs_menu|agree": 27,
+  "slice_vs_menu|cannot_establish": 13
+ },
+ "not_done": [
+  "no AI or Workflow call",
+  "no producer repeat or semantic reroll",
+  "no score, key, prompt or owner edit",
+  "no route replay",
+  "no commit, push, stage, DB, production or main action",
+  "no preparer imported that writes beside the Codex caller"
+ ]
+}

@@ -1,0 +1,6 @@
+tables with a header : 1186
+figures placed       : 43037
+  column UNIQUELY forced    : 17718  (41.17%)
+  no header covers it       : 1328  (3.09%)
+  SEVERAL headers cover it  : 23991  (55.75%)
+  -> genuinely undecided    : 25319  (58.83%)

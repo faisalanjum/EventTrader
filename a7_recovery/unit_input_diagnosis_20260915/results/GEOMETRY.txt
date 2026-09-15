@@ -1,0 +1,4 @@
+tables with a header : 1186
+figures placed       : 43037
+  column FORCED by geometry : 41709  (96.91%)
+  no header covers it       : 1328  (3.09%)  <- real ambiguity
