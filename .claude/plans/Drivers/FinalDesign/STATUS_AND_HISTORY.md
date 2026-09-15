@@ -101,12 +101,15 @@ saved answers, historical pins and the project STOP/WAIT state are unchanged.
 Verification in both worktrees: 14 direct checks pass, including removal of
 each of the 613 preserved lines and 10 damaged-boundary cases. The broader
 harness run has 515 passes and the same three pre-existing failures listed in
-§1.4; two live-only checks were excluded. Frozen evidence is unchanged.
+§1.4; two checks were excluded. The committed clean-tree rerun passed all 400
+affected checks, including the initially excluded offline handoff test.
 The owner approved commit and push of this layout-only change on 2026-09-15.
-Publication awaits the standing R8 independent document-reader result at
+The R8 reader check is NOT QUALIFIED: it skipped 229 WorkOrder lines, and
+independent review found four incorrect answers. The exact evidence is in
 `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-09-15_PLAN_CONSOLIDATION.md`.
-A missing or failed record is not approval; no production or Step 6 readiness
-is claimed.
+Publication is held pending a valid review or an explicit owner exception
+for a checkpoint with this failed review disclosed. No production or Step 6
+readiness is claimed.
 
 **Protect unrelated local work.** Main has settings changes, market-data
 documentation, two old `receipts_827` inventories and deleted test-agent/skill
@@ -542,6 +545,13 @@ within an independently reviewed bounded step. The former “STILL OPEN” and
 “GO#1 uncalled” launch notes are historical; current EXP-5 work/results are §1.
 
 **2026-08-11 — STAGED CORE V2 PUBLIC CHANNEL CONTRACT FROZEN (not live).**
+
+**Location update (2026-09-15):** the dated text below retains the original
+file names and hashes. Public V1 is now ChannelContract Part I, staged public
+V2 is Part II, and internal V1 is Part III. Its old file promotion/deletion
+instructions are historical; follow the ChannelContract opening “Step 6”
+procedure for the current layout. Public and internal contracts remain separate.
+
 `FinalDesign/ChannelContractV2.md` sha256 `d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b`.
 The separately versioned V2 PUBLIC contract governing every channel; Fiscal is the first
 staged consumer. It publishes the full three-stage flow: Stage A the CHANNEL RAW EVENT
