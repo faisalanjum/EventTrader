@@ -1,0 +1,407 @@
+{
+  "schema": "a7-source-cause-evidence/1",
+  "scope": "First corrective G2 batch source windows; review data, not substitute verdicts",
+  "questions": [
+    {
+      "id": "M35df46a5d2795d66",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-000.prompt.txt",
+      "prompt_sha256": "55572d947ada5036e53e3767428f2dca1c14511327af1ed425f9f9325ef72324",
+      "context_metadata": {
+        "event_date": "2026-04-23",
+        "fye_month": 12
+      },
+      "q": {
+        "produced_record": {
+          "fact_type": "guidance",
+          "item": {
+            "change_unit": "m_usd",
+            "change_value": {
+              "scale_multiplier": 1000000000,
+              "unit_scale_evidence": "billion",
+              "value": 4
+            },
+            "company_confirmed": true,
+            "comparison_baseline": null,
+            "comparison_high": null,
+            "comparison_low": null,
+            "comparison_shape_hint": null,
+            "conditions": null,
+            "driver_name": "jet_fuel_expense",
+            "driver_state": "introduced",
+            "fiscal_quarter": null,
+            "fiscal_year": 2026,
+            "half": null,
+            "has_favorability_wording": null,
+            "level_high": null,
+            "level_low": null,
+            "level_shape_hint": null,
+            "level_unit": null,
+            "long_range_end_year": null,
+            "long_range_start_year": null,
+            "measurement_raw_spans": [],
+            "month": null,
+            "period_end_date": null,
+            "period_scope": null,
+            "period_start_date": null,
+            "polarity_proof": null,
+            "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+            "sentinel_class": null,
+            "slice_parts": [],
+            "surprise_basis_hint": null,
+            "time_type": "duration",
+            "value_text": null
+          },
+          "occurrence_in_part": null,
+          "part_ref": "exhibit_99_1",
+          "per_x": null
+        },
+        "question_id": "M35df46a5d2795d66",
+        "reference_card": {
+          "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+          "reference_name": "increase in expense related to higher prices for jet fuel",
+          "values": [
+            4
+          ]
+        }
+      },
+      "windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "6248e10c8f04f921ccc069ab21f933e5375519dee3aea154cc572ee45148be6d",
+          "offset": 922,
+          "excerpt": "PRESS RELEASE (EX-99.1): Exhibit 99.1 Corporate Communications mediarelations@aa.com Investor Relations investor.relations@aa.com FOR RELEASE: Thursday, April 23, 2026 AMERICAN AIRLINES REPORTS FIRST-QUARTER 2026 FINANCIAL RESULTS FORT WORTH, Texas — American Airlines Group Inc. (NASDAQ: AAL) today reported its first-quarter 2026 financial results, including: •Record first-quarter revenue of $13.9 billion •First-quarter GAAP net loss of $382 million, or ($0.58) per diluted share •Excluding net special items1, first-quarter net loss of $267 million, or ($0.40) per diluted share •Ended the quarter with total debt2 of $34.7 billion, the company’s lowest total debt level since mid-20152 •Second-quarter adjusted EPS3 expected to be between ($0.20) and $0.20. Based on the forward fuel curve and the current revenue outlook, the midpoint of the full-year guidance is expected to be approximately flat to 2025, despite a greater than $4 billion increase in expense related to higher prices for jet fuel “American delivered record revenue in the first quarter, and we’re on track for another record in the second quarter,” said American’s CEO Robert Isom. “This revenue momentum is the result of focus on our four commercial priorities — elevating the customer experience, growing our global network, driving premium revenue and leading in loyalty. Even in a volatile operating environment, our pretax margin improved by nearly 2 points year over year, and we still anticipate modest profitability for the year assuming the current forward fuel curve. Demand for our product is growing, and our customer satisfaction scores are improving. We have built a strong foundation to deliver value for our customers, team members and shareholders in 2026 and beyond.” American’s four multiyear commercial initiatives are driving results. The company delivered record first-quarter revenue of $13.9 billion, despite an estimated $320 million revenue impact from winter storms. Demand was strong in the first quarter, and American recorded the nine highest revenue intake weeks in its 100-year history. American had year-over-year total revenue growth of 10.8% in the quarter. Total unit revenue was 7.6% higher year over year, improving sequentially each month in the quarter, culminating with March domestic and"
+        }
+      ]
+    },
+    {
+      "id": "Mec9e16d57c989430",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-000.prompt.txt",
+      "prompt_sha256": "55572d947ada5036e53e3767428f2dca1c14511327af1ed425f9f9325ef72324",
+      "context_metadata": {
+        "event_date": "2026-04-23",
+        "fye_month": 12
+      },
+      "q": {
+        "produced_record": {
+          "fact_type": "metric",
+          "item": {
+            "change_unit": null,
+            "change_value": null,
+            "company_confirmed": null,
+            "comparison_baseline": "prior_year",
+            "comparison_high": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -175
+            },
+            "comparison_low": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -175
+            },
+            "comparison_shape_hint": "point",
+            "conditions": null,
+            "driver_name": "income_tax_expense",
+            "driver_state": "decreased",
+            "fiscal_quarter": 1,
+            "fiscal_year": 2026,
+            "half": null,
+            "has_favorability_wording": null,
+            "level_high": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -94
+            },
+            "level_low": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -94
+            },
+            "level_shape_hint": "point",
+            "level_unit": "m_usd",
+            "long_range_end_year": null,
+            "long_range_start_year": null,
+            "measurement_raw_spans": [],
+            "month": null,
+            "period_end_date": "2026-03-31",
+            "period_scope": null,
+            "period_start_date": "2026-01-01",
+            "polarity_proof": null,
+            "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7)",
+            "sentinel_class": null,
+            "slice_parts": [],
+            "surprise_basis_hint": null,
+            "time_type": "duration",
+            "value_text": null
+          },
+          "occurrence_in_part": null,
+          "part_ref": "mdna",
+          "per_x": null
+        },
+        "question_id": "Mec9e16d57c989430",
+        "reference_card": {
+          "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7)",
+          "reference_name": "Income tax benefit",
+          "values": [
+            -94,
+            -175
+          ]
+        }
+      },
+      "windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "ca9c62a5c65e62278583b21ce1e74a7acb6c19eb5dd45a0c34f82a356a07860b",
+          "offset": 2382,
+          "excerpt": "lability, price volatility and cost of aircraft fuel, which represents one of the largest single cost items in our business. Because of the amount of fuel needed to operate our business, even a relatively small increase or decrease in the price of aircraft fuel can have a material effect on our operating results and liquidity. Market prices for aircraft fuel have fluctuated substantially over the first quarter of 2026 and prices continue to be highly volatile, with market spot prices ranging from a low of approximately $1.86 per gallon to a high of approximately $4.75 per gallon during the first quarter of 2026. AAG’s First Quarter 2026 Results The selected financial data presented below is derived from AAG’s unaudited condensed consolidated financial statements included in Part I, Item 1A of this report and should be read in conjunction with those financial statements and the related notes thereto. Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease) 2026 2025 (In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7) Net loss (382) (473) (91) (19.2) Pre-tax loss – GAAP $ (476) $ (648) $ (172) (26.6) Adjusted for: pre-tax net special items (1) 149 118 31 25.0 Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2) (1) See “Reconciliation of GAAP to Non-GAAP Financial Measures” below and Note 2 to AAG’s Condensed Consolidated Financial Statements in Part I, Item 1A for details on the components of net special items. Pre-Tax Loss and Net Loss Pre-tax loss and net loss were $476 million and $382 million, respectively, in the first quarter of 2026. This compares to first quarter of 2025 pre-tax loss and net loss of $648 million and $473 million, respectively. Excluding the effects of pre-tax net special items, pre-tax loss was $327 million and $530 million in the first quarters of 2026 and 2025, respectively. The period-over-period decrease in pre-tax loss on both a GAAP basis and excluding pre-tax net special items was principally driven by an increase in passenger revenue, offset in part by increases in certain operating expenses including salaries, wages, and benefits, aircraft fuel and related taxes and other operating expenses. Revenue In the first quarter of 2026, we reported total operating revenues of $13.9 billion, an increase of $1.4 billion, or 10.8%, from the first qua"
+        }
+      ]
+    },
+    {
+      "id": "M2fc403e126b61f37",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-000.prompt.txt",
+      "prompt_sha256": "55572d947ada5036e53e3767428f2dca1c14511327af1ed425f9f9325ef72324",
+      "context_metadata": {
+        "event_date": "2026-02-10",
+        "fye_month": 12
+      },
+      "q": {
+        "produced_record": {
+          "fact_type": "metric",
+          "item": {
+            "change_unit": null,
+            "change_value": null,
+            "company_confirmed": null,
+            "comparison_baseline": "prior_year",
+            "comparison_high": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -39
+            },
+            "comparison_low": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -39
+            },
+            "comparison_shape_hint": "point",
+            "conditions": null,
+            "driver_name": "debt_extinguishment",
+            "driver_state": "increased",
+            "fiscal_quarter": null,
+            "fiscal_year": 2025,
+            "half": null,
+            "has_favorability_wording": null,
+            "level_high": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -26
+            },
+            "level_low": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "millions",
+              "value": -26
+            },
+            "level_shape_hint": "point",
+            "level_unit": "m_usd",
+            "long_range_end_year": null,
+            "long_range_start_year": null,
+            "measurement_raw_spans": [],
+            "month": null,
+            "period_end_date": null,
+            "period_scope": null,
+            "period_start_date": null,
+            "polarity_proof": null,
+            "quote": "(in millions) 2025 2024 Interest expense, net $ (679) $ (747) $ 68 Gain/(loss) on investments, net 1,212 (319) 1,531 Loss on extinguishment of debt (26) (39) 13",
+            "sentinel_class": null,
+            "slice_parts": [],
+            "surprise_basis_hint": null,
+            "time_type": "duration",
+            "value_text": null
+          },
+          "occurrence_in_part": null,
+          "part_ref": "mdna",
+          "per_x": null
+        },
+        "question_id": "M2fc403e126b61f37",
+        "reference_card": {
+          "quote": "(in millions) 2025 2024 Interest expense, net $ (679) $ (747) $ 68 Gain/(loss) on investments, net 1,212 (319) 1,531 Loss on extinguishment of debt (26) (39) 13",
+          "reference_name": "Loss on extinguishment of debt",
+          "values": [
+            -26,
+            -39
+          ]
+        }
+      },
+      "windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "f61c10f7cf2e122b1a1745c81d7a34a9a8d9c1f7ab3915459e535195ef1435be",
+          "offset": 14751,
+          "excerpt": " following extensive redevelopment projects at numerous facilities and more flights compared to 2024. Regional Carrier Expense. The increase in regional carrier expense primarily resulted from higher volume of regional flights and annual rate increases. ##TABLE_START Delta Air Lines, Inc. | 2025 Form 10-K ##TABLE_END Item 7. MD&A - Results of Operations Aircraft Maintenance Materials and Outside Repairs. The decrease in aircraft maintenance materials and outside repairs expense primarily resulted from the timing of engine maintenance activities, renegotiated engine maintenance agreements and a gain from the sale of our MRO JV located in Queretaro, Mexico. These decreases were partially offset by a higher volume of airframe checks in 2025. Other . The decrease in other operating expense primarily resulted from gains from several sale-leaseback transactions and lower irregular operations expense in 2025. Non-Operating Results ##TABLE_START Year Ended December 31, Favorable (Unfavorable) (in millions) 2025 2024 Interest expense, net $ (679) $ (747) $ 68 Gain/(loss) on investments, net 1,212 (319) 1,531 Loss on extinguishment of debt (26) (39) 13 Miscellaneous, net (144) (232) 88 Total non-operating income/(expense), net $ 363 $ (1,337) $ 1,700 ##TABLE_END Interest expense, net. Interest expense, net includes interest expense and interest income. This decreased compared to the prior year primarily due to reduced interest expense resulting from our debt reduction initiatives. During 2024, we made payments of $4.0 billion related to our debt and finance lease obligations. We continued to prioritize strengthening the balance sheet and reducing debt with $4.8 billion of payments on debt and finance lease obligations during 2025. During the June 2025 quarter, we issued $2.0 billion in aggregate principal amount of unsecured notes and used a portion of the proceeds to repay the Payroll Support Program (\"PSP\") loan due 2030 (\"PSP1 Loan\"). The new unsecured notes carry a lower interest rate than the repaid PSP1 Loan. We continue to seek opportunities to pre-pay our debt, in addition to periodic amortization and scheduled maturities, and refinance higher cost debt. Gain/(loss) on investments, net. See Note 4 of the Notes to the Consolidated Financial Statements for additional information on our equity investments measured at fair value on a recurring basis. Loss on extinguishment of debt. This reflects the losses incurred in the "
+        }
+      ]
+    },
+    {
+      "id": "Mc7890bf18242f3ee",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-000.prompt.txt",
+      "prompt_sha256": "55572d947ada5036e53e3767428f2dca1c14511327af1ed425f9f9325ef72324",
+      "context_metadata": {
+        "event_date": "2026-04-08",
+        "fye_month": 12
+      },
+      "q": {
+        "produced_record": {
+          "fact_type": "guidance",
+          "item": {
+            "change_unit": null,
+            "change_value": null,
+            "company_confirmed": true,
+            "comparison_baseline": null,
+            "comparison_high": null,
+            "comparison_low": null,
+            "comparison_shape_hint": null,
+            "conditions": null,
+            "driver_name": "operating_margin",
+            "driver_state": "unknown",
+            "fiscal_quarter": 2,
+            "fiscal_year": 2026,
+            "half": null,
+            "has_favorability_wording": null,
+            "level_high": {
+              "scale_multiplier": 1,
+              "unit_scale_evidence": "%",
+              "value": 8
+            },
+            "level_low": {
+              "scale_multiplier": 1,
+              "unit_scale_evidence": "%",
+              "value": 6
+            },
+            "level_shape_hint": "range",
+            "level_unit": "percent",
+            "long_range_end_year": null,
+            "long_range_start_year": null,
+            "measurement_raw_spans": [],
+            "month": null,
+            "period_end_date": null,
+            "period_scope": null,
+            "period_start_date": null,
+            "polarity_proof": null,
+            "quote": "Operating Margin 6% - 8%",
+            "sentinel_class": null,
+            "slice_parts": [],
+            "surprise_basis_hint": null,
+            "time_type": "duration",
+            "value_text": null
+          },
+          "occurrence_in_part": null,
+          "part_ref": "exhibit_99_1",
+          "per_x": null
+        },
+        "question_id": "Mc7890bf18242f3ee",
+        "reference_card": {
+          "quote": "Operating Margin 6% - 8%",
+          "reference_name": "Operating Margin",
+          "values": [
+            6,
+            8
+          ]
+        }
+      },
+      "windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "835b3782a88c7502a710ac3d0157ad91c021547655894fe70490eeaeba475cf1",
+          "offset": 2896,
+          "excerpt": " this environment, with a leading brand, strong financial foundation, and the benefit of our refinery. In the June quarter, we expect to lead the industry with $1 billion of profit. And while the recent fuel spike is currently impacting earnings, I’m confident this environment ultimately reinforces Delta’s leadership and accelerates long-term earnings power.\" March Quarter 2026 GAAP Financial Results •Operating revenue of $15.9 billion •Operating income of $501 million with an operating margin of 3.2 percent •Pre-tax loss of $214 million with a pre-tax margin of (1.4) percent •Loss per share of ($0.44) •Operating cash flow of $2.4 billion March Quarter 2026 Non-GAAP Financial Results •Operating revenue of $14.2 billion •Operating income of $652 million with an operating margin of 4.6 percent •Pre-tax income of $532 million with a pre-tax margin of 3.7 percent •Earnings per share of $0.64 •Operating cash flow of $2.4 billion 1 Financial Guidance1 2Q26 Total Revenue YoY (%) Up low-teens Operating Margin 6% - 8% Earnings Per Share $1.00 - $1.50 Guidance assumes fuel at the forward curve as of April 2, 2026, and includes a refinery benefit of approximately $300 million. This results in a projected all-in fuel price of approximately $4.30 per gallon for the second quarter. Revenue Environment and Outlook \"Total revenue of $14.2 billion was a March quarter record and nearly 10 percent higher than last year, growing several points above our initial outlook, on broad demand strength across corporate and leisure,” said Joe Esposito, Delta’s chief commercial officer. “With continued strength in demand, combined with our actions on capacity reductions and fuel recapture, we expect total revenue growth in the June quarter to be up low-teens on flat capacity over prior year.” •Record March quarter revenue with broad strength across customer segments, geographies, and products: March quarter total revenue increased 9.4 percent over the same period last year to a record $14.2 billion, led by premium, corporate, and loyalty. Adjusted total unit revenue (TRASM) grew 8.2 percent over prior year, with a 1.6 point contribution from robust MRO growth. •Continued momentum in diverse, high-margin revenue streams: Delta’s diversified revenue base represented 62 percent of total revenue and grew mid-teens ov"
+        }
+      ]
+    },
+    {
+      "id": "M726673b0f7719042",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-000.prompt.txt",
+      "prompt_sha256": "55572d947ada5036e53e3767428f2dca1c14511327af1ed425f9f9325ef72324",
+      "context_metadata": {
+        "event_date": "2026-04-08",
+        "fye_month": 12
+      },
+      "q": {
+        "produced_record": {
+          "fact_type": "metric",
+          "item": {
+            "change_unit": null,
+            "change_value": null,
+            "company_confirmed": null,
+            "comparison_baseline": "prior_year",
+            "comparison_high": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "million",
+              "value": -1
+            },
+            "comparison_low": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "million",
+              "value": -1
+            },
+            "comparison_shape_hint": "point",
+            "conditions": null,
+            "driver_name": "operating_income",
+            "driver_state": "decreased",
+            "fiscal_quarter": 1,
+            "fiscal_year": 2026,
+            "half": null,
+            "has_favorability_wording": null,
+            "level_high": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "million",
+              "value": -39
+            },
+            "level_low": {
+              "scale_multiplier": 1000000,
+              "unit_scale_evidence": "million",
+              "value": -39
+            },
+            "level_shape_hint": "point",
+            "level_unit": "m_usd",
+            "long_range_end_year": null,
+            "long_range_start_year": null,
+            "measurement_raw_spans": [],
+            "month": null,
+            "period_end_date": "2026-03-31",
+            "period_scope": null,
+            "period_start_date": "2026-01-01",
+            "polarity_proof": null,
+            "quote": "The refinery generated an operating loss of $39 million in the March 2026 quarter compared to a loss of $1 million in the March 2025 quarter.",
+            "sentinel_class": null,
+            "slice_parts": [
+              "segment:refinery"
+            ],
+            "surprise_basis_hint": null,
+            "time_type": "duration",
+            "value_text": null
+          },
+          "occurrence_in_part": null,
+          "part_ref": "mdna",
+          "per_x": null
+        },
+        "question_id": "M726673b0f7719042",
+        "reference_card": {
+          "quote": "The refinery generated an operating loss of $39 million in the March 2026 quarter compared to a loss of $1 million in the March 2025 quarter.",
+          "reference_name": "refinery generated an operating loss",
+          "values": [
+            -39,
+            -1
+          ]
+        }
+      },
+      "windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "95be87aa8837f35ffdfbfda66453b60499ccde5e983981f978c00cf989282c22",
+          "offset": 12994,
+          "excerpt": "tments recognized in the March 2026 quarter, we project our annual effective tax rate for 2026 will be 23% to 25%. Refinery Segment The refinery operated by Monroe primarily produces gasoline, diesel and jet fuel and operates for the benefit of the airline segment by providing jet fuel to the airline. Monroe sells or exchanges its non-jet fuel production to third parties, which enables us to procure additional jet fuel for consumption in our airline operations. The refinery typically produces approximately 200,000 barrels of refined products per day, which represents approximately 75% of our daily consumption, and it regularly optimizes the mix of its sales and exchange activities based on market conditions. Certain contracts to exchange non-jet fuel products ended during the second half of 2025, which contributed to the increase in third party refinery sales compared to the March 2025 quarter. Third party refinery sales also increased due to higher market prices for refined products. The refinery generated an operating loss of $39 million in the March 2026 quarter compared to a loss of $1 million in the March 2025 quarter. The loss in the March 2026 quarter primarily results from the recognition of settlement losses on fuel hedge contracts related to inventory that is expected to be sold in the future, which was partially offset by higher industry refining margins. For more information regarding the refinery's results, see Note 9 of the Notes to the Condensed Consolidated Financial Statements. Refinery segment financial information Three Months Ended March 31, Increase (Decrease) (in millions) 2026 2025 Third party refinery sales $ 1,654 $ 1,062 $ 592 Sales to airline segment and other 384 636 (252) Operating revenue $ 2,038 $ 1,698 $ 340 Operating loss $ (39) $ (1) $ (38) Delta Air Lines, Inc. | March 2026 Form 10-Q Item 2. MD&A - Operating Statistics Operating Statistics Three Months Ended March 31, % Increase (Decrease) Consolidated (1) 2026 2025 Revenue passenger miles (in millions) (\"RPM\") 56,470 55,678 1 % Available seat miles (in millions) (\"ASM\") 69,163 68,401 1 % Passenger mile yield 21.78 ¢ 20.62 ¢ 6 % Passenger revenue per available seat mile (\"PRASM\") 17.79 ¢ 16.78 ¢ 6 % Total revenue per available seat mile (\"TRASM\") 22.92 ¢ 20.53 ¢ 12 % TRASM, adjusted (2) 20.53 ¢ 18.97 ¢ 8.2 % Cost per available seat mile (\"CASM\") 22.20 ¢ 19.69 ¢ 13 % CASM-Ex (2) 15.13 ¢ 14.23 ¢ 6 % Passenger load f"
+        }
+      ]
+    }
+  ]
+}

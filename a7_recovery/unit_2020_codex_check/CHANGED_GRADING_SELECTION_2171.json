@@ -1,0 +1,346 @@
+{
+  "scope": "Approved affected-task selection only; no call authorization until actual candidate and ceiling are verified",
+  "input_correction_sha256": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4",
+  "base_preparation": {
+    "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_currentg232157_c/CURRENT_G23_PREPARATION.json",
+    "sha256": "d726f2464ead0b8100d1bdc58368a806268609c1dd7f35299c4bcc09ab9f144b"
+  },
+  "baseline_candidates": {
+    "G2": {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_currentg232157_c/G2/a7_g1_candidate.json",
+      "sha256": "18ec3da8713e811b727f8fc97c5f85a793c734a6b057612d0d6cbcc8d605b23d"
+    },
+    "G3": {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/a7_g1_candidate.json",
+      "sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013"
+    }
+  },
+  "populations": {
+    "G2": {
+      "P1|0000006201-26-000031": [
+        [
+          4,
+          4
+        ]
+      ],
+      "P1|0000006201-26-000032": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P1|0000027904-26-000013": [
+        [
+          6,
+          5
+        ]
+      ],
+      "P1|0000027904-26-000020": [
+        [
+          6,
+          8
+        ]
+      ],
+      "P1|0000092380-26-000044": [
+        [
+          4,
+          4
+        ]
+      ],
+      "P1|0000898173-26-000006": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P1|0000940944-25-000038": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P1|0000940944-26-000009": [
+        [
+          1,
+          2
+        ]
+      ],
+      "P1|0001041061-26-000084": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P1|0001104659-25-105631": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P2|0000006201-26-000031": [
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "P2|0000006201-26-000032": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P2|0000027904-26-000013": [
+        [
+          6,
+          6
+        ]
+      ],
+      "P2|0000027904-26-000020": [
+        [
+          6,
+          9
+        ]
+      ],
+      "P2|0000092380-26-000044": [
+        [
+          4,
+          4
+        ]
+      ],
+      "P2|0000764478-25-000057": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P2|0000898173-26-000006": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P2|0000940944-25-000038": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P2|0000940944-26-000005": [
+        [
+          2,
+          2
+        ]
+      ],
+      "P2|0000940944-26-000009": [
+        [
+          2,
+          2
+        ]
+      ],
+      "P2|0001104659-25-105631": [
+        [
+          0,
+          0
+        ]
+      ],
+      "P2|AAL_2026-04-23T08.30": [
+        [
+          8,
+          7
+        ]
+      ],
+      "UNION|0000006201-26-000031": [
+        [
+          4,
+          2
+        ]
+      ],
+      "UNION|0000006201-26-000032": [
+        [
+          0,
+          0
+        ]
+      ],
+      "UNION|0000092380-26-000044": [
+        [
+          4,
+          0
+        ]
+      ],
+      "UNION|0000940944-25-000038": [
+        [
+          0,
+          0
+        ]
+      ],
+      "UNION|0000940944-26-000009": [
+        [
+          1,
+          2
+        ]
+      ],
+      "UNION|0001041061-26-000084": [
+        [
+          0,
+          0
+        ]
+      ],
+      "UNION|0001104659-25-105631": [
+        [
+          0,
+          0
+        ]
+      ],
+      "UNION|AAL_2026-04-23T08.30": [
+        [
+          8,
+          7
+        ]
+      ]
+    },
+    "G3": {
+      "P2|0000027904-26-000020": [
+        8
+      ],
+      "UNION|0000027904-26-000013": [
+        5,
+        8
+      ],
+      "UNION|0000027904-26-000020": [
+        3,
+        5
+      ],
+      "UNION|0000764478-25-000057": [
+        5
+      ],
+      "UNION|0000940944-26-000005": [
+        5
+      ]
+    }
+  },
+  "question_ids": {
+    "G2": [
+      "M02d957fa99800507",
+      "M1cc002a6431725fe",
+      "M24065e66c77fea00",
+      "M2a81c745481f2ebc",
+      "M341ed3bdf05f28cf",
+      "M357a5ef0bb7e36e6",
+      "M43e87509e5cc819b",
+      "M4ca257814a3d2655",
+      "M61beee43a203dd9f",
+      "M645d780bfaa2241b",
+      "M6d9dd25a44c4125e",
+      "M72caa9bf890c910b",
+      "M7a5e4a77f0c4c495",
+      "M7c647e1cedf0a3e3",
+      "M85b17ecaa1bc123d",
+      "M94c0b5e28cf36305",
+      "Ma5d5cffc07c4dd0c",
+      "Mabd80961830fa09a",
+      "Mbbbad21e2ccc2af7",
+      "Mc17055ff4a7a52dd",
+      "Mc6c32dee91400e91",
+      "Md5def2bc09fe22d8",
+      "Mde7d5e39712de0c7",
+      "Me2615b2c555ed925",
+      "Me35f4178e598dcb5",
+      "Mece90a618a058690",
+      "Mee82318cbe88a420",
+      "Mf1aca8c5849b0770",
+      "Mf1c41a01fa7b1847",
+      "Mf91a92c59065852f",
+      "Mffc29b8ff785d499"
+    ],
+    "G3": [
+      "X24756096af610d6d",
+      "X56415b76439cd6be",
+      "X6eea70137b9a2e63",
+      "X73357410ba2d97a2",
+      "X99d7bc16850a9dde",
+      "Xa0f9de09f3c55112",
+      "Xe10aa94910fc4e7a"
+    ]
+  },
+  "reviews": [
+    {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/CARRIED_NULL_DELTA_REVIEW_2170.md",
+      "sha256": "53126317a40c1952c0ce52ca5f26bfb9d6970999f85fa8e1b3fa1b2001b5085b"
+    },
+    {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/CARRIED_NULL_DELTA_REVIEW_2170.json",
+      "sha256": "bb8d13ad1f63b2540755045910b918ec4662c5f870f915becaf7bb5f51131240"
+    },
+    {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2170_review/SUPPLEMENT_2170.md",
+      "sha256": "80235926ce415202ac3388016998ead98df2fc8386d131d6fdb8a2e13cbe01a3"
+    },
+    {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2170_review/IDENTITY_POPULATION_2170.json",
+      "sha256": "05675f2b1d5f3532e5bac1e0a743b9ca2377db8558e74446e7ce3443a76155cf"
+    },
+    {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2171_review/REVIEW_2171.md",
+      "sha256": "d0a7fd799e34defc1a1bceec7867240844f762eec66fe1042ecf90dc61dc203a"
+    },
+    {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2171_review/NULL_DELTA_BOUNDARY_2171.json",
+      "sha256": "09786a4169de359fb8bae17c6fdeb4494561dd0561483e4828cdc534b83bb2bc"
+    },
+    {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2171_review/check_null_delta_boundary_2171.py",
+      "sha256": "abbf785598de91442a9cf84cfea5fe2553dcc50a67edf955973d45f83ef12227"
+    }
+  ],
+  "reason": "Two source-rule corrections (empty action scope and headline comparison), plus the previously omitted null-change tasks affected by the existing corrected instruction. Preserve all prior answers and corrections; apply this as a later revision.",
+  "original_affected_question_ids": [
+    "M02d957fa99800507",
+    "M24065e66c77fea00",
+    "M43e87509e5cc819b",
+    "Mabd80961830fa09a",
+    "Mc17055ff4a7a52dd",
+    "Mc6c32dee91400e91",
+    "Mde7d5e39712de0c7",
+    "Mf91a92c59065852f",
+    "X24756096af610d6d",
+    "X56415b76439cd6be",
+    "X6eea70137b9a2e63",
+    "X73357410ba2d97a2",
+    "X99d7bc16850a9dde",
+    "Xa0f9de09f3c55112",
+    "Xe10aa94910fc4e7a"
+  ],
+  "additional_null_change_question_ids": [
+    "M1cc002a6431725fe",
+    "M2a81c745481f2ebc",
+    "M341ed3bdf05f28cf",
+    "M357a5ef0bb7e36e6",
+    "M4ca257814a3d2655",
+    "M61beee43a203dd9f",
+    "M645d780bfaa2241b",
+    "M6d9dd25a44c4125e",
+    "M72caa9bf890c910b",
+    "M7a5e4a77f0c4c495",
+    "M7c647e1cedf0a3e3",
+    "M85b17ecaa1bc123d",
+    "M94c0b5e28cf36305",
+    "Ma5d5cffc07c4dd0c",
+    "Mbbbad21e2ccc2af7",
+    "Md5def2bc09fe22d8",
+    "Me2615b2c555ed925",
+    "Me35f4178e598dcb5",
+    "Mece90a618a058690",
+    "Mee82318cbe88a420",
+    "Mf1aca8c5849b0770",
+    "Mf1c41a01fa7b1847",
+    "Mffc29b8ff785d499"
+  ],
+  "expected_questions": {
+    "G2": 31,
+    "G3": 7
+  }
+}

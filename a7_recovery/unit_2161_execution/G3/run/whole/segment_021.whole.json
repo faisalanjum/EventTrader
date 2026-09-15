@@ -1,0 +1,10 @@
+{
+ "lanes": {
+  "G3-011/G1a": {
+   "chars": 201,
+   "sha256": "5f525d9c88aa61d3d53403d376340504dabbe33fc6d504cb1f573cb681b13d8f",
+   "text": "```json\n[\n  {\"question_id\": \"Xcf1d14b2028b62d2\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xd880123951a3a221\", \"bucket\": \"duplicate\"},\n  {\"question_id\": \"Xc6e8defff53e5743\", \"bucket\": \"key_miss\"}\n]\n```"
+  }
+ },
+ "segment": 21
+}

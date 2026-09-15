@@ -1,0 +1,26 @@
+{
+ "scope": "operator-compatible view of the frozen 2161 run; adds no new truth",
+ "kind": "G3",
+ "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G3/run",
+ "durable_run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2161_execution/G3/run",
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3",
+ "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+ "root_sha256": "dfc3b9bb3b65188b02a2276ccfccf49785308298ca10425aba99f82e3d49c8f4",
+ "owners": {
+  "a7_g1_build": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439",
+  "a7_g1_complete_v2": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+  "a7_g23_build": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "audit_worker_access": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "workflow_gate_sha256": "e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703",
+ "max_output_tokens": "128000",
+ "first_segment": 1,
+ "first_receipt_sha256": "957945ef0e6c7cfd5b35a3f4ee063070dfd30a53d60569003e6c8c30ce246c11",
+ "first_script_sha256": "e75853df4c718df22ef5bdda427799c045dcd458361dd6a425b5a478487474ed",
+ "source_report": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2161_execution/EXECUTION_LAYOUT_2161.json"
+}

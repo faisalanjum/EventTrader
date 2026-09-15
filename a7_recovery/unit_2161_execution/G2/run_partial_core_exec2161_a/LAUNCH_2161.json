@@ -1,0 +1,60 @@
+{
+ "args_rows": 1,
+ "args_sha256": "2f88cfb67637f0765d22848a90f232909899c32e3f82ec28ef1f5d14f9ab9512",
+ "batches": 19,
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2",
+ "candidate_sha256": "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb",
+ "durable_run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2161_execution/G2/run",
+ "expected_input": {
+  "payload_field": "attachment",
+  "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+  "record_index": 1,
+  "record_type": "attachment"
+ },
+ "expected_input_source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/run/root.json",
+ "first_segment": 1,
+ "first_segment_lanes": [
+  "G2-000/G1a"
+ ],
+ "invalid_only_retry_lanes": 38,
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run/invocation.seg01.json",
+ "invocation_sha256": "8bc504b44063a1b828f8185a930824814db3710f52a285617e255cee7e461eba",
+ "lane": {
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "lane_states": {},
+ "made_calls": 0,
+ "max_attempts": 2,
+ "max_output_tokens": "128000",
+ "owners": {
+  "a7_g1_build": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439",
+  "a7_g1_complete_v2": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+  "a7_g23_build": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "audit_worker_access": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "primary_lanes": 38,
+ "questions": 82,
+ "receipt_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run/receipt.seg01.json",
+ "receipt_sha256": "b9b176963b552db09e63b3510e68e7934ec7e13c110177e14204f4f2faedca4a",
+ "root_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run/root.json",
+ "root_sha256": "6ca1dc4a6c9f0f2beae5c90a7e7d977030096c6244c246d54243a6c7eaf1fbef",
+ "rows": 38,
+ "runtime_and_durable_are_one_directory": true,
+ "runtime_run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run",
+ "script_byte_limit": 524288,
+ "script_bytes": 433473,
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run/grade_batch.seg01.js",
+ "script_sha256": "9542847b293a1c58dfb302a5b4275a0214b87ecf5be541c5a86bde16761d0830"
+}

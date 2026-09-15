@@ -1,0 +1,25 @@
+{
+ "calls": 1,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G2-011",
+   "candidate_sha256": "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "4c2bbf0f0bc72a891d8ad8fcb795b323924473922ea12152f91a93d91d6a723d",
+   "lane_id": "G2-011/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 22,
+   "prompt_sha256": "5c5f9effff3610e7a196795ad762fd15fb1c71e118b3e1310f099dd582ab0f29",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M31b9468dbba21f6c\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"Mc666c76ff3657bc1\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"Mbcadb2079632a153\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M62a85f0d06c8aa5c\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M42c321d822ac47f4\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  }\n]\n```"
+  }
+ ],
+ "rows": 1
+}

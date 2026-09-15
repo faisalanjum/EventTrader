@@ -1,0 +1,20 @@
+{
+ "lanes": {
+  "G2-017/G1b": {
+   "chars": 871,
+   "sha256": "396e09ca26dd8b6d4719a6099ea63f52d8df28bb07157819c8bcc1623bfee9cd",
+   "text": "```json\n[\n  {\n    \"question_id\": \"Mdce0d30d712dcd83\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"Mb3f1ca0e645be073\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": false,\n      \"record_matches_source\": false\n    }\n  },\n  {\n    \"question_id\": \"M4b4e22abcaa8d591\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  }\n]\n```"
+  },
+  "G2-018/G1a": {
+   "chars": 299,
+   "sha256": "2b8c9e377eb3fd034be8398339095164b6280879810a316d86ddfb63d265e22f",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M1b698b1ec9b0c1d6\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": null,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  }\n]\n```"
+  },
+  "G2-018/G1b": {
+   "chars": 299,
+   "sha256": "880646f90d667a89cdd94e7b9d7646ab3fe42a3b01cc0be42c396ac075236d91",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M1b698b1ec9b0c1d6\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  }\n]\n```"
+  }
+ },
+ "segment": 33
+}

@@ -1,0 +1,2 @@
+CHANGED QUESTIONS PREPARED {"G2":{"batches":9,"invalid_only_retry_ceiling":18,"maximum_bound_script_bytes":439520,"primary_call_ceiling":18},"G3":{"batches":3,"invalid_only_retry_ceiling":6,"maximum_bound_script_bytes":393133,"primary_call_ceiling":6}}
+Completed with no AI call.

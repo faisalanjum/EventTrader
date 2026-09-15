@@ -1,0 +1,100 @@
+{
+ "schema": "a7-changed-preparation-check/2172",
+ "selection": {
+  "g2_questions": 31,
+  "g3_questions": 7,
+  "expected_questions": {
+   "G2": 31,
+   "G3": 7
+  },
+  "expected_matches_the_lists": true,
+  "populations_regenerate_the_listed_ids": true,
+  "listed_equals_my_two_frontiers": true,
+  "input_correction_sha256": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4"
+ },
+ "baselines": {
+  "G2": {
+   "population_is_the_full_population": true,
+   "identities_match_the_full_candidate": true,
+   "input_correction_sha256": null,
+   "matched_population_is_the_full_g2": null
+  },
+  "G3": {
+   "population_is_the_full_population": true,
+   "identities_match_the_full_candidate": true,
+   "input_correction_sha256": "32e2f650f56cb77b20c89199bc8cf120181dbc7ff92bdd60014d7abc95a16a2d",
+   "matched_population_is_the_full_g2": true
+  }
+ },
+ "g2_evidence_surfaces": {
+  "questions_rendered_both_ways": 82,
+  "byte_identical": 77,
+  "differ_only_in_slice_parts": 5,
+  "differ_elsewhere": 0,
+  "differ_elsewhere_identities": [],
+  "selected_g2_also_graded_correctively": [
+   "M24065e66c77fea00",
+   "Mc17055ff4a7a52dd"
+  ],
+  "selected_and_corrective_are_byte_identical": true
+ },
+ "one_question_per_event": {
+  "original_g2_events": 310,
+  "corrective_g2_events": 82,
+  "g3_baseline_events": 116
+ },
+ "transport": {
+  "frozen_g2_rules_bytes": 12926,
+  "corrective_g2_rules_bytes": 13174,
+  "contract_adds_bytes": 142,
+  "rules_growth_vs_frozen": 390,
+  "largest_existing_prompt_bytes": 483217,
+  "largest_prompt_under_contract_rules": 483607,
+  "script_byte_limit": 524288
+ },
+ "native_job": {
+  "state_in_owner_tsv": "finished exit 0",
+  "exit_file_present": true,
+  "raw_exit": "0",
+  "stdout_bytes": 280,
+  "stderr_bytes": 0,
+  "payload_pid_alive": false,
+  "report_present": true
+ },
+ "produced_candidates": {
+  "G2": {
+   "population_equals_the_selection_subset": true,
+   "every_prompt_hash_verifies": true,
+   "rendered_question_ids_equal_the_selection": true,
+   "questions": 31,
+   "evidence_identical_to_the_baseline": 31,
+   "corrected_clauses_served": {
+    "scope": 9,
+    "headline": 9,
+    "null_change": 9
+   },
+   "input_correction_sha256": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4",
+   "batches": 9,
+   "launcher_rows": 18,
+   "made_calls": 0,
+   "largest_prompt_bytes": 424280
+  },
+  "G3": {
+   "population_equals_the_selection_subset": true,
+   "every_prompt_hash_verifies": true,
+   "rendered_question_ids_equal_the_selection": true,
+   "questions": 7,
+   "evidence_identical_to_the_baseline": 7,
+   "corrected_clauses_served": {
+    "scope": 3,
+    "headline": 3,
+    "null_change": 3
+   },
+   "input_correction_sha256": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4",
+   "batches": 3,
+   "launcher_rows": 6,
+   "made_calls": 0,
+   "largest_prompt_bytes": 376512
+  }
+ }
+}

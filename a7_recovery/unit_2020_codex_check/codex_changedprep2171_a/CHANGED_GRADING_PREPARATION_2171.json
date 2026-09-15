@@ -1,0 +1,338 @@
+{
+ "caller_sha256": "804803834e52926d3c1fc5e40256cfeb448414317f93a1c9bf7db4a6d9595043",
+ "candidates": {
+  "G2": {
+   "batches": 9,
+   "bound_scripts_checked": 36,
+   "candidate": {
+    "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_changedprep2171_a/G2/a7_g1_candidate.json",
+    "sha256": "a7e1e4b90e4ad4c63ac782148b413ac8047c7106df8cb5a130df931a063fdfbe"
+   },
+   "input_correction_sha256": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4",
+   "invalid_only_retry_ceiling": 18,
+   "maximum_bound_script_bytes": 439520,
+   "population": {
+    "P1|0000006201-26-000031": [
+     [
+      4,
+      4
+     ]
+    ],
+    "P1|0000006201-26-000032": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P1|0000027904-26-000013": [
+     [
+      6,
+      5
+     ]
+    ],
+    "P1|0000027904-26-000020": [
+     [
+      6,
+      8
+     ]
+    ],
+    "P1|0000092380-26-000044": [
+     [
+      4,
+      4
+     ]
+    ],
+    "P1|0000898173-26-000006": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P1|0000940944-25-000038": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P1|0000940944-26-000009": [
+     [
+      1,
+      2
+     ]
+    ],
+    "P1|0001041061-26-000084": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P1|0001104659-25-105631": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P2|0000006201-26-000031": [
+     [
+      4,
+      4
+     ],
+     [
+      5,
+      5
+     ]
+    ],
+    "P2|0000006201-26-000032": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P2|0000027904-26-000013": [
+     [
+      6,
+      6
+     ]
+    ],
+    "P2|0000027904-26-000020": [
+     [
+      6,
+      9
+     ]
+    ],
+    "P2|0000092380-26-000044": [
+     [
+      4,
+      4
+     ]
+    ],
+    "P2|0000764478-25-000057": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P2|0000898173-26-000006": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P2|0000940944-25-000038": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P2|0000940944-26-000005": [
+     [
+      2,
+      2
+     ]
+    ],
+    "P2|0000940944-26-000009": [
+     [
+      2,
+      2
+     ]
+    ],
+    "P2|0001104659-25-105631": [
+     [
+      0,
+      0
+     ]
+    ],
+    "P2|AAL_2026-04-23T08.30": [
+     [
+      8,
+      7
+     ]
+    ],
+    "UNION|0000006201-26-000031": [
+     [
+      4,
+      2
+     ]
+    ],
+    "UNION|0000006201-26-000032": [
+     [
+      0,
+      0
+     ]
+    ],
+    "UNION|0000092380-26-000044": [
+     [
+      4,
+      0
+     ]
+    ],
+    "UNION|0000940944-25-000038": [
+     [
+      0,
+      0
+     ]
+    ],
+    "UNION|0000940944-26-000009": [
+     [
+      1,
+      2
+     ]
+    ],
+    "UNION|0001041061-26-000084": [
+     [
+      0,
+      0
+     ]
+    ],
+    "UNION|0001104659-25-105631": [
+     [
+      0,
+      0
+     ]
+    ],
+    "UNION|AAL_2026-04-23T08.30": [
+     [
+      8,
+      7
+     ]
+    ]
+   },
+   "primary_call_ceiling": 18,
+   "questions": [
+    "M02d957fa99800507",
+    "M1cc002a6431725fe",
+    "M24065e66c77fea00",
+    "M2a81c745481f2ebc",
+    "M341ed3bdf05f28cf",
+    "M357a5ef0bb7e36e6",
+    "M43e87509e5cc819b",
+    "M4ca257814a3d2655",
+    "M61beee43a203dd9f",
+    "M645d780bfaa2241b",
+    "M6d9dd25a44c4125e",
+    "M72caa9bf890c910b",
+    "M7a5e4a77f0c4c495",
+    "M7c647e1cedf0a3e3",
+    "M85b17ecaa1bc123d",
+    "M94c0b5e28cf36305",
+    "Ma5d5cffc07c4dd0c",
+    "Mabd80961830fa09a",
+    "Mbbbad21e2ccc2af7",
+    "Mc17055ff4a7a52dd",
+    "Mc6c32dee91400e91",
+    "Md5def2bc09fe22d8",
+    "Mde7d5e39712de0c7",
+    "Me2615b2c555ed925",
+    "Me35f4178e598dcb5",
+    "Mece90a618a058690",
+    "Mee82318cbe88a420",
+    "Mf1aca8c5849b0770",
+    "Mf1c41a01fa7b1847",
+    "Mf91a92c59065852f",
+    "Mffc29b8ff785d499"
+   ]
+  },
+  "G3": {
+   "batches": 3,
+   "bound_scripts_checked": 12,
+   "candidate": {
+    "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_changedprep2171_a/G3/a7_g1_candidate.json",
+    "sha256": "2b063c4f588c9128f92d7552d521ac860199f9e8e4202fec14197080eaa3a263"
+   },
+   "input_correction_sha256": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4",
+   "invalid_only_retry_ceiling": 6,
+   "maximum_bound_script_bytes": 393133,
+   "population": {
+    "P2|0000027904-26-000020": [
+     8
+    ],
+    "UNION|0000027904-26-000013": [
+     5,
+     8
+    ],
+    "UNION|0000027904-26-000020": [
+     3,
+     5
+    ],
+    "UNION|0000764478-25-000057": [
+     5
+    ],
+    "UNION|0000940944-26-000005": [
+     5
+    ]
+   },
+   "primary_call_ceiling": 6,
+   "questions": [
+    "X24756096af610d6d",
+    "X56415b76439cd6be",
+    "X6eea70137b9a2e63",
+    "X73357410ba2d97a2",
+    "X99d7bc16850a9dde",
+    "Xa0f9de09f3c55112",
+    "Xe10aa94910fc4e7a"
+   ]
+  }
+ },
+ "current_input": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/CURRENT_G23_INPUT_2157.json",
+  "sha256": "391f7e3d79291bedcd0fc45a14bfdf7bd1bb574ee33b3654a805e3360d6c3802"
+ },
+ "g1": {
+  "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_keygrading2150_a/g1_candidate",
+  "pins": {
+   "candidate_sha256": "48d01dced57656748a35a358b8f66ee29aef8e259f64b49745e57b18fbd7e5f8",
+   "g1_key_reuse_inputs_sha256": "d7571670fc3ae38a4dc732a7e377f23c385a0ee59aad3eb38d52151cd590e9f7",
+   "g1_key_reuse_owner_sha256": "10af3e7e1c490bd6280f0c403e342205aa0a38eec0df24ac65beefdb079052c5",
+   "g1_key_reuse_selection_sha256": "343ccc85c01e06c9270ee5b0e9e938306885eabce402cf07e94c999b30438290",
+   "git_head": "2dc0ad39f30dba4756078573f5e80038465939cc",
+   "git_tree": "a45f8d0c2802e0d482ddefc5d330a4774d25a787",
+   "grading_script_binding_owner_sha256": "052646398f73421fe6da1690ad5c19e3e4e335a061e3a4186a55b676f6628858",
+   "grading_script_binding_sha256": "ee2c22b8b2bd19c9b618b2b6cdcbe0035049090d365df482863161ac0068beb5",
+   "partial_grading_policy_sha256": "1a465b94ff57789bee9bc210b36e7b892768156975702160fe22cd46b16db959",
+   "partial_grading_rule_sha256": "05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b",
+   "prompt_tree_sha256": "956d741b6b9f423bd97b56a0589a642d76acb04c97fb0e8640623786dd0f16bf",
+   "root_sha256": "a4bbb4f08b1a37e379641fa0bd5c636e57b22c0136aaffa54960dd34f890303b",
+   "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+   "run_file_count": 69,
+   "run_tree_sha256": "f6af648170ab1018e7afa7ea6d3fc5ce65b4b42961bc27250aea14bbd0a30663"
+  },
+  "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2152_g1_reuse/g1"
+ },
+ "key_identity": {
+  "accepted_rows": 165,
+  "acted_rows": 0,
+  "approved_lock_sha256": "68270f4fd33f342e1b562dd700f789fb442fa0b4bbb1ec2b8cd83a6c1cb19737",
+  "approved_receipt_sha256": "a54b8db1546c639801f60a7655e4eb6e867a3144a5ed88d6734288e98bd4671a",
+  "base_owner": "a7_g1_build.gold_by_event",
+  "events": 33,
+  "key_digest": "d4f31b59e0ed67dd241a9dac682f503dfc29b38e015b9db375bcffdc2dcce30a",
+  "schema": "a7-current-key/approved"
+ },
+ "model_calls": 0,
+ "producer": {
+  "a4_lock_receipt_sha256": "a54b8db1546c639801f60a7655e4eb6e867a3144a5ed88d6734288e98bd4671a",
+  "a4_lock_sha256": "68270f4fd33f342e1b562dd700f789fb442fa0b4bbb1ec2b8cd83a6c1cb19737",
+  "a6_freeze_sha256": "7285044672995ae8224bc43bb9e0efdb70ef22b215c9e7840a4b487a8606596b",
+  "contract_suffix": null,
+  "corrected_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "evaluation_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_keygrading2150_a/evaluation",
+  "executed": {
+   "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+   "run_files": 799
+  },
+  "finalizations": {
+   "primary": "2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f"
+  },
+  "receipt_sha256": "8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+  "scheduled_calls": 382,
+  "schema": "a7_prepared_run/1",
+  "source_manifest_sha256": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce"
+ },
+ "scope": "Verified changed-task preparation, NOT call approval or a score",
+ "selection": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/CHANGED_GRADING_SELECTION_2171.json",
+  "sha256": "1107680379634723be19afe255bd19864ebdf06e0b65eaeb199ee871d8998710"
+ },
+ "unchanged_question_evidence": true
+}

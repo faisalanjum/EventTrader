@@ -1,0 +1,2471 @@
+{
+  "purpose": "Independent source-review evidence only; not replacement verdicts, answer key, or scoring overrides.",
+  "reviewed_at_utc": "2026-09-15 01:57:17 UTC",
+  "collection_state": "Both original primary replies are saved for every question. Collection validity is not semantic approval or a final score.",
+  "scope": {
+    "g2_candidate_sha256": "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb",
+    "batches": [
+      "G2-013",
+      "G2-014",
+      "G2-015",
+      "G2-016",
+      "G2-017",
+      "G2-018"
+    ],
+    "successful_calls_repeated": 0
+  },
+  "rows": [
+    {
+      "question_id": "M9176d0f5d99a2a38",
+      "identity": {
+        "leg": "P1",
+        "source_id": "0000898173-26-000006",
+        "gold_idx": 4,
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-013.prompt.txt",
+      "prompt_sha256": "08c7f6997a17ea27216f9b8cbf9e2e75bcff273d914419d840aa09b5c8e571a5",
+      "metadata": {
+        "event_date": "2026-02-04",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "In thousands",
+            "value": -1370961
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "In thousands",
+            "value": -1370961
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "shareholders_equity",
+          "driver_state": "increased",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "In thousands",
+            "value": -763352
+          },
+          "level_low": {
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "In thousands",
+            "value": -763352
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2025-12-31",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "(In thousands, except share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ December 31, 2025 ​ December 31, 2024 ​ ​ ​ ​ (Unaudited) ​ ​ ​ (Note) Assets ​ ​ ​ ​ ​ ​ Current assets: ​ ​ ​ ​ ​ ​ Cash and cash equivalents ​ $ 193,793 ​ $ 130,245 Accounts receivable, net ​ 389,793 ​ ​ 356,839 Amounts receivable from suppliers ​ 159,900 ​ ​ 139,091 Inventory ​ 5,731,385 ​ ​ 5,095,804 Other current assets ​ 269,406 ​ ​ 117,916 Total current assets ​ 6,744,277 ​ ​ 5,839,895 ​ ​ ​ ​ ​ ​ ​ Property and equipment, at cost ​ 10,222,249 ​ ​ 9,192,254 Less: accumulated depreciation and amortization ​ 3,964,824 ​ ​ 3,587,098 Net property and equipment ​ 6,257,425 ​ ​ 5,605,156 ​ ​ ​ ​ ​ ​ ​ Operating lease, right-of-use assets ​ 2,391,150 ​ ​ 2,324,638 Goodwill ​ 948,208 ​ ​ 930,161 Other assets, net ​ 197,193 ​ ​ 193,891 Total assets ​ $ 16,538,253 ​ $ 14,893,741 ​ ​ ​ ​ ​ ​ ​ Liabilities and shareholders’ deficit ​ ​ ​ ​ ​ ​ Current liabilities: ​ ​ ​ ​ ​ ​ Accounts payable ​ $ 7,103,684 ​ $ 6,524,811 Self-insurance reserves ​ 297,304 ​ ​ 149,387 Accrued payroll ​ 119,603 ​ ​ 107,495 Accrued benefits and withholdings ​ 240,072 ​ ​ 199,593 Income taxes payable ​ 13,957 ​ ​ 6,274 Current portion of operating lease liabilities ​ 439,907 ​ ​ 419,213 Other current liabilities ​ 561,294 ​ ​ 876,732 Total current liabilities ​ 8,775,821 ​ ​ 8,283,505 ​ ​ ​ ​ ​ ​ ​ Long-term debt ​ 6,016,904 ​ ​ 5,520,932 Operating lease liabilities, less current portion ​ 2,034,688 ​ ​ 1,980,705 Deferred income taxes ​ 211,210 ​ ​ 247,599 Other liabilities ​ 262,982 ​ ​ 231,961 ​ ​ ​ ​ ​ ​ ​ Shareholders’ equity (deficit): ​ ​ ​ ​ ​ ​ Common stock, $0.01 par value: ​ ​ ​ ​ ​ ​ Authorized shares – 1,250,000,000 ​ ​ ​ ​ ​ Issued and outstanding shares – ​ ​ ​ ​ ​ ​ 841,909,238 as of December 31, 2025, and ​ ​ ​ ​ ​ ​ 862,232,760 as of December 31, 2024 ​ ​ 8,419 ​ ​ 8,622 Additional paid-in capital ​ 1,530,292 ​ ​ 1,454,518 Retained deficit ​ (2,328,817) ​ ​ (2,791,288) Accumulated other comprehensive income (loss) ​ ​ 26,754 ​ ​ (42,813) Total shareholders’ deficit ​ (763,352)",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "(In thousands, except share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ December 31, 2025 ​ December 31, 2024 ​ ​ ​ ​ (Unaudited) ​ ​ ​ (Note) Assets ​ ​ ​ ​ ​ ​ Current assets: ​ ​ ​ ​ ​ ​ Cash and cash equivalents ​ $ 193,793 ​ $ 130,245 Accounts receivable, net ​ 389,793 ​ ​ 356,839 Amounts receivable from suppliers ​ 159,900 ​ ​ 139,091 Inventory ​ 5,731,385 ​ ​ 5,095,804 Other current assets ​ 269,406 ​ ​ 117,916 Total current assets ​ 6,744,277 ​ ​ 5,839,895 ​ ​ ​ ​ ​ ​ ​ Property and equipment, at cost ​ 10,222,249 ​ ​ 9,192,254 Less: accumulated depreciation and amortization ​ 3,964,824 ​ ​ 3,587,098 Net property and equipment ​ 6,257,425 ​ ​ 5,605,156 ​ ​ ​ ​ ​ ​ ​ Operating lease, right-of-use assets ​ 2,391,150 ​ ​ 2,324,638 Goodwill ​ 948,208 ​ ​ 930,161 Other assets, net ​ 197,193 ​ ​ 193,891 Total assets ​ $ 16,538,253 ​ $ 14,893,741 ​ ​ ​ ​ ​ ​ ​ Liabilities and shareholders’ deficit ​ ​ ​ ​ ​ ​ Current liabilities: ​ ​ ​ ​ ​ ​ Accounts payable ​ $ 7,103,684 ​ $ 6,524,811 Self-insurance reserves ​ 297,304 ​ ​ 149,387 Accrued payroll ​ 119,603 ​ ​ 107,495 Accrued benefits and withholdings ​ 240,072 ​ ​ 199,593 Income taxes payable ​ 13,957 ​ ​ 6,274 Current portion of operating lease liabilities ​ 439,907 ​ ​ 419,213 Other current liabilities ​ 561,294 ​ ​ 876,732 Total current liabilities ​ 8,775,821 ​ ​ 8,283,505 ​ ​ ​ ​ ​ ​ ​ Long-term debt ​ 6,016,904 ​ ​ 5,520,932 Operating lease liabilities, less current portion ​ 2,034,688 ​ ​ 1,980,705 Deferred income taxes ​ 211,210 ​ ​ 247,599 Other liabilities ​ 262,982 ​ ​ 231,961 ​ ​ ​ ​ ​ ​ ​ Shareholders’ equity (deficit): ​ ​ ​ ​ ​ ​ Common stock, $0.01 par value: ​ ​ ​ ​ ​ ​ Authorized shares – 1,250,000,000 ​ ​ ​ ​ ​ Issued and outstanding shares – ​ ​ ​ ​ ​ ​ 841,909,238 as of December 31, 2025, and ​ ​ ​ ​ ​ ​ 862,232,760 as of December 31, 2024 ​ ​ 8,419 ​ ​ 8,622 Additional paid-in capital ​ 1,530,292 ​ ​ 1,454,518 Retained deficit ​ (2,328,817) ​ ​ (2,791,288) Accumulated other comprehensive income (loss) ​ ​ 26,754 ​ ​ (42,813) Total shareholders’ deficit ​ (763,352)",
+        "reference_name": "Total shareholders’ deficit",
+        "values": [
+          -763352,
+          -1370961
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_a7879640-eaf",
+          "lane": "G2-013/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_eada25de-579",
+          "lane": "G2-013/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "f09491bf95f2b0ccdd63e0e4bb601c3b7ca12705dc9e5fa78fa21b25d3b69bc2",
+          "offset": 13605,
+          "excerpt": "s and Exchange Commission filings, for additional factors that could materially affect the Company’s financial performance. Forward-looking statements speak only as of the date they were made, and the Company undertakes no obligation to publicly update any forward-looking statements, whether as a result of new information, future events, or otherwise, except as required by applicable law. ​ ​ ​ For further information contact: Investor Relations Contacts ​ Leslie Skorick (417) 874-7142 ​ Eric Bird (417) 868-4259 ​ ​ ​ Media Contact ​ Sonya Cox (417) 829-5709 ​ ​ O’REILLY AUTOMOTIVE, INC. AND SUBSIDIARIES CONDENSED CONSOLIDATED BALANCE SHEETS (In thousands, except share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ December 31, 2025 ​ December 31, 2024 ​ ​ ​ ​ (Unaudited) ​ ​ ​ (Note) Assets ​ ​ ​ ​ ​ ​ Current assets: ​ ​ ​ ​ ​ ​ Cash and cash equivalents ​ $ 193,793 ​ $ 130,245 Accounts receivable, net ​ 389,793 ​ ​ 356,839 Amounts receivable from suppliers ​ 159,900 ​ ​ 139,091 Inventory ​ 5,731,385 ​ ​ 5,095,804 Other current assets ​ 269,406 ​ ​ 117,916 Total current assets ​ 6,744,277 ​ ​ 5,839,895 ​ ​ ​ ​ ​ ​ ​ Property and equipment, at cost ​ 10,222,249 ​ ​ 9,192,254 Less: accumulated depreciation and amortization ​ 3,964,824 ​ ​ 3,587,098 Net property and equipment ​ 6,257,425 ​ ​ 5,605,156 ​ ​ ​ ​ ​ ​ ​ Operating lease, right-of-use assets ​ 2,391,150 ​ ​ 2,324,638 Goodwill ​ 948,208 ​ ​ 930,161 Other assets, net ​ 197,193 ​ ​ 193,891 Total assets ​ $ 16,538,253 ​ $ 14,893,741 ​ ​ ​ ​ ​ ​ ​ Liabilities and shareholders’ deficit ​ ​ ​ ​ ​ ​ Current liabilities: ​ ​ ​ ​ ​ ​ Accounts payable ​ $ 7,103,684 ​ $ 6,524,811 Self-insurance reserves ​ 297,304 ​ ​ 149,387 Accrued payroll ​ 119,603 ​ ​ 107,495 Accrued benefits and withholdings ​ 240,072 ​ ​ 199,593 Income taxes payable ​ 13,957 ​ ​ 6,274 Current portion of operating lease liabilities ​ 439,907 ​ ​ 419,213 Other current liabilities ​ 561,294 ​ ​ 876,732 Total current liabilities ​ 8,775,821 ​ ​ 8,283,505 ​ ​ ​ ​ ​ ​ ​ Long-term debt ​ 6,016,904 ​ ​ 5,520,932 Operating lease liabilities, less current portion ​ 2,034,688 ​ ​ 1,980,705 Deferred income taxes ​ 211,210 ​ ​ 247,599 Other liabilities ​ 262,982 ​ ​ 231,961 ​ ​ ​ ​ ​ ​ ​ Shareholders’ equity (deficit): ​ ​ ​ ​ ​ ​ Common stock, $0.01 par value: ​ ​ ​ ​ ​ ​ Authorized shares – 1,250,000,000 ​ ​ ​ ​ ​ Issued and outstanding shares – ​ ​ ​ ​ ​ ​ 841,909,238 as of December 31, 2025, and ​ ​ ​ ​ ​ ​ 862,232,760 as of December 31, 2024 ​ ​ 8,419 ​ ​ 8,622 Additional paid-in capital ​ 1,530,292 ​ ​ 1,454,518 Retained deficit ​ (2,328,817) ​ ​ (2,791,288) Accumulated other comprehensive income (loss) ​ ​ 26,754 ​ ​ (42,813) Total shareholders’ deficit ​ (763,352) ​ ​ (1,370,961) ​ ​ ​ ​ ​ ​ ​ Total liabilities and shareholders’ deficit ​ $ 16,538,253 ​ $ 14,893,741 ​ Note: The balance sheet at December 31, 2024, has been derived from the audited consolidated financial statements at that date but does not include all of the information and footnotes required by United States generally accepted accounting principles for complete financial statements. ​ O’REILLY AUTOMOTIVE, INC. AND SUBSIDIARIES CONDENSED CONSOLIDATED STATEMENTS OF INCOME (In thousands, except per share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ For the Three Months Ended For the Year Ended ​ December 31, December 31, ​ ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ (Unaudited) ​ (Unaudited) ​ (Unaudited) ​ (Note) Sales ​ $ 4,414,314 ​ $ 4,095,601 ​ $ 17,781,992 ​ $ 16,708,479 Cost of goods sold, including warehouse and distribution expenses ​ 2,128,142 ​ 1,994,569 ​ 8,607,851 ​ 8,153,990 Gross profit ​ 2,286,172 ​ 2,101,032 ​ 9,174,141 ​ 8,554,489 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Selling, general and administrative expenses ​ 1,457,563 ​ 1,362,382 ​ 5,713,529 ​ 5,303,332 Operating income ​"
+        }
+      ]
+    },
+    {
+      "question_id": "M155d065a49c7695b",
+      "identity": {
+        "leg": "P1",
+        "source_id": "0000940944-26-000009",
+        "gold_idx": 2,
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-013.prompt.txt",
+      "prompt_sha256": "08c7f6997a17ea27216f9b8cbf9e2e75bcff273d914419d840aa09b5c8e571a5",
+      "metadata": {
+        "event_date": "2026-03-27",
+        "fye_month": 5
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": "percent_yoy",
+          "change_value": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "4.3"
+          },
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "in millions",
+            "value": "385.3"
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "in millions",
+            "value": "385.3"
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "sales",
+          "driver_state": "increased",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "in millions",
+            "value": "402.0"
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "in millions",
+            "value": "402.0"
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2026-02-22",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg SRS (1) \n\nFebruary 22, 2026 February 23, 2025 % Chg SRS (1) \n\nOlive Garden $ 1,393.0 $ 1,330.3 4.7 % 3.2 % $ 4,056.8 $ 3,831.9 5.9 % 4.5 % LongHorn Steakhouse $ 854.2 $ 768.1 11.2 % 7.2 % $ 2,406.5 $ 2,191.7 9.8 % 6.3 % Fine Dining $ 402.0 $ 385.3 4.3 %",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:finediningsegment"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg SRS (1) \n\nFebruary 22, 2026 February 23, 2025 % Chg SRS (1) \n\nOlive Garden $ 1,393.0 $ 1,330.3 4.7 % 3.2 % $ 4,056.8 $ 3,831.9 5.9 % 4.5 % LongHorn Steakhouse $ 854.2 $ 768.1 11.2 % 7.2 % $ 2,406.5 $ 2,191.7 9.8 % 6.3 % Fine Dining $ 402.0 $ 385.3 4.3 %",
+        "reference_name": "Fine Dining",
+        "values": [
+          "402.0",
+          "385.3"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_a7879640-eaf",
+          "lane": "G2-013/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_eada25de-579",
+          "lane": "G2-013/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "7c40db0be0eed2ff64f79e34e906c804c8b8b163b4d86a80317aa33f5d08b0d8",
+          "offset": 8617,
+          "excerpt": "estaurants are expected to be closed or converted to other brands (between the third quarter of fiscal 2026 and the fourth quarter of fiscal 2027). 2 Annual same-restaurant sales is a 52-week metric and excludes the impact of Chuy’s, which will not have been owned and operated by Darden for a 16-month period prior to the beginning of fiscal 2026, as well as Bahama Breeze as all restaurants are expected to be closed or converted to other brands (between the third quarter of fiscal 2026 and the fourth quarter of fiscal 2027). SALES The following table presents our sales by segment for the periods indicated. Three Months Ended Nine Months Ended (in millions) February 22, 2026 February 23, 2025 % Chg SRS (1) February 22, 2026 February 23, 2025 % Chg SRS (1) Olive Garden $ 1,393.0 $ 1,330.3 4.7 % 3.2 % $ 4,056.8 $ 3,831.9 5.9 % 4.5 % LongHorn Steakhouse $ 854.2 $ 768.1 11.2 % 7.2 % $ 2,406.5 $ 2,191.7 9.8 % 6.3 % Fine Dining $ 402.0 $ 385.3 4.3 % 2.1 % $ 1,004.7 $ 970.2 3.6 % 1.0 % Other Business $ 696.1 $ 674.3 3.2 % 3.9 % $ 2,024.1 $ 1,811.2 11.8 % 3.4 % (1) Same-restaurant sales is a year-over-year comparison of each period’s sales volumes for a 52-week year and is limited to restaurants that have been open, and operated by Darden, for at least 16 months. Accordingly, Chuy’s results will not be included in this calculation until the fourth quarter of fiscal 2026. Additionally, results from Bahama Breeze are excluded as all restaurants are expected to be closed or converted to other brands (between the third quarter of fiscal 2026 and the fourth quarter of fiscal 2027). Olive Garden’s sales increase for the third quarter of fiscal 2026 was primarily driven by same-restaurant sales increases, as well as revenue from new restaurants. The increase in U.S. same-restaurant sales for the third quarter of fiscal 2026 resulted from a 3.6 percent increase in average check, which includes a 1.3 percent increase in off-premise catering sales, offset by a 0.4 percent decrease in same-restaurant guest counts. Olive Garden’s sales incre"
+        }
+      ]
+    },
+    {
+      "question_id": "M4e236380221db347",
+      "identity": {
+        "leg": "P1",
+        "source_id": "0001104659-25-118458",
+        "gold_idx": 4,
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-013.prompt.txt",
+      "prompt_sha256": "08c7f6997a17ea27216f9b8cbf9e2e75bcff273d914419d840aa09b5c8e571a5",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "credit_facility_interest_rate_margin",
+          "driver_state": "reported",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "2.0"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "1.5"
+          },
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2025-11-01",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+            "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+        "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+        "values": [
+          "1.5",
+          "2.0"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_a7879640-eaf",
+          "lane": "G2-013/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": false,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_eada25de-579",
+          "lane": "G2-013/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 32582,
+          "excerpt": "ximum revolving loans equal to the lesser of $1.0 billion or a percentage of eligible owned inventory and eligible owned receivables (which borrowing base may, at the election of the Company and satisfaction of certain conditions, include a percentage of qualified cash), and contains a $50.0 million subfacility for letters of credit. The Loan Agreement requires the Company to maintain a minimum fixed charge coverage ratio of 1.0 whenever availability under the Loan Agreement falls below the specified threshold. Substantially all of the Company’s assets are pledged as collateral for outstanding borrowings under the Loan Agreement. Outstanding borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum. As of November 1, 2025 and November 2, 2024, the Company had $488.3 million and $199.7 million, respectively, of borrowings outstanding under this credit facility. The weighted average interest rate was 6.42% and 7.15% for the 39 weeks ended November 1, 2025 and November 2, 2024, respectively. As of February 1, 2025, there were no borrowings outstanding under the credit facility. As of November 1, 2025, we were in compliance with all terms and covenants of the Loan Agreement. Ulta Beauty’s wholly owned subsidiary, Space NK, maintains a multi-currency revolving credit facility (the Facility Agreement) with National Westminster Bank plc, providing up to £40.0 million for working capital requirements. The Facility Agreement, maturing on April 17, 2028, allows Space NK to increase the revolving facility by an additional £10.0 million with lender consent. The facility is secured by the assets of Space NK and contains a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0 and a leverage ratio not to exceed 2.0 to 1.0 for any relevant period. Borrowings bear interest"
+        }
+      ]
+    },
+    {
+      "question_id": "M4f731135a40dab8b",
+      "identity": {
+        "leg": "P1",
+        "source_id": "0001104659-26-017090",
+        "gold_idx": 6,
+        "produced_idx": 6
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-013.prompt.txt",
+      "prompt_sha256": "08c7f6997a17ea27216f9b8cbf9e2e75bcff273d914419d840aa09b5c8e571a5",
+      "metadata": {
+        "event_date": "2026-02-18",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "comparable_restaurant_sales",
+          "driver_state": "increased",
+          "fiscal_quarter": null,
+          "fiscal_year": 2024,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 2
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 2
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2024-12-31",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:northitalia"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+        "reference_name": "Comparable restaurant sales vs. prior year",
+        "values": [
+          2
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_a7879640-eaf",
+          "lane": "G2-013/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_eada25de-579",
+          "lane": "G2-013/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a",
+          "offset": 17124,
+          "excerpt": " $ (220,555 ) $ 178,317 26901 Malibu Hills Road, Calabasas Hills, CA 91301 • Telephone (818) 871-3000 The Cheesecake Factory Incorporated Selected Operating, Restaurant and Balance Sheet Information (unaudited; in thousands, except statistical data) 13 Weeks Ended 13 Weeks Ended 52 Weeks Ended 52 Weeks Ended The Cheesecake Factory restaurants operating information: December 30, 2025 December 31, 2024 December 30, 2025 December 31, 2024 Comparable restaurant sales vs. prior year (2.2 )% 1.7 % 0.1 % 1.0 % Restaurants opened during period 2 2 4 3 Restaurants open at period-end 218 215 218 215 Restaurant operating weeks 2,821 2,795 11,218 11,214 North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 % Restaurants opened during period 2 3 6 6 Restaurants open at period-end 48 42 48 42 Restaurant operating weeks 606 535 2,355 2,021 Other Fox Restaurant Concepts (FRC) operating information:(1) Restaurants opened during period 3 2 9 8 Restaurants open at period-end 56 48 56 48 Restaurant operating weeks 715 611 2,675 2,264 Other operating information:(2) Restaurants opened during period - 2 6 6 Restaurants open at period-end 49 43 49 43 Restaurant operating weeks 637 551 2,477 2,114 Number of company-owned restaurants: The Cheesecake Factory 218 North Italia 48 Other FRC 56 Other 49 Total 371 Number of international-licensed restaurants: The Cheesecake Factory 35 (1) The Other FRC segment includes all FRC brands except Flower Child. (2) The Other segment includes the Flower Child, Grand Lux Cafe and Social Monk Asian Kitchen concepts, as well as the Company's third-party bakery, international and consumer packaged goods businesses, unallocated corporate expenses and gift card costs. Selected Consolidated Balance Sheet Information December 30, 2025 December 31, 2024 Cash and cash equi"
+        }
+      ]
+    },
+    {
+      "question_id": "Mba3e48c6e9efd4f9",
+      "identity": {
+        "leg": "P1",
+        "source_id": "MCD_2026-02-11T16.30",
+        "gold_idx": 6,
+        "produced_idx": 6
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-013.prompt.txt",
+      "prompt_sha256": "08c7f6997a17ea27216f9b8cbf9e2e75bcff273d914419d840aa09b5c8e571a5",
+      "metadata": {
+        "event_date": "2026-02-11",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_openings",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 1000
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 1000
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:china"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+        "reference_name": "about 1,000 in China",
+        "values": [
+          1000
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_a7879640-eaf",
+          "lane": "G2-013/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": false,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_eada25de-579",
+          "lane": "G2-013/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "d79b4245ca3aea3c49c5567f401780831b8159f3237b9d039bbe2564c21b96a3",
+          "offset": 20617,
+          "excerpt": ", and GBS. Second, we prioritize our dividend, which has increased in each of the last 49 years. And third, we repurchase shares with remaining free cash flow over time. With respect to restaurant development and capital expenditures, as Chris mentioned, we continue to accelerate our pace of new unit openings and remain on track to achieve our target of 50,000 restaurants by the end of 2027. In 2025, we exceeded our openings plan for the year with gross openings of about 2,275 restaurants and net openings of 1,880. And in 2026, we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments. We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China. Overall, we anticipate about 4.5 percent unit growth from the approximately 2,100 net restaurant additions in 2026. We expect our capital expenditure spend to be between 3.7 and 3.9 billion this year, with the majority invested in new unit openings across our U.S. and IOM segments. This increase in CapEx versus the prior year of 3.4 billion is in line with the targeted increase of about 300 to 500 million that we outlined at our December 23 investor day. Lastly, we're targeting our net income to free cash flow conversion rate in 2026 to be in the low to mid 80% range, which is in line with the 84% in 2025. And with that, let me hand it back over to Chris. Thanks, Ian.\", \"Chris Kempczynski [1396]: As we close the books in 2025, it's only natural to reflect not just on the year that was, but on how far we've come since announcing accelerating the arches in November 2020 and expanding our ambitions in December 2023. We made bold commitments to grow our business. We've made great progress on our accelerator priorities, and we've become a fundamentally different company. You heard from J"
+        }
+      ]
+    },
+    {
+      "question_id": "Mab3c1cc44faa7224",
+      "identity": {
+        "leg": "P1",
+        "source_id": "ULTA_2026-03-12T16.30",
+        "gold_idx": 3,
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-014.prompt.txt",
+      "prompt_sha256": "790286cf47e512da56a658794953da167775507c91e5bbc3a27f12184c459c31",
+      "metadata": {
+        "event_date": "2026-03-12",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "store_count",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 80
+          },
+          "level_shape_hint": "floor",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+        "reference_name": "stores in the UK and Ireland",
+        "values": [
+          80
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_31d90c8a-d35",
+          "lane": "G2-014/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9044ee2a-6f5",
+          "lane": "G2-014/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "f484e9f92d405a91524e11f36f063daf368ea2d9adfe29b61e9607223266e9df",
+          "offset": 7892,
+          "excerpt": "ion with Beyonce's Sacred Haircurl launch. and elevating our brand building capabilities, enabling us to build stronger portfolios of exclusive brands and products that drive meaningful differentiation and new member acquisition. Noteworthy successes in 2025 include Sacred, which became our largest prestige haircare launch in history, prestige skincare K-beauty brand Peach & Lily, influencer-founded makeup brand Dibs, and Gen Z's most loved fragrance brand Noise. We built and expanded into new growth channels through our international expansion beyond the US with nearly 100 stores in five countries. This included our acquisition of Space NK, a luxury beauty retailer operating more than 80 stores in the UK and Ireland, the opening of nine stores in Mexico via our joint venture partner, Grupo AXO, and the opening of two stores in the Middle East through our franchise partner, Alshaya. Our newly launched Marketplace, a curated online assortment that allows guests to explore a complimentary array of beauty, wellness, and lifestyle products on alta.com and our app. The assortment includes more than 200 established and emerging brands and 5,000 SKUs. Our wellness initiative, which included the addition of nearly 30 new brands in our core wellness assortment and nearly 40 new brands in our marketplace assortment, along with an expanded store presence in more than 400 stores. And new UB media capabilities, like the addition of connected TV and streaming audio products that drove engagement and incremental ad revenue. We made notable progress aligning our foundation to support future growth through important leadership changes to ensure our team was positioned to meet the needs of our evolving business. and ongoing cost optimization efforts, including investment in AI and automation, like the testing and"
+        }
+      ]
+    },
+    {
+      "question_id": "Mdcf1d03950dd4702",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0000006201-26-000032",
+        "gold_idx": 2,
+        "produced_idx": 2
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-014.prompt.txt",
+      "prompt_sha256": "790286cf47e512da56a658794953da167775507c91e5bbc3a27f12184c459c31",
+      "metadata": {
+        "event_date": "2026-04-23",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": -530
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": -530
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "pretax_income",
+          "driver_state": "increased",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": -327
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": -327
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "excluding net special items"
+          ],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7) Net loss (382) (473) (91) (19.2) Pre-tax loss – GAAP $ (476) $ (648) $ (172) (26.6) Adjusted for: pre-tax net special items (1) \n\n149 118 31 25.0 Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2)",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7) Net loss (382) (473) (91) (19.2) Pre-tax loss – GAAP $ (476) $ (648) $ (172) (26.6) Adjusted for: pre-tax net special items (1) \n\n149 118 31 25.0 Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2)",
+        "reference_name": "Pre-tax loss excluding net special items",
+        "values": [
+          -327,
+          -530
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_31d90c8a-d35",
+          "lane": "G2-014/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9044ee2a-6f5",
+          "lane": "G2-014/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "ca9c62a5c65e62278583b21ce1e74a7acb6c19eb5dd45a0c34f82a356a07860b",
+          "offset": 2382,
+          "excerpt": "craft fuel have fluctuated substantially over the first quarter of 2026 and prices continue to be highly volatile, with market spot prices ranging from a low of approximately $1.86 per gallon to a high of approximately $4.75 per gallon during the first quarter of 2026. AAG’s First Quarter 2026 Results The selected financial data presented below is derived from AAG’s unaudited condensed consolidated financial statements included in Part I, Item 1A of this report and should be read in conjunction with those financial statements and the related notes thereto. Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease) 2026 2025 (In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7) Net loss (382) (473) (91) (19.2) Pre-tax loss – GAAP $ (476) $ (648) $ (172) (26.6) Adjusted for: pre-tax net special items (1) 149 118 31 25.0 Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2) (1) See “Reconciliation of GAAP to Non-GAAP Financial Measures” below and Note 2 to AAG’s Condensed Consolidated Financial Statements in Part I, Item 1A for details on the components of net special items. Pre-Tax Loss and Net Loss Pre-tax loss and net loss were $476 million and $382 million, respectively, in the first quarter of 2026. This compares to first quarter of 2025 pre-tax loss and net loss of $648 million and $473 million, respectively. Excluding the effects of pre-tax net special items, pre-tax loss was $327 million and $530 million in the first quarters of 2026 and 2025, respectively. The period-over-period decrease in pre-tax loss on both a GAAP basis and excluding pre-tax net special items was principally driven by an increase in passenger revenue, offset in part by increases in certain operating expenses including salaries, wages, and benefits, aircraft fuel and related taxes and other operating expenses. Revenue In the first quarter of 2026, we reported total operating revenues of $13.9 billion, an increase of $1.4 billion, or 10.8%, from the first quarter of 2025. Pa"
+        }
+      ]
+    },
+    {
+      "question_id": "M3e5aa7f1ebcc7dae",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0000027904-26-000013",
+        "gold_idx": 4,
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-014.prompt.txt",
+      "prompt_sha256": "790286cf47e512da56a658794953da167775507c91e5bbc3a27f12184c459c31",
+      "metadata": {
+        "event_date": "2026-02-10",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "effective_tax_rate",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 25
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 23
+          },
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "Excluding the mark-to-market results"
+          ],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+        "reference_name": "annual effective tax rate",
+        "values": [
+          23,
+          25
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_31d90c8a-d35",
+          "lane": "G2-014/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9044ee2a-6f5",
+          "lane": "G2-014/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "f61c10f7cf2e122b1a1745c81d7a34a9a8d9c1f7ab3915459e535195ef1435be",
+          "offset": 17613,
+          "excerpt": "apital assets for tax purposes, because realized capital losses can only be deducted against realized capital gains. As of December 31, 2025, we had approximately $2.4 billion of U.S. federal pre-tax net operating loss carryforwards which we are expecting to utilize during 2026. These net operating loss carryforwards were primarily generated in 2020 and do not expire. In certain periods, we may have adjustments to our net deferred tax liabilities as a result of changes in prior year estimates, mark-to-market adjustments on our equity investments and tax laws enacted during the period, which will impact the effective tax rate for that period. Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026. On July 4, 2025, the One Big Beautiful Bill Act was signed into law. The legislation did not have a material impact on our income tax expense or effective income tax rate for the year ended December 31, 2025. For more information about our income taxes, see Note 10 of the Notes to the Consolidated Financial Statements. ##TABLE_START Delta Air Lines, Inc. | 2025 Form 10-K ##TABLE_END Item 7. MD&A - Refinery Segment Refinery Segment The refinery operated by our wholly owned subsidiary, Monroe, primarily produces gasoline, diesel and jet fuel. Monroe has agreements in place to exchange or sell the non-jet fuel products the refinery produces with third parties to obtain jet fuel for consumption in our airline operations. The refinery provides approximately 200,000 barrels per day, or approximately 75% of our consumption, for use in our airline operations through the production of jet fuel and through exchanges and sales of gasoline and diesel fuel produced by the refinery. The refinery regularly optimizes its sales and exchange activities of non-jet fuel products based on market conditi"
+        }
+      ]
+    },
+    {
+      "question_id": "Mc17055ff4a7a52dd",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0000027904-26-000020",
+        "gold_idx": 6,
+        "produced_idx": 9
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-014.prompt.txt",
+      "prompt_sha256": "790286cf47e512da56a658794953da167775507c91e5bbc3a27f12184c459c31",
+      "metadata": {
+        "event_date": "2026-04-08",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": "m_usd",
+          "change_value": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": -760
+          },
+          "company_confirmed": null,
+          "comparison_baseline": "sequential_period",
+          "comparison_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 14300
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 14300
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "net_debt",
+          "driver_state": "decreased",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 13540
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 13540
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "Adjusted"
+          ],
+          "month": null,
+          "period_end_date": "2026-03-31",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "(in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 — Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities — — — 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760)",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "(in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 — Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities — — — 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760)",
+        "reference_name": "Adjusted net debt",
+        "values": [
+          13540,
+          14300
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_31d90c8a-d35",
+          "lane": "G2-014/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9044ee2a-6f5",
+          "lane": "G2-014/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "835b3782a88c7502a710ac3d0157ad91c021547655894fe70490eeaeba475cf1",
+          "offset": 37675,
+          "excerpt": "62 $ 2.45 7 % 15 Adjusted Net Debt. We use adjusted gross debt, including fleet operating lease liabilities (comprised of aircraft and engine leases and regional aircraft leases embedded within our capacity purchase agreements) and unfunded pension liabilities (if applicable), in addition to adjusted debt and finance leases, to present estimated financial obligations. We reduce adjusted total debt by cash, cash equivalents, and LGA restricted cash, resulting in adjusted net debt, to present the amount of assets needed to satisfy the debt. Management believes this metric is helpful to investors in assessing the company's overall debt profile. (in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 — Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities — — — 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760) Gross Capital Expenditures. We adjust capital expenditures for the following item to determine gross capital expenditures for the reason described below: Net cash flows related to certain airport construction projects. Cash flows related to certain airport construction projects are included in capital expenditures. We adjust for these items because management believes investors should be informed that a portion of these capital expenditures from airport construction projects are either funded with restricted cash specific to these projects or reimbursed by a third party. Three Months Ended (in millions) March 31, 2026 March 31, 2025 Flight equipment, including advance payments $ 1,000 $ 987 Ground property and equipment, including technology 200 237 Adjusted for: Net cash flows related to certain airport construction projects (21) (50) Gross capital expenditures $ 1,179 $ 1,174 16 Free Cash Flow. We present free cash flow because management believes this metric is helpful to investors to evaluate the company's ability to generate cash that is available for use for debt service or ge"
+        }
+      ]
+    },
+    {
+      "question_id": "M74ee782ce4554785",
+      "identity": {
+        "leg": "P2",
+        "source_id": "CMG_2026-02-03T16.30",
+        "gold_idx": 3,
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-014.prompt.txt",
+      "prompt_sha256": "790286cf47e512da56a658794953da167775507c91e5bbc3a27f12184c459c31",
+      "metadata": {
+        "event_date": "2026-02-03",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "group_occasion_sales_mix",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": null,
+          "level_shape_hint": null,
+          "level_unit": null,
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+          "sentinel_class": "long_term",
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": "double-digit percentage of sales longer term"
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+        "reference_name": "could be double-digit percentage of sales longer term",
+        "values": []
+      },
+      "answers": [
+        {
+          "run_id": "wf_31d90c8a-d35",
+          "lane": "G2-014/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": false,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_9044ee2a-6f5",
+          "lane": "G2-014/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": false,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "c059e1033fc0fe14c4a3b88454773432e375c9f36f85606f9df9bf53fb371f1c",
+          "offset": 10797,
+          "excerpt": "onstrate higher long-term value, maintaining elevated spend and frequency levels throughout the year. In addition to limited time offers, we will roll out new sauces and build a strong pipeline of innovation in untapped sales layers like sides and beverages. As new menu items make their way through the StageGate process, we can pace and sequence these growth layers to provide a long path for transaction growth for years to come. We also see the group occasion as a big opportunity longer term. We are currently building awareness around build your own Chipotle for families or groups of four to six, as well as testing the expansion of catering. Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term. Build Your Own Chipotle continues to perform. It is also highly incremental and driving strong repeat purchases, which is why we are extending our trial promotion into 2026. To build on our momentum, we will scale awareness across our marketing channels, leaning into moments that bring people together like sports, holidays, and other shared occasions where we have seen our highest incidents. Regarding our catering tests, our teams are getting up to speed with the new equipment and technology that will support a bigger catering business. And we are ramping up our marketing efforts, including the recent rollout of one of the large third party delivery platforms. While it is still early in a testing phase, we are seeing the catering orders begin to build and we remain optimistic that we have found the right solution to help scale our catering business moving forward. Third, We are in process of relaunching our rewards program this spring to widen the funnel and leverage our data and AI to power more personalized and impactful user experiences. 2025, we grew our active members to over 2"
+        }
+      ]
+    },
+    {
+      "question_id": "Mdb9090926047d818",
+      "identity": {
+        "leg": "P2",
+        "source_id": "MCD_2026-02-11T16.30",
+        "gold_idx": 6,
+        "produced_idx": 6
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-015.prompt.txt",
+      "prompt_sha256": "bbff1ce0093d4d2f34cfe5ed85cb08906429ced41600f8fd414d61af99397a3c",
+      "metadata": {
+        "event_date": "2026-02-11",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_openings",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 1000
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 1000
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:china"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+        "reference_name": "about 1,000 in China",
+        "values": [
+          1000
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_138de1f8-da9",
+          "lane": "G2-015/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_95f18752-5df",
+          "lane": "G2-015/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "d79b4245ca3aea3c49c5567f401780831b8159f3237b9d039bbe2564c21b96a3",
+          "offset": 20617,
+          "excerpt": ", and GBS. Second, we prioritize our dividend, which has increased in each of the last 49 years. And third, we repurchase shares with remaining free cash flow over time. With respect to restaurant development and capital expenditures, as Chris mentioned, we continue to accelerate our pace of new unit openings and remain on track to achieve our target of 50,000 restaurants by the end of 2027. In 2025, we exceeded our openings plan for the year with gross openings of about 2,275 restaurants and net openings of 1,880. And in 2026, we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments. We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China. Overall, we anticipate about 4.5 percent unit growth from the approximately 2,100 net restaurant additions in 2026. We expect our capital expenditure spend to be between 3.7 and 3.9 billion this year, with the majority invested in new unit openings across our U.S. and IOM segments. This increase in CapEx versus the prior year of 3.4 billion is in line with the targeted increase of about 300 to 500 million that we outlined at our December 23 investor day. Lastly, we're targeting our net income to free cash flow conversion rate in 2026 to be in the low to mid 80% range, which is in line with the 84% in 2025. And with that, let me hand it back over to Chris. Thanks, Ian.\", \"Chris Kempczynski [1396]: As we close the books in 2025, it's only natural to reflect not just on the year that was, but on how far we've come since announcing accelerating the arches in November 2020 and expanding our ambitions in December 2023. We made bold commitments to grow our business. We've made great progress on our accelerator priorities, and we've become a fundamentally different company. You heard from J"
+        }
+      ]
+    },
+    {
+      "question_id": "M42b29840407e0051",
+      "identity": {
+        "leg": "P2",
+        "source_id": "ULTA_2026-03-12T16.30",
+        "gold_idx": 3,
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-015.prompt.txt",
+      "prompt_sha256": "bbff1ce0093d4d2f34cfe5ed85cb08906429ced41600f8fd414d61af99397a3c",
+      "metadata": {
+        "event_date": "2026-03-12",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "store_count",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 80
+          },
+          "level_shape_hint": "floor",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+            "geography:gb",
+            "geography:ie"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+        "reference_name": "stores in the UK and Ireland",
+        "values": [
+          80
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_138de1f8-da9",
+          "lane": "G2-015/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_95f18752-5df",
+          "lane": "G2-015/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "f484e9f92d405a91524e11f36f063daf368ea2d9adfe29b61e9607223266e9df",
+          "offset": 7892,
+          "excerpt": "ion with Beyonce's Sacred Haircurl launch. and elevating our brand building capabilities, enabling us to build stronger portfolios of exclusive brands and products that drive meaningful differentiation and new member acquisition. Noteworthy successes in 2025 include Sacred, which became our largest prestige haircare launch in history, prestige skincare K-beauty brand Peach & Lily, influencer-founded makeup brand Dibs, and Gen Z's most loved fragrance brand Noise. We built and expanded into new growth channels through our international expansion beyond the US with nearly 100 stores in five countries. This included our acquisition of Space NK, a luxury beauty retailer operating more than 80 stores in the UK and Ireland, the opening of nine stores in Mexico via our joint venture partner, Grupo AXO, and the opening of two stores in the Middle East through our franchise partner, Alshaya. Our newly launched Marketplace, a curated online assortment that allows guests to explore a complimentary array of beauty, wellness, and lifestyle products on alta.com and our app. The assortment includes more than 200 established and emerging brands and 5,000 SKUs. Our wellness initiative, which included the addition of nearly 30 new brands in our core wellness assortment and nearly 40 new brands in our marketplace assortment, along with an expanded store presence in more than 400 stores. And new UB media capabilities, like the addition of connected TV and streaming audio products that drove engagement and incremental ad revenue. We made notable progress aligning our foundation to support future growth through important leadership changes to ensure our team was positioned to meet the needs of our evolving business. and ongoing cost optimization efforts, including investment in AI and automation, like the testing and"
+        }
+      ]
+    },
+    {
+      "question_id": "M58a292b9b8e315f9",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0000027904-26-000013",
+        "gold_idx": 4,
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-015.prompt.txt",
+      "prompt_sha256": "bbff1ce0093d4d2f34cfe5ed85cb08906429ced41600f8fd414d61af99397a3c",
+      "metadata": {
+        "event_date": "2026-02-10",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "effective_tax_rate",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 25
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 23
+          },
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "Excluding the mark-to-market results"
+          ],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+        "reference_name": "annual effective tax rate",
+        "values": [
+          23,
+          25
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_138de1f8-da9",
+          "lane": "G2-015/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_95f18752-5df",
+          "lane": "G2-015/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "f61c10f7cf2e122b1a1745c81d7a34a9a8d9c1f7ab3915459e535195ef1435be",
+          "offset": 17613,
+          "excerpt": "apital assets for tax purposes, because realized capital losses can only be deducted against realized capital gains. As of December 31, 2025, we had approximately $2.4 billion of U.S. federal pre-tax net operating loss carryforwards which we are expecting to utilize during 2026. These net operating loss carryforwards were primarily generated in 2020 and do not expire. In certain periods, we may have adjustments to our net deferred tax liabilities as a result of changes in prior year estimates, mark-to-market adjustments on our equity investments and tax laws enacted during the period, which will impact the effective tax rate for that period. Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026. On July 4, 2025, the One Big Beautiful Bill Act was signed into law. The legislation did not have a material impact on our income tax expense or effective income tax rate for the year ended December 31, 2025. For more information about our income taxes, see Note 10 of the Notes to the Consolidated Financial Statements. ##TABLE_START Delta Air Lines, Inc. | 2025 Form 10-K ##TABLE_END Item 7. MD&A - Refinery Segment Refinery Segment The refinery operated by our wholly owned subsidiary, Monroe, primarily produces gasoline, diesel and jet fuel. Monroe has agreements in place to exchange or sell the non-jet fuel products the refinery produces with third parties to obtain jet fuel for consumption in our airline operations. The refinery provides approximately 200,000 barrels per day, or approximately 75% of our consumption, for use in our airline operations through the production of jet fuel and through exchanges and sales of gasoline and diesel fuel produced by the refinery. The refinery regularly optimizes its sales and exchange activities of non-jet fuel products based on market conditi"
+        }
+      ]
+    },
+    {
+      "question_id": "M15a4fe7f7f566593",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-102611",
+        "gold_idx": 1,
+        "produced_idx": 1
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-015.prompt.txt",
+      "prompt_sha256": "bbff1ce0093d4d2f34cfe5ed85cb08906429ced41600f8fd414d61af99397a3c",
+      "metadata": {
+        "event_date": "2025-10-27",
+        "fye_month": 8
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "vendor_purchase_concentration",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent",
+            "value": 13
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent",
+            "value": 13
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "one individual vendor provided 13 percent of our total purchases",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "business",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "one individual vendor provided 13 percent of our total purchases",
+        "reference_name": "one individual vendor",
+        "values": [
+          13
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_138de1f8-da9",
+          "lane": "G2-015/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": false,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_95f18752-5df",
+          "lane": "G2-015/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "business",
+          "part_sha256": "3c9dc0fea4c48d64d0e6cbb84e589015eb5939aa15d317f020e05994ebe8ea6b",
+          "offset": 18402,
+          "excerpt": "ial displays promote products on floor displays, end caps and shelves. We utilize in-store signage, creative product placement and promotions to help educate customers about products that they may need. ​ Purchasing and Supply Chain Merchandise is selected and purchased for all stores through our store support centers located in Memphis, Tennessee; Monterrey, Mexico; Chihuahua, Mexico; Sao Paulo, Brazil and Gurugram, India. Additionally, we have offices in Shanghai, China and Istanbul, Turkey to support our global sourcing efforts. In fiscal 2025, one class of similar products accounted for approximately 14 percent of our total revenues, and one individual vendor provided 13 percent of our total purchases. No other class of similar products accounted for 10 percent or more of our total revenues, and no other individual vendor provided more than 10 percent of our total purchases. We believe alternative sources of supply exist, at similar costs, for most types of product sold. Most of our merchandise flows through our distribution centers to our stores by our fleet of tractors and trailers or by third-party transportation firms. The distribution centers replenish our stores up to multiple times per week depending on store sales volumes. Competition The sale of automotive parts, accessories and maintenance items is highly competitive. AutoZone competes on the basis of customer service, including the knowledge and expertise of our AutoZoners and our ability to provide prompt delivery to commercial customers; merchandise quality, selection and availability; product warranty; store layouts, location and convenience; price; and the strength of our AutoZone brand name and quality, trademarks and service marks. Our competitors include national, regional and local auto parts chains, independen"
+        }
+      ]
+    },
+    {
+      "question_id": "M700afaa8868c8f08",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "CMG_2026-02-03T16.30",
+        "gold_idx": 3,
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-016.prompt.txt",
+      "prompt_sha256": "d327b2da7cbd58e90a0a7ec594311b2cf3d5938311ac51291fd4545dfecd7082",
+      "metadata": {
+        "event_date": "2026-02-03",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "group_occasion_sales_mix",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": null,
+          "level_shape_hint": null,
+          "level_unit": null,
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+          "sentinel_class": "long_term",
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": "double-digit percentage of sales longer term"
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+        "reference_name": "could be double-digit percentage of sales longer term",
+        "values": []
+      },
+      "answers": [
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": false,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": false,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "c059e1033fc0fe14c4a3b88454773432e375c9f36f85606f9df9bf53fb371f1c",
+          "offset": 10797,
+          "excerpt": "onstrate higher long-term value, maintaining elevated spend and frequency levels throughout the year. In addition to limited time offers, we will roll out new sauces and build a strong pipeline of innovation in untapped sales layers like sides and beverages. As new menu items make their way through the StageGate process, we can pace and sequence these growth layers to provide a long path for transaction growth for years to come. We also see the group occasion as a big opportunity longer term. We are currently building awareness around build your own Chipotle for families or groups of four to six, as well as testing the expansion of catering. Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term. Build Your Own Chipotle continues to perform. It is also highly incremental and driving strong repeat purchases, which is why we are extending our trial promotion into 2026. To build on our momentum, we will scale awareness across our marketing channels, leaning into moments that bring people together like sports, holidays, and other shared occasions where we have seen our highest incidents. Regarding our catering tests, our teams are getting up to speed with the new equipment and technology that will support a bigger catering business. And we are ramping up our marketing efforts, including the recent rollout of one of the large third party delivery platforms. While it is still early in a testing phase, we are seeing the catering orders begin to build and we remain optimistic that we have found the right solution to help scale our catering business moving forward. Third, We are in process of relaunching our rewards program this spring to widen the funnel and leverage our data and AI to power more personalized and impactful user experiences. 2025, we grew our active members to over 2"
+        }
+      ]
+    },
+    {
+      "question_id": "Mecc6f80e11ee1f6e",
+      "identity": {
+        "leg": "P1",
+        "source_id": "0001104659-26-017090",
+        "gold_idx": 7,
+        "produced_idx": 7
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-016.prompt.txt",
+      "prompt_sha256": "d327b2da7cbd58e90a0a7ec594311b2cf3d5938311ac51291fd4545dfecd7082",
+      "metadata": {
+        "event_date": "2026-02-18",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_openings",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 7
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 6
+          },
+          "level_shape_hint": "range",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:flowerchild"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+        "reference_name": "six to seven Flower Child locations",
+        "values": [
+          6,
+          7
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a",
+          "offset": 3467,
+          "excerpt": "ating environment remains competitive, our strong operational execution, continued menu innovation, and portfolio of high-quality concepts differentiate our business and position us well for long-term growth and shareholder value creation.” 26901 Malibu Hills Road, Calabasas Hills, CA 91301 • Telephone (818) 871-3000 Development During the fourth quarter of fiscal 2025, the Company opened two Cheesecake Factory, two North Italia, and three FRC restaurants. Subsequent to quarter-end, the Company opened one Flower Child location and closed four restaurants, including two Cheesecake Factory restaurants, one Grand Lux Cafe, and one FRC location. The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants. Liquidity and Capital Allocation As of December 30, 2025, the Company had total available liquidity of $582.2 million, including a cash balance of $215.7 million and $366.5 million of availability on its revolving credit facility with no outstanding balance. Total principal amount of debt outstanding was $644.0 million, including $69.0 million in principal amount of 0.375% convertible senior notes due 2026 and $575.0 million in principal amount of 2.00% convertible senior notes due 2030. During the fourth quarter of fiscal 2025, the Company repurchased approximately 228,100 shares of its stock at a cost of $11.2 million. On February 12, 2026, the Company’s Board of Directors approved an increase of 5.0 million shares to the existing repurchase program raising the total authorization to 66 million shares, of which approximately 6.0 million shares remain available for repurchase following the increase. Also on February 12, 2026, the Board approved a $0.03 increase in the quarterly dividend to $0.30 per share to be paid on March 17, 2026, to shareholders of record at the close of busin"
+        }
+      ]
+    },
+    {
+      "question_id": "M4ea4d7f5cd26d81a",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0000898173-26-000006",
+        "gold_idx": 4,
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-016.prompt.txt",
+      "prompt_sha256": "d327b2da7cbd58e90a0a7ec594311b2cf3d5938311ac51291fd4545dfecd7082",
+      "metadata": {
+        "event_date": "2026-02-04",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "shareholders_equity",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "thousands",
+            "value": -763352
+          },
+          "level_low": {
+            "scale_multiplier": 1000,
+            "unit_scale_evidence": "thousands",
+            "value": -763352
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2025-12-31",
+          "period_scope": null,
+          "period_start_date": "2025-12-31",
+          "polarity_proof": null,
+          "quote": "(In thousands, except share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ December 31, 2025 ​ December 31, 2024 ​ ​ ​ ​ (Unaudited) ​ ​ ​ (Note) Assets ​ ​ ​ ​ ​ ​ Current assets: ​ ​ ​ ​ ​ ​ Cash and cash equivalents ​ $ 193,793 ​ $ 130,245 Accounts receivable, net ​ 389,793 ​ ​ 356,839 Amounts receivable from suppliers ​ 159,900 ​ ​ 139,091 Inventory ​ 5,731,385 ​ ​ 5,095,804 Other current assets ​ 269,406 ​ ​ 117,916 Total current assets ​ 6,744,277 ​ ​ 5,839,895 ​ ​ ​ ​ ​ ​ ​ Property and equipment, at cost ​ 10,222,249 ​ ​ 9,192,254 Less: accumulated depreciation and amortization ​ 3,964,824 ​ ​ 3,587,098 Net property and equipment ​ 6,257,425 ​ ​ 5,605,156 ​ ​ ​ ​ ​ ​ ​ Operating lease, right-of-use assets ​ 2,391,150 ​ ​ 2,324,638 Goodwill ​ 948,208 ​ ​ 930,161 Other assets, net ​ 197,193 ​ ​ 193,891 Total assets ​ $ 16,538,253 ​ $ 14,893,741 ​ ​ ​ ​ ​ ​ ​ Liabilities and shareholders’ deficit ​ ​ ​ ​ ​ ​ Current liabilities: ​ ​ ​ ​ ​ ​ Accounts payable ​ $ 7,103,684 ​ $ 6,524,811 Self-insurance reserves ​ 297,304 ​ ​ 149,387 Accrued payroll ​ 119,603 ​ ​ 107,495 Accrued benefits and withholdings ​ 240,072 ​ ​ 199,593 Income taxes payable ​ 13,957 ​ ​ 6,274 Current portion of operating lease liabilities ​ 439,907 ​ ​ 419,213 Other current liabilities ​ 561,294 ​ ​ 876,732 Total current liabilities ​ 8,775,821 ​ ​ 8,283,505 ​ ​ ​ ​ ​ ​ ​ Long-term debt ​ 6,016,904 ​ ​ 5,520,932 Operating lease liabilities, less current portion ​ 2,034,688 ​ ​ 1,980,705 Deferred income taxes ​ 211,210 ​ ​ 247,599 Other liabilities ​ 262,982 ​ ​ 231,961 ​ ​ ​ ​ ​ ​ ​ Shareholders’ equity (deficit): ​ ​ ​ ​ ​ ​ Common stock, $0.01 par value: ​ ​ ​ ​ ​ ​ Authorized shares – 1,250,000,000 ​ ​ ​ ​ ​ Issued and outstanding shares – ​ ​ ​ ​ ​ ​ 841,909,238 as of December 31, 2025, and ​ ​ ​ ​ ​ ​ 862,232,760 as of December 31, 2024 ​ ​ 8,419 ​ ​ 8,622 Additional paid-in capital ​ 1,530,292 ​ ​ 1,454,518 Retained deficit ​ (2,328,817) ​ ​ (2,791,288) Accumulated other comprehensive income (loss) ​ ​ 26,754 ​ ​ (42,813) Total shareholders’ deficit ​ (763,352)",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "(In thousands, except share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ December 31, 2025 ​ December 31, 2024 ​ ​ ​ ​ (Unaudited) ​ ​ ​ (Note) Assets ​ ​ ​ ​ ​ ​ Current assets: ​ ​ ​ ​ ​ ​ Cash and cash equivalents ​ $ 193,793 ​ $ 130,245 Accounts receivable, net ​ 389,793 ​ ​ 356,839 Amounts receivable from suppliers ​ 159,900 ​ ​ 139,091 Inventory ​ 5,731,385 ​ ​ 5,095,804 Other current assets ​ 269,406 ​ ​ 117,916 Total current assets ​ 6,744,277 ​ ​ 5,839,895 ​ ​ ​ ​ ​ ​ ​ Property and equipment, at cost ​ 10,222,249 ​ ​ 9,192,254 Less: accumulated depreciation and amortization ​ 3,964,824 ​ ​ 3,587,098 Net property and equipment ​ 6,257,425 ​ ​ 5,605,156 ​ ​ ​ ​ ​ ​ ​ Operating lease, right-of-use assets ​ 2,391,150 ​ ​ 2,324,638 Goodwill ​ 948,208 ​ ​ 930,161 Other assets, net ​ 197,193 ​ ​ 193,891 Total assets ​ $ 16,538,253 ​ $ 14,893,741 ​ ​ ​ ​ ​ ​ ​ Liabilities and shareholders’ deficit ​ ​ ​ ​ ​ ​ Current liabilities: ​ ​ ​ ​ ​ ​ Accounts payable ​ $ 7,103,684 ​ $ 6,524,811 Self-insurance reserves ​ 297,304 ​ ​ 149,387 Accrued payroll ​ 119,603 ​ ​ 107,495 Accrued benefits and withholdings ​ 240,072 ​ ​ 199,593 Income taxes payable ​ 13,957 ​ ​ 6,274 Current portion of operating lease liabilities ​ 439,907 ​ ​ 419,213 Other current liabilities ​ 561,294 ​ ​ 876,732 Total current liabilities ​ 8,775,821 ​ ​ 8,283,505 ​ ​ ​ ​ ​ ​ ​ Long-term debt ​ 6,016,904 ​ ​ 5,520,932 Operating lease liabilities, less current portion ​ 2,034,688 ​ ​ 1,980,705 Deferred income taxes ​ 211,210 ​ ​ 247,599 Other liabilities ​ 262,982 ​ ​ 231,961 ​ ​ ​ ​ ​ ​ ​ Shareholders’ equity (deficit): ​ ​ ​ ​ ​ ​ Common stock, $0.01 par value: ​ ​ ​ ​ ​ ​ Authorized shares – 1,250,000,000 ​ ​ ​ ​ ​ Issued and outstanding shares – ​ ​ ​ ​ ​ ​ 841,909,238 as of December 31, 2025, and ​ ​ ​ ​ ​ ​ 862,232,760 as of December 31, 2024 ​ ​ 8,419 ​ ​ 8,622 Additional paid-in capital ​ 1,530,292 ​ ​ 1,454,518 Retained deficit ​ (2,328,817) ​ ​ (2,791,288) Accumulated other comprehensive income (loss) ​ ​ 26,754 ​ ​ (42,813) Total shareholders’ deficit ​ (763,352)",
+        "reference_name": "Total shareholders’ deficit",
+        "values": [
+          -763352,
+          -1370961
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "f09491bf95f2b0ccdd63e0e4bb601c3b7ca12705dc9e5fa78fa21b25d3b69bc2",
+          "offset": 13605,
+          "excerpt": "s and Exchange Commission filings, for additional factors that could materially affect the Company’s financial performance. Forward-looking statements speak only as of the date they were made, and the Company undertakes no obligation to publicly update any forward-looking statements, whether as a result of new information, future events, or otherwise, except as required by applicable law. ​ ​ ​ For further information contact: Investor Relations Contacts ​ Leslie Skorick (417) 874-7142 ​ Eric Bird (417) 868-4259 ​ ​ ​ Media Contact ​ Sonya Cox (417) 829-5709 ​ ​ O’REILLY AUTOMOTIVE, INC. AND SUBSIDIARIES CONDENSED CONSOLIDATED BALANCE SHEETS (In thousands, except share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ December 31, 2025 ​ December 31, 2024 ​ ​ ​ ​ (Unaudited) ​ ​ ​ (Note) Assets ​ ​ ​ ​ ​ ​ Current assets: ​ ​ ​ ​ ​ ​ Cash and cash equivalents ​ $ 193,793 ​ $ 130,245 Accounts receivable, net ​ 389,793 ​ ​ 356,839 Amounts receivable from suppliers ​ 159,900 ​ ​ 139,091 Inventory ​ 5,731,385 ​ ​ 5,095,804 Other current assets ​ 269,406 ​ ​ 117,916 Total current assets ​ 6,744,277 ​ ​ 5,839,895 ​ ​ ​ ​ ​ ​ ​ Property and equipment, at cost ​ 10,222,249 ​ ​ 9,192,254 Less: accumulated depreciation and amortization ​ 3,964,824 ​ ​ 3,587,098 Net property and equipment ​ 6,257,425 ​ ​ 5,605,156 ​ ​ ​ ​ ​ ​ ​ Operating lease, right-of-use assets ​ 2,391,150 ​ ​ 2,324,638 Goodwill ​ 948,208 ​ ​ 930,161 Other assets, net ​ 197,193 ​ ​ 193,891 Total assets ​ $ 16,538,253 ​ $ 14,893,741 ​ ​ ​ ​ ​ ​ ​ Liabilities and shareholders’ deficit ​ ​ ​ ​ ​ ​ Current liabilities: ​ ​ ​ ​ ​ ​ Accounts payable ​ $ 7,103,684 ​ $ 6,524,811 Self-insurance reserves ​ 297,304 ​ ​ 149,387 Accrued payroll ​ 119,603 ​ ​ 107,495 Accrued benefits and withholdings ​ 240,072 ​ ​ 199,593 Income taxes payable ​ 13,957 ​ ​ 6,274 Current portion of operating lease liabilities ​ 439,907 ​ ​ 419,213 Other current liabilities ​ 561,294 ​ ​ 876,732 Total current liabilities ​ 8,775,821 ​ ​ 8,283,505 ​ ​ ​ ​ ​ ​ ​ Long-term debt ​ 6,016,904 ​ ​ 5,520,932 Operating lease liabilities, less current portion ​ 2,034,688 ​ ​ 1,980,705 Deferred income taxes ​ 211,210 ​ ​ 247,599 Other liabilities ​ 262,982 ​ ​ 231,961 ​ ​ ​ ​ ​ ​ ​ Shareholders’ equity (deficit): ​ ​ ​ ​ ​ ​ Common stock, $0.01 par value: ​ ​ ​ ​ ​ ​ Authorized shares – 1,250,000,000 ​ ​ ​ ​ ​ Issued and outstanding shares – ​ ​ ​ ​ ​ ​ 841,909,238 as of December 31, 2025, and ​ ​ ​ ​ ​ ​ 862,232,760 as of December 31, 2024 ​ ​ 8,419 ​ ​ 8,622 Additional paid-in capital ​ 1,530,292 ​ ​ 1,454,518 Retained deficit ​ (2,328,817) ​ ​ (2,791,288) Accumulated other comprehensive income (loss) ​ ​ 26,754 ​ ​ (42,813) Total shareholders’ deficit ​ (763,352) ​ ​ (1,370,961) ​ ​ ​ ​ ​ ​ ​ Total liabilities and shareholders’ deficit ​ $ 16,538,253 ​ $ 14,893,741 ​ Note: The balance sheet at December 31, 2024, has been derived from the audited consolidated financial statements at that date but does not include all of the information and footnotes required by United States generally accepted accounting principles for complete financial statements. ​ O’REILLY AUTOMOTIVE, INC. AND SUBSIDIARIES CONDENSED CONSOLIDATED STATEMENTS OF INCOME (In thousands, except per share data) ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ For the Three Months Ended For the Year Ended ​ December 31, December 31, ​ ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ (Unaudited) ​ (Unaudited) ​ (Unaudited) ​ (Note) Sales ​ $ 4,414,314 ​ $ 4,095,601 ​ $ 17,781,992 ​ $ 16,708,479 Cost of goods sold, including warehouse and distribution expenses ​ 2,128,142 ​ 1,994,569 ​ 8,607,851 ​ 8,153,990 Gross profit ​ 2,286,172 ​ 2,101,032 ​ 9,174,141 ​ 8,554,489 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Selling, general and administrative expenses ​ 1,457,563 ​ 1,362,382 ​ 5,713,529 ​ 5,303,332 Operating income ​"
+        }
+      ]
+    },
+    {
+      "question_id": "M619427b099934206",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0000940944-26-000009",
+        "gold_idx": 1,
+        "produced_idx": 1
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-016.prompt.txt",
+      "prompt_sha256": "d327b2da7cbd58e90a0a7ec594311b2cf3d5938311ac51291fd4545dfecd7082",
+      "metadata": {
+        "event_date": "2026-03-27",
+        "fye_month": 5
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": "percent_yoy",
+          "change_value": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "-2.2"
+          },
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$",
+            "value": "2.74"
+          },
+          "comparison_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$",
+            "value": "2.74"
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "continuing_operations_earnings_per_share",
+          "driver_state": "decreased",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$",
+            "value": "2.68"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$",
+            "value": "2.68"
+          },
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "Diluted"
+          ],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Diluted net earnings per share: \n\nEarnings from continuing operations \n\n$ 2.68 $ 2.74 (2.2)%",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": "share"
+      },
+      "reference": {
+        "quote": "Diluted net earnings per share: \n\nEarnings from continuing operations \n\n$ 2.68 $ 2.74 (2.2)%",
+        "reference_name": "Earnings from continuing operations",
+        "values": [
+          "2.68",
+          "2.74"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_e71803ab-f54",
+          "lane": "G2-016/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "7c40db0be0eed2ff64f79e34e906c804c8b8b163b4d86a80317aa33f5d08b0d8",
+          "offset": 2604,
+          "excerpt": "Depreciation and amortization 141.8 131.9 7.5 414.8 381.1 8.8 Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM Total costs and expenses $ 2,938.9 $ 2,739.8 7.3 $ 8,426.1 $ 7,825.5 7.7 Operating income 406.4 418.2 (2.8) 1,066.0 979.5 8.8 Interest, net 49.6 45.5 9.0 143.0 128.8 11.0 Earnings before income taxes 356.8 372.7 (4.3) $ 923.0 $ 850.7 8.5 Income tax expense (1) 46.2 49.0 (5.7) 117.1 103.7 12.9 Earnings from continuing operations $ 310.6 $ 323.7 (4.0) $ 805.9 $ 747.0 7.9 Losses from discontinued operations, net of tax (3.8) (0.3) NM (4.1) (1.2) NM Net earnings $ 306.8 $ 323.4 (5.1)% $ 801.8 $ 745.8 7.5% Diluted net earnings per share: Earnings from continuing operations $ 2.68 $ 2.74 (2.2)% $ 6.91 $ 6.30 9.7% Losses from discontinued operations (0.03) — NM (0.04) (0.01) NM Net earnings $ 2.65 $ 2.74 (3.3)% $ 6.87 $ 6.29 9.2% (1) Effective tax rate 12.9 % 13.1 % 12.7 % 12.2 % NM- Percentage not considered meaningful. The following table details the number of company-owned restaurants currently reported in continuing operations that were open at the end of the third quarter of fiscal 2026, compared with the number of company-owned restaurants open at the end of fiscal 2025 and at the end of the third quarter of fiscal 2025. February 22, 2026 May 25, 2025 February 23, 2025 Olive Garden 1 944 935 927 LongHorn Steakhouse 608 591 586 Cheddar’s Scratch Kitchen 184 181 182 Chuy’s 2 108 108 106 Yard House 92 88 89 Ruth’s Chris 82 82 82 The Capital Grille 73 71 71 Seasons 52 45 43 45 Eddie V’s 30 29 30 Bahama Breeze 27 28 43 The Capital Burger 3 3 4 Total 2,196 2,159 2,165 1 During the first quarter of fiscal 2026, we sold all of the Olive Garden Canada Restaurants. 2 Includes 103 Chuy’s restaurants acquired during the second quarter of fiscal 2025. OVERVIEW OF OPERATIONS Our bu"
+        },
+        {
+          "part": "mdna",
+          "part_sha256": "7c40db0be0eed2ff64f79e34e906c804c8b8b163b4d86a80317aa33f5d08b0d8",
+          "offset": 0,
+          "excerpt": "[ManagementDiscussionandAnalysisofFinancialConditionandResultsofOperations] Item 2. Management’s Discussion and Analysis of Financial Condition and Results of Operations The discussion and analysis below for the Company, which contains forward-looking statements, should be read in conjunction with the unaudited consolidated financial statements and the notes to such financial statements included elsewhere in this quarterly report on Form 10-Q (Form 10-Q) and the audited consolidated financial statements and the notes thereto included in our Form 10-K for the fiscal year ended May 25, 2025 (Form 10-K). In addition to historical consolidated financial information, this discussion contains forward-looking statements that reflect our plans, estimates, and beliefs and involve numerous risks and uncertainties, including but not limited to those described in the “Item 1A. Risk Factors” section of the Form 10-K. Actual results may differ materially from those contained in any forward-looking statements. You should carefully read “Forward-Looking Statements” included below in this Form 10-Q. To facilitate the review of our discussion and analysis, the following table sets forth our financial results for the periods indicated. All information is derived from the unaudited consolidated statements of earnings for the three and nine months ended February 22, 2026 and February 23, 2025, respectively. Three Months Ended Nine Months Ended (in millions) February 22, 2026 February 23, 2025 % Chg February 22, 2026 February 23, 2025 % Chg Sales $ 3,345.3 $ 3,158.0 5.9% $ 9,492.1 $ 8,805.0 7.8% Costs and expenses: Food and beverage 1,026.7 953.6 7.7 2,919.5 2,673.1 9.2 Restaurant labor 1,046.9 995.0 5.2 3,035.0 2,811.1 8.0 Restaurant expenses 528.7 501.0 5.5 1,541.2 1,426.9 8.0 Marketing expenses 39.4 35.4 11.3 137.2 128.9 6.4 Pre-opening costs 8.8 6.1 44.3 22.8 16.1 41.6 General and admi"
+        }
+      ]
+    },
+    {
+      "question_id": "Mdce0d30d712dcd83",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0001104659-26-017090",
+        "gold_idx": 6,
+        "produced_idx": 6
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-017.prompt.txt",
+      "prompt_sha256": "ad0125baa9a84dc333b0ef303379718f27f0db5000ad739cf1ef3964230efb05",
+      "metadata": {
+        "event_date": "2026-02-18",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "comparable_restaurant_sales",
+          "driver_state": "increased",
+          "fiscal_quarter": null,
+          "fiscal_year": 2024,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 2
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 2
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:northitalia"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+        "reference_name": "Comparable restaurant sales vs. prior year",
+        "values": [
+          2
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_26c63607-ab8",
+          "lane": "G2-017/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_382ae75e-7b6",
+          "lane": "G2-017/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a",
+          "offset": 17124,
+          "excerpt": " $ (220,555 ) $ 178,317 26901 Malibu Hills Road, Calabasas Hills, CA 91301 • Telephone (818) 871-3000 The Cheesecake Factory Incorporated Selected Operating, Restaurant and Balance Sheet Information (unaudited; in thousands, except statistical data) 13 Weeks Ended 13 Weeks Ended 52 Weeks Ended 52 Weeks Ended The Cheesecake Factory restaurants operating information: December 30, 2025 December 31, 2024 December 30, 2025 December 31, 2024 Comparable restaurant sales vs. prior year (2.2 )% 1.7 % 0.1 % 1.0 % Restaurants opened during period 2 2 4 3 Restaurants open at period-end 218 215 218 215 Restaurant operating weeks 2,821 2,795 11,218 11,214 North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 % Restaurants opened during period 2 3 6 6 Restaurants open at period-end 48 42 48 42 Restaurant operating weeks 606 535 2,355 2,021 Other Fox Restaurant Concepts (FRC) operating information:(1) Restaurants opened during period 3 2 9 8 Restaurants open at period-end 56 48 56 48 Restaurant operating weeks 715 611 2,675 2,264 Other operating information:(2) Restaurants opened during period - 2 6 6 Restaurants open at period-end 49 43 49 43 Restaurant operating weeks 637 551 2,477 2,114 Number of company-owned restaurants: The Cheesecake Factory 218 North Italia 48 Other FRC 56 Other 49 Total 371 Number of international-licensed restaurants: The Cheesecake Factory 35 (1) The Other FRC segment includes all FRC brands except Flower Child. (2) The Other segment includes the Flower Child, Grand Lux Cafe and Social Monk Asian Kitchen concepts, as well as the Company's third-party bakery, international and consumer packaged goods businesses, unallocated corporate expenses and gift card costs. Selected Consolidated Balance Sheet Information December 30, 2025 December 31, 2024 Cash and cash equi"
+        }
+      ]
+    },
+    {
+      "question_id": "Mb3f1ca0e645be073",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-102611",
+        "gold_idx": 3,
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-017.prompt.txt",
+      "prompt_sha256": "ad0125baa9a84dc333b0ef303379718f27f0db5000ad739cf1ef3964230efb05",
+      "metadata": {
+        "event_date": "2025-10-27",
+        "fye_month": 8
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": "m_usd",
+          "change_value": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": "329.5"
+          },
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "net_sales",
+          "driver_state": "increased",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": null,
+          "level_shape_hint": null,
+          "level_unit": null,
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:us",
+            "customer:commercial"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+        "reference_name": "Domestic commercial sales",
+        "values": [
+          "329.5"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_26c63607-ab8",
+          "lane": "G2-017/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": false,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_382ae75e-7b6",
+          "lane": "G2-017/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "a4e6477713e39d5cfdbfab68bd67dd5870b7d8c51cdda23a135f367e465910f9",
+          "offset": 12559,
+          "excerpt": "s in Management’s Discussion and Analysis of Financial Condition and Results of Operations. (10) Share repurchases are inclusive of excise tax in fiscal 2025, 2024 and 2023. The excise tax is assessed at one percent of the fair market value of net stock repurchases after December 31, 2022. ​ Fiscal 2025 Compared with Fiscal 2024 For the fiscal year ended August 30, 2025, we had net sales of $18.9 billion compared with $18.5 billion for the year ended August 31, 2024, an increase of 2.4%. This growth was driven primarily by a domestic same store sales increase of 3.2% and net sales of $374.3 million from new domestic and international stores. Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales. Same store sales, or sales for our domestic and international stores open at least one year, are computed on a 52-week basis and are as follows: ##TABLE_START ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Fiscal Year Ended August ​ ​ ​ ​ ​ Constant Currency (1) ​ ​ ​ ​ ​ Domestic ​ 3.2 % ​ 0.4 % ​ 3.2 % ​ 0.4 % International (3.2 %) 16.1 % 9.3 % 10.2 % Total Company 2.4 % 2.1 % 3.9 % 1.4 % ##TABLE_END ​ ##TABLE_START (1) Constant currency same store sales exclude impacts from fluctuations of foreign exchange rates by converting both the current year and prior year international results at the prior year foreign currency exchange rate. ##TABLE_END ​ Gross profit for fiscal 2025 was $10.0 billion, or 52.6% of net sales, a 47 basis point decrease compared with $9.8 billion, or 53.1% of net sales for fiscal 2024. The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact. Operating, selling, general and administrative expenses for fiscal 2025 increased to $6.4 billion, or 33.6% of net sal"
+        }
+      ]
+    },
+    {
+      "question_id": "M4b4e22abcaa8d591",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "MCD_2026-02-11T16.30",
+        "gold_idx": 6,
+        "produced_idx": 2
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-017.prompt.txt",
+      "prompt_sha256": "ad0125baa9a84dc333b0ef303379718f27f0db5000ad739cf1ef3964230efb05",
+      "metadata": {
+        "event_date": "2026-02-11",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_openings",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 1000
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 1000
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:china"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+        "reference_name": "about 1,000 in China",
+        "values": [
+          1000
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_26c63607-ab8",
+          "lane": "G2-017/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_382ae75e-7b6",
+          "lane": "G2-017/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "d79b4245ca3aea3c49c5567f401780831b8159f3237b9d039bbe2564c21b96a3",
+          "offset": 20617,
+          "excerpt": ", and GBS. Second, we prioritize our dividend, which has increased in each of the last 49 years. And third, we repurchase shares with remaining free cash flow over time. With respect to restaurant development and capital expenditures, as Chris mentioned, we continue to accelerate our pace of new unit openings and remain on track to achieve our target of 50,000 restaurants by the end of 2027. In 2025, we exceeded our openings plan for the year with gross openings of about 2,275 restaurants and net openings of 1,880. And in 2026, we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments. We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China. Overall, we anticipate about 4.5 percent unit growth from the approximately 2,100 net restaurant additions in 2026. We expect our capital expenditure spend to be between 3.7 and 3.9 billion this year, with the majority invested in new unit openings across our U.S. and IOM segments. This increase in CapEx versus the prior year of 3.4 billion is in line with the targeted increase of about 300 to 500 million that we outlined at our December 23 investor day. Lastly, we're targeting our net income to free cash flow conversion rate in 2026 to be in the low to mid 80% range, which is in line with the 84% in 2025. And with that, let me hand it back over to Chris. Thanks, Ian.\", \"Chris Kempczynski [1396]: As we close the books in 2025, it's only natural to reflect not just on the year that was, but on how far we've come since announcing accelerating the arches in November 2020 and expanding our ambitions in December 2023. We made bold commitments to grow our business. We've made great progress on our accelerator priorities, and we've become a fundamentally different company. You heard from J"
+        }
+      ]
+    },
+    {
+      "question_id": "M1b698b1ec9b0c1d6",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0001104659-26-017090",
+        "gold_idx": 7,
+        "produced_idx": 7
+      },
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-018.prompt.txt",
+      "prompt_sha256": "f40c2f2ffa884d9d1d96f98bc5a8bbcd9a9a84bdd685361185d5c733fb83ba74",
+      "metadata": {
+        "event_date": "2026-02-18",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_openings",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 7
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 6
+          },
+          "level_shape_hint": "range",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:flowerchild"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+        "reference_name": "six to seven Flower Child locations",
+        "values": [
+          6,
+          7
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_26c63607-ab8",
+          "lane": "G2-018/G1a",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": null,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_26c63607-ab8",
+          "lane": "G2-018/G1b",
+          "attempt": 1,
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a",
+          "offset": 3467,
+          "excerpt": "ating environment remains competitive, our strong operational execution, continued menu innovation, and portfolio of high-quality concepts differentiate our business and position us well for long-term growth and shareholder value creation.” 26901 Malibu Hills Road, Calabasas Hills, CA 91301 • Telephone (818) 871-3000 Development During the fourth quarter of fiscal 2025, the Company opened two Cheesecake Factory, two North Italia, and three FRC restaurants. Subsequent to quarter-end, the Company opened one Flower Child location and closed four restaurants, including two Cheesecake Factory restaurants, one Grand Lux Cafe, and one FRC location. The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants. Liquidity and Capital Allocation As of December 30, 2025, the Company had total available liquidity of $582.2 million, including a cash balance of $215.7 million and $366.5 million of availability on its revolving credit facility with no outstanding balance. Total principal amount of debt outstanding was $644.0 million, including $69.0 million in principal amount of 0.375% convertible senior notes due 2026 and $575.0 million in principal amount of 2.00% convertible senior notes due 2030. During the fourth quarter of fiscal 2025, the Company repurchased approximately 228,100 shares of its stock at a cost of $11.2 million. On February 12, 2026, the Company’s Board of Directors approved an increase of 5.0 million shares to the existing repurchase program raising the total authorization to 66 million shares, of which approximately 6.0 million shares remain available for repurchase following the increase. Also on February 12, 2026, the Board approved a $0.03 increase in the quarterly dividend to $0.30 per share to be paid on March 17, 2026, to shareholders of record at the close of busin"
+        }
+      ]
+    }
+  ],
+  "raw_bindings_updated_at_utc": "2026-09-15 02:26:18 UTC"
+}

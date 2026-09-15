@@ -1,0 +1,4 @@
+CONTRACT_NATIVE_2169 {"a7_correction_candidate_2118.py": "50f9298c9bf9b0ff256f3faae6e227260c4e5fac10113bc9252c2cb45cf8f40f", "a7_grading_contract_2168.py": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4", "a7_grading_input_correction_2114.py": "32e2f650f56cb77b20c89199bc8cf120181dbc7ff92bdd60014d7abc95a16a2d", "a7_grading_revision_2115.py": "dd708431e2a106c4f711b89dfe8b9918a52ddf4f8616f5fefb94fa742783de76", "test_correction_native_2118.py": "5c2341b98a132533b0d727250c37767adf4f624a552d0de65e21fc42f8a5ac8b", "test_grading_revision_chain_native_2169.py": "45984c9d19f7404e35796679edf0129e9835302f001fbf70c3ae6a8bc9150d01"}
+............................                                             [100%]
+28 passed in 53.84s
+TEST_REPLIES_ONLY; model calls=0; raw pytest exit=0

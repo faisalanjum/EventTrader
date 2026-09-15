@@ -1,0 +1,1111 @@
+{
+  "purpose": "Independent source review data, not replacement judgments or a key",
+  "reviewed_at_utc": "2026-09-15 00:28:39 UTC",
+  "scope": "Completed G2 batches 001 and 002; no model calls repeated",
+  "rows": [
+    {
+      "question_id": "M96e4fc2ed3155b3b",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-001.prompt.txt",
+      "prompt_sha256": "62e246c88035148f7337510ea0dd43ba666fd3d83c46dce2fab4b1b85998b344",
+      "metadata": {
+        "event_date": "2026-04-22",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": -149
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": -149
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "net_income",
+          "driver_state": "increased",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 227
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 227
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2026-03-31",
+          "period_scope": null,
+          "period_start_date": "2026-01-01",
+          "polarity_proof": null,
+          "quote": "(in millions, except per share amounts) (unaudited) Three months ended March 31, 2026 2025 Percent Change OPERATING REVENUES: Passenger $ 6,591 $ 5,811 13.4 Freight 44 41 7.3 Other 614 576 6.6 Total operating revenues 7,249 6,428 12.8 OPERATING EXPENSES: Salaries, wages, and benefits 3,297 3,102 6.3 Aircraft fuel and related taxes 1,356 1,249 8.6 Maintenance materials and repairs 259 292 (11.3) Landing fees and airport rentals 572 522 9.6 Depreciation and amortization 398 396 0.5 Other operating expenses 1,037 1,090 (4.9) Total operating expenses 6,919 6,651 4.0 OPERATING INCOME (LOSS) 330 (223) n.m. NON-OPERATING EXPENSES (INCOME): Interest expense 54 46 17.4 Capitalized interest (12) (11) 9.1 Interest income (23) (84) (72.6) Other (gains) losses, net 26 18 44.4 Total non-operating expenses (income) 45 (31) n.m. INCOME (LOSS) BEFORE INCOME TAXES 285 (192) n.m. PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m. NET INCOME (LOSS) $ 227 $ (149) n.m.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "(in millions, except per share amounts) (unaudited) Three months ended March 31, 2026 2025 Percent Change OPERATING REVENUES: Passenger $ 6,591 $ 5,811 13.4 Freight 44 41 7.3 Other 614 576 6.6 Total operating revenues 7,249 6,428 12.8 OPERATING EXPENSES: Salaries, wages, and benefits 3,297 3,102 6.3 Aircraft fuel and related taxes 1,356 1,249 8.6 Maintenance materials and repairs 259 292 (11.3) Landing fees and airport rentals 572 522 9.6 Depreciation and amortization 398 396 0.5 Other operating expenses 1,037 1,090 (4.9) Total operating expenses 6,919 6,651 4.0 OPERATING INCOME (LOSS) 330 (223) n.m. NON-OPERATING EXPENSES (INCOME): Interest expense 54 46 17.4 Capitalized interest (12) (11) 9.1 Interest income (23) (84) (72.6) Other (gains) losses, net 26 18 44.4 Total non-operating expenses (income) 45 (31) n.m. INCOME (LOSS) BEFORE INCOME TAXES 285 (192) n.m. PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m. NET INCOME (LOSS) $ 227 $ (149) n.m.",
+        "reference_name": "NET INCOME (LOSS)",
+        "values": [
+          227,
+          -149
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_3e836797-906",
+          "lane": "G2-001/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9739c9a4-f05",
+          "lane": "G2-001/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "b0c47050919ca59526505208b3c77a4955f6890187fab2ca99652808b8f931fd",
+          "offset": 16136,
+          "excerpt": "ctors, as described in the Company's filings with the Securities and Exchange Commission, including the detailed factors discussed under the heading \"Risk Factors\" in the Company's Annual Report on Form 10-K for the fiscal year ended December 31, 2025. Investor Contact: Southwest Airlines Investor Relations investor.relations@wnco.com Media Contact: Southwest Airlines Media Relations 214-792-4847 swamedia@wnco.com SW-QFS 7 Southwest Airlines Co. Condensed Consolidated Statement of Income (Loss) (in millions, except per share amounts) (unaudited) Three months ended March 31, 2026 2025 Percent Change OPERATING REVENUES: Passenger $ 6,591 $ 5,811 13.4 Freight 44 41 7.3 Other 614 576 6.6 Total operating revenues 7,249 6,428 12.8 OPERATING EXPENSES: Salaries, wages, and benefits 3,297 3,102 6.3 Aircraft fuel and related taxes 1,356 1,249 8.6 Maintenance materials and repairs 259 292 (11.3) Landing fees and airport rentals 572 522 9.6 Depreciation and amortization 398 396 0.5 Other operating expenses 1,037 1,090 (4.9) Total operating expenses 6,919 6,651 4.0 OPERATING INCOME (LOSS) 330 (223) n.m. NON-OPERATING EXPENSES (INCOME): Interest expense 54 46 17.4 Capitalized interest (12) (11) 9.1 Interest income (23) (84) (72.6) Other (gains) losses, net 26 18 44.4 Total non-operating expenses (income) 45 (31) n.m. INCOME (LOSS) BEFORE INCOME TAXES 285 (192) n.m. PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m. NET INCOME (LOSS) $ 227 $ (149) n.m. NET INCOME (LOSS) PER SHARE: Basic $ 0.45 $ (0.26) n.m. Diluted $ 0.45 $ (0.26) n.m. WEIGHTED AVERAGE SHARES OUTSTANDING: Basic 498 584 (14.7) Diluted 503 584 (13.9) 8 Southwest Airlines Co. Reconciliation of Reported Amounts to Non-GAAP Financial Measures (excluding special items) (See Note Regarding Use of Non-GAAP Financial Measures) (in millions, except per share and per ASM amounts) (unaudited) Three months ended March 31, Percent 2026 2025 Change Aircraft fuel and related taxes, unhedged $ 1,327 $ 1,212 (a) Add: Premium cost of fuel contracts designated as hedges 29 37 Aircraft fuel and related taxes, as reported (and economic) $ 1,356 $ 1,249 8.6 Total operating expenses, as reported"
+        }
+      ],
+      "additional_source_windows": []
+    },
+    {
+      "question_id": "M6c722b0ca333185b",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-001.prompt.txt",
+      "prompt_sha256": "62e246c88035148f7337510ea0dd43ba666fd3d83c46dce2fab4b1b85998b344",
+      "metadata": {
+        "event_date": "2025-12-05",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "action_event",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "goodwill_and_intangible_asset_impairment",
+          "driver_state": "occurred",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 171
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 171
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2025-11-01",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "($ in millions, except per share amounts): \n\nThree Months Ended Nine Months Ended November 1, 2025 November 2, 2024 November 1, 2025 November 2, 2024 Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580 Revenue % change 2.4 % (3.2) % 1.1 % (4.3) % Comparable sales % change 2.7 % (2.9) % 1.2 % (3.7) % Gross profit $ 2,248 $ 2,217 $ 6,491 $ 6,467 \n\nGross profit as a % of revenue (1) \n\n23.2 % 23.5 % 23.3 % 23.4 % Selling, general and administrative expense (\"SG&A\") $ 1,884 $ 1,871 $ 5,434 $ 5,418 \n\nSG&A as a % of revenue (1) \n\n19.5 % 19.8 % 19.5 % 19.6 % Restructuring charges $ (5) $ (4) $ 218 $ 4 Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:ReportingUnitAxis__bestbuyhealth"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "($ in millions, except per share amounts): \n\nThree Months Ended Nine Months Ended November 1, 2025 November 2, 2024 November 1, 2025 November 2, 2024 Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580 Revenue % change 2.4 % (3.2) % 1.1 % (4.3) % Comparable sales % change 2.7 % (2.9) % 1.2 % (3.7) % Gross profit $ 2,248 $ 2,217 $ 6,491 $ 6,467 \n\nGross profit as a % of revenue (1) \n\n23.2 % 23.5 % 23.3 % 23.4 % Selling, general and administrative expense (\"SG&A\") $ 1,884 $ 1,871 $ 5,434 $ 5,418 \n\nSG&A as a % of revenue (1) \n\n19.5 % 19.8 % 19.5 % 19.6 % Restructuring charges $ (5) $ (4) $ 218 $ 4 Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+        "reference_name": "Goodwill and intangible asset impairments",
+        "values": [
+          171
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_3e836797-906",
+          "lane": "G2-001/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9739c9a4-f05",
+          "lane": "G2-001/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "dbac58d3ebb2e5f2ab648317e173721569b489eac512d6cf377980e5615280ce",
+          "offset": 8043,
+          "excerpt": "osure of revenue changes in constant currency provides useful supplementary information to investors in light of significant fluctuations in currency rates. Refer to the Non-GAAP Financial Measures section below for detailed reconciliations of items impacting consolidated adjusted operating income, consolidated adjusted effective tax rate and consolidated adjusted diluted EPS in the presented periods. Results of Operations Consolidated Results Selected consolidated financial data was as follows ($ in millions, except per share amounts): Three Months Ended Nine Months Ended November 1, 2025 November 2, 2024 November 1, 2025 November 2, 2024 Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580 Revenue % change 2.4 % (3.2) % 1.1 % (4.3) % Comparable sales % change 2.7 % (2.9) % 1.2 % (3.7) % Gross profit $ 2,248 $ 2,217 $ 6,491 $ 6,467 Gross profit as a % of revenue (1) 23.2 % 23.5 % 23.3 % 23.4 % Selling, general and administrative expense (\"SG&A\") $ 1,884 $ 1,871 $ 5,434 $ 5,418 SG&A as a % of revenue (1) 19.5 % 19.8 % 19.5 % 19.6 % Restructuring charges $ (5) $ (4) $ 218 $ 4 Goodwill and intangible asset impairments $ 171 $ - $ 171 $ - Operating income $ 198 $ 350 $ 668 $ 1,045 Operating income as a % of revenue 2.0 % 3.7 % 2.4 % 3.8 % Net earnings $ 140 $ 273 $ 528 $ 810 Diluted EPS $ 0.66 $ 1.26 $ 2.48 $ 3.73 (1) Because retailers vary in how they record costs of operating their supply chain between cost of sales and SG&A, our gross profit rate and SG&A rate may not be comparable to other retailers’ corresponding rates. For additional information regarding costs classified in cost of sales and SG&A, refer to Note 1, Summary of Significant Accounting Policies , of the Notes to Consolidated Financial Statements included in our Annual Report on Form 10-K for the fiscal year ended February 1, 2025. In the third quarter and "
+        }
+      ],
+      "additional_source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "dbac58d3ebb2e5f2ab648317e173721569b489eac512d6cf377980e5615280ce",
+          "needle": "Goodwill and intangible asset impairments in the third",
+          "offset": 10381,
+          "excerpt": "e that commenced in the second quarter of fiscal 2026 and a restructuring initiative focused on optimizing our Best Buy Health business that commenced in the first quarter of fiscal 2026. Refer to Note 2, Restructuring , of the Notes to Consolidated Financial Statements, for additional information. Goodwill and intangible asset impairments in the third quarter and first nine months of fiscal 2026 were related to Best Buy Health. A change in Best Buy Health’s customer base during the third quarter of fiscal 2026 resulted in an impairment review of all Best Buy Health assets. The impairments reflect downward revisions of our revenue growth rates and margin rates compared to previous projections, in part due to pressures in the Medicaid and Medicare Advantage markets. Refer to Note 3, Goodwill and Intangible Assets , of the Notes to Consolidated Financial Statements, for additional information Operating income rate decreased in the third quarter of fiscal 2026, primarily due to goodwill and intangible asset impairments. Operating income rate decreased in the first nine months of fiscal 2026, primarily due to higher restructuring charges and goodwill and intangible asset impairments. Diluted EPS decreased in the third quarter of fiscal 2026, primarily due to lower net earnings driven by higher goodwill and intangible asset impairments, partially offset by lower income tax expense. Diluted EPS decreased in the first nine months of fiscal 2026, primarily due to lower net earnings driven by higher restructuring charges and goodwill"
+        }
+      ]
+    },
+    {
+      "question_id": "M70f663f593c28775",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-001.prompt.txt",
+      "prompt_sha256": "62e246c88035148f7337510ea0dd43ba666fd3d83c46dce2fab4b1b85998b344",
+      "metadata": {
+        "event_date": "2026-02-04",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "store_count",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 6447
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 6447
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2025-12-31",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Ending domestic store count ​ 6,447",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:us"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Ending domestic store count ​ 6,447",
+        "reference_name": "Ending domestic store count",
+        "values": [
+          6447,
+          6265
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_3e836797-906",
+          "lane": "G2-001/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": false,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_9739c9a4-f05",
+          "lane": "G2-001/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "f09491bf95f2b0ccdd63e0e4bb601c3b7ca12705dc9e5fa78fa21b25d3b69bc2",
+          "offset": 23914,
+          "excerpt": "rovider customers ​ 2,149,531 ​ 1,905,539 ​ 8,651,746 ​ 7,836,283 Other sales and sales adjustments ​ 84,365 ​ ​ 93,233 ​ 364,599 ​ ​ 399,155 Total sales ​ $ 4,414,314 ​ $ 4,095,601 ​ $ 17,781,992 ​ $ 16,708,479 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ For the Three Months Ended ​ For the Year Ended ​ ​ December 31, ​ December 31, ​ ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ ​ 2025 ​ ​ 2024 Store Count: ​ ​ ​ ​ ​ ​ ​ ​ Beginning domestic store count 6,406 6,187 6,265 6,095 New stores opened 41 78 182 170 Stores closed — — — — Ending domestic store count ​ 6,447 ​ 6,265 ​ 6,447 ​ 6,265 ​ ​ ​ ​ ​ ​ ​ ​ ​ Beginning Mexico store count ​ 107 ​ 78 ​ 87 ​ 62 New stores opened ​ 5 ​ 9 ​ 25 ​ 25 Stores closed ​ — ​ — ​ — ​ — Ending Mexico store count ​ 112 ​ 87 ​ 112 ​ 87 ​ ​ ​ ​ ​ ​ ​ ​ ​ Beginning Canada store count ​ 25 ​ 26 ​ 26 ​ — New stores opened ​ 1 ​ — ​ 1 ​ 3 Stores acquired ​ — ​ — ​ — ​ 23 Stores closed ​ — ​ — ​ (1) ​ — Ending Canada store count ​ 26 ​ 26 ​ 26 ​ 26 ​ ​ ​ ​ ​ ​ ​ ​ ​ Total ending store count 6,585 6,378 6,585 6,378 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ For the Three Months Ended ​ For the Year Ended ​ ​ December 31, ​ December 31, ​ ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ ​ 2025 ​ ​ ​ 2024 Store and Team Member Information: ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ "
+        }
+      ],
+      "additional_source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "f09491bf95f2b0ccdd63e0e4bb601c3b7ca12705dc9e5fa78fa21b25d3b69bc2",
+          "needle": "Ending domestic store count",
+          "offset": 23914,
+          "excerpt": "self customers $ 2,180,418 ​ $ 2,096,829 ​ $ 8,765,647 ​ $ 8,473,041 Sales to professional service provider customers ​ 2,149,531 ​ 1,905,539 ​ 8,651,746 ​ 7,836,283 Other sales and sales adjustments ​ 84,365 ​ ​ 93,233 ​ 364,599 ​ ​ 399,155 Total sales ​ $ 4,414,314 ​ $ 4,095,601 ​ $ 17,781,992 ​ $ 16,708,479 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ For the Three Months Ended ​ For the Year Ended ​ ​ December 31, ​ December 31, ​ ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ ​ 2025 ​ ​ 2024 Store Count: ​ ​ ​ ​ ​ ​ ​ ​ Beginning domestic store count 6,406 6,187 6,265 6,095 New stores opened 41 78 182 170 Stores closed — — — — Ending domestic store count ​ 6,447 ​ 6,265 ​ 6,447 ​ 6,265 ​ ​ ​ ​ ​ ​ ​ ​ ​ Beginning Mexico store count ​ 107 ​ 78 ​ 87 ​ 62 New stores opened ​ 5 ​ 9 ​ 25 ​ 25 Stores closed ​ — ​ — ​ — ​ — Ending Mexico store count ​ 112 ​ 87 ​ 112 ​ 87 ​ ​ ​ ​ ​ ​ ​ ​ ​ Beginning Canada store count ​ 25 ​ 26 ​ 26 ​ — New stores opened ​ 1 ​ — ​ 1 ​ 3 Stores acquired ​ — ​ — ​ — ​ 23 Stores closed ​ — ​ — ​ (1) ​ — Ending Canada store count ​ 26 ​ 26 ​ 26 ​ 26 ​ ​ ​ ​ ​ ​ ​ ​ ​ Total ending store count 6,585 6,378 6,585 6,378 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ For the Three Months Ended ​ For the Year Ended ​ ​ December 31, ​ December 31, ​ ​ ​ ​ 2025 ​ ​ ​ 2024 ​ ​ ​ 2025 ​ ​ ​ 2024 Store and Team Member Information: ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Total employment ​ 93,072 ​ 93,176 ​ ​ ​ ​ ​ Square footage (in thousands) (4) ​ ​ 51,515 ​ ​ 48,809 ​ ​ ​ ​ ​ ​ Sales per weighted-average square foot (4)(5) ​ $ 83.95 ​ $ 82.70 ​ $ 345.73 ​ $ 342.32 Sales per weighted-average store (in thousands) (4)(6) ​ $ 670 ​ $ 642 ​ $ 2,728 ​ $ 2,642 ​ ​ (1) Calculated as cost of goods sold for the last 12 months divided by average inventory. Average inventory is calculated as the average of inventory for the trailing four quarters used in determining the denominator. (2) Calculated as inventory divided by store count at the end of the reported period. (3) Calculated as accounts payable divided by inventory. (4) Represents O’Reilly’s U.S. and Puerto Rico operations only. (5) Calculated as sales less jobber sales, divided by weighted-average square footage. Weighted-average square footage is determined by weighting store square footage based on the approximate dates of store openings, acquisitions, expansion"
+        },
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "f09491bf95f2b0ccdd63e0e4bb601c3b7ca12705dc9e5fa78fa21b25d3b69bc2",
+          "needle": "As of December 31, 2025",
+          "offset": 10715,
+          "excerpt": "re locations, hours and services, employment opportunities, and other programs. As of December 31, 2025, the Company operated 6,585 stores across 48 U.S. states, Puerto Rico, Mexico, and Canada. ​ Forward-Looking Statements The Company claims the protection of the safe-harbor for forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. You can identify these statements by forward-looking words such as “estimate,” “may,” “could,” “will,” “believe,” “expect,” “would,” “consider,” “should,” “anticipate,” “project,” “plan,” “intend,” ​ “guidance,” “target,” or similar words. In addition, statements contained within this press rele"
+        }
+      ]
+    },
+    {
+      "question_id": "Md1b56847528f639c",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-001.prompt.txt",
+      "prompt_sha256": "62e246c88035148f7337510ea0dd43ba666fd3d83c46dce2fab4b1b85998b344",
+      "metadata": {
+        "event_date": "2026-03-27",
+        "fye_month": 5
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": "-0.3"
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": "-0.3"
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "discontinued_operations",
+          "driver_state": "decreased",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": "-3.8"
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": "-3.8"
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "net of tax"
+          ],
+          "month": null,
+          "period_end_date": "2026-02-22",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg February 22, 2026 February 23, 2025 % Chg Sales $ 3,345.3 $ 3,158.0 5.9% $ 9,492.1 $ 8,805.0 7.8% Costs and expenses: Food and beverage \n\n1,026.7 953.6 7.7 2,919.5 2,673.1 9.2 Restaurant labor \n\n1,046.9 995.0 5.2 3,035.0 2,811.1 8.0 Restaurant expenses \n\n528.7 501.0 5.5 1,541.2 1,426.9 8.0 Marketing expenses \n\n39.4 35.4 11.3 137.2 128.9 6.4 Pre-opening costs 8.8 6.1 44.3 22.8 16.1 41.6 General and administrative expenses \n\n121.5 116.7 4.1 375.4 387.2 (3.0) Depreciation and amortization \n\n141.8 131.9 7.5 414.8 381.1 8.8 Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM Total costs and expenses $ 2,938.9 $ 2,739.8 7.3 $ 8,426.1 $ 7,825.5 7.7 Operating income 406.4 418.2 (2.8) 1,066.0 979.5 8.8 Interest, net 49.6 45.5 9.0 143.0 128.8 11.0 Earnings before income taxes 356.8 372.7 (4.3) $ 923.0 $ 850.7 8.5 Income tax expense (1) 46.2 49.0 (5.7) 117.1 103.7 12.9 Earnings from continuing operations $ 310.6 $ 323.7 (4.0) $ 805.9 $ 747.0 7.9 Losses from discontinued operations, net of tax (3.8) (0.3) NM",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg February 22, 2026 February 23, 2025 % Chg Sales $ 3,345.3 $ 3,158.0 5.9% $ 9,492.1 $ 8,805.0 7.8% Costs and expenses: Food and beverage \n\n1,026.7 953.6 7.7 2,919.5 2,673.1 9.2 Restaurant labor \n\n1,046.9 995.0 5.2 3,035.0 2,811.1 8.0 Restaurant expenses \n\n528.7 501.0 5.5 1,541.2 1,426.9 8.0 Marketing expenses \n\n39.4 35.4 11.3 137.2 128.9 6.4 Pre-opening costs 8.8 6.1 44.3 22.8 16.1 41.6 General and administrative expenses \n\n121.5 116.7 4.1 375.4 387.2 (3.0) Depreciation and amortization \n\n141.8 131.9 7.5 414.8 381.1 8.8 Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM Total costs and expenses $ 2,938.9 $ 2,739.8 7.3 $ 8,426.1 $ 7,825.5 7.7 Operating income 406.4 418.2 (2.8) 1,066.0 979.5 8.8 Interest, net 49.6 45.5 9.0 143.0 128.8 11.0 Earnings before income taxes 356.8 372.7 (4.3) $ 923.0 $ 850.7 8.5 Income tax expense (1) 46.2 49.0 (5.7) 117.1 103.7 12.9 Earnings from continuing operations $ 310.6 $ 323.7 (4.0) $ 805.9 $ 747.0 7.9 Losses from discontinued operations, net of tax (3.8) (0.3) NM",
+        "reference_name": "Losses from discontinued operations, net of tax",
+        "values": [
+          "-3.8",
+          "-0.3"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_3e836797-906",
+          "lane": "G2-001/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9739c9a4-f05",
+          "lane": "G2-001/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "7c40db0be0eed2ff64f79e34e906c804c8b8b163b4d86a80317aa33f5d08b0d8",
+          "offset": 1447,
+          "excerpt": "erially from those contained in any forward-looking statements. You should carefully read “Forward-Looking Statements” included below in this Form 10-Q. To facilitate the review of our discussion and analysis, the following table sets forth our financial results for the periods indicated. All information is derived from the unaudited consolidated statements of earnings for the three and nine months ended February 22, 2026 and February 23, 2025, respectively. Three Months Ended Nine Months Ended (in millions) February 22, 2026 February 23, 2025 % Chg February 22, 2026 February 23, 2025 % Chg Sales $ 3,345.3 $ 3,158.0 5.9% $ 9,492.1 $ 8,805.0 7.8% Costs and expenses: Food and beverage 1,026.7 953.6 7.7 2,919.5 2,673.1 9.2 Restaurant labor 1,046.9 995.0 5.2 3,035.0 2,811.1 8.0 Restaurant expenses 528.7 501.0 5.5 1,541.2 1,426.9 8.0 Marketing expenses 39.4 35.4 11.3 137.2 128.9 6.4 Pre-opening costs 8.8 6.1 44.3 22.8 16.1 41.6 General and administrative expenses 121.5 116.7 4.1 375.4 387.2 (3.0) Depreciation and amortization 141.8 131.9 7.5 414.8 381.1 8.8 Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM Total costs and expenses $ 2,938.9 $ 2,739.8 7.3 $ 8,426.1 $ 7,825.5 7.7 Operating income 406.4 418.2 (2.8) 1,066.0 979.5 8.8 Interest, net 49.6 45.5 9.0 143.0 128.8 11.0 Earnings before income taxes 356.8 372.7 (4.3) $ 923.0 $ 850.7 8.5 Income tax expense (1) 46.2 49.0 (5.7) 117.1 103.7 12.9 Earnings from continuing operations $ 310.6 $ 323.7 (4.0) $ 805.9 $ 747.0 7.9 Losses from discontinued operations, net of tax (3.8) (0.3) NM (4.1) (1.2) NM Net earnings $ 306.8 $ 323.4 (5.1)% $ 801.8 $ 745.8 7.5% Diluted net earnings per share: Earnings from continuing operations $ 2.68 $ 2.74 (2.2)% $ 6.91 $ 6.30 9.7% Losses from discontinued operations (0.03) — NM (0.04) (0.01) NM Net earnings $ 2.65 $ 2.74 (3.3)% $ 6.87 $ 6.29 9.2% (1) Effective tax rate 12.9 % 13.1 % 12.7 % 12.2 % NM- Percentage not considered meaningful. The following table details the number of company-owned restaurants currently reported in continuing operations that were open at the end of the third quarter of fiscal 2026, compared with the number of company-owned restaurants open at the end of fiscal 2025 and at the end of the third quarter of fiscal 20"
+        }
+      ],
+      "additional_source_windows": []
+    },
+    {
+      "question_id": "M02dd1d33369df31b",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-001.prompt.txt",
+      "prompt_sha256": "62e246c88035148f7337510ea0dd43ba666fd3d83c46dce2fab4b1b85998b344",
+      "metadata": {
+        "event_date": "2026-02-04",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "earnings_per_share",
+          "driver_state": "reported",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$",
+            "value": "1.73"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$",
+            "value": "1.73"
+          },
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "excluding Special Items"
+          ],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was $1.73.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": "share"
+      },
+      "reference": {
+        "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was $1.73.",
+        "reference_name": "EPS excluding Special Items",
+        "values": [
+          "1.73",
+          "1.61"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_3e836797-906",
+          "lane": "G2-001/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_9739c9a4-f05",
+          "lane": "G2-001/G1b",
+          "verdicts": {
+            "driver_state": false,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": false,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "c5c1dcec3446db26b749483224ad41c563564c5f426d1384c4cd95f381f5800c",
+          "offset": 525,
+          "excerpt": "NEWS Yum! Brands Reports Fourth-Quarter Results and Increases Dividend 2025 Q4 and Full-Year Taco Bell Same-Store Sales Growth of 7%; KFC Record Development with over 1,100 New Store Builds in Q4 and Nearly 3,000 in 2025 Louisville, KY (February 4, 2026) - Yum! Brands, Inc. (NYSE: YUM) today reported results for the fourth quarter and year ended December 31, 2025. Fourth-quarter GAAP operating profit grew 12%, and fourth-quarter Core Operating Profit excluding the lap of the 53rd week grew 11%. Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was $1.73. Full-year GAAP operating profit grew 7%, and full-year Core Operating Profit excluding the lap of the 53rd week grew 7%. Full-year GAAP EPS was $5.55, and EPS excluding Special Items was $6.05, an increase of 10%. LEADERSHIP COMMENTS Chris Turner, CEO, said “Yum! delivered another year of outstanding results at KFC and Taco Bell with our fundamentals stronger than ever at both brands. Taco Bell again gained market share with standout same-store sales performance, and KFC delivered another record-breaking year of unit development. We enter 2026 with a clear strategic focus on accelerating long-term growth, embodied in our multi-year 'Raise the Bar' priorities. I’m more convinced than ever th"
+        }
+      ],
+      "additional_source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "c5c1dcec3446db26b749483224ad41c563564c5f426d1384c4cd95f381f5800c",
+          "needle": "SUMMARY FINANCIAL TABLE",
+          "offset": 1936,
+          "excerpt": "s for the Pizza Hut brand. We have momentum entering 2026, an ambitious strategic agenda and are highly energized by the growth opportunities ahead.\" SUMMARY FINANCIAL TABLE Fourth-Quarter Full-Year 2025 2024 % Change 2025 2024 % Change GAAP EPS $1.91 $1.49 +28 $5.55 $5.22 +6 Special Items EPS1 $0.18 $(0.12) NM $(0.50) $(0.26) NM EPS Excluding Special Items $1.73 $1.61 +8 $6.05 $5.48 +10 1 See reconciliation of Non-GAAP Measurements to GAAP Results in our Consolidated Summary of Results for further detail of Special Items. All comparisons are versus the same period a year ago. Our fourth-quarter and full-year 2024 results included an extra week (\"53rd week\") for business units operating on a weekly periodic calendar. All results presented herein include the impact of lapping this 53rd week unless otherwise noted. System sales growth figures exclude foreign currency translation (\"F/X\") and core operating profit growth figures exclude F/X and Special Items. Special Items are not allocated to any segment and therefore only impact worldwide GAAP results. See reconciliation of Non-GAAP Measurements to GAAP Results in our Consolidated Summary of Results for further details. Digital system sales includes all transactions where consumers at system restaurants utilize ordering interaction that is primarily facilitated by automated techno"
+        }
+      ]
+    },
+    {
+      "question_id": "Ma529b8a7aa02495d",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-002.prompt.txt",
+      "prompt_sha256": "da8bfacdbd4c1fdfa6bd399dd5806664543122d90df2e72f3741b85d077fda67",
+      "metadata": {
+        "event_date": "2026-02-03",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_openings",
+          "driver_state": "introduced",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 370
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 350
+          },
+          "level_shape_hint": "range",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "350 to 370 new restaurant openings",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "350 to 370 new restaurant openings",
+        "reference_name": "350 to 370 new restaurant openings",
+        "values": [
+          350,
+          370
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_81385e15-daa",
+          "lane": "G2-002/G1a",
+          "verdicts": {
+            "driver_state": false,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        },
+        {
+          "run_id": "wf_a8e6d807-581",
+          "lane": "G2-002/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "7fac2e8390d1539034a34dca65e3ec80fc0bc03adec6556c30635ffefbe1686e",
+          "offset": 9987,
+          "excerpt": "ts, including the early success of our high-protein menu and benefits from our high-efficiency equipment package,\" said Boatwright. \"At the center of our strategy is the strength and relevance of our brand and our unwavering commitment to sourcing the best ingredients. We are confident in the opportunity ahead and our ability to delight guests and deliver value for shareholders.” Outlook For 2026, management is anticipating the following: •Full year comparable restaurant sales to be about flat •350 to 370 new restaurant openings, which includes 10 to 15 international partner-operated restaurants. Around 80% of company-owned restaurants will have a Chipotlane •An estimated underlying effective full year tax rate between 24% and 26% before discrete items 1Restaurant level operating margin, adjusted diluted earnings per share, adjusted net income, non-GAAP general and administrative expenses, and non-GAAP effective income tax rate are non-GAAP financial measures. Reconciliations to GAAP measures and further information are set forth in the table at the end of this press release. Definitions The following definitions apply to these terms as used throughout this release: •Comparable restaurant sales, or sales comps, and"
+        }
+      ],
+      "additional_source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "7fac2e8390d1539034a34dca65e3ec80fc0bc03adec6556c30635ffefbe1686e",
+          "needle": "Outlook",
+          "offset": 9870,
+          "excerpt": "ent in the opportunity ahead and our ability to delight guests and deliver value for shareholders.” Outlook For 2026, management is anticipating the following: •Full year comparable restaurant sales to be about flat •350 to 370 new restaurant openings, which includes 10 to 15 international partner-operated restaurants. Around 80% of company-owned restaurants will have a Chipotlane •An estimated underlying effective full year tax rate between 24% and 26% before discrete items 1Restaurant level operating margin, adjusted diluted earnings per share, adjusted net income, non-GAAP general and administrative expenses, and non-GAAP effective income tax rate are non-GAAP financial measures. Reconciliations to GAAP measures and further information are set forth in the table at the end of this press release. Definitions The following definitions apply to these terms as used throughout this release: •Comparable restaurant sales, or sales comps, and comparable restaurant transactions, represent the change in period-over-period total revenue or transactions for company-owned restaurants in operation for at least 13 full calendar months. •Average restaurant sales refers to the average trailing 12-month food and beverage revenue for company-owned restaurants in operation for at least 12 full calendar months. •Restaurant level operating margin represents total revenue less direct restaurant operating costs, expressed as a percent of total revenue. •Digital sales represent food and beverage revenue for company-owned restaurants generated through the Chipotle website, Chipotle app or third-party delivery aggregators. Digital sales include revenue deferrals associated with Chipotle Rewards. •Partner-operated restaurants - Chipotle restaurants over which Chipotle does not have a controlling financial interest and for which Chipotle does not directly manage day-to-day operations. This includes restaurants operated by third parties pursuant to license or franchise agreements and restaurants in which Chipotle holds a minority, non‑controlling ownership interest. Conference Call Details and Supplemental Slides Chipotle will host a conference call on Tuesday, February 3, 2026, at 4:30 PM Eastern time to discuss our fourth quarter and fiscal year 2025 financial results as well as provide a business update on the Company’s “Recipe for Growth” strategy and the first quarter of 2026. In connection, supplemental slides for the call will be available on the company's website at ir.chipo"
+        }
+      ]
+    },
+    {
+      "question_id": "Mb18c07ecdfc63be7",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-002.prompt.txt",
+      "prompt_sha256": "da8bfacdbd4c1fdfa6bd399dd5806664543122d90df2e72f3741b85d077fda67",
+      "metadata": {
+        "event_date": "2025-10-27",
+        "fye_month": 8
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": "-40.0"
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": "-40.0"
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "lifo_impact",
+          "driver_state": "increased",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": "64.0"
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": "64.0"
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "non-cash"
+          ],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+        "reference_name": "non-cash LIFO impact",
+        "values": [
+          "64.0",
+          "-40.0"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_81385e15-daa",
+          "lane": "G2-002/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_a8e6d807-581",
+          "lane": "G2-002/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "a4e6477713e39d5cfdbfab68bd67dd5870b7d8c51cdda23a135f367e465910f9",
+          "offset": 13476,
+          "excerpt": "ional (3.2 %) 16.1 % 9.3 % 10.2 % Total Company 2.4 % 2.1 % 3.9 % 1.4 % ##TABLE_END ​ ##TABLE_START (1) Constant currency same store sales exclude impacts from fluctuations of foreign exchange rates by converting both the current year and prior year international results at the prior year foreign currency exchange rate. ##TABLE_END ​ Gross profit for fiscal 2025 was $10.0 billion, or 52.6% of net sales, a 47 basis point decrease compared with $9.8 billion, or 53.1% of net sales for fiscal 2024. The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact. Operating, selling, general and administrative expenses for fiscal 2025 increased to $6.4 billion, or 33.6% of net sales, from $6.0 billion, or 32.6% of net sales for fiscal 2024. The increase in operating expenses as a percentage of sales was primarily driven by investments to support our growth initiatives. Interest expense, net for fiscal 2025 was $475.8 million compared with $451.6 million during fiscal 2024. Average borrowings for fiscal 2025 were $9.0 billion, compared with $8.7 billion for fiscal 2024. Weighted average borrowing rates were 4.48% and 4.39% for fiscal 2025 and 2024, respectively. Our effective income tax rate was 20.3% and 20.2% of pre-tax income for fiscal 2025 and fi"
+        }
+      ],
+      "additional_source_windows": []
+    },
+    {
+      "question_id": "M66e7557e3b1064dd",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-002.prompt.txt",
+      "prompt_sha256": "da8bfacdbd4c1fdfa6bd399dd5806664543122d90df2e72f3741b85d077fda67",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "store_count",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 84
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 84
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2025-11-01",
+          "period_scope": null,
+          "period_start_date": "2025-11-01",
+          "polarity_proof": null,
+          "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:gb",
+            "geography:ie",
+            "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+        "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+        "values": [
+          84
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_81385e15-daa",
+          "lane": "G2-002/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_a8e6d807-581",
+          "lane": "G2-002/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 17817,
+          "excerpt": "​ 1,056,887 ​ ​ 1,061,751 Income tax expense ​ ​ 73,436 ​ ​ 77,997 ​ ​ 257,875 ​ ​ 253,903 Income before equity net loss of affiliate ​ ​ 231,860 ​ ​ 242,179 ​ ​ 799,012 ​ ​ 807,848 Equity net loss of affiliate ​ ​ ​ ​ — ​ ​ 2,210 ​ ​ — Net income ​ $ 230,875 ​ $ 242,179 ​ $ 796,802 ​ $ 807,848 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Other operating data: ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Number of stores end of period (1) ​ ​ 1,500 ​ ​ 1,437 ​ ​ 1,500 ​ ​ 1,437 Comparable sales ​ ​ 6.3% ​ ​ 0.6% ​ ​ 5.2% ​ ​ 0.3% (1) Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025. ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ 13 Weeks Ended ​ 39 Weeks Ended ​ ​ November 1, ​ November 2, ​ November 1, ​ November 2, (Percentage of net sales) ​ Net sales ​ ​ 100.0% ​ ​ 100.0% ​ ​ 100.0% ​ ​ 100.0% Cost of sales ​ ​ 59.6% ​ ​ 60.3% ​ ​ 60.4% ​ ​ 60.9% Gross profit ​ ​ 40.4% ​ ​ 39.7% ​ ​ 39.6% ​ ​ 39.1% ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Selling, general and administrative expenses ​ ​ 29.4% ​ ​ 27.0% ​ ​ 27.0% ​ ​ 25.5% Pre-opening expenses ​ ​ 0.2% ​ ​ 0.2% ​ ​ 0.1% ​ ​ 0.2% Operating income ​ ​ 10.8% ​ ​ 12.6% ​ ​ 12.4% ​ ​ 13.4% Interest expense (income), net ​ ​ 0.1% ​ ​ (0.1%) ​ ​ 0.0% ​ ​ (0.2%) Income before income taxes and equity net loss of affiliate ​ ​ 10.7% ​ ​ 12.7% ​ ​ 12.4% ​ "
+        }
+      ],
+      "additional_source_windows": []
+    },
+    {
+      "question_id": "Mfaf02208a2ac48aa",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-002.prompt.txt",
+      "prompt_sha256": "da8bfacdbd4c1fdfa6bd399dd5806664543122d90df2e72f3741b85d077fda67",
+      "metadata": {
+        "event_date": "2026-02-18",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "comparable_restaurant_sales",
+          "driver_state": "increased",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2024,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 1
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": 1
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2024-12-31",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:northitalia"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+        "reference_name": "Comparable restaurant sales vs. prior year",
+        "values": [
+          1
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_81385e15-daa",
+          "lane": "G2-002/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_a8e6d807-581",
+          "lane": "G2-002/G1b",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a",
+          "offset": 17124,
+          "excerpt": "rating, Restaurant and Balance Sheet Information (unaudited; in thousands, except statistical data) 13 Weeks Ended 13 Weeks Ended 52 Weeks Ended 52 Weeks Ended The Cheesecake Factory restaurants operating information: December 30, 2025 December 31, 2024 December 30, 2025 December 31, 2024 Comparable restaurant sales vs. prior year (2.2 )% 1.7 % 0.1 % 1.0 % Restaurants opened during period 2 2 4 3 Restaurants open at period-end 218 215 218 215 Restaurant operating weeks 2,821 2,795 11,218 11,214 North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 % Restaurants opened during period 2 3 6 6 Restaurants open at period-end 48 42 48 42 Restaurant operating weeks 606 535 2,355 2,021 Other Fox Restaurant Concepts (FRC) operating information:(1) Restaurants opened during period 3 2 9 8 Restaurants open at period-end 56 48 56 48 Restaurant operating weeks 715 611 2,675 2,264 Other operating information:(2) Restaurants opened during period - 2 6 6 Restaurants open at period-end 49 43 49 43 Restaurant operating weeks 637 551 2,477 2,114 Number of company-owned restaurants: The Cheesecake Factory 218 North Italia 48 Other FRC 56 Other 49 Total 371 Number of international-licensed restaurants: The Cheesecake Factory 35 (1) The Other FRC segment in"
+        }
+      ],
+      "additional_source_windows": []
+    },
+    {
+      "question_id": "M1a1d8504821bf26a",
+      "prompt": "a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/prompts/G2-002.prompt.txt",
+      "prompt_sha256": "da8bfacdbd4c1fdfa6bd399dd5806664543122d90df2e72f3741b85d077fda67",
+      "metadata": {
+        "event_date": "2026-03-12",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "comparable_sales",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "3.5"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "2.5"
+          },
+          "level_shape_hint": "range",
+          "level_unit": "percent_yoy",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Comparable sales growth ​ ​ 2.5% to 3.5%",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference": {
+        "quote": "Comparable sales growth ​ ​ 2.5% to 3.5%",
+        "reference_name": "Comparable sales growth",
+        "values": [
+          "2.5",
+          "3.5"
+        ]
+      },
+      "answers": [
+        {
+          "run_id": "wf_81385e15-daa",
+          "lane": "G2-002/G1a",
+          "verdicts": {
+            "driver_state": true,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": true
+          }
+        },
+        {
+          "run_id": "wf_a8e6d807-581",
+          "lane": "G2-002/G1b",
+          "verdicts": {
+            "driver_state": false,
+            "lane_routing": true,
+            "favorability": true,
+            "growth_basis": true,
+            "slice_vs_menu": true,
+            "driver_name_meaning": true,
+            "record_matches_source": false
+          }
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "91685ffae40b9ff3b7554ac5089150e06d7ff8960eb78ce83d80bb1caa4041c9",
+          "offset": 5649,
+          "excerpt": "formation technology systems, and supply chain optimization. ​ During fiscal 2025, the Company repurchased 2.0 million shares of its common stock at a cost of $890.5 million, excluding excise taxes. As of January 31, 2026, $1.8 billion remained available under the $3.0 billion share repurchase program announced in October 2024. ​ Fiscal 2026 Outlook Based on current estimates, the Company anticipates the following in fiscal 2026: ​ ​ ​ ​ ​ ​ ​ ​ Fiscal 2026 Outlook Net sales growth ​ ​ 6% to 7% Comparable sales growth ​ ​ 2.5% to 3.5% Operating income growth ​ ​ 6% to 9% Diluted earnings per share ​ ​ $28.05 to $28.55 Capital expenditures ​ ​ $400 million to $450 million ​ Conference Call Information ​ A conference call to discuss fourth quarter of fiscal 2025 results is scheduled for today, March 12, 2026, at 4:30 p.m. Eastern Time / 3:30 p.m. Central Time. During the conference call, a related presentation will be webcast live. Investors and analysts who are interested in participating in the call are invited to register for the live event at https://q4-2025-ulta-beauty-earnings-conference-call.open-exchange.net/. A copy of the presentation and a replay of the webcast will be available and archived for a limited time o"
+        }
+      ],
+      "additional_source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "91685ffae40b9ff3b7554ac5089150e06d7ff8960eb78ce83d80bb1caa4041c9",
+          "needle": "Fiscal 2026 Outlook",
+          "offset": 5481,
+          "excerpt": "ng excise taxes. As of January 31, 2026, $1.8 billion remained available under the $3.0 billion share repurchase program announced in October 2024. ​ Fiscal 2026 Outlook Based on current estimates, the Company anticipates the following in fiscal 2026: ​ ​ ​ ​ ​ ​ ​ ​ Fiscal 2026 Outlook Net sales growth ​ ​ 6% to 7% Comparable sales growth ​ ​ 2.5% to 3.5% Operating income growth ​ ​ 6% to 9% Diluted earnings per share ​ ​ $28.05 to $28.55 Capital expenditures ​ ​ $400 million to $450 million ​ Conference Call Information ​ A conference call to discuss fourth quarter of fiscal 2025 results is scheduled for today, March 12, 2026, at 4:30 p.m. Eastern Time / 3:30 p.m. Central Time. During the conference call, a related presentation will be webcast live. Investors and analysts who are interested in participating in the call are invited to register for the live event at https://q4-2025-ulta-beauty-earnings-conference-call.open-exchange.net/. A copy of the presentation and a replay of the webcast will be available and archived for a limited time on the company's Investor Relations website at https://www.ulta.com/investor. ​ About Ulta Beauty Ulta Beauty (NASDAQ: ULTA) is the largest specialty beauty retailer in the U.S. and a leading destination for cosmetics, fragrance, skin care, hair care, wellness and salon services. Since opening its first store in 1990, Ulta Beauty has grown to more than 1,500 stores across the U.S. and redefined beauty retail by bringing together All Things Beauty. All in One Place®. With an expansive product assortment, professional salon services, and its beloved Ulta Beauty Rewards loyalty program, the company delivers seamless, personalized experiences across stores, Ulta.com and the Ulta Beauty App – where the possibilities are truly beautiful. Ulta Beauty is also expanding its presence internationally through its subsidiary, Space NK, a luxury beauty retailer operating in the U.K. and Ireland, its joint venture in Mexico, and its franchise in the Middle East. For more information, visit www.ulta.com. Forward-Looking Statements This press release contains forward-looking statements within the meaning of Section 21E of the Securities Exchange Act of 1934, as amended, and the safe harbor provisions of the Private Securities Litigation Reform Act of 1995, which reflect the Company’s current views with respect to, among other things, future events and financial performance. These statements can be identified by the use of forward-looking words such as “outlook,” “believes,” “expects,” “plans,” “estimates,” “targets,” “strategies” or other comparable words. Any forward-looking statements contained in this press release are based upon the Company’s historical performance and on current plans, estimates, and expectations. The inclusion of this forward-looking information should not be regarded as a representation by the Company or any other person that the future plans, estimates,"
+        }
+      ]
+    }
+  ]
+}

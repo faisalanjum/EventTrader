@@ -1,0 +1,168 @@
+{
+  "scope": "Read-only raw-answer addendum for the one allowed G3-007/G1b retry; source review reused without replacing prior evidence or native verdicts.",
+  "source_evidence": {
+    "path": "a7_recovery/unit_2020_codex_check/G3_CORRECTIVE_BATCH78910_SOURCE_EVIDENCE_2165.json",
+    "sha256": "a94ef2b5340d6a722fb73c8bd90380fd41118573ecfc2546d35b0114eead71fa"
+  },
+  "retry_receipt": {
+    "path": "a7_recovery/unit_2161_execution/G3/run/receipt.seg50.json",
+    "sha256": "23c1af311441cfab23c1136b0c87c5ef1393aedfd223dc8693ce8d3e2bee9249"
+  },
+  "retry_finalization": {
+    "path": "a7_recovery/unit_2161_execution/G3/run/finalization.seg50.json",
+    "sha256": "eab8111d8c5283e708a0caaa976fb1a73e442c8e8bd899bb11979f0e208d1b83"
+  },
+  "rows": [
+    {
+      "question_id": "X5603a0beaadd5e3c",
+      "identity": {
+        "leg": "P1",
+        "source_id": "0001104659-25-102611",
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-007.prompt.txt",
+      "prompt_sha256": "fac76e5519b724a44274b649c447e0011f314d678959ec21d6b5c0d619cf1808",
+      "answers": [
+        {
+          "run_id": "wf_278704d3-511",
+          "lane": "G3-007/G1b",
+          "attempt": 2,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_3379efe6-9d0",
+          "lane": "G3-007/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_e23d319b-1a0",
+          "lane": "G3-007/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ]
+    },
+    {
+      "question_id": "X6e22977f210d9c10",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0000027904-26-000022",
+        "produced_idx": 2
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-007.prompt.txt",
+      "prompt_sha256": "fac76e5519b724a44274b649c447e0011f314d678959ec21d6b5c0d619cf1808",
+      "answers": [
+        {
+          "run_id": "wf_278704d3-511",
+          "lane": "G3-007/G1b",
+          "attempt": 2,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_3379efe6-9d0",
+          "lane": "G3-007/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_e23d319b-1a0",
+          "lane": "G3-007/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ]
+    },
+    {
+      "question_id": "X75b11760e0633d83",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0000063908-26-000032",
+        "produced_idx": 0
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-007.prompt.txt",
+      "prompt_sha256": "fac76e5519b724a44274b649c447e0011f314d678959ec21d6b5c0d619cf1808",
+      "answers": [
+        {
+          "run_id": "wf_278704d3-511",
+          "lane": "G3-007/G1b",
+          "attempt": 2,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_3379efe6-9d0",
+          "lane": "G3-007/G1b",
+          "attempt": 1,
+          "bucket": "MISSING"
+        },
+        {
+          "run_id": "wf_e23d319b-1a0",
+          "lane": "G3-007/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ]
+    },
+    {
+      "question_id": "X12cb0c151404674d",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0001104659-25-118458",
+        "produced_idx": 1
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-007.prompt.txt",
+      "prompt_sha256": "fac76e5519b724a44274b649c447e0011f314d678959ec21d6b5c0d619cf1808",
+      "answers": [
+        {
+          "run_id": "wf_278704d3-511",
+          "lane": "G3-007/G1b",
+          "attempt": 2,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_3379efe6-9d0",
+          "lane": "G3-007/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_e23d319b-1a0",
+          "lane": "G3-007/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ]
+    },
+    {
+      "question_id": "Xa89529fe646aaa72",
+      "identity": {
+        "leg": "P2",
+        "source_id": "YUM_2026-02-04T08.15",
+        "produced_idx": 2
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-007.prompt.txt",
+      "prompt_sha256": "fac76e5519b724a44274b649c447e0011f314d678959ec21d6b5c0d619cf1808",
+      "answers": [
+        {
+          "run_id": "wf_278704d3-511",
+          "lane": "G3-007/G1b",
+          "attempt": 2,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_3379efe6-9d0",
+          "lane": "G3-007/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_e23d319b-1a0",
+          "lane": "G3-007/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ]
+    }
+  ],
+  "interpretation": "All five selected G1a-primary/G1b-retry pairs say key_miss. This is an observed judgment, not proof of an omitted key fact. The previous source/card dispositions still apply. The original G1b attempt is invalid in its entirety and is retained, including the absent X75b11760e0633d83 answer. Only native attempt selection may grant credit."
+}

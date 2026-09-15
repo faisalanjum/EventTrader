@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 217, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 245, 2026-09-15 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,508 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision217: G2 checkpoint963725ee17e9cb66b34fb529f1ed56f1e25c2bc7
+CURRENT ADDENDUM,Revision245: Core2168 answers Codex2172 and independently
+verifies the actual38-question preparation with no defect found. Its three
+files under unit_2172_review are read and hashed4c14df01/ed56c65c/8b13c298.
+Root's independent checks agree, including all source bindings and24 primary
+calls. Final affected regression rerun:290 +29subtests pass in3.33s,exit0.
+CHECKPOINT_FILES_2172.json freezes the1963-file verified payload; the separate
+checkpoint note keeps provisional grades and Core proposals clearly qualified.
+Core is WAITING after its one reply. Root is publishing this verified partial
+checkpoint on the SAME recovery branch, without main or unrelated changes.
+Next task is bounded24-call collection via the existing pinned lifecycle,
+with exact new run/receipt/script bindings and invalid-only retries, then
+native completion, final score/cause reporting and END-only offline check.
+
+PREVIOUS ADDENDUM,Revision244: actual38-question preparation is COMPLETE,
+rawexit0,empty stderr,0AI. Reportf1d3245b in codex_changedprep2171_a binds
+G2 candidatea7e1e4b9 and G3 candidate2b063c4f. Independently rechecked all38
+IDs, populations, prompt hashes and unchanged producer/key bindings.31G2/9
+batches/18 primary calls;7G3/3 batches/6 calls. Total24 primary, at most24
+INVALID-ONLY retries. All48 script variants fit524288 bytes; maxima439520
+and393133. CHANGED_GRADING_REVIEW_2171.md records exact proof and limitations.
+Native exec59026 is FINISHED; do not wait on it or repeat it. Core2172 still
+reviews only this invocation. Next: verify its report, checkpoint publication,
+freeze exact run/receipt/executed-script identities, then bounded collection.
+
+PREVIOUS ADDENDUM,Revision243: Core2167/98216119 and Root independently agree
+on23 additional null-change tasks,0 overlap with the accepted15: the final
+affected list is31G2+7G3=38. CHANGED_GRADING_SELECTION_2171.json11076803
+pins all identities, full populations, baseline evidence and source reviews.
+The other388 existing questions keep their judgments; the382 reader answers
+remain unchanged. Root rederived all310 G2 identities,228 carried rows,37
+complete records/identities and the191-row no-comparison boundary independently.
+
+Root's prepare_changed_grading_2171.py80480383 invokes only existing owners,
+binding both PREP inputs to contract23c and comparing every rendered evidence
+block to its prior counterpart. Actual native preparation codex_changedprep2171_a
+started05:34:20UTC under unit1947; wrapper4095489,payload4095493,exec59026.
+No AI calls. Core2172/e5d29c55 independently checks this exact invocation and
+selection, writing only unit_2172_review; no duplicate native run or old audit.
+Next: successful raw exit plus verified candidate/evidence/script ceiling,
+verified checkpoint publication, then bounded qualified grading collection.
+Do not authorize new calls from a candidate report without the successful
+native result. All prior corrected evidence remains first in the final chain.
+
+PREVIOUS ADDENDUM,Revision242: Core2166/d9fb97ec closes the two-clause
+population: 15 changed/open questions, 411 unaffected by THOSE two clauses.
+Root independently rederived all426 exact identities and disposition counts.
+The quote groups are not necessarily distinct complete facts; an ORLY temporal
+category needed qualification but does not change the affected selection.
+
+Root found a separate omission in its earlier2159 selection: it checked six
+closed-operand records WITH a change but omitted affected null changes.
+CARRIED_NULL_DELTA_REVIEW_2170.md/JSON preserve37 carried questions/22 full
+records, proposing23 changed tasks and14 exclusions. Core2171/9385c1a1 now
+independently checks those and the remaining191 carried-task boundary, writing
+only unit_2171_review. No new prompt is proposed: contract23c already inherits
+the null/read-time rule. Current G3 already received it. Do not launch calls
+until the minimal combined population and actual candidate/ceiling are frozen.
+
+The final caller's FULL real-evidence ordered-chain replay is DONE:
+codex_score_chain_replay2170_a,05:02:56–05:14:02UTC,rawexit0,99 actual routes,
+2 distinct native completion loads,0AI. All prior score/report fields exactly
+match656c18bd except caller hash; only sequence/chain-pin fields were added.
+New report83186fdd. CALLER_CHAIN_REVIEW_2170.md records the proof and290tests
++29subtests passing in3.12s. The replay is a regression, not new model evidence;
+exclude CALLER_CHAIN_REPLAY_2170.json from the actual correction sequence.
+Root owns the minimal native preparation caller and final consumer; Core must
+not duplicate that work. Publication, qualified corrected judgments, final
+cause report and END-only offline model-setup check remain open. A7 then WAIT.
+
+PREVIOUS ADDENDUM,Revision241: Core2165/48732b48 answered Codex2169 with
+two correct instruction findings and a provisional15-question frontier. Its
+baseline completeness proof still silently excluded quotes outside five search
+strings; one quote also does not prove one claim. Codex2170/f0c6db87 asks
+ONLY for a versioned full426-question affected/unaffected/open proof, reusing
+valid scope/source reviews. Core writes only unit_2170_review; noAI or edits
+to published artifacts. Main/recovery HEADs and the single watcher unchanged.
+
+Root's final caller now accepts an explicitly pinned ordered correction
+sequence, retaining the original82/116 validation and the existing native
+revision/evidence owners. Completion accounting checks exact run/root/result
+identities, not just a count. The earlier caller37ea1744 is preserved exactly
+in snapshots_2169/score_corrected_grading_2162.before_chain.py. Initial test
+reproduction:8 missing-feature failures and11 positive controls passed.
+Full affected regression after the minimal change:290 tests +29subtests pass
+in3.12s; three actual caller mutants covered.
+NON-AI native replay codex_score_chain_replay2170_a is running through the
+actual final caller. It reapplies the SAME already approved G3 completion as
+a second revision and must reproduce every old judgment/score exactly. This
+is a connection regression, not a new grade or new model evidence; exclude
+CALLER_CHAIN_REPLAY_2170.json from the eventual final correction sequence.
+The new instruction candidate/call ceiling, actual corrected judgments,
+qualified cause report, publication and END-only offline check remain open.
+
+PREVIOUS ADDENDUM,Revision240: ordered correction adapterba3175b8 now passes
+17 focused tests, three actual composition mutants, full affected regression
+279 tests +29subtests in3.17s, and28 actual lifecycle/scorer tests in53.84s,
+all exit0. No AI calls. REVISION_CHAIN_REVIEW_2169.md records the complete
+proof, input/output hashes and actual setup failures. Existing revision
+ownerdd708431 and two-clause contract23c36532 remain unchanged. Core2169's
+independent two-rule/frontier review remains pending. Actual new candidate,
+call ceiling and final-caller use of the sequence are still unverified.
+
+PREVIOUS ADDENDUM,Revision239: the two-clause contract now passes the EXISTING
+real correction lifecycle/consumer/scorer:26 tests in48.13s, pytest/wrapper
+exit0, noAI. Attempt codex_contract2169_c started04:29:11UTC and finished;
+CONTRACT_NATIVE_REVIEW_2169.md records exact code/map/output pins and two
+earlier test-setup refusals. New instructions and old evidence remain distinct.
+Core2169 is still the ONE active task; its two-rule affected-question review
+is not yet received. No new call is authorized until that frontier is checked.
+
+Read-only RECALL_ELIGIBILITY_2169.json15114592 covers ALL115 agreed-empty
+G1 findings:5 P1 and7 P2 have an exact emitted match outside the offered pool,
+none has an exact match inside it. This disproves blanket producer-omission
+attribution, not the existing exclusion or zero credit. The remaining103
+still require qualified semantic attribution; no new matching rule was added.
+Core's original185-row review data is preserved in CORE_RECALL_TRACE_2168.json
+with its disclosed added final newline. See RECALL_ELIGIBILITY_REVIEW_2169.md.
+
+One actual next connection issue is reproduced: two individually valid
+existing revision scopes cannot simply be nested; the first scope mistakes
+the second correction's subset for a full population. A small ordered adapter
+in a7_grading_revision_chain_2169.py reuses the unchanged revision owner and
+native evidence verifier. Its focused, native and regression proof is IN
+PROGRESS; it is not approved for a score yet. No second scoring framework or
+manual verdict replacement. Final score656c18bd remains provisional.
+
+PREVIOUS,Revision238: the native end-to-end score has finished, raw exit0.
+Core2164/b254eadb replies to Codex2168/cefe2067; archives match. Its185-row
+miss inventory exactly matches the trace and128 cited raw files hash-verify.
+Agreed empty candidate selections do NOT prove115 facts were never emitted:
+the pool may exclude records and graders may miss a candidate. Codex owns
+that distinction. UNION ULTA gold5's last unexplained miss is now traced to
+a disputed component sharing produced4, not a numeric field mismatch.
+
+Two actual instruction errors are reproduced and fixed in the explicit new
+version a7_grading_contract_2168.py23c36532: action-empty population means
+no applicable part, not automatically whole company; the headline comparison
+wins before a prior-year tiebreak. Historical renderer32e2f650 remains exact.
+No saved answer, key or score changed. Six valid baseline tests first failed;
+after the minimal fix,23 new checks plus existing affected regression give
+262passed and29subtests in3.03s, exit0. CONTRACT_FIX_REVIEW_2168.md records
+scope, actual tests and limits. The actual new candidate/consumer connection
+and changed-task frontier still need proof; no new AI call is authorized yet.
+Codex2169/959d4bd3 is the ONE active Core task: independently review those
+two corrections and determine the complete minimal affected G2/G3 questions.
+Core writes unit_2169_review only, then one reply and WAIT. The state wording
+remains unchanged; clearer wording alone is not a reason to reroll a valid
+reply. Native score remains provisional. END-only offline setup and verified
+publication remain open; no later step is authorized.
+
+PREVIOUS,Revision237:
+Core2163/53f2734b replies exactly to Codex2167/468268b3; both archives match.
+Its100 consumed key_miss identities and four evidence hashes independently
+verify. Its86 blanket present-not-credited semantic conclusions are NOT
+approved: same quote plus numeric set is insufficient, and saved source
+checks already identify errors within that class. The two Starlink gold
+rows/records are accessible in the full native report; no missing-access
+key call is needed. No new key omission has yet been independently proved.
+Codex2168/cefe2067 assigns ONE read-only trace of all185 recall-miss occurrences
+(42/49/94) to the saved original G1 readings and native withholding reasons.
+Core is active, one combined report then WAIT; no further collection is
+authorized. Codex concurrently finishes semantic cause decisions.
+
+New direct native-scorer replay CORRECTED_SCORE_TRACE_2167.jsonb3a759b5,
+caller580f1d0b, exactly reproduces310 matched pairs and16 native measurements
+per leg. It saves all857 error-counter events, including512 field mismatches.
+It excludes original response reliability, external G1 group findings and
+the final tier decision; those remain in the original native proof.
+FINAL_SCORE_CAUSES_2168.md reconciles all26 wrong-accept flags to saved
+source evidence:20 have a concrete error cause, six remain unclosed. This
+is review data, not26 manually replaced judgments or a new precision score.
+The state-contract clarity lead remains under review; no prompt/code/key
+change or new call occurred. Equal source sentences are not equal facts;
+the Plan amendment permits same-answer regrading of verified key corrections.
+The18 unresolved judgments are not18 missing calls or confirmed reader errors.
+
+Both actual native completion candidates were independently re-derived,
+compared in full, persisted through C.persist_g23 and reloaded through
+C.load_g23, with raw exit0 for each. G2 completion bf1d9175:82 questions,
+66 agreed/16 unresolved; G3 bb13da3f:116 questions,114 agreed/2 unresolved.
+All98 lanes have selected relations; original invalid G3 evidence remains.
+Negative controls rejected a wrong review hash and a changed verdict despite
+a matching review-file hash; neither persisted a completion. Existing grading
+owners are unchanged. Commands, controls and PERSISTED_COMPLETION.json proofs
+are in unit_2020_codex_check under codex_completion2166_* and fixtures_2166.
+The small caller is persist_corrected_completion_2166.py8ab3058e.
+
+Final revision A7_GRADING_REVISION_2166.jsonb3c0d407 freezes actual persisted
+completion hashes, exact82/116 correction populations and original identities.
+CORRECTED_SCORE_NATIVE_COMMAND_2166.sh launched the existing37ea1744 caller
+at02:44:51UTC, tag codex_corrected_score2166_a, named PGID3848129/payload
+3848138, execution-map c92da057. It completed successfully; exec16956 is
+closed and must not be relaunched. The saved A7_CORRECTED_SCORE.json in
+unit_2020_codex_check/codex_corrected_score2166_a is
+656c18bd363ac3941a737d4d3ae55b101f303c209727ed261325a42e9664f08a.
+Independent checks confirm99 routes (33events x3legs), two distinct native
+completion loads,165 gold facts per leg and zero new model calls. P1 matched
+123/165, P2 116/165, UNION71/165; scorer wrong-accept flags are9/9/8 and
+unresolved meaning questions48/45/23. These are provisional measurements,
+not source-verified reader verdicts; all three legs fail with grading unfinished.
+The affected regression was repeated afterward:239passed plus29subtests
+in2.96s, exit0; exec72035 complete.
+This proves completion binding and execution, NOT final semantic correctness. The final
+trace/cause reconciliation, verified publication and END-only offline setup
+check remain. ETA11p.m.–midnight Eastern remains an estimate for the checked
+score, not a promise that every grading dispute will be resolved by then.
+
+COLLECTION CHECKPOINT: At02:33UTC Sep15 (22:33Eastern Sep14), independent
+raw-byte proof finds ALL98 lanes finalized valid:38/38 G2 and60/60 G3.
+This is98 primaries plus ONE invalid-only retry,99 unique lane-attempts,
+not99 lanes. Original G3-007/G1b is preserved; wf_278704d3-511 supplies its
+five missing/previously uncredited question readings on attempt2. No other
+retry or successful-call repetition.83 script copies,364 original raw
+evidence copies and83 payload/original-state joins verify. Native completion
+candidates now exist but are not yet independently persisted/scored. Core2165
+remains the ONE live task, with its combined reply still pending at this
+observation. ETA11p.m.–midnight Eastern stays provisional for the checked
+score, not a guarantee that every disputed finding is resolved by then.
+
+SOURCE CHECKS ARE NOW SAVED FOR ALL198 CORRECTIVE QUESTIONS:82/82 G2 and
+116/116 G3, independently derived from both frozen candidate populations with
+no duplicate/foreign IDs. This is source coverage, not a final score.
+CAUSE_REVIEW_PROGRESS_2165.mdca577544 names every source-backed disposition,
+including real record defects versus unsubstantiated grader labels. New exact
+evidence: G3_BATCH1921=647f5db5 (15questions/30raw/15windows/3full diffs),
+G2_BATCH1012=08a439d6 (15/30/18), G3_BATCH2225=4e5d9c81 (17/34/17/1diff),
+G3_BATCH2629=dca9db42 (4/8/4). Names expand to
+unit_2020_codex_check/G[23]_CORRECTIVE_BATCH<n>_SOURCE_EVIDENCE_2165.json.
+G2_BATCH1318=9dcc46c1 now saves all22 source checks/44 raw replies/23windows.
+The original partial snapshot had only5 replies; all new raw joins pass,
+while source/record/card/identity bytes remain unchanged. The retry addendum
+G3_INVALID_RETRY_SOURCE_EVIDENCE_2165.json512a47c7 reuses the a94ef2b5 source
+evidence, binds14 present attempt answers and the one original absence,
+and independently verifies all10 selected paired answers for its5 questions.
+It changes no raw verdict or key. All source/prompt/record/raw joins passed.
+
+No grading code/rule, key, producer answer or successful call changed. Remaining:
+verify and bind both native completions and the exact
+revision, run the existing final caller once, reconcile actual score findings
+with this source evidence, publish verified results, then END-only offline
+model-selection check and STOP/WAIT. Do not start A8 or broaden the audit.
+The AALvalue_text finding remains qualified against the signed key's legitimate
+numberless guidance; do not add a digit heuristic or force any model verdict.
+
+Final-caller affected regression is239passed plus
+29subtests in2.78s, exit0. Reproduced combined-import fixture failure first:
+171passed/68setup errors; the format-test fixture incorrectly derived its
+scorer location from whichever G module was imported first. One fixture path
+now uses the SAME physical unit2008 scorer as the existing input tests.
+No grader/scorer/format rule changed for that fix. The caller's earlier
+missing-format-scope5-failure control is also fixed and included in239.
+Caller37ea1744, caller tests2bc6bf00, format tests341ed3de. Native scoring
+and final semantics remain pending on completion binding; green tests alone are not
+a corrected score. Carried-false source windows are saved in
+unit_2020_codex_check/G2_CARRIED_FALSE_SOURCE_EVIDENCE_2165.json,23question
+identities/20distinct records, NOT replacement verdicts or a key.
+
+Active cause-review handoff: unit_2020_codex_check/CAUSE_REVIEW_PROGRESS_2165.md
+ca577544 reuses2113/2114/2118 and distinguishes the still-unsubstantiated
+carried negative aspects from proved record errors. First corrected G2/G3
+pairs are natively valid but their semantic judgments need source review:
+G3's first5 agreed key_miss labels include already reviewed exclusions,
+an85%-of-respondents versus spend confusion, and2claims already present in
+the reference cards but absent from the matched comparator pool. Do not
+create duplicate key facts, force labels or reroll successes. Finish the
+frozen collection and reconcile actual findings under§6; code-test green
+does not prove model grading correct. First corrected G2 source windows are
+also saved as G2_CORRECTIVE_BATCH0_SOURCE_EVIDENCE_2165.json1a614e29.
+
+Ten more corrective G2 source checks (batches001/002) are saved in
+G2_CORRECTIVE_BATCH12_SOURCE_EVIDENCE_2165.json72dec209: ten exact questions,
+twenty raw verdict bindings and sixteen source windows independently checked
+against live frozen prompt/source and returned payload bytes, all matching.
+The progress note separates supported signed-number/population/period answers
+from real grading mistakes: both graders accept ORLY's reported state despite
+6447/6265 source comparison; YUM's1.73/1.61 comparison and two bare-guidance
+splits also need honest final disposition. No raw verdict, key or rule changed,
+and no successful call was repeated. This is cause evidence, NOT final route
+acceptance or authority to manufacture corrected Boolean judgments.
+
+Twelve further G3 questions (batches001–003), twenty-four raw buckets and
+twelve source windows are saved in G3_CORRECTIVE_BATCH123_SOURCE_EVIDENCE_2165.json
+24c190f3, with exact leg/source/index and all supplied cards/comparisons. One
+agreed DAL debt duplicate differs from its real O4 comparator ONLY in four
+equivalent scale-evidence spans; ten agreed key_miss labels and one split
+do not establish key omissions. The cards already mention those claims;
+record-specific quantity/state/population faults and unmatched G1 accounting
+remain separate. The progress note has each disposition; no scoring override.
+
+G3 batches004–006 add13 source checks with26 original answers and13 verified
+source windows, saved in G3_CORRECTIVE_BATCH456_SOURCE_EVIDENCE_2165.json
+f4e0fa34. All13 received key_miss labels despite an existing card for the
+underlying claim; record-specific faults still count. In particular, UNION's
+DAL refinery amount is EXACTLY original2114 combination7, not a renderer
+mutation. Re-running the existing40-question/22-combination source checker
+passed and reproduced all four positive/negative magnitude controls; raw
+-300000000 times1e6 in m_usd is wrong versus source-300m_usd. No new code
+rule or call. The progress note records each remaining semantic distinction,
+including KFC versus Taco Bell and closure versus conversion horizons.
+
+G2 batches003–005 add15 source checks,30 original verdict bindings and16
+source windows in G2_CORRECTIVE_BATCH345_SOURCE_EVIDENCE_2165.json055a479c,
+all independently rejoined to frozen prompts/raw payloads. Two saved no-write
+route observations are also hash-verified: P1 DALrefinery's wrong double-scaled
+amount is actually accepted by the simulated route, as is P1 ORLY's reported
+state despite the source comparison. Their exact score effect awaits native
+final scoring. P2 ORLY and P2 AALtax correctly use increased; do not transfer
+P1 errors across leg identities. DRI's CFO Q&A explicitly supports the raised
+midpoint; preserve that positive control. All15 dispositions are in the
+progress note; no code, key, prompt or successful call was changed.
+
+G3 batches007–010 add17 source checks,17 windows,33 present raw buckets and
+one explicit missing answer, saved as
+G3_CORRECTIVE_BATCH78910_SOURCE_EVIDENCE_2165.jsona94ef2b5. Independent
+prompt/record/card/comparator/source/raw-payload joins all pass. Entire
+G3-007/G1b primary remains invalid and uncredited, including its four present
+answers; X75b11760e0633d83 is absent. No partial answer is promoted to credit.
+Among the12 questions in complete pairs, two unsupported findings have real
+state/quantity causes, and BBY's international3.6% claim is a supported
+duplicate of O2 whose full record differs only in the equivalent population
+wording. Source-supported missing-match claims already have reference cards;
+current G3 explicitly permits null, not a forced key_miss. Every specific
+cause is in the progress note. No raw verdict override or repeated valid call.
+
+G3 batches011–014 add18 source checks and36 raw bindings, independently
+verified in G3_CORRECTIVE_BATCH1114_SOURCE_EVIDENCE_2165.jsonfbdc8917.
+Three pairs say duplicate: AZOvendor13% and AALCASM-ex15.29/14.54 have
+source-supported equivalent-name/date representations, but DALMRO's two
+380000000 raw values are wrong versus O1/source380million. Four live
+numeric positive/negative checks reproduced this with the unchanged converter
+and independent Decimal arithmetic; exact raw record differences are saved.
+This is a grading-model error under the already explicit source-faithfulness
+rule, not evidence that the converter needs a semantic heuristic or permission
+to reroll successes. Every row's source/population/time distinction is in the
+progress note. Native final scoring and full cause reconciliation still owed.
+
+G2 batches006–007 add5 source checks/10 raw bindings/7 source windows in
+G2_CORRECTIVE_BATCH67_SOURCE_EVIDENCE_2165.json94d8aaa2, all verified.
+YUM1.73/1.61 is the proper Q4 comparison, not the separately adjusted1.52;
+both false reported-state judgments have a cause, while the growth split
+is not settled merely by a missing delta. Four positive pairs have named
+source controls. First G3 batch000's previously reviewed5 cases are also
+saved durably as G3_CORRECTIVE_BATCH0_SOURCE_EVIDENCE_2165.jsonbcd7b1af;
+that is reused evidence, not5 new reviews. Inventory derived from both frozen
+candidates and every source-evidence file now verifies45/82 G2 and80/116 G3
+questions reviewed, with no duplicate or foreign question IDs. Remaining
+source-review questions are37 G2 and36 G3; these are NOT model-job counts
+or full recall/precision closure. All original and incomplete evidence stays.
+
+Latest25 source checks: G2 batches008–009 save10 questions/20 raw verdicts/
+12 source windows in G2_CORRECTIVE_BATCH89_SOURCE_EVIDENCE_2165.json5ef43f9f;
+G3 batches015–018 save15 questions/30 raw buckets/16 windows and3 full-record
+comparisons in G3_CORRECTIVE_BATCH1518_SOURCE_EVIDENCE_2165.json71c4e9a2.
+All exact prompt/source/record/card/raw-answer joins and comparison diffs
+passed. The note distinguishes correct-300m refinery variants from the wrong
+double-scaled identities, real duplicate EPS/margin renderings, and the
+dividend's distinct duration/declaration-time roles. No manual grade/key
+overrides, rule changes or successful-call repetition; native score remains owed.
+
+Follow-up in that progress note locates the two exact G1 causes: AZO P1
+Q12577dcb022671ee links produced[3,4] in both current G1 replies; DAL P2
+Q8d39a6fa65ba3592 links[1,2] in both original/reused replies. Existing
+event_credit withholds those non-bijective groups. They are not no-link
+decisions or evidence of missing key facts. Final source review retains
+that distinction and the original duplicate/group safety accounting.
+The collection helper's prepare already invokes the EXISTING G.preflight
+inside the operator before materializing its exact script bytes. No redundant
+extra preflight command or another interrupt is needed for that checked seam.
+
+Collection observed01:34:17UTC Sep15 (21:34:17Eastern Sep14):66/98 primary
+lanes natively finalized valid (G2=23/38, G3=43/60). G3-007/G1b has one
+invalid primary (X75b11760e0633d83 unanswered), eligible retry not yet used.
+Core2165 remains live and advances both roots independently. The helper now
+continues on a recorded invalid reading under raw exit0 as2165 requires;
+it still refuses a nonzero/ambiguous raw operator exit. No owner rule changed.
+Latest independent byte-check:64 durable/actual-host script copies,258 raw
+original-state/journal/transcript/meta copies,62 returned payloads equal to
+their original states and67 unique returned lane-attempts. Candidate/root,
+invocation-to-script and actual Sonnet5/high identities agree. No duplicate
+call found. This is collection proof, not semantic score approval.
+ETA11p.m.–midnight Eastern remains provisional; no final score claimed.
+
+Nonblocking collection-display finding: Core's optional progress_2161.py
+67bc18fc asserts uniqueness by lane alone, so an allowed attempt2 following
+an invalid attempt1 is incorrectly refused as a lane finalized twice. A
+mocked-filesystem execution of the actual helper reproduced this for both
+valid and exhausted retries, with a valid-primary positive control and an
+actual same-attempt-duplicate negative control. Evidence is
+unit_2020_codex_check/COLLECTION_PROGRESS_RETRY_CHECK_2165.json. No actual
+progress file or Core code was changed by that test. Existing native
+finalization explicitly owns attempt and lane separately; step_2161.sh and
+the scorer do NOT call the optional display helper. Continue to use native
+receipt/finalization/completion evidence, not this display's retry labels or
+assertion, as readiness proof. No active call is interrupted or repeated over
+this helper-only issue; Core remains on the same2165 collection task.
+
+PREVIOUS,Revision221: Core2160/5d4fc32f answers interrupt2164 exactly and
+closes2163. The paired waiter had already exited; nothing was signalled or
+cancelled. All4 distinct primary calls are durably saved and natively finalized
+valid1/invalid0/retry0 each:2/38 G2 and2/60 G3. No call is pending. These
+are collection/identity checks, NOT approval of their semantic judgments.
+Codex2165/26f2f987 immediately resumes the SAME remaining36 G2 +58 G3
+primary obligations, with each root advancing on its own completed workflow.
+No paired wait, no new scheduler/root partition; serialize only the existing
+private-boundary operator commands and inspect their actual raw exits. Keep
+all completed results; existing format recovery/invalid-only retry allowance
+unchanged. Core replies once at completion or genuine blocker, then WAIT.
+Codex owns final-consumer proof and source-backed cause review in parallel.
+
+The corrected-completion format scope's focused checks passed79/79 using
+the EXISTING private-boundary test mapping. The earlier68 host-only fixture
+errors were absent in that isolated invocation, but the full combined suite
+still exposed the import-order fixture issue fixed inRevision222.
+native final-score execution still needs the remaining model results.
+
+Current owner ETA:11p.m.–midnight Eastern Sep14, provisional, based on the
+first two G2 calls taking313.887/326.937s and G3 taking91.878/88.115s.
+This replaces9–10p.m.; it is not a guarantee against retries or real findings.
+No additional audit or feature is added. A7 plus END-only offline model
+setup then STOP/WAIT remains the entire horizon.
+
+PREVIOUS,Revision220: Codex2164/f818b3a7 is the documented interrupt of2163,
+whose exact archive is7dfc1fb2. Stop only Core's paired read-only wait loop
+PID/PGID3514095 if still the same owned process; NEVER cancel/repeat the
+already launched external calls. First two finals are valid, no invalids:
+G2 wf_711d41b8-81e313.887s; G3 wf_b4a91b47-58a91.878s. Second calls
+wf_8bc7ddae-826 / wf_9676fc25-21c already launched. G3 has twice been
+made to wait for slower G2; this avoidable control-flow barrier is the sole
+reason for the interrupt. Core must preserve/report once, then WAIT. Root
+will immediately resume the SAME remaining task, each root independently
+on its own completion; only boundary operator commands are serialized.
+No new scheduler, transport, prompt, model, root split or owner approval.
+
+Root's score_corrected_grading_2162.py now composes the EXISTING pinned
+meaning-format view for corrected completions as well as original ones.
+Otherwise a legitimately recovered new G2 completion could not reproduce its
+own identity. Focused control first failed5/11 for this missing scope, then
+the minimal connection was added. Combined review currently171passed plus
+29subtests; an additionally attempted68 format tests have a HOST-ONLY fixture
+setup error (they look for the frozen scorer under logical unit2006, whose
+physical backing is unit2008). That is not68 grading defects or an AI reason
+to retry. Existing format owner unchanged; test invocation binding remains
+to verify. Native final-score proof still requires the returned completions.
+
+PREVIOUS,Revision219: Core2159/eaac9983 and its archive exactly answer2162.
+Root independently verified the actual HOST regular one-link script copies,
+both unchanged candidates/roots/receipts/invocations, the sole materializer
+run-base token change, and all4 real operator status/preflight raw results:
+exit0, empty stderr, correct packet identities, called0/38 and0/60. Both
+handoff gaps are CLOSED. This is not yet a model-result or score claim.
+
+Codex2163/7dfc1fb2 authorizes ONE bounded collection task:38 G2 +60 G3
+primary calls and at most one existing invalid-only retry per lane (absolute
+ceiling196 calls). Never repeat valid results or reroll valid false findings.
+Overlap distinct G2/G3 model workflows; serialize each root's lifecycle and
+private-boundary operators. EVERY new script is preserved durably and copied
+to its exact receipted HOST path before the preflight/call. No new scheduler,
+root split or transport. Exhausted INVALID stays counted/uncredited under
+the approved rule; refusal/lost evidence/drift/unknown in-flight outcomes
+are not that exception. Core sends one final collection/blocker report, WAIT.
+Root owns final revision binding/scoring/cause review in parallel. Existing
+prepared inputs are already published9b5fdb7f; original382 answers unchanged.
+
+Superseded corrected-score estimate was9–10p.m.Eastern Sep14, provisional pending
+actual collection speed (8p.m. no longer the realistic end of the range).
+No broad audit or production work is added. A7 plus END-only offline model
+setup then STOP/WAIT remains the entire horizon.
+
+PREVIOUS,Revision218: verified G3 preparation is committed and normally pushed
+as9b5fdb7f109f3ced4db8553e7c5ddc8359bb9194, tree35360764a61a28f1c2557efeeadb6b9e1bfe4226,
+parent963725ee.45 exact approved paths,43 manifest entries,9,642,274 bytes;
+mostly30 saved prompts, not new code. Remote equality independently checked.
+Owner dirty build_inventory_review remains2ec3bd33, untouched/unstaged.
+
+Core2158/f649fa9a correctly froze98 lanes and two first-segment receipts,
+but its HOST execution claim is false: neither published script path exists
+outside the private boundary. os.path.samefile passed only INSIDE that map.
+The existing2103/2104 materializer already handles this exact seam. Restore
+the same script bytes to each receipt's actual host path, no receipt rewrite
+or repeated root/candidate preparation. Also emit the descriptor the EXISTING
+run_grading_2086 consumer actually requires: LAUNCH_2161 currently lacks
+run_dir and workflow_gate_sha256. Prove real status/preflight through that
+consumer, not another direct-G-only check. No AI calls until this is checked.
+Codex2162 is this one bounded handoff task, then Core replies once and waits.
+
+Root independently used the existing W._largest_prefix on ALL root rows:
+98 primary lanes project to82 primary segments, not98: G2=33 segments
+(29x1,3x2,1x3 lanes), G3=49(43x1,5x2,1x7). Maximum actual scripts521213
+and514166 bytes. The FIRST one-lane segments do not prove all are one-lane.
+Within one run, pending publication blocks the next; two distinct G2/G3
+runs can overlap at the model stage, while private-boundary operator commands
+stay serialized. No new scheduler, run partition or lifecycle redesign.
+
+Root final scoring caller score_corrected_grading_2162.py is IN DEVELOPMENT,
+not verified or published. Its first6 focused checks pass after missing-module
+RED; they prevent omitted/expanded correction populations and input-version
+drift. Full caller checks/native proof still required before a score claim.
+Unchanged382 answers and original228 G2 findings stay preserved. Target
+8–10p.m.Eastern Sep14 is provisional. A7/cause review/END-only offline setup,
+then STOP/WAIT; no later-step work.
+
+PREVIOUS,Revision217: G2 checkpoint963725ee17e9cb66b34fb529f1ed56f1e25c2bc7
 is committed and normally pushed; remote equality checked22:50:58UTC.
 Core2157/fbe73f6d and its archive answer Codex2160 exactly; same bound
 sessions, main HEAD2dc0ad39 and recovery HEAD963725ee. Exactly one watcher.

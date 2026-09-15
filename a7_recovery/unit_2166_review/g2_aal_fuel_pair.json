@@ -1,0 +1,130 @@
+{
+ "Mb65ece4291c4b307": {
+  "batch": "G2-008",
+  "item": {
+   "change_unit": null,
+   "change_value": null,
+   "company_confirmed": true,
+   "comparison_baseline": null,
+   "comparison_high": null,
+   "comparison_low": null,
+   "comparison_shape_hint": null,
+   "conditions": "if fuel is still at the level with capacity reductions",
+   "driver_name": "fuel_recapture_rate",
+   "driver_state": "unknown",
+   "fiscal_quarter": 4,
+   "fiscal_year": 2026,
+   "half": null,
+   "has_favorability_wording": null,
+   "level_high": null,
+   "level_low": null,
+   "level_shape_hint": null,
+   "level_unit": null,
+   "long_range_end_year": null,
+   "long_range_start_year": null,
+   "measurement_raw_spans": [],
+   "month": null,
+   "period_end_date": null,
+   "period_scope": null,
+   "period_start_date": null,
+   "polarity_proof": null,
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+   "sentinel_class": null,
+   "slice_parts": [],
+   "surprise_basis_hint": null,
+   "time_type": "duration",
+   "value_text": "in the 90s percent"
+  },
+  "reference_card": {
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+   "reference_name": "recapture rate would be in the 90s",
+   "values": []
+  },
+  "verdicts": {
+   "G1a": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "G1b": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  }
+ },
+ "Md2061d63bedc8f75": {
+  "batch": "G2-003",
+  "item": {
+   "change_unit": null,
+   "change_value": null,
+   "company_confirmed": true,
+   "comparison_baseline": null,
+   "comparison_high": null,
+   "comparison_low": null,
+   "comparison_shape_hint": null,
+   "conditions": "if fuel is still at the level with capacity reductions",
+   "driver_name": "fuel_recapture_rate",
+   "driver_state": "unknown",
+   "fiscal_quarter": 4,
+   "fiscal_year": 2026,
+   "half": null,
+   "has_favorability_wording": null,
+   "level_high": null,
+   "level_low": {
+    "scale_multiplier": 1,
+    "unit_scale_evidence": null,
+    "value": 90
+   },
+   "level_shape_hint": "floor",
+   "level_unit": "percent",
+   "long_range_end_year": null,
+   "long_range_start_year": null,
+   "measurement_raw_spans": [],
+   "month": null,
+   "period_end_date": null,
+   "period_scope": null,
+   "period_start_date": null,
+   "polarity_proof": null,
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+   "sentinel_class": null,
+   "slice_parts": [],
+   "surprise_basis_hint": null,
+   "time_type": "duration",
+   "value_text": null
+  },
+  "reference_card": {
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+   "reference_name": "recapture rate would be in the 90s",
+   "values": []
+  },
+  "verdicts": {
+   "G1a": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": true
+   },
+   "G1b": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": true
+   }
+  }
+ }
+}

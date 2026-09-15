@@ -1,0 +1,503 @@
+{
+  "purpose": "Independent source-review evidence only; not replacement verdicts, answer key, or scoring overrides.",
+  "reviewed_at_utc": "2026-09-15 01:57:17 UTC",
+  "scope": {
+    "g3_candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+    "batches": [
+      "G3-026",
+      "G3-027",
+      "G3-028",
+      "G3-029"
+    ],
+    "successful_calls_repeated": 0
+  },
+  "rows": [
+    {
+      "question_id": "X9cdae8b168c23a2a",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-118458",
+        "produced_idx": 6
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-026.prompt.txt",
+      "prompt_sha256": "f3d661b8615f2055afecb36f9fda9d2f79b3f998b6045b59d245646a71d08267",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "interest_coverage_ratio",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": "4.0"
+          },
+          "level_shape_hint": "floor",
+          "level_unit": "x",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:LineOfCreditFacilityAxis__nationalwestminsterbankplc"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+          "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+          "values": [
+            84
+          ]
+        },
+        {
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+          "values": [
+            "4.0"
+          ]
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+          "values": [
+            "0.5",
+            "1.0"
+          ]
+        },
+        {
+          "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+          "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+          "values": []
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+          "values": [
+            "1.5",
+            "2.0"
+          ]
+        }
+      ],
+      "other_records": [],
+      "answers": [
+        {
+          "run_id": "wf_5b2a1f6c-68a",
+          "lane": "G3-026/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_5b2a1f6c-68a",
+          "lane": "G3-026/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 33849,
+          "excerpt": "024, respectively. As of February 1, 2025, there were no borrowings outstanding under the credit facility. As of November 1, 2025, we were in compliance with all terms and covenants of the Loan Agreement. Ulta Beauty’s wholly owned subsidiary, Space NK, maintains a multi-currency revolving credit facility (the Facility Agreement) with National Westminster Bank plc, providing up to £40.0 million for working capital requirements. The Facility Agreement, maturing on April 17, 2028, allows Space NK to increase the revolving facility by an additional £10.0 million with lender consent. The facility is secured by the assets of Space NK and contains a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0 and a leverage ratio not to exceed 2.0 to 1.0 for any relevant period. Borrowings bear interest at either the compound or term Sterling Overnight Index Average plus a margin of 1.75%, and an unused line fee of 0.60% per annum. As of November 1, 2025, there was $63.4 million outstanding under this credit facility. As of November 1, 2025, Space NK was in compliance with all terms and covenants of the Facility Agreement. ​ Seasonality Our business is subject to seasonal fluctuation. Significant portions of our net sales and profits are realized during the fourth quarter of the fiscal year due to the holiday selling season. To a lesser extent, our business is also affected by Mother’s Day and Valentine’s Day. Any decrease in sales during these higher sales volume periods could have an adverse effect on our business, financial condition, or operating results for the entire fiscal year. Our quarterly results of operations have varied in the past and are likely to do so again in the future. As such, we believe that period-to-period comparisons of our results of operations should not be rel"
+        }
+      ]
+    },
+    {
+      "question_id": "Xeb9efe850afaa8e3",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-118458",
+        "produced_idx": 7
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-027.prompt.txt",
+      "prompt_sha256": "04402dcbf3c7a105476c89ae284d5ad6a066be0d19918ef28a2bca9deb7a3c8e",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "interest_rate_margin",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "1.0"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "0.5"
+          },
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:VariableRateAxis__baserate",
+            "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+          "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+          "values": [
+            84
+          ]
+        },
+        {
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+          "values": [
+            "4.0"
+          ]
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+          "values": [
+            "0.5",
+            "1.0"
+          ]
+        },
+        {
+          "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+          "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+          "values": []
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+          "values": [
+            "1.5",
+            "2.0"
+          ]
+        }
+      ],
+      "other_records": [],
+      "answers": [
+        {
+          "run_id": "wf_5b2a1f6c-68a",
+          "lane": "G3-027/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_5b2a1f6c-68a",
+          "lane": "G3-027/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 32582,
+          "excerpt": "ximum revolving loans equal to the lesser of $1.0 billion or a percentage of eligible owned inventory and eligible owned receivables (which borrowing base may, at the election of the Company and satisfaction of certain conditions, include a percentage of qualified cash), and contains a $50.0 million subfacility for letters of credit. The Loan Agreement requires the Company to maintain a minimum fixed charge coverage ratio of 1.0 whenever availability under the Loan Agreement falls below the specified threshold. Substantially all of the Company’s assets are pledged as collateral for outstanding borrowings under the Loan Agreement. Outstanding borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum. As of November 1, 2025 and November 2, 2024, the Company had $488.3 million and $199.7 million, respectively, of borrowings outstanding under this credit facility. The weighted average interest rate was 6.42% and 7.15% for the 39 weeks ended November 1, 2025 and November 2, 2024, respectively. As of February 1, 2025, there were no borrowings outstanding under the credit facility. As of November 1, 2025, we were in compliance with all terms and covenants of the Loan Agreement. Ulta Beauty’s wholly owned subsidiary, Space NK, maintains a multi-currency revolving credit facility (the Facility Agreement) with National Westminster Bank plc, providing up to £40.0 million for working capital requirements. The Facility Agreement, maturing on April 17, 2028, allows Space NK to increase the revolving facility by an additional £10.0 million with lender consent. The facility is secured by the assets of Space NK and contains a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0 and a leverage ratio not to exceed 2.0 to 1.0 for any relevant period. Borrowings bear interest"
+        }
+      ]
+    },
+    {
+      "question_id": "Xba92891f45109f52",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-118458",
+        "produced_idx": 8
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-028.prompt.txt",
+      "prompt_sha256": "501f9e3c8643822718f7172cf158025e1905fcbc8009cbf55f788d575b46119a",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "action_event",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "share_repurchase_program",
+          "driver_state": "canceled",
+          "fiscal_quarter": null,
+          "fiscal_year": 2024,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": null,
+          "level_shape_hint": null,
+          "level_unit": null,
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": 10,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+          "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+          "values": [
+            84
+          ]
+        },
+        {
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+          "values": [
+            "4.0"
+          ]
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+          "values": [
+            "0.5",
+            "1.0"
+          ]
+        },
+        {
+          "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+          "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+          "values": []
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+          "values": [
+            "1.5",
+            "2.0"
+          ]
+        }
+      ],
+      "other_records": [],
+      "answers": [
+        {
+          "run_id": "wf_5b2a1f6c-68a",
+          "lane": "G3-028/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_5b2a1f6c-68a",
+          "lane": "G3-028/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 30612,
+          "excerpt": "anding under our credit facilities. We did not have any outstanding borrowings on the credit facilities as of February 1, 2025. Share repurchase program In March 2024, the Board of Directors authorized a share repurchase program (the March 2024 Share Repurchase Program) pursuant to which the Company could repurchase up to $2.0 billion of the Company’s common stock. The March 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the earlier share repurchase program. The March 2024 Share Repurchase Program did not have an expiration date but provided for suspension or discontinuation at any time. In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program. The October 2024 Share Repurchase Program does not have an expiration date and may be suspended or discontinued at any time. ​ A summary of common stock repurchase activity is presented in the following table: ​ ​ ​ ​ ​ ​ ​ ​ ​ 39 Weeks Ended ​ ​ November 1, ​ November 2, (Dollars in millions) ​ Shares repurchased ​ ​ 1,658,206 ​ ​ 1,869,314 Total cost of shares repurchased, including excise tax ​ $ 699.1 ​ $ 771.5 ​ Credit facility On August 27, 2025, we entered into Amendment No. 4 to the Second Amended and Restated Loan Agreement (as so amended, the Loan Agreement) with Wells Fargo Bank, National Association, as Administrative Agent, Collateral Agent and a Lender thereunder; Wells Fargo Bank, National Association and JPMorgan Chase Bank, N.A., as Lead Arrangers and Bookrunners; JPMorgan Chase Bank, N.A., as Syndication Agent and a Lender; and the other lenders party thereto. The Loan Agreement matures on March 13, 2029, provides maximum revolving loans equal to the lesser of $1.0 billion or a percentage of eligible owned inventory and eligible owned receivables (which borrowing b"
+        }
+      ]
+    },
+    {
+      "question_id": "X1cdb0213363706c7",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-118458",
+        "produced_idx": 9
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-029.prompt.txt",
+      "prompt_sha256": "681cd989b313b1c0c362a8f139244b1779850da275ee82e0d1600ce49324f45d",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "credit_facility_interest_rate_margin",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "2.0"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "1.5"
+          },
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+            "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+          "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+          "values": [
+            84
+          ]
+        },
+        {
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+          "values": [
+            "4.0"
+          ]
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+          "values": [
+            "0.5",
+            "1.0"
+          ]
+        },
+        {
+          "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+          "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+          "values": []
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+          "values": [
+            "1.5",
+            "2.0"
+          ]
+        }
+      ],
+      "other_records": [],
+      "answers": [
+        {
+          "run_id": "wf_5b2a1f6c-68a",
+          "lane": "G3-029/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_81b58e23-638",
+          "lane": "G3-029/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 32582,
+          "excerpt": "ximum revolving loans equal to the lesser of $1.0 billion or a percentage of eligible owned inventory and eligible owned receivables (which borrowing base may, at the election of the Company and satisfaction of certain conditions, include a percentage of qualified cash), and contains a $50.0 million subfacility for letters of credit. The Loan Agreement requires the Company to maintain a minimum fixed charge coverage ratio of 1.0 whenever availability under the Loan Agreement falls below the specified threshold. Substantially all of the Company’s assets are pledged as collateral for outstanding borrowings under the Loan Agreement. Outstanding borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum. As of November 1, 2025 and November 2, 2024, the Company had $488.3 million and $199.7 million, respectively, of borrowings outstanding under this credit facility. The weighted average interest rate was 6.42% and 7.15% for the 39 weeks ended November 1, 2025 and November 2, 2024, respectively. As of February 1, 2025, there were no borrowings outstanding under the credit facility. As of November 1, 2025, we were in compliance with all terms and covenants of the Loan Agreement. Ulta Beauty’s wholly owned subsidiary, Space NK, maintains a multi-currency revolving credit facility (the Facility Agreement) with National Westminster Bank plc, providing up to £40.0 million for working capital requirements. The Facility Agreement, maturing on April 17, 2028, allows Space NK to increase the revolving facility by an additional £10.0 million with lender consent. The facility is secured by the assets of Space NK and contains a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0 and a leverage ratio not to exceed 2.0 to 1.0 for any relevant period. Borrowings bear interest"
+        }
+      ]
+    }
+  ],
+  "complete_record_differences": []
+}

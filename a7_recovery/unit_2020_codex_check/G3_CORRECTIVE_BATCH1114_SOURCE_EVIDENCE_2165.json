@@ -1,0 +1,4450 @@
+{
+  "purpose": "Independent source review data, not replacement judgments or a key",
+  "reviewed_at_utc": "2026-09-15 01:06:12 UTC",
+  "scope": "Completed G3 batches 011 through 014; no model calls repeated",
+  "rows": [
+    {
+      "question_id": "Xcf1d14b2028b62d2",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001058090-26-000007",
+        "produced_idx": 5
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-011.prompt.txt",
+      "prompt_sha256": "0f136a78d727d3a270471eb3cc751faab73f00ea7f1f33b6acf9fad0f643c85c",
+      "metadata": {
+        "event_date": "2026-02-03",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_openings",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 370
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 350
+          },
+          "level_shape_hint": "range",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "350 to 370 new restaurant openings",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Adjusted diluted earnings per share1 remained flat at $0.25",
+          "reference_name": "Adjusted diluted earnings per share",
+          "values": [
+            "0.25"
+          ]
+        },
+        {
+          "quote": "Restaurant level operating margin1 was 23.4%, a decrease from 24.8%",
+          "reference_name": "Restaurant level operating margin",
+          "values": [
+            "23.4",
+            "24.8"
+          ]
+        },
+        {
+          "quote": "(in thousands, except per share amounts) (unaudited) Three months ended Year ended December 31, 2025 December 31, 2025 2025 2024 2025 2024 Net income $ 330,932 $ 331,764 $ 1,535,761 $ 1,534,110 Non-GAAP adjustments: Impairment and exit costs: Restaurant asset impairment(1) 2,466 2,634 2,466 2,634 Gain on restaurant lease termination(2) (1,518) - (1,518) -",
+          "reference_name": "Gain on restaurant lease termination",
+          "values": [
+            -1518
+          ]
+        },
+        {
+          "quote": "350 to 370 new restaurant openings",
+          "reference_name": "350 to 370 new restaurant openings",
+          "values": [
+            350,
+            370
+          ]
+        },
+        {
+          "quote": "Chipotlanes continue to perform well and are helping enhance guest access and convenience, as well as increase new restaurant sales, margins and returns.",
+          "reference_name": "Chipotlanes continue to perform well",
+          "values": []
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "earnings_per_share",
+              "driver_state": "unchanged",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "$",
+                "value": "0.25"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "$",
+                "value": "0.25"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "Adjusted diluted"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Adjusted diluted earnings per share1 remained flat at $0.25",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": "share"
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "24.8"
+              },
+              "comparison_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "24.8"
+              },
+              "comparison_shape_hint": "point",
+              "conditions": null,
+              "driver_name": "restaurant_level_operating_margin",
+              "driver_state": "decreased",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "23.4"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "23.4"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Restaurant level operating margin1 was 23.4%, a decrease from 24.8%",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "action_event",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "restaurant_lease_termination",
+              "driver_state": "occurred",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000,
+                "unit_scale_evidence": "thousands",
+                "value": -1518
+              },
+              "level_low": {
+                "scale_multiplier": 1000,
+                "unit_scale_evidence": "thousands",
+                "value": -1518
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "(in thousands, except per share amounts) (unaudited) Three months ended Year ended December 31, 2025 December 31, 2025 2025 2024 2025 2024 Net income $ 330,932 $ 331,764 $ 1,535,761 $ 1,534,110 Non-GAAP adjustments: Impairment and exit costs: Restaurant asset impairment(1) 2,466 2,634 2,466 2,634 Gain on restaurant lease termination(2) (1,518) - (1,518) -",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O4",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "chipotlane",
+              "driver_state": "persists",
+              "fiscal_quarter": null,
+              "fiscal_year": null,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Chipotlanes continue to perform well and are helping enhance guest access and convenience, as well as increase new restaurant sales, margins and returns.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": null,
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_48f59595-e88",
+          "lane": "G3-011/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_ece9ebda-7ad",
+          "lane": "G3-011/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "7fac2e8390d1539034a34dca65e3ec80fc0bc03adec6556c30635ffefbe1686e",
+          "offset": 9987,
+          "excerpt": "s over the long-term by growing transactions and driving accuracy, efficiency and speed. We are deploying these initiatives and beginning to see results, including the early success of our high-protein menu and benefits from our high-efficiency equipment package,\" said Boatwright. \"At the center of our strategy is the strength and relevance of our brand and our unwavering commitment to sourcing the best ingredients. We are confident in the opportunity ahead and our ability to delight guests and deliver value for shareholders.” Outlook For 2026, management is anticipating the following: •Full year comparable restaurant sales to be about flat •350 to 370 new restaurant openings, which includes 10 to 15 international partner-operated restaurants. Around 80% of company-owned restaurants will have a Chipotlane •An estimated underlying effective full year tax rate between 24% and 26% before discrete items 1Restaurant level operating margin, adjusted diluted earnings per share, adjusted net income, non-GAAP general and administrative expenses, and non-GAAP effective income tax rate are non-GAAP financial measures. Reconciliations to GAAP measures and further information are set forth in the table at the end of this press release. Definitions The following definitions apply to these terms as used throughout this release: •Comparable restaurant sales, or sales comps, and comparable restaurant transactions, represent the change in period-over-period total revenue or transactions for company-owned restaurants in operation for at least 13 full calendar months. •Average restaurant sales refers to the average trailing 12-month food and beverage revenue for company-owned restaurants in operation for at least 12 full calendar months. •Restaurant level operating margin r"
+        }
+      ]
+    },
+    {
+      "question_id": "Xd880123951a3a221",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-102611",
+        "produced_idx": 6
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-011.prompt.txt",
+      "prompt_sha256": "0f136a78d727d3a270471eb3cc751faab73f00ea7f1f33b6acf9fad0f643c85c",
+      "metadata": {
+        "event_date": "2025-10-27",
+        "fye_month": 8
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "vendor_concentration",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent",
+            "value": 13
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent",
+            "value": 13
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "one individual vendor provided 13 percent of our total purchases",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "business",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+          "reference_name": "non-cash LIFO impact",
+          "values": [
+            "64.0",
+            "-40.0"
+          ]
+        },
+        {
+          "quote": "one individual vendor provided 13 percent of our total purchases",
+          "reference_name": "one individual vendor",
+          "values": [
+            13
+          ]
+        },
+        {
+          "quote": "During fiscal 2025, failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales.",
+          "reference_name": "failure and maintenance related categories",
+          "values": [
+            85
+          ]
+        },
+        {
+          "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+          "reference_name": "Domestic commercial sales",
+          "values": [
+            "329.5"
+          ]
+        },
+        {
+          "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+          "reference_name": "31.7% of our total Domestic sales",
+          "values": [
+            "31.7"
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "-40.0"
+              },
+              "comparison_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "-40.0"
+              },
+              "comparison_shape_hint": "point",
+              "conditions": null,
+              "driver_name": "lifo_impact",
+              "driver_state": "increased",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "64.0"
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "64.0"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "non-cash"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "vendor_purchase_concentration",
+              "driver_state": "reported",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "percent",
+                "value": 13
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "percent",
+                "value": 13
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "one individual vendor provided 13 percent of our total purchases",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "business",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 85
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 85
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "During fiscal 2025, failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "product:failure",
+                "product:maintenanceitems"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O4",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "m_usd",
+              "change_value": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "329.5"
+              },
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "net_sales",
+              "driver_state": "increased",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "geography:us",
+                "customer:commercial"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_48f59595-e88",
+          "lane": "G3-011/G1b",
+          "attempt": 1,
+          "bucket": "duplicate"
+        },
+        {
+          "run_id": "wf_ece9ebda-7ad",
+          "lane": "G3-011/G1a",
+          "attempt": 1,
+          "bucket": "duplicate"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "business",
+          "part_sha256": "3c9dc0fea4c48d64d0e6cbb84e589015eb5939aa15d317f020e05994ebe8ea6b",
+          "offset": 18402,
+          "excerpt": "ial displays promote products on floor displays, end caps and shelves. We utilize in-store signage, creative product placement and promotions to help educate customers about products that they may need. ​ Purchasing and Supply Chain Merchandise is selected and purchased for all stores through our store support centers located in Memphis, Tennessee; Monterrey, Mexico; Chihuahua, Mexico; Sao Paulo, Brazil and Gurugram, India. Additionally, we have offices in Shanghai, China and Istanbul, Turkey to support our global sourcing efforts. In fiscal 2025, one class of similar products accounted for approximately 14 percent of our total revenues, and one individual vendor provided 13 percent of our total purchases. No other class of similar products accounted for 10 percent or more of our total revenues, and no other individual vendor provided more than 10 percent of our total purchases. We believe alternative sources of supply exist, at similar costs, for most types of product sold. Most of our merchandise flows through our distribution centers to our stores by our fleet of tractors and trailers or by third-party transportation firms. The distribution centers replenish our stores up to multiple times per week depending on store sales volumes. Competition The sale of automotive parts, accessories and maintenance items is highly competitive. AutoZone competes on the basis of customer service, including the knowledge and expertise of our AutoZoners and our ability to provide prompt delivery to commercial customers; merchandise quality, selection and availability; product warranty; store layouts, location and convenience; price; and the strength of our AutoZone brand name and quality, trademarks and service marks. Our competitors include national, regional and local auto parts chains, independen"
+        }
+      ]
+    },
+    {
+      "question_id": "Xc6e8defff53e5743",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-25-118458",
+        "produced_idx": 1
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-011.prompt.txt",
+      "prompt_sha256": "0f136a78d727d3a270471eb3cc751faab73f00ea7f1f33b6acf9fad0f643c85c",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "interest_coverage_ratio",
+          "driver_state": "persists",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": "4.0"
+          },
+          "level_shape_hint": "floor",
+          "level_unit": "x",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "sentinel_class": null,
+          "slice_parts": [
+            "entity_ownership:spacenk"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+          "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+          "values": [
+            84
+          ]
+        },
+        {
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+          "values": [
+            "4.0"
+          ]
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+          "values": [
+            "0.5",
+            "1.0"
+          ]
+        },
+        {
+          "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+          "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+          "values": []
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+          "values": [
+            "1.5",
+            "2.0"
+          ]
+        }
+      ],
+      "other_records": [],
+      "answers": [
+        {
+          "run_id": "wf_48f59595-e88",
+          "lane": "G3-011/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_ece9ebda-7ad",
+          "lane": "G3-011/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 33849,
+          "excerpt": "024, respectively. As of February 1, 2025, there were no borrowings outstanding under the credit facility. As of November 1, 2025, we were in compliance with all terms and covenants of the Loan Agreement. Ulta Beauty’s wholly owned subsidiary, Space NK, maintains a multi-currency revolving credit facility (the Facility Agreement) with National Westminster Bank plc, providing up to £40.0 million for working capital requirements. The Facility Agreement, maturing on April 17, 2028, allows Space NK to increase the revolving facility by an additional £10.0 million with lender consent. The facility is secured by the assets of Space NK and contains a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0 and a leverage ratio not to exceed 2.0 to 1.0 for any relevant period. Borrowings bear interest at either the compound or term Sterling Overnight Index Average plus a margin of 1.75%, and an unused line fee of 0.60% per annum. As of November 1, 2025, there was $63.4 million outstanding under this credit facility. As of November 1, 2025, Space NK was in compliance with all terms and covenants of the Facility Agreement. ​ Seasonality Our business is subject to seasonal fluctuation. Significant portions of our net sales and profits are realized during the fourth quarter of the fiscal year due to the holiday selling season. To a lesser extent, our business is also affected by Mother’s Day and Valentine’s Day. Any decrease in sales during these higher sales volume periods could have an adverse effect on our business, financial condition, or operating results for the entire fiscal year. Our quarterly results of operations have varied in the past and are likely to do so again in the future. As such, we believe that period-to-period comparisons of our results of operations should not be rel"
+        }
+      ]
+    },
+    {
+      "question_id": "Xe2020b8d13e3d8dc",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-26-017090",
+        "produced_idx": 7
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-012.prompt.txt",
+      "prompt_sha256": "6d6ccbab12e88ed0b1cd6f2e61a7686b2834b5fe67cb4b0271d2e22a97b94d18",
+      "metadata": {
+        "event_date": "2026-02-18",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "comparable_restaurant_sales",
+          "driver_state": "decreased",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": -4
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": -4
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:northitalia"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Excluding the after-tax impact of these and certain other items, adjusted net income and adjusted diluted net income per share for the fourth quarter of fiscal 2025 were $48.3 million and $1.00, respectively.",
+          "reference_name": "adjusted net income",
+          "values": [
+            "48.3"
+          ]
+        },
+        {
+          "quote": "revenue for the quarter finished within our expected range.",
+          "reference_name": "revenue for the quarter",
+          "values": []
+        },
+        {
+          "quote": "revenue for the quarter finished within our expected range.",
+          "reference_name": "revenue for the quarter finished within our expected range",
+          "values": []
+        },
+        {
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "reference_name": "Comparable restaurant sales vs. prior year",
+          "values": [
+            -4
+          ]
+        },
+        {
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "reference_name": "Comparable restaurant sales vs. prior year",
+          "values": [
+            1
+          ]
+        },
+        {
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "reference_name": "Comparable restaurant sales vs. prior year",
+          "values": [
+            -2
+          ]
+        },
+        {
+          "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+          "reference_name": "Comparable restaurant sales vs. prior year",
+          "values": [
+            2
+          ]
+        },
+        {
+          "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+          "reference_name": "six to seven Flower Child locations",
+          "values": [
+            6,
+            7
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "guidance",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": true,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "restaurant_openings",
+              "driver_state": "unknown",
+              "fiscal_quarter": null,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": null,
+                "value": 7
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": null,
+                "value": 6
+              },
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "segment:flowerchild"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_3e7e8ee5-f8c",
+          "lane": "G3-012/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_6ba149b0-6da",
+          "lane": "G3-012/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a",
+          "offset": 17124,
+          "excerpt": " $ (220,555 ) $ 178,317 26901 Malibu Hills Road, Calabasas Hills, CA 91301 • Telephone (818) 871-3000 The Cheesecake Factory Incorporated Selected Operating, Restaurant and Balance Sheet Information (unaudited; in thousands, except statistical data) 13 Weeks Ended 13 Weeks Ended 52 Weeks Ended 52 Weeks Ended The Cheesecake Factory restaurants operating information: December 30, 2025 December 31, 2024 December 30, 2025 December 31, 2024 Comparable restaurant sales vs. prior year (2.2 )% 1.7 % 0.1 % 1.0 % Restaurants opened during period 2 2 4 3 Restaurants open at period-end 218 215 218 215 Restaurant operating weeks 2,821 2,795 11,218 11,214 North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 % Restaurants opened during period 2 3 6 6 Restaurants open at period-end 48 42 48 42 Restaurant operating weeks 606 535 2,355 2,021 Other Fox Restaurant Concepts (FRC) operating information:(1) Restaurants opened during period 3 2 9 8 Restaurants open at period-end 56 48 56 48 Restaurant operating weeks 715 611 2,675 2,264 Other operating information:(2) Restaurants opened during period - 2 6 6 Restaurants open at period-end 49 43 49 43 Restaurant operating weeks 637 551 2,477 2,114 Number of company-owned restaurants: The Cheesecake Factory 218 North Italia 48 Other FRC 56 Other 49 Total 371 Number of international-licensed restaurants: The Cheesecake Factory 35 (1) The Other FRC segment includes all FRC brands except Flower Child. (2) The Other segment includes the Flower Child, Grand Lux Cafe and Social Monk Asian Kitchen concepts, as well as the Company's third-party bakery, international and consumer packaged goods businesses, unallocated corporate expenses and gift card costs. Selected Consolidated Balance Sheet Information December 30, 2025 December 31, 2024 Cash and cash equi"
+        }
+      ]
+    },
+    {
+      "question_id": "X7c01f022765630af",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-26-027061",
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-012.prompt.txt",
+      "prompt_sha256": "6d6ccbab12e88ed0b1cd6f2e61a7686b2834b5fe67cb4b0271d2e22a97b94d18",
+      "metadata": {
+        "event_date": "2026-03-12",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "store_count",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 86
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 86
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2026-01-31",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "The following table presents the number of stores owned at the end of fiscal 2025: ​ ​ ​ ​ ​ ​ ​ ​ United States ​ International (Company-operated) Number of stores ​ 1,505 ​ 86",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:international"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "As a percentage of net sales, gross profit decreased to 38.1% compared to 38.2%, primarily due to unfavorable channel mix, deleverage of store fixed expenses, and deleverage of other revenue, mostly offset by lower inventory shrink and supply chain efficiencies.",
+          "reference_name": "gross profit decreased to 38.1% compared to 38.2%",
+          "values": [
+            "38.1",
+            "38.2"
+          ]
+        },
+        {
+          "quote": "During fiscal 2025, the Company repurchased 2.0 million shares of its common stock at a cost of $890.5 million, excluding excise taxes.",
+          "reference_name": "repurchased 2.0 million shares",
+          "values": [
+            "2.0"
+          ]
+        },
+        {
+          "quote": "Comparable sales growth ​ ​ 2.5% to 3.5%",
+          "reference_name": "Comparable sales growth",
+          "values": [
+            "2.5",
+            "3.5"
+          ]
+        },
+        {
+          "quote": "The following table presents the number of stores owned at the end of fiscal 2025: ​ ​ ​ ​ ​ ​ ​ ​ United States ​ International (Company-operated) Number of stores ​ 1,505 ​ 86",
+          "reference_name": "International (Company-operated)",
+          "values": [
+            86
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "38.2"
+              },
+              "comparison_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "38.2"
+              },
+              "comparison_shape_hint": "point",
+              "conditions": null,
+              "driver_name": "gross_margin",
+              "driver_state": "decreased",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "38.1"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "38.1"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "As a percentage of net sales, gross profit decreased to 38.1% compared to 38.2%, primarily due to unfavorable channel mix, deleverage of store fixed expenses, and deleverage of other revenue, mostly offset by lower inventory shrink and supply chain efficiencies.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "action_event",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "share_repurchase",
+              "driver_state": "occurred",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "2.0"
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "2.0"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "During fiscal 2025, the Company repurchased 2.0 million shares of its common stock at a cost of $890.5 million, excluding excise taxes.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_3e7e8ee5-f8c",
+          "lane": "G3-012/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_6ba149b0-6da",
+          "lane": "G3-012/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "91685ffae40b9ff3b7554ac5089150e06d7ff8960eb78ce83d80bb1caa4041c9",
+          "offset": 19596,
+          "excerpt": " 703,201 ​ ​ 766,594 Cash and cash equivalents at end of year ​ $ 424,243 ​ $ 703,201 ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Exhibit 5 ​ Ulta Beauty, Inc. Store Update (Company-Operated) ​ The following table presents store activities during the fourth quarter of fiscal 2025: ​ ​ ​ ​ ​ ​ ​ ​ United States ​ International (Company-operated) Opened ​ 5 ​ 2 Closed ​ — ​ — Net ​ 5 ​ 2 ​ ​ ​ ​ ​ Relocated ​ — ​ 1 Remodeled ​ 18 ​ — ​ ​ The following table presents store activities during fiscal 2025: ​ ​ ​ ​ ​ ​ ​ ​ United States ​ International (Company-operated) Opened ​ 63 ​ 4 Closed ​ 3 ​ 1 Net ​ 60 ​ 3 ​ ​ ​ ​ ​ Relocated ​ 4 ​ 2 Remodeled ​ 42 ​ — ​ ​ The following table presents the number of stores owned at the end of fiscal 2025: ​ ​ ​ ​ ​ ​ ​ ​ United States ​ International (Company-operated) Number of stores ​ 1,505 ​ 86 ​ ​ ​ ​ ​ ​ Exhibit 6 ​ Ulta Beauty, Inc. Consolidated Sales by Category ​ The following tables set forth the approximate percentage of net sales by primary category: ​ ​ ​ ​ ​ ​ ​ ​ 13 Weeks Ended ​ ​ ​ ​ January 31, ​ ​ February 1, ​ ​ 2026 ​ 2025 Cosmetics ​ 35% ​ 36% Skincare and wellness ​ 24% ​ 23% Haircare ​ 19% ​ 19% Fragrance ​ 17% ​ 17% Services ​ 3% ​ 3% Other ​ 2% ​ 2% ​ ​ 100% ​ 100% ​ ​ ​ ​ ​ ​ ​ ​ Fiscal Year Ended ​ ​ ​ ​ January 31, ​ ​ February 1, ​ ​ 2026 ​ 2025 Cosmetics ​ 38% ​ 39% Skincare and wellness ​ 24% ​ 23% Haircare ​ 19% ​ 19% Fragrance ​ 13% ​ 13% Services ​ 4% ​ 4% Other ​ 2% ​ 2% ​ ​ 100% ​ 100% ​ ​ ​"
+        }
+      ]
+    },
+    {
+      "question_id": "Xbd0db500ca169c0a",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001104659-26-032757",
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-012.prompt.txt",
+      "prompt_sha256": "6d6ccbab12e88ed0b1cd6f2e61a7686b2834b5fe67cb4b0271d2e22a97b94d18",
+      "metadata": {
+        "event_date": "2026-03-20",
+        "fye_month": 8
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "same_store_sales",
+          "driver_state": "increased",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": "3.3"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": "3.3"
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "constant currency"
+          ],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "an increase in total company same store sales of 3.3% on a constant currency basis",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "The second quarter operating profit comparison was negatively impacted by $59.0 million due to an unfavorable non-cash LIFO charge in the current quarter.",
+          "reference_name": "unfavorable non-cash LIFO charge",
+          "values": [
+            "59.0"
+          ]
+        },
+        {
+          "quote": "During the second quarter of fiscal 2026, failure and maintenance related categories represented the largest portion of our sales mix at approximately 85% of total sales, whereas they represented approximately 86% of total sales in the comparable prior year period.",
+          "reference_name": "failure and maintenance related categories",
+          "values": [
+            85,
+            86
+          ]
+        },
+        {
+          "quote": "at February 14, 2026, operated 6,709 stores in the U.S.",
+          "reference_name": "6,709 stores in the U.S.",
+          "values": [
+            6709
+          ]
+        },
+        {
+          "quote": "an increase in total company same store sales of 3.3% on a constant currency basis",
+          "reference_name": "total company same store sales",
+          "values": [
+            "3.3"
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "lifo_charge",
+              "driver_state": "reported",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "59.0"
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "59.0"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "non-cash"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "The second quarter operating profit comparison was negatively impacted by $59.0 million due to an unfavorable non-cash LIFO charge in the current quarter.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "fiscal_quarter": null,
+              "fiscal_year": null,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": null,
+                "value": 6709
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": null,
+                "value": 6709
+              },
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": "2026-02-14",
+              "period_scope": null,
+              "period_start_date": "2026-02-14",
+              "polarity_proof": null,
+              "quote": "at February 14, 2026, operated 6,709 stores in the U.S.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "geography:us"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "instant",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_3e7e8ee5-f8c",
+          "lane": "G3-012/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_6ba149b0-6da",
+          "lane": "G3-012/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "93958b7e65da0b979b18371f7efa17bc70e76e0030eb149c61f0b1c16425d2ab",
+          "offset": 8823,
+          "excerpt": "ergency Economic Powers Act. The President immediately introduced new tariffs under different statutory authority, though their scope and duration, and the likelihood and outcome of further legal challenges to these tariffs, remain uncertain. Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations. Twelve Weeks Ended February 14, 2026 Compared with Twelve Weeks Ended February 15, 2025 Net sales for the twelve weeks ended February 14, 2026, increased $322.1 million to $4.3 billion, or 8.1% over net sales of $4.0 billion for the comparable prior year period. This growth was driven by an increase in total company same store sales of 3.3% on a constant currency basis and net sales of $114.4 million from new domestic and international stores. Domestic commercial sales increased $103.0 million to $1.2 billion, or 9.8% over the comparable prior year. Same store sales, or sales for our domestic and international stores open at least one year, are as follows: ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Twelve Weeks Ended ​ ​ ​ ​ ​ ​ Constant Currency (1) ​ ​ ​ February 14, 2026 ​ February 15, 2025 ​ February 14, 2026 ​ February 15, 2025 Domestic ​ 3.4 % ​ 1.9 % ​ 3.4 % ​ 1.9 % International 17.1 % ​ (8.2) % 2.5 % 9.5 % Total Company 5.2 % ​ 0.5 % 3.3 % 2.9 % (1) Constant currency same store sales exclude impacts from fluctuations of foreign currency exchange rates by converting both the current year and prior year international results at the prior year foreign currency exchange rate. Gross profit for the twelve weeks ended February 14, 2026, was $2.2 billion, compared with $2.1 billion during the comparable prior year period. Gross profit, as a percentage of sales, was 52.5% for the twelve weeks ended February 14, 2026, compared to 53.9% for the comparable prior ye"
+        }
+      ]
+    },
+    {
+      "question_id": "X63efe3da7b1e5477",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0001171843-26-001288",
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-012.prompt.txt",
+      "prompt_sha256": "6d6ccbab12e88ed0b1cd6f2e61a7686b2834b5fe67cb4b0271d2e22a97b94d18",
+      "metadata": {
+        "event_date": "2026-03-03",
+        "fye_month": 8
+      },
+      "record": {
+        "fact_type": "guidance",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": true,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "store_openings",
+          "driver_state": "unknown",
+          "fiscal_quarter": null,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 360
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 350
+          },
+          "level_shape_hint": "range",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Domestic Same Store Sales Increase 3.4%",
+          "reference_name": "Domestic Same Store Sales",
+          "values": [
+            "3.4"
+          ]
+        },
+        {
+          "quote": "The decrease in gross margin was driven by a 138 basis point non-cash LIFO charge.",
+          "reference_name": "non-cash LIFO charge",
+          "values": [
+            138
+          ]
+        },
+        {
+          "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+          "reference_name": "approximately 350-360 stores for the full fiscal year",
+          "values": [
+            350,
+            360
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "same_store_sales",
+              "driver_state": "increased",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "3.4"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "3.4"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": "2026-02-14",
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Domestic Same Store Sales Increase 3.4%",
+              "sentinel_class": null,
+              "slice_parts": [
+                "geography:us"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_3e7e8ee5-f8c",
+          "lane": "G3-012/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_6ba149b0-6da",
+          "lane": "G3-012/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "bc9d184fc3d310089afdfd70393a134cf805c6b9f777ee5bfd825d2edf653eb9",
+          "offset": 2546,
+          "excerpt": "$105 thousand versus negative $161 thousand last year and negative $145 thousand last quarter. “I want to thank our AutoZoners across the company for delivering solid financial results this past quarter. We continue to be pleased with our strategies to grow sales. Domestically, both DIY and Commercial sales continued to perform well this past quarter in spite of winter storms causing disruptions the last week of January and the first week of February. While our international sales, in constant currency, were slightly below our expectations, we believe our market share continues to grow as we outpace our competition in both Mexico and Brazil. We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year. As we remain focused on gaining market share across our highly fragmented industry, we remain committed to a disciplined approach of increasing earnings and cash flows to drive shareholder value,” said Phil Daniele, President and Chief Executive Officer. During the quarter ended February 14, 2026, AutoZone opened 43 new stores in the U.S., 18 in Mexico and three in Brazil for a total of 64 net new stores. As of February 14, 2026, the Company had 6,709 stores in the U.S., 913 in Mexico and 152 in Brazil for a total store count of 7,774. AutoZone is a leading retailer and distributor of automotive replacement parts and accessories in the Americas. Each store carries an extensive product line for cars, sport utility vehicles, vans and light duty trucks, including new and remanufactured automotive hard parts, maintenance items, accessories, and non-automotive products. The majority of stores have a commercial sales program that provides prompt delivery of parts and other products and commercial credit to local, regional and national repair garages, dealers, service stations, fleet owner"
+        }
+      ]
+    },
+    {
+      "question_id": "X59b3cb047c8dd0d9",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "DAL_2026-04-08T10.00",
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-012.prompt.txt",
+      "prompt_sha256": "6d6ccbab12e88ed0b1cd6f2e61a7686b2834b5fe67cb4b0271d2e22a97b94d18",
+      "metadata": {
+        "event_date": "2026-04-08",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "revenue",
+          "driver_state": "increased",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": 380000000
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": 380000000
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million on execution by the Delta Tech Ops team.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "product:productandserviceothermrobusiness"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "earnings of 64 cents per share",
+          "reference_name": "earnings of 64 cents per share",
+          "values": [
+            64
+          ]
+        },
+        {
+          "quote": "earnings per share of 64 cents within our initial guidance range",
+          "reference_name": "within our initial guidance range",
+          "values": [
+            64
+          ]
+        },
+        {
+          "quote": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million on execution by the Delta Tech Ops team.",
+          "reference_name": "the MRO revenue in the first quarter",
+          "values": [
+            380
+          ]
+        },
+        {
+          "quote": "This includes an estimated $300 million benefit from our refinery.",
+          "reference_name": "an estimated $300 million benefit from our refinery",
+          "values": [
+            -300
+          ]
+        },
+        {
+          "quote": "unit revenue growth was healthy across the board with sequential improvement from the fourth quarter in all regions",
+          "reference_name": "unit revenue growth",
+          "values": []
+        },
+        {
+          "quote": "We delivered earnings that were 40% higher than last year",
+          "reference_name": "earnings that were 40% higher than last year",
+          "values": [
+            40
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": 380
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": 380
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million on execution by the Delta Tech Ops team.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "product:productandserviceothermrobusiness"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "percent_sequential",
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "sequential_period",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "unit revenue growth was healthy across the board with sequential improvement from the fourth quarter in all regions",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "percent_yoy",
+              "change_value": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": null,
+                "value": 40
+              },
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "net_income",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "We delivered earnings that were 40% higher than last year",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_3e7e8ee5-f8c",
+          "lane": "G3-012/G1b",
+          "attempt": 1,
+          "bucket": "duplicate"
+        },
+        {
+          "run_id": "wf_6ba149b0-6da",
+          "lane": "G3-012/G1a",
+          "attempt": 1,
+          "bucket": "duplicate"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "fcf3da609862e9d7bbb887e7ba321ea2f7ae72d2ec35e8c30d7718b9f80197e0",
+          "offset": 15815,
+          "excerpt": "duced our adjusted net debt below 2019 levels, and we have a well-laddered maturity profile supported by a substantial base of unencumbered assets and secured borrowing capacity. Our vertically integrated fuel strategy is a unique differentiator. The refinery directly supplies a portion of our jet fuel needs, and its economics partially offset higher cracks, reducing the all-in price we pay for jet fuel. Before we move to Q&A, I want to highlight the performance of our third-party maintenance, repair, and overhaul business. As we discussed in January, with increased financial disclosure in MRO, breaking out both revenue and costs in the P&L, the MRO revenue in the first quarter more than doubled over the prior year to $380 million on execution by the Delta Tech Ops team. For the remaining quarters of the year, we expect a healthy but more normalized rate of MRO growth, supporting a full-year revenue outlook of $1.2 billion, representing nearly a 50% improvement over last year with expanding margins. In closing, Delta's financial strength transcends the industry and positions us to extend our leadership through times of volatility, reinforcing our advantages and improving the long-term earnings power of the business. Now with that, I'll hand it back to Julie for Q&A.\", \"Julie Stewart [1056]: Thank you, Dan. Matthew, can you please remind the analysts how to enter the question queue?\", \"Matthew [1062]: Certainly. And at this time, we'll be conducting a question and answer session for analysts. If you have any questions or comments, please press star 1 on your phone at this time. We do ask that while posing your question, please pick up your handset if you're listening on speakerphone to provide optimum sound quality. We do ask that all Q&A participants please limit to one question and one brief related follow-up question. Once again, if you have any q"
+        }
+      ]
+    },
+    {
+      "question_id": "X560cfed511c85204",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "DRI_2026-03-19T08.30",
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-013.prompt.txt",
+      "prompt_sha256": "c257b024062c0087205aadcf5a279e1db6d02a783a54c0e96220bb4cf210e0ea",
+      "metadata": {
+        "event_date": "2026-03-19",
+        "fye_month": 5
+      },
+      "record": {
+        "fact_type": "action_event",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "restaurant_conversions",
+          "driver_state": "announced",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 14
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 14
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:otheroperatingsegmentbahamabreezebrand"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "We generated $3.3 billion of total sales, 5.9% higher than last year, driven by same-restaurant sales growth of 4.2%.",
+          "reference_name": "same-restaurant sales growth of 4.2%",
+          "values": [
+            "4.2"
+          ]
+        },
+        {
+          "quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+          "reference_name": "adjusted diluted net earnings per share of $10.57 to $10.67",
+          "values": [
+            "10.57",
+            "10.67"
+          ]
+        },
+        {
+          "quote": "Olive Garden delivered a strong segment profit margin of 23% for the quarter, which was only 10 basis points below last year.",
+          "reference_name": "segment profit margin of 23%",
+          "values": [
+            23,
+            -10
+          ]
+        },
+        {
+          "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months.",
+          "reference_name": "14 locations will permanently close",
+          "values": [
+            14
+          ]
+        },
+        {
+          "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months.",
+          "reference_name": "the remaining 14 will be converted to other Darden brands",
+          "values": [
+            14
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "same_restaurant_sales",
+              "driver_state": "increased",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "4.2"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "4.2"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "We generated $3.3 billion of total sales, 5.9% higher than last year, driven by same-restaurant sales growth of 4.2%.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "guidance",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": true,
+              "comparison_baseline": "previous_guidance",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "earnings_per_share",
+              "driver_state": "raised",
+              "fiscal_quarter": null,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "$",
+                "value": "10.67"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "$",
+                "value": "10.57"
+              },
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "adjusted diluted"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": "share"
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "basis_points",
+              "change_value": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "basis points",
+                "value": -10
+              },
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "segment_profit_margin",
+              "driver_state": "decreased",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 23
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 23
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Olive Garden delivered a strong segment profit margin of 23% for the quarter, which was only 10 basis points below last year.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "segment:olivegardensegment"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_44af9485-bda",
+          "lane": "G3-013/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_95629b53-2c0",
+          "lane": "G3-013/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "c5a27e47379110bbbe659322cb27c62228b805e430ab79916f69452d11045f08",
+          "offset": 14010,
+          "excerpt": "pproximately 4.5%, approximately 70 new restaurant openings, commodities inflation of approximately 4%, an effective tax rate of approximately 12.5%, and adjusted diluted net earnings per share of $10.57 to $10.67, including approximately 25 cents related to the addition of 53rd week. For the fourth quarter specifically, our annual outlook implies total sales growth of 13% to 14.5%, which includes the extra fiscal week. Team restaurant sales growth of 3.5% to 5% incorporates the strong trends we have seen through the past three weeks of March. We expect adjusted diluted net earnings per share between $3.59 and $3.69. As previously announced, we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months. We believe the commercial locations are great sites that will benefit several of the brands in our portfolio. Our team members remain a priority throughout this process. A majority of team members, including more than 70% of managers who are impacted by the permanent closures, have already been placed in new roles within the Darden portfolio. We intend to keep the restaurant teams from the conversion locations with the new brand or other Darden brands. We do not expect these actions to have a material impact on our financial results. Now, looking forward to fiscal 2027, I would like to provide our thoughts on a few items. First, we expect to open between 75 and 80 new restaurants in addition to converting 14 Bahama Breeze locations to other Darden brands. Next, we expect to spend approximately $850 million of capital on the following. Approximately $475 million for new restaurants, approximately $25 million for the 14 Baha'u'llah brief conversions, and approximately $350 million related to ongoing restaurant maintenance refresh and technology. Finally, we anticipate an effective tax"
+        }
+      ]
+    },
+    {
+      "question_id": "Xb59980347da41ea2",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "ULTA_2026-03-12T16.30",
+        "produced_idx": 5
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-013.prompt.txt",
+      "prompt_sha256": "c257b024062c0087205aadcf5a279e1db6d02a783a54c0e96220bb4cf210e0ea",
+      "metadata": {
+        "event_date": "2026-03-12",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "store_count",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 80
+          },
+          "level_shape_hint": "floor",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+            "geography:gb",
+            "geography:ie"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+          "reference_name": "diluted EPS",
+          "values": [
+            "28.05",
+            "28.55"
+          ]
+        },
+        {
+          "quote": "Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.",
+          "reference_name": "SG&A growth for the quarter",
+          "values": [
+            17
+          ]
+        },
+        {
+          "quote": "We grew our loyalty program by 5% to a record 46.7 million active members",
+          "reference_name": "active members",
+          "values": [
+            "46.7",
+            5
+          ]
+        },
+        {
+          "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+          "reference_name": "stores in the UK and Ireland",
+          "values": [
+            80
+          ]
+        },
+        {
+          "quote": "we over delivered sales above the high end of our guidance by about 85 million",
+          "reference_name": "sales",
+          "values": []
+        },
+        {
+          "quote": "we over delivered sales above the high end of our guidance by about 85 million",
+          "reference_name": "sales above the high end of our guidance by about 85 million",
+          "values": [
+            85
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "guidance",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": true,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "earnings_per_share",
+              "driver_state": "unknown",
+              "fiscal_quarter": null,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "$",
+                "value": "28.55"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "$",
+                "value": "28.05"
+              },
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "diluted"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": "share"
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "sga",
+              "driver_state": "increased",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 17
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 17
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "Excluding the impact of incentive compensation and SpaceNK"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "percent_yoy",
+              "change_value": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 5
+              },
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "loyalty_program_active_members",
+              "driver_state": "increased",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "46.7"
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "46.7"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "We grew our loyalty program by 5% to a record 46.7 million active members",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "instant",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_44af9485-bda",
+          "lane": "G3-013/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_95629b53-2c0",
+          "lane": "G3-013/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "f484e9f92d405a91524e11f36f063daf368ea2d9adfe29b61e9607223266e9df",
+          "offset": 7892,
+          "excerpt": "ion with Beyonce's Sacred Haircurl launch. and elevating our brand building capabilities, enabling us to build stronger portfolios of exclusive brands and products that drive meaningful differentiation and new member acquisition. Noteworthy successes in 2025 include Sacred, which became our largest prestige haircare launch in history, prestige skincare K-beauty brand Peach & Lily, influencer-founded makeup brand Dibs, and Gen Z's most loved fragrance brand Noise. We built and expanded into new growth channels through our international expansion beyond the US with nearly 100 stores in five countries. This included our acquisition of Space NK, a luxury beauty retailer operating more than 80 stores in the UK and Ireland, the opening of nine stores in Mexico via our joint venture partner, Grupo AXO, and the opening of two stores in the Middle East through our franchise partner, Alshaya. Our newly launched Marketplace, a curated online assortment that allows guests to explore a complimentary array of beauty, wellness, and lifestyle products on alta.com and our app. The assortment includes more than 200 established and emerging brands and 5,000 SKUs. Our wellness initiative, which included the addition of nearly 30 new brands in our core wellness assortment and nearly 40 new brands in our marketplace assortment, along with an expanded store presence in more than 400 stores. And new UB media capabilities, like the addition of connected TV and streaming audio products that drove engagement and incremental ad revenue. We made notable progress aligning our foundation to support future growth through important leadership changes to ensure our team was positioned to meet the needs of our evolving business. and ongoing cost optimization efforts, including investment in AI and automation, like the testing and"
+        }
+      ]
+    },
+    {
+      "question_id": "X41cc5300ffab2d8b",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "YUM_2026-02-04T08.15",
+        "produced_idx": 2
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-013.prompt.txt",
+      "prompt_sha256": "c257b024062c0087205aadcf5a279e1db6d02a783a54c0e96220bb4cf210e0ea",
+      "metadata": {
+        "event_date": "2026-02-04",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "action_event",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "strategic_review_costs",
+          "driver_state": "occurred",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": 40
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": 40
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review",
+          "sentinel_class": null,
+          "slice_parts": [
+            "segment:pizzahutglobaldivision"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "prepared_remarks",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+          "reference_name": "Taco Bell",
+          "values": [
+            10
+          ]
+        },
+        {
+          "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+          "reference_name": "KFC",
+          "values": [
+            10
+          ]
+        },
+        {
+          "quote": "for the year x special gna was in line with our guidance up five percent year over year at 1.15 billion dollars",
+          "reference_name": "x special gna",
+          "values": [
+            "1.15",
+            5
+          ]
+        },
+        {
+          "quote": "for the year x special gna was in line with our guidance up five percent year over year at 1.15 billion dollars",
+          "reference_name": "in line with our guidance",
+          "values": [
+            "1.15"
+          ]
+        },
+        {
+          "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+          "reference_name": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+          "values": [
+            -15
+          ]
+        },
+        {
+          "quote": "In the first half, in the US, we expect approximately 250 targeted closures of underperforming units tied to the Hut Forward program, which will result in a decline in global Pizza Hut units in the first half.",
+          "reference_name": "approximately 250 targeted closures of underperforming units",
+          "values": [
+            250
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "percent_yoy",
+              "change_value": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 10
+              },
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "core"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+              "sentinel_class": null,
+              "slice_parts": [
+                "segment:tacobellglobaldivision"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "guidance",
+            "item": {
+              "change_unit": "percent_yoy",
+              "change_value": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": -15
+              },
+              "company_confirmed": true,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "core_operating_profit",
+              "driver_state": "unknown",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "segment:pizzahutglobaldivision"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "prepared_remarks",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_44af9485-bda",
+          "lane": "G3-013/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_95629b53-2c0",
+          "lane": "G3-013/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "prepared_remarks",
+          "part_sha256": "06f2a48e4d029516332c7726847c21404da3d59ba1f73103a2a1d12022dd3d29",
+          "offset": 13760,
+          "excerpt": "ns were 16%. Taco Bell US delivered 25.7% restaurant-level margins, a 50 basis point expansion year over year on 4% same-store sales growth at company-operated restaurants. full year Taco Bell US restaurant margins ended at 24.4%. Despite higher beef prices year over year, full year margins at Taco Bell US expanded thanks to strong top line and transaction growth. For KFC, Q4 restaurant level margins were 12.7%, a 60 basis point expansion year over year, driven by an improvement of 150 basis points in our UK store margins, nearly 350 basis points in our u.s store margins q4 x special gna was 337 million dollars up five percent year over year reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review for the year x special gna was in line with our guidance up five percent year over year at 1.15 billion dollars as a result Q4 Core Operating Profit grew 11% and X Special EPS was $1.73. For the year, Yum Core Operating Profit grew 7%. Excluding the Pizza Hut division, Core Operating Profit grew 10%. Yum X Special EPS for the year was $6.05, up 10%. Moving on to development, we opened over 1,800 new units in Q4 and over 4,550 new units for the year. KFC led unit growth with over 1,100 units opened in Q4 and nearly 3,000 units opened in the year. This is a record pace for KFC's gross unit openings and spanned 105 different markets. Were it not for the Turkey closures in the first quarter of 2025, KFC would have set a net new unit record in 2025. As you may well know, many of our franchisees set their development plans more than 12 months in advance. So the record-setting unit growth in 2025 on the back of a challenged same-store sales environment in 2024 is a testament to the global appeal of the KFC brand, its attractive restaurant paybacks, and our advantaged franchise system. Buil"
+        }
+      ]
+    },
+    {
+      "question_id": "Xa8876ee91bdb4b67",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "bzNews_50877032",
+        "produced_idx": 1
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-013.prompt.txt",
+      "prompt_sha256": "c257b024062c0087205aadcf5a279e1db6d02a783a54c0e96220bb4cf210e0ea",
+      "metadata": {
+        "event_date": "2026-02-26",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "airport_gates",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 17
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 17
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "body",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates.",
+          "reference_name": "17 new gates",
+          "values": [
+            17
+          ]
+        }
+      ],
+      "other_records": [],
+      "answers": [
+        {
+          "run_id": "wf_44af9485-bda",
+          "lane": "G3-013/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_95629b53-2c0",
+          "lane": "G3-013/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "body",
+          "part_sha256": "6a477e7faa7c423be2638634161ae550736fa228cb3c753bf5349f1843a8019e",
+          "offset": 219,
+          "excerpt": "American Airlines Group Inc. (NASDAQ: AAL ) has pledged a $1 billion investment in the Miami International Airport to build a new three-level concourse D extension, facilitating larger aircraft. Breaking Ground In 2027 In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates. The revamped area will also be able to facilitate international travel in the future with direct access to the airport's customs hall, the statement said. The project is set to break ground in 2027. \"The brand-new, reimagined D60 is a transformational project that will provide a much-improved experience for our customers and our team,\" American Airlines CEO Robert Isom said in the statement. Rising Oil Prices Lead To AAL Dip American Airlines recently recorded a dip in its stock price as rising crude oil prices proved to be a headwind for the flight operator. Jet fuel costs are one of the most volatile expenses for the airline as uncertainty over crude oil prices continues to loom amid rising tensions between Washington and Tehran. DHS' PreCheck Chaos The Department of Homeland Security (DHS) had earlier suspended the Transportation Security Administration 's (TSA) PreCheck and Global Entry programs as it deals with a lack of funding amid the ongoing partial government shutdown. Following backlash from industry stakeholders, experts and customers, however, the DHS reinstated the Pre"
+        }
+      ]
+    },
+    {
+      "question_id": "X65382a6064d6c960",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0001104659-25-102611",
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-013.prompt.txt",
+      "prompt_sha256": "c257b024062c0087205aadcf5a279e1db6d02a783a54c0e96220bb4cf210e0ea",
+      "metadata": {
+        "event_date": "2025-10-27",
+        "fye_month": 8
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": "m_usd",
+          "change_value": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "million",
+            "value": "329.5"
+          },
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "net_sales",
+          "driver_state": "increased",
+          "fiscal_quarter": null,
+          "fiscal_year": 2025,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": null,
+          "level_low": null,
+          "level_shape_hint": null,
+          "level_unit": null,
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "geography:us",
+            "customer:commercial"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+          "reference_name": "non-cash LIFO impact",
+          "values": [
+            "64.0",
+            "-40.0"
+          ]
+        },
+        {
+          "quote": "one individual vendor provided 13 percent of our total purchases",
+          "reference_name": "one individual vendor",
+          "values": [
+            13
+          ]
+        },
+        {
+          "quote": "During fiscal 2025, failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales.",
+          "reference_name": "failure and maintenance related categories",
+          "values": [
+            85
+          ]
+        },
+        {
+          "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+          "reference_name": "Domestic commercial sales",
+          "values": [
+            "329.5"
+          ]
+        },
+        {
+          "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+          "reference_name": "31.7% of our total Domestic sales",
+          "values": [
+            "31.7"
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "-40.0"
+              },
+              "comparison_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "-40.0"
+              },
+              "comparison_shape_hint": "point",
+              "conditions": null,
+              "driver_name": "lifo_impact",
+              "driver_state": "increased",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "64.0"
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": "64.0"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "non-cash"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "vendor_concentration",
+              "driver_state": "reported",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "percent",
+                "value": 13
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "percent",
+                "value": 13
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "one individual vendor provided 13 percent of our total purchases",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "business",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 85
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 85
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "During fiscal 2025, failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales.",
+              "sentinel_class": null,
+              "slice_parts": [
+                "product:failure",
+                "product:maintenanceitems"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O4",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "net_sales",
+              "driver_state": "reported",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "31.7"
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "31.7"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+              "sentinel_class": null,
+              "slice_parts": [
+                "geography:us",
+                "channel:commercial"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_44af9485-bda",
+          "lane": "G3-013/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_95629b53-2c0",
+          "lane": "G3-013/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "a4e6477713e39d5cfdbfab68bd67dd5870b7d8c51cdda23a135f367e465910f9",
+          "offset": 12559,
+          "excerpt": "s in Management’s Discussion and Analysis of Financial Condition and Results of Operations. (10) Share repurchases are inclusive of excise tax in fiscal 2025, 2024 and 2023. The excise tax is assessed at one percent of the fair market value of net stock repurchases after December 31, 2022. ​ Fiscal 2025 Compared with Fiscal 2024 For the fiscal year ended August 30, 2025, we had net sales of $18.9 billion compared with $18.5 billion for the year ended August 31, 2024, an increase of 2.4%. This growth was driven primarily by a domestic same store sales increase of 3.2% and net sales of $374.3 million from new domestic and international stores. Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales. Same store sales, or sales for our domestic and international stores open at least one year, are computed on a 52-week basis and are as follows: ##TABLE_START ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ Fiscal Year Ended August ​ ​ ​ ​ ​ Constant Currency (1) ​ ​ ​ ​ ​ Domestic ​ 3.2 % ​ 0.4 % ​ 3.2 % ​ 0.4 % International (3.2 %) 16.1 % 9.3 % 10.2 % Total Company 2.4 % 2.1 % 3.9 % 1.4 % ##TABLE_END ​ ##TABLE_START (1) Constant currency same store sales exclude impacts from fluctuations of foreign exchange rates by converting both the current year and prior year international results at the prior year foreign currency exchange rate. ##TABLE_END ​ Gross profit for fiscal 2025 was $10.0 billion, or 52.6% of net sales, a 47 basis point decrease compared with $9.8 billion, or 53.1% of net sales for fiscal 2024. The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact. Operating, selling, general and administrative expenses for fiscal 2025 increased to $6.4 billion, or 33.6% of net sal"
+        }
+      ]
+    },
+    {
+      "question_id": "X1c86be8ce30e3b3c",
+      "identity": {
+        "leg": "P2",
+        "source_id": "0001104659-25-118458",
+        "produced_idx": 2
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-014.prompt.txt",
+      "prompt_sha256": "98a495a00765f145ae074932d2859d6211d65c248eb5e8e3d7d0eec30b8ba621",
+      "metadata": {
+        "event_date": "2025-12-04",
+        "fye_month": 1
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "interest_rate_margin",
+          "driver_state": "reported",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "1.0"
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "0.5"
+          },
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:us-gaap:VariableRateAxis__baserate",
+            "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": null,
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+          "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+          "values": [
+            84
+          ]
+        },
+        {
+          "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+          "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+          "values": [
+            "4.0"
+          ]
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+          "values": [
+            "0.5",
+            "1.0"
+          ]
+        },
+        {
+          "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company’s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+          "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+          "values": []
+        },
+        {
+          "quote": "borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+          "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+          "values": [
+            "1.5",
+            "2.0"
+          ]
+        }
+      ],
+      "other_records": [],
+      "answers": [
+        {
+          "run_id": "wf_0ffcd19d-991",
+          "lane": "G3-014/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_415058aa-71d",
+          "lane": "G3-014/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3",
+          "offset": 32582,
+          "excerpt": "ximum revolving loans equal to the lesser of $1.0 billion or a percentage of eligible owned inventory and eligible owned receivables (which borrowing base may, at the election of the Company and satisfaction of certain conditions, include a percentage of qualified cash), and contains a $50.0 million subfacility for letters of credit. The Loan Agreement requires the Company to maintain a minimum fixed charge coverage ratio of 1.0 whenever availability under the Loan Agreement falls below the specified threshold. Substantially all of the Company’s assets are pledged as collateral for outstanding borrowings under the Loan Agreement. Outstanding borrowings bear interest, at the Company’s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company’s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum. As of November 1, 2025 and November 2, 2024, the Company had $488.3 million and $199.7 million, respectively, of borrowings outstanding under this credit facility. The weighted average interest rate was 6.42% and 7.15% for the 39 weeks ended November 1, 2025 and November 2, 2024, respectively. As of February 1, 2025, there were no borrowings outstanding under the credit facility. As of November 1, 2025, we were in compliance with all terms and covenants of the Loan Agreement. Ulta Beauty’s wholly owned subsidiary, Space NK, maintains a multi-currency revolving credit facility (the Facility Agreement) with National Westminster Bank plc, providing up to £40.0 million for working capital requirements. The Facility Agreement, maturing on April 17, 2028, allows Space NK to increase the revolving facility by an additional £10.0 million with lender consent. The facility is secured by the assets of Space NK and contains a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0 and a leverage ratio not to exceed 2.0 to 1.0 for any relevant period. Borrowings bear interest"
+        }
+      ]
+    },
+    {
+      "question_id": "Xc918d203e3a77f17",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0000006201-26-000031",
+        "produced_idx": 3
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-014.prompt.txt",
+      "prompt_sha256": "98a495a00765f145ae074932d2859d6211d65c248eb5e8e3d7d0eec30b8ba621",
+      "metadata": {
+        "event_date": "2026-04-23",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": "percent_yoy",
+          "change_value": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%",
+            "value": "5.9"
+          },
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 30700
+          },
+          "comparison_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 30700
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "full_time_equivalent_employees",
+          "driver_state": "increased",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 32500
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 32500
+          },
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2026-03-31",
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 %",
+          "sentinel_class": null,
+          "slice_parts": [
+            "product:regionalcarrier"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Loss per common share: Basic and diluted $ (0.58) $ (0.72)",
+          "reference_name": "Loss per common share: Basic and diluted",
+          "values": [
+            "-0.58",
+            "-0.72"
+          ]
+        },
+        {
+          "quote": "FY 2026E Adjusted earnings (loss) per diluted share3 ($0.40) to $1.10",
+          "reference_name": "Adjusted earnings (loss) per diluted share3",
+          "values": [
+            "-0.40",
+            "1.10"
+          ]
+        },
+        {
+          "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+          "reference_name": "increase in expense related to higher prices for jet fuel",
+          "values": [
+            4
+          ]
+        },
+        {
+          "quote": "Total unit revenue was 7.6% higher year over year, improving sequentially each month in the quarter",
+          "reference_name": "Total unit revenue",
+          "values": []
+        },
+        {
+          "quote": "Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+          "reference_name": "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+          "values": [
+            "18.57",
+            "17.41"
+          ]
+        },
+        {
+          "quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 %",
+          "reference_name": "Regional (4) 32,500 30,700 5.9 %",
+          "values": [
+            32500,
+            30700
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "17.41"
+              },
+              "comparison_low": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "17.41"
+              },
+              "comparison_shape_hint": "point",
+              "conditions": null,
+              "driver_name": "passenger_revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "18.57"
+              },
+              "level_low": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "18.57"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": "2026-03-31",
+              "period_scope": null,
+              "period_start_date": "2026-01-01",
+              "polarity_proof": null,
+              "quote": "Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+              "sentinel_class": null,
+              "slice_parts": [
+                "geography:domesticdestination"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": "available_seat_mile"
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_0ffcd19d-991",
+          "lane": "G3-014/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_415058aa-71d",
+          "lane": "G3-014/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "6248e10c8f04f921ccc069ab21f933e5375519dee3aea154cc572ee45148be6d",
+          "offset": 22240,
+          "excerpt": "er ASM (cents) 19.38 18.34 5.6 % Operating cost per ASM excluding net special items (cents) 19.36 18.24 6.1 % Operating cost per ASM excluding net special items and fuel (cents) 15.29 14.54 5.2 % Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 % Passenger enplanements (thousands) 51,770 51,034 1.4 % Departures (thousands): Mainline 279 278 0.6 % Regional 255 250 1.6 % Total 534 528 1.1 % Average stage length (miles): Mainline 1,200 1,176 2.0 % Regional 478 470 1.7 % Total 856 841 1.7 % Aircraft at end of period: Mainline (2) 1,022 985 3.8 % Regional (3) 572 567 0.9 % Total 1,594 1,552 2.7 % Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 % Total 138,900 133,100 4.4 % Note: Amounts may not recalculate due to rounding. (1)Unless otherwise noted, operating statistics include mainline and regional operations. Regional includes wholly-owned regional airline subsidiaries and operating results from capacity purchase carriers. (2)Excluded from the aircraft count above are three Airbus A321XLR mainline aircraft that are held in temporary storage as of March 31, 2026. (3)Includes aircraft owned and leased by American as well as aircraft operated by third-party regional carriers under capacity purchase agreements. Excluded from the aircraft count above are two Bombardier CRJ900 regional aircraft that are held in temporary storage as of March 31, 2026. (4)Regional full-time equivalent employees only include our wholly-owned regional airline subsidiaries. American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 9 American Airlines Group Inc. Consolidated Revenue Statistics by Region (Unaudited) 3 Months Ended Increase March 31, (Decrease) 2026 2025 Domestic (1) Revenue passenger miles (millions) 39,167 37"
+        }
+      ]
+    },
+    {
+      "question_id": "Xce1efa269060a6fb",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0000006201-26-000032",
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-014.prompt.txt",
+      "prompt_sha256": "98a495a00765f145ae074932d2859d6211d65c248eb5e8e3d7d0eec30b8ba621",
+      "metadata": {
+        "event_date": "2026-04-23",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": "0.01",
+            "unit_scale_evidence": "cents",
+            "value": "14.54"
+          },
+          "comparison_low": {
+            "scale_multiplier": "0.01",
+            "unit_scale_evidence": "cents",
+            "value": "14.54"
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "operating_cost_per_available_seat_mile",
+          "driver_state": "increased",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": "0.01",
+            "unit_scale_evidence": "cents",
+            "value": "15.29"
+          },
+          "level_low": {
+            "scale_multiplier": "0.01",
+            "unit_scale_evidence": "cents",
+            "value": "15.29"
+          },
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [
+            "excluding net special items, fuel and profit sharing"
+          ],
+          "month": null,
+          "period_end_date": "2026-03-31",
+          "period_scope": null,
+          "period_start_date": "2026-01-01",
+          "polarity_proof": null,
+          "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": "available_seat_mile"
+      },
+      "reference_cards": [
+        {
+          "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+          "reference_name": "CASM excluding net special items, fuel and profit sharing",
+          "values": [
+            "15.29",
+            "14.54"
+          ]
+        },
+        {
+          "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7)",
+          "reference_name": "Income tax benefit",
+          "values": [
+            -94,
+            -175
+          ]
+        },
+        {
+          "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7) Net loss (382) (473) (91) (19.2) Pre-tax loss – GAAP $ (476) $ (648) $ (172) (26.6) Adjusted for: pre-tax net special items (1) \n\n149 118 31 25.0 Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2)",
+          "reference_name": "Pre-tax loss excluding net special items",
+          "values": [
+            -327,
+            -530
+          ]
+        },
+        {
+          "quote": "a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025",
+          "reference_name": "mainline full-time equivalent employees",
+          "values": [
+            "3.9"
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "14.54"
+              },
+              "comparison_low": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "14.54"
+              },
+              "comparison_shape_hint": "point",
+              "conditions": null,
+              "driver_name": "operating_cost_per_available_seat_mile",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "15.29"
+              },
+              "level_low": {
+                "scale_multiplier": "0.01",
+                "unit_scale_evidence": "cents",
+                "value": "15.29"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "excluding net special items, fuel and profit sharing"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": "available_seat_mile"
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "percent_yoy",
+              "change_value": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": "3.9"
+              },
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "full_time_equivalent_employees",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025",
+              "sentinel_class": null,
+              "slice_parts": [
+                "product:mainline"
+              ],
+              "surprise_basis_hint": null,
+              "time_type": "instant",
+              "value_text": null
+            },
+            "occurrence_in_part": 1,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_0ffcd19d-991",
+          "lane": "G3-014/G1a",
+          "attempt": 1,
+          "bucket": "duplicate"
+        },
+        {
+          "run_id": "wf_415058aa-71d",
+          "lane": "G3-014/G1b",
+          "attempt": 1,
+          "bucket": "duplicate"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "ca9c62a5c65e62278583b21ce1e74a7acb6c19eb5dd45a0c34f82a356a07860b",
+          "offset": 7876,
+          "excerpt": "nhancements and procurement transformation and we intend to continue to invest in reengineering our business through the remainder of 2026 and beyond to build an even more efficient airline and continue to manage costs while delivering a better experience for our customers and team. Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025. The increase in CASM was primarily driven by higher costs for salaries, wages and benefits, aircraft fuel and other operating expenses, offset in part by a decrease in mainline operating special items, net. Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses. For a reconciliation of CASM to CASM excluding net special items, fuel and profit sharing see “Reconciliation of GAAP to Non-GAAP Financial Measures” below. Liquidity As of March 31, 2026, we had $10.8 billion in total available liquidity, consisting of $7.3 billion in unrestricted cash and short-term investments, and $3.5 billion in total undrawn capacity under revolving credit and other facilities. During the first three months of 2026, we completed the following financing transactions (see Note 5 to AAG’s Condensed Consolidated Financial Statements in Part I, Item 1A for further information on 2026 financing activities): • repaid in full $629 million of the outstanding principal amount of the senior short-term term loan facility; • prepaid in full $1.0 billion of the outstanding principal amount of the 8.50% senior secured notes; • amended the 2025 AAdvantage Term Loan Facility to reduce the applicable interest rate margin; • increased the aggregate revolving commitments under the 2013, 2014 and 2023 Revolving Facilities from $3.0 billion to $3.1 billion and extended the maturity"
+        }
+      ]
+    },
+    {
+      "question_id": "X99d7bc16850a9dde",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0000027904-26-000013",
+        "produced_idx": 5
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-014.prompt.txt",
+      "prompt_sha256": "98a495a00765f145ae074932d2859d6211d65c248eb5e8e3d7d0eec30b8ba621",
+      "metadata": {
+        "event_date": "2026-02-10",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "action_event",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "boeing_aircraft_purchase_option",
+          "driver_state": "announced",
+          "fiscal_quarter": null,
+          "fiscal_year": null,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null,
+            "value": 30
+          },
+          "level_low": null,
+          "level_shape_hint": "ceiling",
+          "level_unit": "count",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": "2026-01-12",
+          "period_scope": null,
+          "period_start_date": "2026-01-12",
+          "polarity_proof": null,
+          "quote": "with an option to purchase up to an additional 30 of the same aircraft",
+          "sentinel_class": null,
+          "slice_parts": [],
+          "surprise_basis_hint": null,
+          "time_type": "instant",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "operating income, adjusted (a non-GAAP financial measure) was $5.8 billion, a decrease of $212 million compared to 2024.",
+          "reference_name": "operating income, adjusted",
+          "values": [
+            "5.8",
+            -212
+          ]
+        },
+        {
+          "quote": "(in millions) 2025 2024 Interest expense, net $ (679) $ (747) $ 68 Gain/(loss) on investments, net 1,212 (319) 1,531 Loss on extinguishment of debt (26) (39) 13",
+          "reference_name": "Loss on extinguishment of debt",
+          "values": [
+            -26,
+            -39
+          ]
+        },
+        {
+          "quote": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.",
+          "reference_name": "Non-fuel unit costs",
+          "values": [
+            "2.4"
+          ]
+        },
+        {
+          "quote": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.",
+          "reference_name": "in line with our long-term target of low-single digit growth",
+          "values": [
+            "2.4"
+          ]
+        },
+        {
+          "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+          "reference_name": "annual effective tax rate",
+          "values": [
+            23,
+            25
+          ]
+        },
+        {
+          "quote": "we currently own an approximately 19% equity stake in Grupo Aeroméxico, S.A.B. de C.V., the parent company of Aeroméxico.",
+          "reference_name": "equity stake in Grupo Aeroméxico",
+          "values": [
+            19
+          ]
+        },
+        {
+          "quote": "with an option to purchase up to an additional 30 of the same aircraft",
+          "reference_name": "option to purchase up to an additional 30 of the same aircraft",
+          "values": [
+            30
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "m_usd",
+              "change_value": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": -212
+              },
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000000,
+                "unit_scale_evidence": "billion",
+                "value": "5.8"
+              },
+              "level_low": {
+                "scale_multiplier": 1000000000,
+                "unit_scale_evidence": "billion",
+                "value": "5.8"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "adjusted (a non-GAAP financial measure)"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "operating income, adjusted (a non-GAAP financial measure) was $5.8 billion, a decrease of $212 million compared to 2024.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "surprise",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "previous_guidance",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "cost_per_available_seat_mile",
+              "driver_state": "in_line",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": true,
+              "level_high": null,
+              "level_low": null,
+              "level_shape_hint": null,
+              "level_unit": null,
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": "actual",
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": "available_seat_mile"
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "guidance",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": true,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "effective_tax_rate",
+              "driver_state": "unknown",
+              "fiscal_quarter": null,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 25
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 23
+              },
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [
+                "Excluding the mark-to-market results"
+              ],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O4",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "in millions",
+                "value": -39
+              },
+              "comparison_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "in millions",
+                "value": -39
+              },
+              "comparison_shape_hint": "point",
+              "conditions": null,
+              "driver_name": "debt_extinguishment",
+              "driver_state": "increased",
+              "fiscal_quarter": null,
+              "fiscal_year": 2025,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "in millions",
+                "value": -26
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "in millions",
+                "value": -26
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "(in millions) 2025 2024 Interest expense, net $ (679) $ (747) $ 68 Gain/(loss) on investments, net 1,212 (319) 1,531 Loss on extinguishment of debt (26) (39) 13",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "mdna",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_0ffcd19d-991",
+          "lane": "G3-014/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_415058aa-71d",
+          "lane": "G3-014/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "mdna",
+          "part_sha256": "f61c10f7cf2e122b1a1745c81d7a34a9a8d9c1f7ab3915459e535195ef1435be",
+          "offset": 29498,
+          "excerpt": "modifications, airport construction projects and technology enhancements. We have committed to future aircraft purchases and have obtained, but are under no obligation to use, long-term financing commitments for a substantial portion of the purchase price of the aircraft. Our expected 2026 capital spend of approximately $5.5 billion, which may vary depending on financing decisions, will be primarily for aircraft, including deliveries and advance deposit payments, as well as fleet modifications and technology enhancements. On January 12, 2026, we entered into a definitive agreement with The Boeing Company to acquire 30 Boeing 787-10 aircraft, with an option to purchase up to an additional 30 of the same aircraft. The B-787-10 aircraft will include GEnx engines manufactured by General Electric. Deliveries of the B-787-10 aircraft will begin in 2031. On January 27, 2026, we entered into a definitive agreement with Airbus S.A.S. to purchase 16 Airbus A330-900 aircraft and 15 Airbus A350-900 aircraft, with an option to purchase up to an additional 20 widebody aircraft. The A330-900 aircraft will be powered by the Trent 7000 engine and the A350-900 aircraft will utilize the Trent XWB-84 EP engine, both manufactured by Rolls-Royce. Deliveries of the aircraft will begin in 2029. See Note 9 of the Notes to the Consolidated Financial Statements for additional information regarding our aircraft purchase commitments, which totaled approximately $15.4 billion as of December 31, 2025. Strategic Investment in WestJet. In October 2025, we acquired a 12.7% equity stake in WestJet for $276 million. As part of the transaction, we also assumed a commensurate portion of a shareholder loan receivable from the previous owner. Other . In 2025, other, net investing activities primarily included proceeds from sever"
+        }
+      ]
+    },
+    {
+      "question_id": "X1324b492faa2981e",
+      "identity": {
+        "leg": "UNION",
+        "source_id": "0000027904-26-000020",
+        "produced_idx": 4
+      },
+      "prompt": "a7_recovery/unit_2159_current_g3/core_g3prep2159_c/G3/prompts/G3-014.prompt.txt",
+      "prompt_sha256": "98a495a00765f145ae074932d2859d6211d65c248eb5e8e3d7d0eec30b8ba621",
+      "metadata": {
+        "event_date": "2026-04-08",
+        "fye_month": 12
+      },
+      "record": {
+        "fact_type": "metric",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": null,
+          "comparison_high": null,
+          "comparison_low": null,
+          "comparison_shape_hint": null,
+          "conditions": null,
+          "driver_name": "travel_spend",
+          "driver_state": "reported",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent",
+            "value": 85
+          },
+          "level_low": {
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "percent",
+            "value": 85
+          },
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "Recent corporate survey results indicate 85 percent of respondents expect their corporate travel spend will increase or stay the same in the June quarter.",
+          "sentinel_class": null,
+          "slice_parts": [
+            "customer:corporate"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "exhibit_99_1",
+        "per_x": null
+      },
+      "reference_cards": [
+        {
+          "quote": "Pre-tax loss of $214 million with a pre-tax margin of (1.4) percent",
+          "reference_name": "Pre-tax loss",
+          "values": [
+            -214
+          ]
+        },
+        {
+          "quote": "Operating Margin 6% - 8%",
+          "reference_name": "Operating Margin",
+          "values": [
+            6,
+            8
+          ]
+        },
+        {
+          "quote": "Earnings per share of $0.64",
+          "reference_name": "Earnings per share",
+          "values": [
+            "0.64"
+          ]
+        },
+        {
+          "quote": "Delta delivered record March quarter revenue, with an operating margin of 4.6 percent and earnings of $0.64 per share, within our initial guidance range even with a sharp run up in March fuel prices.",
+          "reference_name": "earnings of $0.64 per share, within our initial guidance range",
+          "values": [
+            "0.64"
+          ]
+        },
+        {
+          "quote": "March quarter total revenue increased 9.4 percent over the same period last year to a record $14.2 billion, led by premium, corporate, and loyalty.",
+          "reference_name": "March quarter total revenue",
+          "values": [
+            "14.2",
+            "9.4"
+          ]
+        },
+        {
+          "quote": "Total revenue of $14.2 billion was a March quarter record and nearly 10 percent higher than last year, growing several points above our initial outlook, on broad demand strength across corporate and leisure",
+          "reference_name": "growing several points above our initial outlook",
+          "values": [
+            "14.2"
+          ]
+        },
+        {
+          "quote": "(in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 — Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities — — — 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760)",
+          "reference_name": "Adjusted net debt",
+          "values": [
+            13540,
+            14300
+          ]
+        }
+      ],
+      "other_records": [
+        {
+          "other": "O1",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": null,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "pre_tax_income",
+              "driver_state": "reported",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": -214
+              },
+              "level_low": {
+                "scale_multiplier": 1000000,
+                "unit_scale_evidence": "million",
+                "value": -214
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": "2026-03-31",
+              "period_scope": null,
+              "period_start_date": "2026-01-01",
+              "polarity_proof": null,
+              "quote": "Pre-tax loss of $214 million with a pre-tax margin of (1.4) percent",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O2",
+          "produced_record": {
+            "fact_type": "guidance",
+            "item": {
+              "change_unit": null,
+              "change_value": null,
+              "company_confirmed": true,
+              "comparison_baseline": null,
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "operating_margin",
+              "driver_state": "unknown",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 8
+              },
+              "level_low": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "%",
+                "value": 6
+              },
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": null,
+              "period_scope": null,
+              "period_start_date": null,
+              "polarity_proof": null,
+              "quote": "Operating Margin 6% - 8%",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        },
+        {
+          "other": "O3",
+          "produced_record": {
+            "fact_type": "metric",
+            "item": {
+              "change_unit": "percent_yoy",
+              "change_value": {
+                "scale_multiplier": 1,
+                "unit_scale_evidence": "percent",
+                "value": "9.4"
+              },
+              "company_confirmed": null,
+              "comparison_baseline": "prior_year",
+              "comparison_high": null,
+              "comparison_low": null,
+              "comparison_shape_hint": null,
+              "conditions": null,
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "half": null,
+              "has_favorability_wording": null,
+              "level_high": {
+                "scale_multiplier": 1000000000,
+                "unit_scale_evidence": "billion",
+                "value": "14.2"
+              },
+              "level_low": {
+                "scale_multiplier": 1000000000,
+                "unit_scale_evidence": "billion",
+                "value": "14.2"
+              },
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "long_range_end_year": null,
+              "long_range_start_year": null,
+              "measurement_raw_spans": [],
+              "month": null,
+              "period_end_date": "2026-03-31",
+              "period_scope": null,
+              "period_start_date": "2026-01-01",
+              "polarity_proof": null,
+              "quote": "March quarter total revenue increased 9.4 percent over the same period last year to a record $14.2 billion, led by premium, corporate, and loyalty.",
+              "sentinel_class": null,
+              "slice_parts": [],
+              "surprise_basis_hint": null,
+              "time_type": "duration",
+              "value_text": null
+            },
+            "occurrence_in_part": null,
+            "part_ref": "exhibit_99_1",
+            "per_x": null
+          }
+        }
+      ],
+      "answers": [
+        {
+          "run_id": "wf_0ffcd19d-991",
+          "lane": "G3-014/G1a",
+          "attempt": 1,
+          "bucket": "key_miss"
+        },
+        {
+          "run_id": "wf_415058aa-71d",
+          "lane": "G3-014/G1b",
+          "attempt": 1,
+          "bucket": "key_miss"
+        }
+      ],
+      "source_windows": [
+        {
+          "part": "exhibit_99_1",
+          "part_sha256": "835b3782a88c7502a710ac3d0157ad91c021547655894fe70490eeaeba475cf1",
+          "offset": 5725,
+          "excerpt": "ve unit revenue growth in main cabin since the end of 2024, reflecting strong demand and continued supply rationalization. Delta's main cabin capacity contracted by 3 percent compared to the same period last year, as continued investment in fleet renewal drove premium seat mix higher. •Record quarterly corporate sales2 with growth in all sectors: Corporate sales increased double-digits year-over-year in the March quarter, with performance strengthening as the quarter progressed. All sectors saw positive revenue growth in the quarter, led by Banking, Aerospace & Defense, and Tech. Corporate demand for premium products was particularly strong. Recent corporate survey results indicate 85 percent of respondents expect their corporate travel spend will increase or stay the same in the June quarter. Cost Performance and Outlook \"Delta delivered record March quarter revenue, with an operating margin of 4.6 percent and earnings of $0.64 per share, within our initial guidance range even with a sharp run up in March fuel prices. Non‑fuel unit costs grew 6 percent over prior year, reflecting lower than planned capacity growth and higher recovery costs. For the June quarter, we expect non-fuel unit costs to grow at a rate similar to the March quarter, reflecting the impact of our capacity actions and a continuation of higher crew costs,\" said Dan Janki, Delta’s chief operating officer3. \"Improving operational resilience is a top focus and we are confident in delivering improvement in both operational and cost performance in the second half of the year.” 1 Non-GAAP measures; Refer to Non-GAAP reconciliations for historical comparison figures 2 Corporate travel sales represent the revenue from tickets sold to corporate contracted customers, including tickets for travel during and beyond the referenced time period 3 Dan Janki served as Delta's chief financial officer through March 31, 2"
+        }
+      ]
+    }
+  ],
+  "exact_record_differences": [
+    {
+      "question_id": "Xd880123951a3a221",
+      "other": "O2",
+      "differences": [
+        {
+          "field": "record.item.driver_name",
+          "asked": "vendor_concentration",
+          "comparison": "vendor_purchase_concentration"
+        }
+      ]
+    },
+    {
+      "question_id": "X59b3cb047c8dd0d9",
+      "other": "O1",
+      "differences": [
+        {
+          "field": "record.item.level_high.value",
+          "asked": 380000000,
+          "comparison": 380
+        },
+        {
+          "field": "record.item.level_low.value",
+          "asked": 380000000,
+          "comparison": 380
+        }
+      ]
+    },
+    {
+      "question_id": "Xce1efa269060a6fb",
+      "other": "O1",
+      "differences": [
+        {
+          "field": "record.item.period_end_date",
+          "asked": "2026-03-31",
+          "comparison": null
+        },
+        {
+          "field": "record.item.period_start_date",
+          "asked": "2026-01-01",
+          "comparison": null
+        }
+      ]
+    }
+  ],
+  "mro_numeric_check": {
+    "question_id": "X59b3cb047c8dd0d9",
+    "checks": [
+      {
+        "record": "asked",
+        "slot": "level_low",
+        "raw": {
+          "scale_multiplier": 1000000,
+          "unit_scale_evidence": "million",
+          "value": 380000000
+        },
+        "converted_m_usd": "380000000.000000",
+        "source_m_usd": "380",
+        "source_magnitude_matches": false
+      },
+      {
+        "record": "asked",
+        "slot": "level_high",
+        "raw": {
+          "scale_multiplier": 1000000,
+          "unit_scale_evidence": "million",
+          "value": 380000000
+        },
+        "converted_m_usd": "380000000.000000",
+        "source_m_usd": "380",
+        "source_magnitude_matches": false
+      },
+      {
+        "record": "comparison",
+        "slot": "level_low",
+        "raw": {
+          "scale_multiplier": 1000000,
+          "unit_scale_evidence": "million",
+          "value": 380
+        },
+        "converted_m_usd": "380.000000",
+        "source_m_usd": "380",
+        "source_magnitude_matches": true
+      },
+      {
+        "record": "comparison",
+        "slot": "level_high",
+        "raw": {
+          "scale_multiplier": 1000000,
+          "unit_scale_evidence": "million",
+          "value": 380
+        },
+        "converted_m_usd": "380.000000",
+        "source_m_usd": "380",
+        "source_magnitude_matches": true
+      }
+    ],
+    "result": "PASS",
+    "scope": "magnitude only, not whole-record approval"
+  }
+}

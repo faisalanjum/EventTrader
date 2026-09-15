@@ -1,0 +1,271 @@
+[
+ {
+  "qid": "Xe71679de4dec96b9",
+  "batch": "G3-001",
+  "nearest_comparator": "O4",
+  "differing_fields": [
+   "comparison_high",
+   "comparison_low",
+   "level_high",
+   "level_low"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "comparison_high": {
+    "asked": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "millions",
+     "value": -39
+    },
+    "comparator": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "in millions",
+     "value": -39
+    }
+   },
+   "comparison_low": {
+    "asked": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "millions",
+     "value": -39
+    },
+    "comparator": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "in millions",
+     "value": -39
+    }
+   },
+   "level_high": {
+    "asked": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "millions",
+     "value": -26
+    },
+    "comparator": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "in millions",
+     "value": -26
+    }
+   },
+   "level_low": {
+    "asked": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "millions",
+     "value": -26
+    },
+    "comparator": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "in millions",
+     "value": -26
+    }
+   }
+  }
+ },
+ {
+  "qid": "X3084ebf401c9eb68",
+  "batch": "G3-009",
+  "nearest_comparator": "O2",
+  "differing_fields": [
+   "slice_parts"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "slice_parts": {
+    "asked": [
+     "segment:internationalsegment",
+     "product:consumerelectronics"
+    ],
+    "comparator": [
+     "segment:international",
+     "product:consumerelectronics"
+    ]
+   }
+  }
+ },
+ {
+  "qid": "Xd880123951a3a221",
+  "batch": "G3-011",
+  "nearest_comparator": "O2",
+  "differing_fields": [
+   "driver_name"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "driver_name": {
+    "asked": "vendor_concentration",
+    "comparator": "vendor_purchase_concentration"
+   }
+  }
+ },
+ {
+  "qid": "X59b3cb047c8dd0d9",
+  "batch": "G3-012",
+  "nearest_comparator": "O1",
+  "differing_fields": [
+   "level_high",
+   "level_low"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "level_high": {
+    "asked": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "million",
+     "value": 380000000
+    },
+    "comparator": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "million",
+     "value": 380
+    }
+   },
+   "level_low": {
+    "asked": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "million",
+     "value": 380000000
+    },
+    "comparator": {
+     "scale_multiplier": 1000000,
+     "unit_scale_evidence": "million",
+     "value": 380
+    }
+   }
+  }
+ },
+ {
+  "qid": "Xce1efa269060a6fb",
+  "batch": "G3-014",
+  "nearest_comparator": "O1",
+  "differing_fields": [
+   "period_end_date",
+   "period_start_date"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "period_end_date": {
+    "asked": "2026-03-31",
+    "comparator": null
+   },
+   "period_start_date": {
+    "asked": "2026-01-01",
+    "comparator": null
+   }
+  }
+ },
+ {
+  "qid": "Xbb48c40216961570",
+  "batch": "G3-015",
+  "nearest_comparator": "O1",
+  "differing_fields": [
+   "change_unit",
+   "change_value"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "change_unit": {
+    "asked": "percent_yoy",
+    "comparator": null
+   },
+   "change_value": {
+    "asked": {
+     "scale_multiplier": 1,
+     "unit_scale_evidence": "%",
+     "value": "-2.2"
+    },
+    "comparator": null
+   }
+  }
+ },
+ {
+  "qid": "Xa7bfdf2b6ab0c842",
+  "batch": "G3-018",
+  "nearest_comparator": "O1",
+  "differing_fields": [
+   "measurement_raw_spans"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "measurement_raw_spans": {
+    "asked": [
+     "gross profit"
+    ],
+    "comparator": []
+   }
+  }
+ },
+ {
+  "qid": "X126166ff9554cd21",
+  "batch": "G3-019",
+  "nearest_comparator": "O1",
+  "differing_fields": [
+   "comparison_baseline",
+   "slice_parts"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "comparison_baseline": {
+    "asked": "prior_year",
+    "comparator": null
+   },
+   "slice_parts": {
+    "asked": [
+     "segment:usmarket"
+    ],
+    "comparator": [
+     "segment:u_s_market"
+    ]
+   }
+  }
+ },
+ {
+  "qid": "X31eb45d686e84883",
+  "batch": "G3-020",
+  "nearest_comparator": "O1",
+  "differing_fields": [
+   "fiscal_year"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "fiscal_year": {
+    "asked": 2024,
+    "comparator": null
+   }
+  }
+ },
+ {
+  "qid": "X6a8a1479099fcb9a",
+  "batch": "G3-021",
+  "nearest_comparator": "O2",
+  "differing_fields": [
+   "driver_name",
+   "driver_state"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "driver_name": {
+    "asked": "share_repurchases",
+    "comparator": "share_repurchase"
+   },
+   "driver_state": {
+    "asked": "reported",
+    "comparator": "occurred"
+   }
+  }
+ },
+ {
+  "qid": "X7bfc69ea73a9d1ae",
+  "batch": "G3-024",
+  "nearest_comparator": "O2",
+  "differing_fields": [
+   "period_end_date"
+  ],
+  "quote_same_as_comparator": true,
+  "diffs": {
+   "period_end_date": {
+    "asked": "2026-03-31",
+    "comparator": null
+   }
+  }
+ }
+]

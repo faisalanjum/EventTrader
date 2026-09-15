@@ -1,0 +1,838 @@
+CONTRACT_NATIVE_2169 {"a7_correction_candidate_2118.py": "50f9298c9bf9b0ff256f3faae6e227260c4e5fac10113bc9252c2cb45cf8f40f", "a7_grading_contract_2168.py": "23c36532b0629dc4a76a5ee34a0dcf9dbd9eaca6b8c3e57134d8a6b29fcaeba4", "a7_grading_input_correction_2114.py": "32e2f650f56cb77b20c89199bc8cf120181dbc7ff92bdd60014d7abc95a16a2d", "a7_grading_revision_2115.py": "dd708431e2a106c4f711b89dfe8b9918a52ddf4f8616f5fefb94fa742783de76", "test_correction_native_2118.py": "5c2341b98a132533b0d727250c37767adf4f624a552d0de65e21fc42f8a5ac8b", "test_grading_contract_native_2169.py": "52380f4b2a5b1ebfa2f67070f3d8ca8ef6d7191cdaab9500c1a1f579bcf82059"}
+EEEEEEEEEEEEEEEEEEEEEEEEEE                                               [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_the_prepared_candidate_is_the_subset_and_names_its_input_version _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_an_unapproved_subset_refuses_with_a_valid_control[empty] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_an_unapproved_subset_refuses_with_a_valid_control[unknown_group] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_an_unapproved_subset_refuses_with_a_valid_control[extra_question] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_an_unapproved_subset_refuses_with_a_valid_control[repeated_question] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_corrected_judgment_replaces_only_its_own_questions __
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_an_unresolved_replacement_cannot_inherit_the_superseded_credit _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_tampered_correction_refuses_with_a_valid_control[population] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_tampered_correction_refuses_with_a_valid_control[version] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_tampered_correction_refuses_with_a_valid_control[completion] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_corrected_judgment_changes_only_its_own_scorer_result _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_the_seam_handles_G3_and_the_other_leg_keeps_its_base_evidence _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_____ ERROR at setup of test_a_tampered_root_refuses_with_a_valid_control ______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+___ ERROR at setup of test_a_corrected_G3_bucket_changes_only_its_own_result ___
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_partially_unresolved_reply_cannot_regain_the_superseded_aspects _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_question_scoped_preservation_in_the_actual_population _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_many_questions_in_one_group_across_several_fitted_batches[some] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_many_questions_in_one_group_across_several_fitted_batches[all] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_g3_comparison_records_are_only_this_events_matched_records _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool[sparse] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool[explicit_empty] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_broken_matched_inventory_refuses_with_a_valid_control[absent] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_broken_matched_inventory_refuses_with_a_valid_control[wrong_event] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_broken_matched_inventory_refuses_with_a_valid_control[unknown_index] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_a_broken_matched_inventory_refuses_with_a_valid_control[repeated_index] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+_ ERROR at setup of test_the_bound_matched_population_is_checked_by_the_consumer _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attem...recovery/a7_recovery/unit_1957/logs/attempt_codex_contract2169_b/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+        path, problems = G.write(str(candidate), run)
+        assert problems == [], problems
+>       return FAKE.complete_test_run("G1", candidate, path, out / "run", AUD.PROJECTS_ROOT)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+g1_fake_state.py:24: in complete_test_run
+    check(problems)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+problems = ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+    def check(problems):
+>       assert not problems, problems[:5]
+               ^^^^^^^^^^^^
+E       AssertionError: ["CLAUDE_CODE_MAX_OUTPUT_TOKENS is None, not the frozen '128000'"]
+
+g1_fake_state.py:21: AssertionError
+=========================== short test summary info ============================
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_the_prepared_candidate_is_the_subset_and_names_its_input_version
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_an_unapproved_subset_refuses_with_a_valid_control[empty]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_an_unapproved_subset_refuses_with_a_valid_control[unknown_group]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_an_unapproved_subset_refuses_with_a_valid_control[extra_question]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_an_unapproved_subset_refuses_with_a_valid_control[repeated_question]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_corrected_judgment_replaces_only_its_own_questions
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_an_unresolved_replacement_cannot_inherit_the_superseded_credit
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_tampered_correction_refuses_with_a_valid_control[population]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_tampered_correction_refuses_with_a_valid_control[version]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_tampered_correction_refuses_with_a_valid_control[completion]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_corrected_judgment_changes_only_its_own_scorer_result
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_the_seam_handles_G3_and_the_other_leg_keeps_its_base_evidence
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_tampered_root_refuses_with_a_valid_control
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_corrected_G3_bucket_changes_only_its_own_result
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_partially_unresolved_reply_cannot_regain_the_superseded_aspects
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_question_scoped_preservation_in_the_actual_population
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_many_questions_in_one_group_across_several_fitted_batches[some]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_many_questions_in_one_group_across_several_fitted_batches[all]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_g3_comparison_records_are_only_this_events_matched_records
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool[sparse]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool[explicit_empty]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[absent]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[wrong_event]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[unknown_index]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[repeated_index]
+ERROR ../../../../../../../../../../a7_corr2118/test_grading_contract_native_2169.py::test_the_bound_matched_population_is_checked_by_the_consumer
+26 errors in 6.65s
+TEST_REPLIES_ONLY; model calls=0; raw pytest exit=1

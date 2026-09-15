@@ -1,0 +1,443 @@
+{
+ "agreed": 66,
+ "caller_sha256": "8ab3058e8e559da68a78b4516938de2f334d2c336cc76f7ed1b9239ffc26aa45",
+ "completion_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2/a7_g23_completion.json",
+ "completion_sha256": "bf1d9175e8823bb0b74bf99b13248bbd5a11dba745ba37c2722e03506563a3ee",
+ "lanes_selected": {
+  "G2-000/G1a": 1,
+  "G2-000/G1b": 1,
+  "G2-001/G1a": 1,
+  "G2-001/G1b": 1,
+  "G2-002/G1a": 1,
+  "G2-002/G1b": 1,
+  "G2-003/G1a": 1,
+  "G2-003/G1b": 1,
+  "G2-004/G1a": 1,
+  "G2-004/G1b": 1,
+  "G2-005/G1a": 1,
+  "G2-005/G1b": 1,
+  "G2-006/G1a": 1,
+  "G2-006/G1b": 1,
+  "G2-007/G1a": 1,
+  "G2-007/G1b": 1,
+  "G2-008/G1a": 1,
+  "G2-008/G1b": 1,
+  "G2-009/G1a": 1,
+  "G2-009/G1b": 1,
+  "G2-010/G1a": 1,
+  "G2-010/G1b": 1,
+  "G2-011/G1a": 1,
+  "G2-011/G1b": 1,
+  "G2-012/G1a": 1,
+  "G2-012/G1b": 1,
+  "G2-013/G1a": 1,
+  "G2-013/G1b": 1,
+  "G2-014/G1a": 1,
+  "G2-014/G1b": 1,
+  "G2-015/G1a": 1,
+  "G2-015/G1b": 1,
+  "G2-016/G1a": 1,
+  "G2-016/G1b": 1,
+  "G2-017/G1a": 1,
+  "G2-017/G1b": 1,
+  "G2-018/G1a": 1,
+  "G2-018/G1b": 1
+ },
+ "new_model_calls": 0,
+ "questions": 82,
+ "review_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2161_execution/G2/COMPLETION_CANDIDATE_2161.json",
+ "review_sha256": "e06555ad2e719f8c3d334582f299a94515d41bd1a9cf773c06a6b34d98ecfad7",
+ "run_identity": {
+  "meaning_format_recovery": {
+   "attempts": [
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-000/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "a856f241d830275aa0b5d06a5b2cf576571075858c62015d861124c3689a1f40",
+     "recovered": false,
+     "segment": 1
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-000/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "a856f241d830275aa0b5d06a5b2cf576571075858c62015d861124c3689a1f40",
+     "recovered": false,
+     "segment": 2
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-001/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "807bd9a73f3e91b6cd3f1b26a84235b56c161dd5af402c66f81363ca5972118b",
+     "recovered": false,
+     "segment": 3
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-001/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "38e667da15925da85270b2163713425ce947eb215b62c225d96919a024c5bed9",
+     "recovered": false,
+     "segment": 4
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-002/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "4fb88f7cf2d975bf55f26ab2aa7b86ccc36fcebcf882addf781b9245d099a133",
+     "recovered": false,
+     "segment": 5
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-002/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "28bebbfcdf24e4d40b18ab928544db856888e5b0f35d313ff5fcbd87916b56e9",
+     "recovered": false,
+     "segment": 6
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-003/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "d9a9580f4324578870409a16f145a5c23aeb444cb0c21f2360bd9cc8645eecb3",
+     "recovered": false,
+     "segment": 7
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-003/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "d9a9580f4324578870409a16f145a5c23aeb444cb0c21f2360bd9cc8645eecb3",
+     "recovered": false,
+     "segment": 8
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-004/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "6b5c94854510856c73a80a2988b1455720a30cd63e6c87048e6d6da0aad39dcb",
+     "recovered": false,
+     "segment": 9
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-004/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "6b5c94854510856c73a80a2988b1455720a30cd63e6c87048e6d6da0aad39dcb",
+     "recovered": false,
+     "segment": 10
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-005/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "19aba1aeee72f0671b2a990bf75f9670f3cbbbdb1e5aaa5a348bcf22f84b4797",
+     "recovered": false,
+     "segment": 11
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-005/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "4474a461e98b0699c6ae31287ad9f96bd466eca1f0420b64f59c0fd4e7e3c82c",
+     "recovered": false,
+     "segment": 12
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-006/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "bec7a7d3beca686882df6ecb75156e1d44d8f7994a132d461718e2714f103856",
+     "recovered": false,
+     "segment": 13
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-006/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "88e596a12630dd6bfc8debe6f2739ecfa45e76c7ab9395c77c9ef15ad203ca9a",
+     "recovered": false,
+     "segment": 13
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-007/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "8f0369b1fdb0175cef2a5d55fc4bf467eb58b97bb61655d50b0adfda626b731a",
+     "recovered": false,
+     "segment": 14
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-007/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "8f0369b1fdb0175cef2a5d55fc4bf467eb58b97bb61655d50b0adfda626b731a",
+     "recovered": false,
+     "segment": 15
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-008/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "39f76465da47027394c09209c485f636787bffbd3c395a2bde8c452cc8adc9f0",
+     "recovered": false,
+     "segment": 16
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-008/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "fe8a4c360c4d56eed08685728da7d7d86c4df798219f758203da588a787bade9",
+     "recovered": false,
+     "segment": 16
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-009/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "04d0b9f3cdee644fb1d815ea584855621bdd6db9301b05edb888c664cd66bbe0",
+     "recovered": false,
+     "segment": 17
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-009/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "04d0b9f3cdee644fb1d815ea584855621bdd6db9301b05edb888c664cd66bbe0",
+     "recovered": false,
+     "segment": 18
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-010/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "80f2ce61c218c98b567d8c3ab696fcca2219a12e58b389ae308fbbb601eae6b4",
+     "recovered": false,
+     "segment": 19
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-010/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "b8612aad92315722ebc1c424ed7fea33c9e1a0c78c714c150201df52745ebaeb",
+     "recovered": false,
+     "segment": 20
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-011/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "42a3b69d57b6edfda6a0f047162f287f91218d8ed8d8d5e9f0939466eccc65bc",
+     "recovered": false,
+     "segment": 21
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-011/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "42a3b69d57b6edfda6a0f047162f287f91218d8ed8d8d5e9f0939466eccc65bc",
+     "recovered": false,
+     "segment": 22
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-012/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "718ab03cebfbd89e5bdb3752cf3f29c9d8b1c9b9b27678103723e2f4b529faae",
+     "recovered": false,
+     "segment": 23
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-012/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "718ab03cebfbd89e5bdb3752cf3f29c9d8b1c9b9b27678103723e2f4b529faae",
+     "recovered": false,
+     "segment": 24
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-013/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "f578df5bd6b9b8477cba541e833d82188262824749602da7a016cb3740c72759",
+     "recovered": false,
+     "segment": 25
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-013/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "5b39202fefe4ed83a7d68401ad91b9da50b32cdfdfdfc548f0dbed1c3f9ade8e",
+     "recovered": false,
+     "segment": 26
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-014/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "452d0d0bf429d554073e6b6b018e5037b0dc5f8f3fe17cba946dcffbde3f2075",
+     "recovered": false,
+     "segment": 27
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-014/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "3188f4c7ac901b7adadf562354806225ca2e1f9753f16a3179b03e372dd6d1a7",
+     "recovered": false,
+     "segment": 28
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-015/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "f1403f1d2464e4294193089fb8de8d74c154a4f20ffea3bc3088f653bafe1e8a",
+     "recovered": false,
+     "segment": 29
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-015/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "dcf7daa40f617aefec0ccb26486e5fcd39b6a58928acf881f22fb341901fcaf8",
+     "recovered": false,
+     "segment": 30
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-016/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "e8dccfd48395e51fdd6dab30fc210840c0f5d1d7760f9df0c7c28ac08402c807",
+     "recovered": false,
+     "segment": 31
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-016/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "e8dccfd48395e51fdd6dab30fc210840c0f5d1d7760f9df0c7c28ac08402c807",
+     "recovered": false,
+     "segment": 31
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-017/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "750d01561d6cd4630713f823d18a0120248f43f0d316aa322ea4d746c26cadad",
+     "recovered": false,
+     "segment": 32
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-017/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "396e09ca26dd8b6d4719a6099ea63f52d8df28bb07157819c8bcc1623bfee9cd",
+     "recovered": false,
+     "segment": 33
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-018/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "2b8c9e377eb3fd034be8398339095164b6280879810a316d86ddfb63d265e22f",
+     "recovered": false,
+     "segment": 33
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-018/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "880646f90d667a89cdd94e7b9d7646ab3fe42a3b01cc0be42c396ac075236d91",
+     "recovered": false,
+     "segment": 33
+    }
+   ],
+   "code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+   "rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b"
+  },
+  "root_sha256": "6ca1dc4a6c9f0f2beae5c90a7e7d977030096c6244c246d54243a6c7eaf1fbef",
+  "run_digest": "9569265eb79bcf69df27abe5d5f350a7fce51eb56f4f6c33012de149054c393e",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run",
+  "run_files": 341
+ },
+ "unresolved": 16
+}

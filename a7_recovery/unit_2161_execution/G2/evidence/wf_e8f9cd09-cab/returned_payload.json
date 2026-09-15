@@ -1,0 +1,44 @@
+{
+ "calls": 2,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G2-008",
+   "candidate_sha256": "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "888cfd4c0d90acb07c38dbabe313719ee0041073baded76c76a67e11c05ccdb9",
+   "lane_id": "G2-008/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 16,
+   "prompt_sha256": "5bcc9d6c83a541402d38f6fdc3245c71d9823e47b29c7eb20e80f3f6240d7387",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M6ff710d6120fb2cb\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M5b2ecf7412ac6ecb\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M61563d2abc07f74c\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"Mb65ece4291c4b307\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M7b666c83f5a85ea2\",\n    \"verdicts\": {\n      \"driver_state\": false,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": false\n    }\n  }\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G2-008",
+   "candidate_sha256": "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "888cfd4c0d90acb07c38dbabe313719ee0041073baded76c76a67e11c05ccdb9",
+   "lane_id": "G2-008/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 17,
+   "prompt_sha256": "5bcc9d6c83a541402d38f6fdc3245c71d9823e47b29c7eb20e80f3f6240d7387",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M6ff710d6120fb2cb\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M5b2ecf7412ac6ecb\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M61563d2abc07f74c\",\n    \"verdicts\": {\n      \"driver_state\": false,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": false\n    }\n  },\n  {\n    \"question_id\": \"Mb65ece4291c4b307\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M7b666c83f5a85ea2\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  }\n]\n```"
+  }
+ ],
+ "rows": 2
+}

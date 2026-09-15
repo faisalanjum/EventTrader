@@ -1,0 +1,25 @@
+{
+ "calls": 1,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-010",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "5bc56e251534b19ee39f9c5ebdb4ee6b22c2313fcddff587f268a2838f33d5a1",
+   "lane_id": "G3-010/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 21,
+   "prompt_sha256": "5509ec8f657890220da7e8a8ccf00810a6b47dec00114cc532803281ba9fc691",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"X64d9845a89cc6734\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X3e2d2692bb7e8e6a\", \"bucket\": \"key_miss\"}\n]\n```"
+  }
+ ],
+ "rows": 1
+}

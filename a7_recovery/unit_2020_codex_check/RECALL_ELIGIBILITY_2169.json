@@ -1,0 +1,2078 @@
+{
+ "code_sha256": "4c1a453781e0750fd6b14c4414d80d5d90ac1ed13ab9c925b84bb7a91f23bc52",
+ "g1_trace_sha256": "40f5ac16bdeb270e244eff1160c443f0b5bcdcf8001a6bdb4e9a3c4be96b58f0",
+ "native_score_sha256": "656c18bd363ac3941a737d4d3ae55b101f303c209727ed261325a42e9664f08a",
+ "rows": [
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1
+   ],
+   "gold_idx": 0,
+   "leg": "P1",
+   "offered": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Q531b4296ede6856c",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1
+   ],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Q664fc96247cdfe8f",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Q67bf3bdc88fd8f7a",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    0,
+    1,
+    5,
+    8
+   ],
+   "question_id": "Q458197ca6efdda14",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "gold_idx": 3,
+   "leg": "P1",
+   "offered": [
+    0,
+    1,
+    5,
+    8
+   ],
+   "question_id": "Q9b39e21440a219d3",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "gold_idx": 5,
+   "leg": "P1",
+   "offered": [
+    0,
+    1,
+    5,
+    8
+   ],
+   "question_id": "Q75d9f5b7d6d67b47",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [
+    0,
+    1
+   ],
+   "question_id": "Q1f24d5f58476c48d",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 0,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Qf25ad077e4cb6689",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Qb6103797e88bf50d",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Q4e7dc17f347d4cbc",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 3,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Qbc0b5a4b13d9307b",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 6,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Qf9a79173b448cfa1",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 7,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Q3e2a02adf6f0b123",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 3,
+   "leg": "P1",
+   "offered": [
+    1,
+    2
+   ],
+   "question_id": "Q9581f3f0d430af1a",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     1,
+     1
+    ]
+   ],
+   "excluded_positions": [
+    1,
+    2
+   ],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "question_id": "Qe7f87a731130469a",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "question_id": "Q97be3e4dc90c162f",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    6,
+    8
+   ],
+   "gold_idx": 0,
+   "leg": "P1",
+   "offered": [
+    3,
+    7,
+    9
+   ],
+   "question_id": "Q297a56b7b92b1d65",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     1,
+     1
+    ]
+   ],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    6,
+    8
+   ],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [
+    3,
+    7,
+    9
+   ],
+   "question_id": "Qb746aca213682706",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    6,
+    8
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    3,
+    7,
+    9
+   ],
+   "question_id": "Q30d1d37c61bbf9bd",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    6,
+    8
+   ],
+   "gold_idx": 6,
+   "leg": "P1",
+   "offered": [
+    3,
+    7,
+    9
+   ],
+   "question_id": "Q7499d8aac4b04131",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    6,
+    8
+   ],
+   "gold_idx": 8,
+   "leg": "P1",
+   "offered": [
+    3,
+    7,
+    9
+   ],
+   "question_id": "Q9ea43306a2e233b6",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 0,
+   "leg": "P1",
+   "offered": [],
+   "question_id": "Qee1d2813249a9112",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [],
+   "question_id": "Qb00328dceee1084e",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     2,
+     2
+    ]
+   ],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [],
+   "question_id": "Q577706851b969473",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 3,
+   "leg": "P1",
+   "offered": [],
+   "question_id": "Q063297feae05a224",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 4,
+   "leg": "P1",
+   "offered": [],
+   "question_id": "Q53ccd43c4bd403f8",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 5,
+   "leg": "P1",
+   "offered": [],
+   "question_id": "Qc1db25c722fd8fb1",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 6,
+   "leg": "P1",
+   "offered": [],
+   "question_id": "Qbd784df72f4443a4",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    0
+   ],
+   "question_id": "Q2aeac7433ad92e8c",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3
+   ],
+   "gold_idx": 3,
+   "leg": "P1",
+   "offered": [
+    0
+   ],
+   "question_id": "Q388a4e76f5901313",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     0,
+     0
+    ]
+   ],
+   "excluded_positions": [
+    0,
+    1,
+    2
+   ],
+   "gold_idx": 0,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    6
+   ],
+   "question_id": "Q6d22364e7885a38a",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2
+   ],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [
+    4,
+    5,
+    6
+   ],
+   "question_id": "Qfc2fb35bd374630b",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 1,
+   "leg": "P1",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Q97e94e7d29d99937",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Q443fecf4b22e3f19",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     3,
+     3
+    ]
+   ],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 3,
+   "leg": "P1",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Qb3e34b13927e9b6b",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 4,
+   "leg": "P1",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Q4b49cec6f1fde776",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 4,
+   "leg": "P1",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "question_id": "Q4a6da58e91406462",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    3,
+    4
+   ],
+   "gold_idx": 2,
+   "leg": "P1",
+   "offered": [
+    1,
+    2,
+    5,
+    6
+   ],
+   "question_id": "Qf4ced50d6e3a3c63",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    3,
+    4
+   ],
+   "gold_idx": 3,
+   "leg": "P1",
+   "offered": [
+    1,
+    2,
+    5,
+    6
+   ],
+   "question_id": "Qc68d16b851226973",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     0,
+     0
+    ]
+   ],
+   "excluded_positions": [
+    0,
+    1
+   ],
+   "gold_idx": 0,
+   "leg": "P2",
+   "offered": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Qd976ac904facd5aa",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Q2c74c68003ea81ca",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    6
+   ],
+   "question_id": "Qd51dd91ea53fcf6f",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3
+   ],
+   "gold_idx": 3,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    6
+   ],
+   "question_id": "Q0aeb805d9252d078",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    0,
+    1,
+    8,
+    9
+   ],
+   "question_id": "Q79a5ae710703b4f0",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "gold_idx": 3,
+   "leg": "P2",
+   "offered": [
+    0,
+    1,
+    8,
+    9
+   ],
+   "question_id": "Qaa20144348dfa4aa",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "gold_idx": 4,
+   "leg": "P2",
+   "offered": [
+    0,
+    1,
+    8,
+    9
+   ],
+   "question_id": "Q0a1080d896a3d294",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "gold_idx": 5,
+   "leg": "P2",
+   "offered": [
+    0,
+    1,
+    8,
+    9
+   ],
+   "question_id": "Q72a831a8c345468c",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    0
+   ],
+   "question_id": "Q01a1dcd04b2978d6",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 0,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Q555b3b8599e77547",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Q1faf4f6a817c371d",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Qd35598dc446f3c9a",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 3,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Q7f56bfc7b2235aad",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 6,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Q25468f57809039d5",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7
+   ],
+   "gold_idx": 7,
+   "leg": "P2",
+   "offered": [
+    4,
+    5,
+    8
+   ],
+   "question_id": "Q71ad4ad8f08343b8",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     1,
+     1
+    ]
+   ],
+   "excluded_positions": [
+    1,
+    2
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    0,
+    3,
+    4
+   ],
+   "question_id": "Q460481cb159beb63",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    0,
+    3,
+    4
+   ],
+   "question_id": "Q1c7503e53b4e38a1",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 4,
+   "leg": "P2",
+   "offered": [
+    2,
+    3
+   ],
+   "question_id": "Q57fc207b139a2765",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "question_id": "Q85e3170541f07a3f",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "question_id": "Q09c352c8a00fcfe9",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1
+   ],
+   "gold_idx": 0,
+   "leg": "P2",
+   "offered": [
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "question_id": "Qe0393a29e62e455d",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "question_id": "Q405f7990668b8ddf",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "question_id": "Qb6d4fbbea29faca5",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 0,
+   "leg": "P2",
+   "offered": [],
+   "question_id": "Q0a1be4febbbcf754",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [],
+   "question_id": "Qf9f31732f5efd10b",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     2,
+     2
+    ]
+   ],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [],
+   "question_id": "Q7906fae25260bf8c",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 3,
+   "leg": "P2",
+   "offered": [],
+   "question_id": "Q2142c251064e7486",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 4,
+   "leg": "P2",
+   "offered": [],
+   "question_id": "Q3efc8a5f2c28ae32",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 5,
+   "leg": "P2",
+   "offered": [],
+   "question_id": "Qee68901ea568ec20",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "gold_idx": 6,
+   "leg": "P2",
+   "offered": [],
+   "question_id": "Q13d236d0ce5f08b1",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     0,
+     0
+    ]
+   ],
+   "excluded_positions": [
+    0,
+    1,
+    2
+   ],
+   "gold_idx": 0,
+   "leg": "P2",
+   "offered": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "question_id": "Q563b2a7a2d80e75f",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    1,
+    2
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "question_id": "Q0ef052a59d7f9408",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     1,
+     1
+    ]
+   ],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 1,
+   "leg": "P2",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Q43cdbaaacb0cb433",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Qd727d66e0a980002",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     3,
+     3
+    ]
+   ],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 3,
+   "leg": "P2",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Q9cdcf01d7a4da375",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gold_idx": 4,
+   "leg": "P2",
+   "offered": [
+    0,
+    5,
+    6
+   ],
+   "question_id": "Q86e6842b5817805b",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    4,
+    5
+   ],
+   "gold_idx": 4,
+   "leg": "P2",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Q12548afb48337c30",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    4,
+    5
+   ],
+   "gold_idx": 5,
+   "leg": "P2",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Qa9297842656a9622",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    3,
+    4,
+    5
+   ],
+   "gold_idx": 0,
+   "leg": "P2",
+   "offered": [
+    1,
+    2,
+    6
+   ],
+   "question_id": "Q594c9b96b902c8aa",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "exact_all_emitted_pairs": [
+    [
+     2,
+     3
+    ]
+   ],
+   "excluded_positions": [
+    0,
+    3,
+    4,
+    5
+   ],
+   "gold_idx": 2,
+   "leg": "P2",
+   "offered": [
+    1,
+    2,
+    6
+   ],
+   "question_id": "Q2064ce0d3f1e0276",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    3,
+    4,
+    5
+   ],
+   "gold_idx": 3,
+   "leg": "P2",
+   "offered": [
+    1,
+    2,
+    6
+   ],
+   "question_id": "Q78a37d3fc808094c",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    0,
+    3,
+    4,
+    5
+   ],
+   "gold_idx": 4,
+   "leg": "P2",
+   "offered": [
+    1,
+    2,
+    6
+   ],
+   "question_id": "Q74a7b36288606b36",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 0,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "question_id": "Q9593bb51a3b90fb9",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "question_id": "Q871106cc0dfc39ef",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8
+   ],
+   "question_id": "Q31112c9f70409e36",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Q1f66443f04643704",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 3,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Q3c01e36302a30079",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 5,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Qb002868949e55300",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2
+   ],
+   "question_id": "Qf62750033d11e2f3",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 0,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Q663da216c9aa76b4",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Q559beffdbf09b29c",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Qa69989d8228f1f90",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 3,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Qe2beaa2af1d114d3",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 6,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Qc24c8162bd080cd0",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 7,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Q34093b51e85f77b4",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "question_id": "Qd3148eba32731520",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "question_id": "Qee49a820cde03fe3",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [
+    1,
+    3
+   ],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    0,
+    2,
+    4
+   ],
+   "question_id": "Qfe63e960bb1e477a",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 0,
+   "leg": "UNION",
+   "offered": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "question_id": "Q49949678de9559bc",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "question_id": "Qde6f76f7d8b75879",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "question_id": "Qc7cd3f4866addf93",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 0,
+   "leg": "UNION",
+   "offered": [],
+   "question_id": "Q4bfde1b613342a62",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [],
+   "question_id": "Qc608f70be37a3de5",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [],
+   "question_id": "Qe79bcf44da41cbf4",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 3,
+   "leg": "UNION",
+   "offered": [],
+   "question_id": "Q443f1c5e29839151",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 4,
+   "leg": "UNION",
+   "offered": [],
+   "question_id": "Q1586dcfed3de3b4b",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 5,
+   "leg": "UNION",
+   "offered": [],
+   "question_id": "Qf276e39dbe7fcd46",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 6,
+   "leg": "UNION",
+   "offered": [],
+   "question_id": "Qebe942b3a491b47c",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 0,
+   "leg": "UNION",
+   "offered": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Qfc710fa2db08cadd",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "question_id": "Qf4ee885aa21c9e08",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 1,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Q3580ba0b3ae427b4",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Q1fbe0174770f462e",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 3,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Qbd8abb00c0b5207e",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 4,
+   "leg": "UNION",
+   "offered": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "question_id": "Qdc65f53d4170f7bb",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 2,
+   "leg": "UNION",
+   "offered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "question_id": "Qcf35b507cc610e5b",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "exact_all_emitted_pairs": [],
+   "excluded_positions": [],
+   "gold_idx": 3,
+   "leg": "UNION",
+   "offered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "question_id": "Q613f413919857629",
+   "source_id": "YUM_2026-02-04T08.15"
+  }
+ ],
+ "scope": "All 115 agreed-no-candidate findings: candidate eligibility, not semantic truth or new credit"
+}

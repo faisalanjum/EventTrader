@@ -1,0 +1,4983 @@
+[
+ {
+  "leg": "P1",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "Xfcd052498cda6edb",
+  "batch": "G3-000",
+  "quote": "Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.",
+  "driver_name": "accelerating_the_organization_restructuring_costs",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=80",
+   "level_high=80"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "U.S. increased 6.8%",
+   "owned and operated by independent local business owners"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   1
+  ],
+  "matched_gold_idxs": [
+   0
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 2,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P1",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xa3708e607c7ea5c9",
+  "batch": "G3-000",
+  "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+  "driver_name": "net_sales",
+  "driver_state": "increased",
+  "slice_parts": [
+   "geography:us",
+   "customer:commercial"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "change_value=329.5"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Domestic commercial sales",
+    "values": [
+     "329.5"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "non-cash LIFO impact",
+   "one individual vendor",
+   "failure and maintenance related categories",
+   "Domestic commercial sales",
+   "31.7% of our total Domestic sales"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   5
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P1",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X3d7ea88f66d74904",
+  "batch": "G3-000",
+  "quote": "reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review",
+  "driver_name": "strategic_review_costs",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:pizzahutglobaldivision"
+  ],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=40",
+   "level_high=40"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   0,
+   1,
+   5,
+   6
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   4,
+   5
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X56415b76439cd6be",
+  "batch": "G3-000",
+  "quote": "Recent corporate survey results indicate 85 percent of respondents expect their corporate travel spend will increase or stay the same in the June quarter.",
+  "driver_name": "travel_spend",
+  "driver_state": "reported",
+  "slice_parts": [
+   "customer:corporate"
+  ],
+  "fy": 2026,
+  "fq": 2,
+  "record_numbers": [
+   "level_low=85",
+   "level_high=85"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "Pre-tax loss",
+   "Operating Margin",
+   "Earnings per share",
+   "earnings of $0.64 per share, within our initial guidance range",
+   "March quarter total revenue",
+   "growing several points above our initial outlook",
+   "Adjusted net debt"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   0,
+   1,
+   9
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   6
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000027904-26-000022",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X29a22d2243f2f310",
+  "batch": "G3-000",
+  "quote": "Total revenue, adjusted (a non-GAAP financial measure, which excludes revenue related to refinery sales to third parties) increased in the March 2026 quarter by $1.2 billion, or 9.4%, compared to the March 2025 quarter.",
+  "driver_name": "total_revenue",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "change_value=1.2"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Total revenue, adjusted",
+    "values": [
+     "1.2"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "refinery generated an operating loss",
+   "Total revenue, adjusted",
+   "Atlantic"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 3,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X1117c3fded7423fa",
+  "batch": "G3-001",
+  "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "entity_ownership:spacenk"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=84",
+   "level_high=84"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "84 stores in the U.K. and Ireland operated by Space NK",
+    "values": [
+     84
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X07c571059d14f2d6",
+  "batch": "G3-001",
+  "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+  "driver_name": "jet_fuel_expense",
+  "driver_state": "introduced",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "change_value=4"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "increase in expense related to higher prices for jet fuel",
+    "values": [
+     4
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Loss per common share: Basic and diluted",
+   "Adjusted earnings (loss) per diluted share3",
+   "increase in expense related to higher prices for jet fuel",
+   "Total unit revenue",
+   "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "Regional (4) 32,500 30,700 5.9 %"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000092380-26-000044",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xf6cbcbd375607d09",
+  "batch": "G3-001",
+  "quote": "Announced planned deployment of Starlink ultra\u2011fast Wi\u2011Fi across the fleet, with initial aircraft expected to enter service in summer 2026 and at least 300 aircraft planned by year\u2011end 2026",
+  "driver_name": "starlink_wifi_deployment",
+  "driver_state": "announced",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=300"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Announced planned deployment of Starlink",
+    "values": []
+   }
+  ],
+  "all_card_names": [
+   "$0.45 EPS",
+   "in line with guidance",
+   "fuel costs were $2.73 per gallon",
+   "above prior guidance of approximately $2.40",
+   "Freight",
+   "Announced planned deployment of Starlink",
+   "CASM-X increased 2.3 percent year-over-year",
+   "below prior guidance",
+   "NET INCOME (LOSS)"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "card_present_but_valueless",
+  "matched_produced_idxs": [
+   0,
+   2
+  ],
+  "matched_gold_idxs": [
+   4,
+   8
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 9,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 7
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000764478-25-000057",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xa0f9de09f3c55112",
+  "batch": "G3-002",
+  "quote": "($ in millions, except per share amounts): \n\nThree Months Ended Nine Months Ended November 1, 2025 November 2, 2024 November 1, 2025 November 2, 2024 Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580 Revenue % change 2.4 % (3.2) % 1.1 % (4.3) % Comparable sales % change 2.7 % (2.9) % 1.2 % (3.7) % Gross profit $ 2,248 $ 2,217 $ 6,491 $ 6,467 \n\nGross profit as a % of revenue (1) \n\n23.2 % 23.5 % 23.3 % 23.4 % Selling, general and administrative expense (\"SG&A\") $ 1,884 $ 1,871 $ 5,434 $ 5,418 \n\nSG&A as a % of revenue (1) \n\n19.5 % 19.8 % 19.5 % 19.6 % Restructuring charges $ (5) $ (4) $ 218 $ 4 Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+  "driver_name": "goodwill_and_intangible_asset_impairment",
+  "driver_state": "occurred",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=171",
+   "level_high=171",
+   "comparison_low=0",
+   "comparison_high=0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Goodwill and intangible asset impairments",
+    "values": [
+     171
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Goodwill and intangible asset impairments",
+   "The 7.6% comparable sales growth",
+   "The 3.6% comparable sales growth",
+   "Online revenue as a % of total segment revenue",
+   "Online revenue as a % of total segment revenue"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "partial_overlap_rendering_differs",
+  "matched_produced_idxs": [
+   1,
+   2,
+   8
+  ],
+  "matched_gold_idxs": [
+   1,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xc1c8f8411ee75a20",
+  "batch": "G3-002",
+  "quote": "Ending domestic store count \u200b 6,447",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "geography:us"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=6447",
+   "level_high=6447"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Ending domestic store count",
+    "values": [
+     6447,
+     6265
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Diluted earnings per common share",
+   "SG&A expenses",
+   "SG&A expenses again exceeded our expectations",
+   "Ending domestic store count",
+   "Total shareholders\u2019 deficit"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-25-000038",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X777fcfffdedc3229",
+  "batch": "G3-002",
+  "quote": "As of May 25, 2025, our adjusted debt to EBITDAR ratio was 2.1.",
+  "driver_name": "debt_to_ebitdar_ratio",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=2.1",
+   "level_high=2.1"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "adjusted debt to EBITDAR ratio",
+    "values": [
+     "2.1"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "LongHorn Steakhouse",
+   "Olive Garden\u2019s eight Canadian restaurants",
+   "adjusted debt to EBITDAR ratio"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 3,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000005",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X56e2d89be46d9a61",
+  "batch": "G3-002",
+  "quote": "in millions, except per share amounts Earnings Before Income Tax Income Tax Expense Net Earnings Diluted Net Earnings Per Share Earnings Before Income Tax Income Tax Expense Net Earnings Diluted Net Earnings Per Share Reported Earnings from Continuing Operations $ 356.8 $ 46.2 $ 310.6 $ 2.68 $ 372.7 $ 49.0 $ 323.7 $ 2.74 % Change vs Prior Year (2.2)% Total Adjustments: $ 31.3 $ 0.7 $ 30.6 $ 0.27 $ 8.4 $ 1.9 $ 6.5 $ 0.06 Closed restaurant and other strategic review costs2 6.6 1.6 5.0 0.05 \u2014 \u2014 \u2014 \u2014 General and administrative expenses 5.8 1.4 4.4 0.04 \u2014 \u2014 \u2014 \u2014 Depreciation and amortization 0.8 0.2 0.6 0.01 \u2014 \u2014 \u2014 \u2014 Impairment due to restaurant closures3 24.7 6.2 18.5 0.16",
+  "driver_name": "restaurant_closure_impairment",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:otheroperatingsegmentbahamabreezebrand"
+  ],
+  "fy": 2026,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=24.7",
+   "level_high=24.7"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Impairment due to restaurant closures3",
+    "values": [
+     "24.7"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "blended same-restaurant sales1",
+   "adjusted diluted net earnings per share from continuing operations",
+   "Impairment due to restaurant closures3",
+   "Gain on Olive Garden Canada sale"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X95aa6d36cce8922a",
+  "batch": "G3-002",
+  "quote": "We own and operate all of our restaurants in the United States, except for five restaurants we manage through joint venture or other contractual agreements and 87 franchised restaurants.",
+  "driver_name": "restaurant_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "channel:franchisedunits"
+  ],
+  "fy": 2026,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=87",
+   "level_high=87"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "87 franchised restaurants",
+    "values": [
+     87
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Losses from discontinued operations, net of tax",
+   "Earnings from continuing operations",
+   "Fine Dining",
+   "87 franchised restaurants"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xb4199b551afdffcd",
+  "batch": "G3-003",
+  "quote": "As a result, 283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January.",
+  "driver_name": "unit_closures",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:kfcturkey"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=283",
+   "level_high=283"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "283 KFC",
+    "values": [
+     283
+    ]
+   },
+   {
+    "name": "254 Pizza Hut restaurants in Turkey",
+    "values": [
+     254
+    ]
+   }
+  ],
+  "all_card_names": [
+   "minority investment in Devyani International Limited",
+   "pre-tax investment losses",
+   "283 KFC",
+   "254 Pizza Hut restaurants in Turkey",
+   "reversal of a reserve due to a favorable audit resolution"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   1
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000003",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X112a630f8fef687e",
+  "batch": "G3-003",
+  "quote": "an acquisition of 128 Taco Bell U.S. restaurants from a franchisee for approximately $670 million",
+  "driver_name": "franchise_restaurant_acquisition",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:tacobellglobaldivision",
+   "geography:us"
+  ],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=670",
+   "level_high=670"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "acquisition of 128 Taco Bell U.S. restaurants from a franchisee",
+    "values": [
+     670
+    ]
+   }
+  ],
+  "all_card_names": [
+   "EPS excluding Special Items",
+   "acquisition of 128 Taco Bell U.S. restaurants from a franchisee",
+   "digital system sales",
+   "digital mix"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xe53ce648226c9f64",
+  "batch": "G3-004",
+  "quote": "The resulting net Operating Loss of $11 million for the year ended December 31, 2023 has been reflected as a Special Item.",
+  "driver_name": "market_exit",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:kfcrussia"
+  ],
+  "fy": 2023,
+  "fq": null,
+  "record_numbers": [
+   "level_low=-11",
+   "level_high=-11"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "net Operating Loss of $11 million",
+    "values": [
+     -11
+    ]
+   }
+  ],
+  "all_card_names": [
+   "quarterly dividend of $0.75 per share of Common Stock",
+   "net Operating Loss of $11 million",
+   "Company same-store sales growth of 5%",
+   "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "The Company owned 79% of the Habit Burger & Grill units in the U.S."
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001058090-26-000007",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X3a53a382d26adad5",
+  "batch": "G3-004",
+  "quote": "350 to 370 new restaurant openings",
+  "driver_name": "restaurant_openings",
+  "driver_state": "introduced",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=350",
+   "level_high=370"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "350 to 370 new restaurant openings",
+    "values": [
+     350,
+     370
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Adjusted diluted earnings per share",
+   "Restaurant level operating margin",
+   "Gain on restaurant lease termination",
+   "350 to 370 new restaurant openings",
+   "Chipotlanes continue to perform well"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xdeba718a668874a1",
+  "batch": "G3-004",
+  "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+  "driver_name": "net_sales",
+  "driver_state": "reported",
+  "slice_parts": [
+   "channel:commercial",
+   "geography:us"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=31.7",
+   "level_high=31.7"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "31.7% of our total Domestic sales",
+    "values": [
+     "31.7"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "non-cash LIFO impact",
+   "one individual vendor",
+   "failure and maintenance related categories",
+   "Domestic commercial sales",
+   "31.7% of our total Domestic sales"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X5ea3b7457e8aa160",
+  "batch": "G3-005",
+  "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "geography:gb",
+   "geography:ie",
+   "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=84",
+   "level_high=84"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "84 stores in the U.K. and Ireland operated by Space NK",
+    "values": [
+     84
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X7e0321fb7819e50d",
+  "batch": "G3-005",
+  "quote": "Excluding the after-tax impact of these and certain other items, adjusted net income and adjusted diluted net income per share for the fourth quarter of fiscal 2025 were $48.3 million and $1.00, respectively.",
+  "driver_name": "net_income",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=48.3",
+   "level_high=48.3"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "adjusted net income",
+    "values": [
+     "48.3"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "adjusted net income",
+   "revenue for the quarter",
+   "revenue for the quarter finished within our expected range",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "six to seven Flower Child locations"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   5
+  ],
+  "matched_gold_idxs": [
+   7
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 8,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 7
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xc41c0e28ba4f1e05",
+  "batch": "G3-005",
+  "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%",
+  "driver_name": "comparable_sales",
+  "driver_state": "unknown",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=2.5",
+   "level_high=3.5"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Comparable sales growth",
+    "values": [
+     "2.5",
+     "3.5"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "gross profit decreased to 38.1% compared to 38.2%",
+   "repurchased 2.0 million shares",
+   "Comparable sales growth",
+   "International (Company-operated)"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-032757",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X75819bfe50a39683",
+  "batch": "G3-005",
+  "quote": "During the second quarter of fiscal 2026, failure and maintenance related categories represented the largest portion of our sales mix at approximately 85% of total sales, whereas they represented approximately 86% of total sales in the comparable prior year period.",
+  "driver_name": "sales_mix",
+  "driver_state": "decreased",
+  "slice_parts": [
+   "product:failure",
+   "product:maintenanceitems"
+  ],
+  "fy": 2026,
+  "fq": 2,
+  "record_numbers": [
+   "level_low=85",
+   "level_high=85",
+   "comparison_low=86",
+   "comparison_high=86"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "failure and maintenance related categories",
+    "values": [
+     85,
+     86
+    ]
+   }
+  ],
+  "all_card_names": [
+   "unfavorable non-cash LIFO charge",
+   "failure and maintenance related categories",
+   "6,709 stores in the U.S.",
+   "total company same store sales"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001171843-26-001288",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X263e008c6143e6f7",
+  "batch": "G3-005",
+  "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+  "driver_name": "store_openings",
+  "driver_state": "reaffirmed",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=350",
+   "level_high=360"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "approximately 350-360 stores for the full fiscal year",
+    "values": [
+     350,
+     360
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Domestic Same Store Sales",
+   "non-cash LIFO charge",
+   "approximately 350-360 stores for the full fiscal year"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0
+  ],
+  "matched_gold_idxs": [
+   0
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 3,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DAL_2026-04-08T10.00",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xa9539f6f9f30a4c6",
+  "batch": "G3-006",
+  "quote": "This includes an estimated $300 million benefit from our refinery.",
+  "driver_name": "fuel_expense",
+  "driver_state": "unknown",
+  "slice_parts": [
+   "segment:refinery"
+  ],
+  "fy": 2026,
+  "fq": 2,
+  "record_numbers": [
+   "level_low=-300000000",
+   "level_high=-300000000"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "an estimated $300 million benefit from our refinery",
+    "values": [
+     -300
+    ]
+   }
+  ],
+  "all_card_names": [
+   "earnings of 64 cents per share",
+   "within our initial guidance range",
+   "the MRO revenue in the first quarter",
+   "an estimated $300 million benefit from our refinery",
+   "unit revenue growth",
+   "earnings that were 40% higher than last year"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "value_mismatch_same_sentence",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   2,
+   4,
+   5
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DRI_2026-03-19T08.30",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X1e64778c5aec89f3",
+  "batch": "G3-006",
+  "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months.",
+  "driver_name": "restaurant_closures",
+  "driver_state": "announced",
+  "slice_parts": [
+   "segment:otheroperatingsegmentbahamabreezebrand"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=14",
+   "level_high=14"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "14 locations will permanently close",
+    "values": [
+     14
+    ]
+   },
+   {
+    "name": "the remaining 14 will be converted to other Darden brands",
+    "values": [
+     14
+    ]
+   }
+  ],
+  "all_card_names": [
+   "same-restaurant sales growth of 4.2%",
+   "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "segment profit margin of 23%",
+   "14 locations will permanently close",
+   "the remaining 14 will be converted to other Darden brands"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "ULTA_2026-03-12T16.30",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xb649417e45cad2de",
+  "batch": "G3-006",
+  "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=80"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "stores in the UK and Ireland",
+    "values": [
+     80
+    ]
+   }
+  ],
+  "all_card_names": [
+   "diluted EPS",
+   "SG&A growth for the quarter",
+   "active members",
+   "stores in the UK and Ireland",
+   "sales",
+   "sales above the high end of our guidance by about 85 million"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X625f7c75cc570b04",
+  "batch": "G3-006",
+  "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+  "driver_name": "operating_profit",
+  "driver_state": "increased",
+  "slice_parts": [
+   "segment:kfcglobaldivision"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "change_value=10"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Taco Bell",
+    "values": [
+     10
+    ]
+   },
+   {
+    "name": "KFC",
+    "values": [
+     10
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "bzNews_50877032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X427bb1a95bab02aa",
+  "batch": "G3-006",
+  "quote": "In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates.",
+  "driver_name": "gate_count",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=17",
+   "level_high=17"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "17 new gates",
+    "values": [
+     17
+    ]
+   }
+  ],
+  "all_card_names": [
+   "17 new gates"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 1,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P1",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X5603a0beaadd5e3c",
+  "batch": "G3-007",
+  "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+  "driver_name": "net_sales",
+  "driver_state": "increased",
+  "slice_parts": [
+   "geography:us",
+   "customer:commercial"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "change_value=6.7"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Domestic commercial sales",
+    "values": [
+     "329.5"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "non-cash LIFO impact",
+   "one individual vendor",
+   "failure and maintenance related categories",
+   "Domestic commercial sales",
+   "31.7% of our total Domestic sales"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "value_mismatch_same_sentence",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   5
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000027904-26-000022",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X6e22977f210d9c10",
+  "batch": "G3-007",
+  "quote": "Total revenue, adjusted (a non-GAAP financial measure, which excludes revenue related to refinery sales to third parties) increased in the March 2026 quarter by $1.2 billion, or 9.4%, compared to the March 2025 quarter.",
+  "driver_name": "total_revenue",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "change_value=9.4"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Total revenue, adjusted",
+    "values": [
+     "1.2"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "refinery generated an operating loss",
+   "Total revenue, adjusted",
+   "Atlantic"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "value_mismatch_same_sentence",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 3,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X75b11760e0633d83",
+  "batch": "G3-007",
+  "quote": "Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.",
+  "driver_name": "accelerating_the_organization_restructuring_costs",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=80",
+   "level_high=80"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "U.S. increased 6.8%",
+   "owned and operated by independent local business owners"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   1
+  ],
+  "matched_gold_idxs": [
+   0
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 2,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X12cb0c151404674d",
+  "batch": "G3-007",
+  "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+  "driver_name": "interest_coverage_ratio",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:LineOfCreditFacilityAxis__nationalwestminsterbankplc"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=4.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "interest coverage ratio not less than 4.0 to 1.0",
+    "values": [
+     "4.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "P2",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xa89529fe646aaa72",
+  "batch": "G3-007",
+  "quote": "reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review",
+  "driver_name": "strategic_options_review_costs",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:pizzahutglobaldivision"
+  ],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=40",
+   "level_high=40"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   1,
+   6
+  ],
+  "matched_gold_idxs": [
+   1,
+   5
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X86feb54326687022",
+  "batch": "G3-008",
+  "quote": "Total unit revenue was 7.6% higher year over year, improving sequentially each month in the quarter",
+  "driver_name": "revenue_per_available_seat_mile",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [],
+  "cards_sharing_quote": [
+   {
+    "name": "Total unit revenue",
+    "values": []
+   }
+  ],
+  "all_card_names": [
+   "Loss per common share: Basic and diluted",
+   "Adjusted earnings (loss) per diluted share3",
+   "increase in expense related to higher prices for jet fuel",
+   "Total unit revenue",
+   "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "Regional (4) 32,500 30,700 5.9 %"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "record_numberless_card_present",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xa4deadc9031eb381",
+  "batch": "G3-008",
+  "quote": "we currently own an approximately 19% equity stake in Grupo Aerom\u00e9xico, S.A.B. de C.V., the parent company of Aerom\u00e9xico.",
+  "driver_name": "equity_ownership_stake",
+  "driver_state": "reported",
+  "slice_parts": [
+   "entity_ownership:grupoaeromexico"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=19",
+   "level_high=19"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "equity stake in Grupo Aerom\u00e9xico",
+    "values": [
+     19
+    ]
+   }
+  ],
+  "all_card_names": [
+   "operating income, adjusted",
+   "Loss on extinguishment of debt",
+   "Non-fuel unit costs",
+   "in line with our long-term target of low-single digit growth",
+   "annual effective tax rate",
+   "equity stake in Grupo Aerom\u00e9xico",
+   "option to purchase up to an additional 30 of the same aircraft"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3,
+   6
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   3,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X6eea70137b9a2e63",
+  "batch": "G3-008",
+  "quote": "(in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 \u2014 Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities \u2014 \u2014 \u2014 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760)",
+  "driver_name": "net_debt",
+  "driver_state": "decreased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=13540",
+   "level_high=13540",
+   "change_value=-760",
+   "comparison_low=14300",
+   "comparison_high=14300"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Adjusted net debt",
+    "values": [
+     13540,
+     14300
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Pre-tax loss",
+   "Operating Margin",
+   "Earnings per share",
+   "earnings of $0.64 per share, within our initial guidance range",
+   "March quarter total revenue",
+   "growing several points above our initial outlook",
+   "Adjusted net debt"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "partial_overlap_rendering_differs",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000092380-26-000044",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xb100f34c67a98cff",
+  "batch": "G3-008",
+  "quote": "Announced planned deployment of Starlink ultra\u2011fast Wi\u2011Fi across the fleet, with initial aircraft expected to enter service in summer 2026 and at least 300 aircraft planned by year\u2011end 2026",
+  "driver_name": "starlink_wifi",
+  "driver_state": "announced",
+  "slice_parts": [],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=300"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Announced planned deployment of Starlink",
+    "values": []
+   }
+  ],
+  "all_card_names": [
+   "$0.45 EPS",
+   "in line with guidance",
+   "fuel costs were $2.73 per gallon",
+   "above prior guidance of approximately $2.40",
+   "Freight",
+   "Announced planned deployment of Starlink",
+   "CASM-X increased 2.3 percent year-over-year",
+   "below prior guidance",
+   "NET INCOME (LOSS)"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "card_present_but_valueless",
+  "matched_produced_idxs": [
+   0,
+   2
+  ],
+  "matched_gold_idxs": [
+   4,
+   8
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 9,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 7
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X6f9c048ff25601a9",
+  "batch": "G3-009",
+  "quote": "(In thousands, except share data) \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b December 31, 2025 \u200b December 31, 2024 \u200b \u200b \u200b \u200b (Unaudited) \u200b \u200b \u200b (Note) Assets \u200b \u200b \u200b \u200b \u200b \u200b Current assets: \u200b \u200b \u200b \u200b \u200b \u200b Cash and cash equivalents \u200b $ 193,793 \u200b $ 130,245 Accounts receivable, net \u200b 389,793 \u200b \u200b 356,839 Amounts receivable from suppliers \u200b 159,900 \u200b \u200b 139,091 Inventory \u200b 5,731,385 \u200b \u200b 5,095,804 Other current assets \u200b 269,406 \u200b \u200b 117,916 Total current assets \u200b 6,744,277 \u200b \u200b 5,839,895 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Property and equipment, at cost \u200b 10,222,249 \u200b \u200b 9,192,254 Less: accumulated depreciation and amortization \u200b 3,964,824 \u200b \u200b 3,587,098 Net property and equipment \u200b 6,257,425 \u200b \u200b 5,605,156 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Operating lease, right-of-use assets \u200b 2,391,150 \u200b \u200b 2,324,638 Goodwill \u200b 948,208 \u200b \u200b 930,161 Other assets, net \u200b 197,193 \u200b \u200b 193,891 Total assets \u200b $ 16,538,253 \u200b $ 14,893,741 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Liabilities and shareholders\u2019 deficit \u200b \u200b \u200b \u200b \u200b \u200b Current liabilities: \u200b \u200b \u200b \u200b \u200b \u200b Accounts payable \u200b $ 7,103,684 \u200b $ 6,524,811 Self-insurance reserves \u200b 297,304 \u200b \u200b 149,387 Accrued payroll \u200b 119,603 \u200b \u200b 107,495 Accrued benefits and withholdings \u200b 240,072 \u200b \u200b 199,593 Income taxes payable \u200b 13,957 \u200b \u200b 6,274 Current portion of operating lease liabilities \u200b 439,907 \u200b \u200b 419,213 Other current liabilities \u200b 561,294 \u200b \u200b 876,732 Total current liabilities \u200b 8,775,821 \u200b \u200b 8,283,505 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Long-term debt \u200b 6,016,904 \u200b \u200b 5,520,932 Operating lease liabilities, less current portion \u200b 2,034,688 \u200b \u200b 1,980,705 Deferred income taxes \u200b 211,210 \u200b \u200b 247,599 Other liabilities \u200b 262,982 \u200b \u200b 231,961 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Shareholders\u2019 equity (deficit): \u200b \u200b \u200b \u200b \u200b \u200b Common stock, $0.01 par value: \u200b \u200b \u200b \u200b \u200b \u200b Authorized shares \u2013 1,250,000,000 \u200b \u200b \u200b \u200b \u200b Issued and outstanding shares \u2013 \u200b \u200b \u200b \u200b \u200b \u200b 841,909,238 as of December 31, 2025, and \u200b \u200b \u200b \u200b \u200b \u200b 862,232,760 as of December 31, 2024 \u200b \u200b 8,419 \u200b \u200b 8,622 Additional paid-in capital \u200b 1,530,292 \u200b \u200b 1,454,518 Retained deficit \u200b (2,328,817) \u200b \u200b (2,791,288) Accumulated other comprehensive income (loss) \u200b \u200b 26,754 \u200b \u200b (42,813) Total shareholders\u2019 deficit \u200b (763,352)",
+  "driver_name": "shareholders_equity",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=-763352",
+   "level_high=-763352",
+   "comparison_low=-1370961",
+   "comparison_high=-1370961"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Total shareholders\u2019 deficit",
+    "values": [
+     -763352,
+     -1370961
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Diluted earnings per common share",
+   "SG&A expenses",
+   "SG&A expenses again exceeded our expectations",
+   "Ending domestic store count",
+   "Total shareholders\u2019 deficit"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-25-000038",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X18645f55a6091ad6",
+  "batch": "G3-009",
+  "quote": "As of May 25, 2025, our adjusted debt to EBITDAR ratio was 2.1.",
+  "driver_name": "debt_to_ebitdar_ratio",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=2.1",
+   "level_high=2.1"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "adjusted debt to EBITDAR ratio",
+    "values": [
+     "2.1"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "LongHorn Steakhouse",
+   "Olive Garden\u2019s eight Canadian restaurants",
+   "adjusted debt to EBITDAR ratio"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 3,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X8e7ae846d72a4dfe",
+  "batch": "G3-009",
+  "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg February 22, 2026 February 23, 2025 % Chg Sales $ 3,345.3 $ 3,158.0 5.9% $ 9,492.1 $ 8,805.0 7.8% Costs and expenses: Food and beverage \n\n1,026.7 953.6 7.7 2,919.5 2,673.1 9.2 Restaurant labor \n\n1,046.9 995.0 5.2 3,035.0 2,811.1 8.0 Restaurant expenses \n\n528.7 501.0 5.5 1,541.2 1,426.9 8.0 Marketing expenses \n\n39.4 35.4 11.3 137.2 128.9 6.4 Pre-opening costs 8.8 6.1 44.3 22.8 16.1 41.6 General and administrative expenses \n\n121.5 116.7 4.1 375.4 387.2 (3.0) Depreciation and amortization \n\n141.8 131.9 7.5 414.8 381.1 8.8 Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM Total costs and expenses $ 2,938.9 $ 2,739.8 7.3 $ 8,426.1 $ 7,825.5 7.7 Operating income 406.4 418.2 (2.8) 1,066.0 979.5 8.8 Interest, net 49.6 45.5 9.0 143.0 128.8 11.0 Earnings before income taxes 356.8 372.7 (4.3) $ 923.0 $ 850.7 8.5 Income tax expense (1) 46.2 49.0 (5.7) 117.1 103.7 12.9 Earnings from continuing operations $ 310.6 $ 323.7 (4.0) $ 805.9 $ 747.0 7.9 Losses from discontinued operations, net of tax (3.8) (0.3) NM",
+  "driver_name": "discontinued_operations_income",
+  "driver_state": "decreased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=-3.8",
+   "level_high=-3.8",
+   "comparison_low=-0.3",
+   "comparison_high=-0.3"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Losses from discontinued operations, net of tax",
+    "values": [
+     "-3.8",
+     "-0.3"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Losses from discontinued operations, net of tax",
+   "Earnings from continuing operations",
+   "Fine Dining",
+   "87 franchised restaurants"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X64d9845a89cc6734",
+  "batch": "G3-010",
+  "quote": "As a result, 283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January.",
+  "driver_name": "unit_closures",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:phturkey"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=254",
+   "level_high=254"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "283 KFC",
+    "values": [
+     283
+    ]
+   },
+   {
+    "name": "254 Pizza Hut restaurants in Turkey",
+    "values": [
+     254
+    ]
+   }
+  ],
+  "all_card_names": [
+   "minority investment in Devyani International Limited",
+   "pre-tax investment losses",
+   "283 KFC",
+   "254 Pizza Hut restaurants in Turkey",
+   "reversal of a reserve due to a favorable audit resolution"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   1
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X3e2d2692bb7e8e6a",
+  "batch": "G3-010",
+  "quote": "The Company owned 79% of the Habit Burger & Grill units in the U.S. as of the end of 2025.",
+  "driver_name": "unit_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "entity_ownership:companyownedstores",
+   "geography:us",
+   "segment:habitdivision"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=79",
+   "level_high=79"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+    "values": [
+     79
+    ]
+   }
+  ],
+  "all_card_names": [
+   "quarterly dividend of $0.75 per share of Common Stock",
+   "net Operating Loss of $11 million",
+   "Company same-store sales growth of 5%",
+   "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "The Company owned 79% of the Habit Burger & Grill units in the U.S."
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001058090-26-000007",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xcf1d14b2028b62d2",
+  "batch": "G3-011",
+  "quote": "350 to 370 new restaurant openings",
+  "driver_name": "restaurant_openings",
+  "driver_state": "unknown",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=350",
+   "level_high=370"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "350 to 370 new restaurant openings",
+    "values": [
+     350,
+     370
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Adjusted diluted earnings per share",
+   "Restaurant level operating margin",
+   "Gain on restaurant lease termination",
+   "350 to 370 new restaurant openings",
+   "Chipotlanes continue to perform well"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xc6e8defff53e5743",
+  "batch": "G3-011",
+  "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+  "driver_name": "interest_coverage_ratio",
+  "driver_state": "persists",
+  "slice_parts": [
+   "entity_ownership:spacenk"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=4.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "interest coverage ratio not less than 4.0 to 1.0",
+    "values": [
+     "4.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xe2020b8d13e3d8dc",
+  "batch": "G3-012",
+  "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+  "driver_name": "comparable_restaurant_sales",
+  "driver_state": "decreased",
+  "slice_parts": [
+   "segment:northitalia"
+  ],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=-4",
+   "level_high=-4"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -4
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     1
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -2
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     2
+    ]
+   }
+  ],
+  "all_card_names": [
+   "adjusted net income",
+   "revenue for the quarter",
+   "revenue for the quarter finished within our expected range",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "six to seven Flower Child locations"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   5
+  ],
+  "matched_gold_idxs": [
+   7
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 8,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 7
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X7c01f022765630af",
+  "batch": "G3-012",
+  "quote": "The following table presents the number of stores owned at the end of fiscal 2025: \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b United States \u200b International (Company-operated) Number of stores \u200b 1,505 \u200b 86",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "geography:international"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=86",
+   "level_high=86"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "International (Company-operated)",
+    "values": [
+     86
+    ]
+   }
+  ],
+  "all_card_names": [
+   "gross profit decreased to 38.1% compared to 38.2%",
+   "repurchased 2.0 million shares",
+   "Comparable sales growth",
+   "International (Company-operated)"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-032757",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xbd0db500ca169c0a",
+  "batch": "G3-012",
+  "quote": "an increase in total company same store sales of 3.3% on a constant currency basis",
+  "driver_name": "same_store_sales",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 2,
+  "record_numbers": [
+   "level_low=3.3",
+   "level_high=3.3"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "total company same store sales",
+    "values": [
+     "3.3"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "unfavorable non-cash LIFO charge",
+   "failure and maintenance related categories",
+   "6,709 stores in the U.S.",
+   "total company same store sales"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001171843-26-001288",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X63efe3da7b1e5477",
+  "batch": "G3-012",
+  "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+  "driver_name": "store_openings",
+  "driver_state": "unknown",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=350",
+   "level_high=360"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "approximately 350-360 stores for the full fiscal year",
+    "values": [
+     350,
+     360
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Domestic Same Store Sales",
+   "non-cash LIFO charge",
+   "approximately 350-360 stores for the full fiscal year"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0
+  ],
+  "matched_gold_idxs": [
+   0
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 3,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DRI_2026-03-19T08.30",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X560cfed511c85204",
+  "batch": "G3-013",
+  "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months.",
+  "driver_name": "restaurant_conversions",
+  "driver_state": "announced",
+  "slice_parts": [
+   "segment:otheroperatingsegmentbahamabreezebrand"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=14",
+   "level_high=14"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "14 locations will permanently close",
+    "values": [
+     14
+    ]
+   },
+   {
+    "name": "the remaining 14 will be converted to other Darden brands",
+    "values": [
+     14
+    ]
+   }
+  ],
+  "all_card_names": [
+   "same-restaurant sales growth of 4.2%",
+   "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "segment profit margin of 23%",
+   "14 locations will permanently close",
+   "the remaining 14 will be converted to other Darden brands"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "ULTA_2026-03-12T16.30",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xb59980347da41ea2",
+  "batch": "G3-013",
+  "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+   "geography:gb",
+   "geography:ie"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=80"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "stores in the UK and Ireland",
+    "values": [
+     80
+    ]
+   }
+  ],
+  "all_card_names": [
+   "diluted EPS",
+   "SG&A growth for the quarter",
+   "active members",
+   "stores in the UK and Ireland",
+   "sales",
+   "sales above the high end of our guidance by about 85 million"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X41cc5300ffab2d8b",
+  "batch": "G3-013",
+  "quote": "reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review",
+  "driver_name": "strategic_review_costs",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:pizzahutglobaldivision"
+  ],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=40",
+   "level_high=40"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "bzNews_50877032",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xa8876ee91bdb4b67",
+  "batch": "G3-013",
+  "quote": "In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates.",
+  "driver_name": "airport_gates",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=17",
+   "level_high=17"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "17 new gates",
+    "values": [
+     17
+    ]
+   }
+  ],
+  "all_card_names": [
+   "17 new gates"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 1,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X65382a6064d6c960",
+  "batch": "G3-013",
+  "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+  "driver_name": "net_sales",
+  "driver_state": "increased",
+  "slice_parts": [
+   "geography:us",
+   "customer:commercial"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "change_value=329.5"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Domestic commercial sales",
+    "values": [
+     "329.5"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "non-cash LIFO impact",
+   "one individual vendor",
+   "failure and maintenance related categories",
+   "Domestic commercial sales",
+   "31.7% of our total Domestic sales"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   5
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X1c86be8ce30e3b3c",
+  "batch": "G3-014",
+  "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+  "driver_name": "interest_rate_margin",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:VariableRateAxis__baserate",
+   "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=0.5",
+   "level_high=1.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "a base rate plus a margin of 0.5% to 1.0%",
+    "values": [
+     "0.5",
+     "1.0"
+    ]
+   },
+   {
+    "name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+    "values": [
+     "1.5",
+     "2.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xc918d203e3a77f17",
+  "batch": "G3-014",
+  "quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 %",
+  "driver_name": "full_time_equivalent_employees",
+  "driver_state": "increased",
+  "slice_parts": [
+   "product:regionalcarrier"
+  ],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=32500",
+   "level_high=32500",
+   "change_value=5.9",
+   "comparison_low=30700",
+   "comparison_high=30700"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Regional (4) 32,500 30,700 5.9 %",
+    "values": [
+     32500,
+     30700
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Loss per common share: Basic and diluted",
+   "Adjusted earnings (loss) per diluted share3",
+   "increase in expense related to higher prices for jet fuel",
+   "Total unit revenue",
+   "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "Regional (4) 32,500 30,700 5.9 %"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "partial_overlap_rendering_differs",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X99d7bc16850a9dde",
+  "batch": "G3-014",
+  "quote": "with an option to purchase up to an additional 30 of the same aircraft",
+  "driver_name": "boeing_aircraft_purchase_option",
+  "driver_state": "announced",
+  "slice_parts": [],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_high=30"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "option to purchase up to an additional 30 of the same aircraft",
+    "values": [
+     30
+    ]
+   }
+  ],
+  "all_card_names": [
+   "operating income, adjusted",
+   "Loss on extinguishment of debt",
+   "Non-fuel unit costs",
+   "in line with our long-term target of low-single digit growth",
+   "annual effective tax rate",
+   "equity stake in Grupo Aerom\u00e9xico",
+   "option to purchase up to an additional 30 of the same aircraft"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3,
+   6
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   3,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X1324b492faa2981e",
+  "batch": "G3-014",
+  "quote": "Recent corporate survey results indicate 85 percent of respondents expect their corporate travel spend will increase or stay the same in the June quarter.",
+  "driver_name": "travel_spend",
+  "driver_state": "reported",
+  "slice_parts": [
+   "customer:corporate"
+  ],
+  "fy": 2026,
+  "fq": 2,
+  "record_numbers": [
+   "level_low=85",
+   "level_high=85"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "Pre-tax loss",
+   "Operating Margin",
+   "Earnings per share",
+   "earnings of $0.64 per share, within our initial guidance range",
+   "March quarter total revenue",
+   "growing several points above our initial outlook",
+   "Adjusted net debt"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X028e7ca1db790ea8",
+  "batch": "G3-015",
+  "quote": "Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.",
+  "driver_name": "accelerating_the_organization_restructuring_costs",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=80",
+   "level_high=80"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "U.S. increased 6.8%",
+   "owned and operated by independent local business owners"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   3
+  ],
+  "matched_gold_idxs": [
+   0
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 2,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000764478-25-000057",
+  "produced_idx": 9,
+  "bucket": "key_miss",
+  "qid": "X14637de8bbc0ab1b",
+  "batch": "G3-015",
+  "quote": "Online revenue as a % of total segment revenue 31.8 % 31.4 % 32.1 % 31.2 %",
+  "driver_name": "revenue_mix",
+  "driver_state": "increased",
+  "slice_parts": [
+   "segment:domestic",
+   "channel:online"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=32.1",
+   "level_high=32.1",
+   "comparison_low=31.2",
+   "comparison_high=31.2"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Online revenue as a % of total segment revenue",
+    "values": [
+     "31.8",
+     "31.4"
+    ]
+   },
+   {
+    "name": "Online revenue as a % of total segment revenue",
+    "values": [
+     "32.1",
+     "31.2"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Goodwill and intangible asset impairments",
+   "The 7.6% comparable sales growth",
+   "The 3.6% comparable sales growth",
+   "Online revenue as a % of total segment revenue",
+   "Online revenue as a % of total segment revenue"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   1,
+   2,
+   8
+  ],
+  "matched_gold_idxs": [
+   1,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xa6096f3fa348cdd9",
+  "batch": "G3-015",
+  "quote": "Diluted earnings per common share for the year ended December 31, 2025, increased 10% to $2.97 on 856 million shares versus $2.71 on 881 million shares for the same period one year ago.",
+  "driver_name": "earnings_per_share",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=2.97",
+   "level_high=2.97",
+   "comparison_low=2.71",
+   "comparison_high=2.71"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Diluted earnings per common share",
+    "values": [
+     "2.97",
+     "2.71"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Diluted earnings per common share",
+   "SG&A expenses",
+   "SG&A expenses again exceeded our expectations",
+   "Ending domestic store count",
+   "Total shareholders\u2019 deficit"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000005",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X24756096af610d6d",
+  "batch": "G3-015",
+  "quote": "in millions, except per share amounts Earnings Before Income Tax Income Tax Expense Net Earnings Diluted Net Earnings Per Share Earnings Before Income Tax Income Tax Expense Net Earnings Diluted Net Earnings Per Share Reported Earnings from Continuing Operations $ 356.8 $ 46.2 $ 310.6 $ 2.68 $ 372.7 $ 49.0 $ 323.7 $ 2.74 % Change vs Prior Year (2.2)% Total Adjustments: $ 31.3 $ 0.7 $ 30.6 $ 0.27 $ 8.4 $ 1.9 $ 6.5 $ 0.06 Closed restaurant and other strategic review costs2 6.6 1.6 5.0 0.05 \u2014 \u2014 \u2014 \u2014 General and administrative expenses 5.8 1.4 4.4 0.04 \u2014 \u2014 \u2014 \u2014 Depreciation and amortization 0.8 0.2 0.6 0.01 \u2014 \u2014 \u2014 \u2014 Impairment due to restaurant closures3 24.7 6.2 18.5 0.16",
+  "driver_name": "asset_impairment",
+  "driver_state": "occurred",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=24.7",
+   "level_high=24.7"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Impairment due to restaurant closures3",
+    "values": [
+     "24.7"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "blended same-restaurant sales1",
+   "adjusted diluted net earnings per share from continuing operations",
+   "Impairment due to restaurant closures3",
+   "Gain on Olive Garden Canada sale"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X301482d0236debbc",
+  "batch": "G3-016",
+  "quote": "During the quarter ended March 31, 2024, we sold our approximate 5% minority investment in Devyani International Limited (\"Devyani\"), a franchise entity that operates KFC and Pizza Hut restaurants in India, for pre-tax proceeds of $104 million.",
+  "driver_name": "minority_investment_divestiture",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "entity_ownership:devyani"
+  ],
+  "fy": 2024,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=104",
+   "level_high=104"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "minority investment in Devyani International Limited",
+    "values": [
+     104
+    ]
+   }
+  ],
+  "all_card_names": [
+   "minority investment in Devyani International Limited",
+   "pre-tax investment losses",
+   "283 KFC",
+   "254 Pizza Hut restaurants in Turkey",
+   "reversal of a reserve due to a favorable audit resolution"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   1
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X7fd8ca3f891aae84",
+  "batch": "G3-017",
+  "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+  "driver_name": "net_sales",
+  "driver_state": "reported",
+  "slice_parts": [
+   "geography:us",
+   "channel:commercial"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=31.7",
+   "level_high=31.7"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "31.7% of our total Domestic sales",
+    "values": [
+     "31.7"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "non-cash LIFO impact",
+   "one individual vendor",
+   "failure and maintenance related categories",
+   "Domestic commercial sales",
+   "31.7% of our total Domestic sales"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X3b3a3eb17452fbcd",
+  "batch": "G3-017",
+  "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company\u2019s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+  "driver_name": "share_repurchase_program",
+  "driver_state": "canceled",
+  "slice_parts": [
+   "unknown:us-gaap:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"
+  ],
+  "fy": 2024,
+  "fq": null,
+  "record_numbers": [],
+  "cards_sharing_quote": [
+   {
+    "name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+    "values": []
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "record_numberless_card_present",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X169a9a6e92c88dc7",
+  "batch": "G3-017",
+  "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+  "driver_name": "comparable_restaurant_sales",
+  "driver_state": "increased",
+  "slice_parts": [
+   "segment:northitalia"
+  ],
+  "fy": 2024,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=1",
+   "level_high=1"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -4
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     1
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -2
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     2
+    ]
+   }
+  ],
+  "all_card_names": [
+   "adjusted net income",
+   "revenue for the quarter",
+   "revenue for the quarter finished within our expected range",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "six to seven Flower Child locations"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   5
+  ],
+  "matched_gold_idxs": [
+   7
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 8,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 7
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-032757",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xbfdce791095ec14e",
+  "batch": "G3-018",
+  "quote": "During the second quarter of fiscal 2026, failure and maintenance related categories represented the largest portion of our sales mix at approximately 85% of total sales, whereas they represented approximately 86% of total sales in the comparable prior year period.",
+  "driver_name": "sales_mix",
+  "driver_state": "decreased",
+  "slice_parts": [
+   "product:failure",
+   "product:maintenanceitems"
+  ],
+  "fy": 2026,
+  "fq": 2,
+  "record_numbers": [
+   "level_low=85",
+   "level_high=85",
+   "comparison_low=86",
+   "comparison_high=86"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "failure and maintenance related categories",
+    "values": [
+     85,
+     86
+    ]
+   }
+  ],
+  "all_card_names": [
+   "unfavorable non-cash LIFO charge",
+   "failure and maintenance related categories",
+   "6,709 stores in the U.S.",
+   "total company same store sales"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   2
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DAL_2026-04-08T10.00",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X77c244b1640ebb8c",
+  "batch": "G3-018",
+  "quote": "This includes an estimated $300 million benefit from our refinery.",
+  "driver_name": "fuel_expense",
+  "driver_state": "unknown",
+  "slice_parts": [
+   "segment:refinery"
+  ],
+  "fy": 2026,
+  "fq": 2,
+  "record_numbers": [
+   "level_low=-300",
+   "level_high=-300"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "an estimated $300 million benefit from our refinery",
+    "values": [
+     -300
+    ]
+   }
+  ],
+  "all_card_names": [
+   "earnings of 64 cents per share",
+   "within our initial guidance range",
+   "the MRO revenue in the first quarter",
+   "an estimated $300 million benefit from our refinery",
+   "unit revenue growth",
+   "earnings that were 40% higher than last year"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   2,
+   4,
+   5
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xc0176db34612ea2c",
+  "batch": "G3-018",
+  "quote": "In the first half, in the US, we expect approximately 250 targeted closures of underperforming units tied to the Hut Forward program, which will result in a decline in global Pizza Hut units in the first half.",
+  "driver_name": "underperforming_store_closures",
+  "driver_state": "announced",
+  "slice_parts": [
+   "segment:pizzahutglobaldivision",
+   "geography:us"
+  ],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=250",
+   "level_high=250"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "approximately 250 targeted closures of underperforming units",
+    "values": [
+     250
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xc60ccdea49a8ca1a",
+  "batch": "G3-018",
+  "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+  "driver_name": "jet_fuel_expense",
+  "driver_state": "introduced",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "change_value=4000"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "increase in expense related to higher prices for jet fuel",
+    "values": [
+     4
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Loss per common share: Basic and diluted",
+   "Adjusted earnings (loss) per diluted share3",
+   "increase in expense related to higher prices for jet fuel",
+   "Total unit revenue",
+   "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "Regional (4) 32,500 30,700 5.9 %"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "value_mismatch_same_sentence",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000032",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X11cf711eee0371d7",
+  "batch": "G3-019",
+  "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7)",
+  "driver_name": "income_tax_expense",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=-94",
+   "level_high=-94",
+   "comparison_low=-175",
+   "comparison_high=-175"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Income tax benefit",
+    "values": [
+     -94,
+     -175
+    ]
+   }
+  ],
+  "all_card_names": [
+   "CASM excluding net special items, fuel and profit sharing",
+   "Income tax benefit",
+   "Pre-tax loss excluding net special items",
+   "mainline full-time equivalent employees"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xe7dd22baabb1c77b",
+  "batch": "G3-019",
+  "quote": "we currently own an approximately 19% equity stake in Grupo Aerom\u00e9xico, S.A.B. de C.V., the parent company of Aerom\u00e9xico.",
+  "driver_name": "equity_stake",
+  "driver_state": "reported",
+  "slice_parts": [
+   "entity_ownership:grupoaeromexico"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=19",
+   "level_high=19"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "equity stake in Grupo Aerom\u00e9xico",
+    "values": [
+     19
+    ]
+   }
+  ],
+  "all_card_names": [
+   "operating income, adjusted",
+   "Loss on extinguishment of debt",
+   "Non-fuel unit costs",
+   "in line with our long-term target of low-single digit growth",
+   "annual effective tax rate",
+   "equity stake in Grupo Aerom\u00e9xico",
+   "option to purchase up to an additional 30 of the same aircraft"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3,
+   6
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   3,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X73357410ba2d97a2",
+  "batch": "G3-019",
+  "quote": "(in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 \u2014 Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities \u2014 \u2014 \u2014 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760)",
+  "driver_name": "net_debt",
+  "driver_state": "decreased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=13540",
+   "level_high=13540",
+   "change_value=-760",
+   "comparison_low=14300",
+   "comparison_high=14300"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Adjusted net debt",
+    "values": [
+     13540,
+     14300
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Pre-tax loss",
+   "Operating Margin",
+   "Earnings per share",
+   "earnings of $0.64 per share, within our initial guidance range",
+   "March quarter total revenue",
+   "growing several points above our initial outlook",
+   "Adjusted net debt"
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "partial_overlap_rendering_differs",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X4c3aaf2cf2f4bcee",
+  "batch": "G3-019",
+  "quote": "Ending domestic store count \u200b 6,447",
+  "driver_name": "store_count",
+  "driver_state": "increased",
+  "slice_parts": [
+   "geography:us"
+  ],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=6447",
+   "level_high=6447"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Ending domestic store count",
+    "values": [
+     6447,
+     6265
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Diluted earnings per common share",
+   "SG&A expenses",
+   "SG&A expenses again exceeded our expectations",
+   "Ending domestic store count",
+   "Total shareholders\u2019 deficit"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xbd1a43bdf9debd46",
+  "batch": "G3-020",
+  "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg SRS (1) \n\nFebruary 22, 2026 February 23, 2025 % Chg SRS (1) \n\nOlive Garden $ 1,393.0 $ 1,330.3 4.7 % 3.2 % $ 4,056.8 $ 3,831.9 5.9 % 4.5 % LongHorn Steakhouse $ 854.2 $ 768.1 11.2 % 7.2 % $ 2,406.5 $ 2,191.7 9.8 % 6.3 % Fine Dining $ 402.0 $ 385.3 4.3 %",
+  "driver_name": "sales",
+  "driver_state": "increased",
+  "slice_parts": [
+   "segment:finediningsegment"
+  ],
+  "fy": 2026,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=402.0",
+   "level_high=402.0",
+   "comparison_low=385.3",
+   "comparison_high=385.3"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Fine Dining",
+    "values": [
+     "402.0",
+     "385.3"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Losses from discontinued operations, net of tax",
+   "Earnings from continuing operations",
+   "Fine Dining",
+   "87 franchised restaurants"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X8d2159e496d61cc6",
+  "batch": "G3-020",
+  "quote": "The resulting net Operating Loss of $11 million for the year ended December 31, 2023 has been reflected as a Special Item.",
+  "driver_name": "operating_profit",
+  "driver_state": "reported",
+  "slice_parts": [
+   "segment:kfcrussia"
+  ],
+  "fy": 2023,
+  "fq": null,
+  "record_numbers": [
+   "level_low=-11",
+   "level_high=-11"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "net Operating Loss of $11 million",
+    "values": [
+     -11
+    ]
+   }
+  ],
+  "all_card_names": [
+   "quarterly dividend of $0.75 per share of Common Stock",
+   "net Operating Loss of $11 million",
+   "Company same-store sales growth of 5%",
+   "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "The Company owned 79% of the Habit Burger & Grill units in the U.S."
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X06c4d4988b938d1c",
+  "batch": "G3-020",
+  "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+  "driver_name": "credit_facility_interest_rate_margin",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+   "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate"
+  ],
+  "fy": 2025,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=1.5",
+   "level_high=2.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "a base rate plus a margin of 0.5% to 1.0%",
+    "values": [
+     "0.5",
+     "1.0"
+    ]
+   },
+   {
+    "name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+    "values": [
+     "1.5",
+     "2.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 9,
+  "bucket": "key_miss",
+  "qid": "X8e198589cfc2917f",
+  "batch": "G3-021",
+  "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+  "driver_name": "comparable_restaurant_sales",
+  "driver_state": "decreased",
+  "slice_parts": [
+   "segment:northitalia"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=-2",
+   "level_high=-2"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -4
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     1
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -2
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     2
+    ]
+   }
+  ],
+  "all_card_names": [
+   "adjusted net income",
+   "revenue for the quarter",
+   "revenue for the quarter finished within our expected range",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "six to seven Flower Child locations"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   5
+  ],
+  "matched_gold_idxs": [
+   7
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 8,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 7
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xa2b729c37573e3b6",
+  "batch": "G3-021",
+  "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+  "driver_name": "operating_profit",
+  "driver_state": "increased",
+  "slice_parts": [
+   "segment:kfcglobaldivision"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=10",
+   "level_high=10"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Taco Bell",
+    "values": [
+     10
+    ]
+   },
+   {
+    "name": "KFC",
+    "values": [
+     10
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X13e66778b6585c9a",
+  "batch": "G3-021",
+  "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+  "driver_name": "net_sales",
+  "driver_state": "increased",
+  "slice_parts": [
+   "geography:us",
+   "customer:commercial"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "change_value=6.7"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Domestic commercial sales",
+    "values": [
+     "329.5"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "non-cash LIFO impact",
+   "one individual vendor",
+   "failure and maintenance related categories",
+   "Domestic commercial sales",
+   "31.7% of our total Domestic sales"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "value_mismatch_same_sentence",
+  "matched_produced_idxs": [
+   0,
+   1,
+   2,
+   5
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X36efe9f676dedb12",
+  "batch": "G3-021",
+  "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company\u2019s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+  "driver_name": "share_repurchase_program",
+  "driver_state": "canceled",
+  "slice_parts": [
+   "unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"
+  ],
+  "fy": 2024,
+  "fq": null,
+  "record_numbers": [],
+  "cards_sharing_quote": [
+   {
+    "name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+    "values": []
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "record_numberless_card_present",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "Xf6928f184a847e9e",
+  "batch": "G3-022",
+  "quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 %",
+  "driver_name": "full_time_equivalent_employees",
+  "driver_state": "increased",
+  "slice_parts": [
+   "product:regionalcarrier"
+  ],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=32500",
+   "level_high=32500",
+   "comparison_low=30700",
+   "comparison_high=30700"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Regional (4) 32,500 30,700 5.9 %",
+    "values": [
+     32500,
+     30700
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Loss per common share: Basic and diluted",
+   "Adjusted earnings (loss) per diluted share3",
+   "increase in expense related to higher prices for jet fuel",
+   "Total unit revenue",
+   "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "Regional (4) 32,500 30,700 5.9 %"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000032",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "Xb8d3efab26630ed1",
+  "batch": "G3-022",
+  "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7) Net loss (382) (473) (91) (19.2) Pre-tax loss \u2013 GAAP $ (476) $ (648) $ (172) (26.6) Adjusted for: pre-tax net special items (1) \n\n149 118 31 25.0 Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2)",
+  "driver_name": "pretax_income",
+  "driver_state": "increased",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": 1,
+  "record_numbers": [
+   "level_low=-327",
+   "level_high=-327",
+   "comparison_low=-530",
+   "comparison_high=-530"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Pre-tax loss excluding net special items",
+    "values": [
+     -327,
+     -530
+    ]
+   }
+  ],
+  "all_card_names": [
+   "CASM excluding net special items, fuel and profit sharing",
+   "Income tax benefit",
+   "Pre-tax loss excluding net special items",
+   "mainline full-time equivalent employees"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "Xe10aa94910fc4e7a",
+  "batch": "G3-022",
+  "quote": "with an option to purchase up to an additional 30 of the same aircraft",
+  "driver_name": "b787_10_purchase_option",
+  "driver_state": "announced",
+  "slice_parts": [],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_high=30"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "option to purchase up to an additional 30 of the same aircraft",
+    "values": [
+     30
+    ]
+   }
+  ],
+  "all_card_names": [
+   "operating income, adjusted",
+   "Loss on extinguishment of debt",
+   "Non-fuel unit costs",
+   "in line with our long-term target of low-single digit growth",
+   "annual effective tax rate",
+   "equity stake in Grupo Aerom\u00e9xico",
+   "option to purchase up to an additional 30 of the same aircraft"
+  ],
+  "n_other_records": 4,
+  "leg_source_matched_pairs": 4,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3,
+   6
+  ],
+  "matched_gold_idxs": [
+   0,
+   1,
+   3,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 7,
+  "n_matched_gold": 4,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xa08160168595ca26",
+  "batch": "G3-022",
+  "quote": "Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.",
+  "driver_name": "accelerating_the_organization_restructuring_costs",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=80",
+   "level_high=80"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "U.S. increased 6.8%",
+   "owned and operated by independent local business owners"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   3
+  ],
+  "matched_gold_idxs": [
+   0
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 2,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 1
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X6f84a382ffbc0004",
+  "batch": "G3-022",
+  "quote": "(In thousands, except share data) \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b December 31, 2025 \u200b December 31, 2024 \u200b \u200b \u200b \u200b (Unaudited) \u200b \u200b \u200b (Note) Assets \u200b \u200b \u200b \u200b \u200b \u200b Current assets: \u200b \u200b \u200b \u200b \u200b \u200b Cash and cash equivalents \u200b $ 193,793 \u200b $ 130,245 Accounts receivable, net \u200b 389,793 \u200b \u200b 356,839 Amounts receivable from suppliers \u200b 159,900 \u200b \u200b 139,091 Inventory \u200b 5,731,385 \u200b \u200b 5,095,804 Other current assets \u200b 269,406 \u200b \u200b 117,916 Total current assets \u200b 6,744,277 \u200b \u200b 5,839,895 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Property and equipment, at cost \u200b 10,222,249 \u200b \u200b 9,192,254 Less: accumulated depreciation and amortization \u200b 3,964,824 \u200b \u200b 3,587,098 Net property and equipment \u200b 6,257,425 \u200b \u200b 5,605,156 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Operating lease, right-of-use assets \u200b 2,391,150 \u200b \u200b 2,324,638 Goodwill \u200b 948,208 \u200b \u200b 930,161 Other assets, net \u200b 197,193 \u200b \u200b 193,891 Total assets \u200b $ 16,538,253 \u200b $ 14,893,741 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Liabilities and shareholders\u2019 deficit \u200b \u200b \u200b \u200b \u200b \u200b Current liabilities: \u200b \u200b \u200b \u200b \u200b \u200b Accounts payable \u200b $ 7,103,684 \u200b $ 6,524,811 Self-insurance reserves \u200b 297,304 \u200b \u200b 149,387 Accrued payroll \u200b 119,603 \u200b \u200b 107,495 Accrued benefits and withholdings \u200b 240,072 \u200b \u200b 199,593 Income taxes payable \u200b 13,957 \u200b \u200b 6,274 Current portion of operating lease liabilities \u200b 439,907 \u200b \u200b 419,213 Other current liabilities \u200b 561,294 \u200b \u200b 876,732 Total current liabilities \u200b 8,775,821 \u200b \u200b 8,283,505 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Long-term debt \u200b 6,016,904 \u200b \u200b 5,520,932 Operating lease liabilities, less current portion \u200b 2,034,688 \u200b \u200b 1,980,705 Deferred income taxes \u200b 211,210 \u200b \u200b 247,599 Other liabilities \u200b 262,982 \u200b \u200b 231,961 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Shareholders\u2019 equity (deficit): \u200b \u200b \u200b \u200b \u200b \u200b Common stock, $0.01 par value: \u200b \u200b \u200b \u200b \u200b \u200b Authorized shares \u2013 1,250,000,000 \u200b \u200b \u200b \u200b \u200b Issued and outstanding shares \u2013 \u200b \u200b \u200b \u200b \u200b \u200b 841,909,238 as of December 31, 2025, and \u200b \u200b \u200b \u200b \u200b \u200b 862,232,760 as of December 31, 2024 \u200b \u200b 8,419 \u200b \u200b 8,622 Additional paid-in capital \u200b 1,530,292 \u200b \u200b 1,454,518 Retained deficit \u200b (2,328,817) \u200b \u200b (2,791,288) Accumulated other comprehensive income (loss) \u200b \u200b 26,754 \u200b \u200b (42,813) Total shareholders\u2019 deficit \u200b (763,352)",
+  "driver_name": "shareholders_equity",
+  "driver_state": "reported",
+  "slice_parts": [],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=-763352",
+   "level_high=-763352"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Total shareholders\u2019 deficit",
+    "values": [
+     -763352,
+     -1370961
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Diluted earnings per common share",
+   "SG&A expenses",
+   "SG&A expenses again exceeded our expectations",
+   "Ending domestic store count",
+   "Total shareholders\u2019 deficit"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X1126d58e06d1223b",
+  "batch": "G3-023",
+  "quote": "We own and operate all of our restaurants in the United States, except for five restaurants we manage through joint venture or other contractual agreements and 87 franchised restaurants.",
+  "driver_name": "restaurant_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "channel:franchisedunits"
+  ],
+  "fy": 2026,
+  "fq": 3,
+  "record_numbers": [
+   "level_low=87",
+   "level_high=87"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "87 franchised restaurants",
+    "values": [
+     87
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Losses from discontinued operations, net of tax",
+   "Earnings from continuing operations",
+   "Fine Dining",
+   "87 franchised restaurants"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   2
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 3
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "X4e081a7d171dba07",
+  "batch": "G3-023",
+  "quote": "As a result, 283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January.",
+  "driver_name": "store_closures",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:kfcturkey"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=283",
+   "level_high=283"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "283 KFC",
+    "values": [
+     283
+    ]
+   },
+   {
+    "name": "254 Pizza Hut restaurants in Turkey",
+    "values": [
+     254
+    ]
+   }
+  ],
+  "all_card_names": [
+   "minority investment in Devyani International Limited",
+   "pre-tax investment losses",
+   "283 KFC",
+   "254 Pizza Hut restaurants in Turkey",
+   "reversal of a reserve due to a favorable audit resolution"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   1
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "X5e80f0a222be7eb2",
+  "batch": "G3-023",
+  "quote": "The Company owned 79% of the Habit Burger & Grill units in the U.S. as of the end of 2025.",
+  "driver_name": "unit_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "segment:habitdivision",
+   "geography:us",
+   "entity_ownership:companyownedstores"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=79",
+   "level_high=79"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+    "values": [
+     79
+    ]
+   }
+  ],
+  "all_card_names": [
+   "quarterly dividend of $0.75 per share of Common Stock",
+   "net Operating Loss of $11 million",
+   "Company same-store sales growth of 5%",
+   "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "The Company owned 79% of the Habit Burger & Grill units in the U.S."
+  ],
+  "n_other_records": 3,
+  "leg_source_matched_pairs": 3,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   2,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   2,
+   3
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 3,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X1ef69564dbb27ac2",
+  "batch": "G3-023",
+  "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "entity_ownership:spacenk"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=84",
+   "level_high=84"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "84 stores in the U.K. and Ireland operated by Space NK",
+    "values": [
+     84
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 10,
+  "bucket": "key_miss",
+  "qid": "X38b3c845d88429f0",
+  "batch": "G3-024",
+  "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+  "driver_name": "comparable_restaurant_sales",
+  "driver_state": "increased",
+  "slice_parts": [
+   "segment:northitalia"
+  ],
+  "fy": 2024,
+  "fq": null,
+  "record_numbers": [
+   "level_low=2",
+   "level_high=2"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -4
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     1
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     -2
+    ]
+   },
+   {
+    "name": "Comparable restaurant sales vs. prior year",
+    "values": [
+     2
+    ]
+   }
+  ],
+  "all_card_names": [
+   "adjusted net income",
+   "revenue for the quarter",
+   "revenue for the quarter finished within our expected range",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "Comparable restaurant sales vs. prior year",
+   "six to seven Flower Child locations"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   5
+  ],
+  "matched_gold_idxs": [
+   7
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 8,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 7
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X1642c8fd4f67b764",
+  "batch": "G3-024",
+  "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%",
+  "driver_name": "comparable_sales",
+  "driver_state": "introduced",
+  "slice_parts": [],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=2.5",
+   "level_high=3.5"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "Comparable sales growth",
+    "values": [
+     "2.5",
+     "3.5"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "gross profit decreased to 38.1% compared to 38.2%",
+   "repurchased 2.0 million shares",
+   "Comparable sales growth",
+   "International (Company-operated)"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "Xf2bdb18bab1c8ab8",
+  "batch": "G3-024",
+  "quote": "reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review",
+  "driver_name": "strategic_options_review_costs",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:pizzahutglobaldivision"
+  ],
+  "fy": 2025,
+  "fq": 4,
+  "record_numbers": [
+   "level_low=40",
+   "level_high=40"
+  ],
+  "cards_sharing_quote": [],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "no_card_on_this_sentence",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xbae787103e785e11",
+  "batch": "G3-025",
+  "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+  "driver_name": "credit_facility_interest_rate_margin",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+   "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=1.5",
+   "level_high=2.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "a base rate plus a margin of 0.5% to 1.0%",
+    "values": [
+     "0.5",
+     "1.0"
+    ]
+   },
+   {
+    "name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+    "values": [
+     "1.5",
+     "2.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X0df833dc3d20e76e",
+  "batch": "G3-025",
+  "quote": "As a result, 283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January.",
+  "driver_name": "store_closures",
+  "driver_state": "occurred",
+  "slice_parts": [
+   "segment:phturkey"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=254",
+   "level_high=254"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "283 KFC",
+    "values": [
+     283
+    ]
+   },
+   {
+    "name": "254 Pizza Hut restaurants in Turkey",
+    "values": [
+     254
+    ]
+   }
+  ],
+  "all_card_names": [
+   "minority investment in Devyani International Limited",
+   "pre-tax investment losses",
+   "283 KFC",
+   "254 Pizza Hut restaurants in Turkey",
+   "reversal of a reserve due to a favorable audit resolution"
+  ],
+  "n_other_records": 1,
+  "leg_source_matched_pairs": 1,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   1
+  ],
+  "matched_gold_idxs": [
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 1,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xb3a3351bca3b64eb",
+  "batch": "G3-025",
+  "quote": "The following table presents the number of stores owned at the end of fiscal 2025: \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b United States \u200b International (Company-operated) Number of stores \u200b 1,505 \u200b 86",
+  "driver_name": "store_count",
+  "driver_state": "reported",
+  "slice_parts": [
+   "geography:international"
+  ],
+  "fy": 2025,
+  "fq": null,
+  "record_numbers": [
+   "level_low=86",
+   "level_high=86"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "International (Company-operated)",
+    "values": [
+     86
+    ]
+   }
+  ],
+  "all_card_names": [
+   "gross profit decreased to 38.1% compared to 38.2%",
+   "repurchased 2.0 million shares",
+   "Comparable sales growth",
+   "International (Company-operated)"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   1
+  ],
+  "matched_gold_idxs": [
+   0,
+   1
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 4,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 2
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "X9b6e4dcf1d43f68e",
+  "batch": "G3-025",
+  "quote": "In the first half, in the US, we expect approximately 250 targeted closures of underperforming units tied to the Hut Forward program, which will result in a decline in global Pizza Hut units in the first half.",
+  "driver_name": "unit_closures",
+  "driver_state": "announced",
+  "slice_parts": [
+   "geography:us",
+   "segment:pizzahutglobaldivision"
+  ],
+  "fy": 2026,
+  "fq": null,
+  "record_numbers": [
+   "level_low=250",
+   "level_high=250"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "approximately 250 targeted closures of underperforming units",
+    "values": [
+     250
+    ]
+   }
+  ],
+  "all_card_names": [
+   "Taco Bell",
+   "KFC",
+   "x special gna",
+   "in line with our guidance",
+   "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "approximately 250 targeted closures of underperforming units"
+  ],
+  "n_other_records": 2,
+  "leg_source_matched_pairs": 2,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [
+   0,
+   3
+  ],
+  "matched_gold_idxs": [
+   0,
+   4
+  ],
+  "this_record_was_matched": false,
+  "n_reference_cards": 6,
+  "n_matched_gold": 2,
+  "unmatched_gold_rows": 4
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X9cdae8b168c23a2a",
+  "batch": "G3-026",
+  "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+  "driver_name": "interest_coverage_ratio",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:LineOfCreditFacilityAxis__nationalwestminsterbankplc"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=4.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "interest coverage ratio not less than 4.0 to 1.0",
+    "values": [
+     "4.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xeb9efe850afaa8e3",
+  "batch": "G3-027",
+  "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+  "driver_name": "interest_rate_margin",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:VariableRateAxis__baserate",
+   "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=0.5",
+   "level_high=1.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "a base rate plus a margin of 0.5% to 1.0%",
+    "values": [
+     "0.5",
+     "1.0"
+    ]
+   },
+   {
+    "name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+    "values": [
+     "1.5",
+     "2.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "Xba92891f45109f52",
+  "batch": "G3-028",
+  "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company\u2019s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+  "driver_name": "share_repurchase_program",
+  "driver_state": "canceled",
+  "slice_parts": [
+   "unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"
+  ],
+  "fy": 2024,
+  "fq": null,
+  "record_numbers": [],
+  "cards_sharing_quote": [
+   {
+    "name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+    "values": []
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "record_numberless_card_present",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 9,
+  "bucket": "key_miss",
+  "qid": "X1cdb0213363706c7",
+  "batch": "G3-029",
+  "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+  "driver_name": "credit_facility_interest_rate_margin",
+  "driver_state": "reported",
+  "slice_parts": [
+   "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+   "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate"
+  ],
+  "fy": null,
+  "fq": null,
+  "record_numbers": [
+   "level_low=1.5",
+   "level_high=2.0"
+  ],
+  "cards_sharing_quote": [
+   {
+    "name": "a base rate plus a margin of 0.5% to 1.0%",
+    "values": [
+     "0.5",
+     "1.0"
+    ]
+   },
+   {
+    "name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+    "values": [
+     "1.5",
+     "2.0"
+    ]
+   }
+  ],
+  "all_card_names": [
+   "84 stores in the U.K. and Ireland operated by Space NK",
+   "interest coverage ratio not less than 4.0 to 1.0",
+   "a base rate plus a margin of 0.5% to 1.0%",
+   "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%"
+  ],
+  "n_other_records": 0,
+  "leg_source_matched_pairs": 0,
+  "classification": "key_card_carries_all_record_numbers",
+  "matched_produced_idxs": [],
+  "matched_gold_idxs": [],
+  "this_record_was_matched": false,
+  "n_reference_cards": 5,
+  "n_matched_gold": 0,
+  "unmatched_gold_rows": 5
+ }
+]

@@ -1,0 +1,702 @@
+[
+ {
+  "leg": "P1",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "Xfcd052498cda6edb"
+ },
+ {
+  "leg": "P1",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xa3708e607c7ea5c9"
+ },
+ {
+  "leg": "P1",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X5603a0beaadd5e3c"
+ },
+ {
+  "leg": "P1",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X3d7ea88f66d74904"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X56415b76439cd6be"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000027904-26-000022",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X29a22d2243f2f310"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000027904-26-000022",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X6e22977f210d9c10"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X75b11760e0633d83"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X65382a6064d6c960"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X13e66778b6585c9a"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X1117c3fded7423fa"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X12cb0c151404674d"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X1c86be8ce30e3b3c"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X36efe9f676dedb12"
+ },
+ {
+  "leg": "P2",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xbae787103e785e11"
+ },
+ {
+  "leg": "P2",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xa89529fe646aaa72"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X07c571059d14f2d6"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X86feb54326687022"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xc918d203e3a77f17"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xc60ccdea49a8ca1a"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000031",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "Xf6928f184a847e9e"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000032",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X11cf711eee0371d7"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000006201-26-000032",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "Xb8d3efab26630ed1"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xa4deadc9031eb381"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X99d7bc16850a9dde"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xe7dd22baabb1c77b"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000013",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "Xe10aa94910fc4e7a"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X6eea70137b9a2e63"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X1324b492faa2981e"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000027904-26-000020",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X73357410ba2d97a2"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X028e7ca1db790ea8"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000063908-26-000032",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xa08160168595ca26"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000092380-26-000044",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xf6cbcbd375607d09"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000092380-26-000044",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xb100f34c67a98cff"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000764478-25-000057",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xa0f9de09f3c55112"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000764478-25-000057",
+  "produced_idx": 9,
+  "bucket": "key_miss",
+  "qid": "X14637de8bbc0ab1b"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xc1c8f8411ee75a20"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X6f9c048ff25601a9"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xa6096f3fa348cdd9"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X4c3aaf2cf2f4bcee"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000898173-26-000006",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X6f84a382ffbc0004"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-25-000038",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X777fcfffdedc3229"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-25-000038",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X18645f55a6091ad6"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000005",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X56e2d89be46d9a61"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000005",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X24756096af610d6d"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X95aa6d36cce8922a"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X8e7ae846d72a4dfe"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xbd1a43bdf9debd46"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0000940944-26-000009",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X1126d58e06d1223b"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xb4199b551afdffcd"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X64d9845a89cc6734"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X301482d0236debbc"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "X4e081a7d171dba07"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-25-000109",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X0df833dc3d20e76e"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000003",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X112a630f8fef687e"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xe53ce648226c9f64"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X3e2d2692bb7e8e6a"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X8d2159e496d61cc6"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001041061-26-000084",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "X5e80f0a222be7eb2"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001058090-26-000007",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X3a53a382d26adad5"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001058090-26-000007",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xcf1d14b2028b62d2"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xdeba718a668874a1"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-102611",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X7fd8ca3f891aae84"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X5ea3b7457e8aa160"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xc6e8defff53e5743"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X3b3a3eb17452fbcd"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X06c4d4988b938d1c"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X1ef69564dbb27ac2"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X9cdae8b168c23a2a"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xeb9efe850afaa8e3"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "Xba92891f45109f52"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-25-118458",
+  "produced_idx": 9,
+  "bucket": "key_miss",
+  "qid": "X1cdb0213363706c7"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X7e0321fb7819e50d"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xe2020b8d13e3d8dc"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 8,
+  "bucket": "key_miss",
+  "qid": "X169a9a6e92c88dc7"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 9,
+  "bucket": "key_miss",
+  "qid": "X8e198589cfc2917f"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-017090",
+  "produced_idx": 10,
+  "bucket": "key_miss",
+  "qid": "X38b3c845d88429f0"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "Xc41c0e28ba4f1e05"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X7c01f022765630af"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "X1642c8fd4f67b764"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-027061",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "Xb3a3351bca3b64eb"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-032757",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X75819bfe50a39683"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-032757",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xbd0db500ca169c0a"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001104659-26-032757",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xbfdce791095ec14e"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001171843-26-001288",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X263e008c6143e6f7"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "0001171843-26-001288",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X63efe3da7b1e5477"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DAL_2026-04-08T10.00",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xa9539f6f9f30a4c6"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DAL_2026-04-08T10.00",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "X77c244b1640ebb8c"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DRI_2026-03-19T08.30",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "X1e64778c5aec89f3"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "DRI_2026-03-19T08.30",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "X560cfed511c85204"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "ULTA_2026-03-12T16.30",
+  "produced_idx": 3,
+  "bucket": "key_miss",
+  "qid": "Xb649417e45cad2de"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "ULTA_2026-03-12T16.30",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xb59980347da41ea2"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "X625f7c75cc570b04"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 2,
+  "bucket": "key_miss",
+  "qid": "X41cc5300ffab2d8b"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 4,
+  "bucket": "key_miss",
+  "qid": "Xc0176db34612ea2c"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 5,
+  "bucket": "key_miss",
+  "qid": "Xa2b729c37573e3b6"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 6,
+  "bucket": "key_miss",
+  "qid": "Xf2bdb18bab1c8ab8"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "YUM_2026-02-04T08.15",
+  "produced_idx": 7,
+  "bucket": "key_miss",
+  "qid": "X9b6e4dcf1d43f68e"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "bzNews_50877032",
+  "produced_idx": 0,
+  "bucket": "key_miss",
+  "qid": "X427bb1a95bab02aa"
+ },
+ {
+  "leg": "UNION",
+  "source_id": "bzNews_50877032",
+  "produced_idx": 1,
+  "bucket": "key_miss",
+  "qid": "Xa8876ee91bdb4b67"
+ }
+]

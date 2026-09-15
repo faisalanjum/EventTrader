@@ -1,0 +1,25 @@
+{
+ "calls": 1,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-007",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "4e320ddb5c32d71b3331da7c09a17d8b9d85951f858e022df45cb416ec764f46",
+   "lane_id": "G3-007/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 15,
+   "prompt_sha256": "fac76e5519b724a44274b649c447e0011f314d678959ec21d6b5c0d619cf1808",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"X5603a0beaadd5e3c\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X6e22977f210d9c10\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xa89529fe646aaa72\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X12cb0c151404674d\", \"bucket\": \"key_miss\"}\n]\n```"
+  }
+ ],
+ "rows": 1
+}

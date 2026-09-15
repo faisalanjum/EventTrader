@@ -1,0 +1,80 @@
+{
+  "purpose": "Diagnostic proof for the optional collection progress display, not a native operator failure or a grading result",
+  "helper": "a7_recovery/unit_2161_execution/progress_2161.py",
+  "helper_sha256": "67bc18fcecd4bf411df3f23c2e3fcebf3972e3361995651a9f14b969161b880d",
+  "result": {
+    "checks": {
+      "one_valid_primary": {
+        "outcome": "written-to-memory-only",
+        "progress": {
+          "evidence": {
+            "G3": {
+              "attempts": [],
+              "called_but_not_finalized": [],
+              "candidates": [],
+              "empty_text": [],
+              "errors": [],
+              "finalized_but_no_evidence": [
+                "G3-007/G1b"
+              ],
+              "lanes_called": 0,
+              "lanes_called_twice": [],
+              "runs": 0,
+              "runtime_models": []
+            }
+          },
+          "primary_target": {
+            "G3": 1
+          },
+          "problems": {},
+          "retry_lanes": {},
+          "roots": {
+            "G3": {
+              "candidate_sha256": [
+                "same-frozen-candidate"
+              ],
+              "invalid": 0,
+              "lanes": 1,
+              "lanes_done": 1,
+              "remaining": 0,
+              "retry": 0,
+              "root_sha256": [
+                "same-frozen-root"
+              ],
+              "scheduled": 1,
+              "segments": 1,
+              "uncalled": 0,
+              "valid": 1
+            }
+          },
+          "total": {
+            "invalid": 0,
+            "lanes": 1,
+            "remaining": 0,
+            "retry": 0,
+            "scheduled": 1,
+            "segments": 1,
+            "uncalled": 0,
+            "valid": 1
+          }
+        }
+      },
+      "invalid_then_valid_retry": {
+        "outcome": "refused",
+        "reason": "a lane was finalized twice in G3"
+      },
+      "invalid_then_exhausted_retry": {
+        "outcome": "refused",
+        "reason": "a lane was finalized twice in G3"
+      },
+      "repeated_same_attempt_negative_control": {
+        "outcome": "refused",
+        "reason": "a lane was finalized twice in G3"
+      }
+    },
+    "result": "REPRODUCED",
+    "scope": "optional progress helper, mocked filesystem only; native operator and ongoing jobs untouched"
+  },
+  "native_contract": "The existing G.finalize_segment writes attempt plus validity per segment; an invalid primary and its permitted retry name the same lane in separate finalizations. The real pending case is G3-007/G1b.",
+  "current_impact": "No grading call or native owner is blocked by this review. step_2161.sh does not invoke this optional helper. The helper is not used as completion or scoring authority. Do not interrupt or repeat live calls over this diagnostic."
+}

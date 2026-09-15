@@ -1,0 +1,9 @@
+attempt	codex_contract2169_c
+payload	../../unit_2020_codex_check/run_grading_contract_native_2169.py
+map	../unit_2020_codex_check/map_contract_native_2169.tsv
+command	run_1957.sh ../unit_2020_codex_check/map_contract_native_2169.tsv ../../unit_2020_codex_check/run_grading_contract_native_2169.py codex_contract2169_c 300
+wrapper_pid	3994035
+payload_pid	3994039
+payload_pgid	3994035
+started_utc	2026-09-15T04:29:11Z
+state	finished exit 0

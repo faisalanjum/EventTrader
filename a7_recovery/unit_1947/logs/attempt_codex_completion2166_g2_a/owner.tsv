@@ -1,0 +1,7 @@
+attempt	codex_completion2166_g2_a
+payload	../../unit_2020_codex_check/persist_corrected_completion_2166.py
+map	../unit_2161_execution/map_execution_2161.tsv
+wrapper_pid	3845176
+payload_pid	3845180
+started_utc	2026-09-15T02:43:20Z
+state	finished exit 0

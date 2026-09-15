@@ -1,0 +1,59 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G3/run/invocation.seg48.json",
+ "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+ "parent": null,
+ "reservation_sha256": "a3734f429dea8f882563d749682749c89f755004203bc1cc9dfc012eb3e29bcf",
+ "root_sha256": "dfc3b9bb3b65188b02a2276ccfccf49785308298ca10425aba99f82e3d49c8f4",
+ "rows": [
+  {
+   "batch_id": "G3-026",
+   "lane_id": "G3-026/G1a",
+   "ordinal": 52,
+   "prompt_sha256": "f3d661b8615f2055afecb36f9fda9d2f79b3f998b6045b59d245646a71d08267"
+  },
+  {
+   "batch_id": "G3-026",
+   "lane_id": "G3-026/G1b",
+   "ordinal": 53,
+   "prompt_sha256": "f3d661b8615f2055afecb36f9fda9d2f79b3f998b6045b59d245646a71d08267"
+  },
+  {
+   "batch_id": "G3-027",
+   "lane_id": "G3-027/G1a",
+   "ordinal": 54,
+   "prompt_sha256": "04402dcbf3c7a105476c89ae284d5ad6a066be0d19918ef28a2bca9deb7a3c8e"
+  },
+  {
+   "batch_id": "G3-027",
+   "lane_id": "G3-027/G1b",
+   "ordinal": 55,
+   "prompt_sha256": "04402dcbf3c7a105476c89ae284d5ad6a066be0d19918ef28a2bca9deb7a3c8e"
+  },
+  {
+   "batch_id": "G3-028",
+   "lane_id": "G3-028/G1a",
+   "ordinal": 56,
+   "prompt_sha256": "501f9e3c8643822718f7172cf158025e1905fcbc8009cbf55f788d575b46119a"
+  },
+  {
+   "batch_id": "G3-028",
+   "lane_id": "G3-028/G1b",
+   "ordinal": 57,
+   "prompt_sha256": "501f9e3c8643822718f7172cf158025e1905fcbc8009cbf55f788d575b46119a"
+  },
+  {
+   "batch_id": "G3-029",
+   "lane_id": "G3-029/G1a",
+   "ordinal": 58,
+   "prompt_sha256": "681cd989b313b1c0c362a8f139244b1779850da275ee82e0d1600ce49324f45d"
+  }
+ ],
+ "run_id": "run",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G3/run/grade_batch.seg48.js",
+ "script_sha256": "5f87bf66cebe87c828a477826944d6799f1b51bbf95ca565458273eaa87d0788",
+ "segment": 48,
+ "state_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G3/run/state.seg48.json"
+}

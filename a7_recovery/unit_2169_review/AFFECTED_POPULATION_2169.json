@@ -1,0 +1,1269 @@
+{
+ "baseline_headline": {
+  "M02d957fa99800507": {
+   "claims": {
+    "year over year quarter over quarter": {
+     "reason": "the quote states year over year AND quarter over quarter, and the only quantified comparison is versus the fourth quarter, so the headline is sequential; served forces prior year, corrected keeps the headline",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": 8,
+   "kind": "G2",
+   "leg": "UNION",
+   "produced_idx": 7,
+   "question_verdict": "affected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  "M24065e66c77fea00": {
+   "claims": {
+    "1Q26 vs 4Q25": {
+     "reason": "the table states a prior-year column and a sequential column, and its ONLY stated change is the 1Q26 vs 4Q25 column, so the headline comparison is sequential; the served text forces prior year whenever both appear and the corrected text keeps the headline",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original",
+      "corrective"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": 6,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 8,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000020"
+  },
+  "M5aeb2352c3aae25f": {
+   "claims": {
+    "sequential improvement from the fourth quarter": {
+     "reason": "the claim states one temporal comparison, the sequential one, so the served tiebreak's both-stated precondition does not fire and the corrected headline is that same comparison",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "UNION",
+   "produced_idx": 2,
+   "question_verdict": "unaffected",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  "M5da15f425e4d9b10": {
+   "claims": {
+    "sequential improvement from the fourth quarter": {
+     "reason": "the claim states one temporal comparison, the sequential one, so the served tiebreak's both-stated precondition does not fire and the corrected headline is that same comparison",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  "M84f7bd7ab2bad82f": {
+   "claims": {
+    "sequential improvement from the fourth quarter": {
+     "reason": "the claim states one temporal comparison, the sequential one, so the served tiebreak's both-stated precondition does not fire and the corrected headline is that same comparison",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  "Mb6660dcce1356528": {
+   "claims": {
+    "improving sequentially each month": {
+     "reason": "every served produced record on this claim carries no comparison baseline at all; both texts only choose among STATED comparisons and neither speaks to an absent baseline. A correctly supported prior-year headline is not changed by the sequential mention",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": null,
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 3,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0000006201-26-000031"
+  },
+  "Mc17055ff4a7a52dd": {
+   "claims": {
+    "1Q26 vs 4Q25": {
+     "reason": "the table states a prior-year column and a sequential column, and its ONLY stated change is the 1Q26 vs 4Q25 column, so the headline comparison is sequential; the served text forces prior year whenever both appear and the corrected text keeps the headline",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original",
+      "corrective"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": 6,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 9,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000020"
+  },
+  "Me36640ff3213b7f2": {
+   "claims": {
+    "increase sequentially up into March": {
+     "reason": "the 7% carries no stated basis, so either the sequential move is the only stated comparison - both texts pick it - or the 7% is the year-over-year headline, which both texts also pick; the required answer is the same on either reading",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 9,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 8,
+   "question_verdict": "unaffected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  "Me9adff0c6d62ed44": {
+   "claims": {
+    "increase sequentially up into March": {
+     "reason": "the 7% carries no stated basis, so either the sequential move is the only stated comparison - both texts pick it - or the 7% is the year-over-year headline, which both texts also pick; the required answer is the same on either reading",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 9,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 9,
+   "question_verdict": "unaffected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  "Mf6bf097c465003eb": {
+   "claims": {
+    "improving sequentially each month": {
+     "reason": "every served produced record on this claim carries no comparison baseline at all; both texts only choose among STATED comparisons and neither speaks to an absent baseline. A correctly supported prior-year headline is not changed by the sequential mention",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": null,
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 3,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0000006201-26-000031"
+  },
+  "Mf91a92c59065852f": {
+   "claims": {
+    "year over year quarter over quarter": {
+     "reason": "the quote states year over year AND quarter over quarter, and the only quantified comparison is versus the fourth quarter, so the headline is sequential; served forces prior year, corrected keeps the headline",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "original"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": 8,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 7,
+   "question_verdict": "affected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  "X56415b76439cd6be": {
+   "claims": {
+    "1Q26 vs 4Q25": {
+     "reason": "the table states a prior-year column and a sequential column, and its ONLY stated change is the 1Q26 vs 4Q25 column, so the headline comparison is sequential; the served text forces prior year whenever both appear and the corrected text keeps the headline",
+     "roles": [
+      "comparator"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "P2",
+   "produced_idx": 8,
+   "question_verdict": "open",
+   "source_id": "0000027904-26-000020"
+  },
+  "X59b3cb047c8dd0d9": {
+   "claims": {
+    "sequential improvement from the fourth quarter": {
+     "reason": "the claim states one temporal comparison, the sequential one, so the served tiebreak's both-stated precondition does not fire and the corrected headline is that same comparison",
+     "roles": [
+      "comparator"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 4,
+   "question_verdict": "unaffected",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  "X6eea70137b9a2e63": {
+   "claims": {
+    "1Q26 vs 4Q25": {
+     "reason": "the table states a prior-year column and a sequential column, and its ONLY stated change is the 1Q26 vs 4Q25 column, so the headline comparison is sequential; the served text forces prior year whenever both appear and the corrected text keeps the headline",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 3,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000020"
+  },
+  "X73357410ba2d97a2": {
+   "claims": {
+    "1Q26 vs 4Q25": {
+     "reason": "the table states a prior-year column and a sequential column, and its ONLY stated change is the 1Q26 vs 4Q25 column, so the headline comparison is sequential; the served text forces prior year whenever both appear and the corrected text keeps the headline",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000020"
+  },
+  "X77c244b1640ebb8c": {
+   "claims": {
+    "sequential improvement from the fourth quarter": {
+     "reason": "the claim states one temporal comparison, the sequential one, so the served tiebreak's both-stated precondition does not fire and the corrected headline is that same comparison",
+     "roles": [
+      "comparator"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  "X86feb54326687022": {
+   "claims": {
+    "improving sequentially each month": {
+     "reason": "every served produced record on this claim carries no comparison baseline at all; both texts only choose among STATED comparisons and neither speaks to an absent baseline. A correctly supported prior-year headline is not changed by the sequential mention",
+     "roles": [
+      "asked"
+     ],
+     "served_baseline": null,
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0000006201-26-000031"
+  },
+  "Xa9539f6f9f30a4c6": {
+   "claims": {
+    "sequential improvement from the fourth quarter": {
+     "reason": "the claim states one temporal comparison, the sequential one, so the served tiebreak's both-stated precondition does not fire and the corrected headline is that same comparison",
+     "roles": [
+      "comparator"
+     ],
+     "served_baseline": "sequential_period",
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "DAL_2026-04-08T10.00"
+  }
+ },
+ "population": {
+  "g2_questions": 310,
+  "g3_questions": 116,
+  "total": 426
+ },
+ "schema": "a7-two-clause-affected-population/2169",
+ "scope_action_empty": {
+  "M0d11a0029b0b0718": {
+   "claims": {
+    "On October 6, 2022, we entered into a Fourth Amended and Restated Loan Agreement": {
+     "reason": "a corporate credit agreement; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 3,
+   "kind": "G2",
+   "leg": "UNION",
+   "produced_idx": 4,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-25-105631"
+  },
+  "M0de45b05b3884472": {
+   "claims": {
+    "a $320 million revenue impact from winter storms": {
+     "reason": "the stated figure is a consolidated revenue impact; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "UNION",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  "M12f0e3b0f622a71c": {
+   "claims": {
+    "(in thousands, except per share amounts) (unaudited) Three months ended Year ended": {
+     "reason": "a consolidated non-GAAP reconciliation table of a single-brand company; no part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 2,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 2,
+   "question_verdict": "unaffected",
+   "source_id": "0001058090-26-000007"
+  },
+  "M1c4c23ebd184f0cc": {
+   "claims": {
+    "Announced planned deployment of Starlink": {
+     "reason": "the source states the deployment is across the fleet, so whole-company scope is explicit and empty is lawful under either text",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 5,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "0000092380-26-000044"
+  },
+  "M3267fda9050619b6": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 3,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "M340cd96cab48c901": {
+   "claims": {
+    "(in thousands, except per share amounts) (unaudited) Three months ended Year ended": {
+     "reason": "a consolidated non-GAAP reconciliation table of a single-brand company; no part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 2,
+   "kind": "G2",
+   "leg": "UNION",
+   "produced_idx": 2,
+   "question_verdict": "unaffected",
+   "source_id": "0001058090-26-000007"
+  },
+  "M3d3bf43c6b9baad8": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 1,
+   "kind": "G2",
+   "leg": "UNION",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "M43e87509e5cc819b": {
+   "claims": {
+    "with an option to purchase up to an additional 30 of the same aircraft": {
+     "reason": "an aircraft purchase option is neither a consolidated whole-company claim nor a business population the source names, so the served text makes empty assert something the quote does not establish while the corrected text makes empty affirmatively lawful",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": 6,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 5,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000013"
+  },
+  "M49ccb6aa2eb4a6c5": {
+   "claims": {
+    "Tax (Benefit) - Tax audit in the quarter": {
+     "reason": "a consolidated income-tax item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 4,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-25-000109"
+  },
+  "M51fe2eb8ba3ffada": {
+   "claims": {
+    "The decrease in gross margin was driven by a 138 basis point non-cash LIFO charge.": {
+     "reason": "a consolidated gross-margin charge; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 1,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0001171843-26-001288"
+  },
+  "M54c69cfbbfb770fe": {
+   "claims": {
+    "We recorded a $15.9 million loss on early debt extinguishment": {
+     "reason": "a corporate financing charge; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 1,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-25-105631"
+  },
+  "M63c05645b2228cf4": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 3,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "M6fdeee55db09c5ae": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 3,
+   "kind": "G2",
+   "leg": "UNION",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "M752dab6e0c48afa8": {
+   "claims": {
+    "a $320 million revenue impact from winter storms": {
+     "reason": "the stated figure is a consolidated revenue impact; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 4,
+   "question_verdict": "unaffected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  "Mabd80961830fa09a": {
+   "claims": {
+    "with an option to purchase up to an additional 30 of the same aircraft": {
+     "reason": "an aircraft purchase option is neither a consolidated whole-company claim nor a business population the source names, so the served text makes empty assert something the quote does not establish while the corrected text makes empty affirmatively lawful",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": 6,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 6,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000013"
+  },
+  "Mb440e706885e6f10": {
+   "claims": {
+    "Tax (Benefit) - Tax audit in the quarter": {
+     "reason": "a consolidated income-tax item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 4,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-25-000109"
+  },
+  "Mb693cbc83edbc2b9": {
+   "claims": {
+    "We recorded a $15.9 million loss on early debt extinguishment": {
+     "reason": "a corporate financing charge; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 1,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-25-105631"
+  },
+  "Mba17df14d96f594b": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 1,
+   "kind": "G2",
+   "leg": "P1",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "Mc3faae8812cd07d3": {
+   "claims": {
+    "(in thousands, except per share amounts) (unaudited) Three months ended Year ended": {
+     "reason": "a consolidated non-GAAP reconciliation table of a single-brand company; no part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 2,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 2,
+   "question_verdict": "unaffected",
+   "source_id": "0001058090-26-000007"
+  },
+  "Mc6c32dee91400e91": {
+   "claims": {
+    "in millions, except per share amounts Earnings Before Income Tax": {
+     "reason": "the reconciliation footnote says primarily, not exclusively, Bahama Breeze, so whether an applicable part is source-stated - which the corrected text still requires in the field - is unsettled",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "open"
+    }
+   },
+   "gold_idx": 2,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 2,
+   "question_verdict": "open",
+   "source_id": "0000940944-26-000005"
+  },
+  "Md51d433bdbbf21c8": {
+   "claims": {
+    "On October 6, 2022, we entered into a Fourth Amended and Restated Loan Agreement": {
+     "reason": "a corporate credit agreement; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 3,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-25-105631"
+  },
+  "Md5b6c966cbdbf15c": {
+   "claims": {
+    "a $320 million revenue impact from winter storms": {
+     "reason": "the stated figure is a consolidated revenue impact; no business part is stated and whole-company is establishable",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 4,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  "Mde7d5e39712de0c7": {
+   "claims": {
+    "($ in millions, except per share amounts)": {
+     "reason": "the served quote is the consolidated table, but the corrective rules direct the grader to the surrounding source where the impairment is attributed to Health; whether a part is therefore source-stated is unsettled and Codex already holds this row open",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "open"
+    }
+   },
+   "gold_idx": 0,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 0,
+   "question_verdict": "open",
+   "source_id": "0000764478-25-000057"
+  },
+  "Mfeb0c103032e5aba": {
+   "claims": {
+    "Announced planned deployment of Starlink": {
+     "reason": "the source states the deployment is across the fleet, so whole-company scope is explicit and empty is lawful under either text",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "original"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": 5,
+   "kind": "G2",
+   "leg": "P2",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "0000092380-26-000044"
+  },
+  "X1642c8fd4f67b764": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 6,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "X24756096af610d6d": {
+   "claims": {
+    "in millions, except per share amounts Earnings Before Income Tax": {
+     "reason": "the reconciliation footnote says primarily, not exclusively, Bahama Breeze, so whether an applicable part is source-stated - which the corrected text still requires in the field - is unsettled",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "open"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "open",
+   "source_id": "0000940944-26-000005"
+  },
+  "X3a53a382d26adad5": {
+   "claims": {
+    "(in thousands, except per share amounts) (unaudited) Three months ended Year ended": {
+     "reason": "a consolidated non-GAAP reconciliation table of a single-brand company; no part is stated and whole-company is establishable",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0001058090-26-000007"
+  },
+  "X3e2d2692bb7e8e6a": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 4,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "X5e80f0a222be7eb2": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 7,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "X6a8a1479099fcb9a": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "X7c01f022765630af": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "X8d2159e496d61cc6": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 6,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "X99d7bc16850a9dde": {
+   "claims": {
+    "with an option to purchase up to an additional 30 of the same aircraft": {
+     "reason": "an aircraft purchase option is neither a consolidated whole-company claim nor a business population the source names, so the served text makes empty assert something the quote does not establish while the corrected text makes empty affirmatively lawful",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000013"
+  },
+  "Xa0f9de09f3c55112": {
+   "claims": {
+    "($ in millions, except per share amounts)": {
+     "reason": "the served quote is the consolidated table, but the corrective rules direct the grader to the surrounding source where the impairment is attributed to Health; whether a part is therefore source-stated is unsettled and Codex already holds this row open",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "open"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "open",
+   "source_id": "0000764478-25-000057"
+  },
+  "Xa7bfdf2b6ab0c842": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 4,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "Xb100f34c67a98cff": {
+   "claims": {
+    "Announced planned deployment of Starlink": {
+     "reason": "the source states the deployment is across the fleet, so whole-company scope is explicit and empty is lawful under either text",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 3,
+   "question_verdict": "unaffected",
+   "source_id": "0000092380-26-000044"
+  },
+  "Xb3a3351bca3b64eb": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 7,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "Xc41c0e28ba4f1e05": {
+   "claims": {
+    "During fiscal 2025, the Company repurchased": {
+     "reason": "the source names the consolidated Company as the actor and its own common stock as the object, so whole-company scope and no-applicable-part are both establishable; empty stays lawful under either text",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 2,
+   "question_verdict": "unaffected",
+   "source_id": "0001104659-26-027061"
+  },
+  "Xcf1d14b2028b62d2": {
+   "claims": {
+    "(in thousands, except per share amounts) (unaudited) Three months ended Year ended": {
+     "reason": "a consolidated non-GAAP reconciliation table of a single-brand company; no part is stated and whole-company is establishable",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "0001058090-26-000007"
+  },
+  "Xe10aa94910fc4e7a": {
+   "claims": {
+    "with an option to purchase up to an additional 30 of the same aircraft": {
+     "reason": "an aircraft purchase option is neither a consolidated whole-company claim nor a business population the source names, so the served text makes empty assert something the quote does not establish while the corrected text makes empty affirmatively lawful",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "affected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 8,
+   "question_verdict": "affected",
+   "source_id": "0000027904-26-000013"
+  },
+  "Xe241261548339f09": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 5,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "Xe53ce648226c9f64": {
+   "claims": {
+    "Other Income Tax impacts recorded as Special": {
+     "reason": "a consolidated income-tax special item; no business part is stated and the company-level reading is establishable, so both texts accept empty",
+     "roles": [
+      "comparator"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0001041061-26-000084"
+  },
+  "Xf6cbcbd375607d09": {
+   "claims": {
+    "Announced planned deployment of Starlink": {
+     "reason": "the source states the deployment is across the fleet, so whole-company scope is explicit and empty is lawful under either text",
+     "roles": [
+      "asked"
+     ],
+     "served_by": [
+      "corrective"
+     ],
+     "verdict": "unaffected"
+    }
+   },
+   "gold_idx": null,
+   "kind": "G3",
+   "leg": "UNION",
+   "produced_idx": 1,
+   "question_verdict": "unaffected",
+   "source_id": "0000092380-26-000044"
+  }
+ },
+ "summary": {
+  "baseline_headline": {
+   "G2|affected": 4,
+   "G2|unaffected": 7,
+   "G3|affected": 2,
+   "G3|open": 1,
+   "G3|unaffected": 4
+  },
+  "scope_action_empty": {
+   "G2|affected": 2,
+   "G2|open": 2,
+   "G2|unaffected": 20,
+   "G3|affected": 2,
+   "G3|open": 2,
+   "G3|unaffected": 15
+  }
+ }
+}

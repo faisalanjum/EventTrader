@@ -1,0 +1,139 @@
+{
+ "calls": 7,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-026",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+   "lane_id": "G3-026/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 52,
+   "prompt_sha256": "f3d661b8615f2055afecb36f9fda9d2f79b3f998b6045b59d245646a71d08267",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"X9cdae8b168c23a2a\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-026",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+   "lane_id": "G3-026/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 53,
+   "prompt_sha256": "f3d661b8615f2055afecb36f9fda9d2f79b3f998b6045b59d245646a71d08267",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"X9cdae8b168c23a2a\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-027",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+   "lane_id": "G3-027/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 54,
+   "prompt_sha256": "04402dcbf3c7a105476c89ae284d5ad6a066be0d19918ef28a2bca9deb7a3c8e",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"Xeb9efe850afaa8e3\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-027",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+   "lane_id": "G3-027/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 55,
+   "prompt_sha256": "04402dcbf3c7a105476c89ae284d5ad6a066be0d19918ef28a2bca9deb7a3c8e",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"Xeb9efe850afaa8e3\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-028",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+   "lane_id": "G3-028/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 56,
+   "prompt_sha256": "501f9e3c8643822718f7172cf158025e1905fcbc8009cbf55f788d575b46119a",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"Xba92891f45109f52\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-028",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+   "lane_id": "G3-028/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 57,
+   "prompt_sha256": "501f9e3c8643822718f7172cf158025e1905fcbc8009cbf55f788d575b46119a",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"Xba92891f45109f52\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-029",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "a7c6bf9ed5557f26d415b1aff4e8f53717ad4c7767c740cb5d8ece6e542486e1",
+   "lane_id": "G3-029/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 58,
+   "prompt_sha256": "681cd989b313b1c0c362a8f139244b1779850da275ee82e0d1600ce49324f45d",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[{\"question_id\": \"X1cdb0213363706c7\", \"bucket\": \"key_miss\"}]\n```"
+  }
+ ],
+ "rows": 7
+}

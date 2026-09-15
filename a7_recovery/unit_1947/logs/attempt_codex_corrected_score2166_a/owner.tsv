@@ -1,0 +1,7 @@
+attempt	codex_corrected_score2166_a
+payload	../../unit_2020_codex_check/score_corrected_grading_2162.py
+map	../unit_2161_execution/map_execution_2161.tsv
+wrapper_pid	3848129
+payload_pid	3848133
+started_utc	2026-09-15T02:44:51Z
+state	finished exit 0

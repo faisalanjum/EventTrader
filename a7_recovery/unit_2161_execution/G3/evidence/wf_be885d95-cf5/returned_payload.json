@@ -1,0 +1,44 @@
+{
+ "calls": 2,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-005",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "bdfe0762e4d8ea7e59a3e16159051cd94c7c64adabe3bc9ec2fed0d9fc4b6c67",
+   "lane_id": "G3-005/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 10,
+   "prompt_sha256": "bde46c3ea52c56fdd0ecb3c96c9a679d53cc87588d7eaf802383d85d96f09700",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"X5ea3b7457e8aa160\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X7e0321fb7819e50d\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xc41c0e28ba4f1e05\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X75819bfe50a39683\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X263e008c6143e6f7\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G3-005",
+   "candidate_sha256": "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "bdfe0762e4d8ea7e59a3e16159051cd94c7c64adabe3bc9ec2fed0d9fc4b6c67",
+   "lane_id": "G3-005/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 11,
+   "prompt_sha256": "bde46c3ea52c56fdd0ecb3c96c9a679d53cc87588d7eaf802383d85d96f09700",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\"question_id\": \"X5ea3b7457e8aa160\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X7e0321fb7819e50d\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xc41c0e28ba4f1e05\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X75819bfe50a39683\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X263e008c6143e6f7\", \"bucket\": \"key_miss\"}\n]\n```"
+  }
+ ],
+ "rows": 2
+}

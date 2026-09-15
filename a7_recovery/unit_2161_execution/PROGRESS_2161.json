@@ -1,0 +1,105 @@
+{
+ "evidence": {
+  "G2": {
+   "attempts": [
+    1
+   ],
+   "called_but_not_finalized": [],
+   "candidates": [
+    "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb"
+   ],
+   "empty_text": [],
+   "errors": [],
+   "finalized_but_no_evidence": [],
+   "lanes_called": 38,
+   "lanes_called_twice": [],
+   "retry_calls_spent": 0,
+   "runs": 33,
+   "runtime_models": [
+    "claude-sonnet-5"
+   ]
+  },
+  "G3": {
+   "attempts": [
+    1,
+    2
+   ],
+   "called_but_not_finalized": [],
+   "candidates": [
+    "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013"
+   ],
+   "empty_text": [],
+   "errors": [],
+   "finalized_but_no_evidence": [],
+   "lanes_called": 61,
+   "lanes_called_twice": [
+    "G3-007/G1b"
+   ],
+   "retry_calls_spent": 1,
+   "runs": 50,
+   "runtime_models": [
+    "claude-sonnet-5"
+   ]
+  }
+ },
+ "primary_target": {
+  "G2": 38,
+  "G3": 60
+ },
+ "problems": {},
+ "retry_lanes": {
+  "G3": [
+   "G3-007/G1b"
+  ]
+ },
+ "roots": {
+  "G2": {
+   "candidate_sha256": [
+    "102901818fea435835c4926cb17a8de6124869711feb3497fa6dd348ea4d98fb"
+   ],
+   "final_invalid": 0,
+   "final_valid": 38,
+   "invalid": 0,
+   "lanes": 38,
+   "lanes_done": 38,
+   "remaining": 0,
+   "retry": 0,
+   "root_sha256": [
+    "6ca1dc4a6c9f0f2beae5c90a7e7d977030096c6244c246d54243a6c7eaf1fbef"
+   ],
+   "scheduled": 38,
+   "segments": 33,
+   "uncalled": 0,
+   "valid": 38
+  },
+  "G3": {
+   "candidate_sha256": [
+    "088902eb930089df3f222bc6ac5aca2ae5c43715983ef17b0341883af10b8013"
+   ],
+   "final_invalid": 0,
+   "final_valid": 60,
+   "invalid": 1,
+   "lanes": 60,
+   "lanes_done": 60,
+   "remaining": 0,
+   "retry": 1,
+   "root_sha256": [
+    "dfc3b9bb3b65188b02a2276ccfccf49785308298ca10425aba99f82e3d49c8f4"
+   ],
+   "scheduled": 61,
+   "segments": 50,
+   "uncalled": 0,
+   "valid": 60
+  }
+ },
+ "total": {
+  "invalid": 1,
+  "lanes": 98,
+  "remaining": 0,
+  "retry": 1,
+  "scheduled": 99,
+  "segments": 83,
+  "uncalled": 0,
+  "valid": 98
+ }
+}

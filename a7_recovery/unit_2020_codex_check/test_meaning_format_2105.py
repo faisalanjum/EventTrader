@@ -20,7 +20,7 @@ import a7_meaning_format_2105 as F
 def scorer(monkeypatch):
     monkeypatch.setattr(B, 'GRADING_SCORER', None)
     monkeypatch.setattr(B, 'GRADING_SCORER_PROVENANCE', None)
-    path = str(Path(G.__file__).parent / 'scorers/score_exp5_current.py')
+    path = str(A7 / 'unit_2008/harness_g1v3/scorers/score_exp5_current.py')
     B.bind_grading_scorer(path, G._sha_file(path))
 
 

@@ -1,0 +1,15 @@
+{
+ "lanes": {
+  "G3-015/G1a": {
+   "chars": 325,
+   "sha256": "e651768315ffa6a8025150301e99d7323c794915d5c3cc4b059f7edc8d906aa1",
+   "text": "```json\n[\n  {\"question_id\": \"X028e7ca1db790ea8\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X14637de8bbc0ab1b\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xa6096f3fa348cdd9\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X24756096af610d6d\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xbb48c40216961570\", \"bucket\": \"duplicate\"}\n]\n```"
+  },
+  "G3-015/G1b": {
+   "chars": 325,
+   "sha256": "e651768315ffa6a8025150301e99d7323c794915d5c3cc4b059f7edc8d906aa1",
+   "text": "```json\n[\n  {\"question_id\": \"X028e7ca1db790ea8\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X14637de8bbc0ab1b\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xa6096f3fa348cdd9\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X24756096af610d6d\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"Xbb48c40216961570\", \"bucket\": \"duplicate\"}\n]\n```"
+  }
+ },
+ "segment": 29
+}

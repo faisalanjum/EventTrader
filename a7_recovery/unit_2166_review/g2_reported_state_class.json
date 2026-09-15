@@ -1,0 +1,208 @@
+[
+ {
+  "qid": "M70f663f593c28775",
+  "batch": "G2-001",
+  "card_values": [
+   6447,
+   6265
+  ],
+  "card_has_prior": true,
+  "quote": "Ending domestic store count \u200b 6,447",
+  "lanes": {
+   "G1a": [
+    true,
+    false
+   ],
+   "G1b": [
+    true,
+    true
+   ]
+  },
+  "unresolved": true
+ },
+ {
+  "qid": "M02dd1d33369df31b",
+  "batch": "G2-001",
+  "card_values": [
+   "1.73",
+   "1.61"
+  ],
+  "card_has_prior": true,
+  "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was",
+  "lanes": {
+   "G1a": [
+    true,
+    true
+   ],
+   "G1b": [
+    false,
+    false
+   ]
+  },
+  "unresolved": true
+ },
+ {
+  "qid": "M66e7557e3b1064dd",
+  "batch": "G2-002",
+  "card_values": [
+   84
+  ],
+  "card_has_prior": false,
+  "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of ",
+  "lanes": {
+   "G1a": [
+    true,
+    true
+   ],
+   "G1b": [
+    true,
+    true
+   ]
+  },
+  "unresolved": false
+ },
+ {
+  "qid": "M0c5dd9bbeece43b0",
+  "batch": "G2-006",
+  "card_values": [
+   "1.73",
+   "1.61"
+  ],
+  "card_has_prior": true,
+  "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was",
+  "lanes": {
+   "G1a": [
+    false,
+    false
+   ],
+   "G1b": [
+    false,
+    false
+   ]
+  },
+  "unresolved": true
+ },
+ {
+  "qid": "M31b20a4a0b7e5203",
+  "batch": "G2-010",
+  "card_values": [
+   "1.73",
+   "1.61"
+  ],
+  "card_has_prior": true,
+  "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was",
+  "lanes": {
+   "G1a": [
+    false,
+    false
+   ],
+   "G1b": [
+    false,
+    false
+   ]
+  },
+  "unresolved": true
+ },
+ {
+  "qid": "M4e236380221db347",
+  "batch": "G2-013",
+  "card_values": [
+   "1.5",
+   "2.0"
+  ],
+  "card_has_prior": true,
+  "quote": "borrowings bear interest, at the Company\u2019s election, at either a base ",
+  "lanes": {
+   "G1a": [
+    true,
+    false
+   ],
+   "G1b": [
+    true,
+    true
+   ]
+  },
+  "unresolved": true
+ },
+ {
+  "qid": "Mab3c1cc44faa7224",
+  "batch": "G2-014",
+  "card_values": [
+   80
+  ],
+  "card_has_prior": false,
+  "quote": "a luxury beauty retailer operating more than 80 stores in the UK and I",
+  "lanes": {
+   "G1a": [
+    true,
+    true
+   ],
+   "G1b": [
+    true,
+    true
+   ]
+  },
+  "unresolved": false
+ },
+ {
+  "qid": "M42b29840407e0051",
+  "batch": "G2-015",
+  "card_values": [
+   80
+  ],
+  "card_has_prior": false,
+  "quote": "a luxury beauty retailer operating more than 80 stores in the UK and I",
+  "lanes": {
+   "G1b": [
+    true,
+    true
+   ],
+   "G1a": [
+    true,
+    true
+   ]
+  },
+  "unresolved": false
+ },
+ {
+  "qid": "M15a4fe7f7f566593",
+  "batch": "G2-015",
+  "card_values": [
+   13
+  ],
+  "card_has_prior": false,
+  "quote": "one individual vendor provided 13 percent of our total purchases",
+  "lanes": {
+   "G1b": [
+    true,
+    false
+   ],
+   "G1a": [
+    true,
+    true
+   ]
+  },
+  "unresolved": true
+ },
+ {
+  "qid": "M4ea4d7f5cd26d81a",
+  "batch": "G2-016",
+  "card_values": [
+   -763352,
+   -1370961
+  ],
+  "card_has_prior": true,
+  "quote": "(In thousands, except share data) \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b December 31, 202",
+  "lanes": {
+   "G1a": [
+    true,
+    true
+   ],
+   "G1b": [
+    true,
+    true
+   ]
+  },
+  "unresolved": false
+ }
+]

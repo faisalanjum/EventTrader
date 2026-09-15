@@ -1,0 +1,1738 @@
+{
+ "schema": "a7-carried-null-delta-review/v1",
+ "reviewer_session": "01a05829-3086-73e0-89c9-e5773b322d80",
+ "status": "Root source review; independent Core check still pending; NO call approval",
+ "inputs": {
+  "score": {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_corrected_score2166_a/A7_CORRECTED_SCORE.json",
+   "sha256": "656c18bd363ac3941a737d4d3ae55b101f303c209727ed261325a42e9664f08a"
+  },
+  "candidate": {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_currentg232157_c/a7_g23_candidate.json",
+   "sha256": "020f4550c47e0f4bbfb63aebe67854d5eb3efade92c674ae72fceb40f1d3050a"
+  },
+  "selection": {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/G2_REUSE_SELECTION_2159.json",
+   "sha256": "9603626914cdddd79461ad8150d4a054dbde5776cb6af4f58057b21dd48228c2"
+  },
+  "previous_materiality": {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/G2_MATERIALITY_REVIEW_2159.md",
+   "sha256": "a0ea2c66ab7dfd73655abdcf48be3e0319f35a9c2223eac58a5385dfced7f73c"
+  },
+  "renderer": {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/a7_grading_input_correction_2114.py",
+   "sha256": "32e2f650f56cb77b20c89199bc8cf120181dbc7ff92bdd60014d7abc95a16a2d"
+  }
+ },
+ "counts": {
+  "all_carried_questions": 228,
+  "with_both_stored_closed_operands": 37,
+  "distinct_complete_records": 22,
+  "additional_changed_questions": 23,
+  "unchanged_questions_in_frontier": 14
+ },
+ "additional_question_ids": [
+  "M1cc002a6431725fe",
+  "M2a81c745481f2ebc",
+  "M341ed3bdf05f28cf",
+  "M357a5ef0bb7e36e6",
+  "M4ca257814a3d2655",
+  "M61beee43a203dd9f",
+  "M645d780bfaa2241b",
+  "M6d9dd25a44c4125e",
+  "M72caa9bf890c910b",
+  "M7a5e4a77f0c4c495",
+  "M7c647e1cedf0a3e3",
+  "M85b17ecaa1bc123d",
+  "M94c0b5e28cf36305",
+  "Ma5d5cffc07c4dd0c",
+  "Mbbbad21e2ccc2af7",
+  "Md5def2bc09fe22d8",
+  "Me2615b2c555ed925",
+  "Me35f4178e598dcb5",
+  "Mece90a618a058690",
+  "Mee82318cbe88a420",
+  "Mf1aca8c5849b0770",
+  "Mf1c41a01fa7b1847",
+  "Mffc29b8ff785d499"
+ ],
+ "groups": [
+  {
+   "sid": "0000006201-26-000031",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "17.41"
+     },
+     "comparison_low": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "17.41"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "passenger_revenue_per_available_seat_mile",
+     "driver_state": "increased",
+     "fiscal_quarter": 1,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "18.57"
+     },
+     "level_low": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "18.57"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": "2026-03-31",
+     "period_scope": null,
+     "period_start_date": "2026-01-01",
+     "polarity_proof": null,
+     "quote": "Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+     "sentinel_class": null,
+     "slice_parts": [
+      "geography:domesticdestination"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": "available_seat_mile"
+   },
+   "identities": [
+    {
+     "q": "M2a81c745481f2ebc",
+     "leg": "P1",
+     "g": 4,
+     "i": 4
+    },
+    {
+     "q": "Md5def2bc09fe22d8",
+     "leg": "P2",
+     "g": 4,
+     "i": 4
+    },
+    {
+     "q": "Mffc29b8ff785d499",
+     "leg": "UNION",
+     "g": 4,
+     "i": 2
+    }
+   ],
+   "review_index": 0,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000006201-26-000032",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "14.54"
+     },
+     "comparison_low": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "14.54"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "operating_cost_per_available_seat_mile",
+     "driver_state": "increased",
+     "fiscal_quarter": 1,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "15.29"
+     },
+     "level_low": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "15.29"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "excluding net special items, fuel and profit sharing"
+     ],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": "available_seat_mile"
+   },
+   "identities": [
+    {
+     "q": "M341ed3bdf05f28cf",
+     "leg": "P1",
+     "g": 0,
+     "i": 0
+    },
+    {
+     "q": "Mf1c41a01fa7b1847",
+     "leg": "UNION",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 1,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000092380-26-000044",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 41
+     },
+     "comparison_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 41
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "revenue",
+     "driver_state": "increased",
+     "fiscal_quarter": 1,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 44
+     },
+     "level_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 44
+     },
+     "level_shape_hint": "point",
+     "level_unit": "m_usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": "2026-03-31",
+     "period_scope": null,
+     "period_start_date": "2026-01-01",
+     "polarity_proof": null,
+     "quote": "(in millions, except per share amounts) (unaudited) Three months ended March 31, 2026 2025 Percent Change OPERATING REVENUES: Passenger $ 6,591 $ 5,811 13.4 Freight 44 41 7.3",
+     "sentinel_class": null,
+     "slice_parts": [
+      "product:cargoandfreight"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M85b17ecaa1bc123d",
+     "leg": "P1",
+     "g": 4,
+     "i": 4
+    },
+    {
+     "q": "M7c647e1cedf0a3e3",
+     "leg": "P2",
+     "g": 4,
+     "i": 4
+    },
+    {
+     "q": "M72caa9bf890c910b",
+     "leg": "UNION",
+     "g": 4,
+     "i": 0
+    }
+   ],
+   "review_index": 2,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000764478-25-000057",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.4"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.4"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "revenue",
+     "driver_state": "increased",
+     "fiscal_quarter": 3,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.8"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.8"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": "2025-11-01",
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Online revenue as a % of total segment revenue 31.8 % 31.4 % 32.1 % 31.2 %",
+     "sentinel_class": null,
+     "slice_parts": [
+      "segment:domesticsegment",
+      "channel:online"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M838398e01dc7b3d7",
+     "leg": "P1",
+     "g": 3,
+     "i": 3
+    }
+   ],
+   "review_index": 3,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0000764478-25-000057",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.2"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.2"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "revenue",
+     "driver_state": "increased",
+     "fiscal_quarter": null,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "32.1"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "32.1"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": "2025-11-01",
+     "period_scope": "ytd",
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Online revenue as a % of total segment revenue 31.8 % 31.4 % 32.1 % 31.2 %",
+     "sentinel_class": null,
+     "slice_parts": [
+      "segment:domesticsegment",
+      "channel:online"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "Meae5deb8e54cd4dc",
+     "leg": "P1",
+     "g": 4,
+     "i": 4
+    }
+   ],
+   "review_index": 4,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0000898173-26-000006",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.71"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.71"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "earnings_per_share",
+     "driver_state": "increased",
+     "fiscal_quarter": null,
+     "fiscal_year": 2025,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.97"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.97"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "Diluted"
+     ],
+     "month": null,
+     "period_end_date": "2025-12-31",
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Diluted earnings per common share for the year ended December 31, 2025, increased 10% to $2.97 on 856 million shares versus $2.71 on 881 million shares for the same period one year ago.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": "share"
+   },
+   "identities": [
+    {
+     "q": "M7a5e4a77f0c4c495",
+     "leg": "P1",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 5,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000940944-25-000038",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "18.4"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "18.4"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "segment_profit_margin",
+     "driver_state": "increased",
+     "fiscal_quarter": null,
+     "fiscal_year": 2025,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "19.3"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "19.3"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "LongHorn Steakhouse 19.3% 18.4% 90 BP",
+     "sentinel_class": null,
+     "slice_parts": [
+      "segment:longhornsteakhousesegment"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "Mece90a618a058690",
+     "leg": "P1",
+     "g": 0,
+     "i": 0
+    },
+    {
+     "q": "Ma5d5cffc07c4dd0c",
+     "leg": "P2",
+     "g": 0,
+     "i": 0
+    },
+    {
+     "q": "M1cc002a6431725fe",
+     "leg": "UNION",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 6,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000940944-26-000009",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.74"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.74"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "continuing_operations_earnings_per_share",
+     "driver_state": "decreased",
+     "fiscal_quarter": 3,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.68"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.68"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "Diluted"
+     ],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Diluted net earnings per share: \n\nEarnings from continuing operations \n\n$ 2.68 $ 2.74 (2.2)%",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": "share"
+   },
+   "identities": [
+    {
+     "q": "M6d9dd25a44c4125e",
+     "leg": "P1",
+     "g": 1,
+     "i": 2
+    },
+    {
+     "q": "Mbbbad21e2ccc2af7",
+     "leg": "UNION",
+     "g": 1,
+     "i": 2
+    }
+   ],
+   "review_index": 7,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0001041061-26-000084",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "0.71"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "0.71"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "dividend_per_share",
+     "driver_state": "increased",
+     "fiscal_quarter": null,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "0.75"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "0.75"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": 2,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "In February 2026, our Board of Directors declared a quarterly dividend of $0.75 per share of Common Stock, a 6% increase from the quarterly dividend of $0.71 per share of Common Stock paid in 2025.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "instant",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": "share"
+   },
+   "identities": [
+    {
+     "q": "Me2615b2c555ed925",
+     "leg": "P1",
+     "g": 0,
+     "i": 0
+    },
+    {
+     "q": "Mee82318cbe88a420",
+     "leg": "UNION",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 8,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0001058090-26-000007",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "24.8"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "24.8"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "restaurant_level_operating_margin",
+     "driver_state": "decreased",
+     "fiscal_quarter": 4,
+     "fiscal_year": 2025,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "23.4"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "23.4"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Restaurant level operating margin1 was 23.4%, a decrease from 24.8%",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M97687ce178b7517e",
+     "leg": "P1",
+     "g": 1,
+     "i": 1
+    },
+    {
+     "q": "M3c01992f2e58d996",
+     "leg": "P2",
+     "g": 1,
+     "i": 1
+    },
+    {
+     "q": "M2ad3c19c55a33b22",
+     "leg": "UNION",
+     "g": 1,
+     "i": 1
+    }
+   ],
+   "review_index": 9,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0001104659-25-105631",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "million",
+      "value": "71.9"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "million",
+      "value": "71.9"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "sales",
+     "driver_state": "increased",
+     "fiscal_quarter": 3,
+     "fiscal_year": 2025,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "million",
+      "value": "83.5"
+     },
+     "level_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "million",
+      "value": "83.5"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "m_usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "North Italia sales increased 16.1% to $83.5 million for the third quarter of fiscal 2025, compared to $71.9 million for the third quarter of fiscal 2024.",
+     "sentinel_class": null,
+     "slice_parts": [
+      "segment:northitalia"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M4ca257814a3d2655",
+     "leg": "P1",
+     "g": 0,
+     "i": 0
+    },
+    {
+     "q": "M94c0b5e28cf36305",
+     "leg": "P2",
+     "g": 0,
+     "i": 0
+    },
+    {
+     "q": "M645d780bfaa2241b",
+     "leg": "UNION",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 10,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0001104659-26-027061",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.2"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.2"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "gross_margin",
+     "driver_state": "decreased",
+     "fiscal_quarter": 4,
+     "fiscal_year": 2025,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.1"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.1"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "As a percentage of net sales, gross profit decreased to 38.1% compared to 38.2%, primarily due to unfavorable channel mix, deleverage of store fixed expenses, and deleverage of other revenue, mostly offset by lower inventory shrink and supply chain efficiencies.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M1aa19982f56a2a96",
+     "leg": "P1",
+     "g": 0,
+     "i": 0
+    },
+    {
+     "q": "M4e5b3f2256646925",
+     "leg": "UNION",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 11,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0001104659-26-032757",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 86
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 86
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "sales_mix",
+     "driver_state": "decreased",
+     "fiscal_quarter": 2,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 85
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 85
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "approximately"
+     ],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "During the second quarter of fiscal 2026, failure and maintenance related categories represented the largest portion of our sales mix at approximately 85% of total sales, whereas they represented approximately 86% of total sales in the comparable prior year period.",
+     "sentinel_class": null,
+     "slice_parts": [
+      "product:failure",
+      "product:maintenanceitems"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M558257457a55f3be",
+     "leg": "P1",
+     "g": 1,
+     "i": 1
+    }
+   ],
+   "review_index": 12,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0000006201-26-000031",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": null,
+      "value": 30700
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": null,
+      "value": 30700
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "full_time_equivalent_employees",
+     "driver_state": "increased",
+     "fiscal_quarter": 1,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": null,
+      "value": 32500
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": null,
+      "value": 32500
+     },
+     "level_shape_hint": "point",
+     "level_unit": "count",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": "2026-03-31",
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 %",
+     "sentinel_class": null,
+     "slice_parts": [
+      "product:regionalcarrier"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "instant",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "Me35f4178e598dcb5",
+     "leg": "P2",
+     "g": 5,
+     "i": 5
+    }
+   ],
+   "review_index": 13,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000006201-26-000032",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "14.54"
+     },
+     "comparison_low": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "14.54"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "operating_cost_per_available_seat_mile",
+     "driver_state": "increased",
+     "fiscal_quarter": 1,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "15.29"
+     },
+     "level_low": {
+      "scale_multiplier": "0.01",
+      "unit_scale_evidence": "cents",
+      "value": "15.29"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "excluding net special items, fuel and profit sharing"
+     ],
+     "month": null,
+     "period_end_date": "2026-03-31",
+     "period_scope": null,
+     "period_start_date": "2026-01-01",
+     "polarity_proof": null,
+     "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": "available_seat_mile"
+   },
+   "identities": [
+    {
+     "q": "M357a5ef0bb7e36e6",
+     "leg": "P2",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 14,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000764478-25-000057",
+   "fact": {
+    "fact_type": "action_event",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 0
+     },
+     "comparison_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 0
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "goodwill_and_intangible_asset_impairment",
+     "driver_state": "occurred",
+     "fiscal_quarter": 3,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 171
+     },
+     "level_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": 171
+     },
+     "level_shape_hint": "point",
+     "level_unit": "m_usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "($ in millions, except per share amounts): \n\nThree Months Ended Nine Months Ended November 1, 2025 November 2, 2024 November 1, 2025 November 2, 2024 Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580 Revenue % change 2.4 % (3.2) % 1.1 % (4.3) % Comparable sales % change 2.7 % (2.9) % 1.2 % (3.7) % Gross profit $ 2,248 $ 2,217 $ 6,491 $ 6,467 \n\nGross profit as a % of revenue (1) \n\n23.2 % 23.5 % 23.3 % 23.4 % Selling, general and administrative expense (\"SG&A\") $ 1,884 $ 1,871 $ 5,434 $ 5,418 \n\nSG&A as a % of revenue (1) \n\n19.5 % 19.8 % 19.5 % 19.6 % Restructuring charges $ (5) $ (4) $ 218 $ 4 Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "Mde7d5e39712de0c7",
+     "leg": "P2",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 15,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0000764478-25-000057",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.4"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.4"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "revenue_mix",
+     "driver_state": "increased",
+     "fiscal_quarter": 3,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.8"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.8"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Online revenue as a % of total segment revenue 31.8 % 31.4 % 32.1 % 31.2 %",
+     "sentinel_class": null,
+     "slice_parts": [
+      "segment:domestic",
+      "channel:online"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M5bb3d300ea194bd7",
+     "leg": "P2",
+     "g": 3,
+     "i": 3
+    },
+    {
+     "q": "M8624b63494238990",
+     "leg": "UNION",
+     "g": 3,
+     "i": 8
+    }
+   ],
+   "review_index": 16,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0000764478-25-000057",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.2"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "31.2"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "revenue_mix",
+     "driver_state": "increased",
+     "fiscal_quarter": null,
+     "fiscal_year": null,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "32.1"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "32.1"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": "2025-11-01",
+     "period_scope": "ytd",
+     "period_start_date": "2025-02-02",
+     "polarity_proof": null,
+     "quote": "Online revenue as a % of total segment revenue 31.8 % 31.4 % 32.1 % 31.2 %",
+     "sentinel_class": null,
+     "slice_parts": [
+      "segment:domestic",
+      "channel:online"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M9ac184b07624a590",
+     "leg": "P2",
+     "g": 4,
+     "i": 4
+    }
+   ],
+   "review_index": 17,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0000898173-26-000006",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.71"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.71"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "earnings_per_share",
+     "driver_state": "increased",
+     "fiscal_quarter": null,
+     "fiscal_year": 2025,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.97"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "$",
+      "value": "2.97"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "Diluted"
+     ],
+     "month": null,
+     "period_end_date": "2025-12-31",
+     "period_scope": null,
+     "period_start_date": "2025-01-01",
+     "polarity_proof": null,
+     "quote": "Diluted earnings per common share for the year ended December 31, 2025, increased 10% to $2.97 on 856 million shares versus $2.71 on 881 million shares for the same period one year ago.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": "share"
+   },
+   "identities": [
+    {
+     "q": "Mf1aca8c5849b0770",
+     "leg": "P2",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 18,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0000940944-26-000009",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": "385.3"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": "385.3"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "sales",
+     "driver_state": "increased",
+     "fiscal_quarter": 3,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": "402.0"
+     },
+     "level_low": {
+      "scale_multiplier": 1000000,
+      "unit_scale_evidence": "millions",
+      "value": "402.0"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "m_usd",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg SRS (1) \n\nFebruary 22, 2026 February 23, 2025 % Chg SRS (1) \n\nOlive Garden $ 1,393.0 $ 1,330.3 4.7 % 3.2 % $ 4,056.8 $ 3,831.9 5.9 % 4.5 % LongHorn Steakhouse $ 854.2 $ 768.1 11.2 % 7.2 % $ 2,406.5 $ 2,191.7 9.8 % 6.3 % Fine Dining $ 402.0 $ 385.3 4.3 %",
+     "sentinel_class": null,
+     "slice_parts": [
+      "segment:finediningsegment"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "M61beee43a203dd9f",
+     "leg": "P2",
+     "g": 2,
+     "i": 2
+    }
+   ],
+   "review_index": 19,
+   "decision": "changed_task",
+   "reason": "This source claim states a numerical change beside two stored closed comparable operands. Leaving the change null is itself affected by the corrected null/read-time convention; the previous selection wrongly required a populated change. Rounded source percentages remain a meaning question, not a deterministic exact-equality shortcut. No correctness verdict is supplied."
+  },
+  {
+   "sid": "0001104659-26-027061",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.2"
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.2"
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "gross_margin",
+     "driver_state": "decreased",
+     "fiscal_quarter": 4,
+     "fiscal_year": 2025,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.1"
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": "38.1"
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "gross profit"
+     ],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "As a percentage of net sales, gross profit decreased to 38.1% compared to 38.2%, primarily due to unfavorable channel mix, deleverage of store fixed expenses, and deleverage of other revenue, mostly offset by lower inventory shrink and supply chain efficiencies.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "exhibit_99_1",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "Maea7c65b7628c57e",
+     "leg": "P2",
+     "g": 0,
+     "i": 0
+    }
+   ],
+   "review_index": 20,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  },
+  {
+   "sid": "0001104659-26-032757",
+   "fact": {
+    "fact_type": "metric",
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": "prior_year",
+     "comparison_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 86
+     },
+     "comparison_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 86
+     },
+     "comparison_shape_hint": "point",
+     "conditions": null,
+     "driver_name": "sales_mix",
+     "driver_state": "decreased",
+     "fiscal_quarter": 2,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": null,
+     "level_high": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 85
+     },
+     "level_low": {
+      "scale_multiplier": 1,
+      "unit_scale_evidence": "%",
+      "value": 85
+     },
+     "level_shape_hint": "point",
+     "level_unit": "percent",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [
+      "approximately",
+      "approximately"
+     ],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "During the second quarter of fiscal 2026, failure and maintenance related categories represented the largest portion of our sales mix at approximately 85% of total sales, whereas they represented approximately 86% of total sales in the comparable prior year period.",
+     "sentinel_class": null,
+     "slice_parts": [
+      "product:failure",
+      "product:maintenanceitems"
+     ],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "mdna",
+    "per_x": null
+   },
+   "identities": [
+    {
+     "q": "Mf779fb08c3d45f27",
+     "leg": "P2",
+     "g": 1,
+     "i": 1
+    }
+   ],
+   "review_index": 21,
+   "decision": "unchanged_task",
+   "reason": "No numerical delta is stated for this particular claim. The old and corrected rules both leave a merely computed change unasserted; co-stated changes on other claims in the same quote do not alter this one."
+  }
+ ]
+}

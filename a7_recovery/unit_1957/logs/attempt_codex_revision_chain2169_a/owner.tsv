@@ -1,0 +1,9 @@
+attempt	codex_revision_chain2169_a
+payload	../../unit_2020_codex_check/run_grading_contract_native_2169.py
+map	../unit_2020_codex_check/map_revision_chain_native_2169.tsv
+command	run_1957.sh ../unit_2020_codex_check/map_revision_chain_native_2169.tsv ../../unit_2020_codex_check/run_grading_contract_native_2169.py codex_revision_chain2169_a 300
+wrapper_pid	4013669
+payload_pid	4013673
+payload_pgid	4013669
+started_utc	2026-09-15T04:40:36Z
+state	finished exit 0

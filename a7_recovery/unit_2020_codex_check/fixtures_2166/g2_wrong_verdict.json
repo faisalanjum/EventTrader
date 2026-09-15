@@ -1,0 +1,2240 @@
+{
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g2reuse2159_a/G2",
+ "completion": {
+  "batches": 19,
+  "credited": {
+   "M05a0426b99cc6edf": {
+    "batch_id": "G2-004",
+    "verdict": {
+     "driver_name_meaning": false,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M0fa273105b8bcf8a": {
+    "batch_id": "G2-010",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M155d065a49c7695b": {
+    "batch_id": "G2-013",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M16e5547d3350a121": {
+    "batch_id": "G2-004",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M1d1e2b191c165491": {
+    "batch_id": "G2-006",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M1ff094f118e22d74": {
+    "batch_id": "G2-005",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M20bf61063ac29515": {
+    "batch_id": "G2-009",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M22ede9a4b555fd5b": {
+    "batch_id": "G2-003",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M24065e66c77fea00": {
+    "batch_id": "G2-012",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M25685d07827234a2": {
+    "batch_id": "G2-005",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M2631bbcafac8881d": {
+    "batch_id": "G2-009",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M265b7554e70f66e3": {
+    "batch_id": "G2-010",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M292ac8520c3978ff": {
+    "batch_id": "G2-012",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    }
+   },
+   "M2c147d86c788aab4": {
+    "batch_id": "G2-004",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M2fc403e126b61f37": {
+    "batch_id": "G2-000",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M31b9468dbba21f6c": {
+    "batch_id": "G2-011",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M35df46a5d2795d66": {
+    "batch_id": "G2-000",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    }
+   },
+   "M3e5aa7f1ebcc7dae": {
+    "batch_id": "G2-014",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M40c9264a220ea3e1": {
+    "batch_id": "G2-003",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M42b29840407e0051": {
+    "batch_id": "G2-015",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M42c321d822ac47f4": {
+    "batch_id": "G2-011",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M4b4e22abcaa8d591": {
+    "batch_id": "G2-017",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M4ea4d7f5cd26d81a": {
+    "batch_id": "G2-016",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M4f731135a40dab8b": {
+    "batch_id": "G2-013",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M58a292b9b8e315f9": {
+    "batch_id": "G2-015",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M5b2ecf7412ac6ecb": {
+    "batch_id": "G2-008",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M619427b099934206": {
+    "batch_id": "G2-016",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M6221427dec8dc14b": {
+    "batch_id": "G2-010",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M62a85f0d06c8aa5c": {
+    "batch_id": "G2-011",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M63a211408d38ee40": {
+    "batch_id": "G2-004",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    }
+   },
+   "M66e7557e3b1064dd": {
+    "batch_id": "G2-002",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M6c722b0ca333185b": {
+    "batch_id": "G2-001",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M6ff710d6120fb2cb": {
+    "batch_id": "G2-008",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M700afaa8868c8f08": {
+    "batch_id": "G2-016",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": false
+    }
+   },
+   "M726673b0f7719042": {
+    "batch_id": "G2-000",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M72e4aef467cb286e": {
+    "batch_id": "G2-007",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M74ee782ce4554785": {
+    "batch_id": "G2-014",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": false
+    }
+   },
+   "M75813437a92cf998": {
+    "batch_id": "G2-004",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M765d517b782cfa01": {
+    "batch_id": "G2-009",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M8222e982fe3cfda8": {
+    "batch_id": "G2-012",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M86be1a27f32dbaf2": {
+    "batch_id": "G2-009",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M8f3cb6b387ec8ba9": {
+    "batch_id": "G2-012",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    }
+   },
+   "M9176d0f5d99a2a38": {
+    "batch_id": "G2-013",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M95c73e1ef95ea6d0": {
+    "batch_id": "G2-007",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M96e4fc2ed3155b3b": {
+    "batch_id": "G2-001",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "M990e3e1bcb642c43": {
+    "batch_id": "G2-005",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mab3c1cc44faa7224": {
+    "batch_id": "G2-014",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mb18c07ecdfc63be7": {
+    "batch_id": "G2-002",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mb2d4aa3ce9f9cd04": {
+    "batch_id": "G2-010",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mb65ece4291c4b307": {
+    "batch_id": "G2-008",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mbcadb2079632a153": {
+    "batch_id": "G2-011",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mc428a88a58bd94f1": {
+    "batch_id": "G2-007",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mc666c76ff3657bc1": {
+    "batch_id": "G2-011",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mc7890bf18242f3ee": {
+    "batch_id": "G2-000",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Md1b56847528f639c": {
+    "batch_id": "G2-001",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Md2061d63bedc8f75": {
+    "batch_id": "G2-003",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    }
+   },
+   "Md537d4751f505235": {
+    "batch_id": "G2-003",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mdb9090926047d818": {
+    "batch_id": "G2-015",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mdce0d30d712dcd83": {
+    "batch_id": "G2-017",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mdcf1d03950dd4702": {
+    "batch_id": "G2-014",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mdeaf9591a2dcc241": {
+    "batch_id": "G2-003",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Meaab12906816245d": {
+    "batch_id": "G2-012",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mec9e16d57c989430": {
+    "batch_id": "G2-000",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    }
+   },
+   "Mecc6f80e11ee1f6e": {
+    "batch_id": "G2-016",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mfaf02208a2ac48aa": {
+    "batch_id": "G2-002",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "Mff46eed2c64e8d13": {
+    "batch_id": "G2-009",
+    "verdict": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   }
+  },
+  "credited_questions": 66,
+  "questions": 82,
+  "run_identity": {
+   "meaning_format_recovery": {
+    "attempts": [
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-000/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "a856f241d830275aa0b5d06a5b2cf576571075858c62015d861124c3689a1f40",
+      "recovered": false,
+      "segment": 1
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-000/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "a856f241d830275aa0b5d06a5b2cf576571075858c62015d861124c3689a1f40",
+      "recovered": false,
+      "segment": 2
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-001/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "807bd9a73f3e91b6cd3f1b26a84235b56c161dd5af402c66f81363ca5972118b",
+      "recovered": false,
+      "segment": 3
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-001/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "38e667da15925da85270b2163713425ce947eb215b62c225d96919a024c5bed9",
+      "recovered": false,
+      "segment": 4
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-002/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "4fb88f7cf2d975bf55f26ab2aa7b86ccc36fcebcf882addf781b9245d099a133",
+      "recovered": false,
+      "segment": 5
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-002/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "28bebbfcdf24e4d40b18ab928544db856888e5b0f35d313ff5fcbd87916b56e9",
+      "recovered": false,
+      "segment": 6
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-003/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "d9a9580f4324578870409a16f145a5c23aeb444cb0c21f2360bd9cc8645eecb3",
+      "recovered": false,
+      "segment": 7
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-003/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "d9a9580f4324578870409a16f145a5c23aeb444cb0c21f2360bd9cc8645eecb3",
+      "recovered": false,
+      "segment": 8
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-004/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "6b5c94854510856c73a80a2988b1455720a30cd63e6c87048e6d6da0aad39dcb",
+      "recovered": false,
+      "segment": 9
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-004/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "6b5c94854510856c73a80a2988b1455720a30cd63e6c87048e6d6da0aad39dcb",
+      "recovered": false,
+      "segment": 10
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-005/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "19aba1aeee72f0671b2a990bf75f9670f3cbbbdb1e5aaa5a348bcf22f84b4797",
+      "recovered": false,
+      "segment": 11
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-005/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "4474a461e98b0699c6ae31287ad9f96bd466eca1f0420b64f59c0fd4e7e3c82c",
+      "recovered": false,
+      "segment": 12
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-006/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "bec7a7d3beca686882df6ecb75156e1d44d8f7994a132d461718e2714f103856",
+      "recovered": false,
+      "segment": 13
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-006/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "88e596a12630dd6bfc8debe6f2739ecfa45e76c7ab9395c77c9ef15ad203ca9a",
+      "recovered": false,
+      "segment": 13
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-007/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "8f0369b1fdb0175cef2a5d55fc4bf467eb58b97bb61655d50b0adfda626b731a",
+      "recovered": false,
+      "segment": 14
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-007/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "8f0369b1fdb0175cef2a5d55fc4bf467eb58b97bb61655d50b0adfda626b731a",
+      "recovered": false,
+      "segment": 15
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-008/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "39f76465da47027394c09209c485f636787bffbd3c395a2bde8c452cc8adc9f0",
+      "recovered": false,
+      "segment": 16
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-008/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "fe8a4c360c4d56eed08685728da7d7d86c4df798219f758203da588a787bade9",
+      "recovered": false,
+      "segment": 16
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-009/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "04d0b9f3cdee644fb1d815ea584855621bdd6db9301b05edb888c664cd66bbe0",
+      "recovered": false,
+      "segment": 17
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-009/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "04d0b9f3cdee644fb1d815ea584855621bdd6db9301b05edb888c664cd66bbe0",
+      "recovered": false,
+      "segment": 18
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-010/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "80f2ce61c218c98b567d8c3ab696fcca2219a12e58b389ae308fbbb601eae6b4",
+      "recovered": false,
+      "segment": 19
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-010/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "b8612aad92315722ebc1c424ed7fea33c9e1a0c78c714c150201df52745ebaeb",
+      "recovered": false,
+      "segment": 20
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-011/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "42a3b69d57b6edfda6a0f047162f287f91218d8ed8d8d5e9f0939466eccc65bc",
+      "recovered": false,
+      "segment": 21
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-011/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "42a3b69d57b6edfda6a0f047162f287f91218d8ed8d8d5e9f0939466eccc65bc",
+      "recovered": false,
+      "segment": 22
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-012/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "718ab03cebfbd89e5bdb3752cf3f29c9d8b1c9b9b27678103723e2f4b529faae",
+      "recovered": false,
+      "segment": 23
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-012/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "718ab03cebfbd89e5bdb3752cf3f29c9d8b1c9b9b27678103723e2f4b529faae",
+      "recovered": false,
+      "segment": 24
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-013/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "f578df5bd6b9b8477cba541e833d82188262824749602da7a016cb3740c72759",
+      "recovered": false,
+      "segment": 25
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-013/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "5b39202fefe4ed83a7d68401ad91b9da50b32cdfdfdfc548f0dbed1c3f9ade8e",
+      "recovered": false,
+      "segment": 26
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-014/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "452d0d0bf429d554073e6b6b018e5037b0dc5f8f3fe17cba946dcffbde3f2075",
+      "recovered": false,
+      "segment": 27
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-014/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "3188f4c7ac901b7adadf562354806225ca2e1f9753f16a3179b03e372dd6d1a7",
+      "recovered": false,
+      "segment": 28
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-015/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "f1403f1d2464e4294193089fb8de8d74c154a4f20ffea3bc3088f653bafe1e8a",
+      "recovered": false,
+      "segment": 29
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-015/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "dcf7daa40f617aefec0ccb26486e5fcd39b6a58928acf881f22fb341901fcaf8",
+      "recovered": false,
+      "segment": 30
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-016/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "e8dccfd48395e51fdd6dab30fc210840c0f5d1d7760f9df0c7c28ac08402c807",
+      "recovered": false,
+      "segment": 31
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-016/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "e8dccfd48395e51fdd6dab30fc210840c0f5d1d7760f9df0c7c28ac08402c807",
+      "recovered": false,
+      "segment": 31
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-017/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "750d01561d6cd4630713f823d18a0120248f43f0d316aa322ea4d746c26cadad",
+      "recovered": false,
+      "segment": 32
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-017/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "396e09ca26dd8b6d4719a6099ea63f52d8df28bb07157819c8bcc1623bfee9cd",
+      "recovered": false,
+      "segment": 33
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-018/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "2b8c9e377eb3fd034be8398339095164b6280879810a316d86ddfb63d265e22f",
+      "recovered": false,
+      "segment": 33
+     },
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-018/G1b",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "880646f90d667a89cdd94e7b9d7646ab3fe42a3b01cc0be42c396ac075236d91",
+      "recovered": false,
+      "segment": 33
+     }
+    ],
+    "code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+    "rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b"
+   },
+   "root_sha256": "6ca1dc4a6c9f0f2beae5c90a7e7d977030096c6244c246d54243a6c7eaf1fbef",
+   "run_digest": "9569265eb79bcf69df27abe5d5f350a7fce51eb56f4f6c33012de149054c393e",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run",
+   "run_files": 341
+  },
+  "schema": "a7_g23_whole_run_completion/1",
+  "task_kind": "G2",
+  "unresolved": [
+   {
+    "batch_id": "G2-001",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true
+    },
+    "question_id": "M70f663f593c28775",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "slice_vs_menu",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true
+      },
+      "question_id": "M70f663f593c28775",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true
+      },
+      "question_id": "M70f663f593c28775",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-001",
+    "established": {
+     "driver_name_meaning": true,
+     "favorability": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M02dd1d33369df31b",
+    "reasons": [
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "driver_state",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M02dd1d33369df31b",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M02dd1d33369df31b",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M02dd1d33369df31b",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-002",
+    "established": {
+     "driver_name_meaning": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "Ma529b8a7aa02495d",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "driver_state",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "Ma529b8a7aa02495d",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "Ma529b8a7aa02495d",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-002",
+    "established": {
+     "driver_name_meaning": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M1a1d8504821bf26a",
+    "reasons": [
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "driver_state",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M1a1d8504821bf26a",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M1a1d8504821bf26a",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-005",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "Me41517754e358a49",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "Me41517754e358a49",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-005",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "Mfdc3b99ab640f039",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "Mfdc3b99ab640f039",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-006",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    },
+    "question_id": "M0c5dd9bbeece43b0",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": false,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "question_id": "M0c5dd9bbeece43b0",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-008",
+    "established": {
+     "driver_name_meaning": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M61563d2abc07f74c",
+    "reasons": [
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "driver_state",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M61563d2abc07f74c",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M61563d2abc07f74c",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-008",
+    "established": {
+     "driver_name_meaning": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M7b666c83f5a85ea2",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "driver_state",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M7b666c83f5a85ea2",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M7b666c83f5a85ea2",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-010",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    },
+    "question_id": "M31b20a4a0b7e5203",
+    "reasons": [
+     {
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": false,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "question_id": "M31b20a4a0b7e5203",
+      "reason": "a reading could not establish it"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-013",
+    "established": {
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M4e236380221db347",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "driver_name_meaning",
+      "established": {
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M4e236380221db347",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M4e236380221db347",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-013",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true
+    },
+    "question_id": "Mba3e48c6e9efd4f9",
+    "reasons": [
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "slice_vs_menu",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true
+      },
+      "question_id": "Mba3e48c6e9efd4f9",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       false,
+       true
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true
+      },
+      "question_id": "Mba3e48c6e9efd4f9",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-014",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "Mc17055ff4a7a52dd",
+    "reasons": [
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "Mc17055ff4a7a52dd",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-015",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true
+    },
+    "question_id": "M15a4fe7f7f566593",
+    "reasons": [
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "slice_vs_menu",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true
+      },
+      "question_id": "M15a4fe7f7f566593",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true
+      },
+      "question_id": "M15a4fe7f7f566593",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-017",
+    "established": {
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "Mb3f1ca0e645be073",
+    "reasons": [
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "driver_name_meaning",
+      "established": {
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "Mb3f1ca0e645be073",
+      "reason": "the readings disagree"
+     },
+     {
+      "answers": [
+       true,
+       false
+      ],
+      "aspect": "record_matches_source",
+      "established": {
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "Mb3f1ca0e645be073",
+      "reason": "the readings disagree"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-018",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M1b698b1ec9b0c1d6",
+    "reasons": [
+     {
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M1b698b1ec9b0c1d6",
+      "reason": "a reading could not establish it"
+     }
+    ]
+   }
+  ],
+  "unresolved_questions": 16
+ },
+ "completion_problems": [],
+ "evidence_problems": [],
+ "kind": "G2",
+ "lanes_read": 38,
+ "lanes_with_selected_relation": 38,
+ "model_calls": 0,
+ "persisted": false,
+ "root_sha256": "6ca1dc4a6c9f0f2beae5c90a7e7d977030096c6244c246d54243a6c7eaf1fbef",
+ "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run",
+ "run_identity": {
+  "meaning_format_recovery": {
+   "attempts": [
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-000/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "a856f241d830275aa0b5d06a5b2cf576571075858c62015d861124c3689a1f40",
+     "recovered": false,
+     "segment": 1
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-000/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "a856f241d830275aa0b5d06a5b2cf576571075858c62015d861124c3689a1f40",
+     "recovered": false,
+     "segment": 2
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-001/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "807bd9a73f3e91b6cd3f1b26a84235b56c161dd5af402c66f81363ca5972118b",
+     "recovered": false,
+     "segment": 3
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-001/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "38e667da15925da85270b2163713425ce947eb215b62c225d96919a024c5bed9",
+     "recovered": false,
+     "segment": 4
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-002/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "4fb88f7cf2d975bf55f26ab2aa7b86ccc36fcebcf882addf781b9245d099a133",
+     "recovered": false,
+     "segment": 5
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-002/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "28bebbfcdf24e4d40b18ab928544db856888e5b0f35d313ff5fcbd87916b56e9",
+     "recovered": false,
+     "segment": 6
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-003/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "d9a9580f4324578870409a16f145a5c23aeb444cb0c21f2360bd9cc8645eecb3",
+     "recovered": false,
+     "segment": 7
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-003/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "d9a9580f4324578870409a16f145a5c23aeb444cb0c21f2360bd9cc8645eecb3",
+     "recovered": false,
+     "segment": 8
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-004/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "6b5c94854510856c73a80a2988b1455720a30cd63e6c87048e6d6da0aad39dcb",
+     "recovered": false,
+     "segment": 9
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-004/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "6b5c94854510856c73a80a2988b1455720a30cd63e6c87048e6d6da0aad39dcb",
+     "recovered": false,
+     "segment": 10
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-005/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "19aba1aeee72f0671b2a990bf75f9670f3cbbbdb1e5aaa5a348bcf22f84b4797",
+     "recovered": false,
+     "segment": 11
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-005/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "4474a461e98b0699c6ae31287ad9f96bd466eca1f0420b64f59c0fd4e7e3c82c",
+     "recovered": false,
+     "segment": 12
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-006/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "bec7a7d3beca686882df6ecb75156e1d44d8f7994a132d461718e2714f103856",
+     "recovered": false,
+     "segment": 13
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-006/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "88e596a12630dd6bfc8debe6f2739ecfa45e76c7ab9395c77c9ef15ad203ca9a",
+     "recovered": false,
+     "segment": 13
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-007/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "8f0369b1fdb0175cef2a5d55fc4bf467eb58b97bb61655d50b0adfda626b731a",
+     "recovered": false,
+     "segment": 14
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-007/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "8f0369b1fdb0175cef2a5d55fc4bf467eb58b97bb61655d50b0adfda626b731a",
+     "recovered": false,
+     "segment": 15
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-008/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "39f76465da47027394c09209c485f636787bffbd3c395a2bde8c452cc8adc9f0",
+     "recovered": false,
+     "segment": 16
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-008/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "fe8a4c360c4d56eed08685728da7d7d86c4df798219f758203da588a787bade9",
+     "recovered": false,
+     "segment": 16
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-009/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "04d0b9f3cdee644fb1d815ea584855621bdd6db9301b05edb888c664cd66bbe0",
+     "recovered": false,
+     "segment": 17
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-009/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "04d0b9f3cdee644fb1d815ea584855621bdd6db9301b05edb888c664cd66bbe0",
+     "recovered": false,
+     "segment": 18
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-010/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "80f2ce61c218c98b567d8c3ab696fcca2219a12e58b389ae308fbbb601eae6b4",
+     "recovered": false,
+     "segment": 19
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-010/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "b8612aad92315722ebc1c424ed7fea33c9e1a0c78c714c150201df52745ebaeb",
+     "recovered": false,
+     "segment": 20
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-011/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "42a3b69d57b6edfda6a0f047162f287f91218d8ed8d8d5e9f0939466eccc65bc",
+     "recovered": false,
+     "segment": 21
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-011/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "42a3b69d57b6edfda6a0f047162f287f91218d8ed8d8d5e9f0939466eccc65bc",
+     "recovered": false,
+     "segment": 22
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-012/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "718ab03cebfbd89e5bdb3752cf3f29c9d8b1c9b9b27678103723e2f4b529faae",
+     "recovered": false,
+     "segment": 23
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-012/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "718ab03cebfbd89e5bdb3752cf3f29c9d8b1c9b9b27678103723e2f4b529faae",
+     "recovered": false,
+     "segment": 24
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-013/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "f578df5bd6b9b8477cba541e833d82188262824749602da7a016cb3740c72759",
+     "recovered": false,
+     "segment": 25
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-013/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "5b39202fefe4ed83a7d68401ad91b9da50b32cdfdfdfc548f0dbed1c3f9ade8e",
+     "recovered": false,
+     "segment": 26
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-014/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "452d0d0bf429d554073e6b6b018e5037b0dc5f8f3fe17cba946dcffbde3f2075",
+     "recovered": false,
+     "segment": 27
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-014/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "3188f4c7ac901b7adadf562354806225ca2e1f9753f16a3179b03e372dd6d1a7",
+     "recovered": false,
+     "segment": 28
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-015/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "f1403f1d2464e4294193089fb8de8d74c154a4f20ffea3bc3088f653bafe1e8a",
+     "recovered": false,
+     "segment": 29
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-015/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "dcf7daa40f617aefec0ccb26486e5fcd39b6a58928acf881f22fb341901fcaf8",
+     "recovered": false,
+     "segment": 30
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-016/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "e8dccfd48395e51fdd6dab30fc210840c0f5d1d7760f9df0c7c28ac08402c807",
+     "recovered": false,
+     "segment": 31
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-016/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "e8dccfd48395e51fdd6dab30fc210840c0f5d1d7760f9df0c7c28ac08402c807",
+     "recovered": false,
+     "segment": 31
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-017/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "750d01561d6cd4630713f823d18a0120248f43f0d316aa322ea4d746c26cadad",
+     "recovered": false,
+     "segment": 32
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-017/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "396e09ca26dd8b6d4719a6099ea63f52d8df28bb07157819c8bcc1623bfee9cd",
+     "recovered": false,
+     "segment": 33
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-018/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "2b8c9e377eb3fd034be8398339095164b6280879810a316d86ddfb63d265e22f",
+     "recovered": false,
+     "segment": 33
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-018/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "880646f90d667a89cdd94e7b9d7646ab3fe42a3b01cc0be42c396ac075236d91",
+     "recovered": false,
+     "segment": 33
+    }
+   ],
+   "code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+   "rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b"
+  },
+  "root_sha256": "6ca1dc4a6c9f0f2beae5c90a7e7d977030096c6244c246d54243a6c7eaf1fbef",
+  "run_digest": "9569265eb79bcf69df27abe5d5f350a7fce51eb56f4f6c33012de149054c393e",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2159/G2/run",
+  "run_files": 341
+ }
+}
