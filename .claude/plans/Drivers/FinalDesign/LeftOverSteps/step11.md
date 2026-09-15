@@ -55,7 +55,7 @@ Apply these owners in order:
 
 1. `FINAL_DESIGN.md` for identity, birth, evidence, recovery, graph shape,
    reads, and safety law;
-2. the live V2 `ChannelContract.md` and `15_CandidateFactPacket.md` for public
+2. the live V2 `ChannelContract.md` Parts II and III for public
    events, internal facts, outcomes, retries, and channel acknowledgements;
 3. `BUILD_AND_OPERATIONS.md` §§5, 7, 8.1, 10, and 11 for the writer transaction,
    preflight, shadow phase, S3 comparison, launch blockers, hazards, and

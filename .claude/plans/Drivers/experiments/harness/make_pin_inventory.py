@@ -38,8 +38,8 @@ INVENTORY = os.path.join(_HERE, "rev4_pin_inventory.md")
 # hex string, which confirms a pin is PRESENT and says nothing about whether it
 # is still TRUE — and one of the three had already gone stale.
 PINS = {
-    "aa7239ed": ("packet v1.0",
-                 ".claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md"),
+    "aa7239ed": ("packet v1.0 (preserved INTERNAL V1 section)",
+                 ".claude/plans/Drivers/FinalDesign/ChannelContract.md"),
     "86b2fc17": ("packet pre-amendment",
                  ".claude/plans/Drivers/FinalDesign/archive/"
                  "2026-07-15_pre-consolidation/15_CandidateFactPacket.pre-amendment.md"),
@@ -85,6 +85,16 @@ def verify_pins():
         if raw is None:
             out[pin] = (label, rel, "", "ABSENT")
             continue
+        if pin == "aa7239ed":
+            # The original file bytes now live inside one marked section.
+            # The cover/public parts must not change this historical identity.
+            start, end = b"<!-- BEGIN INTERNAL V1 -->\n", b"<!-- END INTERNAL V1 -->\n"
+            if raw.count(start) != 1 or raw.count(end) != 1:
+                raise ValueError("internal V1 boundaries must be unique")
+            _, _, rest = raw.partition(start)
+            raw, found, _ = rest.partition(end)
+            if not found:
+                raise ValueError("internal V1 boundaries are reversed")
         got = hashlib.sha256(raw).hexdigest()
         out[pin] = (label, rel, got[:8],
                     "AGREES" if got.startswith(pin) else "DIFFERS")
@@ -264,6 +274,8 @@ def render():
            "",
            f"Hash method: **{HASH_METHOD}**. An unlabelled digest is a pin nobody "
            "else can reproduce, so the method is stated rather than implied.",
+           "The packet v1.0 digest uses its original file bytes preserved between "
+           "the INTERNAL V1 markers in ChannelContract.md, not the combined file.",
            "",
            "v4 addressed pins by `file:LINE`. A line number is not durable — one "
            "inserted sentence invalidated 73 of 76 rows while every hash stayed "

@@ -49,9 +49,9 @@ Read and apply authority in this order:
 
 1. `FINAL_DESIGN.md` for source time, safety, identity, admission, recovery,
    lazy Driver creation, reads, and feature-off rules;
-2. the live V2 `ChannelContract.md` for channel selection, submission,
+2. the live V2 `ChannelContract.md` Part II for channel selection, submission,
    completeness, cursor, receipt, reopening, and retry behavior;
-3. the live V2 `15_CandidateFactPacket.md` for internal handoffs;
+3. the live V2 `ChannelContract.md` Part III for internal handoffs;
 4. `BUILD_AND_OPERATIONS.md` §§3, 7, 8.1, 10, and 11 for the two earnings-8-K
    routes, running-layer requirements, approved kernel operations, hazards, and
    writer transaction/audit contract;

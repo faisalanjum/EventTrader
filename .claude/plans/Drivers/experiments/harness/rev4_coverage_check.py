@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Rev-4 coverage gate — MACHINE-RUN, replaces the Part-J checklist sentence
+"""Historical rev-4 coverage gate — not a check of today's active contract.
+Source documents are replayed at rev4_build_patch.DOC_BASE; saved patches and
+original paths stay unchanged after the lossless contract consolidation.
+
+Replaces the Part-J checklist sentence
 that revision 3 claimed but never executed (the review's finding).
 
 Two proofs, both mechanical:
@@ -13,7 +17,7 @@ Run: venv/bin/python harness/rev4_coverage_check.py <patch-file>
 Exit 0 = clean; nonzero = residue listed. RED against the rev-3 patch by
 design — its failures ARE the rev-4 work list.
 """
-import subprocess, sys, tempfile, shutil, os, io
+import subprocess, sys, tempfile, os, io
 
 # IMPORT MUST DO NOTHING: this resolved the repo root with a subprocess at module
 # level, and the file ENDED with a bare `main(sys.argv[1])` — so importing it ran
@@ -49,6 +53,16 @@ SUPERSEDED_MARKS = ("history above unedited",)   # narrowed: no broad word-conta
 import re
 HISTORY_LINE = re.compile(r"^> \*\*v\d")   # blockquoted status-history entries: exempt, never edited
 
+
+def stage_sources(directory, targets):
+    """Materialize only the historical documents needed by this patch check."""
+    from rev4_build_patch import source_text
+    for rel in targets:
+        dst = os.path.join(directory, rel)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        with io.open(dst, "w", encoding="utf-8") as fh:
+            fh.write(source_text(rel))
+
 def main(patch):
     tmp = tempfile.mkdtemp()
     fails = []
@@ -57,12 +71,7 @@ def main(patch):
     for ln in io.open(patch, encoding="utf-8"):
         if ln.startswith("--- a/"):
             targets.add(ln[6:].strip())
-    for rel in targets | set(RESIDUE):
-        dst = os.path.join(tmp, rel)
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        if not os.path.exists(os.path.join(repo(), rel)):
-            continue                  # blocked/absent target: nothing to scan
-        shutil.copy(os.path.join(repo(), rel), dst)
+    stage_sources(tmp, targets | set(RESIDUE))
     r = subprocess.run(["git", "apply", "--unsafe-paths", "--directory", tmp, patch],
                        capture_output=True, text=True, cwd=repo())
     if r.returncode != 0:
@@ -94,10 +103,8 @@ def main(patch):
     # derived both sides.
     import re as _re
     _WO = ".claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md"
-    pkg = io.open(os.path.join(
-        repo(),
-        ".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md"),
-        encoding="utf-8").read()
+    from rev4_build_patch import source_text
+    pkg = source_text(".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md")
     pm = _re.search(r'"item": \{\n(.*?)\n    \}\}', pkg, _re.S)
     pkg_fields = set(_re.findall(r'"([a-z_]+)":', pm.group(1))) if pm else set()
     if len(pkg_fields) != 32:

@@ -35,8 +35,8 @@ If Step 6 reveals a required behavior change, stop and return it to Step 5. The 
 ## Authority
 
 Apply `FINAL_DESIGN.md` for unchanged product law,
-`ChannelContractV2.md` as the exact reviewed public V2 candidate,
-`ChannelContract.md` as the V1 file it replaces, `15_CandidateFactPacket.md` as
+`ChannelContract.md` Part II as the exact reviewed public V2 candidate,
+Part I as the public V1 law it supersedes, Part III as
 the separate internal contract to refreeze, and `BUILD_AND_OPERATIONS.md` for
 the atomic release order and proof. The exact Step 5 candidate, call graph,
 tests, and hashes prove what moves. Status, this work order, comments, commits,
@@ -125,8 +125,8 @@ Before changing production code, add failing tests proving that:
 * Fiscal’s live builder still chooses V1;
 * the command-line loader still expects V1;
 * the old V1 classes still import;
-* the temporary V2 contract still exists;
-* the active public contract is still V1;
+* the V2 part is still staged;
+* the active public-contract part is still V1;
 * the internal packet still carries V1 law;
 * active hashes still point to the V1 packet or staged contract.
 
@@ -136,12 +136,18 @@ The tests must derive names, fields, and allowed values from their owners. Do no
 
 ## 3. Promote the public V2 contract
 
-Replace the contents of ChannelContract.md with the proved V2 public contract.
+Activate the proved V2 contract in `ChannelContract.md` Part II. Update the
+opening authority notice and mark Part I historical, never operative. Preserve
+Part I's complete original text; the owner consolidated both files on
+2026-09-15, so this step must not repeat the merge or delete either part.
+Account for every difference and V1 safeguard listed in the document's opening
+table through the Step 5 proof; do not silently drop a requirement or resolve
+an unproved behavior change during this switch.
 
 The promoted document must:
 
 * identify itself as the active V2 contract;
-* remove all “staged,” “current versus future,” and “at the switch” wording;
+* remove “staged,” “current versus future,” and “at the switch” wording from active V2 instructions, not preserved V1 history;
 * describe only the behavior proved in Step 5;
 * retain the same raw event, evidence, trust-door, scale, result, ledger, and source-completeness rules;
 * state the actual shared validation owner chosen in Step 5;
@@ -159,13 +165,15 @@ Update the machine-readable contract block so that:
 * every public field has one authority;
 * no second schema list becomes an independent owner.
 
-Delete ChannelContractV2.md in the same switch commit.
-
-Do not copy the old V1 contract into an archive during this step. Git history already preserves it.
+The former standalone V2 file is already removed. Keep one public-contract file,
+one active part and one machine-readable contract block. Do not create another
+contract copy or delete the V1 history already preserved in Part I.
 
 ## 4. Separately freeze the internal V2 contract
 
-Rewrite 15_CandidateFactPacket.md as the internal V2 contract. Do not copy the public contract into it.
+Add and activate the proved internal V2 contract in ChannelContract.md Part III.
+Mark its original V1 block historical and preserve that block byte-for-byte.
+Do not copy the public contract into the internal contract or create another file.
 
 The public contract answers:
 
@@ -191,7 +199,7 @@ The internal contract must distinguish:
 * the input-to-fact-to-result accounting relation;
 * the final public receipt.
 
-Remove V1-only material, including:
+Remove V1-only material from the active instructions (not the preserved historical block), including:
 
 * raw-unit guessing fields;
 * unit-kind and money-mode hints;
@@ -213,7 +221,9 @@ Preserve:
 
 If a final but still-unbuilt feature remains relevant, point to its existing owner and mark it unbuilt. Do not duplicate its rules inside the packet.
 
-Calculate the new packet hash and treat it as the only active internal-packet pin.
+Calculate the new internal V2 section hash and treat it as the only active
+internal-packet pin. The original V1 hash remains a historical identity;
+the combined file hash is separate and covers everything a full-file reader sees.
 
 ## 5. Make V2 the sole public code route
 
@@ -328,9 +338,8 @@ Update only active truth:
 
 * STATUS_AND_HISTORY.md: exact switch commit, contract and packet hashes, V1 removal, writes-off state, and the conditional documentation-check pointer.
 
-* ChannelContract.md: active V2 public law.
-
-* 15_CandidateFactPacket.md: active V2 internal law.
+* ChannelContract.md: Part II active V2 public law; Part III active V2 internal
+  law; Part I and Part III's original V1 block clearly historical and preserved.
 
 * active READMEs, command help, tests, and manifests.
 
@@ -397,8 +406,8 @@ Do not compare against V1 output as the correctness authority. V2 correctness wa
 
 Prove:
 
-* ChannelContract.md is active V2.
-* ChannelContractV2.md is absent.
+* ChannelContract.md marks Part II active V2 and Part I historical.
+* the former standalone V2 file remains absent; Part I's original text remains intact.
 * the internal packet is frozen as V2.
 * every active packet hash matches.
 * every machine-readable contract surface matches its code owner.
@@ -519,13 +528,13 @@ changed, stop rather than substituting another model.
 
 Procedure:
 
-1. Prepare the exact seven live files:
+1. Prepare the exact six live files (the two contracts now share one file;
+   neither contract is omitted from the review):
 
    * FINAL_DESIGN.md
-   * ChannelContract.md
+   * ChannelContract.md — all public and internal parts
    * BUILD_AND_OPERATIONS.md
    * STATUS_AND_HISTORY.md
-   * 15_CandidateFactPacket.md
    * FableExperimentPlan.md
    * FableExperimentWorkOrder.md
 
@@ -535,17 +544,17 @@ Procedure:
 
 4. Create a detached clean worktree at that commit.
 
-5. Hash all seven files before the reader starts.
+5. Hash all six files before the reader starts, including the entire combined contract.
 
 6. Run the existing R7-amended ten-question blank-context test with its locked grading rule.
 
 7. Require 10/10.
 
-8. Recheck all seven hashes and require 7/7 unchanged.
+8. Recheck all six hashes and require 6/6 unchanged.
 
 9. Run every prescribed command with its actual exit status checked.
 
-10. Add one append-only result record after the run without changing the tested seven files.
+10. Add one append-only result record after the run without changing the tested six files.
 
 A failed, incomplete, overloaded, or hash-mismatched run does not pass.
 
@@ -559,7 +568,7 @@ A failed, incomplete, overloaded, or hash-mismatched run does not pass.
    Steps.md; do not ask again when it does.
 6. Commit one local atomic switch commit.
 7. Run the mandatory blank-context check against that commit.
-8. Commit the append-only check record separately, touching none of the seven tested files.
+8. Commit the append-only check record separately, touching none of the six tested files.
 9. Re-run the final deterministic, zero-write, and identity checks.
 10. After the full step passes, normally push the exact Codex-verified commits
     under the standing ruling in `Steps.md`.

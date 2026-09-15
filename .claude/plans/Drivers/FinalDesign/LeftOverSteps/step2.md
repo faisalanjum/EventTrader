@@ -457,8 +457,8 @@ Owner ruling, 2026-08-14:
 * Repeated identical proposals are idempotent and may never create a second
   relationship.
 * `FINAL_DESIGN.md` remains the meaning owner. Step 3 publishes the exact
-  transport once in `ChannelContractV2.md` and its machine-readable surfaces;
-  that contract becomes `ChannelContract.md` at the atomic switch. Core's one
+  transport once in `ChannelContract.md` Part II and its machine-readable surfaces;
+  that part becomes active at the atomic switch. Core's one
   production response parser is the code owner.
 
 Do not add a second model call to find proposals, hide one inside a fact,
@@ -519,11 +519,12 @@ At minimum reconcile:
 * `BUILD_AND_OPERATIONS.md`—router/judge duties, `BROAD`/establishment count
   rules, high-blast review, deferred-pair aging, retry/terminal classes, and
   named industry-pair production examples;
-* `ChannelContractV2.md`—public outcome mappings so `parked` names only an
+* `ChannelContract.md` Part II—public outcome mappings so `parked` names only an
   exact-trigger retryable result.
 
-Do not change the active V1 `15_CandidateFactPacket.md` in Step 2. Step 6
-replaces it atomically with the promoted V2 packet and proves no retired
+Do not change the active V1 `ChannelContract.md` Part III in Step 2. Step 6
+marks its preserved V1 block historical and activates the separately proved
+internal V2 contract in Part III, atomically with public V2, and proves no retired
 count-based or indefinite-wait behavior survives.
 
 Keep realistic industry pairs only in hidden tests and historical evidence.

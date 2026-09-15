@@ -33,7 +33,7 @@ Do not begin final closure until:
 Apply these owners in order:
 
 1. `FINAL_DESIGN.md` for product meaning and safety law;
-2. the live `ChannelContract.md` and `15_CandidateFactPacket.md` for public and
+2. the live `ChannelContract.md` Parts II and III for public and
    internal runtime contracts;
 3. `BUILD_AND_OPERATIONS.md` for construction, operation, activation,
    retirement, and proof requirements;

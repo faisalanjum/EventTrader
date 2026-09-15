@@ -40,8 +40,8 @@ If any condition is missing, stop. Do not replace a missing production component
 ## Authority
 
 Apply `FINAL_DESIGN.md` §§1–9 for product behavior, the frozen staged
-`ChannelContractV2.md` for the candidate public route, the active
-`ChannelContract.md` and `15_CandidateFactPacket.md` only to preserve V1 until
+`ChannelContract.md` Part II for the candidate public route, its active
+Part I and `ChannelContract.md` Part III only to preserve V1 until
 Step 6, and `BUILD_AND_OPERATIONS.md` §§5 and 11 for ordering, outcomes,
 validation, planning, audit, and no-write behavior. The signed Step 2 memo and
 reviewed Step 3/4 outputs own their measured choices and exact interfaces.
@@ -674,7 +674,7 @@ Step 5 is complete only when:
 * zero observed wrong facts are accepted;
 * recall loss is measured;
 * all required tests and mutations pass;
-* V1 remains byte-identical;
+* the V1 contract text in `ChannelContract.md` Part I remains byte-identical;
 * the live database and cursors remain unchanged;
 * V2 still refuses writes;
 * the exact reviewed tree is frozen and independently verified;

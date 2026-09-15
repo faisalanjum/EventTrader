@@ -26,12 +26,15 @@ Existing WIP code migrates here AT THE END (see the porting manifest); new code 
 **`.claude/plans/Drivers/FinalDesign/` is the design-law authority** for everything in this tree (record model,
 naming, identity, validators, supersessions). The owner will eventually consolidate it into a few files — until
 then rules and supersessions are added there on the fly; on any conflict, FinalDesign wins over code comments
-and READMEs. Key entries: `15_CandidateFactPacket.md` (the frozen packet spec) · `ChannelContract.md` (the
-channel input contract — the only file channel builders need) · `95_Supersession.md` (old→new rule reversals).
+and READMEs. Key entries: `ChannelContract.md` (Parts I/II: public input;
+Part III: internal facts) · `95_Supersession.md` (old→new rule reversals).
 
 ## The channel contract
-One file, contract-only, read it before building any channel:
+One contract file; channel builders read the public part selected by its opening notice:
 `.claude/plans/Drivers/FinalDesign/ChannelContract.md` (moves to `driver/CONTRACT.md` at the end-reorg).
+Its opening notice selects the governing part: Part I is active V1; Part II
+is staged V2 until the Step 6 switch. Part III is the separate internal contract
+for Core builders (V1 active). All three original texts are preserved there.
 
 ## The flow (what triggers what)
 ```

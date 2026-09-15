@@ -47,7 +47,7 @@ Apply these owners in order:
 
 1. `FINAL_DESIGN.md` for graph meaning, evidence, identity, continuity, reads,
    facts, XBRL enrichment, and point-in-time behavior;
-2. the live V2 `ChannelContract.md` and `15_CandidateFactPacket.md` for every
+2. the live V2 `ChannelContract.md` Parts II and III for every
    enabled channel boundary and internal fact;
 3. `BUILD_AND_OPERATIONS.md` §6 for old-Guidance retirement, §7 for operations,
    and §8.2 for the complete ratified native-XBRL mechanics and gates;

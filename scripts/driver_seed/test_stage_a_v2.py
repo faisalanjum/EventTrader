@@ -26,7 +26,7 @@ from driver.channels.fiscal_ai import route_a_source as SRC
 import locator as LOC
 import wp3_compliant_packet as WP3
 
-CONTRACT = ROOT / ".claude/plans/Drivers/FinalDesign/ChannelContractV2.md"
+CONTRACT = ROOT / ".claude/plans/Drivers/FinalDesign/ChannelContract.md"
 
 
 def _contract_surfaces():

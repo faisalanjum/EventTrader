@@ -42,7 +42,7 @@ inside the catalog builder.
 Read and apply authority in this order:
 
 1. `FINAL_DESIGN.md` for meaning and safety;
-2. the live `ChannelContract.md` and `15_CandidateFactPacket.md` for the active
+2. the live `ChannelContract.md` Parts II and III for the active
    V2 boundary;
 3. `BUILD_AND_OPERATIONS.md` §4 and §8.1 for the catalog procedure and release
    gates;

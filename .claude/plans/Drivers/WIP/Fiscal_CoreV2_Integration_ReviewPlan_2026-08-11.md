@@ -10,8 +10,11 @@ Core production code has been changed by this plan.
 **Contract SHA-256:**
 `d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b`.
 
-**Important:** V2 is staged, not live. `ChannelContract.md` V1 and
-`15_CandidateFactPacket.md` V1 remain the live laws until Core performs the
+**Location update (2026-09-15):** the path/hash above identify the original
+snapshot. Read its unchanged text in `ChannelContract.md` Part II now.
+
+**Important:** V2 is staged, not live. `ChannelContract.md` Parts I and III
+(public and internal V1) remain the live laws until Core performs the
 separate atomic V1 -> V2 switch.
 
 ## 1. Goal, in plain words

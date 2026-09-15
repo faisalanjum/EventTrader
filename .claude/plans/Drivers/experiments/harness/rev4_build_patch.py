@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Rebuild exp5_rev4_docs.patch from the canonical edit tables.
+"""Replay the historical rev-4 edit tables, not the current Step 6 migration.
+
+The source documents have since been consolidated. Historical paths resolve
+only against DOC_BASE; never apply this patch to the combined live contract.
+Step 6 instead derives its internal V2 contract from the proved Step 5 code.
 
 Pipeline (the documented regeneration recipe, now a saved script):
   1. load R + APPEND from rev3_build.py (source truncated before its build tail)
@@ -15,6 +19,7 @@ import difflib, io, os, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "exp5_rev4_docs.patch")
+DOC_BASE = "18f38be90bae6926b69b44fd1ce3a8d6c858d26c"  # last pre-consolidation main
 
 # IMPORT MUST DO NOTHING. This ran `git rev-parse` and then `os.chdir` at module
 # level, so merely importing this builder spawned a subprocess and MOVED THE
@@ -72,22 +77,10 @@ def normalize_blank_context(patch):
 
 
 def source_text(rel):
-    """The document's COMMITTED text — the index, which is what the commit will
-    carry.
-
-    THE DEFECT THIS FIXES. This read the WORKING TREE. Another track has
-    uncommitted edits to `FableExperimentWorkOrder.md`, so the patch was built
-    against bytes that exist only on this machine and FAILED to apply inside the
-    committed tree — the one place a committed patch has to work. `git apply
-    --check` passing in the dirty worktree said nothing about that.
-
-    THE TRADE, stated: the patch now describes the committed documents. When the
-    owner-approved switch actually applies it, it is rebuilt against whatever is
-    committed then — which is the only tree that will exist by then anyway.
-    """
-    got = subprocess.run(["git", "show", f":{rel}"], cwd=repo(),
+    """Historical source bytes, independent of today's paths or dirty index."""
+    got = subprocess.run(["git", "show", f"{DOC_BASE}:{rel}"], cwd=repo(),
                          capture_output=True)
-    assert got.returncode == 0, f"{rel} is not in the index — the patch has no base"
+    assert got.returncode == 0, f"{rel} is absent at historical base {DOC_BASE}"
     return got.stdout.decode("utf-8")
 
 
@@ -158,12 +151,13 @@ def build_patch_text():
 
 def main():
     patch, n_files = build_patch_text()
-    io.open(OUT, "w", encoding="utf-8").write(patch)
-    r = subprocess.run(["git", "apply", "--check", "--whitespace=error", OUT],
-                       capture_output=True, text=True, cwd=repo())
-    status = "STRICT-CLEAN" if r.returncode == 0 else f"APPLY-CHECK FAILED: {r.stderr[:400]}"
-    print(f"patch written: {n_files} files, {len(patch.encode('utf-8'))} bytes, {status}")
-    sys.exit(0 if r.returncode == 0 else 2)
+    with io.open(OUT, encoding="utf-8") as fh:
+        saved = fh.read()
+    if patch != saved:
+        raise SystemExit("Historical rebuild differs from the saved patch; nothing overwritten. "
+                         "Use its original code/source snapshot to investigate.")
+    from rev4_coverage_check import main as check_historical_patch
+    check_historical_patch(OUT)
 
 
 if __name__ == "__main__":

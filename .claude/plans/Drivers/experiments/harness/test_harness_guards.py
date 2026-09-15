@@ -1166,8 +1166,8 @@ def test_final_gate_union_axes_govern():
 
 
 def test_generator_idempotent_AND_matches_the_committed_artifacts(tmp_path):
-    """Two builds must agree with each other AND with what is committed, and the
-    build must not touch the tree.
+    """Two builds agree; frozen payloads stay exact while new identity pins
+    describe today's tree. A document move must not rewrite old evidence.
 
     TWO DEFECTS THIS CLOSES. The old version ran the generator IN PLACE, so a test
     rewrote two tracked files on every run — invisible here, and caught only when
@@ -1219,9 +1219,18 @@ def test_generator_idempotent_AND_matches_the_committed_artifacts(tmp_path):
     assert _hashes() == h1, "two consecutive builds must be byte-identical"
     committed = tuple(hashlib.sha256(
         open(os.path.join(_HERE, n), "rb").read()).hexdigest() for n in names)
-    assert h1 == committed, (
-        "the committed artifacts are not what the generator produces — one of "
-        "them is stale, or the generator records machine-specific values")
+    assert h1[:2] == committed[:2], "frozen drafting artifacts changed"
+    old = json.load(open(os.path.join(_HERE, names[2]), encoding="utf-8"))
+    new = json.loads((work / names[2]).read_text())
+    old_ids, new_ids = old.pop("identities"), new.pop("identities")
+    assert new == old, "document consolidation changed a frozen reader payload"
+    assert set(new_ids) == set(old_ids), "an identity was added or lost"
+    for name in old_ids:
+        expected_path = old_ids[name]["path"]
+        if name == "staged_v2_contract":
+            expected_path = ".claude/plans/Drivers/FinalDesign/ChannelContract.md"
+        assert new_ids[name]["path"] == expected_path, name
+    # Every new hash is checked against the new build by the live-identity test.
 
 
 # THE INTERPRETER RUNNING THIS TEST, not a path guessed from the tree layout.
@@ -1932,12 +1941,90 @@ def test_RED_contract_builder_reads_archived_authority():
         BEC.build(d)
         blocks = json.load(open(os.path.join(
             d, "exp5_prompt_contract.manifest.json")))["blocks"]
-    assert blocks, "the builder resolved no authority at all"
+    _assert_prompt_authorities(blocks, BEC._REPO)
+
+
+@pytest.mark.parametrize("replacement", [
+    ".claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md",
+    ".claude/plans/Drivers/FinalDesign/ChannelContract.md",
+    ".claude/plans/Drivers/FinalDesign/archive/2026-07-15_pre-consolidation/15_CandidateFactPacket.pre-amendment.md",
+])
+def test_prompt_authority_guard_rejects_relocated_or_archived_v1(tmp_path, replacement):
+    import copy
+    import build_exp5_contract as BEC
+    BEC.build(str(tmp_path))
+    blocks = json.loads((tmp_path / "exp5_prompt_contract.manifest.json").read_text())["blocks"]
+    _assert_prompt_authorities(blocks, BEC._REPO)  # real emitted positive control
+    changed = copy.deepcopy(blocks)
+    changed[0]["source"] = replacement
+    with pytest.raises(AssertionError, match="authority"):
+        _assert_prompt_authorities(changed, BEC._REPO)
+
+
+def test_packet_pin_uses_only_the_preserved_section(monkeypatch):
+    import make_pin_inventory as pins
+    raw = open(os.path.join(_REPO, ".claude/plans/Drivers/FinalDesign/ChannelContract.md"), "rb").read()
+    original_reader = pins.committed_bytes
+    def read(rel):
+        if rel == ".claude/plans/Drivers/FinalDesign/ChannelContract.md":
+            return raw
+        if rel == ".claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md":
+            return None  # prove the post-removal state, not the still-old index
+        return original_reader(rel)
+    monkeypatch.setattr(pins, "committed_bytes", read)
+    assert pins.verify_pins()["aa7239ed"][3] == "AGREES"
+    raw = raw.replace(b"# Driver contracts", b"# A different cover title", 1)
+    assert pins.verify_pins()["aa7239ed"][3] == "AGREES"
+    raw = raw.replace(b"The ONE packet", b"A CHANGED packet", 1)
+    assert pins.verify_pins()["aa7239ed"][3] == "DIFFERS"
+
+
+@pytest.mark.parametrize("damage", ["missing", "duplicate", "wrong_heading"])
+def test_prompt_authority_guard_requires_each_approved_section_once(tmp_path, damage):
+    import build_exp5_contract as BEC
+    BEC.build(str(tmp_path))
+    blocks = json.loads((tmp_path / "exp5_prompt_contract.manifest.json").read_text())["blocks"]
+    _assert_prompt_authorities(blocks, BEC._REPO)
+    if damage == "missing":
+        blocks.pop()
+    elif damage == "duplicate":
+        blocks[-1] = dict(blocks[0])
+    else:
+        blocks[0]["heading"] = "### A5."
+    with pytest.raises(AssertionError, match="authority"):
+        _assert_prompt_authorities(blocks, BEC._REPO)
+
+
+@pytest.mark.parametrize("damage", ["missing_start", "missing_end", "duplicate_start", "duplicate_end", "reversed"])
+def test_packet_pin_refuses_invalid_section_boundaries(monkeypatch, damage):
+    import make_pin_inventory as pins
+    raw = open(os.path.join(_REPO, ".claude/plans/Drivers/FinalDesign/ChannelContract.md"), "rb").read()
+    original_reader = pins.committed_bytes
+    path = ".claude/plans/Drivers/FinalDesign/ChannelContract.md"
+    monkeypatch.setattr(pins, "committed_bytes", lambda rel: raw if rel == path else original_reader(rel))
+    assert pins.verify_pins()["aa7239ed"][3] == "AGREES"
+    start, end = b"<!-- BEGIN INTERNAL V1 -->\n", b"<!-- END INTERNAL V1 -->\n"
+    if damage == "reversed":
+        raw = raw.replace(start, b"<!-- SWAP -->\n").replace(end, start).replace(b"<!-- SWAP -->\n", end)
+    else:
+        marker = start if damage.endswith("start") else end
+        raw = raw.replace(marker, b"" if damage.startswith("missing") else marker * 2, 1)
+    with pytest.raises(ValueError, match="boundaries"):
+        pins.verify_pins()
+
+
+def _assert_prompt_authorities(blocks, root):
+    # Approved A7 sections, not a filename blacklist: relocating V1 must not
+    # make it an allowed source. Compare with the independent assigned owner.
+    expected_source = os.path.realpath(os.path.join(
+        root, ".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md"))
+    expected = {(expected_source, f"### A{i}.") for i in range(1, 5)}
+    actual = {(os.path.realpath(os.path.join(root, b["source"])), b["heading"])
+              for b in blocks}
+    assert len(blocks) == len(expected) and actual == expected, "unapproved prompt authority"
     for b in blocks:
-        real = os.path.realpath(os.path.join(BEC._REPO, b["source"]))
+        real = os.path.realpath(os.path.join(root, b["source"]))
         assert os.path.isfile(real), f"authority does not exist: {b['source']}"
-        assert "archive" not in real.lower().split(os.sep), f"archived: {real}"
-        assert os.path.basename(real) != "15_CandidateFactPacket.md"
 
 
 def test_RED_contract_builder_refuses_a_pin_that_is_not_exactly_one_place():
@@ -2233,7 +2320,7 @@ def test_CONTROL_door_scoped_field_remains_lawful_reader_output():
     from driver.core.prepared_fact_v2 import ITEM_FIELDS
     from driver.core import prepared_fact as V1
     ct = open(os.path.join(_HERE, "..", "..", "FinalDesign",
-                           "ChannelContractV2.md"), encoding="utf-8").read()
+                           "ChannelContract.md"), encoding="utf-8").read()
     surf = json.loads(_re.search(r"```json CONTRACT-SURFACES\n(.*?)\n```",
                                  ct, _re.S).group(1))
     door = set(surf["staged_raw_channel"]["retired_fiscal_fields"])
@@ -4185,16 +4272,17 @@ def test_step3_5_the_reader_launcher_executes_its_EXACT_156_schedule():
         {"haiku", "opus", "sonnet"} & set(got["models"])), got["models"]
 
 
-def test_step3_5_every_identity_names_a_path_and_matches_its_LIVE_bytes():
-    """§5.3 — a bare hash cannot be re-checked against the file it names. Every
-    identity is `{path, sha256}` and is recomputed here from the live bytes."""
+def test_step3_5_every_identity_names_a_path_and_matches_its_LIVE_bytes(tmp_path):
+    """Check a NEW plan against its actual build, not a historical plan against
+    newer documents. Frozen plans remain evidence of their recorded snapshots."""
     import hashlib
-    rd = _plan("launch_exp5_readers.manifest.json")
+    work, _ = _build_in(tmp_path)
+    rd = json.loads((work / "launch_exp5_readers.manifest.json").read_text())
     for name, ident in rd["identities"].items():
         assert set(ident) == {"path", "sha256"}, (name, ident)
         assert not os.path.isabs(ident["path"]), (name, ident["path"])
         real = hashlib.sha256(
-            open(os.path.join(_REPO, ident["path"]), "rb").read()).hexdigest()
+            (tmp_path / ident["path"]).read_bytes()).hexdigest()
         assert real == ident["sha256"], (
             f"{name} binds {ident['path']} at a hash that is not its live bytes")
 
@@ -4494,6 +4582,34 @@ def _build_in(dest):
         assert (work / n).exists(), f"the builder did not recreate {n}"
     return work, {n: hashlib.sha256((work / n).read_bytes()).hexdigest()
                   for n in names}
+
+
+def test_new_reader_plan_uses_combined_contract_and_preserves_saved_plan(tmp_path):
+    """A document move changes a new plan's path, never an old run's evidence."""
+    import subprocess
+    from pathlib import Path
+
+    saved_path = Path(_HERE) / "launch_exp5_readers.manifest.json"
+    saved = saved_path.read_bytes()
+    work, _ = _build_in(tmp_path / "current")
+    new = json.loads((work / "launch_exp5_readers.manifest.json").read_text())
+    old = json.loads(saved)
+    relative = ".claude/plans/Drivers/FinalDesign/ChannelContract.md"
+    assert new["identities"]["staged_v2_contract"] == {
+        "path": relative,
+        "sha256": hashlib.sha256((tmp_path / "current" / relative).read_bytes()).hexdigest(),
+    }
+    assert {e["source_id"]: e["prompt_sha256"] for e in new["events"]} == {
+        e["source_id"]: e["prompt_sha256"] for e in old["events"]}
+    assert saved_path.read_bytes() == saved
+    # Reverting only the path must fail in the same otherwise-lawful build.
+    builder = work / "build_launch_manifest.py"
+    source = builder.read_text()
+    assert source.count('"ChannelContract.md"') == 1
+    builder.write_text(source.replace('"ChannelContract.md"', '"ChannelContractV2.md"'))
+    failed = subprocess.run([_REPO_VENV, str(builder)], capture_output=True, text=True)
+    assert failed.returncode != 0 and "ChannelContractV2.md" in failed.stderr
+    assert saved_path.read_bytes() == saved
 
 
 def test_step3_12_two_independent_builds_are_byte_identical(tmp_path):

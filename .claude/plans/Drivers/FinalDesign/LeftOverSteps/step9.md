@@ -72,7 +72,7 @@ Read and apply authority in this order:
 
 1. `FINAL_DESIGN.md` for system meaning, evidence, source-time, precision, and
    channel boundaries;
-2. the live V2 `ChannelContract.md` and `15_CandidateFactPacket.md` for the
+2. the live V2 `ChannelContract.md` Parts II and III for the
    active Fiscal/Core event and item shapes;
 3. `BUILD_AND_OPERATIONS.md` for build, test, release, and activation order;
 4. `.claude/plans/Drivers/WIP/UniversalLocator_Design_2026-07-18.md` for the locked source-locator base;
