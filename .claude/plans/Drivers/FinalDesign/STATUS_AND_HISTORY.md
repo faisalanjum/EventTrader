@@ -11,232 +11,266 @@
 > live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
 > current sha `aa7239ed…`).
 
-## A7 documentation amendment — 2026-09-10
+## 1. Current handover — 2026-09-15
 
-Owner approved the [Plan's A7 evidence-reuse amendment](FableExperimentPlan.md#a7-evidence-reuse-amendment)
-and publication to main and the recovery branch. It permits assessment of the
-382 saved `a3_run_1983` replies under their actual instructions, with a fresh
-independent source-only key. It grants no semantic approval, A7 PASS, later-step
-advance, model deployment or database write. Key construction and actual
-grading remain open. The prepared draft-fed A4 package is not a blind key for
-this reuse route and must not be launched as one. Older signed results,
-original document versions and their hashes remain unchanged historical
-evidence; the current authority pins are on `experiments/WORKORDER_STATUS.md`.
+**Goal:** turn source reports into reusable business causes and exact,
+source-backed facts. Models decide meaning; code checks evidence, numbers,
+dates and identity. The production system is not finished or activated.
 
-## 1. Current execution checkpoint (2026-08-13; identity re-measured 2026-08-16)
+**Where we stopped:** Step 1, A7 (the fact-reading experiment, EXP-5). The
+corrected calculation and bounded error review finished and were published,
+but **A7 did not pass**. Grader uncertainty and genuine reader errors remain.
+The later two-call diagnostic also finished; it did not change the official
+score. The owner's latest boundary is **STOP AND WAIT after this documentation
+consolidation**. Do not resume A7, A8 or later steps automatically.
 
-**Plain truth:** the rule design is mostly settled and the deterministic Core
-foundation is strong, but the new Driver system is not live. V1 is still the
-active contract. The real shared meaning reader, the admission/reuse kernel,
-production Driver writes, the complete point-in-time read layer and the running
-system do not yet exist. Old Guidance was intact at the 2026-07-03 re-census
-recorded in `BUILD_AND_OPERATIONS.md` §6; its state since then has not been
-rechecked.
+This is the sole general handover. The [experiment board](../experiments/WORKORDER_STATUS.md)
+keeps package states and historical receipts, not a second task narrative.
+[Steps.md](LeftOverSteps/Steps.md) owns execution order; individual steps own
+their detailed work. Dates and “next” instructions in older evidence describe
+those past tasks, not today's authorization.
 
-### 1.1 Exact current identity and evidence
+### 1.1 Where the work lives
 
-- Published head, measured 2026-08-16: `main == origin/main ==
-  356146dd5275d9fee65c1d58c95c37a7db4d9a63`; tree
-  `bd1248968e5ded892bbe1c87122d6e6ff869bc03`. `origin/main` is this clone's
-  remote-tracking record at its last sync; the remote itself was not queried for
-  this status update. Every path published since the EXP-5 freeze is
-  documentation under `FinalDesign/LeftOverSteps/`, so no code, contract or test
-  identity moved with it.
-- Last code identity: `0dd71956e942c889c70fede4e547f4737a39cff0`; tree
-  `9f80af23f037f68d0a4233b1d752421963549011`. This is the EXP-5 exam-kit freeze
-  commit (below).
-- The Core V2 dry-run bridge is NO LONGER an uncommitted candidate. It is
-  published at `0edb1be860524556134ecdedab248279590b23b9`; tree
-  `d806365c41def2108f04cfa7ec6cef8559415638`. It is built and tested, and it is
-  **dormant — dry-run only**: it is not the live contract, it performs no graph
-  write, and committing it activated nothing.
-- Fiscal V2 staging is published at `971ba079`; the Fiscal channel relocation at
-  `da9afa06`; the four withdrawn Route-A certification artifacts at
-  `54844a9f`; and the exact instant-period correction at `e6c9a956`.
-- **EXP-5 exam-kit freeze — `0dd71956…`.** One bounded commit carrying exactly
-  51 paths (28 modified, 20 added, 3 deleted), whose tree equals the
-  independently reviewed `9f80af23…`. The final reader-plan manifest is
-  `bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070`. Proof over
-  that exact tree, reconstructed in isolation and measured 2026-08-13: the
-  isolated tree's own write-tree equalled the commit; the clean lane ran with NO
-  credentials of any kind and returned **3,682 passed / 0 failed / 0 skipped**,
-  with all **3,741** pinned identities accounted for in a lane; **58**
-  read-only live nodes plus
-  **1** owner-gated write probe were pinned and the write probe was NOT run.
-  Zero AI calls, zero filing fetches, zero Neo4j writes, no activation and no
-  V1->V2 switch. This freezes the exam kit; it does not run the exam.
-- Graph: this update performed NO database read, so no current count is claimed.
-  An earlier draft of this section attributed one combined census to
-  2026-08-12; that date has no surviving receipt and is WITHDRAWN. Each figure
-  below now carries only the evidence that actually supports it:
-  - old Guidance, at the **2026-07-03** re-census in `BUILD_AND_OPERATIONS.md`
-    §6: `Guidance=548` anchors, `GuidanceUpdate=8,432`, `GuidancePeriod=237`,
-    and **894** sources (532 Reports + 362 Transcripts);
-  - `Driver=0` and `DriverUpdate=0`, at the **2026-07-24** read-only check
-    recorded in `WIP/Fiscal_Core_Review_Guardrails_2026-07-24.md`;
-  - the DriverPeriod count, the Driver uniqueness constraints and the four
-    required DriverPeriod sentinels are **unknown**: no receipt for them was
-    found, and none may be inferred from this document;
-  - writes being refused is not a census claim at all — it is live code: the
-    Neo4j adapter's `transaction()` raises rather than opening one.
-
-  The bridge and exam-kit work itself made **zero Neo4j writes**. Every figure
-  above is dated historical evidence and cannot exclude unrelated external
-  changes since its own measurement date.
-
-| Area | Current truth |
+| Location | Verified evidence base; not a claim that later documentation leaves HEAD unchanged |
 |---|---|
-| Rule design | Mostly final; the running layer is still design-incomplete |
-| Catalog builder | Partial; no production catalog or OD-6 fitness pass |
-| Fiscal tagged-filing path | Strong offline/staged V2 path; live command still emits V1 |
-| Core IDs, periods, units, validation, fusion, planning | Built and tested; dry-run only |
-| V2 event bridge | Published at `0edb1be8`; dormant, dry-run only, not active |
-| EXP-5 exam kit | Frozen and published at `0dd71956`; NOT run — no model quality is claimed |
-| Shared meaning reader | Not built; tests inject recorded answers |
-| Driver reuse/create decision system | Approved design and rehearsal seams only; production kernel not built |
-| Graph writes | Disabled (current, from live code: the adapter's `transaction()` raises); the 2026-07-24 read-only check found `Driver=0` and `DriverUpdate=0` |
-| Point-in-time read layer | Build-pending; the adapter's narrow reads are not the finished layer |
-| Schedules, retries, monitoring and backfills | Not built; design is incomplete |
-| Old Guidance retirement | Not started by this work; the 2026-07-03 re-census (BUILD §6) found the old graph intact (state since then not rechecked) |
+| Main: `/home/faisal/EventMarketDB`, branch `main` | `2dc0ad39f30dba4756078573f5e80038465939cc`, tree `a45f8d0c2802e0d482ddefc5d330a4774d25a787` |
+| Recovery: `/home/faisal/EventMarketDB-driver-recovery`, branch `recovery/a3-a7-verified` | Result commit `8dacb463406a48e0179f269e87e145d8c5823564`, tree `374ec3ca2a7f35b1844d3d285ea2f97ed533902e`; status follow-up `3340851ef2aa75817ff18b9beb73301b36370a39` |
 
-Corrections to the 2026-08-12 outside status review:
+Both branch tips above matched the actual remote on 2026-09-15 before this
+consolidation. Recovery implementation/evidence is **not merged into main**.
+Documentation synchronization is not an implementation merge or deployment.
+Use `git rev-parse HEAD` and `git ls-remote origin refs/heads/main refs/heads/recovery/a3-a7-verified`
+to establish newer tips; recovery has no configured upstream.
 
-1. The Fiscal instant-period defect is no longer open; it is published at
-   `e6c9a956`. The Core bridge is no longer uncommitted either — it is published
-   at `0edb1be8`.
-2. **THIS ENTRY WAS WRONG AND IS WITHDRAWN 2026-08-13.** It previously read that
-   the new Core tests "do not open Neo4j while pytest is collecting them" and
-   that "the reported collection-time side effect was not reproduced". The
-   effect is REAL and was reproduced during Step 4:
-   `driver/core/test_v2_event_route.py` built its fixtures at module import via
-   `_v2_events()`, which called `route_a_source.build_source()` ->
-   `dotenv_values('.env')` -> `GraphDatabase.driver(...)` and then ran two Cypher
-   reads. In the working tree collection therefore SUCCEEDED by querying the
-   live database, so every green reading of that suite had been taken with the
-   graph reachable; in the committed tree, which has no `.env`, collection
-   failed with `KeyError: 'NEO4J_URI'` and all 187 tests became "0 collected, 1
-   error". The outside reviewer's original report was correct and this file's
-   rebuttal was not. Fixed in the test fixture only — the source entry is now
-   built from the tracked packet's own `source_id` and prepared text, output
-   byte-identical to the graph-built baseline, with a mutation-proven guard that
-   fails if the call returns. Production `route_a_source.py` was not changed.
+Below, **A7** means the recovery worktree's `a7_recovery/`; **U** means
+`A7/unit_2020_codex_check/`. These evidence paths live on the recovery branch.
+Its mapped runner preserves old logical paths; a `/tmp` name in a frozen map
+does not mean the evidence should be moved back to temporary storage.
 
-### 1.2 Immediate bounded unit
+Protect unrelated local changes: main has changed settings, market-data
+documentation, two old `receipts_827` inventories and deleted test-agent/skill
+files. Recovery has an unrelated change in
+`A7/grader_20260909/harness_g1v3/build_inventory_review.py`
+(SHA256 `2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2`).
+Both trees contain extensive untracked work. Never blanket-stage, clean,
+reset or infer that every file belongs to this task.
 
-The staged V2 dry-run bridge foundation and the EXP-5 kit freeze are both DONE
-and published. The live ordered sequence is now `LeftOverSteps/Steps.md`; the
-reader work below is its Step 1 and begins only after Step 0 publishes the
-roadmap and this document, and after Codex authorizes that step.
+### 1.2 Completed work and what its proof means
 
-1. **The K-fields launch is NOT ready and is NOT lawfully frozen for a run.**
-   **CORRECTED 2026-08-16** — an earlier draft of this entry called the
-   preparation READY and made the next unit a model run. What is true: the
-   frozen inputs and the 36-event schedule exist, and `made_calls` is 0 in
-   `experiments/harness/launch_kfields_drafts.manifest.json`. What is also
-   true, and blocks a run: that same manifest still schedules two lanes per
-   event, `model: sonnet` and `model: opus`, and
-   `launch_kfields_drafts.workflow.template.js` calls those aliases directly.
-   An Opus lane may not run under the `Steps.md` first-release model ruling.
-2. The immediate bounded work after Step 0 is therefore preparation, not calls.
-   `step1.md` A1-A2 require replacing the Opus lane with a second independent
-   blind Sonnet 5 high-effort call, resolving the exact runtime identity and
-   transport, regenerating the manifest and launcher twice to identical bytes,
-   freezing the exact launch packet, and passing its deterministic preflight.
-   Only after that may the 72 calls run — 36 events read twice, one lane each.
-   Those calls need no separate owner or spending approval: the owner ruling in
-   `Steps.md` pre-authorizes every model call already bounded by a reviewed
-   step. Neo4j writes and live activation keep their own separate
-   fresh-approval requirement.
-3. **CORRECTED 2026-08-16** — an earlier draft of this entry stated that the
-   K-fields lock hash is unset and that a runner refuses to start without it.
-   Those belong to the EXP-5 launcher (`launch_exp5_readers.manifest.json`
-   carries `kfields_lock.sha256 = null` and its runner-refusal rule), not to
-   the K-fields door, which has no lock field at all.
-4. After the drafts exist, Fable settles every K-fields record and disputed
-   result against the event text alone, then signs and hash-locks the key
-   (`step1.md` Roles and A4). Fable is a live independent review role, not a
-   superseded model tier: the `Steps.md` model ruling replaces the old tier
-   choices, not Fable. Any model-assisted part of that review is a separate
-   blind Sonnet 5 high-effort call, and no call may grade its own answer. Only
-   then may EXP-5 run, and EXP-6 only if EXP-5 passes.
+| Work | Delivered result / evidence |
+|---|---|
+| Earlier deterministic foundation | Core source binding, exact arithmetic, periods, IDs, validation, fusion and no-write planning; Fiscal fetch/relocation and slice-menu work. See §1.6 and the historical records below. This is not the production meaning reader or identity system. |
+| V2 bridge and original exam kit | Published `0edb1be8` and `0dd71956`; staged, writes off. Original kit proof: 3,682 passed, zero failures/skips, 3,741 identities accounted; 58 read-only tests and one unrun write probe separately pinned. These are August snapshot results, not today's suite totals. |
+| A1–A3 preparation and saved answers | Frozen independent reading/transport and durable recovery; A3 recovery checkpoint `26836bb309542163b7a1a0da480905e396d3668d`. Current evaluation preserves 382 original answers: 191 items in each of two runs, across 33 source events. No successful answer may be repeated merely to recover files or improve its score. |
+| A4 key recovery | Original recovered package `90925920d5f2675191edfe5f1285c239177ca453`. That older draft-fed key is historical, not the blind key used for the later saved-answer evaluation. |
+| A5 / A6 preparation | Recovered and published at `38e42d9a43d2ec1a9cf69e5c01b0c3a1af5010c3` / `cc7df9f41206c22604fa3736f4c97d120ee74dbc`. Later evaluation reuses answers under their actual original instructions, not unserved prompt clarifications. |
+| New independent source-only key | Signed current key: `U/codex_lock2149_a/SIGNED_KEY.json`, SHA256 `4474bd7a330a0cb5c03aef09883053ce34d138bfd43ff4046671580b65591ee4`. 33 events, 191 rows, 165 expected facts, 34 controls, 10 exclusions, 44 abstentions; no open signing issues or exact duplicate key facts. These are different counts, not quantities to sum. |
+| Grader and real connection | Existing raw capture, parser, source normalizer, matching, independent judgments, real Core no-write route and scorer connected. Exact current chain: `U/FINAL_SCORE_COMMAND_2174.sh` and `map_final_grading_2174.tsv`. No second scoring system or production import of experiment code. |
+| Final A7 calculation and bounded cause review | Published result/cause/reuse package `8dacb463`; 99 no-write event routes, four completion loads, zero new model calls in the final calculation. Detailed results below. |
+| Later selected-case diagnostic | Two fresh Sonnet readings of one Best Buy impairment target; [result and evidence](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_probe_20260915/RESULT.md), recovery commit `c8188c5c6c6fd8c926526dda47f2095104115595` (26 files, 848,873 bytes). Separate from the 382 answers and official grades. |
 
-**EXP-5 HAS NOT RUN.** The exam kit is frozen and proved self-sufficient; no
-model has sat the exam, so no reader accuracy, recall or model-quality claim
-exists or may be inferred from this checkpoint.
+The independent key's lock is
+`68270f4fd33f342e1b562dd700f789fb442fa0b4bbb1ec2b8cd83a6c1cb19737`;
+its receipt is
+`a54b8db1546c639801f60a7655e4eb6e867a3144a5ed88d6734288e98bd4671a`.
+The saved producer receipt is
+`8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e`,
+finalization
+`2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f`.
+The older “82 launched” / “206 lanes” counts are historical schedules, not the
+denominator of this final evaluation.
 
-This checkpoint does **not** build the real reader or kernel, run EXP-5, switch
-contracts, enable writes, build the read/running layers, or activate native XBRL.
+### 1.3 Actual A7 result — finished calculation, not qualification
 
-One named pre-switch issue remains. The candidate deliberately splits
-`validate_via_production` into its existing conversion owner before fusion and
-its one underlying `validate_fact` rule engine after fusion. That is not a
-second validator, but the staged public V2 contract §6 literally requires the switched
-pipeline to pass every prepared fact through the named
-`validate_via_production` doorway. Before the atomic switch, either that named
-owner must support the fused production value without duplicate conversion, or
-the owner must explicitly amend the contract. The current dry-run checkpoint
-must not be described as completing that switch-time requirement.
+Official report: `U/codex_final_score2174_a/A7_CORRECTED_SCORE.json`,
+SHA256 `966d14bc71ee487afdeff88a41fbf59ccf0e68c349a342c96a60aa0ff733a062`.
 
-### 1.3 Ordered roadmap after the Core checkpoint
+| Measure | First run (P1) | Second run (P2) | Strict combined result (UNION) |
+|---|---:|---:|---:|
+| Expected facts matched | 123/165 (74.55%) | 116/165 (70.30%) | 71/165 (43.03%) |
+| Raw value/shape measure | 87.54% | 86.95% | 90.84% |
+| State measure | 94.87% | 95.54% | 98.53% |
+| Wrong-accept flags from scorer | 9 | 9 | 8 |
+| Incomplete meaning judgments | 48 | 38 | 18 |
+| Raw `key_miss` labels | 4 | 11 | 84 |
+| PASS / safety result | false / FAIL | false / FAIL | false / FAIL |
 
-**OWNER-RULED 2026-08-12: EXP-5 is a pre-switch proof.** The Core bridge is now
-committed (`0edb1be8`) and the EXP-5 bundle is frozen (`0dd71956`), both while
-V1 remains the live production contract and all writes remain off. Only then may
-K-fields and EXP-5 run. This supersedes the 2026-08-11 “switch-gated bundle”
-timing, which became circular once the switch itself required the still-unbuilt
-reader/kernel that EXP-5 must first prove.
+**A match is not a fully correct answer.** In P2, the 116 matches include
+100 facts the code would accept, 13 held for dates and three rejected for
+units. Some mechanically accepted facts still have meaning errors. The strict
+combined result follows its frozen agreement/matching rules; it is not a
+simple union of the two match counts. None of these columns is an overall
+“percentage correct” or a production accuracy claim.
 
-The dependency order is:
+All 426 required grading questions are accounted for: 388 unaffected outcomes
+unchanged, 24 selected outcomes changed and 14 selected outcomes unchanged.
+The 104 incomplete meaning judgments remain uncredited where unresolved;
+they are not 104 missing calls or permission to reroll valid disagreements.
+All three reports say `required_grading_unfinished=true`.
 
-1. ~~Regenerate and freeze the EXP-5 contract, prompts, checks and manifests
-   against staged V2, using only the committed dry-run bridge; V1 stays live.~~
-   **COMPLETED 2026-08-13** at `0dd71956` (tree `9f80af23`). V1 stayed live
-   throughout and no write was enabled.
-2. **← NEXT.** Run the remaining evidence program: reader lane = K-fields ->
-   EXP-5 -> EXP-6. It starts with preparation, not calls: `step1.md` A1-A2
-   first replace the Opus lane with a second blind Sonnet 5 high-effort lane,
-   re-freeze the launch packet and pass preflight. The 72 calls follow that and
-   need no separate owner approval; GO #1 is still UNFIRED;
-   identity/catalog lane = WP-FC-RUN, K-stamp/EXP-4B, F-C, K-route/EXP-3 and
-   K-pairs.v2/EXP-4A. `LeftOverSteps/step1.md` now owns that lane's exact plan:
-   the WorkOrder supplies its dependencies, but its still-unrun model,
-   escalation and fallback choices are superseded by `Steps.md`, and no lane may
-   launch before Step 0 closes.
-3. Record the result memo; no failed or uncertain experiment becomes code.
-4. Build one shared reader/decomposer and one admission/reuse kernel. Reuse the
-   existing validation, fusion, planning and audit owners.
-5. Prove a complete no-write V2 run over real text and XBRL-backed events,
-   including all five outcomes and reuse/create/refuse/park behavior.
-6. Resolve the named validation-door issue, then perform one atomic V1->V2
-   switch: promote V2, freeze the V2 internal packet, move every caller and pin,
-   delete V1 and the temporary V2 contract, and prove zero V1 reachability.
-   Graph writes remain off.
-7. Finish the full catalog/OD-6 gate, independent Fiscal prose certification,
-   point-in-time read layer, operating layer, shadow burn-in and recovery.
-   Native-XBRL materialization, other channels, verdict/DCM work, old Guidance
-   retirement and broader rollout remain separately gated.
-8. Model calls bounded by a reviewed step are pre-authorized under `Steps.md`
-   and need no separate owner or spending approval; freeze each one's exact plan
-   and Sonnet 5 high-effort identity first. Obtain fresh owner approval
-   immediately before any Neo4j write and before any live activation.
+Read [FINAL_SCORE_FINDINGS_2174.md](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/FINAL_SCORE_FINDINGS_2174.md),
+then its linked cause/addendum records for exact event/fact/field evidence.
+The bounded source review supports defects in 23 of 26 flagged records; three
+flags remain unconfirmed. Examples of genuine reader errors include omitted
+Best Buy Health scope and omitted pre-tax measurement. Grader false-positive
+leads, vague-quantity/range interpretation and a Boeing-option stage question
+remain explicitly qualified. Many raw `key_miss` labels are contradicted by
+existing reference cards; they are not proved missing-key facts. No qualified
+replacement judgment was invented to improve the score.
 
-### 1.4 Earlier one-page dashboard (2026-07-22 baseline)
+The later two-call diagnostic restored Health scope in both replies. One
+still duplicated the charge and omitted required start dates; the other would
+pass code checks. Both interpreted a printed dash as prior zero, which the
+served instructions did not conclusively settle. No source-context loss was
+found. This selected known case is not an unseen test, A7 PASS or authority
+to replace the original answers.
 
-| Layer | Design | Code | Tests | Production run |
-|---|---|---|---|---|
-| Rule meaning (FINAL_DESIGN §1-§9) | FINAL (locked set + owner rulings through 2026-07-18, incl. PER-21) | — | — | — |
-| Track A catalog engine | FINAL | PARTIAL (WP-FC-EDITS `5db902f` + rounds 22-23 prompt sync; implementation gate in BUILD §4 governs any run) | 266 pass + 1 skip (2026-07-22, incl. the strengthened rulebook-sync guard + the PER-21 authority pin guard in `workflows/tests/`) | NEVER RUN (no graph catalog; fitness gate never run; old June RULE-BEARING outputs = historical evidence only, chunk copies excepted per BUILD §4) |
-| Fiscal.ai channel adapter (S1) | FINAL incl. PER-21 | S1 BUILT; PER-21 historical-router correction SHIPPED — WP1 re-gate CLOSED (`80bae52`). Universal Locator WP2–WP4 execution is governed by `../WIP/UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md`, the sole current execution amendment/work order over the locked `../WIP/UniversalLocator_Design_2026-07-18.md` base (reading order: locked Design base → FinalPlan changes/current steps → Review Record history). Older UniversalLocator WIP plans are history/evidence. This work order does not amend FINAL_DESIGN, ChannelContract, BUILD_AND_OPERATIONS, PER-21, Core ownership, or News. | smoke 16 packets / 175 items, 0 tokens; WP1 close gates green at `80bae52` (battery 149/149 · floors 28/28) | not live |
-| Track B fact stack | FINAL + the §11.4 INTERNAL writer contract OWNER-LOCKED 2026-07-17, internal portion CLOSED (PreparedFactV1 schema approved; public channel portion = S4) | steps 1-5 + step-7 slice menu BUILT (`driver/core/`: ids · period resolver, PER-20 HAS_XBRL producer guard PENDING · units · validators/planner · fusion · write CLI `97a46ce` · Report-only Neo4j adapter, writes DISABLED · slice_menu + owner-approved frozen lists, R12) | 392 unit + 1 opt-in probe skip · live read-only 10/10 (separate gate) · Track A 266+1 | dry-run only; ENABLE_DRIVER_WRITES off; adapter transaction() raises |
-| Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
-| Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
-| Admission kernel | **APPROVED WORKING DESIGN (owner 2026-07-15; not activated)** | — | gates in force; integration COMPLETE (BUILD §8.1; original archived) | — |
-| XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + hard pre-gates + EXP-6)** | — | EXP-1 signed | — |
-| Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
-| Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-5 EXECUTED (owner GO 2026-07-16); all 33 sources accounted for byte-verified (29 originals + 3 snapshots archived; the byte-pinned Plan at root); audit trail = the archived CONSOLIDATION.md | — | definitive blank-context reader test: outcome + per-question grades + authoritative tested hashes in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run15.md` — Phase 5 COMPLETE only if that record shows 10/10 PASS | root = the 7 sanctioned files + archive/; Plan + WorkOrder stay until the experiment program migrates |
+### 1.4 Verification, remaining limits and model reuse
+
+The published final package records **318 tests plus 29 subtests passed**
+(3.34 s), including 15 offline model-reuse checks. The reporting fix first
+failed seven tests with two passing controls, then passed nine focused tests
+and four executed reversion mutations. Exact commands/results:
+`U/FINAL_REGRESSION_COMMAND_2176.sh`, `OFFLINE_VERIFICATION_2176.json`,
+`FINAL_CHECKPOINT_REVIEW_2176.md`. Numeric replay
+`FINAL_SCORE_TRACE_2174.json` reproduces 310 matched pairs and 16 measures
+per run; it does not independently decide meaning.
+
+[MODEL_REUSE_OFFLINE_REVIEW_2176.md](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/MODEL_REUSE_OFFLINE_REVIEW_2176.md)
+proves the same grader/parser/no-write route works with unfamiliar supported
+offline input. **Changing only a local model name is not yet a verified launch.**
+The separate host-side task still needs exact prompt-capacity proof, actual
+returned model/completion capture and honest attempt/resume receipts. No local
+model was run and no inference engine/client was changed. Follow the current
+`LeftOverSteps/QwenInference.md`; the older Qwen handoff is historical where
+that document supersedes it. Evidence copies are in `U/snapshots_2176/`.
+
+Keep the grader as an external evaluation tool. Production must not import
+experiment-harness code. Later Step 3 moves the approved prompt/response
+responsibility to production ownership; this does not require turning the
+entire test harness into production software.
+
+No current database census is claimed by this update. The September 7 audit
+reported Driver/DriverUpdate/DriverPeriod = 0/0/0 and old Guidance =
+548/8,432/237; those are dated observations, not present-day guarantees.
+The live adapter still refuses transactions. No database write or activation
+was performed by this work.
+
+### 1.5 Remaining roadmap — all advancement currently paused
+
+| Step / part | Actual position and remaining result |
+|---|---|
+| 0 | Starting roadmap/status published in August; historical starting identity is not today's HEAD. This update is routine status maintenance, not a new Step 0 or Step 13. |
+| 1 A7 | Calculation/cause package delivered; FAIL with the limits above. Further corrections or a changed test require a new bounded owner-directed task; reuse valid saved evidence. |
+| 1 A8 | Not run: EXP-6 text/tagged-fact identity comparison requires EXP-5 PASS. |
+| 1 B1–B7 | Catalog/identity lane unfinished. B1 was parked for A7 priority (Codex archive 1445); NAME-16 finding remains a lead in step7. B2 catalog run, B3 type key/stamping, B4 mini-catalog freeze, B5 routing key, B6 routing experiment, B7A pair-key and B7B identity experiment remain unsigned/open. |
+| 2 | No final signed build decision for both Step 1 lanes. Reconcile results, rules, model roles and allowed build scope only after its entry conditions. |
+| 3 | Shared production meaning reader not completed; experimental saved/raw-response paths do not close it. |
+| 4 | Production admission/reuse/create, type/family, links, continuity and recovery not completed. |
+| 5 | Full V2 production reader + identity no-write proof not completed; close the named validation-door/fusion ordering requirement here. |
+| 6 | V1 remains active; atomic V2 promotion, caller migration and V1 removal not done. |
+| 7 | Production catalog/finalizer, safety and fitness qualification not completed. |
+| 8 | Remaining fact wiring, concept links, reads, withdrawals, verdict/DCM plans and dual-producer calibration not completed. |
+| 9A / 9B | Fiscal source-location certification unfinished; 150 real-anchor tagged-filing test waits for Step 11's lawful first records. Do not restore the withdrawn certification artifacts. |
+| 10 | Minimum operating layer not completed; design may overlap only where Steps permits; implementation waits for 8 and 9A. |
+| 11 | Shadow, separately approved bounded graph setup/write, 9B and controlled rollout not completed. |
+| 12A / 12B / 12C | Consumer/Guidance retirement not done; 12B first-release channel set is owner-frozen empty, not an open charter task; native tagged-filing production/rollout remains last and gated. |
+| 13 | Whole-system closure not reached. |
+| 14 | Dormant; never a prerequisite to Step 13. |
+
+The exact dependency graph and approvals remain in [Steps.md](LeftOverSteps/Steps.md).
+The starting publications are `c8f228802` (roadmap) and `929d6ed05` (status).
+Do not estimate overall completion from file counts, capability counts or
+expired hourly estimates. First-release rulings already defer cross-company
+slice comparison, non-USD support, item-number taxonomy and third-party
+guidance; do not re-request those settled choices. Other choices are raised
+only at their frozen trigger.
+
+### 1.6 Preserved audit findings and history
+
+The September 7 report's useful implementation map is retained here:
+`driver/core/driver_write_cli.py` owns event dispatch; prepared-fact modules
+own schemas; period/unit/ID/fusion/validator/writer modules own deterministic
+mechanics; `driver_neo4j_adapter.py` is the fenced Report-only graph adapter.
+Fiscal owns source finding/copying, not meaning or Driver identity. Legacy
+known-value relocation and source-neutral tagged relocation have different
+protected callers. Catalog tools remain under `.claude/plans/Drivers/workflows/`.
+
+Arithmetic fixes `8255d4dc80988ce8490078cbbfa5f7f435817239` on main and
+`c60defaa9a8f678b506cabe449c60a96fbca47cb` on recovery preserve exact
+negative numbers and guidance midpoint comparisons. They are separate from
+the A7 grader. The September 7 audit recorded 4,454 passes, one failure and
+one skip across its scoped runs; those were not a whole-system pass.
+Its 7 packet artifacts / 136 event occurrences / 743 items were not 743
+source-code files or unique events. Its 31 capability groups were a component
+inventory, not an effort percentage.
+
+The August test-collection database read was real and was fixed in test
+fixtures; the earlier denial was withdrawn. The source-routing owner was
+not replaced. Preserve that correction when interpreting old green tests.
+
+Remaining audit leads, not new tasks: same-fact replay/member-edge enrichment
+requires source-rule adjudication if reached; current catalog tools must be
+reconciled to the later count-free independent-identity-review ruling; V2
+production ownership and operating policy close at their existing steps.
+The older report's unconfirmed owner-approval questions do not override
+recorded rulings in Steps. Withdrawn suspicions stay withdrawn unless new
+evidence shows a regression.
+
+Before this documentation edit, the applicable main checks produced
+201 passes and three failures: the old generated patch differs from its
+builder; its enclosing clean-proof test therefore also fails; the old pin
+inventory differs from its generator. These are recorded pre-existing
+baseline findings, not three new runtime defects. Do not silently regenerate
+frozen proof or claim today's full suite is green.
+
+Consolidation checks: 84 documentation/contract tests passed; the full affected
+A7 regression passed 318 tests plus 29 subtests. The larger main check repeated
+201 passes and the same three baseline failures. The old A7 command correctly
+refuses changed documentation hashes; the fresh check used a separate map
+with only the reviewed document-directory digest changed. Historical maps
+remain immutable and require their original snapshot for reproduction.
+
+The following preserved sections keep the original rule decisions and
+33-source crosswalk. Their dated test counts and historical “next” wording
+do not supersede this checkpoint. The September 7 audit and final A7 work
+diary are recoverable in Git as specified in §8; raw evidence was not deleted.
+
+### 1.7 Safe resumption
+
+Read `AGENTS.md`, the Fiscal/Core guardrails, the live design and relevant
+step, this checkpoint, then [Orchestration.md](LeftOverSteps/Orchestration.md)
+before coordinating Core. Use that protocol, not copied chat instructions.
+The old untracked `CoreSessionPrompt.md` is an August one-use handover, not
+the current task or replacement-session prompt.
+The current documented pair is Codex
+`01a05829-3086-73e0-89c9-e5773b322d80` and Core
+`5ae9b86b-f0f6-4449-beee-9cac7cfa7200`; verify rather than assume they persist.
+
+Last reviewed exchange: Core 2174 replies to Codex 2178 and waits.
+Their SHA256 values are respectively
+`b8299efd8ac7cb288dfb8148ab11ea1e635b7f2b7c3ba984f76d69d02c8cf9f5`
+and `b358056226b847887b1e580af4b7d8c9dc78291003780b200e51e4860d3f3d04`.
+Current mailboxes matched their archives. Re-read both: downtime events are
+not replayed. A replacement session must complete the protocol's handover;
+ordinary compaction is not replacement. Reuse the single proven watcher and
+existing goal; never reset sequences or send an acknowledgement of an
+acknowledgement. The old all-steps goal is not achieved.
+
+No model calls, Core task or roadmap advancement follows from opening this
+file. The next action after this consolidation is to report the documented
+state and wait for the owner. Any later authorized correction must preserve
+original answers, full denominators, exact evidence and every miss/refusal.
+Models decide meaning; code does deterministic work. Fix only reproduced
+test defects at their one owner; do not tune measured reader errors into a
+pass. Real writes, activation and destructive work retain their own approvals.
 
 ## 2. Lists by status
+
+These are the preserved design-status categories. The September 15 execution
+checkpoint above and later owner rulings in Steps.md supersede old open-item
+or build-progress wording; they do not erase the historical rule record.
 
 - THIS file owns the status lists (one-copy law); `FINAL_DESIGN.md` §10 is the GENERATED mirror. The master lists:
 - **FINAL / BUILD-PENDING:** Track A remainder (fold/tree mirrors, finalizer, real folds, WP-FC-RUN, OD-6 fitness gate — never run) · UNIT-14 production wiring · PER-20 HAS_XBRL producer guard · full slice TABLE materialization (materializer-era; the step-7 PIT menu code IS built) · concept-linker vetoes C/D + PIT query build · Track B remainder (the internal writer/validators/fusion/CLI/audit + step-7 slice menu are BUILT `0d6c1d0`, dry-run only — remaining: S4 decomposer/kernel integration + public channel runtime, FS-18 step-7 menu-for-producers, write enablement behind the fitness gate) · read layer · verdict/DCM writer · channel adapters + certification · Track C execution · incremental refresh.
@@ -479,12 +513,21 @@ or test bar, and permits no Neo4j write. A failure stops before activation.
 
 EXP-1 PASS 07-09 (O13 dimension binding owner-ratified) · EXP-0 PASS 07-10 (grader = 2× `claude-sonnet-5`
 @effort=high; the (model,effort) pair binds) · WP-FC-EDITS `5db902f` 07-10 · WP-FA + O2 signed 07-10 · K-reader
-v3 LOCKED 07-10 · EXP-2 PASS 07-11 (sonnet-5@high/40k/1-run) · PENDING: EXP-3..6, remaining keys, WP-FC-RUN,
-F-C freeze. Standing gates: ra_0007 kernel-§6.1 review BEFORE K-pairs.v2; original Plan sha `51966848…7472` remains historical;
+v3 LOCKED 07-10 · EXP-2 PASS 07-11 (sonnet-5@high/40k/1-run). Current EXP-5:
+corrected calculation completed, FAIL with grading limits (§1.3); source-only
+K-fields key signed (§1.2). EXP-3/4, K-route/K-stamp/K-pairs.v2, WP-FC-RUN and
+F-C freeze remain open; EXP-6 waits for EXP-5 PASS.
+Standing gates: ra_0007 kernel-§6.1 review BEFORE K-pairs.v2; original Plan sha `51966848…7472` remains historical;
 WorkOrder sha recorded, never pinned — authoritative record = `experiments/WORKORDER_STATUS.md`, re-recorded at
 every edit incl. the Phase-5 21c re-point (board UPDATED at Phase-5 step 21c 2026-07-16 — the full hash chain recorded, its current line authoritative;
 frozen original `4911a22f…` = archive MANIFEST). Artifacts:
 `.claude/plans/Drivers/experiments/`.
+
+Earlier PASS labels qualify their own tasks, not A7 or production. EXP-2's
+selected reader matched 475/1,175 expected names (40.43%); its audited precision
+sample was 51/60 (85%), not a complete accuracy census. EXP-1's 9,603 fixture
+rows demonstrate deterministic materialization, not live activation. The
+complete signed artifacts and dated board entries retain their original bars.
 
 ## 6. Known documentation/logic issues (open; no new authority)
 
@@ -637,6 +680,22 @@ repo-wide broken-reference scan came back clean (card step 8).
 
 ## 8. Archive manifest + evidence pointers
 
+- **September 15 status consolidation:** `DRIVER_STATUS_REPORT.md` was folded
+  into §1 and removed; its full September 7 audit remains at
+  `2dc0ad39f30dba4756078573f5e80038465939cc:.claude/plans/Drivers/FinalDesign/DRIVER_STATUS_REPORT.md`,
+  SHA256 `68e636d5b7a485f2dd2c5ed8002c6ba9561409ee436f47f886d37d7e213c37f9`.
+  The completed A7 diary was also folded here and removed; its exact final
+  revision 254 remains at
+  `3340851ef2aa75817ff18b9beb73301b36370a39:a7_recovery/A7_PREGRADING_WORK_ORDER.md`,
+  SHA256 `b27f3c02415e5cebcc869739d9e13a985f815e352e7722848e244bb8ade5267f`.
+  Read either with `git show <commit>:<path>`. Earlier frozen publication
+  builders/manifests still refer to their historical work-order path: use
+  their original committed snapshot, never repin them to this handover.
+  No grading runtime or live test requires either deleted document. Original
+  answers, keys, signed results, maps, manifests and mailbox archives remain.
+  Main/recovery now share the already-approved partial-report Plan amendment;
+  recovery uses the current main communication instructions. Neither is a
+  new rule, new protocol or authorization to resume the roadmap.
 - **The archive's contents, exactly (two distinct kinds — never conflate):** (a) **32 SOURCE COPIES** = 29
   source originals + 3 pre-amendment/frozen-original snapshots; (b) **EVIDENCE FILES, which are NOT source
   copies** = the audit file `CONSOLIDATION.md`, `MANIFEST.json`, `README.md`, and the `READER_TEST_RECORD_*`

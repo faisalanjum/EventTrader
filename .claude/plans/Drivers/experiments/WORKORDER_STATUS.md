@@ -1,16 +1,21 @@
 # WORKORDER_STATUS - FableExperimentWorkOrder v2.0 execution board
 
-> **CURRENT (2026-09-10):** WorkOrder v2.0 + A7 evidence-reuse amendment (sha `23854f459500e44d4ba238cc118bbd74bc1de405c071de2b43d9015875751343`) · Plan v1.0 + EXP-5 Addendum A + A7 evidence-reuse amendment (sha `a8e8989b1e8a49829021a4329789cc4b1c8a11c1d27e74f22a6e0314462512db`). The version title + round pin-lists below are PRESERVED history; this line is the current pin.
+> **CURRENT (2026-09-15):** WorkOrder v2.0 + A7 evidence-reuse amendment (sha `23854f459500e44d4ba238cc118bbd74bc1de405c071de2b43d9015875751343`) · Plan v1.0 + EXP-5 Addendum A + A7 reuse/partial-report amendments (sha `05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b`). Historical run pins below remain unchanged.
 >
-> **A7 amendment status (2026-09-10):** owner approved
+> **A7 status (2026-09-15):** corrected calculation and bounded cause review
+> published on recovery at `8dacb463`, status follow-up `3340851`; FAIL, not
+> A7 PASS. Key, score, remaining uncertainty, local-model limitations and the
+> owner's STOP/WAIT boundary are maintained only in
+> [STATUS_AND_HISTORY.md](../FinalDesign/STATUS_AND_HISTORY.md#1-current-handover--2026-09-15).
+> Owner approved
 > [saved-answer reuse and corrected regrading](../FinalDesign/FableExperimentPlan.md#a7-evidence-reuse-amendment),
 > not a model qualification or later-step advance. The 382 saved replies in
 > recovery `a7_recovery/unit_1983/run` remain immutable evidence: receipt
 > `8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e`,
 > finalization `2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f`.
-> A fresh source-only independent key and actual grading remain open; no
-> additional producer call is owed merely because these were called drafts.
-> Publication changes documents only, not a frozen prompt, run, key or score.
+> The source-only key is now signed and grading calculated. No additional
+> producer call is owed merely because these were called drafts. This board
+> update changes no frozen prompt, answer, key, score or historical receipt.
 >
 > **Previous current pins (2026-08-10):** WorkOrder
 > `e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410`;
@@ -60,7 +65,7 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 - Candidate model IDs (1.3): cheap=claude-haiku-4-5-20251001 | strong=<sonnet: resolve alias at run start> | escalation=claude-opus-4-8 | fable=claude-fable-5 (adjudication only)
 - Runner: venv/bin/python3 (Python 3.10.12, neo4j-driver 5.28.1); env-first only (load_dotenv unreliable in venv)
 
-## Live counts (use these, not stale work-order estimates)
+## Bootstrap counts — historical 2026-07-09, not a current census
 - Fact total: 13775616 (work order estimate was ~9.9M; live figure governs, per P19)
 - Report total: 42633
 
@@ -79,12 +84,12 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 | WP-0 bootstrap | DONE | - | - | tree + BUDGET.json + board created 2026-07-09T01:05:17Z |
 | WP-FA corpus | DONE | 2026-07-10 | manifest f39f2d4b | 36 event packets (12/8/8/4/4) + frozen chunks (VERIFY OK, 845 events) + FIXTURES_MANIFEST; O2 signed by Fable (FA 8e9556f9); preflight a-g recorded; 0-LLM |
 | EXP-1 census | DONE | - | no-gate (descriptive) | 7 aggregates -> exp1_xbrl/census.json |
-| EXP-1 dry-run | DONE - PASS (paperwork complete) | 2026-07-09T14-25-39Z_dryrun | PASS | 9,603 emitted; gate + completion review accepted by Fable; ra_0005 + O12 entry filed; EXP-6 UNBLOCKED |
+| EXP-1 dry-run | DONE - PASS (paperwork complete) | 2026-07-09T14-25-39Z_dryrun | PASS | 9,603 emitted; gate + completion review accepted by Fable; ra_0005 + O12 entry filed; EXP-6 still also requires EXP-5 PASS |
 | K-pairs.v1 | LOCKED v1.3 (Fable O10-2 2026-07-09T23:57:50Z) | - | lint ok | kp_0022 quote re-anchored (gold unchanged); composite gate: 3 fresh calls on kp_0022 only; sha 023fb1ceddbb... |
 | K-pairs.v2 | PENDING | - | - | needs FREEZE (mining) |
 | K-reader | LOCKED v3 (Fable 2026-07-10) | K-reader.v3 | PASS | 1,175 records across 39/40 chunks; deliberate zero-cause skip-test preserved; key sha `cf87a09a…b181736` |
 | K-route | PENDING | - | - | needs FREEZE + candidate pool |
-| K-fields | DRAFTING (GO #1 held) | - | - | Do not fire until the complete EXP-5 bundle is regenerated and hash-frozen against the committed staged-V2 dry-run bridge; then use the existing Fable-signoff gate |
+| K-fields | SIGNED / LOCKED for current saved-answer evaluation | codex_lock2149_a | signing gate passed | Independent source-only key: 165 facts, 33 events, 191 source rows; exact lock/evidence in STATUS §1.2. Older draft-fed keys remain historical. |
 | K-stamp | PENDING | - | - | needs F-C run records |
 | EXP-0 graders | DONE - PASS (Fable-SIGNED 2026-07-10T00:15:20Z) | 2026-07-10T00-10-11Z_exp0v13composite | PASS | grader tier = claude-sonnet-5 x2 @ effort=high; Opus = escalation; blindness discounts NONE; graded scoring UNBLOCKED |
 | WP-FC-EDITS | DONE | 2026-07-10 | 5db902f | 18 files; 2.3 items 1-11 + Fable F1-F8; hermetic suite green (260 pass/1 skip); Fable signed off |
@@ -94,10 +99,16 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 | EXP-4A judge | PENDING | - | - | needs K-pairs.v2 |
 | EXP-4B stamp | PENDING | - | - | needs FC-RUN + K-stamp |
 | F-C FREEZE | PENDING | - | - | needs EXP-4B |
-| EXP-5 fields | PENDING | - | - | needs committed staged-V2 dry-run bridge + regenerated/frozen V2 bundle + K-fields lock; runs before the V1->V2 switch |
-| EXP-6 twins | PENDING | - | - | needs EXP-1 + EXP-5 |
+| EXP-5 fields | CALCULATED — FAIL, grading limits retained | codex_final_score2174_a | no PASS | Unchanged 382 saved answers; exact result and limitations in STATUS §1.3; no later-step advance. |
+| EXP-6 twins | NOT RUN / BLOCKED | - | - | EXP-5 has not passed; owner's current STOP/WAIT also applies. |
 
 ## Log
+
+All entries below are dated historical records. Their old “current”, “next”,
+open counts and model defaults are not today's work order. Do not repin or
+rewrite them. The board above owns current package states; the sole general
+handover is STATUS_AND_HISTORY.md. Global call/budget closure has not been
+recomputed by the September 15 documentation update.
 - 2026-07-09T01:05:17Z WP-0 bootstrap complete; EXP-1 schema-binding (step 0) started.
 - 2026-07-09T01:34:55Z EXP-1 schema-binding: (a)/(c) CLEAN; (b) axis<->member = O13 (typed-dim misalignment: 2637 contexts, 1290 slice-touching) -> STOPPED, ra_0001 filed, handed to owner/Fable.
 - 2026-07-09T02:50:49Z O13 RATIFIED (owner): binding (b) = explicit-dims positional pairing, drop typed dims, fail-closed skip+count residual. ra_0001 resolved. Census aggregates starting.
