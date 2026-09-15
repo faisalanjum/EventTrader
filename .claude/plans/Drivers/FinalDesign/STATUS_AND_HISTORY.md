@@ -20,9 +20,11 @@ dates and identity. The production system is not finished or activated.
 **Where we stopped:** Step 1, A7 (the fact-reading experiment, EXP-5). The
 corrected calculation and bounded error review finished and were published,
 but **A7 did not pass**. Grader uncertainty and genuine reader errors remain.
-The later two-call diagnostic also finished; it did not change the official
-score. The owner's latest boundary is **STOP AND WAIT after this documentation
-consolidation**. Do not resume A7, A8 or later steps automatically.
+The later two-call diagnostic and owner/Core input-format diagnosis are
+separate evidence; neither changes the official score. The latest authorization
+is to preserve and publish the reviewed diagnosis and final handover (§1.3.1),
+then **STOP AND WAIT** for new sessions and a new owner-directed task.
+Do not resume A7, A8 or later steps automatically.
 
 This is the sole general handover. The [experiment board](../experiments/WORKORDER_STATUS.md)
 keeps package states and historical receipts, not a second task narrative.
@@ -34,11 +36,11 @@ those past tasks, not today's authorization.
 
 | Location | Verified evidence base; not a claim that later documentation leaves HEAD unchanged |
 |---|---|
-| Main: `/home/faisal/EventMarketDB`, branch `main` | `2dc0ad39f30dba4756078573f5e80038465939cc`, tree `a45f8d0c2802e0d482ddefc5d330a4774d25a787` |
-| Recovery: `/home/faisal/EventMarketDB-driver-recovery`, branch `recovery/a3-a7-verified` | Result commit `8dacb463406a48e0179f269e87e145d8c5823564`, tree `374ec3ca2a7f35b1844d3d285ea2f97ed533902e`; status follow-up `3340851ef2aa75817ff18b9beb73301b36370a39` |
+| Main: `/home/faisal/EventMarketDB`, branch `main` | Consolidated handover `befad299888f56b1c84bb6abcead877ccd83dcc0`; earlier result documentation `2dc0ad39f30dba4756078573f5e80038465939cc` |
+| Recovery: `/home/faisal/EventMarketDB-driver-recovery`, branch `recovery/a3-a7-verified` | Result `8dacb463406a48e0179f269e87e145d8c5823564`; later diagnosis and recovered call evidence `5fb3feef80f1d4c59dae47d538d158afcf2f413c` |
 
-Both branch tips above matched the actual remote on 2026-09-15 before this
-consolidation. Recovery implementation/evidence is **not merged into main**.
+These checkpoints were published on 2026-09-15; this shared status file has a
+later documentation-only commit on each branch. Recovery implementation/evidence is **not merged into main**.
 Documentation synchronization is not an implementation merge or deployment.
 Use `git rev-parse HEAD` and `git ls-remote origin refs/heads/main refs/heads/recovery/a3-a7-verified`
 to establish newer tips; recovery has no configured upstream.
@@ -112,8 +114,9 @@ All three reports say `required_grading_unfinished=true`.
 Read [FINAL_SCORE_FINDINGS_2174.md](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/FINAL_SCORE_FINDINGS_2174.md),
 then its linked cause/addendum records for exact event/fact/field evidence.
 The bounded source review supports defects in 23 of 26 flagged records; three
-flags remain unconfirmed. Examples of genuine reader errors include omitted
-Best Buy Health scope and omitted pre-tax measurement. Grader false-positive
+flags remain unconfirmed. Observed answer defects include omitted Best Buy
+Health scope and omitted pre-tax measurement; their existence alone does not
+separate input/prompt effects from model limitations. Grader false-positive
 leads, vague-quantity/range interpretation and a Boeing-option stage question
 remain explicitly qualified. Many raw `key_miss` labels are contradicted by
 existing reference cards; they are not proved missing-key facts. No qualified
@@ -122,9 +125,81 @@ replacement judgment was invented to improve the score.
 The later two-call diagnostic restored Health scope in both replies. One
 still duplicated the charge and omitted required start dates; the other would
 pass code checks. Both interpreted a printed dash as prior zero, which the
-served instructions did not conclusively settle. No source-context loss was
-found. This selected known case is not an unseen test, A7 PASS or authority
+served instructions did not conclusively settle. No source-context loss between
+the saved prompt and those two calls was found; this did not audit the earlier
+HTML-to-text conversion. This selected known case is not an unseen test, A7 PASS or authority
 to replace the original answers.
+
+#### 1.3.1 Later input diagnosis — independently checked 2026-09-15
+
+Owner/Core's [ANALYSIS.md](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_input_diagnosis_20260915/ANALYSIS.md)
+(SHA256 `06c85ac40de6d2edb350fd7cea8156fb91056d9cf21f1127577d3cef6a2bac81`)
+is useful diagnostic evidence, **not proof that most errors are unrelated to
+the reader**. All 31 original entries match their manifest hash prefixes;
+the original manifest is preserved as `evidence/MANIFEST_original.txt`,
+SHA256 `11feecc54e0b83f87708564f38052e6345bf164c82df023e6fe4f39d853e4567`.
+Core later expanded `MANIFEST.txt` to 36 entries. The complete checkpoint's
+full hashes, recovered call records and source dependencies are in
+`EVIDENCE_INDEX.json`; the original analysis and results remain unchanged.
+
+* **Inputs and selected results:** 10/10 original prompts reconstruct to their
+  pinned hashes; removing the grids and added rule restores the original
+  headers exactly. All 10 reconstructed modified inputs parse and retain their
+  quotes; all four saved SEND files match, and 18/18 added grids match the
+  scripts' HTML-cell rendering. Four saved replies cover just two Best Buy
+  targets, not the full test. Both impairment replies include Health and emit
+  one record; both revenue-mix replies agree on the quarter/year-to-date values.
+  The impairment replies still differ in name and end date. Added structure
+  **and** an added rule changed the test; these are not corrected official grades.
+* **Table formatting:** the read-only reproduction returns 3,196/3,751
+  (85.2%) matched labels without a newline in the preceding three characters,
+  over 15 filings. The saved Best Buy prompt also visibly joins a heading and
+  data row. This supports a real formatting concern, not an exact measurement
+  of all lost table boundaries or its contribution to A7 errors.
+* **Grading variation:** recomputed from the hash-checked G2 prompts and saved
+  review: 10 repeated records, 28 appearances, 70 record/field checks; 57 agree,
+  12 differ between decided and unresolved, one has both true and false.
+  Source, record and reference card agree across repeats, but question IDs and
+  surrounding batches differ. Thus 81.43% agreement is this sample's
+  established-judgment agreement—not a general one-in-five wrong-answer rate
+  or a 19% minimum measurable score change. All 70 prompts contain the quoted
+  boolean/null template; the existing receipt records format-only recovery for
+  93/141 attempts. Those saved recoveries are already applied, not calls owed.
+* **Claims not established:** the 88.3% cause attribution groups overlapping
+  error counters (349 total, 308 excluding diagnostic abstentions), not
+  individually proved causes. D3's plain/encoded Health-token difference is
+  already handled by `unit_2008/harness_g1v3/a1_reader.py`: both new replies
+  normalize to the key token, and official P1 already contains that token.
+  Rule 6 already discusses real duration windows and safely derived periods;
+  missing exact search phrases do not explain every date error. The 96.91%
+  geometry script counts **any** covering header, not unique correct placement,
+  and ignores row spans. Core's later v3 test constructs non-overlapping cells
+  within each row, so its zero-overlap result does not independently prove
+  correct placement. Neither version is a generic parser correctness proof.
+
+**Final Core review and recovered evidence:** Core 2175 withdraws D3 and
+softens D1; its earlier `ADDENDUM_2179.md` still contains stronger claims and
+must be read with the qualifications above. Contrary to that mailbox's missing-
+evidence claim, Codex recovered all four native child transcripts and the
+30-filing parser timing output from the existing session records. All four
+transcripts report `claude-sonnet-5`, cover all 511 lines of their exact saved
+input and contain matching saved JSON replies and completed turns. The parser
+output records 30/30 parsed, 2,237 tables and 0.73 s median; it was recovered,
+not rerun or independently timed. No successful call was repeated.
+
+The checkpoint also preserves both original HTML filings, the six cited
+guidance-review artifacts and a 69-file hash roster for the scale measurements.
+The remaining scale-test HTML files and the newline check's database text are
+external dependencies, not bundled inputs. Historical materializer/pre-A2-lock
+scratchpad files could not be identified by Core; they are neither claimed
+recovered nor added as A7 prerequisites. No temporary directory is required to
+retain the evidence packaged by this handover.
+
+Keep the table, prompt clarity, menu ambiguity and grading-variation leads for
+the next specifically authorized task. Do not erase observed wrong answers,
+declare the reader fault-free, change the key/score, promote the diagnostic
+parser or repeat successful calls on this evidence alone. This review made no
+new model call or production-code change.
 
 ### 1.4 Verification, remaining limits and model reuse
 
@@ -239,24 +314,38 @@ diary are recoverable in Git as specified in §8; raw evidence was not deleted.
 
 ### 1.7 Safe resumption
 
-Read `AGENTS.md`, the Fiscal/Core guardrails, the live design and relevant
-step, this checkpoint, then [Orchestration.md](LeftOverSteps/Orchestration.md)
-before coordinating Core. Use that protocol, not copied chat instructions.
+Start with `AGENTS.md` and [Orchestration.md](LeftOverSteps/Orchestration.md),
+then follow its ordered reading and session handover exactly. Use its replacement
+prompts with each session's own runtime ID. After binding, this checkpoint gives
+the current stop state; the live design and roadmap still own the rules.
 The old untracked `CoreSessionPrompt.md` is an August one-use handover, not
 the current task or replacement-session prompt.
 The current documented pair is Codex
 `01a05829-3086-73e0-89c9-e5773b322d80` and Core
 `5ae9b86b-f0f6-4449-beee-9cac7cfa7200`; verify rather than assume they persist.
 
-Last reviewed exchange: Core 2174 replies to Codex 2178 and waits.
+Last reviewed work exchange: Core 2175 replies to Codex 2179 and waits.
 Their SHA256 values are respectively
-`b8299efd8ac7cb288dfb8148ab11ea1e635b7f2b7c3ba984f76d69d02c8cf9f5`
-and `b358056226b847887b1e580af4b7d8c9dc78291003780b200e51e4860d3f3d04`.
-Current mailboxes matched their archives. Re-read both: downtime events are
+`5616bf993e7f046f24244af427c1a5b1cb3e306ff3c4ca818e1b06039a99bc8e`
+and `5f13007939238dcf59677aeba15347f694050ea35092c4827f1248ef321efd14`.
+Both are preserved under the diagnosis's `evidence/`. A later publication/WAIT
+receipt belongs to the mailbox chain, not a new project task. Re-read both
+current mailboxes and their archives: downtime events are
 not replayed. A replacement session must complete the protocol's handover;
 ordinary compaction is not replacement. Reuse the single proven watcher and
 existing goal; never reset sequences or send an acknowledgement of an
 acknowledgement. The old all-steps goal is not achieved.
+
+Exact process checks found one Codex watcher in `codex-mailwatch` and one Core
+monitor in `core-mailwatch`; `driver-core` is the Core terminal, not a third
+monitor. Recheck and reuse them. Core reports no running job and is waiting;
+do not launch work merely because an old goal, hook or historical note says “next.”
+
+Final publication checks: both live documentation/contract checks passed on
+each branch; 18 preserved Python files parsed; all checkpoint hashes and the
+four transcript-to-input/reply bindings matched. The final-score/key bytes
+were unchanged. This documentation/evidence-only handover did not rerun the
+full A7 regression or approve the experimental parser as production code.
 
 No model calls, Core task or roadmap advancement follows from opening this
 file. The next action after this consolidation is to report the documented
