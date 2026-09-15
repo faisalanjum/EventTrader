@@ -1,89 +1,77 @@
-# STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
+# Driver project — status and history
 
-> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run15.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. Review rounds + decision trail = the archived `CONSOLIDATION.md` §10.2/§16.** This file owns STATUS and HISTORY only — live rule
-> wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
-> `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
-> change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
-> section plus a new supersession row here.
->
-> **Reading order (front door = `FINAL_DESIGN.md`):** FINAL_DESIGN → ChannelContract (adapters only) →
-> BUILD_AND_OPERATIONS (builders/operators) → this file (what is open, replaced, or archived). Temporary fifth
-> live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
-> current sha `aa7239ed…`).
+This is the **single general handover**: current progress, preserved decisions
+and evidence locations. It does not define new Driver rules.
+`FINAL_DESIGN.md` owns meaning, `ChannelContract.md` the active public boundary,
+`15_CandidateFactPacket.md` the active internal packet, `BUILD_AND_OPERATIONS.md`
+build/release procedure, and `LeftOverSteps/Steps.md` execution order.
+
+**Read §1–2 for the current handover.** Sections 3–8 preserve decisions and
+historical cross-references needed by live plans and tests. Their old “next,” “open”
+and completion statements describe their dated snapshots, not new tasks.
+Later owner rulings in Steps.md prevail. Communication and session startup
+belong only in [Orchestration.md](LeftOverSteps/Orchestration.md).
 
 ## 1. Current handover — 2026-09-15
 
 **Goal:** turn source reports into reusable business causes and exact,
 source-backed facts. Models decide meaning; code checks evidence, numbers,
-dates and identity. The production system is not finished or activated.
+dates and identity. Production is not finished or activated.
 
-**Where we stopped:** Step 1, A7 (the fact-reading experiment, EXP-5). The
-corrected calculation and bounded error review finished and were published,
-but **A7 did not pass**. Grader uncertainty and genuine reader errors remain.
-The later two-call diagnostic and owner/Core input-format diagnosis are
-separate evidence; neither changes the official score. The latest authorization
-is to preserve and publish the reviewed diagnosis and final handover (§1.3.1),
-then **STOP AND WAIT** for new sessions and a new owner-directed task.
-Do not resume A7, A8 or later steps automatically.
+**Stopped at Step 1 / A7 (EXP-5):** the corrected score and bounded error review
+are published, but **A7 did not pass**. Grader uncertainty and observed answer
+errors remain. The later selected-case/input-format diagnostics do not replace
+the official score or prove the reader fault-free.
 
-This is the sole general handover. The [experiment board](../experiments/WORKORDER_STATUS.md)
-keeps package states and historical receipts, not a second task narrative.
-[Steps.md](LeftOverSteps/Steps.md) owns execution order; individual steps own
-their detailed work. Dates and “next” instructions in older evidence describe
-those past tasks, not today's authorization.
+**Current project state: STOP AND WAIT** for the owner's next task. This
+documentation-only update does not reopen A7, A8 or later steps.
+The [experiment board](../experiments/WORKORDER_STATUS.md) retains package
+receipts, not a second general work order.
 
 ### 1.1 Where the work lives
 
-| Location | Verified evidence base; not a claim that later documentation leaves HEAD unchanged |
+| Location | Published checkpoint before this documentation cleanup |
 |---|---|
-| Main: `/home/faisal/EventMarketDB`, branch `main` | Consolidated handover `befad299888f56b1c84bb6abcead877ccd83dcc0`; earlier result documentation `2dc0ad39f30dba4756078573f5e80038465939cc` |
-| Recovery: `/home/faisal/EventMarketDB-driver-recovery`, branch `recovery/a3-a7-verified` | Result `8dacb463406a48e0179f269e87e145d8c5823564`; later diagnosis and recovered call evidence `5fb3feef80f1d4c59dae47d538d158afcf2f413c` |
+| Main: `/home/faisal/EventMarketDB`, branch `main` | `bd361f7364297b71c9bbaa10ef5c725942069ca1` |
+| A7 work: `/home/faisal/EventMarketDB-driver-recovery`, branch `recovery/a3-a7-verified` | `b9376c0a0dcc7f871d1c37a1eebe1858421e8623` |
 
-These checkpoints were published on 2026-09-15; this shared status file has a
-later documentation-only commit on each branch. Recovery implementation/evidence is **not merged into main**.
-Documentation synchronization is not an implementation merge or deployment.
-Use `git rev-parse HEAD` and `git ls-remote origin refs/heads/main refs/heads/recovery/a3-a7-verified`
-to establish newer tips; recovery has no configured upstream.
+Recovery code/evidence is **not merged into main**. These two handover documents
+are synchronized; that is not an implementation merge or deployment.
+Session startup is separate from the worktree: follow Orchestration.md and
+use the recovery path for A7 edits/tests, not main.
 
-Below, **A7** means the recovery worktree's `a7_recovery/`; **U** means
-`A7/unit_2020_codex_check/`. These evidence paths live on the recovery branch.
-Its mapped runner preserves old logical paths; a `/tmp` name in a frozen map
-does not mean the evidence should be moved back to temporary storage.
+For newer tips, use `git rev-parse HEAD` in each worktree and
+`git ls-remote origin refs/heads/main refs/heads/recovery/a3-a7-verified`.
+Recovery has no configured upstream. Below, **A7** means the recovery
+worktree's `a7_recovery/`; **U** means `A7/unit_2020_codex_check/`.
 
-Protect unrelated local changes: main has changed settings, market-data
+**Protect unrelated local work.** Main has settings changes, market-data
 documentation, two old `receipts_827` inventories and deleted test-agent/skill
-files. Recovery has an unrelated change in
+files. Recovery has an unrelated edit to
 `A7/grader_20260909/harness_g1v3/build_inventory_review.py`
 (SHA256 `2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2`).
-Both trees contain extensive untracked work. Never blanket-stage, clean,
-reset or infer that every file belongs to this task.
+Both trees have extensive untracked files. Never blanket-stage, clean or reset.
+Frozen maps may contain old logical `/tmp` paths; the mapped evidence is
+durable. Do not move it back or rewrite historical map pins.
 
-### 1.2 Completed work and what its proof means
+### 1.2 Completed work and its proof
 
 | Work | Delivered result / evidence |
 |---|---|
-| Earlier deterministic foundation | Core source binding, exact arithmetic, periods, IDs, validation, fusion and no-write planning; Fiscal fetch/relocation and slice-menu work. See §1.6 and the historical records below. This is not the production meaning reader or identity system. |
-| V2 bridge and original exam kit | Published `0edb1be8` and `0dd71956`; staged, writes off. Original kit proof: 3,682 passed, zero failures/skips, 3,741 identities accounted; 58 read-only tests and one unrun write probe separately pinned. These are August snapshot results, not today's suite totals. |
-| A1–A3 preparation and saved answers | Frozen independent reading/transport and durable recovery; A3 recovery checkpoint `26836bb309542163b7a1a0da480905e396d3668d`. Current evaluation preserves 382 original answers: 191 items in each of two runs, across 33 source events. No successful answer may be repeated merely to recover files or improve its score. |
-| A4 key recovery | Original recovered package `90925920d5f2675191edfe5f1285c239177ca453`. That older draft-fed key is historical, not the blind key used for the later saved-answer evaluation. |
-| A5 / A6 preparation | Recovered and published at `38e42d9a43d2ec1a9cf69e5c01b0c3a1af5010c3` / `cc7df9f41206c22604fa3736f4c97d120ee74dbc`. Later evaluation reuses answers under their actual original instructions, not unserved prompt clarifications. |
-| New independent source-only key | Signed current key: `U/codex_lock2149_a/SIGNED_KEY.json`, SHA256 `4474bd7a330a0cb5c03aef09883053ce34d138bfd43ff4046671580b65591ee4`. 33 events, 191 rows, 165 expected facts, 34 controls, 10 exclusions, 44 abstentions; no open signing issues or exact duplicate key facts. These are different counts, not quantities to sum. |
-| Grader and real connection | Existing raw capture, parser, source normalizer, matching, independent judgments, real Core no-write route and scorer connected. Exact current chain: `U/FINAL_SCORE_COMMAND_2174.sh` and `map_final_grading_2174.tsv`. No second scoring system or production import of experiment code. |
-| Final A7 calculation and bounded cause review | Published result/cause/reuse package `8dacb463`; 99 no-write event routes, four completion loads, zero new model calls in the final calculation. Detailed results below. |
-| Later selected-case diagnostic | Two fresh Sonnet readings of one Best Buy impairment target; [result and evidence](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_probe_20260915/RESULT.md), recovery commit `c8188c5c6c6fd8c926526dda47f2095104115595` (26 files, 848,873 bytes). Separate from the 382 answers and official grades. |
+| Deterministic foundation | Core source binding, arithmetic, periods, IDs, validation, fusion and no-write planning; Fiscal source fetching/relocation and slice-menu work. These do not constitute the production meaning reader or identity system. |
+| Staged V2 bridge and original exam kit | `0edb1be8` / `0dd71956`, writes off. The August kit recorded 3,682 passes and 3,741 accounted identities, with 58 read-only tests and one unrun write probe separately pinned. Historical totals, not today's full suite. |
+| A1–A3 preparation/recovery | A3 checkpoint `26836bb309542163b7a1a0da480905e396d3668d`. Reuse the 382 original answers: 191 items per run, two runs, 33 source events. Never repeat a successful answer merely to recover files or improve its score. |
+| A4 recovery | `90925920d5f2675191edfe5f1285c239177ca453`. The older draft-fed key is historical, not the later independent source-only key. |
+| A5 / A6 preparation | Published at `38e42d9a43d2ec1a9cf69e5c01b0c3a1af5010c3` / `cc7df9f41206c22604fa3736f4c97d120ee74dbc`. Saved answers are evaluated under their original served instructions. |
+| Independent source-only key | `U/codex_lock2149_a/SIGNED_KEY.json`, SHA256 `4474bd7a330a0cb5c03aef09883053ce34d138bfd43ff4046671580b65591ee4`. 33 events, 191 rows, 165 expected facts, 34 controls, 10 exclusions, 44 abstentions; no open signing issues or exact duplicate key facts. Counts overlap and must not be summed. |
+| Grading connection and final calculation | Raw capture, parser, normalizer, matching, independent judgments, real Core no-write route and scorer connected. Run/map: `U/FINAL_SCORE_COMMAND_2174.sh`, `map_final_grading_2174.tsv`. Result/cause/reuse package `8dacb463406a48e0179f269e87e145d8c5823564`: 99 no-write event routes, four completion loads, zero new model calls in the final calculation. |
+| Later diagnostics | Original-prompt two-call probe: `A7/manual_probe_20260915/RESULT.md`, commit `c8188c5c6c6fd8c926526dda47f2095104115595`. Modified-input diagnosis and recovered native evidence: `A7/unit_input_diagnosis_20260915/`, commit `5fb3feef80f1d4c59dae47d538d158afcf2f413c`. Neither replaces the official test. |
 
-The independent key's lock is
-`68270f4fd33f342e1b562dd700f789fb442fa0b4bbb1ec2b8cd83a6c1cb19737`;
-its receipt is
-`a54b8db1546c639801f60a7655e4eb6e867a3144a5ed88d6734288e98bd4671a`.
-The saved producer receipt is
-`8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e`,
-finalization
-`2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f`.
-The older “82 launched” / “206 lanes” counts are historical schedules, not the
-denominator of this final evaluation.
+The key lock, signing/producer receipts and finalization identities remain in
+the signed package and frozen run map. The old “82 launched” / “206 lanes”
+counts describe recovery schedules, not this final evaluation's denominator.
 
-### 1.3 Actual A7 result — finished calculation, not qualification
+### 1.3 A7 result — completed calculation, not qualification
 
 Official report: `U/codex_final_score2174_a/A7_CORRECTED_SCORE.json`,
 SHA256 `966d14bc71ee487afdeff88a41fbf59ccf0e68c349a342c96a60aa0ff733a062`.
@@ -93,287 +81,224 @@ SHA256 `966d14bc71ee487afdeff88a41fbf59ccf0e68c349a342c96a60aa0ff733a062`.
 | Expected facts matched | 123/165 (74.55%) | 116/165 (70.30%) | 71/165 (43.03%) |
 | Raw value/shape measure | 87.54% | 86.95% | 90.84% |
 | State measure | 94.87% | 95.54% | 98.53% |
-| Wrong-accept flags from scorer | 9 | 9 | 8 |
+| Wrong-accept flags | 9 | 9 | 8 |
 | Incomplete meaning judgments | 48 | 38 | 18 |
 | Raw `key_miss` labels | 4 | 11 | 84 |
 | PASS / safety result | false / FAIL | false / FAIL | false / FAIL |
 
-**A match is not a fully correct answer.** In P2, the 116 matches include
-100 facts the code would accept, 13 held for dates and three rejected for
-units. Some mechanically accepted facts still have meaning errors. The strict
-combined result follows its frozen agreement/matching rules; it is not a
-simple union of the two match counts. None of these columns is an overall
-“percentage correct” or a production accuracy claim.
+**A match is not a fully correct answer.** P2's 116 matches include 100 the
+code would accept, 13 held for dates and three rejected for units. Some accepted
+facts still have meaning errors. UNION follows the frozen agreement/matching
+rules, not a simple union of match counts. No column is production accuracy.
 
-All 426 required grading questions are accounted for: 388 unaffected outcomes
-unchanged, 24 selected outcomes changed and 14 selected outcomes unchanged.
-The 104 incomplete meaning judgments remain uncredited where unresolved;
-they are not 104 missing calls or permission to reroll valid disagreements.
-All three reports say `required_grading_unfinished=true`.
+All 426 required grading questions are accounted for: 388 unaffected outcomes,
+24 selected outcomes changed, 14 selected outcomes unchanged. The 104 incomplete
+meaning judgments stay uncredited; they are not missing calls or permission to
+reroll valid disagreements. All three reports say
+`required_grading_unfinished=true`.
 
-Read [FINAL_SCORE_FINDINGS_2174.md](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/FINAL_SCORE_FINDINGS_2174.md),
-then its linked cause/addendum records for exact event/fact/field evidence.
-The bounded source review supports defects in 23 of 26 flagged records; three
-flags remain unconfirmed. Observed answer defects include omitted Best Buy
-Health scope and omitted pre-tax measurement; their existence alone does not
-separate input/prompt effects from model limitations. Grader false-positive
-leads, vague-quantity/range interpretation and a Boeing-option stage question
-remain explicitly qualified. Many raw `key_miss` labels are contradicted by
-existing reference cards; they are not proved missing-key facts. No qualified
-replacement judgment was invented to improve the score.
+`U/FINAL_SCORE_FINDINGS_2174.md` and its linked cause/addendum records preserve
+the exact findings. The bounded source review supports defects in 23 of 26
+flagged records; three remain unconfirmed. Examples include missing Best Buy
+Health scope and pre-tax measurement. Their existence does not by itself
+separate input/prompt effects from model limitations. Grader false positives,
+vague-quantity/range interpretation and a Boeing-option stage question remain
+qualified. Many raw `key_miss` labels are contradicted by existing reference
+cards, not proved missing-key facts. No replacement judgment was invented to
+raise the score.
 
-The later two-call diagnostic restored Health scope in both replies. One
-still duplicated the charge and omitted required start dates; the other would
-pass code checks. Both interpreted a printed dash as prior zero, which the
-served instructions did not conclusively settle. No source-context loss between
-the saved prompt and those two calls was found; this did not audit the earlier
-HTML-to-text conversion. This selected known case is not an unseen test, A7 PASS or authority
-to replace the original answers.
+The separate original-prompt two-call probe restored Health in both replies.
+One still duplicated the charge and omitted start dates; the other would pass
+code checks. Both read a dash as prior zero, which the instructions did not
+conclusively settle. No source loss between that saved prompt and those two
+calls was found; the earlier HTML-to-text conversion was not covered.
 
-#### 1.3.1 Later input diagnosis — independently checked 2026-09-15
+#### 1.3.1 Later input diagnosis — verified findings and limits
 
-Owner/Core's [ANALYSIS.md](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_input_diagnosis_20260915/ANALYSIS.md)
+Read `A7/unit_input_diagnosis_20260915/ANALYSIS.md`
 (SHA256 `06c85ac40de6d2edb350fd7cea8156fb91056d9cf21f1127577d3cef6a2bac81`)
-is useful diagnostic evidence, **not proof that most errors are unrelated to
-the reader**. All 31 original entries match their manifest hash prefixes;
-the original manifest is preserved as `evidence/MANIFEST_original.txt`,
-SHA256 `11feecc54e0b83f87708564f38052e6345bf164c82df023e6fe4f39d853e4567`.
-Core later expanded `MANIFEST.txt` to 36 entries. The complete checkpoint's
-full hashes, recovered call records and source dependencies are in
-`EVIDENCE_INDEX.json`; the original analysis and results remain unchanged.
+**with the qualifications here**, not as proof that most errors are unrelated
+to the reader. `EVIDENCE_INDEX.json` inventories the full hashes, native
+records, source dependencies and verification results.
 
-* **Inputs and selected results:** 10/10 original prompts reconstruct to their
-  pinned hashes; removing the grids and added rule restores the original
-  headers exactly. All 10 reconstructed modified inputs parse and retain their
-  quotes; all four saved SEND files match, and 18/18 added grids match the
-  scripts' HTML-cell rendering. Four saved replies cover just two Best Buy
-  targets, not the full test. Both impairment replies include Health and emit
-  one record; both revenue-mix replies agree on the quarter/year-to-date values.
-  The impairment replies still differ in name and end date. Added structure
-  **and** an added rule changed the test; these are not corrected official grades.
-* **Table formatting:** the read-only reproduction returns 3,196/3,751
-  (85.2%) matched labels without a newline in the preceding three characters,
-  over 15 filings. The saved Best Buy prompt also visibly joins a heading and
-  data row. This supports a real formatting concern, not an exact measurement
-  of all lost table boundaries or its contribution to A7 errors.
-* **Grading variation:** recomputed from the hash-checked G2 prompts and saved
-  review: 10 repeated records, 28 appearances, 70 record/field checks; 57 agree,
-  12 differ between decided and unresolved, one has both true and false.
-  Source, record and reference card agree across repeats, but question IDs and
-  surrounding batches differ. Thus 81.43% agreement is this sample's
-  established-judgment agreement—not a general one-in-five wrong-answer rate
-  or a 19% minimum measurable score change. All 70 prompts contain the quoted
-  boolean/null template; the existing receipt records format-only recovery for
-  93/141 attempts. Those saved recoveries are already applied, not calls owed.
-* **Claims not established:** the 88.3% cause attribution groups overlapping
-  error counters (349 total, 308 excluding diagnostic abstentions), not
-  individually proved causes. D3's plain/encoded Health-token difference is
-  already handled by `unit_2008/harness_g1v3/a1_reader.py`: both new replies
-  normalize to the key token, and official P1 already contains that token.
-  Rule 6 already discusses real duration windows and safely derived periods;
-  missing exact search phrases do not explain every date error. The 96.91%
-  geometry script counts **any** covering header, not unique correct placement,
-  and ignores row spans. Core's later v3 test constructs non-overlapping cells
-  within each row, so its zero-overlap result does not independently prove
-  correct placement. Neither version is a generic parser correctness proof.
+* **Input binding:** 10 original prompts match their pins; removing the added
+  grids/rule restores their headers. All 10 modified inputs parse and retain
+  their quotes; four saved SEND files match, and 18 grids match the scripts'
+  HTML-cell rendering. Four native `claude-sonnet-5` child records cover all
+  511 lines of their respective inputs and contain the saved JSON replies and
+  completed turns. No successful call was repeated.
+* **Selected results:** four replies cover only two Best Buy targets. Both
+  impairment replies include Health without duplicating the charge, but differ
+  in name/end date; both revenue-mix replies agree on quarter/year-to-date
+  values. Structure **and** a rule changed, so this does not isolate the cause
+  or correct the official grades.
+* **Formatting concern:** reproduced 3,196/3,751 matched labels without a newline
+  in the preceding three characters, across 15 filings. A saved heading/data
+  join is real. The 85.2% is this proxy, not the fraction of all lost boundaries
+  or of A7 errors caused by formatting.
+* **Grading variation:** 10 repeated records, 28 appearances, 70 record/field
+  checks: 57 agree, 12 decided-versus-unresolved, one true-versus-false. Source,
+  record and reference card agree; question IDs/batches differ. This is not a
+  general one-in-five error rate or a 19% score-noise floor. Recorded
+  format-only recoveries (93/141 attempts) are already applied, not calls owed.
+* **Withdrawn/unproved claims:** the 88.3% cause attribution groups overlapping
+  counters, not individually traced causes. D3's plain/encoded Health-token
+  difference is already handled by `unit_2008/harness_g1v3/a1_reader.py`;
+  official P1 already used the key token. Rule 6 already discusses duration
+  windows, so D1 is a possible clarity gap, not total silence. Geometry v1
+  counts any covering header; v3 constructs non-overlap by definition and
+  ignores row spans. Neither proves a generally correct table parser.
 
-**Final Core review and recovered evidence:** Core 2175 withdraws D3 and
-softens D1; its earlier `ADDENDUM_2179.md` still contains stronger claims and
-must be read with the qualifications above. Contrary to that mailbox's missing-
-evidence claim, Codex recovered all four native child transcripts and the
-30-filing parser timing output from the existing session records. All four
-transcripts report `claude-sonnet-5`, cover all 511 lines of their exact saved
-input and contain matching saved JSON replies and completed turns. The parser
-output records 30/30 parsed, 2,237 tables and 0.73 s median; it was recovered,
-not rerun or independently timed. No successful call was repeated.
+The original analysis and Core's `ADDENDUM_2179.md` are preserved historical
+bytes, including their stronger claims. Core withdrew/qualified those claims
+in the later mailbox review. Codex also recovered the four native records and
+the parser timing output that Core had mistakenly declared unavailable.
+The latter records 30/30 parsed, 2,237 tables and a 0.73-second median; it was
+recovered, not independently timed or treated as a correctness test.
 
-The checkpoint also preserves both original HTML filings, the six cited
-guidance-review artifacts and a 69-file hash roster for the scale measurements.
-The remaining scale-test HTML files and the newline check's database text are
-external dependencies, not bundled inputs. Historical materializer/pre-A2-lock
-scratchpad files could not be identified by Core; they are neither claimed
-recovered nor added as A7 prerequisites. No temporary directory is required to
-retain the evidence packaged by this handover.
+Both selected original HTML filings and the six cited guidance-review files
+are preserved. A 69-file hash roster identifies scale-test inputs; the other
+HTML files and the newline test's database text remain external dependencies.
+The original 31-entry manifest and later 36-entry manifest are both retained;
+the complete inventory is EVIDENCE_INDEX.json. Historical materializer/pre-A2-
+lock scratchpad files could not be identified by Core: no recovery/completion
+claim is made, and they are not added as A7 prerequisites.
 
-Keep the table, prompt clarity, menu ambiguity and grading-variation leads for
-the next specifically authorized task. Do not erase observed wrong answers,
-declare the reader fault-free, change the key/score, promote the diagnostic
-parser or repeat successful calls on this evidence alone. This review made no
-new model call or production-code change.
+Next investigation, only when authorized: the table-format, prompt-clarity,
+menu-ambiguity and grader-variation leads above. Do not erase observed errors,
+declare the reader fault-free or promote the diagnostic parser on this evidence.
 
-### 1.4 Verification, remaining limits and model reuse
+### 1.4 Verification, limits and model reuse
 
-The published final package records **318 tests plus 29 subtests passed**
-(3.34 s), including 15 offline model-reuse checks. The reporting fix first
-failed seven tests with two passing controls, then passed nine focused tests
-and four executed reversion mutations. Exact commands/results:
-`U/FINAL_REGRESSION_COMMAND_2176.sh`, `OFFLINE_VERIFICATION_2176.json`,
-`FINAL_CHECKPOINT_REVIEW_2176.md`. Numeric replay
-`FINAL_SCORE_TRACE_2174.json` reproduces 310 matched pairs and 16 measures
-per run; it does not independently decide meaning.
+The published final package records **318 tests plus 29 subtests passed**,
+including 15 offline model-reuse checks. The reporting fix first failed seven
+tests with two passing controls, then passed nine focused tests and four
+reversion mutations. Exact commands/results: `U/FINAL_REGRESSION_COMMAND_2176.sh`,
+`OFFLINE_VERIFICATION_2176.json`, `FINAL_CHECKPOINT_REVIEW_2176.md`.
+`FINAL_SCORE_TRACE_2174.json` reproduces 310 matched pairs and 16 measures per
+run; it does not decide meaning.
 
-[MODEL_REUSE_OFFLINE_REVIEW_2176.md](/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/MODEL_REUSE_OFFLINE_REVIEW_2176.md)
-proves the same grader/parser/no-write route works with unfamiliar supported
-offline input. **Changing only a local model name is not yet a verified launch.**
-The separate host-side task still needs exact prompt-capacity proof, actual
-returned model/completion capture and honest attempt/resume receipts. No local
-model was run and no inference engine/client was changed. Follow the current
-`LeftOverSteps/QwenInference.md`; the older Qwen handoff is historical where
-that document supersedes it. Evidence copies are in `U/snapshots_2176/`.
+`U/MODEL_REUSE_OFFLINE_REVIEW_2176.md` proves reuse of the grader/parser/no-write
+route with unfamiliar supported offline input. **Changing a local model name
+alone is not a verified launch.** The separate inference-host task still needs
+prompt-capacity proof, actual returned model/completion capture and honest
+attempt/resume receipts. No local model or inference engine was changed.
+Follow `LeftOverSteps/QwenInference.md`; older handoffs are historical where
+superseded. Frozen authority copies are in `U/snapshots_2176/`.
 
-Keep the grader as an external evaluation tool. Production must not import
-experiment-harness code. Later Step 3 moves the approved prompt/response
-responsibility to production ownership; this does not require turning the
-entire test harness into production software.
+Production must not import experiment-harness code. Step 3 transfers approved
+prompt/response responsibility to production ownership; the grader remains an
+external evaluation tool, not code to embed in production.
 
-No current database census is claimed by this update. The September 7 audit
-reported Driver/DriverUpdate/DriverPeriod = 0/0/0 and old Guidance =
-548/8,432/237; those are dated observations, not present-day guarantees.
-The live adapter still refuses transactions. No database write or activation
-was performed by this work.
+Main's earlier documentation audit recorded 201 passes and three pre-existing
+failures: generated-patch repeatability, its enclosing clean-proof check and
+pin-inventory repeatability. Do not claim the whole main suite is green or
+regenerate frozen proof merely to clear these findings. The consolidation
+recorded 84 documentation/contract passes and the A7 regression above.
+Historical A7 maps require their original documentation snapshot; later
+document changes are not permission to overwrite their hashes.
 
-### 1.5 Remaining roadmap — all advancement currently paused
+The previous handover's two live documentation/contract checks passed on both
+branches; 18 preserved Python files parsed and four native input/reply bindings
+matched. These were documentation/evidence checks, not a fresh A7 qualification.
+The September 7 graph census (Driver/DriverUpdate/DriverPeriod 0/0/0) is dated,
+not a current guarantee. The live adapter refuses transactions; this work made
+no database write or activation.
 
-| Step / part | Actual position and remaining result |
+### 1.5 Remaining roadmap — advancement paused
+
+| Step / part | Remaining result |
 |---|---|
-| 0 | Starting roadmap/status published in August; historical starting identity is not today's HEAD. This update is routine status maintenance, not a new Step 0 or Step 13. |
-| 1 A7 | Calculation/cause package delivered; FAIL with the limits above. Further corrections or a changed test require a new bounded owner-directed task; reuse valid saved evidence. |
-| 1 A8 | Not run: EXP-6 text/tagged-fact identity comparison requires EXP-5 PASS. |
-| 1 B1–B7 | Catalog/identity lane unfinished. B1 was parked for A7 priority (Codex archive 1445); NAME-16 finding remains a lead in step7. B2 catalog run, B3 type key/stamping, B4 mini-catalog freeze, B5 routing key, B6 routing experiment, B7A pair-key and B7B identity experiment remain unsigned/open. |
-| 2 | No final signed build decision for both Step 1 lanes. Reconcile results, rules, model roles and allowed build scope only after its entry conditions. |
-| 3 | Shared production meaning reader not completed; experimental saved/raw-response paths do not close it. |
-| 4 | Production admission/reuse/create, type/family, links, continuity and recovery not completed. |
-| 5 | Full V2 production reader + identity no-write proof not completed; close the named validation-door/fusion ordering requirement here. |
-| 6 | V1 remains active; atomic V2 promotion, caller migration and V1 removal not done. |
-| 7 | Production catalog/finalizer, safety and fitness qualification not completed. |
-| 8 | Remaining fact wiring, concept links, reads, withdrawals, verdict/DCM plans and dual-producer calibration not completed. |
-| 9A / 9B | Fiscal source-location certification unfinished; 150 real-anchor tagged-filing test waits for Step 11's lawful first records. Do not restore the withdrawn certification artifacts. |
-| 10 | Minimum operating layer not completed; design may overlap only where Steps permits; implementation waits for 8 and 9A. |
-| 11 | Shadow, separately approved bounded graph setup/write, 9B and controlled rollout not completed. |
-| 12A / 12B / 12C | Consumer/Guidance retirement not done; 12B first-release channel set is owner-frozen empty, not an open charter task; native tagged-filing production/rollout remains last and gated. |
-| 13 | Whole-system closure not reached. |
-| 14 | Dormant; never a prerequisite to Step 13. |
+| 0 | Historical roadmap/status publication complete; this is routine status maintenance, not a new Step 0 or Step 13. |
+| 1 A7 | Published FAIL with the limits above; any correction/change needs the next bounded owner-directed task. Reuse valid saved evidence. |
+| 1 A8 | EXP-6 text/tagged-fact identity comparison not run; waits for EXP-5 PASS. |
+| 1 B1–B7 | Catalog/identity lane unfinished. B1 parked for A7 priority (Codex archive 1445); NAME-16 remains a step7 lead. B2 catalog, B3 type key/stamping, B4 mini-catalog freeze, B5 routing key, B6 routing experiment, B7A pair-key and B7B identity experiment remain open. |
+| 2 | Signed build decision for both Step 1 lanes. |
+| 3 | Shared production meaning reader. |
+| 4 | Production admission/reuse/create, type/family, links, continuity and recovery. |
+| 5 | Complete V2 no-write proof, including validation-door/fusion ordering. |
+| 6 | Atomic V2 promotion, caller migration and V1 removal; V1 is still active. |
+| 7 | Production catalog/finalizer, safety and fitness qualification. |
+| 8 | Remaining fact wiring, concept links, reads, withdrawals, verdict/DCM plans and dual-producer calibration. |
+| 9A / 9B | Fiscal source-location certification; the 150-real-anchor gate waits for Step 11's first lawful records. Do not restore withdrawn certification artifacts. |
+| 10 | Minimum operating layer; design overlap only where Steps permits, implementation after 8 and 9A. |
+| 11 | Shadow, separately approved bounded graph setup/write, 9B and controlled rollout. |
+| 12A / 12B / 12C | Consumer/Guidance retirement; 12B records the owner-frozen empty first-release channel set; native tagged-filing rollout remains last and gated. |
+| 13 | Whole-system closure. |
+| 14 | Dormant, never a prerequisite to 13. |
 
-The exact dependency graph and approvals remain in [Steps.md](LeftOverSteps/Steps.md).
-The starting publications are `c8f228802` (roadmap) and `929d6ed05` (status).
-Do not estimate overall completion from file counts, capability counts or
-expired hourly estimates. First-release rulings already defer cross-company
-slice comparison, non-USD support, item-number taxonomy and third-party
-guidance; do not re-request those settled choices. Other choices are raised
-only at their frozen trigger.
+[Steps.md](LeftOverSteps/Steps.md) owns exact dependencies and approvals.
+Do not infer completion from file/test counts or old time estimates.
 
-### 1.6 Preserved audit findings and history
+### 1.6 Foundation and preserved audit leads
 
-The September 7 report's useful implementation map is retained here:
 `driver/core/driver_write_cli.py` owns event dispatch; prepared-fact modules
 own schemas; period/unit/ID/fusion/validator/writer modules own deterministic
-mechanics; `driver_neo4j_adapter.py` is the fenced Report-only graph adapter.
-Fiscal owns source finding/copying, not meaning or Driver identity. Legacy
-known-value relocation and source-neutral tagged relocation have different
-protected callers. Catalog tools remain under `.claude/plans/Drivers/workflows/`.
+checks. `driver_neo4j_adapter.py` is the fenced Report-only graph adapter.
+Fiscal locates/copies sources, not meaning or identity. Legacy known-value
+relocation and source-neutral tagged relocation retain their separate callers.
+Catalog tools live under `.claude/plans/Drivers/workflows/`.
 
 Arithmetic fixes `8255d4dc80988ce8490078cbbfa5f7f435817239` on main and
-`c60defaa9a8f678b506cabe449c60a96fbca47cb` on recovery preserve exact
-negative numbers and guidance midpoint comparisons. They are separate from
-the A7 grader. The September 7 audit recorded 4,454 passes, one failure and
-one skip across its scoped runs; those were not a whole-system pass.
-Its 7 packet artifacts / 136 event occurrences / 743 items were not 743
-source-code files or unique events. Its 31 capability groups were a component
-inventory, not an effort percentage.
+`c60defaa9a8f678b506cabe449c60a96fbca47cb` on recovery preserve exact negative
+numbers and guidance midpoint comparisons; they are separate from the grader.
 
-The August test-collection database read was real and was fixed in test
-fixtures; the earlier denial was withdrawn. The source-routing owner was
-not replaced. Preserve that correction when interpreting old green tests.
-
-Remaining audit leads, not new tasks: same-fact replay/member-edge enrichment
-requires source-rule adjudication if reached; current catalog tools must be
-reconciled to the later count-free independent-identity-review ruling; V2
-production ownership and operating policy close at their existing steps.
-The older report's unconfirmed owner-approval questions do not override
-recorded rulings in Steps. Withdrawn suspicions stay withdrawn unless new
-evidence shows a regression.
-
-Before this documentation edit, the applicable main checks produced
-201 passes and three failures: the old generated patch differs from its
-builder; its enclosing clean-proof test therefore also fails; the old pin
-inventory differs from its generator. These are recorded pre-existing
-baseline findings, not three new runtime defects. Do not silently regenerate
-frozen proof or claim today's full suite is green.
-
-Consolidation checks: 84 documentation/contract tests passed; the full affected
-A7 regression passed 318 tests plus 29 subtests. The larger main check repeated
-201 passes and the same three baseline failures. The old A7 command correctly
-refuses changed documentation hashes; the fresh check used a separate map
-with only the reviewed document-directory digest changed. Historical maps
-remain immutable and require their original snapshot for reproduction.
-
-The following preserved sections keep the original rule decisions and
-33-source crosswalk. Their dated test counts and historical “next” wording
-do not supersede this checkpoint. The September 7 audit and final A7 work
-diary are recoverable in Git as specified in §8; raw evidence was not deleted.
+Keep these as leads at their existing step, not extra A7 tasks: same-fact
+replay/member-edge enrichment needs source-rule adjudication if reached;
+catalog tools must follow the count-free independent-identity-review ruling;
+V2 production ownership/operating policy close later. The August test-collection
+database read was real and fixed in fixtures; the earlier denial was withdrawn.
+The source-routing owner was not replaced. Do not revive withdrawn suspicions
+without new evidence. The full September 7 audit remains recoverable via §8.
 
 ### 1.7 Safe resumption
 
-Start with `AGENTS.md` and [Orchestration.md](LeftOverSteps/Orchestration.md),
-then follow its ordered reading and session handover exactly. Use its replacement
-prompts with each session's own runtime ID. After binding, this checkpoint gives
-the current stop state; the live design and roadmap still own the rules.
-The old untracked `CoreSessionPrompt.md` is an August one-use handover, not
-the current task or replacement-session prompt.
-The current documented pair is Codex
-`01a05829-3086-73e0-89c9-e5773b322d80` and Core
-`5ae9b86b-f0f6-4449-beee-9cac7cfa7200`; verify rather than assume they persist.
+Follow [Orchestration.md](LeftOverSteps/Orchestration.md) for session launch,
+worktree selection, runtime IDs, mailbox order, notification attachment,
+goal reuse and the exact interrupt procedure. Its replacement prompts—not the
+old one-use `CoreSessionPrompt.md`—are the startup instructions. Do not copy
+historical session IDs or assume an old receiver belongs to a new session.
 
-Last reviewed work exchange: Core 2175 replies to Codex 2179 and waits.
-Their SHA256 values are respectively
-`5616bf993e7f046f24244af427c1a5b1cb3e306ff3c4ca818e1b06039a99bc8e`
-and `5f13007939238dcf59677aeba15347f694050ea35092c4827f1248ef321efd14`.
-Both are preserved under the diagnosis's `evidence/`. A later publication/WAIT
-receipt belongs to the mailbox chain, not a new project task. Re-read both
-current mailboxes and their archives: downtime events are
-not replayed. A replacement session must complete the protocol's handover;
-ordinary compaction is not replacement. Reuse the single proven watcher and
-existing goal; never reset sequences or send an acknowledgement of an
-acknowledgement. The old all-steps goal is not achieved.
+Read both current mailboxes: later receipts are in their archive chain, not
+new project tasks, and notices from downtime are not replayed. The earlier
+publication closed with Core 2176 replying to Codex 2180 in WAIT; re-read
+rather than treating those numbers as current. An unfinished all-steps goal
+does not override the owner's stop. No model call or roadmap advancement
+follows merely from opening this file.
 
-Exact process checks found one Codex watcher in `codex-mailwatch` and one Core
-monitor in `core-mailwatch`; `driver-core` is the Core terminal, not a third
-monitor. Recheck and reuse them. Core reports no running job and is waiting;
-do not launch work merely because an old goal, hook or historical note says “next.”
+## 2. Design-status categories and settled scope
 
-Final publication checks: both live documentation/contract checks passed on
-each branch; 18 preserved Python files parsed; all checkpoint hashes and the
-four transcript-to-input/reply bindings matched. The final-score/key bytes
-were unchanged. This documentation/evidence-only handover did not rerun the
-full A7 regression or approve the experimental parser as production code.
+These categories preserve the design-to-build distinction behind the historical
+records. §1.5 is the current execution list; the live roadmap owns each trigger.
 
-No model calls, Core task or roadmap advancement follows from opening this
-file. The next action after this consolidation is to report the documented
-state and wait for the owner. Any later authorized correction must preserve
-original answers, full denominators, exact evidence and every miss/refusal.
-Models decide meaning; code does deterministic work. Fix only reproduced
-test defects at their one owner; do not tune measured reader errors into a
-pass. Real writes, activation and destructive work retain their own approvals.
+* **Specified, still to build/prove:** production reader/identity, catalog
+  finalization, remaining fact/link/read work, operations and rollout. Earlier
+  internal writer and slice-menu code does not complete these integrations.
+* **Ratified but not activated:** Admission Kernel v3.4 and the native tagged-
+  filing design; operative mechanics are in BUILD §8.1/§8.2, original migration
+  evidence in §7.1b. Their gates and dormant status remain in force.
+* **Conditional, not automatic work:** OD-19, XC-16, model-role changes,
+  caching/stability work and the broader OD-7 proposals, only at their existing
+  reviewed triggers.
+* **Owner choices only at their triggers:** optional metric text/action
+  conditions, financial classification, later-channel charters and Track-C
+  history-gap acceptance. Follow Steps.md's triggered-decision register and
+  the active step, not an older OPEN list.
+* **Already settled for the first release:** no fixed 786/796 catalog target;
+  no cross-company slice comparison (FS-23), non-USD expansion, item-number
+  taxonomy or third-party guidance; Step 12B's channel set is empty. Preserve
+  later expansion questions as future work, not new approval requests.
+* **Historical proposals only:** Bayes learner and Driver Genesis restructure.
+* **Retired approaches stay retired:** Guidance replay, fixed-vocabulary
+  Driver v1, eager/catalog-first live reuse, `slice=total`, alias layers,
+  `long_range` scope, quiet `gp_UNDEF`, `evhash16`, cross-company slice
+  recurrence, RavenPack vocabulary and materialize-all catalog sync. Model
+  invocation follows the current runner policy in Steps.md.
 
-## 2. Lists by status
-
-These are the preserved design-status categories. The September 15 execution
-checkpoint above and later owner rulings in Steps.md supersede old open-item
-or build-progress wording; they do not erase the historical rule record.
-
-- THIS file owns the status lists (one-copy law); `FINAL_DESIGN.md` §10 is the GENERATED mirror. The master lists:
-- **FINAL / BUILD-PENDING:** Track A remainder (fold/tree mirrors, finalizer, real folds, WP-FC-RUN, OD-6 fitness gate — never run) · UNIT-14 production wiring · PER-20 HAS_XBRL producer guard · full slice TABLE materialization (materializer-era; the step-7 PIT menu code IS built) · concept-linker vetoes C/D + PIT query build · Track B remainder (the internal writer/validators/fusion/CLI/audit + step-7 slice menu are BUILT `0d6c1d0`, dry-run only — remaining: S4 decomposer/kernel integration + public channel runtime, FS-18 step-7 menu-for-producers, write enablement behind the fitness gate) · read layer · verdict/DCM writer · channel adapters + certification · Track C execution · incremental refresh.
-- **DESIGN-INCOMPLETE:** the production running layer (BUILD §7's runbook list). The OD-5 change scanner is a recommendation only.
-- **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (RATIFIED as design 2026-07-15; DORMANT until the P19 enablement proof plan — X-XL0-3 bars — every hard pre-gate pass, and the EXP-6 convergence evidence) · multi-run concept stability/caching (only if monitoring justifies).
-- **OPEN (owner):** catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K item/content taxonomy only (earnings 8-K pairing is CLOSED by PER-21) · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel) · **Driver financial classification (owner 2026-07-19): NO field approved — for now derive exact facts (company-specific XBRL linkage, monetary units); revisit before production Driver creation ONLY if a named consumer and a testable definition exist; otherwise the field stays absent.**
-- **APPROVED WORKING DESIGN (owner 2026-07-15; not activated; gates/OFF-switches in force):** Admission Kernel v3.4 · XBRL-native materializer — integration COMPLETE (INT-2..INT-5, destination proof §7.1b); both originals archived 2026-07-15, byte-verified vs the Phase-1 manifest. The kernel bundle also settled two formerly-open/tracked items: G1 reuse-display rules (→ BUILD §8.1.3) · OD-7's born-complete/live-create CORE (→ BUILD §8.1; the broader OD-7 design stays UNRATIFIED — FINAL §4.2 Q5 note; the mis-name/mis-type exit + exact recipes land at the future OD-7 pass, BUILD §11.2).
-- **CANDIDATE:** Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision record = §4 below; the full decision text + verification trail = the archived `CONSOLIDATION.md` §10.2/§16 (`archive/2026-07-15_pre-consolidation/`).
-- **Change law (owner 2026-07-15):** every future design correction updates the ONE owning live section and adds a short history entry here; no parallel live copies.
-- **RETIRED (never a production path):** old Guidance replay plan (`13_Track_RetiredDesign.md` — GI stale-trap
-  rows in its GI-07) · fixed-vocabulary Driver v1 · eager-reuse v2 · `slice=total` · alias layers · `long_range`
-  scope value · `gp_UNDEF` quiet fallback · `evhash16` on DriverUpdate · FS-22 cross-company recurrence ·
-  RavenPack import · catalog-first live reuse · SDK/OAuth metered concept invocation · OD-16 materialize-all
-  catalog sync (owner ruling 2026-07-15, Q3).
+The obsolete July OPEN/build lists are preserved in Git at
+`bd361f7364297b71c9bbaa10ef5c725942069ca1:.claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md`,
+not repeated as current instructions. The generated status summary in
+FINAL_DESIGN §10 predates later Steps.md rulings; it cannot reopen those choices.
 
 ## 3. The 43 supersession rows (terse; dead rule kept once for audit; current wording ONLY at the anchor)
 
@@ -547,20 +472,11 @@ untouched. The NAME-13 deferral note is superseded and its ⏸ markers are delet
 §3/§10 and the three live prompt rulebooks. Evidence: `experiments/WORKORDER_STATUS.md` 2026-07-25
 pack · EXP-2C 40-chunk replay (zero eps forms emitted, correct spell-out, quotes verbatim) · EXP-2D
 acronym probe (zero acronyms kept as names, unverifiable acronym skipped, ARPA-agency trap passed).
-Guard: `workflows/tests/test_perx_naming_residue.py`. STILL OPEN and deliberately NOT in this batch:
-the EXP-5 item-contract regeneration (`exp5_item_contract.md:127` still serves the old sentence) and
-the launch-manifest re-pin. CORRECTED 2026-08-11 (reviewer SEQ 957/959): these do NOT belong to the
-Core contract-freeze step. The 2026-08-11 conclusion that the whole bundle was
-switch-gated is **SUPERSEDED by the 2026-08-12 owner ruling below**. K-fields
-GO#1 was gated on the complete bundle being regenerated, hash-frozen and proved
-against the committed staged-V2 dry-run bridge. **That condition was satisfied
-on 2026-08-13 (`0dd71956`), and GO#1 is still UNFIRED.** The bundle was the
-TECHNICAL PREREQUISITE, not the authorization: satisfying it did not by itself
-start any call. **SUPERSEDED 2026-08-14** — this entry ended by keeping GO#1
-owner-gated pending fresh approval at the moment of the run. The `Steps.md`
-owner ruling pre-authorizes every model call already bounded by a reviewed step,
-so GO#1 now waits on Step 1 freezing its exact bounded plan and pinning Sonnet 5
-at high effort, not on a further owner approval.
+Guard: `workflows/tests/test_perx_naming_residue.py`.
+Historical rollout: the complete staged-V2 EXP-5 bundle was frozen on
+2026-08-13 (`0dd71956`); the 2026-08-14 owner ruling then pre-authorized calls
+within an independently reviewed bounded step. The former “STILL OPEN” and
+“GO#1 uncalled” launch notes are historical; current EXP-5 work/results are §1.
 
 **2026-08-11 — STAGED CORE V2 PUBLIC CHANNEL CONTRACT FROZEN (not live).**
 `FinalDesign/ChannelContractV2.md` sha256 `d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b`.
@@ -618,16 +534,14 @@ sample was 51/60 (85%), not a complete accuracy census. EXP-1's 9,603 fixture
 rows demonstrate deterministic materialization, not live activation. The
 complete signed artifacts and dated board entries retain their original bars.
 
-## 6. Known documentation/logic issues (open; no new authority)
+## 6. Historical documentation issues — not a new backlog
 
-- The 24 stale-text items (per-file) and the interim hazard rule: the archived `CONSOLIDATION.md` §10.1 + Phase-2 note.
-  Biggest traps: `03`/`11`/`12` old collision text (OD-8 is current) · `04` one-hint-pair (per-slot is current) ·
-  `09 §8`/`07 §D` expectation-baseline wording · stale experiment headers (signed artifacts win) ·
-  `15` "already built" = "fully specified" (stale-item 11).
-- Missing build recipes (packet lifecycle · born-complete transaction · machine contracts; ID namespaces
-  CLOSED 2026-07-16 — owner-approved S3.1 ID law, BUILD §5/§11.3):
-  BUILD §11.
-- Truly open owner choices: FINAL_DESIGN §10 OPEN list.
+The July consolidation's 24 stale-text findings and original missing-recipe
+list remain in archived `CONSOLIDATION.md` §10.1 and BUILD §11. They describe
+that snapshot; they are not all unresolved today. Old collision/hint/expectation
+wording loses to the live rules, and “already built” in an old design sometimes
+meant “specified,” not implemented. Current known failures are in §1.4;
+remaining work and decision triggers are in §1.5/§2 and Steps.md.
 
 ## 7. Source crosswalk (33 files → destinations; every row re-verified at Phase 4/5)
 
@@ -675,7 +589,7 @@ column — the map is total over every ID listed in the archived `CONSOLIDATION.
 |---|---|---|
 | NAME-01..19 | FINAL_DESIGN §3 (inline, own numbers) | — |
 | FS-01..04, 27 | FINAL_DESIGN §5.1 | FS-03's old collision text dead → OD-8 (§5.1) |
-| FS-05..24 | FINAL_DESIGN §5.2 | FS-09 separators also §5.1 · FS-14 menu + PIT · FS-15 kind ladder · FS-16/18 code-exact rules · FS-20 buckets · FS-21 member link · FS-22 RETIRED (row 37) · FS-23 OPEN (§2) |
+| FS-05..24 | FINAL_DESIGN §5.2 | FS-09 separators also §5.1 · FS-14 menu + PIT · FS-15 kind ladder · FS-16/18 code-exact rules · FS-20 buckets · FS-21 member link · FS-22 RETIRED (row 37) · FS-23 deferred beyond first release (§2; Steps.md) |
 | FS-25 | FINAL_DESIGN §5.3 | — |
 | FS-26 | FINAL_DESIGN §5.4 | storage shapes + guards + recovery inline |
 | UNIT-01..13 | FINAL_DESIGN §6.1 | UNIT-04 replaced by per-slot hints (row 26) · UNIT-08 per-X also §3 NAME-13 |
@@ -703,7 +617,7 @@ column — the map is total over every ID listed in the archived `CONSOLIDATION.
 | Contract clauses §1-§9 | ChannelContract.md (live; one section per clause: what-a-channel-is · flow · packet · never-send · submission · outcomes · ledger duties · never-list · onboarding) | — |
 | Packet blocks 0-3 + Parts B/C/D | the live frozen packet (structure summarized BUILD §2) | — |
 | Ratified design bundles (formerly candidates) | BUILD §8.1 (kernel mechanics whole) · §8.2 (XBRL recipe + pin map + amendments) = the OPERATIVE text; the archived originals are historical evidence only (destination proof §7.1b) | — |
-| Open items | §2 OPEN list (mirrored FINAL_DESIGN §10) + BUILD §11 missing recipes | — |
+| Open items | §1.5 remaining work + §2 settled scope/conditional choices; Steps.md owns current triggers | BUILD §11 retains design recipes; FINAL_DESIGN §10 is an older status mirror |
 
 ### 7.1b Ratified-design destination proof (owner order 2026-07-15: every transferred item → its exact live anchor)
 
@@ -769,6 +683,11 @@ repo-wide broken-reference scan came back clean (card step 8).
 
 ## 8. Archive manifest + evidence pointers
 
+- **July consolidation closure:** the definitive result and tested hashes are
+  in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run15.md`.
+  That documentation phase is complete only if the record shows 10/10 PASS;
+  it is not A7 or production qualification. Review rounds and owner decisions
+  remain in the archived `CONSOLIDATION.md` §10.2/§16.
 - **September 15 status consolidation:** `DRIVER_STATUS_REPORT.md` was folded
   into §1 and removed; its full September 7 audit remains at
   `2dc0ad39f30dba4756078573f5e80038465939cc:.claude/plans/Drivers/FinalDesign/DRIVER_STATUS_REPORT.md`,
@@ -783,8 +702,8 @@ repo-wide broken-reference scan came back clean (card step 8).
   No grading runtime or live test requires either deleted document. Original
   answers, keys, signed results, maps, manifests and mailbox archives remain.
   Main/recovery now share the already-approved partial-report Plan amendment;
-  recovery uses the current main communication instructions. Neither is a
-  new rule, new protocol or authorization to resume the roadmap.
+  recovery uses the current main communication instructions. That status
+  consolidation did not authorize a new rule or roadmap resumption.
 - **The archive's contents, exactly (two distinct kinds — never conflate):** (a) **32 SOURCE COPIES** = 29
   source originals + 3 pre-amendment/frozen-original snapshots; (b) **EVIDENCE FILES, which are NOT source
   copies** = the audit file `CONSOLIDATION.md`, `MANIFEST.json`, `README.md`, and the `READER_TEST_RECORD_*`
