@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 253, 2026-09-15 Eastern. Maintainer: Codex.
+Revision 254, 2026-09-15 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,24 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT ADDENDUM,Revision253: final calculation and bounded cause review are
+CURRENT ADDENDUM,Revision254: verified result/evidence checkpoint COMMITTED
+AND NORMALLY PUSHED8dacb463406a48e0179f269e87e145d8c5823564, remote verified
+equal. Tree374ec3ca2a7f35b1844d3d285ea2f97ed533902e, parent37dd71d2,
+725 exact reviewed changed paths. Payload722 files/40921784 bytes, manifest
+5737b55b1155d2efef2418ffb0ff437d4396794f4345573eae602785b35be8be.
+Every staged blob equalled its reviewed live bytes and diff checks passed.
+Only reviewed ignored execution logs were explicitly included; ignore rules
+were not changed. Main2dc0ad39 and unrelated dirty2ec3bd33 are unchanged.
+
+The task is at the owner's STOP/WAIT boundary: the corrected measurement is
+FAIL, the cause/limitation report is published, and the END-only offline reuse
+check is done without claiming local-launch readiness. No new model call,
+Core task, A8 or later step is authorized. Core is to acknowledge the final
+mailbox once and WAIT. The broader old goal is NOT achieved. This final
+resume-status-only update is a separate small checkpoint after the published
+result; no code/evidence/grade bytes change here.
+
+PREVIOUS ADDENDUM,Revision253: final calculation and bounded cause review are
 finished with explicitly retained semantic limits, NOT A7 PASS. The figures
 below are unchanged. Core2171/37cea401 exactly acknowledges Codex2175/1f7ba60f;
 both current mailboxes equal their archives, the same sessions/HEADs match,
@@ -4424,7 +4441,7 @@ rerolls or hidden replacement of the original score.
 | Separate duplication / organization | VERIFIED: existing input, parser, completion, revision, route and scoring owners reused. One current progress owner; historical scripts/outputs retained as evidence |
 | Final simplicity pass | VERIFIED: only the proved reporting-counter fix plus offline tests/docs in this final delta. No client/engine, semantic rule, scorer, hidden retry, extra AI round or unrelated production work |
 | Tests / regression / mutations | Final318 passed plus29subtests in3.34s. Reporting TDD7 failures/2 controls then9 tests plus4 executed reversion mutants. Final collection all26 raw attempts independently bound; offline15 tests disclose client limits instead of claiming live readiness |
-| Key lock / evaluation freeze / publication | Earlier checkpoints through37dd71d2 committed/pushed. Final result/evidence payload is being frozen under FINAL_CHECKPOINT_FILES_2176.json; only exact reviewed paths may publish |
+| Key lock / evaluation freeze / publication | VERIFIED CHECKPOINT PUSHED8dacb463, remote equal; final722-file payload hashes and all725 changed staged paths independently checked. No A7 PASS or approval of every model judgment |
 | Actual grading | CALCULATED, FAIL: recall123/165,116/165,71/165;104 incomplete judgments. Not a single overall accuracy score or A7 PASS |
 | Post-baseline root causes and corrected result | BOUNDED REVIEW FINISHED with source/model/grader/ambiguity distinctions;23 of26 raw wrong-accept flags substantiated,3 unconfirmed. No manual grading override or unchanged successful-judgment reroll |
 
@@ -4529,7 +4546,7 @@ task. No overlapping edits or blanket re-audit of unchanged proved machinery.
 | 3. Correct only proved TEST causes | PROVED TEST CORRECTIONS VERIFIED; valid model mistakes/ambiguous judgments retained, no semantic override | Reproduce grading/code defects first; fix the single existing owner generally, with affected-population tests, positive/negative controls, meaningful mutations and affected regression. Key corrections require a fresh source-only independent qualified owner that has not seen evaluated replies or scores. Models decide meaning; no answer-specific strings, semantic code or production patch. Correct a grading prompt only for a demonstrated mismatch with its governing task. Record genuine tested-model errors without trying to improve that model's score. An unclear rule gets the Plan's rule_ambiguity exhibit and required decision, not an invented resolution. |
 | 4. Verify the corrected TEST without cheating | CALCULATED AND CHECKED; final966d14bc,426 required questions reconciled, all388 unaffected unchanged; FAIL | Regrade the unchanged382 saved answers for proved code/key corrections, reusing valid judgments only where full bindings still hold. If a corrected AI-facing GRADING task/input/configuration needs new evidence, pre-freeze the reason, full affected population and call ceiling; use targeted fresh blind grading tests with no expected verdict or previous attempt supplied. Known repaired cases are regression evidence, not unseen qualification. No producer-prompt tuning, unchanged semantic rerolls, successful-call repeats, dropped hard cases, lowered bars or altered raw answers. |
 | 5. Check model-selection setup AT THE END | OFFLINE CHECK FINISHED;15 tests pass, local launch/receipt and host capacity/identity remain UNVERIFIED | Read the owner's /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md and /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/LOCAL_QWEN_HANDOFF.md. Check the existing test/grader's configuration and connection contract for another supported model, including local; preserve sources/key where bindings permit and the same grading/accounting/report owners. Confine justified model-specific details to one documented selection and make only demonstrated A7-side connection fixes, with focused offline positive/invalid tests. Do NOT change the inference engine/client/server or try the local model, run its preflight, alter its settings or launch a live probe. Host-side execution is a separate task. No second grader, speculative provider framework, production import,382-answer rerun or change to the frozen current run. |
-| 6. Deliver the checked correction/setup result and stop | PUBLICATION CHECKPOINT IN PREPARATION; after normal push, report FAIL/limits and STOP/WAIT | Keep baseline and each corrected version separately with exact hashes and all attempts. Reconcile every finding and all unchanged A7 gates; publish verified code/evidence normally on the same recovery branch. Report model-selection usage, actual offline setup evidence and unsupported limits; explicitly state local live execution was not tested and belongs to the host-side task. A genuine model error is a completed test finding and stays in the score; a remaining unverified test/evidence defect is an open limitation. Preserve required FAIL/INCONCLUSIVE outcomes; do not manufacture PASS. Once this A7 test/correction/setup package is verified, STOP AND WAIT for owner instructions; no A8 or later-step task. |
+| 6. Deliver the checked correction/setup result and stop | PUBLISHED8dacb463, remote verified; report FAIL/limits and STOP/WAIT | Keep baseline and each corrected version separately with exact hashes and all attempts. Reconcile every finding and all unchanged A7 gates; publish verified code/evidence normally on the same recovery branch. Report model-selection usage, actual offline setup evidence and unsupported limits; explicitly state local live execution was not tested and belongs to the host-side task. A genuine model error is a completed test finding and stays in the score; a remaining unverified test/evidence defect is an open limitation. Preserve required FAIL/INCONCLUSIVE outcomes; do not manufacture PASS. Once this A7 test/correction/setup package is verified, STOP AND WAIT for owner instructions; no A8 or later-step task. |
 
 This is the existing Plan §2 amendment3–6 correction/reuse path, not new product
 law, a second scorer or permission to spend without a frozen missing proof.
