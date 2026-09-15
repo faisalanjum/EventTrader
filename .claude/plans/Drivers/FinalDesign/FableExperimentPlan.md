@@ -104,6 +104,23 @@ meaning, pass bars, required case coverage and roadmap gates are unchanged.
    their existing gates. This amendment authorizes no production change,
    graph write, automatic later-step advance or Step 14 activity.
 
+6. **Partial scoring after invalid grader replies — owner-approved 2026-09-13.**
+   A fully recorded invalid grader reply does not stop collection of the
+   remaining scheduled readings. Keep the one invalid-only retry; never repeat
+   a valid reply. After all required readings and eligible retries are
+   accounted for, an exhausted invalid reading remains incomplete, with no
+   unverified credit and no removal from the full fact denominator. Continue
+   the remaining grading and report partial scores with every affected event
+   and missing judgment identified. Preserve original raw replies, invalid
+   counts, frozen collection identities and the unchanged evidence checks;
+   separately pin the new reporting code and this rule. Refusals, missing
+   evidence, unfinished calls and identity drift do not qualify for this
+   exception. Required grading still incomplete cannot PASS; a proved safety
+   failure remains FAIL, otherwise the result remains INCONCLUSIVE. This
+   changes reporting availability, not answer validity, scoring formulas,
+   pass bars, production permission or the gates of later steps. Investigate
+   remaining failures afterward under points 3–4, without rerolling successes.
+
 ---
 
 ## §3 What this plan deliberately does NOT run
