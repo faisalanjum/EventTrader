@@ -8,10 +8,11 @@
 > see the archived `CONSOLIDATION.md` §10.1 (known stale prose in the originals).
 >
 > **One-copy law of the four-file set:** rule MEANING lives only here · public channel duties live only in
-> `ChannelContract.md` · build/test/run procedure lives only in `BUILD_AND_OPERATIONS.md` · status, history,
-> supersessions, and crosswalks live only in `STATUS_AND_HISTORY.md`. The frozen Candidate Fact Packet
-> (`15_CandidateFactPacket.md`, owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4 and Q1-ext) is a temporary fifth live
-> file until its relocation is separately approved; also at the root until the experiment program migrates: the
+> `ChannelContract.md` (Part I active V1; Part II staged until Step 6) · build/test/run procedure lives only in `BUILD_AND_OPERATIONS.md` · status, history,
+> supersessions, and crosswalks live only in `STATUS_AND_HISTORY.md`. The internal Candidate Fact Packet
+> lives in `ChannelContract.md` Part III (V1 active; owner-frozen v1.0 + the two 2026-07-15 amendments Q4 and Q1-ext),
+> relocated byte-for-byte with owner approval on 2026-09-15. Its contract stays distinct from public input;
+> Step 6 separately freezes internal V2. Also at the root until the experiment program migrates: the
 > hash-pinned `FableExperimentPlan.md` + `FableExperimentWorkOrder.md`. The two RATIFIED designs
 > (`FableAdmissionKernelDesign.md`, `XBRLIntegrationDesign.md`) are fully integrated into these files
 > (BUILD §8.1/§8.2); their originals were ARCHIVED 2026-07-15, byte-verified, after the integration-gate reader test. Status
@@ -71,7 +72,7 @@ Event/Report/Transcript/News -> DriverUpdate -> Driver
 
 The source channel never creates graph identity; the shared core does. The public input boundary is
 `ChannelContract.md` (raw adapter submission); the internal core object is the frozen Candidate Fact Packet
-(envelope · transient identity signals · proven fact · optional verdict — see `BUILD_AND_OPERATIONS.md`).
+(envelope · transient identity signals · proven fact · optional verdict — see `ChannelContract.md` Part III).
 XBRL at the boundary, the exact conditional (mirror of ChannelContract §3, which governs): the EXACT context
 ALWAYS; every SUPPLIED dimension carries BOTH axis and member; `dimensions=[]` is sent ONLY as an explicit
 VERIFIED-empty assertion — a missed extraction must never masquerade as consolidated.

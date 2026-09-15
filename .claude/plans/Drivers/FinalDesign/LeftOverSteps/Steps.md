@@ -3,10 +3,27 @@
 > **Status:** execution aid reconciled to the live tree on 2026-08-14. It
 > creates no Driver rule. If it conflicts with a live owner, the live owner
 > wins: `FINAL_DESIGN.md` for meaning, `ChannelContract.md` for the active
-> public contract, `15_CandidateFactPacket.md` for the active internal packet,
+> public and internal contract parts,
 > `BUILD_AND_OPERATIONS.md` for build and release procedure,
 > `FableExperimentPlan.md` and `FableExperimentWorkOrder.md` for experiment
 > procedure, and `STATUS_AND_HISTORY.md` for status.
+
+## Contract-file consolidation — 2026-09-15
+
+Owner-authorized layout change only: `ChannelContract.md` now contains
+[Part I: active public V1](../ChannelContract.md#channel-v1),
+[Part II: staged public V2](../ChannelContract.md#channel-v2), and
+[Part III: active internal V1](../ChannelContract.md#internal-contract), preserving all three original
+texts. Its opening section records differences and the already-assigned work
+needed before activation. References to the old standalone files in frozen
+evidence retain their original meaning and hashes. A pre-switch requirement
+to preserve V1 byte-for-byte now applies to Part I and Part III's original
+V1 block, not the combined file. Step 6 activates both proved V2 contracts
+while retaining the original V1 text as history; its reader still checks both
+contracts, now within six files rather than seven.
+Step 6 activates the proved Part II and marks Part I historical; it does not
+delete either part or repeat this consolidation. All code, meaning, testing,
+internal-packet and no-write requirements remain unchanged.
 
 ## Narrow reader amendment — 2026-08-18
 
@@ -453,8 +470,8 @@ refuses does not invalidate unrelated lawful facts. Repeated identical
 proposals are idempotent and may never create a second relationship.
 
 `FINAL_DESIGN.md` remains the meaning owner. Step 3 must publish the exact
-transport once in `ChannelContractV2.md` and its machine-readable surfaces;
-that contract becomes `ChannelContract.md` at the atomic switch. Core's one
+transport once in `ChannelContract.md` Part II and its machine-readable surfaces;
+that part becomes active at the atomic switch. Core's one
 production response parser is the code owner. Do not add another model call,
 reader, fact field, fact type, response wrapper, generic extension mechanism,
 source locator, compatibility branch, or standing rename detector to find a
@@ -499,7 +516,7 @@ Measured starting point; Step 0 must remeasure it before publication:
 
 * `main == origin/main == 0dd71956e942c889c70fede4e547f4737a39cff0`;
 * tree `9f80af23f037f68d0a4233b1d752421963549011`;
-* V1 is active; `ChannelContractV2.md` is frozen but inactive;
+* V1 is active; the frozen V2 candidate is inactive (now preserved in `ChannelContract.md` Part II);
 * graph writes are disabled;
 * the working folder is mixed and must not be treated as one candidate;
 * the exact roadmap package is 21 files: this file, `promptStandard.md`,

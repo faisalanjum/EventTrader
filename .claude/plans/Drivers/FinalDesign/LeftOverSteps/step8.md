@@ -53,7 +53,7 @@ Read and apply authority in this order:
 
 1. `FINAL_DESIGN.md` §§5–9 for fact, continuity, unit, period, verdict,
    enrichment, and read behavior;
-2. the live V2 `ChannelContract.md` and `15_CandidateFactPacket.md` for the
+2. the live V2 `ChannelContract.md` Parts II and III for the
    active public and internal shapes;
 3. `BUILD_AND_OPERATIONS.md` §5 for Track-B order and gates;
 4. the signed Step 2 result memo for measured model roles and approved

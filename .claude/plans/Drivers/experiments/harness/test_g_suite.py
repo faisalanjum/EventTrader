@@ -725,8 +725,14 @@ def test_G19_two_rebuilds_are_byte_identical():
 
 
 def test_G19_the_patch_still_applies_strictly():
-    r = subprocess.run(["git", "apply", "--check", "--whitespace=error", PATCH],
-                       capture_output=True, text=True, cwd=_REPO)
+    """The saved patch belongs to the pre-consolidation documents, not today's layout."""
+    from rev4_coverage_check import stage_sources
+    with tempfile.TemporaryDirectory() as tmp:
+        targets = {line[6:].strip() for line in io.open(PATCH, encoding="utf-8")
+                   if line.startswith("--- a/")}
+        stage_sources(tmp, targets)
+        r = subprocess.run(["git", "apply", "--check", "--whitespace=error", PATCH],
+                           capture_output=True, text=True, cwd=tmp)
     assert r.returncode == 0, r.stderr
 
 
@@ -1127,7 +1133,13 @@ def test_the_pin_inventory_uses_SEMANTIC_anchors_and_never_itself():
             paths += 1
             assert not _re.search(r":\d+$", token), f"line-number anchor: {token}"
             assert "pin_inventory" not in token, f"self-reference: {token}"
-            assert os.path.exists(os.path.join(_REPO, token)), f"absent: {token}"
+            if not os.path.exists(os.path.join(_REPO, token)):
+                # Saved inventory paths refer to their original snapshot.
+                # Live section/hash resolution is tested separately.
+                from rev4_build_patch import DOC_BASE
+                r = subprocess.run(["git", "cat-file", "-e", f"{DOC_BASE}:{token}"],
+                                   capture_output=True, cwd=_REPO)
+                assert r.returncode == 0, f"absent from live and historical trees: {token}"
     # THE SCAN MUST HAVE FOUND SOMETHING, and every row must name a real file:
     # a silently empty scan is the false green this whole gate exists to stop.
     assert paths >= len(rows), \

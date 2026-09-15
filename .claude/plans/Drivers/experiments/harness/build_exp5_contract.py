@@ -46,7 +46,9 @@ card and manifest it emitted ARE tracked (4d473822). A committed artefact whose
 generator is untracked cannot be reproduced from a clean checkout; this file
 ends that by being the tracked generator of everything it writes.
 
-15_CandidateFactPacket.md is a PROTECTED V1 baseline and is never read here.
+The protected internal V1 packet is now in ChannelContract.md Part III.
+Neither it nor the combined document is read here: only the approved package
+sections above and code-owned V2 fields supply these A7 prompts.
 
 Run:  venv/bin/python3 harness/build_exp5_contract.py [--out DIR]
 """

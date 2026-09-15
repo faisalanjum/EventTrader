@@ -66,8 +66,8 @@ files—must remain untouched and unstaged.
 Verify status claims against:
 
 1. FINAL_DESIGN.md — system meaning.
-2. ChannelContract.md and ChannelContractV2.md — old and staged-new public formats.
-3. 15_CandidateFactPacket.md — current internal format.
+2. ChannelContract.md — Part I is active V1; Part II is the staged V2 public format.
+3. ChannelContract.md Part III — current internal format.
 4. BUILD_AND_OPERATIONS.md — build and release order.
 5. FableExperimentPlan.md and FableExperimentWorkOrder.md — experiment rules.
 6. Signed experiment results, exact Git objects, live code and raw test receipts.

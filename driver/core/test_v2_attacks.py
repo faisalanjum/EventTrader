@@ -1467,8 +1467,9 @@ def test_W9_the_verified_bundle_boundary_is_static_and_singular():
 # --------------------------------------------- STAGED V2 PUBLIC CONTRACT ----
 # The staged Core V2 public contract for Fiscal (owner-authorized 2026-08-11,
 # reviewer SEQ 958). V1 is LIVE, so the V2 contract is a SEPARATELY VERSIONED,
-# STAGED document that must never be mistaken for live law, and it is DELETED at
-# the atomic switch. These two tests are why that document cannot quietly drift:
+# STAGED section that must never be mistaken for live law. Both original texts
+# now live in ChannelContract.md; the Step 6 switch changes which part governs.
+# These tests are why that candidate cannot quietly drift:
 # every CURRENT CODE-OWNED surface it publishes is compared to ITS EXISTING
 # OWNER, and its frozen hash is checked against the real bytes. The staged raw
 # channel profile is hash-frozen only — Fiscal's later boundary tests consume it. No second code constant was
@@ -1483,15 +1484,21 @@ def _v2_paths():
     # two landed inside driver/ and looked for the plans tree there)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     fd = os.path.join(root, ".claude", "plans", "Drivers", "FinalDesign")
-    return (os.path.join(fd, "ChannelContractV2.md"),
+    return (os.path.join(fd, "ChannelContract.md"),
             os.path.join(fd, "STATUS_AND_HISTORY.md"))
 
 
 def _v2_contract_bytes():
     import os
     contract, _ = _v2_paths()
-    assert os.path.exists(contract), f"the staged V2 contract is missing: {contract}"
-    return open(contract, "rb").read()
+    assert os.path.exists(contract), f"the combined channel contract is missing: {contract}"
+    raw = open(contract, "rb").read()
+    start, end = b"<!-- BEGIN V2 -->\n", b"<!-- END V2 -->\n"
+    assert raw.count(start) == raw.count(end) == 1, "V2 boundaries must be unique"
+    _, _, rest = raw.partition(start)
+    body, found, _ = rest.partition(end)
+    assert found, "V2 boundaries are reversed"
+    return body
 
 
 def _v2_contract_block(text):
@@ -1506,6 +1513,56 @@ def _v2_contract_block(text):
     j = text.find("```", i + len(marker))
     assert j > i, "the CONTRACT-SURFACES block is unterminated"
     return json.loads(text[i + len(marker):j])
+
+
+def test_channel_contract_consolidation_preserves_all_complete_originals():
+    """The owner requested lossless moves, not rewrites of the three originals."""
+    import hashlib
+    from pathlib import Path
+
+    directory = Path(_v2_paths()[0]).parent
+    combined = (directory / "ChannelContract.md").read_bytes()
+    originals = {
+        "V1": "1062e0fb1b58b4311bb4a03d0a4a42274288c460d22f74a8f75cc803bb04b0dd",
+        "V2": "d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b",
+        "INTERNAL V1": "aa7239edf069dec611678dc9981cebfa6760dedbc79faada95d4bc5c66b7e98c",
+    }
+    for version, expected in originals.items():
+        start = f"<!-- BEGIN {version} -->\n".encode()
+        end = f"<!-- END {version} -->\n".encode()
+        assert combined.count(start) == combined.count(end) == 1, version
+        _, _, rest = combined.partition(start)
+        body, found, _ = rest.partition(end)
+        assert found, f"{version}: reversed boundaries"
+        assert hashlib.sha256(body).hexdigest() == expected, version
+    assert combined.count(b"```json CONTRACT-SURFACES") == 1
+    assert b"**Current authority: Part I (V1). Part II (V2) remains staged.**" in combined
+    assert not (directory / "ChannelContractV2.md").exists()
+    assert not (directory / "15_CandidateFactPacket.md").exists()
+
+
+@pytest.mark.parametrize("damage", ["missing_start", "missing_end", "duplicate_start",
+                                    "duplicate_end", "reversed"])
+def test_combined_contract_reader_refuses_ambiguous_boundaries(tmp_path, monkeypatch, damage):
+    from pathlib import Path
+
+    path, status = _v2_paths()
+    raw = Path(path).read_bytes()
+    expected = _v2_contract_bytes()
+    candidate = tmp_path / "ChannelContract.md"
+    candidate.write_bytes(raw)
+    monkeypatch.setitem(globals(), "_v2_paths", lambda: (str(candidate), status))
+    assert _v2_contract_bytes() == expected  # same reader, lawful control
+    start, end = b"<!-- BEGIN V2 -->\n", b"<!-- END V2 -->\n"
+    if damage == "reversed":
+        broken = raw.replace(start, b"<!-- SWAP -->\n").replace(end, start).replace(b"<!-- SWAP -->\n", end)
+    else:
+        marker = start if damage.endswith("start") else end
+        replacement = b"" if damage.startswith("missing") else marker * 2
+        broken = raw.replace(marker, replacement, 1)
+    candidate.write_bytes(broken)
+    with pytest.raises(AssertionError, match="boundaries"):
+        _v2_contract_bytes()
 
 
 def test_the_staged_V2_contract_matches_every_live_V2_owner():
@@ -1563,8 +1620,8 @@ def test_the_staged_V2_contract_matches_every_live_V2_owner():
 
 
 def test_the_staged_V2_contract_hash_is_FROZEN_in_the_history_record():
-    """A prose hash nobody checks is not a freeze. The dated STATUS row must
-    carry the EXACT sha256 of the contract bytes on disk."""
+    """The dated original freeze must match the preserved V2 SECTION bytes,
+    not the new combined file's fingerprint. Historical hashes do not move."""
     import hashlib, re
     _, status_path = _v2_paths()
     digest = hashlib.sha256(_v2_contract_bytes()).hexdigest()

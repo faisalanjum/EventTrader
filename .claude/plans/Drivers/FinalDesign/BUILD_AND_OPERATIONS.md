@@ -2,7 +2,7 @@
 
 > **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run15.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
-> here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
+> here, never restated). Public channel duties live only in `ChannelContract.md` (Part I active V1; Part II staged until Step 6). Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. The 33 frozen sources are fully accounted for, byte-verified (29 originals + 3 snapshots archived; the
 > byte-pinned Plan live at root) — evidence baseline = `archive/2026-07-15_pre-consolidation/MANIFEST.json`;
 > audit trail = the archived `CONSOLIDATION.md`.
@@ -30,11 +30,11 @@ channel adapter (SELECT · FETCH · SUBMIT, per ChannelContract.md)
 
 ## 2. The internal core packet (frozen Candidate Fact Packet v1.0)
 
-- **The frozen source file `15_CandidateFactPacket.md` stays the temporary FIFTH live file** — owner-frozen
-  2026-07-14, amended twice by the owner 2026-07-15 (Q4 XBRL row, then the Q1-extension on the FETCH
-  guidance clause; current post-amendment sha `aa7239ed…`, pre-amendment baseline `86b2fc17…` pinned in the
-  Phase-1 manifest). Relocating its content into this file requires explicit
-  owner approval plus a byte/hash proof; until then this section only summarizes and points.
+- **The frozen internal V1 source is `ChannelContract.md` Part III**, relocated byte-for-byte with owner
+  approval on 2026-09-15; this section only summarizes it. The original was owner-frozen 2026-07-14,
+  amended twice on 2026-07-15 (Q4 XBRL row, then Q1-extension on the FETCH guidance clause).
+  Post-amendment sha `aa7239ed…` identifies the preserved section bytes, not the combined file;
+  pre-amendment sha `86b2fc17…` remains pinned in the Phase-1 manifest. Step 6 separately freezes internal V2.
 - Structure ("three blocks" = three required + one optional): Block 0 event envelope (source id/type, ticker,
   fiscal-year-end, optional calendar override, event time) · Block 1 transient identity signals (proposed name,
   slices, measurement spans, per-X, quote) · Block 2 the proven fact (all source values/text/conditions/

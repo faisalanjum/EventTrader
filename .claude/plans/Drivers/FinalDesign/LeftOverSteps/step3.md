@@ -39,8 +39,8 @@ Do not begin until:
 ## Authority
 
 Apply `FINAL_DESIGN.md` §§1–7 for meaning and evidence, the frozen staged
-`ChannelContractV2.md` for the V2 candidate boundary, the active
-`ChannelContract.md` and `15_CandidateFactPacket.md` only to preserve the
+`ChannelContract.md` Part II for the V2 candidate boundary, its active
+Part I and `ChannelContract.md` Part III only to preserve the
 untouched V1 route, `BUILD_AND_OPERATIONS.md` §§5, 8.1, and 11 for the reader's
 handoff and ownership limits, and the signed Step 2 memo for measured model and
 prompt choices. Current production code and frozen EXP-5 vectors prove the
@@ -77,8 +77,8 @@ does not invalidate unrelated lawful facts. Repeated identical proposals are
 idempotent and may never create a second relationship.
 
 `FINAL_DESIGN.md` remains the meaning owner. Publish the exact transport once
-in `ChannelContractV2.md` and its machine-readable surfaces; that contract
-becomes `ChannelContract.md` at the atomic switch. The one production response
+in `ChannelContract.md` Part II and its machine-readable surfaces; that part
+becomes active at the atomic switch. The one production response
 parser under Core is the code owner. Do not add another model call to find
 proposals, another reader, fact field, fact type, response wrapper,
 compatibility branch, generic extension mechanism, source locator, or standing

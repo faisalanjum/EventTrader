@@ -284,7 +284,7 @@ def build_reader_plan(events=None):
         "core_foundation": _id(".claude/plans/Drivers/FinalDesign/"
                                "FINAL_DESIGN.md"),
         "staged_v2_contract": _id(".claude/plans/Drivers/FinalDesign/"
-                                  "ChannelContractV2.md"),
+                                  "ChannelContract.md"),
         # Step 2 owners
         "step2_builder": _hid("build_exp5_contract.py"),
         "step2_instruction_producer": _hid("exp5_prompt_producer.md"),

@@ -2,8 +2,8 @@
 
 This is the **single general handover**: current progress, preserved decisions
 and evidence locations. It does not define new Driver rules.
-`FINAL_DESIGN.md` owns meaning, `ChannelContract.md` the active public boundary,
-`15_CandidateFactPacket.md` the active internal packet, `BUILD_AND_OPERATIONS.md`
+`FINAL_DESIGN.md` owns meaning, `ChannelContract.md` identifies the active public
+and internal contract parts, `BUILD_AND_OPERATIONS.md`
 build/release procedure, and `LeftOverSteps/Steps.md` execution order.
 
 **Read §1–2 for the current handover.** Sections 3–8 preserve decisions and
@@ -44,6 +44,55 @@ For newer tips, use `git rev-parse HEAD` in each worktree and
 `git ls-remote origin refs/heads/main refs/heads/recovery/a3-a7-verified`.
 Recovery has no configured upstream. Below, **A7** means the recovery
 worktree's `a7_recovery/`; **U** means `A7/unit_2020_codex_check/`.
+
+**2026-09-15 contract consolidation:** [ChannelContract.md](ChannelContract.md)
+is now the sole public/internal-contract file: Part I is active public V1;
+Part II is staged public V2; Part III is active internal V1. All three original
+texts are preserved byte-for-byte (77, 359 and 183 lines). Its opening
+table records the contradictions, missing explicit safeguards and assigned
+Step 5/6 work; Step 6 activates a part rather than deleting a contract file.
+The older V2 freeze below identifies the original Part II bytes, not the
+combined file. Historical manifests, snapshots and results remain unchanged;
+use their recorded commits/snapshots when replaying them. This changes no rule,
+code route, A7 result or STOP/WAIT state.
+
+Public-contract consolidation checks (before the internal-packet move):
+635 passed on main; 632 passed in recovery. One existing
+live-only test was excluded in both; three Fiscal checks passed on main but
+lack local credentials/filing caches in recovery. Both original hashes match;
+438 deliberate document corruptions were rejected, including deletion of each
+of the 436 original lines. New-plan checks preserve saved prompts and manifests.
+
+Internal-packet move: original hash `aa7239edf069dec611678dc9981cebfa6760dedbc79faada95d4bc5c66b7e98c`
+now identifies the preserved Part III block. The standalone file is removed;
+original bytes remain recoverable both here and at commit `18f38be90bae6926b69b44fd1ce3a8d6c858d26c`.
+Live references use Part III; archived records and saved patches keep their original identities.
+Verification checklist for the internal move:
+
+* Preservation: all 619 original lines match their original full hashes;
+  deleting any one line is rejected by the saved preservation test.
+* Routing: public/internal duties remain separate; active references use the
+  right part. Step 6 still proves and activates V2, reviewing both contracts
+  within six physical files. Historical references retain their original meaning.
+* Readers: the internal pin hashes only the preserved section. A7's guard now
+  checks the four approved prompt sections, not a filename blacklist; relocated
+  V1, archives, missing/duplicate sections and wrong headings are rejected.
+* Regression: six affected modules passed (644 main, 641 recovery); after three
+  additional section-guard cases, the full 360-test harness passed in both.
+  The historical patch gate passed all 10 tests; production code is unchanged.
+  The same one live-only exclusion and three recovery environment limits above apply.
+
+The broader G-suite is not wholly green: saved-patch rebuild equality and
+saved pin-inventory equality already failed before this move; the registry's
+aggregate check also reports the patch failure. These historical artifacts
+were not rewritten to make the checks green. The saved patch is checked against
+pre-consolidation commit `18f38be90bae6926b69b44fd1ce3a8d6c858d26c`, not today's
+combined layout, and this is not Step 6 readiness proof. Two nested-Git tests
+initially inherited the verification-only index; both pass without that variable.
+The owner approved publishing this consolidation to main and the recovery branch
+on 2026-09-15. The checks above preceded publication and used temporary indexes;
+unrelated work is excluded. Compare local and remote tips using §1.1 to verify
+publication. This approval does not reopen project execution or activate V2.
 
 **Protect unrelated local work.** Main has settings changes, market-data
 documentation, two old `receipts_827` inventories and deleted test-agent/skill
@@ -566,7 +615,7 @@ the three pre-amendment/frozen-original snapshots sit beside them.
 | 11_TrackB Census · 12_FactPipeline | normative census + build manual | FINAL_DESIGN (rules) + BUILD §5; archive |
 | 13_TrackC (active) · 13_Track_RetiredDesign | retirement plan · retired history | BUILD §6 · archive (one pointer to its still-useful non-replay analysis: GI-31 `<=` rationale, 894-source reachability audit, 4 stated-mid outliers) |
 | 14_BuildReadiness | stale checklist | BUILD + this file's dashboard; archive |
-| 15_CandidateFactPacket | FROZEN v1.0 + the two 2026-07-15 owner amendments (Q4, Q1-ext) | temporary fifth live file (current sha `aa7239ed…`) |
+| 15_CandidateFactPacket | FROZEN v1.0 + the two 2026-07-15 owner amendments (Q4, Q1-ext) | moved byte-identically to ChannelContract.md Part III on 2026-09-15 (section sha `aa7239ed…`); no separate live file |
 | 66_IssuesToBeHandled | owner blocks + stale tail | rules → FINAL_DESIGN; status here; archive |
 | 90_OpenItems · 95_Supersession · 99_Codex audit | status · 43-row ledger · history | this file §1-§3; archive (99 wholesale) |
 | BayesProposal | unvetted proposal | BUILD §8.3 pointer; ARCHIVED directly in the dated archive 2026-07-16 ✓ |
@@ -614,7 +663,7 @@ column — the map is total over every ID listed in the archived `CONSOLIDATION.
 | OD-1..21 | per-ID anchors in the §3 additions list | all 21 individually anchored there |
 | K2 | BUILD §4 | — |
 | 43 supersession rows | §3 above | — |
-| Contract clauses §1-§9 | ChannelContract.md (live; one section per clause: what-a-channel-is · flow · packet · never-send · submission · outcomes · ledger duties · never-list · onboarding) | — |
+| Contract clauses §1-§9 | ChannelContract.md Part I (active V1; one section per clause: what-a-channel-is · flow · packet · never-send · submission · outcomes · ledger duties · never-list · onboarding) | — |
 | Packet blocks 0-3 + Parts B/C/D | the live frozen packet (structure summarized BUILD §2) | — |
 | Ratified design bundles (formerly candidates) | BUILD §8.1 (kernel mechanics whole) · §8.2 (XBRL recipe + pin map + amendments) = the OPERATIVE text; the archived originals are historical evidence only (destination proof §7.1b) | — |
 | Open items | §1.5 remaining work + §2 settled scope/conditional choices; Steps.md owns current triggers | BUILD §11 retains design recipes; FINAL_DESIGN §10 is an older status mirror |
