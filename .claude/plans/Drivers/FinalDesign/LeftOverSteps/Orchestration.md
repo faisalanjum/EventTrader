@@ -309,8 +309,9 @@ env -u TMUX tmux attach-session -r -t codex-mailwatch
 
 This is a read-only tmux client, not a new watcher. Keep that terminal handle
 while coordinating; wait for its output rather than polling mailbox hashes.
-Detach only this client with tmux's detach key (`Ctrl-b`, then `d` under the
-default binding), not Ctrl-C on the watcher. Existing attached owner terminals
+Detach only this client with the configured prefix, then `d`, not Ctrl-C on
+the watcher. Check it with `tmux show-option -gv prefix`: this machine uses
+`C-a` (Ctrl-A); tmux's default is `C-b` (Ctrl-B). Existing attached owner terminals
 may remain. A new task always reads the current full mailbox first: old events
 are not replayed, and this watcher cannot wake a closed Codex task.
 Do not add hash loops, tail loops, timed mailbox polling or another watcher.
@@ -385,7 +386,7 @@ tmux attach-session -t '=driver-core'
 ```
 
 Start Core normally in that terminal and give it the §2 Core prompt with its
-new runtime ID. Detach (`Ctrl-b`, then `d`), then run:
+new runtime ID. Detach using the configured prefix followed by `d` (§6), then run:
 
 ```bash
 tmux attach-session -t '=driver-codex'
