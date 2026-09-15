@@ -1,0 +1,25 @@
+{
+ "calls": 1,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G2-002",
+   "candidate_sha256": "a7e1e4b90e4ad4c63ac782148b413ac8047c7106df8cb5a130df931a063fdfbe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "94083a13a21ad9071f93ec5633413e56c9fbb9e240f3bbcc229380fe3a63be64",
+   "lane_id": "G2-002/G1b",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 5,
+   "prompt_sha256": "00e52e35585a5cb2e019f49c69d6b06af1dd4ae4e8c457c0388d310b55256a8e",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M6d9dd25a44c4125e\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"Me2615b2c555ed925\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M4ca257814a3d2655\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": false\n    }\n  }\n]\n```"
+  }
+ ],
+ "rows": 1
+}

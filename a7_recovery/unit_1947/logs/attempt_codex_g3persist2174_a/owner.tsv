@@ -1,0 +1,7 @@
+attempt	codex_g3persist2174_a
+payload	../../unit_2020_codex_check/persist_corrected_completion_2166.py
+map	../unit_2020_codex_check/map_final_grading_2174.tsv
+wrapper_pid	50351
+payload_pid	50355
+started_utc	2026-09-15T07:15:32Z
+state	finished exit 0

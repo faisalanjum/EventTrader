@@ -1,0 +1,23 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "2b063c4f588c9128f92d7552d521ac860199f9e8e4202fec14197080eaa3a263",
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run/invocation.seg03.json",
+ "invocation_sha256": "3d597c9a51bf470fe2289947d947e0068e573f42bfb43c5e3a13bd150775de46",
+ "parent": null,
+ "reservation_sha256": "8fe939733c1230e44f6c4a3e687311156532b8e34dd3372fffb7ca68d2865e2a",
+ "root_sha256": "329884aef49d9032159ae8a21dc55d908dc55df9da84ba2f6ec652ed03475d4f",
+ "rows": [
+  {
+   "batch_id": "G3-001",
+   "lane_id": "G3-001/G1a",
+   "ordinal": 2,
+   "prompt_sha256": "cdad4bc4045ae8306944303aa232a62515d183607e3dec662c07739d5d8d3e40"
+  }
+ ],
+ "run_id": "run",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run/grade_batch.seg03.js",
+ "script_sha256": "044641facede9c6305bd55204a10c8927b014cc8d1f3397ed60e78e6fc38379c",
+ "segment": 3,
+ "state_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run/state.seg03.json"
+}

@@ -1,0 +1,7 @@
+SEGMENT     : 1 state_file wf_0ecde186-92d.json
+OFFICIAL_ROWS: 1
+LEDGER      : {"invalid":1,"retry":1,"scheduled":1,"uncalled":0,"valid":0}
+RETRY       : ['G2-000/G1a'] UNCALLED []
+NONVALID    : [['G2-000/G1a', False]] why {"G2-000/G1a":["the reply did not parse: the reply opens a fence it never closes at the end of the reply"]}
+SEGMENT_CLEAN: False
+STOP: segment 1 is not clean; do NOT start the next segment

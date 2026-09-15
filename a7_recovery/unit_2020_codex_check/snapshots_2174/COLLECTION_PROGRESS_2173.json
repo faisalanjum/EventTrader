@@ -1,0 +1,65 @@
+{
+ "scope": "bounded collection progress; lanes and questions are DISTINCT denominators and no outcome is judged here",
+ "per_kind": {
+  "G2": {
+   "lanes_required": 18,
+   "lanes_scheduled": 15,
+   "lanes_launched": 15,
+   "lanes_finalized": 18,
+   "lanes_usable": 18,
+   "lanes_invalid": 0,
+   "lanes_exhausted": 0,
+   "lanes_waiting": 0,
+   "questions_required": 31,
+   "questions_covered_by_usable_lanes": 31,
+   "max_attempts": 2,
+   "retry_eligible_lanes": [
+    "G2-000/G1a"
+   ],
+   "invalid_lanes": [],
+   "exhausted_lanes": [],
+   "waiting_lanes": [],
+   "problems": {
+    "G2-000/G1a": [
+     "the reply did not parse: the reply opens a fence it never closes at the end of the reply"
+    ]
+   }
+  },
+  "G3": {
+   "lanes_required": 6,
+   "lanes_scheduled": 5,
+   "lanes_launched": 5,
+   "lanes_finalized": 6,
+   "lanes_usable": 6,
+   "lanes_invalid": 0,
+   "lanes_exhausted": 0,
+   "lanes_waiting": 0,
+   "questions_required": 7,
+   "questions_covered_by_usable_lanes": 7,
+   "max_attempts": 2,
+   "retry_eligible_lanes": [
+    "G3-002/G1b"
+   ],
+   "invalid_lanes": [],
+   "exhausted_lanes": [],
+   "waiting_lanes": [],
+   "problems": {
+    "G3-002/G1b": [
+     "the reply is not a JSON array"
+    ]
+   }
+  }
+ },
+ "total": {
+  "lanes_exhausted": 0,
+  "lanes_finalized": 24,
+  "lanes_invalid": 0,
+  "lanes_launched": 20,
+  "lanes_required": 24,
+  "lanes_scheduled": 20,
+  "lanes_usable": 24,
+  "lanes_waiting": 0,
+  "questions_covered_by_usable_lanes": 38,
+  "questions_required": 38
+ }
+}

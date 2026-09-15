@@ -1,0 +1,217 @@
+{
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_changedprep2171_a/G2",
+ "completion_problems": [],
+ "evidence_problems": [],
+ "kind": "G2",
+ "lanes_read": 18,
+ "lanes_with_selected_relation": 18,
+ "model_calls": 0,
+ "persisted": false,
+ "root_sha256": "0af92471f6c92eee6f48fe921eb69cf87c2e1b2ccbf7588dc4a830c8907ac2a2",
+ "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G2/run",
+ "run_identity": {
+  "meaning_format_recovery": {
+   "attempts": [
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-000/G1a",
+     "original_problems": [
+      "the reply did not parse: the reply opens a fence it never closes at the end of the reply"
+     ],
+     "original_valid": false,
+     "raw_sha256": "a5e92775b9624d37835e2f0771c00dfd012ac3f019d4c2d9a95a1c60bc120b55",
+     "recovered": false,
+     "segment": 1
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-000/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "f0be99ffc2d8a031a8dd213b453ab8f03d12b63ad82832a0463b7767ce941d7d",
+     "recovered": false,
+     "segment": 2
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-001/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "15d9cb1219379f9ef7bced3bc76ea3ef53e7345ec203cd2d811026d712895d6f",
+     "recovered": false,
+     "segment": 3
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-001/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "a6d173c863db51247d6c7b90cbe74acf2a3b2ba3b11fb21ae216ad2f2f56552c",
+     "recovered": false,
+     "segment": 3
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-002/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "d9371642a37f296d3bc78b9ca821c98043164615469d9606d422be7ca7a1b0d9",
+     "recovered": false,
+     "segment": 4
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-002/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "ce8bf5f545cd9ff4803b6828859f9634bf5f258ffbfecca7ae9ec253e4f49b8d",
+     "recovered": false,
+     "segment": 5
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-003/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "5efa3458bc9984f27fc0006d5f8cf66bd665c7fea42906d04efdd8cf7cf5a18a",
+     "recovered": false,
+     "segment": 6
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-003/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "fc1e16ce84bab3325b3e329572c3c773918d55347f1c715538451673aefac8a4",
+     "recovered": false,
+     "segment": 7
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-004/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "0ac5d6dd97ac8628aafa8b18951fbea080962b7e0e5444c968a8c813eda44ba6",
+     "recovered": false,
+     "segment": 8
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-004/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "4da95c6add1eda1b156ee52db34ada4c49ac101b383d0f15ed9dff785bd39087",
+     "recovered": false,
+     "segment": 9
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-005/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "25277da76af2941c4d6d6e992dbc15c2e6eddba4efd09b7f4ddefaf01369d37a",
+     "recovered": false,
+     "segment": 10
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-005/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "25277da76af2941c4d6d6e992dbc15c2e6eddba4efd09b7f4ddefaf01369d37a",
+     "recovered": false,
+     "segment": 10
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-006/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "0de5d973c3fd1f842d7d2e210ca88363c23bfc62ccd423330c5bd1f333346447",
+     "recovered": false,
+     "segment": 11
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-006/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "0de5d973c3fd1f842d7d2e210ca88363c23bfc62ccd423330c5bd1f333346447",
+     "recovered": false,
+     "segment": 11
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-007/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "9ed833bef9ddeb29689355c05db0599e41c234cd7e395576be06195c8ab3f567",
+     "recovered": false,
+     "segment": 12
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-007/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "9ed833bef9ddeb29689355c05db0599e41c234cd7e395576be06195c8ab3f567",
+     "recovered": false,
+     "segment": 13
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-008/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "bbcd8b8b97a489b3374abe8dab4fb497dc73884b24f1f7841baffb955b29c719",
+     "recovered": false,
+     "segment": 13
+    },
+    {
+     "attempt": 1,
+     "conversions": [],
+     "lane_id": "G2-008/G1b",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "bbcd8b8b97a489b3374abe8dab4fb497dc73884b24f1f7841baffb955b29c719",
+     "recovered": false,
+     "segment": 14
+    },
+    {
+     "attempt": 2,
+     "conversions": [],
+     "lane_id": "G2-000/G1a",
+     "original_problems": [],
+     "original_valid": true,
+     "raw_sha256": "2d3e26707af3a9df471b6f1fa595f1add67e1157055c9f893f8b8e5bdca04bfc",
+     "recovered": false,
+     "segment": 15
+    }
+   ],
+   "code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+   "rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b"
+  },
+  "root_sha256": "0af92471f6c92eee6f48fe921eb69cf87c2e1b2ccbf7588dc4a830c8907ac2a2",
+  "run_digest": "ad1a1c96eca09912d6ad5a4d2d48b530937aba3c2653d4cb3ff48a27f4b62c71",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G2/run",
+  "run_files": 159
+ }
+}
+COMPLETION_CANDIDATE /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2173_grading/G2/COMPLETION_CANDIDATE_2173.json dad1345693105caaaf01567947b39f6c2daa4a1580fd9b9276620f6a7c6f9574

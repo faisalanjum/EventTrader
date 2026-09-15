@@ -1,0 +1,31 @@
+{
+ "accounting_sha256": "8019b9ab2b93e4bd193310f27b2a3181c710c8ac466cca6b7f5c29f7bcd2e22e",
+ "attempt": 1,
+ "candidate_sha256": "a7e1e4b90e4ad4c63ac782148b413ac8047c7106df8cb5a130df931a063fdfbe",
+ "ledger": {
+  "invalid": 1,
+  "retry": 1,
+  "scheduled": 1,
+  "uncalled": 0,
+  "valid": 0
+ },
+ "problems": {
+  "G2-000/G1a": [
+   "the reply did not parse: the reply opens a fence it never closes at the end of the reply"
+  ]
+ },
+ "receipt_sha256": "f03a4f0bc53105ce581c87e90a38567dee7b005e2779f2ed8ca5b383ab11beb2",
+ "retry": [
+  "G2-000/G1a"
+ ],
+ "root_sha256": "0af92471f6c92eee6f48fe921eb69cf87c2e1b2ccbf7588dc4a830c8907ac2a2",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 1,
+ "uncalled": [],
+ "validity": [
+  [
+   "G2-000/G1a",
+   false
+  ]
+ ]
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "Offline tests only; known local-client limitations are not launch readiness",
+  "focused": {
+    "chunk_id": "6778c3",
+    "wall_time_seconds": 0.000001873,
+    "exit_code": 0,
+    "original_token_count": 25,
+    "output": "...............                                                          [100%]\n15 passed in 0.26s\n"
+  },
+  "regression": {
+    "chunk_id": "bd5d9c",
+    "wall_time_seconds": 0.000001914,
+    "exit_code": 0,
+    "original_token_count": 99,
+    "output": "........................................................................................................................................................................................... [ 58%]\n........................................................................ [ 81%]\n...........................................................              [100%]\n318 passed, 29 subtests passed in 3.34s\n"
+  },
+  "regression_command": "env PYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py --host a7_recovery/unit_2020_codex_check/map_current_key_2148.tsv /home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/pytest/__main__.py -q -p no:cacheprovider a7_recovery/unit_2020_codex_check/test_g2_key_reuse_2159.py a7_recovery/unit_2020_codex_check/test_grading_revision_2115.py a7_recovery/unit_2020_codex_check/test_g1_key_reuse_2152.py a7_recovery/unit_2020_codex_check/test_g1_key_reuse_original_2153.py a7_recovery/unit_2020_codex_check/test_grading_input_correction_2114.py a7_recovery/unit_2020_codex_check/test_duplicate_accounting_2116.py a7_recovery/unit_2020_codex_check/test_grading_script_binding_2156.py a7_recovery/unit_2020_codex_check/test_current_g23_report_2157.py a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py a7_recovery/unit_2159_current_g3/test_g3_prepare_2159.py a7_recovery/unit_2020_codex_check/test_corrected_score_2162.py a7_recovery/unit_2020_codex_check/test_grading_contract_2168.py a7_recovery/unit_2020_codex_check/test_grading_revision_chain_2169.py a7_recovery/unit_2020_codex_check/test_corrected_score_chain_2170.py a7_recovery/unit_2020_codex_check/test_collection_progress_2173.py a7_recovery/unit_2020_codex_check/test_model_reuse_offline_2176.py\n",
+  "ai_calls": 0,
+  "network_calls": 0
+}

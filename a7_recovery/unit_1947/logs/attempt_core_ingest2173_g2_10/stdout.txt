@@ -1,0 +1,6 @@
+SEGMENT     : 10 state_file wf_866290fa-d4a.json
+OFFICIAL_ROWS: 2
+LEDGER      : {"invalid":0,"retry":0,"scheduled":2,"uncalled":0,"valid":2}
+RETRY       : [] UNCALLED []
+NONVALID    : [] why {}
+SEGMENT_CLEAN: True

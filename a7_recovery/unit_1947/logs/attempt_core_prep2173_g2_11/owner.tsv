@@ -1,0 +1,7 @@
+attempt	core_prep2173_g2_11
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2173_grading/map_execution_2173.tsv
+wrapper_pid	10978
+payload_pid	10982
+started_utc	2026-09-15T06:47:16Z
+state	finished exit 0

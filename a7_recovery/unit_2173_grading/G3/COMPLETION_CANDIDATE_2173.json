@@ -1,0 +1,74 @@
+{
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_changedprep2171_a/G3",
+ "completion": {
+  "batches": 3,
+  "credited": {
+   "X24756096af610d6d": {
+    "batch_id": "G3-000",
+    "verdict": "key_miss"
+   },
+   "X6eea70137b9a2e63": {
+    "batch_id": "G3-001",
+    "verdict": "key_miss"
+   },
+   "X73357410ba2d97a2": {
+    "batch_id": "G3-002",
+    "verdict": "key_miss"
+   },
+   "X99d7bc16850a9dde": {
+    "batch_id": "G3-000",
+    "verdict": "key_miss"
+   },
+   "Xa0f9de09f3c55112": {
+    "batch_id": "G3-000",
+    "verdict": "key_miss"
+   },
+   "Xe10aa94910fc4e7a": {
+    "batch_id": "G3-001",
+    "verdict": "key_miss"
+   }
+  },
+  "credited_questions": 6,
+  "questions": 7,
+  "run_identity": {
+   "root_sha256": "329884aef49d9032159ae8a21dc55d908dc55df9da84ba2f6ec652ed03475d4f",
+   "run_digest": "c17e146e986db3029fe8379312c6fae9a525663df2d3cbab69613e17f6fba145",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run",
+   "run_files": 55
+  },
+  "schema": "a7_g23_whole_run_completion/1",
+  "task_kind": "G3",
+  "unresolved": [
+   {
+    "batch_id": "G3-000",
+    "question_id": "X56415b76439cd6be",
+    "reasons": [
+     {
+      "answers": [
+       "unsupported",
+       "key_miss"
+      ],
+      "question_id": "X56415b76439cd6be",
+      "reason": "the readings disagree"
+     }
+    ]
+   }
+  ],
+  "unresolved_questions": 1
+ },
+ "completion_problems": [],
+ "evidence_problems": [],
+ "kind": "G3",
+ "lanes_read": 6,
+ "lanes_with_selected_relation": 6,
+ "model_calls": 0,
+ "persisted": false,
+ "root_sha256": "329884aef49d9032159ae8a21dc55d908dc55df9da84ba2f6ec652ed03475d4f",
+ "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run",
+ "run_identity": {
+  "root_sha256": "329884aef49d9032159ae8a21dc55d908dc55df9da84ba2f6ec652ed03475d4f",
+  "run_digest": "c17e146e986db3029fe8379312c6fae9a525663df2d3cbab69613e17f6fba145",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run",
+  "run_files": 55
+ }
+}

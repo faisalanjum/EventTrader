@@ -1,0 +1,7 @@
+SEGMENT     : 4 state_file wf_7c1d58d4-f0e.json
+OFFICIAL_ROWS: 3
+LEDGER      : {"invalid":1,"retry":1,"scheduled":3,"uncalled":0,"valid":2}
+RETRY       : ['G3-002/G1b'] UNCALLED []
+NONVALID    : [['G3-002/G1b', False]] why {"G3-002/G1b":["the reply is not a JSON array"]}
+SEGMENT_CLEAN: False
+STOP: segment 4 is not clean; do NOT start the next segment

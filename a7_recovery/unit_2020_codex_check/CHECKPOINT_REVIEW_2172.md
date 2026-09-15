@@ -28,9 +28,9 @@ The manifest, this note, the latest work order and Core's three2172 review
 files are additional checkpoint metadata, all covered by the Git tree.
 Generated pytest working directories and links are excluded; exact commands,
 raw outputs/exit records and the relevant reusable tests are retained.
-The historical failed-test stdout retains its original trailing whitespace;
-it is byte-pinned evidence, not source to format. Source/diff checks exclude
-that raw log only; no evidence was rewritten to satisfy a style check.
+The two historical failed-test stdout files retain their original trailing
+whitespace; they are byte-pinned evidence, not source to format. Source/diff
+checks exclude those two raw logs only; no evidence was rewritten for style.
 Unrelated dirty build_inventory_review.py and all unrelated untracked work
 are excluded and preserved. Main is untouched. No history rewrite.
 

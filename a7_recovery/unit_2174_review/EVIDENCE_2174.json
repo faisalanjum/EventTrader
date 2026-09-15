@@ -1,0 +1,451 @@
+{
+ "schema": "a7-final-source-cause-check/2174",
+ "scope": "independent cause review; it overwrites no verdict, label, key or score, and establishes no replacement grade",
+ "counts": {
+  "questions": 10,
+  "root_dispositions": 3,
+  "newly_collected_g3": 7,
+  "g3_establishing_a_fact_absent_from_the_key": 0
+ },
+ "questions": {
+  "M8624b63494238990": {
+   "part": "root source disposition",
+   "leg": "UNION",
+   "source_id": "0000764478-25-000057",
+   "gold_idx": 3,
+   "produced_idx": 8,
+   "gold": {
+    "fact_type": "metric",
+    "driver_name": "revenue_mix",
+    "driver_state": "increased",
+    "level_low": "31.8",
+    "level_high": "31.8",
+    "level_shape_hint": "point",
+    "level_unit": "percent",
+    "comparison_low": "31.4",
+    "comparison_baseline": "prior_year",
+    "value_text": null,
+    "slice_parts": [
+     "segment:domestic",
+     "channel:online"
+    ],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 3,
+    "per_x": null,
+    "part_ref": "mdna"
+   },
+   "produced": {
+    "fact_type": "metric",
+    "driver_name": "revenue_mix",
+    "driver_state": "increased",
+    "level_low": "31.8",
+    "level_high": "31.8",
+    "level_shape_hint": "point",
+    "level_unit": "percent",
+    "comparison_low": "31.4",
+    "comparison_baseline": "prior_year",
+    "value_text": null,
+    "slice_parts": [
+     "segment:domestic",
+     "channel:online"
+    ],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 3,
+    "per_x": null,
+    "part_ref": "mdna"
+   },
+   "recursive_difference": [
+    "/ambiguity_note :only in the first",
+    "/du_worthy :only in the first",
+    "/gold_extra :only in the first"
+   ],
+   "gold_ambiguity_note": "The quote is four bare percentages whose windows come from the Domestic table header above them, so the first pair reads as the three months ended November 1, 2025 against the prior-year quarter, and \"online\" has no menu counterpart so its channel kind is coined from the filing's website/app/virtual-store selling description.",
+   "core_finding": "grading limitation: the produced fact equals the approved gold fact in every produced field, so no source-supported defect stands behind the negative"
+  },
+  "Ma31af1665347b9ec": {
+   "part": "root source disposition",
+   "leg": "UNION",
+   "source_id": "0001041061-26-000003",
+   "gold_idx": 3,
+   "produced_idx": 3,
+   "gold": {
+    "fact_type": "metric",
+    "driver_name": "system_sales_mix",
+    "driver_state": "reported",
+    "level_low": null,
+    "level_high": 60,
+    "level_shape_hint": "ceiling",
+    "level_unit": "percent",
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": null,
+    "slice_parts": [
+     "channel:digital"
+    ],
+    "fiscal_year": 2025,
+    "fiscal_quarter": 4,
+    "per_x": null,
+    "part_ref": "exhibit_99_1"
+   },
+   "produced": {
+    "fact_type": "metric",
+    "driver_name": "digital_mix",
+    "driver_state": "reported",
+    "level_low": null,
+    "level_high": null,
+    "level_shape_hint": null,
+    "level_unit": null,
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": 2025,
+    "fiscal_quarter": 4,
+    "per_x": null,
+    "part_ref": "exhibit_99_1"
+   },
+   "recursive_difference": [
+    "/ambiguity_note :only in the first",
+    "/du_worthy :only in the first",
+    "/gold_extra :only in the first",
+    "/item/driver_name : 'system_sales_mix' vs 'digital_mix'",
+    "/item/level_high : {'scale_multiplier': 1, 'unit_scale_evidence': '%', 'value': 60} vs None",
+    "/item/level_shape_hint : 'ceiling' vs None",
+    "/item/level_unit : 'percent' vs None",
+    "/item/slice_parts :length 1 vs 0"
+   ],
+   "gold_ambiguity_note": "The target phrase never names its denominator, so I took \"system sales\" from the same sentence into the name and put the company's own sales channel into the slice, as the own-measured-part role rule requires, instead of keeping \"digital\" in the name.",
+   "core_finding": "producer defect on name/population (NAME-10: a sales channel goes to the slice); the numeric nulls are the SAME open representation question as Md2061d63bedc8f75, mirrored, not merely lawful caution"
+  },
+  "Md2061d63bedc8f75": {
+   "part": "root source disposition",
+   "leg": "P1",
+   "source_id": "AAL_2026-04-23T08.30",
+   "gold_idx": 7,
+   "produced_idx": 7,
+   "gold": {
+    "fact_type": "guidance",
+    "driver_name": "fuel_recapture_rate_guidance",
+    "driver_state": "unknown",
+    "level_low": null,
+    "level_high": null,
+    "level_shape_hint": null,
+    "level_unit": null,
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": "recapture rate in the nineties",
+    "slice_parts": [],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 4,
+    "per_x": null,
+    "part_ref": "qa"
+   },
+   "produced": {
+    "fact_type": "guidance",
+    "driver_name": "fuel_recapture_rate",
+    "driver_state": "unknown",
+    "level_low": 90,
+    "level_high": null,
+    "level_shape_hint": "floor",
+    "level_unit": "percent",
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 4,
+    "per_x": null,
+    "part_ref": "qa"
+   },
+   "recursive_difference": [
+    "/ambiguity_note :only in the first",
+    "/du_worthy :only in the first",
+    "/gold_extra :only in the first",
+    "/item/driver_name : 'fuel_recapture_rate_guidance' vs 'fuel_recapture_rate'",
+    "/item/level_low : None vs {'scale_multiplier': 1, 'unit_scale_evidence': None, 'value': 90}",
+    "/item/level_shape_hint : None vs 'floor'",
+    "/item/level_unit : None vs 'percent'",
+    "/item/value_text : 'recapture rate in the nineties' vs None"
+   ],
+   "gold_ambiguity_note": "'In the 90s' is a vague quantity rather than a stated number, so the guide is stored qualitatively, and the target year comes from the surrounding balance-of-year sequence rather than from the quote itself.",
+   "core_finding": "rule ambiguity: FINAL_DESIGN fixes what value_text may hold and what a floor means, but never says whether a vague band must stay qualitative"
+  },
+  "X24756096af610d6d": {
+   "part": "newly collected G3 extra",
+   "leg": "UNION",
+   "source_id": "0000940944-26-000005",
+   "produced_idx": 5,
+   "produced": {
+    "fact_type": "action_event",
+    "driver_name": "asset_impairment",
+    "driver_state": "occurred",
+    "level_low": "24.7",
+    "level_high": "24.7",
+    "level_shape_hint": "point",
+    "level_unit": "m_usd",
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 3,
+    "per_x": null,
+    "part_ref": "exhibit_99_1"
+   },
+   "approved_key_facts_stating_the_same_claim": [
+    2
+   ],
+   "its_card_was_served": [
+    true
+   ],
+   "card_reference_name": [
+    "Impairment due to restaurant closures3"
+   ],
+   "served_reference_cards": 4,
+   "served_other_records": 2,
+   "core_finding": "existing key fact represented differently (key g2 restaurant_closure_impairment, same type/state/value/unit); not a key omission",
+   "matching_gold_is_a_recall_miss": {
+    "2": [
+     "agreed_selection_not_credited",
+     "multi_candidate_selection"
+    ]
+   }
+  },
+  "X56415b76439cd6be": {
+   "part": "newly collected G3 extra",
+   "leg": "P2",
+   "source_id": "0000027904-26-000020",
+   "produced_idx": 8,
+   "produced": {
+    "fact_type": "metric",
+    "driver_name": "travel_spend",
+    "driver_state": "reported",
+    "level_low": 85,
+    "level_high": 85,
+    "level_shape_hint": "point",
+    "level_unit": "percent",
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": null,
+    "slice_parts": [
+     "customer:corporate"
+    ],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 2,
+    "per_x": null,
+    "part_ref": "exhibit_99_1"
+   },
+   "approved_key_facts_stating_the_same_claim": [],
+   "its_card_was_served": [],
+   "card_reference_name": [],
+   "served_reference_cards": 7,
+   "served_other_records": 3,
+   "core_finding": "wrong/unsupported produced record: 85 percent is the share of survey RESPONDENTS, stored as the level of travel_spend, and an outside survey expectation about a future quarter is not the company own measured metric"
+  },
+  "X6eea70137b9a2e63": {
+   "part": "newly collected G3 extra",
+   "leg": "UNION",
+   "source_id": "0000027904-26-000020",
+   "produced_idx": 3,
+   "produced": {
+    "fact_type": "metric",
+    "driver_name": "net_debt",
+    "driver_state": "decreased",
+    "level_low": 13540,
+    "level_high": 13540,
+    "level_shape_hint": "point",
+    "level_unit": "m_usd",
+    "comparison_low": 14300,
+    "comparison_baseline": "sequential_period",
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 1,
+    "per_x": null,
+    "part_ref": "exhibit_99_1"
+   },
+   "approved_key_facts_stating_the_same_claim": [
+    6
+   ],
+   "its_card_was_served": [
+    true
+   ],
+   "card_reference_name": [
+    "Adjusted net debt"
+   ],
+   "served_reference_cards": 7,
+   "served_other_records": 3,
+   "core_finding": "existing key fact represented differently (key g6 net_debt, same type/state/value/unit/baseline); not a key omission",
+   "matching_gold_is_a_recall_miss": {
+    "6": [
+     "agreed_selection_not_credited",
+     "multi_candidate_selection"
+    ]
+   }
+  },
+  "X73357410ba2d97a2": {
+   "part": "newly collected G3 extra",
+   "leg": "UNION",
+   "source_id": "0000027904-26-000020",
+   "produced_idx": 5,
+   "produced": {
+    "fact_type": "metric",
+    "driver_name": "net_debt",
+    "driver_state": "decreased",
+    "level_low": 13540,
+    "level_high": 13540,
+    "level_shape_hint": "point",
+    "level_unit": "m_usd",
+    "comparison_low": 14300,
+    "comparison_baseline": "sequential_period",
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 1,
+    "per_x": null,
+    "part_ref": "exhibit_99_1"
+   },
+   "approved_key_facts_stating_the_same_claim": [
+    6
+   ],
+   "its_card_was_served": [
+    true
+   ],
+   "card_reference_name": [
+    "Adjusted net debt"
+   ],
+   "served_reference_cards": 7,
+   "served_other_records": 3,
+   "core_finding": "existing key fact represented differently (key g6 net_debt) AND a second emission of X6eea70137b9a2e63 differing only in period_start_date",
+   "matching_gold_is_a_recall_miss": {
+    "6": [
+     "agreed_selection_not_credited",
+     "multi_candidate_selection"
+    ]
+   }
+  },
+  "X99d7bc16850a9dde": {
+   "part": "newly collected G3 extra",
+   "leg": "UNION",
+   "source_id": "0000027904-26-000013",
+   "produced_idx": 5,
+   "produced": {
+    "fact_type": "action_event",
+    "driver_name": "boeing_aircraft_purchase_option",
+    "driver_state": "announced",
+    "level_low": null,
+    "level_high": 30,
+    "level_shape_hint": "ceiling",
+    "level_unit": "count",
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": null,
+    "fiscal_quarter": null,
+    "per_x": null,
+    "part_ref": "mdna"
+   },
+   "approved_key_facts_stating_the_same_claim": [
+    6
+   ],
+   "its_card_was_served": [
+    true
+   ],
+   "card_reference_name": [
+    "option to purchase up to an additional 30 of the same aircraft"
+   ],
+   "served_reference_cards": 6,
+   "served_other_records": 4,
+   "core_finding": "existing key fact represented differently (key g6 aircraft_purchase_option, same type/state/ceiling/unit); not a key omission",
+   "matching_gold_is_a_recall_miss": {
+    "6": [
+     "agreed_selection_not_credited",
+     "multi_candidate_selection"
+    ]
+   }
+  },
+  "Xa0f9de09f3c55112": {
+   "part": "newly collected G3 extra",
+   "leg": "UNION",
+   "source_id": "0000764478-25-000057",
+   "produced_idx": 5,
+   "produced": {
+    "fact_type": "action_event",
+    "driver_name": "goodwill_and_intangible_asset_impairment",
+    "driver_state": "occurred",
+    "level_low": 171,
+    "level_high": 171,
+    "level_shape_hint": "point",
+    "level_unit": "m_usd",
+    "comparison_low": 0,
+    "comparison_baseline": "prior_year",
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": 2026,
+    "fiscal_quarter": 3,
+    "per_x": null,
+    "part_ref": "mdna"
+   },
+   "approved_key_facts_stating_the_same_claim": [
+    0
+   ],
+   "its_card_was_served": [
+    true
+   ],
+   "card_reference_name": [
+    "Goodwill and intangible asset impairments"
+   ],
+   "served_reference_cards": 4,
+   "served_other_records": 3,
+   "core_finding": "existing key fact represented differently (key g0 asset_impairment, same type/state/value/unit); it also empties the key population and adds a prior-year comparison to a table dash",
+   "matching_gold_is_a_recall_miss": {
+    "0": [
+     "agreed_selection_not_credited",
+     "multi_candidate_selection"
+    ]
+   }
+  },
+  "Xe10aa94910fc4e7a": {
+   "part": "newly collected G3 extra",
+   "leg": "UNION",
+   "source_id": "0000027904-26-000013",
+   "produced_idx": 8,
+   "produced": {
+    "fact_type": "action_event",
+    "driver_name": "b787_10_purchase_option",
+    "driver_state": "announced",
+    "level_low": null,
+    "level_high": 30,
+    "level_shape_hint": "ceiling",
+    "level_unit": "count",
+    "comparison_low": null,
+    "comparison_baseline": null,
+    "value_text": null,
+    "slice_parts": [],
+    "fiscal_year": null,
+    "fiscal_quarter": null,
+    "per_x": null,
+    "part_ref": "mdna"
+   },
+   "approved_key_facts_stating_the_same_claim": [
+    6
+   ],
+   "its_card_was_served": [
+    true
+   ],
+   "card_reference_name": [
+    "option to purchase up to an additional 30 of the same aircraft"
+   ],
+   "served_reference_cards": 6,
+   "served_other_records": 4,
+   "core_finding": "existing key fact represented differently (key g6) AND a second emission of X99d7bc16850a9dde differing only in driver_name",
+   "matching_gold_is_a_recall_miss": {
+    "6": [
+     "agreed_selection_not_credited",
+     "multi_candidate_selection"
+    ]
+   }
+  }
+ }
+}

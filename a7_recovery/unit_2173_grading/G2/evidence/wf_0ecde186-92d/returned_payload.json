@@ -1,0 +1,25 @@
+{
+ "calls": 1,
+ "results": [
+  {
+   "agentType": "lean-probe",
+   "attempt": 1,
+   "batch_id": "G2-000",
+   "candidate_sha256": "a7e1e4b90e4ad4c63ac782148b413ac8047c7106df8cb5a130df931a063fdfbe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "effort": "high",
+   "error": null,
+   "invocation_sha256": "f49feae8618f9cfa2e705ef37d50377810825559ab9534027763149bed65d4cd",
+   "lane_id": "G2-000/G1a",
+   "max_output_tokens": "128000",
+   "model": "sonnet",
+   "ordinal": 0,
+   "prompt_sha256": "4e9d79f55ec28489f056176401bd979bdb344c376be4c0d5486c04c010ffacde",
+   "runtime_model_id": "claude-sonnet-5",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M2a81c745481f2ebc\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M341ed3bdf05f28cf\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M43e87509e5cc819b\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  },\n  {\n    \"question_id\": \"M24065e66c77fea00\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": false\n    }\n  },\n  {\n    \"question_id\": \"M85b17ecaa1bc123d\",\n    \"verdicts\": {\n      \"driver_state\": true,\n      \"lane_routing\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"slice_vs_menu\": true,\n      \"driver_name_meaning\": true,\n      \"record_matches_source\": true\n    }\n  }\n]\n```\n\nNote on E4 (question M24065e66c77fea00): the record populates `change_value: -760` / `change_unit: m_usd` even though this is exactly `level (13540) - comparison (14300)` \u2014 a closed shape (point vs point). Per the NUMBERS rule (\"Leave change_value null when it could merely be derived from a closed shape; derive at read time\"), this should have been left null, as correctly done in the analogous PRASM (E1) and CASM (E2) records where an explicitly-stated, equally-derivable percent change was properly omitted. That is the basis for marking `record_matches_source` false there."
+  }
+ ],
+ "rows": 1
+}

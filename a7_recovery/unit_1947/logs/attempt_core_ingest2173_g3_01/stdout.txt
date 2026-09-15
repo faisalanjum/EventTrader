@@ -1,0 +1,6 @@
+SEGMENT     : 1 state_file wf_689b9531-edb.json
+OFFICIAL_ROWS: 1
+LEDGER      : {"invalid":0,"retry":0,"scheduled":1,"uncalled":0,"valid":1}
+RETRY       : [] UNCALLED []
+NONVALID    : [] why {}
+SEGMENT_CLEAN: True

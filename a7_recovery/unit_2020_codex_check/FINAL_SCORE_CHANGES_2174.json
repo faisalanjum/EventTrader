@@ -1,0 +1,656 @@
+{
+ "total_questions": 426,
+ "unchanged_unaffected": 388,
+ "changed_selected": 24,
+ "absent_judgments": [
+  {
+   "leg": "P2",
+   "kind": "G3",
+   "key": [
+    "0000027904-26-000020",
+    8
+   ]
+  },
+  {
+   "leg": "UNION",
+   "kind": "G3",
+   "key": [
+    "0000006201-26-000032",
+    1
+   ]
+  },
+  {
+   "leg": "UNION",
+   "kind": "G3",
+   "key": [
+    "0001041061-26-000084",
+    5
+   ]
+  }
+ ],
+ "new_flags": [
+  {
+   "aspects": [
+    "driver_state",
+    "record_matches_source"
+   ],
+   "gold_idx": 6,
+   "kind": "meaning_false",
+   "leg": "P1",
+   "outcome": {
+    "codes": [],
+    "decision": "written",
+    "detail": null,
+    "fact_id": "du:0000027904-26-000013:boeing_aircraft_purchase_option:period=gp_2026-01-12_2026-01-12",
+    "index": 5
+   },
+   "produced_idx": 5,
+   "question_id": "M43e87509e5cc819b",
+   "sid": "0000027904-26-000013",
+   "wrong_accept_flag": true
+  }
+ ],
+ "removed_flags": [
+  {
+   "aspects": [
+    "growth_basis",
+    "record_matches_source"
+   ],
+   "gold_idx": 1,
+   "kind": "meaning_false",
+   "leg": "P1",
+   "outcome": {
+    "codes": [],
+    "decision": "written",
+    "detail": null,
+    "fact_id": "du:0000940944-26-000009:continuing_operations_earnings_per_share:period=gp_2025-12-01_2026-02-28|measurement=diluted",
+    "index": 1
+   },
+   "produced_idx": 2,
+   "question_id": "M6d9dd25a44c4125e",
+   "sid": "0000940944-26-000009",
+   "wrong_accept_flag": true
+  }
+ ],
+ "current_negative_meaning": 33,
+ "current_incomplete": 104,
+ "extra_counts": {
+  "key_miss": 99,
+  "unsupported": 3,
+  "duplicate": 11
+ },
+ "changed": [
+  {
+   "leg": "P1",
+   "kind": "G2",
+   "key": [
+    "0000006201-26-000032",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P1",
+   "kind": "G2",
+   "key": [
+    "0000027904-26-000013",
+    6
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": false,
+    "favorability": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P1",
+   "kind": "G2",
+   "key": [
+    "0000027904-26-000020",
+    6
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P1",
+   "kind": "G2",
+   "key": [
+    "0000940944-25-000038",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P1",
+   "kind": "G2",
+   "key": [
+    "0000940944-26-000009",
+    1
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": false,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P1",
+   "kind": "G2",
+   "key": [
+    "0001041061-26-000084",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P1",
+   "kind": "G2",
+   "key": [
+    "0001104659-25-105631",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000006201-26-000031",
+    5
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000006201-26-000032",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000027904-26-000013",
+    6
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000027904-26-000020",
+    6
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000092380-26-000044",
+    4
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000764478-25-000057",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": false
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": false
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000898173-26-000006",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000940944-25-000038",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000940944-26-000005",
+    2
+   ],
+   "before": {
+    "driver_state": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": false
+   },
+   "after": {
+    "driver_name_meaning": false,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": false
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "0000940944-26-000009",
+    2
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G2",
+   "key": [
+    "AAL_2026-04-23T08.30",
+    8
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "P2",
+   "kind": "G3",
+   "key": [
+    "0000027904-26-000020",
+    8
+   ],
+   "before": "key_miss",
+   "after": null
+  },
+  {
+   "leg": "UNION",
+   "kind": "G2",
+   "key": [
+    "0000092380-26-000044",
+    4
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "UNION",
+   "kind": "G2",
+   "key": [
+    "0000940944-25-000038",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "UNION",
+   "kind": "G2",
+   "key": [
+    "0000940944-26-000009",
+    1
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "UNION",
+   "kind": "G2",
+   "key": [
+    "0001041061-26-000084",
+    0
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "lane_routing": true,
+    "slice_vs_menu": true
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  {
+   "leg": "UNION",
+   "kind": "G2",
+   "key": [
+    "AAL_2026-04-23T08.30",
+    8
+   ],
+   "before": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false
+   },
+   "after": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": true
+   }
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "agreed": 6,
+ "caller_sha256": "8ab3058e8e559da68a78b4516938de2f334d2c336cc76f7ed1b9239ffc26aa45",
+ "completion_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_changedprep2171_a/G3/a7_g23_completion.json",
+ "completion_sha256": "2f689d0606d1ddaa246a43c41f476c8aef35aeecef66d4ed882471aac15df98a",
+ "lanes_selected": {
+  "G3-000/G1a": 1,
+  "G3-000/G1b": 1,
+  "G3-001/G1a": 1,
+  "G3-001/G1b": 1,
+  "G3-002/G1a": 1,
+  "G3-002/G1b": 2
+ },
+ "new_model_calls": 0,
+ "questions": 7,
+ "review_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2173_grading/G3/COMPLETION_CANDIDATE_2173.json",
+ "review_sha256": "9af306ba379c6cd1bc02393ed7c7248da1cc1f2cf0221cd6134012c2306e2fcc",
+ "run_identity": {
+  "root_sha256": "329884aef49d9032159ae8a21dc55d908dc55df9da84ba2f6ec652ed03475d4f",
+  "run_digest": "c17e146e986db3029fe8379312c6fae9a525663df2d3cbab69613e17f6fba145",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run",
+  "run_files": 55
+ },
+ "unresolved": 1
+}

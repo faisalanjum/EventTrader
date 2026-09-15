@@ -1,0 +1,78 @@
+{
+ "evidence": {
+  "G2": {
+   "attempts": [],
+   "called_but_not_finalized": [],
+   "candidates": [],
+   "empty_text": [],
+   "errors": [],
+   "finalized_but_no_evidence": [],
+   "lanes_called": 0,
+   "lanes_called_twice": [],
+   "retry_calls_spent": 0,
+   "runs": 0,
+   "runtime_models": []
+  },
+  "G3": {
+   "attempts": [],
+   "called_but_not_finalized": [],
+   "candidates": [],
+   "empty_text": [],
+   "errors": [],
+   "finalized_but_no_evidence": [],
+   "lanes_called": 0,
+   "lanes_called_twice": [],
+   "retry_calls_spent": 0,
+   "runs": 0,
+   "runtime_models": []
+  }
+ },
+ "primary_target": {
+  "G2": 18,
+  "G3": 6
+ },
+ "problems": {},
+ "retry_lanes": {},
+ "roots": {
+  "G2": {
+   "candidate_sha256": [],
+   "final_invalid": 0,
+   "final_valid": 0,
+   "invalid": 0,
+   "lanes": 0,
+   "lanes_done": 0,
+   "remaining": 18,
+   "retry": 0,
+   "root_sha256": [],
+   "scheduled": 0,
+   "segments": 0,
+   "uncalled": 0,
+   "valid": 0
+  },
+  "G3": {
+   "candidate_sha256": [],
+   "final_invalid": 0,
+   "final_valid": 0,
+   "invalid": 0,
+   "lanes": 0,
+   "lanes_done": 0,
+   "remaining": 6,
+   "retry": 0,
+   "root_sha256": [],
+   "scheduled": 0,
+   "segments": 0,
+   "uncalled": 0,
+   "valid": 0
+  }
+ },
+ "total": {
+  "invalid": 0,
+  "lanes": 0,
+  "remaining": 24,
+  "retry": 0,
+  "scheduled": 0,
+  "segments": 0,
+  "uncalled": 0,
+  "valid": 0
+ }
+}

@@ -1,0 +1,8 @@
+SEGMENT     : 3
+LANES       : 1 predicted_bytes 292877
+ROOT_SHA    : 329884aef49d9032159ae8a21dc55d908dc55df9da84ba2f6ec652ed03475d4f
+RECEIPT_SHA : 7bcf3720554726f63f3437a6ef60e731fba3146bbd7104d7b9be61e725c97afc
+SCRIPT_PATH : /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2173/G3/run/grade_batch.seg03.js
+SCRIPT_BYTES: 292877
+ARGS_FILE   : /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2173_grading/G3/g1_args_seg03.json rows 1
+PREPARE_OK

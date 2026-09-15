@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 245, 2026-09-15 Eastern. Maintainer: Codex.
+Revision 253, 2026-09-15 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,151 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT ADDENDUM,Revision245: Core2168 answers Codex2172 and independently
+CURRENT ADDENDUM,Revision253: final calculation and bounded cause review are
+finished with explicitly retained semantic limits, NOT A7 PASS. The figures
+below are unchanged. Core2171/37cea401 exactly acknowledges Codex2175/1f7ba60f;
+both current mailboxes equal their archives, the same sessions/HEADs match,
+and the existing watcher delivered the reply. Core concedes the four precise
+corrections and is WAITING. No further Core or AI task is assigned.
+
+The END-only offline model check is finished: MODEL_REUSE_OFFLINE_REVIEW_2176
+records15 passing tests, including actual shared reader/no-write route/scorer
+integration on an unfamiliar synthetic event. Full affected regression318
+tests plus29subtests passes in3.34s,rawexit0. No production/client/engine edit,
+live local call, new parser/scorer or provider framework. The shared grader
+is reusable; a model-name-only local launch is NOT proved. The current local
+client lacks pre-call size proof and sufficient returned identity/completion
+capture. Its separate host-side transport/receipt task remains UNVERIFIED;
+do not fake subscription evidence or claim local readiness. Those limitations
+are documented, not silently waived or added as another current A7 build.
+
+Root is freezing/publishing only the verified result, raw collection evidence,
+reporting fix, tests and review notes on recovery/a3-a7-verified. Exact payload
+and publication review: FINAL_CHECKPOINT_FILES_2176.json and
+FINAL_CHECKPOINT_REVIEW_2176.md. Preserve unrelated build_inventory_review.py
+and untracked work; main remains untouched. After publication, report the
+FAIL result and limits and STOP/WAIT as the owner asked. A8 and later steps
+remain prohibited; the wider stored goal is NOT complete.
+
+PREVIOUS ADDENDUM,Revision252: ACTUAL FINAL CALCULATION IS DONE,rawexit0;
+exec46465 is closed, do not wait on or repeat it. Report966d14bc in
+codex_final_score2174_a uses99 routes,4 distinct completion loads,0AI.
+Recall123/165,116/165,71/165; rawwrongacceptflags9/9/8; incomplete meaning
+judgments48/38/18=104. All native safety resultsFAIL; no A7 PASS.
+FINAL_SCORE_TRACE_2174.json4713b9b1 reproduces310 pairs/16 measures perleg;
+FINAL_SCORE_CHANGES_2174.json0925a761 proves all426 required questions are
+accounted for,388 unaffected unchanged,24 selected outcomes changed and14
+unchanged. Three absent G3 judgments stay in the denominator. Do not confuse
+unresolved questions with empty verdicts: agreed aspects remain usable.
+
+Core2170/3d8f70aa has replied to Codex2174 and isWAITING. Its three files
+under unit_2174_review are read/hashedc55e9299/984f5eeb/29ee6949. Root's
+FINAL_SCORE_FINDINGS_2174.md records accepted findings and qualifications:
+full-field source comparisons confirm no new missing key fact in those7;
+Core's number/type predicate is not semantic proof, its four group failures
+are GOLD-side one-to-many, and the YUM quote does retain nearly60%.
+BBY Health-population and DRI pre-tax-qualifier omissions are now concrete
+causes.23 of26 flagged records have documented defects; three flags remain
+unconfirmed, including the new Boeing-option stage/measurement question.
+No new prompts, calls, key edits, score overrides or later steps are justified
+by these findings. Next: reply to Core with the precise ruling, END-only
+offline supported-model setup check, verified publication, then STOP for owner.
+Only watcher observer85562 remains live; native persistence jobs also finished.
+
+PREVIOUS ADDENDUM,Revision251: Core2169/c7fb4c62 completed the collection.
+Root independently verified26 attempts,24 distinct lanes and26 child
+transcripts, all final readings valid; both retries followed invalid format
+only. Native re-derivation/persistence/load finished rawexit0 for both roots:
+G2 completion031b83b1,25 agreed/6 unresolved of31; G3 completion2f689d06,
+6 agreed/1 unresolved of7. Seven disagreements are NOT missing calls and
+must not be rerolled. Full hashes and per-attempt evidence are in
+unit_2020_codex_check/COLLECTION_EVIDENCE_CHECK_2174.json and the two
+codex_g2persist2174_a/codex_g3persist2174_a/PERSISTED_COMPLETION.json files.
+
+Root fixed only the progress counter after Core entered WAIT. Original
+helperfc995493 and reportbd30b30b remain exact in snapshots_2174. Current
+helper38cbe4c2/report0e77ebf2 count24 launched/scheduled/usable lanes and no
+open retries or problems. Test-first7 failures/2 controls became13 passes,
+including4 actual counter/retry reversion mutants; full affected regression
+303 tests plus29subtests passed in3.17s,rawexit0. Earlier PROGRESS_2173.json
+is historical diagnostic evidence, not the current progress owner.
+
+ACTUAL FINAL SCORE IS RUNNING: codex_final_score2174_a,exec46465, command
+FINAL_SCORE_COMMAND_2174.sh/24b4d80c. Revision2174/e51b0702 is LATER; the
+old82/116 revision remains FIRST. It uses map3f25cc28 with BOTH pairs of
+roots. Do not repeat this native job. Its exact run evidence lives under
+unit_1947/logs/attempt_codex_final_score2174_a. No AI calls by Root.
+
+Codex2174/54ffb7d2 now asks Core for ONE read-only final cause check: the
+three new source dispositions in SOURCE_CAUSE_ADDENDUM_2174 plus only the
+seven changed G3 questions, comparing complete facts rather than quotes or
+number sets. Reuse prior source reviews; no repeat full audit, call, code,
+key, grade or native-job action. Core writes only unit_2174_review, replies
+once then waits. Root owns scoring/counter/checkpoint/work-order work.
+Next: checked final numbers and cause limitations, END-only offline supported
+model setup, verified publication, then STOP for owner; no later steps.
+
+PREVIOUS ADDENDUM,Revision250: Root prepared map_final_grading_2174.tsv in
+unit_2020_codex_check, SHA3f25cc28f75302ffef7d75347d413d392bf44a653012ae724d28a3c7b5df4f14.
+It retains EVERY map2161 row and adds only the two new2173 run bindings. The
+final consumer needs both old and new correction roots; Core's collection map
+needs only the new pair and must not replace the old pair in the final chain.
+No new scorer or grading rule. At07:06:22UTC Root independently checked all
+25 preserved attempts then available:24 distinct lanes,19 workflow returns,
+25 child transcripts, exact state/payload/raw/invocation/script bindings,
+actual assistant model claude-sonnet-5 and zero worker tools. The G2 invalid
+retry was still pending; this is a timestamped partial check, not completion.
+The existing observer85562 and watcher1035973 remain in use. Core2173 is the
+sole active Core task; no new handover or message. Next: verify its completed
+report, the small reporting fix below, native persistence and final scoring.
+
+PREVIOUS ADDENDUM,Revision249: Root reproduced a REPORTING-ONLY defect in
+unit_2173_grading/collection_progress_2173.py, hashfc995493: scheduled/launched
+counts use segment counts instead of unique lane identities, and old retry
+eligibility/problems survive successful or exhausted retries. The native
+grader/finalizer is NOT changed or implicated. Focused test file
+unit_2020_codex_check/test_collection_progress_2173.py, hash09e5aecf, reproduces
+7 failures with2 real positive controls, pytest exit1. Fix only this small
+report owner once Core's collection is finished and Core is waiting; do not
+edit its live helper concurrently or interrupt valid AI work for this. Then
+run these tests, actual completed-population checks and affected regression.
+The pending fix is not permission for another grading prompt or AI round.
+
+PREVIOUS ADDENDUM,Revision248: Core2173's bounded collection is running; no new
+task or call allowance. Root's SOURCE_CAUSE_ADDENDUM_2174.md closes the apparent
+post-selection miss as the existing one-lane matching conflict, reproduced
+through the real owner with a positive control. Of three remaining source
+questions outside the38, BBY matches every produced gold field and its source;
+YUM has an actual name/population error distinct from lawful numeric caution;
+AAL's weaker bound remains a named representation ambiguity, not a manual
+grade. These findings preserve all raw verdicts and scores. The metric-state
+lead is CUT as a new correction task: the served instructions already
+distinguish source prior comparisons from bare reported levels; wrong model
+judgments alone do not establish a task contradiction or permit semantic
+rerolls. Preserve that grading limitation, not a claim of verified precision.
+Current scope remains38-question collection/consumer, final cause limitations,
+END-only offline supported-model setup, then STOP. No A8 or later step.
+
+PREVIOUS ADDENDUM,Revision246: checkpoint37dd71d2901f448dc8fe373f4fd8f35157cee4f6
+is COMMITTED AND PUSHED to recovery/a3-a7-verified; remote hash independently
+matches. Tree7f0bcde256ce86471771c59f23391ccb11d49179; parent9b5fdb7f;
+1965 changed paths. All1963 manifest payload hashes match. Main2dc0ad39 and
+the unrelated dirty build_inventory_review.py are untouched. Only the two
+historical failed-test stdout files have whitespace diagnostics; all code and
+other-file diff checks pass. No raw log was changed for a style check.
+
+Codex2173 now authorizes ONE bounded correction collection:24 primary calls,
+18G2+6G3 over the verified38 questions, at most24 existing invalid-only retries.
+Core writes only new unit_2173_grading and the necessary new runtime execution
+copies backed by it. Exact candidate/selection/profile hashes and all freeze,
+preflight, preservation, no-repeat and partial-report rules are in that mail.
+Use the existing lifecycle/collector/native completion owners; no new framework.
+Core returns one combined report and native completion CANDIDATES then waits.
+Root independently verifies/persists those and applies this as a LATER revision,
+keeping the old82/116 first. Then final measurements/cause limits, END-only
+offline supported/local-model setup check, and STOP. No A8 or later step.
+
+PREVIOUS ADDENDUM,Revision245: Core2168 answers Codex2172 and independently
 verifies the actual38-question preparation with no defect found. Its three
 files under unit_2172_review are read and hashed4c14df01/ed56c65c/8b13c298.
 Root's independent checks agree, including all source bindings and24 primary
@@ -4143,9 +4287,9 @@ No staging or publication of incomplete or inconclusive preparation.
 | Real key signature and lock | VERIFIED: SIGNATURE_LOCK_REVIEW_2084.md | Actual original signature, complete histories, immutable dc919227 lock,33 mutations and cold re-derivation passed |
 | Saved-answer/evaluation freeze | Existing A5/A6/G1/G2/G3 owners | Original382 bindings unchanged; full required grading population/call ceiling derived and pinned |
 | Preparation publication | Core after Codex verifies exact snapshot | Affected checks passed; approved manifest/staged tree only; normal commit/push; remote identity verified |
-| Actual A7 grading and score | Qualified graders; Core operates, Codex verifies | Complete outcomes, raw evidence, correct formulas and independent final report |
-| Post-baseline cause correction and checked result | Codex owns §6; one bounded Core task at a time | Complete finding inventory, source-supported decisions, proved minimal corrections, preserved baseline and separately verified corrected result |
-| Same-infrastructure model selection | Codex owns §6 at the END, after A7 test/grading corrections | Check supported configuration/adapter contracts and offline integration using the two owner-named local documents; no inference-engine edit or live local trial. Disclose that host-side execution is a separate task |
+| Actual A7 grading and score | CALCULATED; FAIL, not A7 PASS | Final966d14bc,99 native routes,4 completion loads; all426 required grading questions accounted for,104 incomplete meaning judgments retained |
+| Post-baseline cause correction and checked result | BOUNDED REVIEW FINISHED with named semantic limits | FINAL_SCORE_FINDINGS_2174.md;23/26 wrong-accept flags have source/rule defects,3 remain unconfirmed; grader errors/ambiguities are not silently replaced with new labels |
+| Same-infrastructure model selection | OFFLINE CHECK FINISHED; local launch remains unverified | MODEL_REUSE_OFFLINE_REVIEW_2176.md;15 offline tests, same reader/route/scorer. Separate host capacity, actual identity/completion capture and local receipt connection remain open; no client/engine edit or live trial |
 
 A/B may progress together only as these non-overlapping source-review and
 mechanical connection tasks. No AI launch uses unfinished source-review data
@@ -4273,16 +4417,16 @@ rerolls or hidden replacement of the original score.
 | Requirement | Status / verification |
 |---|---|
 | Scope and minimum solution | VERIFIED against original Codex2024 three-stage work order, current Step1 A4–A7, reuse amendment and Steps' production exclusion; no extra prerequisite |
-| Existing result reuse | VERIFIED:31 current decisions plus two carried news; old66 valid blind readings through actual native composite owner; recovered AAL result kept |
-| Source truth / coverage | OPEN current source questions650bb5ae. The older signed-key coverage proof remains preserved; no claim that the corrected key is signed or closed |
-| Generality / legitimate constants | VERIFIED: new generic reviewer-task clarification and exact real31-source rendering; no product rules, semantic code or examples added |
-| Complete workflow / later-step fit | Older signed-key/real grader proof preserved. New round-input owner VERIFIED by05f7372b/a8d5a305/b5173026; current source packet, new signature/key handoff and corrected grading remain OPEN |
-| Separate duplication / organization | VERIFIED: reused prefix/body/lifecycle/counting/lock; one true-origin merge for this phase; no second grader |
-| Final simplicity pass | VERIFIED for inspected delta: four required tracked-line connections and narrow existing-owner binding; no unrelated production work |
-| Tests / regression / mutations | Current three-round proof:32 TEST lifecycle/lock,26 real cold-packet,8 native collision refusals/16 controls,25 actual cold-consumer,6 real controls/5 saved-chain refusals and22 unchanged full-regression tests on the NEW owner pass. Earlier proof and disclosed D3 implementation-name assertion failure remain preserved |
-| Key lock / evaluation freeze / publication | VERIFIED AND PUSHED; preparation b86c9052 and later evidence checkpoints in §2. Final collection/result publication remains open |
-| Actual grading | IN PROGRESS; §2 pins the checked prefix and remaining full-population work. No final score or A7 PASS claimed |
-| Post-baseline root causes and corrected result | OPEN; owner-requested bounded follow-up in §6. No baseline finding has been silently waived or relabeled |
+| Existing result reuse | VERIFIED: original382 answers unchanged, all valid bound judgments reused; final26 attempts include only two invalid-output retries, no successful-call repeats |
+| Source truth / coverage | Current signed key4474bd7a verified in §2;165 required facts/33 events. Final source-review limits in FINAL_SCORE_FINDINGS_2174.md; no new missing-key fact established by the latest review |
+| Generality / legitimate constants | VERIFIED: structured lane/attempt accounting, generic shared parser/reader/scorer. Frozen run/model/hash constants remain legitimate provenance; no semantic hardcoding or new provider framework |
+| Complete workflow / later-step fit | Actual final score966d14bc completes99 routes and4 native completion loads. Offline unfamiliar-event test reaches real reader/no-write route/scorer. Local launch/receipt limitations explicit; production may not import the experiment harness |
+| Separate duplication / organization | VERIFIED: existing input, parser, completion, revision, route and scoring owners reused. One current progress owner; historical scripts/outputs retained as evidence |
+| Final simplicity pass | VERIFIED: only the proved reporting-counter fix plus offline tests/docs in this final delta. No client/engine, semantic rule, scorer, hidden retry, extra AI round or unrelated production work |
+| Tests / regression / mutations | Final318 passed plus29subtests in3.34s. Reporting TDD7 failures/2 controls then9 tests plus4 executed reversion mutants. Final collection all26 raw attempts independently bound; offline15 tests disclose client limits instead of claiming live readiness |
+| Key lock / evaluation freeze / publication | Earlier checkpoints through37dd71d2 committed/pushed. Final result/evidence payload is being frozen under FINAL_CHECKPOINT_FILES_2176.json; only exact reviewed paths may publish |
+| Actual grading | CALCULATED, FAIL: recall123/165,116/165,71/165;104 incomplete judgments. Not a single overall accuracy score or A7 PASS |
+| Post-baseline root causes and corrected result | BOUNDED REVIEW FINISHED with source/model/grader/ambiguity distinctions;23 of26 raw wrong-accept flags substantiated,3 unconfirmed. No manual grading override or unchanged successful-judgment reroll |
 
 ## 5. Evidence and resume rules
 
@@ -4381,11 +4525,11 @@ task. No overlapping edits or blanket re-audit of unchanged proved machinery.
 | Order / task | Status | Required evidence and boundary |
 |---|---|---|
 | 1. Freeze the honest baseline | VERIFIED and published86e742ee | All required readings and lawful attempts accounted for; G2/G3 completions reused by the actual no-write route/scorer; baseline98a7a6ad and full accounting preserved. This is a FAIL measurement, not A7 PASS. |
-| 2. Establish each actual cause | IN PROGRESS: complete raw scoring trace verified; semantic dispositions open | Derive the complete finding population from final scorer/completion records, including but not limited to provisional33+91. Bind each finding to exact event/item/fact/field, original prompt/output, source, key and grader replies. Distinguish producer meaning errors, source/key errors, grading errors, deterministic code/transport faults and legitimate ambiguity. Check apparently cautious answers against the rule actually served; do not turn uncertainty into a wrong answer or force unsupported truth. Record an evidence-backed disposition for every finding. |
-| 3. Correct only proved TEST causes | OPEN after cause proof | Reproduce grading/code defects first; fix the single existing owner generally, with affected-population tests, positive/negative controls, meaningful mutations and affected regression. Key corrections require a fresh source-only independent qualified owner that has not seen evaluated replies or scores. Models decide meaning; no answer-specific strings, semantic code or production patch. Correct a grading prompt only for a demonstrated mismatch with its governing task. Record genuine tested-model errors without trying to improve that model's score. An unclear rule gets the Plan's rule_ambiguity exhibit and required decision, not an invented resolution. |
-| 4. Verify the corrected TEST without cheating | OPEN after named correction | Regrade the unchanged382 saved answers for proved code/key corrections, reusing valid judgments only where full bindings still hold. If a corrected AI-facing GRADING task/input/configuration needs new evidence, pre-freeze the reason, full affected population and call ceiling; use targeted fresh blind grading tests with no expected verdict or previous attempt supplied. Known repaired cases are regression evidence, not unseen qualification. No producer-prompt tuning, unchanged semantic rerolls, successful-call repeats, dropped hard cases, lowered bars or altered raw answers. |
-| 5. Check model-selection setup AT THE END | DEFERRED until A7 test/grading corrections are complete | Read the owner's /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md and /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/LOCAL_QWEN_HANDOFF.md. Check the existing test/grader's configuration and connection contract for another supported model, including local; preserve sources/key where bindings permit and the same grading/accounting/report owners. Confine justified model-specific details to one documented selection and make only demonstrated A7-side connection fixes, with focused offline positive/invalid tests. Do NOT change the inference engine/client/server or try the local model, run its preflight, alter its settings or launch a live probe. Host-side execution is a separate task. No second grader, speculative provider framework, production import,382-answer rerun or change to the frozen current run. |
-| 6. Deliver the checked correction/setup result and stop | OPEN | Keep baseline and each corrected version separately with exact hashes and all attempts. Reconcile every finding and all unchanged A7 gates; publish verified code/evidence normally on the same recovery branch. Report model-selection usage, actual offline setup evidence and unsupported limits; explicitly state local live execution was not tested and belongs to the host-side task. A genuine model error is a completed test finding and stays in the score; a remaining unverified test/evidence defect is an open limitation. Preserve required FAIL/INCONCLUSIVE outcomes; do not manufacture PASS. Once this A7 test/correction/setup package is verified, STOP AND WAIT for owner instructions; no A8 or later-step task. |
+| 2. Establish each actual cause | BOUNDED REVIEW FINISHED; source-confirmed causes and named semantic limits in FINAL_SCORE_FINDINGS_2174.md | Derive the complete finding population from final scorer/completion records, including but not limited to provisional33+91. Bind each finding to exact event/item/fact/field, original prompt/output, source, key and grader replies. Distinguish producer meaning errors, source/key errors, grading errors, deterministic code/transport faults and legitimate ambiguity. Check apparently cautious answers against the rule actually served; do not turn uncertainty into a wrong answer or force unsupported truth. Record an evidence-backed disposition for every finding. |
+| 3. Correct only proved TEST causes | PROVED TEST CORRECTIONS VERIFIED; valid model mistakes/ambiguous judgments retained, no semantic override | Reproduce grading/code defects first; fix the single existing owner generally, with affected-population tests, positive/negative controls, meaningful mutations and affected regression. Key corrections require a fresh source-only independent qualified owner that has not seen evaluated replies or scores. Models decide meaning; no answer-specific strings, semantic code or production patch. Correct a grading prompt only for a demonstrated mismatch with its governing task. Record genuine tested-model errors without trying to improve that model's score. An unclear rule gets the Plan's rule_ambiguity exhibit and required decision, not an invented resolution. |
+| 4. Verify the corrected TEST without cheating | CALCULATED AND CHECKED; final966d14bc,426 required questions reconciled, all388 unaffected unchanged; FAIL | Regrade the unchanged382 saved answers for proved code/key corrections, reusing valid judgments only where full bindings still hold. If a corrected AI-facing GRADING task/input/configuration needs new evidence, pre-freeze the reason, full affected population and call ceiling; use targeted fresh blind grading tests with no expected verdict or previous attempt supplied. Known repaired cases are regression evidence, not unseen qualification. No producer-prompt tuning, unchanged semantic rerolls, successful-call repeats, dropped hard cases, lowered bars or altered raw answers. |
+| 5. Check model-selection setup AT THE END | OFFLINE CHECK FINISHED;15 tests pass, local launch/receipt and host capacity/identity remain UNVERIFIED | Read the owner's /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md and /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/LOCAL_QWEN_HANDOFF.md. Check the existing test/grader's configuration and connection contract for another supported model, including local; preserve sources/key where bindings permit and the same grading/accounting/report owners. Confine justified model-specific details to one documented selection and make only demonstrated A7-side connection fixes, with focused offline positive/invalid tests. Do NOT change the inference engine/client/server or try the local model, run its preflight, alter its settings or launch a live probe. Host-side execution is a separate task. No second grader, speculative provider framework, production import,382-answer rerun or change to the frozen current run. |
+| 6. Deliver the checked correction/setup result and stop | PUBLICATION CHECKPOINT IN PREPARATION; after normal push, report FAIL/limits and STOP/WAIT | Keep baseline and each corrected version separately with exact hashes and all attempts. Reconcile every finding and all unchanged A7 gates; publish verified code/evidence normally on the same recovery branch. Report model-selection usage, actual offline setup evidence and unsupported limits; explicitly state local live execution was not tested and belongs to the host-side task. A genuine model error is a completed test finding and stays in the score; a remaining unverified test/evidence defect is an open limitation. Preserve required FAIL/INCONCLUSIVE outcomes; do not manufacture PASS. Once this A7 test/correction/setup package is verified, STOP AND WAIT for owner instructions; no A8 or later-step task. |
 
 This is the existing Plan §2 amendment3–6 correction/reuse path, not new product
 law, a second scorer or permission to spend without a frozen missing proof.

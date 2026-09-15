@@ -1,0 +1,20 @@
+{
+ "lanes": {
+  "G3-001/G1b": {
+   "chars": 138,
+   "sha256": "659431aaf7ad28b8a1d6e941a3ba4b94ba39f3655c80a64f2ada94c2fb753ed8",
+   "text": "```json\n[\n  {\"question_id\": \"Xe10aa94910fc4e7a\", \"bucket\": \"key_miss\"},\n  {\"question_id\": \"X6eea70137b9a2e63\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  "G3-002/G1a": {
+   "chars": 76,
+   "sha256": "90751c5016376ac7ab5cc0bfd76c1174df0ca4ed896aab99f3c8cd49b774c5b6",
+   "text": "```json\n[\n  {\"question_id\": \"X73357410ba2d97a2\", \"bucket\": \"key_miss\"}\n]\n```"
+  },
+  "G3-002/G1b": {
+   "chars": 58,
+   "sha256": "f0f9abf3e1baec082c311a6b14ae7654e369ba232bb3943e50c1ef5ee873e9c4",
+   "text": "{\"question_id\": \"X73357410ba2d97a2\", \"bucket\": \"key_miss\"}"
+  }
+ },
+ "segment": 4
+}

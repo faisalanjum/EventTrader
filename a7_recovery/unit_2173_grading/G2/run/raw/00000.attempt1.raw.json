@@ -1,0 +1,66 @@
+```json
+[
+  {
+    "question_id": "M2a81c745481f2ebc",
+    "verdicts": {
+      "driver_state": true,
+      "lane_routing": true,
+      "favorability": true,
+      "growth_basis": true,
+      "slice_vs_menu": true,
+      "driver_name_meaning": true,
+      "record_matches_source": true
+    }
+  },
+  {
+    "question_id": "M341ed3bdf05f28cf",
+    "verdicts": {
+      "driver_state": true,
+      "lane_routing": true,
+      "favorability": true,
+      "growth_basis": true,
+      "slice_vs_menu": true,
+      "driver_name_meaning": true,
+      "record_matches_source": true
+    }
+  },
+  {
+    "question_id": "M43e87509e5cc819b",
+    "verdicts": {
+      "driver_state": true,
+      "lane_routing": true,
+      "favorability": true,
+      "growth_basis": true,
+      "slice_vs_menu": true,
+      "driver_name_meaning": true,
+      "record_matches_source": true
+    }
+  },
+  {
+    "question_id": "M24065e66c77fea00",
+    "verdicts": {
+      "driver_state": true,
+      "lane_routing": true,
+      "favorability": true,
+      "growth_basis": true,
+      "slice_vs_menu": true,
+      "driver_name_meaning": true,
+      "record_matches_source": false
+    }
+  },
+  {
+    "question_id": "M85b17ecaa1bc123d",
+    "verdicts": {
+      "driver_state": true,
+      "lane_routing": true,
+      "favorability": true,
+      "growth_basis": true,
+      "slice_vs_menu": true,
+      "driver_name_meaning": true,
+      "record_matches_source": true
+    }
+  }
+]
+```
+
+Note on E4 (question M24065e66c77fea00): the record populates `change_value: -760` / `change_unit: m_usd` even though this is exactly `level (13540) - comparison (14300)` — a closed shape (point vs point). Per the NUMBERS rule ("Leave change_value null when it could merely be derived from a closed shape; derive at read time"), this should have been left null, as correctly done in the analogous PRASM (E1) and CASM (E2) records where an explicitly-stated, equally-derivable percent change was properly omitted. That is the basis for marking `record_matches_source` false there.

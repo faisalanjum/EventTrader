@@ -1,0 +1,1 @@
+FROZEN: {"primary_lanes_total": 24, "per_kind": {"G2": {"rows": 18, "first_segment_lanes": 1, "script_bytes": 439518}, "G3": {"rows": 6, "first_segment_lanes": 1, "script_bytes": 393133}}}

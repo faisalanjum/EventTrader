@@ -1,0 +1,249 @@
+{
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_changedprep2171_a/G2",
+ "candidate_sha256": "a7e1e4b90e4ad4c63ac782148b413ac8047c7106df8cb5a130df931a063fdfbe",
+ "lane": {
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "max_attempts": 2,
+ "max_output_tokens": "128000",
+ "owners": {
+  "a7_g1_build": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439",
+  "a7_g1_complete_v2": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+  "a7_g23_build": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "audit_worker_access": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "prompt_tree_sha256": "d756c19a9d0035fd1e61dbd7d52d3ea17990c8eb5df32605e4c09d76be315f05",
+ "rows": [
+  {
+   "batch_id": "G2-000",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-000/G1a",
+   "ordinal": 0,
+   "prompt_sha256": "4e9d79f55ec28489f056176401bd979bdb344c376be4c0d5486c04c010ffacde"
+  },
+  {
+   "batch_id": "G2-000",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-000/G1b",
+   "ordinal": 1,
+   "prompt_sha256": "4e9d79f55ec28489f056176401bd979bdb344c376be4c0d5486c04c010ffacde"
+  },
+  {
+   "batch_id": "G2-001",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-001/G1a",
+   "ordinal": 2,
+   "prompt_sha256": "4edd496b99f9c1e644d747bb1523d12859dbbd7370439198e11a104b65f2774a"
+  },
+  {
+   "batch_id": "G2-001",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-001/G1b",
+   "ordinal": 3,
+   "prompt_sha256": "4edd496b99f9c1e644d747bb1523d12859dbbd7370439198e11a104b65f2774a"
+  },
+  {
+   "batch_id": "G2-002",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-002/G1a",
+   "ordinal": 4,
+   "prompt_sha256": "00e52e35585a5cb2e019f49c69d6b06af1dd4ae4e8c457c0388d310b55256a8e"
+  },
+  {
+   "batch_id": "G2-002",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-002/G1b",
+   "ordinal": 5,
+   "prompt_sha256": "00e52e35585a5cb2e019f49c69d6b06af1dd4ae4e8c457c0388d310b55256a8e"
+  },
+  {
+   "batch_id": "G2-003",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-003/G1a",
+   "ordinal": 6,
+   "prompt_sha256": "aa129c8a7ef23bd55f4745a5b0caf61675873dc9ef16403c15ae142ec52746f2"
+  },
+  {
+   "batch_id": "G2-003",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-003/G1b",
+   "ordinal": 7,
+   "prompt_sha256": "aa129c8a7ef23bd55f4745a5b0caf61675873dc9ef16403c15ae142ec52746f2"
+  },
+  {
+   "batch_id": "G2-004",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-004/G1a",
+   "ordinal": 8,
+   "prompt_sha256": "91e8645b6dc0806b48dfc58cd75302720708e6a8bb73910ad351ee3f6e37b4fa"
+  },
+  {
+   "batch_id": "G2-004",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-004/G1b",
+   "ordinal": 9,
+   "prompt_sha256": "91e8645b6dc0806b48dfc58cd75302720708e6a8bb73910ad351ee3f6e37b4fa"
+  },
+  {
+   "batch_id": "G2-005",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-005/G1a",
+   "ordinal": 10,
+   "prompt_sha256": "920577a866c95aebb244b835e9ac13e5299485da9d926297cb9d7ad20b5a3d63"
+  },
+  {
+   "batch_id": "G2-005",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-005/G1b",
+   "ordinal": 11,
+   "prompt_sha256": "920577a866c95aebb244b835e9ac13e5299485da9d926297cb9d7ad20b5a3d63"
+  },
+  {
+   "batch_id": "G2-006",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-006/G1a",
+   "ordinal": 12,
+   "prompt_sha256": "e39fe6064f6fe2dae88a0ccde1a01e49b76b284d11aee6402043259ac5801ad2"
+  },
+  {
+   "batch_id": "G2-006",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-006/G1b",
+   "ordinal": 13,
+   "prompt_sha256": "e39fe6064f6fe2dae88a0ccde1a01e49b76b284d11aee6402043259ac5801ad2"
+  },
+  {
+   "batch_id": "G2-007",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-007/G1a",
+   "ordinal": 14,
+   "prompt_sha256": "79e45efc73c90d21124ab19c1c4c65bf83de4d2a2781aaa6320a6ccd7c44ea74"
+  },
+  {
+   "batch_id": "G2-007",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-007/G1b",
+   "ordinal": 15,
+   "prompt_sha256": "79e45efc73c90d21124ab19c1c4c65bf83de4d2a2781aaa6320a6ccd7c44ea74"
+  },
+  {
+   "batch_id": "G2-008",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-008/G1a",
+   "ordinal": 16,
+   "prompt_sha256": "e418fcce42d693978036a6a582eb9b00ea6c8de1f4473e6a64b0c8d508e6ad5c"
+  },
+  {
+   "batch_id": "G2-008",
+   "expected_input": {
+    "payload_field": "attachment",
+    "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1",
+    "record_index": 1,
+    "record_type": "attachment"
+   },
+   "lane_id": "G2-008/G1b",
+   "ordinal": 17,
+   "prompt_sha256": "e418fcce42d693978036a6a582eb9b00ea6c8de1f4473e6a64b0c8d508e6ad5c"
+  }
+ ],
+ "rules_block_sha256": "9d92c776488bbc1526423f8630506529a24f7882fa869b65a9bda63754ef88ba",
+ "run_id": "run",
+ "schema": "a7_g1_event_candidate/3"
+}
