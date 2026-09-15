@@ -735,8 +735,12 @@ Archived directly in the dated archive (`archive/2026-07-15_pre-consolidation/Ba
   It changes no build, release or experiment passing gate. Prior byte-pinned
   versions remain immutable historical evidence; current document hashes live
   in `experiments/WORKORDER_STATUS.md`.
-- `FableExperimentPlan.md` defines WHAT to test (the original `51966848…7472`
-  snapshot and later frozen versions remain byte-identical in history).
+- [Plan Part I](FableExperimentPlan.md#experiment-plan-active) defines WHAT to test.
+  [Part II](FableExperimentPlan.md#experiment-plan-pending-v2) preserves the
+  unapproved V2 successor (O-b PENDING), not a replacement for Part I's later
+  amendments. Both original bodies retain their hashes; new file bindings
+  hash the combined Plan. The original `51966848…7472` snapshot and later
+  frozen versions remain byte-identical in history.
   `FableExperimentWorkOrder.md` defines HOW (sha recorded, never pinned — the CURRENT sha lives on
   `experiments/WORKORDER_STATUS.md`, re-recorded at every edit incl. the Phase-5 21c re-point; the board was
   UPDATED at Phase-5 step 21c (2026-07-16) with the full hash chain — its current_workorder_sha256 line is

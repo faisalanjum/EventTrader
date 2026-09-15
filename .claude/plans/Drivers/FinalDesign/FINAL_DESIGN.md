@@ -13,7 +13,11 @@
 > lives in `ChannelContract.md` Part III (V1 active; owner-frozen v1.0 + the two 2026-07-15 amendments Q4 and Q1-ext),
 > relocated byte-for-byte with owner approval on 2026-09-15. Its contract stays distinct from public input;
 > Step 6 separately freezes internal V2. Also at the root until the experiment program migrates: the
-> hash-pinned `FableExperimentPlan.md` + `FableExperimentWorkOrder.md`. The two RATIFIED designs
+> `FableExperimentPlan.md` (Part I active amended V1; Part II PENDING O-b)
+> + the separate `FableExperimentWorkOrder.md`. The Plan now preserves both
+> original bodies; its cover distinguishes their hashes from the combined-file
+> hash. The source-33 manifest proof above describes the historical July freeze.
+> The two RATIFIED designs
 > (`FableAdmissionKernelDesign.md`, `XBRLIntegrationDesign.md`) are fully integrated into these files
 > (BUILD §8.1/§8.2); their originals were ARCHIVED 2026-07-15, byte-verified, after the integration-gate reader test. Status
 > tags in this file (FINAL / BUILD-PENDING / CONDITIONAL / OPEN / CANDIDATE) are generated summaries — the

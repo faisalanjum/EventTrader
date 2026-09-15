@@ -535,7 +535,7 @@ Procedure:
    * ChannelContract.md — all public and internal parts
    * BUILD_AND_OPERATIONS.md
    * STATUS_AND_HISTORY.md
-   * FableExperimentPlan.md
+   * FableExperimentPlan.md — Part I active; Part II PENDING O-b, not approved by this review
    * FableExperimentWorkOrder.md
 
 2. Put the future unique result-record path into the tested documents where required.

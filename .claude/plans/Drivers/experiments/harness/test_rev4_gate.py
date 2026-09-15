@@ -136,7 +136,7 @@ def _check_dispositions(pkg_path):
     hunk; artifact -> the named file exists; implementation/package -> counted."""
     import re
     pkg = io.open(pkg_path, encoding="utf-8").read()
-    rows = re.findall(r"^\| (F\d+) \| ([^|]+) \|.*\[disposition=([A-Za-z0-9:._-]+)\]", pkg, re.M)
+    rows = re.findall(r"^\| (F\d+) \| ([^|]+) \|.*\[disposition=([A-Za-z0-9:/._-]+)\]", pkg, re.M)
     ids = [r[0] for r in rows]
     assert sorted(ids) == sorted({f"F{i}" for i in range(1, 15)}), f"need exactly one each of F1-F14, got {sorted(ids)}"
     # `blocked` is a FIFTH disposition, added because a row can be genuinely
@@ -262,9 +262,91 @@ def test_duplicate_key_in_skeleton_is_rejected():
         pass
 
 
+
+PLAN = os.path.abspath(os.path.join(_HERE, "..", "..", "FinalDesign",
+                                    "FableExperimentPlan.md"))
+PLAN_ORIGINALS = {
+    "V1": (336, "05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b"),
+    "V2": (277, "6d66d3b8197d521d9ebf3f0e88fac18786f68fda82af62a142d3cb7f91807716"),
+}
+
+
+def _original_plan(version, raw=None):
+    """Read one preserved original, never the cover or the other version."""
+    if raw is None:
+        with open(PLAN, "rb") as stream:
+            raw = stream.read()
+    start = ("<!-- BEGIN PLAN %s -->\n" % version).encode("ascii")
+    end = ("<!-- END PLAN %s -->\n" % version).encode("ascii")
+    assert raw.count(start) == raw.count(end) == 1, "plan boundaries must be unique"
+    body, found, _ = raw.partition(start)[2].partition(end)
+    assert found, "plan boundaries are reversed"
+    return body
+
+
+def _assert_plan_preserved(raw):
+    import hashlib
+    for version, (lines, digest) in PLAN_ORIGINALS.items():
+        body = _original_plan(version, raw)
+        assert len(body.splitlines()) == lines, version + " line count changed"
+        assert hashlib.sha256(body).hexdigest() == digest, version + " bytes changed"
+    assert raw.index(b"<!-- BEGIN PLAN V1 -->") < raw.index(b"<!-- BEGIN PLAN V2 -->"), \
+        "active plan must precede the pending proposal"
+
+
+def test_both_plan_originals_are_byte_preserved():
+    with open(PLAN, "rb") as stream:
+        _assert_plan_preserved(stream.read())
+    assert not os.path.exists(os.path.join(_HERE, "FableExperimentPlan_v2.md")), \
+        "the moved pending proposal must not have a second live copy"
+
+
+def test_plan_preservation_rejects_every_deleted_original_line():
+    import pytest
+    with open(PLAN, "rb") as stream:
+        raw = stream.read()
+    _assert_plan_preserved(raw)  # real positive control
+    for version in PLAN_ORIGINALS:
+        body = _original_plan(version, raw)
+        lines = body.splitlines(keepends=True)
+        for index in range(len(lines)):
+            damaged = b"".join(lines[:index] + lines[index + 1:])
+            with pytest.raises(AssertionError):
+                _assert_plan_preserved(raw.replace(body, damaged, 1))
+
+
+def test_plan_preservation_rejects_bad_boundaries():
+    import pytest
+    with open(PLAN, "rb") as stream:
+        raw = stream.read()
+    _assert_plan_preserved(raw)
+    for version in PLAN_ORIGINALS:
+        start = ("<!-- BEGIN PLAN %s -->\n" % version).encode("ascii")
+        end = ("<!-- END PLAN %s -->\n" % version).encode("ascii")
+        for marker in (start, end):
+            for replacement in (b"", marker + marker):
+                with pytest.raises(AssertionError):
+                    _assert_plan_preserved(raw.replace(marker, replacement, 1))
+        reversed_bounds = raw.replace(start, b"__PLAN_BOUNDARY__", 1).replace(
+            end, start, 1).replace(b"__PLAN_BOUNDARY__", end, 1)
+        with pytest.raises(AssertionError):
+            _assert_plan_preserved(reversed_bounds)
+
+
+def test_plan_v2_artifact_reference_still_checks_existence(monkeypatch):
+    import pytest
+    package = os.path.join(_HERE, "exp5_rev4_package.md")
+    _check_dispositions(package)  # real positive control
+    exists = os.path.exists
+    monkeypatch.setattr(os.path, "exists",
+                        lambda path: False if os.path.abspath(path) == PLAN else exists(path))
+    with pytest.raises(AssertionError, match="F8: artifact missing"):
+        _check_dispositions(package)
+
+
 def test_plan_v2_corrected_phrases_stay_corrected():
     """Regression pins for the three rev-4h Plan-v2 corrections."""
-    plan = io.open(os.path.join(_HERE, "FableExperimentPlan_v2.md"), encoding="utf-8").read()
+    plan = _original_plan("V2").decode("utf-8")
     assert "market-moving" not in plan, "the du_worthy correction regressed"
     assert "`du_worthy` fact (the locked DU-03 gate" in plan
     assert "LEGACY-ONLY evidence" in plan, "the resolver legacy-warning regressed"

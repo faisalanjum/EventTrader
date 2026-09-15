@@ -25,6 +25,14 @@ Step 6 activates the proved Part II and marks Part I historical; it does not
 delete either part or repeat this consolidation. All code, meaning, testing,
 internal-packet and no-write requirements remain unchanged.
 
+## Experiment-plan consolidation — 2026-09-15
+
+`FableExperimentPlan.md` now contains active amended V1 in Part I and the
+V2 proposal in Part II, **PENDING O-b approval**. Both original bodies are
+preserved; no pending instruction overrides later approved rulings.
+WorkOrder stays separate. Step 6 still reviews six files and all ten questions;
+new hashes cover the entire combined Plan, while historical pins remain unchanged.
+
 ## Narrow reader amendment — 2026-08-18
 
 This later owner ruling changes only still-unrun reader work. It supersedes a
