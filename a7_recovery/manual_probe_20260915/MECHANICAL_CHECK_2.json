@@ -1,0 +1,96 @@
+{
+  "completed": {
+    "abstentions": [],
+    "continuity_hints": [],
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "change_unit": null,
+          "change_value": null,
+          "company_confirmed": null,
+          "comparison_baseline": "prior_year",
+          "comparison_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 0
+          },
+          "comparison_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 0
+          },
+          "comparison_shape_hint": "point",
+          "conditions": null,
+          "driver_name": "goodwill_and_intangible_asset_impairment",
+          "driver_state": "occurred",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "half": null,
+          "has_favorability_wording": null,
+          "level_high": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 171
+          },
+          "level_low": {
+            "scale_multiplier": 1000000,
+            "unit_scale_evidence": "millions",
+            "value": 171
+          },
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "long_range_end_year": null,
+          "long_range_start_year": null,
+          "measurement_raw_spans": [],
+          "month": null,
+          "period_end_date": null,
+          "period_scope": null,
+          "period_start_date": null,
+          "polarity_proof": null,
+          "quote": "($ in millions, except per share amounts): \n\nThree Months Ended Nine Months Ended November 1, 2025 November 2, 2024 November 1, 2025 November 2, 2024 Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580 Revenue % change 2.4 % (3.2) % 1.1 % (4.3) % Comparable sales % change 2.7 % (2.9) % 1.2 % (3.7) % Gross profit $ 2,248 $ 2,217 $ 6,491 $ 6,467 \n\nGross profit as a % of revenue (1) \n\n23.2 % 23.5 % 23.3 % 23.4 % Selling, general and administrative expense (\"SG&A\") $ 1,884 $ 1,871 $ 5,434 $ 5,418 \n\nSG&A as a % of revenue (1) \n\n19.5 % 19.8 % 19.5 % 19.6 % Restructuring charges $ (5) $ (4) $ 218 $ 4 Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+          "sentinel_class": null,
+          "slice_parts": [
+            "unknown:xbrlaxis_75732d676161703a5265706f7274696e67556e697441786973__bestbuyhealth"
+          ],
+          "surprise_basis_hint": null,
+          "time_type": "duration",
+          "value_text": null
+        },
+        "occurrence_in_part": null,
+        "part_ref": "mdna",
+        "per_x": null
+      }
+    ],
+    "source_id": "0000764478-25-000057"
+  },
+  "database_writes": 0,
+  "no_write_route": {
+    "index_map": [
+      [
+        [
+          "fact",
+          0
+        ],
+        0
+      ]
+    ],
+    "rejected_conflicting_names": [],
+    "rejected_fact_idxs": [],
+    "result": {
+      "items": [
+        {
+          "codes": [],
+          "decision": "written",
+          "detail": null,
+          "fact_id": "du:0000764478-25-000057:goodwill_and_intangible_asset_impairment:period=gp_2025-08-03_2025-11-01|slice=unknown:xbrlaxis_75732d676161703a5265706f7274696e67556e697441786973__bestbuyhealth",
+          "index": 0
+        }
+      ],
+      "status": "dry_run"
+    }
+  },
+  "parser_schema_provenance_problems": [],
+  "raw_sha256": "20c2931446f541c196eb8e93b34b6061e492c0f080082e61dcd1a91f5381671c",
+  "run": "wf_199f0418-b48"
+}

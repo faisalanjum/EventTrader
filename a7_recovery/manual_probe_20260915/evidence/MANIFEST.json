@@ -1,0 +1,82 @@
+{
+ "agent_ids_distinct": true,
+ "calls": [
+  {
+   "agent_id": "a7902350b9f66265c",
+   "agent_type": "lean-probe",
+   "agents": 1,
+   "diagnostic_id": "A7-MANUAL-20260915-1",
+   "duration_ms": 104966,
+   "evidence_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_probe_20260915/evidence/wf_f3b650fd-615",
+   "files_preserved": [
+    "agent-a7902350b9f66265c.jsonl",
+    "agent-a7902350b9f66265c.meta.json",
+    "journal.jsonl",
+    "wf_f3b650fd-615.json"
+   ],
+   "mismatches": [],
+   "non_prompt_attachments": [
+    "remote_session_change"
+   ],
+   "prompt_sha256_in_child": "566b676c1e617604554af14a76a1be93d6e5cbeff1e21dd2e6a70de0e9b0bf2b",
+   "requested_model": "sonnet",
+   "returned_error": null,
+   "returned_text_sha256": "2c6881708c882bba0e947564c60643638091f42b85191f144505944ad7209367",
+   "returned_text_utf8_bytes": 2019,
+   "run_id": "wf_f3b650fd-615",
+   "runtime_model": "claude-sonnet-5",
+   "status": "completed",
+   "stop_reason": "end_turn",
+   "tokens": 45939,
+   "tool_calls": 0,
+   "user_messages": 1
+  },
+  {
+   "agent_id": "ad4665f8f9c351717",
+   "agent_type": "lean-probe",
+   "agents": 1,
+   "diagnostic_id": "A7-MANUAL-20260915-2",
+   "duration_ms": 156229,
+   "evidence_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_probe_20260915/evidence/wf_199f0418-b48",
+   "files_preserved": [
+    "agent-ad4665f8f9c351717.jsonl",
+    "agent-ad4665f8f9c351717.meta.json",
+    "journal.jsonl",
+    "wf_199f0418-b48.json"
+   ],
+   "mismatches": [],
+   "non_prompt_attachments": [
+    "remote_session_change"
+   ],
+   "prompt_sha256_in_child": "566b676c1e617604554af14a76a1be93d6e5cbeff1e21dd2e6a70de0e9b0bf2b",
+   "requested_model": "sonnet",
+   "returned_error": null,
+   "returned_text_sha256": "20c2931446f541c196eb8e93b34b6061e492c0f080082e61dcd1a91f5381671c",
+   "returned_text_utf8_bytes": 1026,
+   "run_id": "wf_199f0418-b48",
+   "runtime_model": "claude-sonnet-5",
+   "status": "completed",
+   "stop_reason": "end_turn",
+   "tokens": 45939,
+   "tool_calls": 0,
+   "user_messages": 1
+  }
+ ],
+ "original_children_reused": false,
+ "pins_verified_before_any_call": {
+  "anthropic_api_key_present": false,
+  "claude_code_max_output_tokens": "128000",
+  "durable_script_bytes": 78833,
+  "durable_script_sha256": "6542e8b28e6659b8e86a98b827aeaae12c768c6c7c9955fdf0293e0f559a817f",
+  "lean_probe_profile_sha256": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "prompt_chars": 76134,
+  "prompt_sha256": "566b676c1e617604554af14a76a1be93d6e5cbeff1e21dd2e6a70de0e9b0bf2b",
+  "prompt_utf8_bytes": 76464,
+  "script_import_or_require_statements": 0,
+  "work_order_sha256": "26516dd0a631445f7dd68e8318f58bdcca76de66e64cf871f240ecb4f49f4771"
+ },
+ "retries": 0,
+ "schema": "a7-manual-probe-evidence/20260915",
+ "scope": "operator record of two owner-authorized diagnostic calls; no interpretation, no grading, no score",
+ "transport_note": "the tool refuses a scriptPath under the recovery tree, so the EXACT bytes were copied to the session scratchpad and executed there; cmp reports byte equality and the executed copy hashes to the durable script"
+}

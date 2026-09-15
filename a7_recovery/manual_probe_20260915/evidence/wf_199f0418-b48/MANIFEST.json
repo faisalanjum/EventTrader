@@ -1,0 +1,30 @@
+{
+ "agents": 1,
+ "diagnostic_id": "A7-MANUAL-20260915-2",
+ "duration_ms": 156229,
+ "evidence_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_probe_20260915/evidence/wf_199f0418-b48",
+ "files_preserved": [
+  "agent-ad4665f8f9c351717.jsonl",
+  "agent-ad4665f8f9c351717.meta.json",
+  "journal.jsonl",
+  "wf_199f0418-b48.json"
+ ],
+ "mismatches": [],
+ "original_paths": {
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_199f0418-b48/agent-ad4665f8f9c351717.jsonl": "35a9223a4617dc0d3fec27dfcb322fbec930291d3b217ddd8068ab244b75cf44",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_199f0418-b48/agent-ad4665f8f9c351717.meta.json": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_199f0418-b48/journal.jsonl": "fd0fd3be2f44a1748477778761ffa13b1569e5b8c0b435636df1f03928ff8ebd",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_199f0418-b48.json": "23678d406730769c4c1349e669400f1bb48563e2741c06cb367efadaad7fe7e8"
+ },
+ "returned_error": null,
+ "returned_result_sha256": "4f93a53a995aab0b0910adff0c25941fea6fd4cce470c2a3d27711f7d74a0d4c",
+ "returned_text_chars": 1026,
+ "returned_text_present": true,
+ "returned_text_sha256": "20c2931446f541c196eb8e93b34b6061e492c0f080082e61dcd1a91f5381671c",
+ "returned_text_utf8_bytes": 1026,
+ "run_id": "wf_199f0418-b48",
+ "state_sha256": "23678d406730769c4c1349e669400f1bb48563e2741c06cb367efadaad7fe7e8",
+ "status": "completed",
+ "tokens": 45939,
+ "tool_calls": 0
+}

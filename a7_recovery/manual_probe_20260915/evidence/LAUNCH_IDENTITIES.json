@@ -1,0 +1,29 @@
+{
+ "schema": "a7-manual-probe-launch/20260915",
+ "note": "run ids recorded immediately after launch, before any result is read",
+ "launches": [
+  {
+   "diagnostic_id": "A7-MANUAL-20260915-1",
+   "run_id": "wf_f3b650fd-615",
+   "task_id": "wob4j666v",
+   "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_f3b650fd-615",
+   "executed_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/manual_probe_20260915/direct_sonnet.js",
+   "executed_script_sha256": "6542e8b28e6659b8e86a98b827aeaae12c768c6c7c9955fdf0293e0f559a817f",
+   "durable_script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_probe_20260915/direct_sonnet.js",
+   "byte_identical_to_durable": true,
+   "launched_utc": "2026-09-15T08:52:02Z"
+  },
+  {
+   "diagnostic_id": "A7-MANUAL-20260915-2",
+   "run_id": "wf_199f0418-b48",
+   "task_id": "wbyto5ab9",
+   "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_199f0418-b48",
+   "executed_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/manual_probe_20260915/direct_sonnet.js",
+   "executed_script_sha256": "6542e8b28e6659b8e86a98b827aeaae12c768c6c7c9955fdf0293e0f559a817f",
+   "durable_script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_probe_20260915/direct_sonnet.js",
+   "byte_identical_to_durable": true,
+   "launched_utc": "2026-09-15T08:54:50Z",
+   "launched_after_first_terminated": true
+  }
+ ]
+}

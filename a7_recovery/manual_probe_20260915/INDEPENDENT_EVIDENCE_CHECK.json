@@ -1,0 +1,198 @@
+{
+  "schema": "a7-manual-two-call-evidence-check/1",
+  "calls": [
+    {
+      "diagnostic_id": "A7-MANUAL-20260915-1",
+      "run_id": "wf_f3b650fd-615",
+      "agent_id": "a7902350b9f66265c",
+      "agent_parent_uuid": null,
+      "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+      "script_sha256": "6542e8b28e6659b8e86a98b827aeaae12c768c6c7c9955fdf0293e0f559a817f",
+      "prompt_sha256": "566b676c1e617604554af14a76a1be93d6e5cbeff1e21dd2e6a70de0e9b0bf2b",
+      "prompt_bytes": 76464,
+      "user_messages": 1,
+      "actual_model": "claude-sonnet-5",
+      "effort_in_executed_script": "high",
+      "actual_native_attempt": 1,
+      "tool_calls": 0,
+      "stop_reason": "end_turn",
+      "native_files_byte_equal": 4,
+      "returned_text_sha256": "2c6881708c882bba0e947564c60643638091f42b85191f144505944ad7209367",
+      "state_sha256": "86131ade87c90d2eedb9e802316419a2efce17617bec79c68279931fc0bdca74",
+      "transcript_sha256": "ea0d07a21c594fb43cabf15e4424fcbdfc127fda32d97ef317e4f2da7b27fc97",
+      "duration_ms": 104966,
+      "native_total_tokens": 45939,
+      "assistant_usage": [
+        {
+          "type": [
+            "thinking"
+          ],
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 45935,
+            "cache_read_input_tokens": 0,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 45935,
+              "ephemeral_1h_input_tokens": 0
+            },
+            "output_tokens": 2,
+            "service_tier": "standard",
+            "inference_geo": "not_available"
+          }
+        },
+        {
+          "type": [
+            "text"
+          ],
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 45935,
+            "cache_read_input_tokens": 0,
+            "output_tokens": 9856,
+            "output_tokens_details": {
+              "thinking_tokens": 8981
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 45935
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 9856,
+                "cache_read_input_tokens": 0,
+                "cache_creation_input_tokens": 45935,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 45935,
+                  "ephemeral_1h_input_tokens": 0
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          }
+        }
+      ]
+    },
+    {
+      "diagnostic_id": "A7-MANUAL-20260915-2",
+      "run_id": "wf_199f0418-b48",
+      "agent_id": "ad4665f8f9c351717",
+      "agent_parent_uuid": null,
+      "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+      "script_sha256": "6542e8b28e6659b8e86a98b827aeaae12c768c6c7c9955fdf0293e0f559a817f",
+      "prompt_sha256": "566b676c1e617604554af14a76a1be93d6e5cbeff1e21dd2e6a70de0e9b0bf2b",
+      "prompt_bytes": 76464,
+      "user_messages": 1,
+      "actual_model": "claude-sonnet-5",
+      "effort_in_executed_script": "high",
+      "actual_native_attempt": 1,
+      "tool_calls": 0,
+      "stop_reason": "end_turn",
+      "native_files_byte_equal": 4,
+      "returned_text_sha256": "20c2931446f541c196eb8e93b34b6061e492c0f080082e61dcd1a91f5381671c",
+      "state_sha256": "23678d406730769c4c1349e669400f1bb48563e2741c06cb367efadaad7fe7e8",
+      "transcript_sha256": "35a9223a4617dc0d3fec27dfcb322fbec930291d3b217ddd8068ab244b75cf44",
+      "duration_ms": 156229,
+      "native_total_tokens": 45939,
+      "assistant_usage": [
+        {
+          "type": [
+            "thinking"
+          ],
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 45935,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 0
+            },
+            "output_tokens": 2,
+            "service_tier": "standard",
+            "inference_geo": "not_available"
+          }
+        },
+        {
+          "type": [
+            "text"
+          ],
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 45935,
+            "output_tokens": 14217,
+            "output_tokens_details": {
+              "thinking_tokens": 13763
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 14217,
+                "cache_read_input_tokens": 45935,
+                "cache_creation_input_tokens": 0,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 0
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          }
+        }
+      ]
+    }
+  ],
+  "total_model_calls": 2,
+  "model_retries": 0,
+  "checks_passed": true,
+  "scope": "Two independent new child conversations under the existing Core parent; not two new top-level Core sessions.",
+  "runtime_limits": {
+    "effort": "High is explicitly requested in both executed scripts; returned child metadata does not echo effort.",
+    "attachments": {
+      "type": "remote_session_change",
+      "per_child_count": 1,
+      "fields": [
+        "type",
+        "url",
+        "commit",
+        "pr",
+        "sendUserFileHint"
+      ],
+      "new_children_equal": true,
+      "old_vs_new_equal": false,
+      "changed_fields": [
+        "url",
+        "commit",
+        "pr"
+      ],
+      "finding": "The old and new runtime session references differ. Attachment contents are session-reference metadata, not task text or answers. This was not an equality of every opaque provider input."
+    },
+    "precall_witness": {
+      "parent_transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+      "timestamp": "2026-09-15T08:51:02.459Z",
+      "tool_use_id": "toolu_01Bx1onkercBHGvo5WsyhwM5",
+      "anthropic_api_key_present": false,
+      "env_file_key_matches": 0,
+      "claude_code_max_output_tokens": "128000",
+      "profile_sha256": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515"
+    }
+  }
+}
