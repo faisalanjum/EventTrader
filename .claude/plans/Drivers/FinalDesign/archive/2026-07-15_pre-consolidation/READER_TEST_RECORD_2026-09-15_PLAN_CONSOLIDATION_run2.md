@@ -292,3 +292,19 @@ Per FINAL_DESIGN §7.1 table:
 - **Every T-group (census T1-T12) → anchor:** STATUS_AND_HISTORY.md **§7.2 "Census T-group anchors (per-group exact map; within a group, rules share the group anchor unless a per-rule exception is listed)"** — T1(T1.1-T1.8) through T12(T12.1-T12.9), each mapped to a FINAL_DESIGN section with explicit per-rule exceptions (e.g. T1.4 → §5.1, T6.1 → §4.1, T11.6 → §9+§4.3).
 - **Every transferred ratified-design element → anchor:** STATUS_AND_HISTORY.md **§7.1b "Ratified-design destination proof (owner order 2026-07-15: every transferred item → its exact live anchor)"** — two subtables: Kernel (`FableAdmissionKernelDesign.md` §1 through §16/§15.0, each row → its BUILD_AND_OPERATIONS.md §8.1.x anchor) and XBRL (`XBRLIntegrationDesign.md` §3/§5.2/§5.3/pins P1-P19/the ten amendments, each → BUILD_AND_OPERATIONS.md §8.2 recipe/pin-map or its owning law section, gate-tagged).
 <!-- END RUN2 RAW ANSWER -->
+
+## Later owner decision — publication exception, 2026-09-15
+
+After the 5/10 result, the preservation checks and the limited publication
+exception were explained, the owner instructed: **“ok then push it.”**
+This lifts the publication hold for this document-only consolidation and its
+disclosed reader failure on main and recovery. It does not change either raw
+answer or grade, certify the current documents through the failed reader,
+waive future R8 reviews, approve Plan V2, or resume A7 or later project work.
+No new model call is needed or authorized for this publication.
+
+The earlier sections remain the unchanged test-time record. The accompanying
+STATUS update records this later decision; it does not pretend that its new
+bytes were part of the six-file test freeze. Source and evidence hashes above
+continue to identify that original freeze. Publication is verified against
+the remote main and recovery refs, not inferred from a local commit.

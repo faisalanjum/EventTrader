@@ -106,13 +106,14 @@ affected checks, including the initially excluded offline handoff test.
 The owner approved commit and push of this layout-only change on 2026-09-15.
 The earlier reader attempt is preserved at
 `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-09-15_PLAN_CONSOLIDATION.md`.
-The owner authorized one corrected, complete-input review before publication.
-Its result belongs at
+The corrected, complete-input reader review scored **5/10**; Core withdrew its
+10/10 claim. Exact sources, raw answers and independent findings are preserved at
 `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-09-15_PLAN_CONSOLIDATION_run2.md`.
-Publication requires that exact record to show a valid 10/10 result, unchanged
-six-file hashes and passing affected checks. No result is implied before the
-record exists. This is documentation verification, not production or Step 6
-readiness, approval of Plan V2, or permission to resume A7.
+After that failure was explained, the owner explicitly approved publication:
+“ok then push it.” This exception permits only this preserved, tested document
+merge and its disclosed failed review on main and recovery. It does not mark
+the reader passed, waive future R8 reviews, approve Plan V2, establish Step 6
+or production readiness, or resume A7. Verify publication using the refs in §1.1.
 
 **Protect unrelated local work.** Main has settings changes, market-data
 documentation, two old `receipts_827` inventories and deleted test-agent/skill
