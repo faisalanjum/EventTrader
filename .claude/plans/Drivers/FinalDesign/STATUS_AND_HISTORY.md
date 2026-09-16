@@ -104,12 +104,15 @@ harness run has 515 passes and the same three pre-existing failures listed in
 §1.4; two checks were excluded. The committed clean-tree rerun passed all 400
 affected checks, including the initially excluded offline handoff test.
 The owner approved commit and push of this layout-only change on 2026-09-15.
-The R8 reader check is NOT QUALIFIED: it skipped 229 WorkOrder lines, and
-independent review found four incorrect answers. The exact evidence is in
+The earlier reader attempt is preserved at
 `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-09-15_PLAN_CONSOLIDATION.md`.
-Publication is held pending a valid review or an explicit owner exception
-for a checkpoint with this failed review disclosed. No production or Step 6
-readiness is claimed.
+The owner authorized one corrected, complete-input review before publication.
+Its result belongs at
+`archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-09-15_PLAN_CONSOLIDATION_run2.md`.
+Publication requires that exact record to show a valid 10/10 result, unchanged
+six-file hashes and passing affected checks. No result is implied before the
+record exists. This is documentation verification, not production or Step 6
+readiness, approval of Plan V2, or permission to resume A7.
 
 **Protect unrelated local work.** Main has settings changes, market-data
 documentation, two old `receipts_827` inventories and deleted test-agent/skill
