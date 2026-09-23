@@ -239,19 +239,33 @@ def test_1_parity_old_ensure_period_vs_new():
 
 # ---- cascade A/B/C behavior with injected lookups ----
 
-def test_cascade_order_existing_then_sec_then_predict():
+def test_cascade_order_sec_then_existing_then_predict():
+    # Date repair (Codex 2340) changed the pinned order from existing->sec->predict:
+    # exact SEC dates are asked first and an existing window never displaces them.
     calls = []
     lookups = {
-        "existing": lambda t, fy, fq: calls.append("A") or None,
+        "existing": lambda t, fy, fq: pytest.fail("an SEC hit must stop before the existing window"),
         "sec": lambda t, fy, sfx: calls.append("B") or {"start": "2025-06-29", "end": "2025-09-27"},
         "predict": lambda t, fy, fq: pytest.fail("must stop at SEC hit"),
         "corrected_fye": lambda t: pytest.fail("must stop at SEC hit"),
     }
     out = resolve({"fiscal_year": 2025, "fiscal_quarter": 3, "time_type": "duration"},
                   ticker="AAPL", lookups=lookups)
-    assert calls == ["A", "B"]
+    assert calls == ["B"]
     assert out["period_u_id"] == "gp_2025-06-29_2025-09-27"   # real filing dates win
     assert out["period_scope"] == "quarter"
+    # full order on misses: sec -> existing -> predict, stopping at the first answer
+    calls.clear()
+    lookups = {
+        "existing": lambda t, fy, fq: calls.append("A") or None,
+        "sec": lambda t, fy, sfx: calls.append("B") or None,
+        "predict": lambda t, fy, fq: calls.append("C") or {"start": "2025-06-29", "end": "2025-09-27"},
+        "corrected_fye": lambda t: pytest.fail("must stop at the predict hit"),
+    }
+    out = resolve({"fiscal_year": 2025, "fiscal_quarter": 3, "time_type": "duration"},
+                  ticker="AAPL", lookups=lookups)
+    assert calls == ["B", "A", "C"]
+    assert out["period_u_id"] == "gp_2025-06-29_2025-09-27"
 
 
 def test_cascade_skipped_for_instants_and_nonstandard():
@@ -687,7 +701,9 @@ def test_truly_periodless_action_event_returns_none():
 # Baselines already pinned: test_exact_dates_half_specified_rejected
 # (start-only duration) + controls test_20b_exact_instant_single_date
 # (instant end-only accepted) and test_20_exact_dates_win_over_fiscal_shorthand
-# (two-date duration accepted). The corroborated-completion FEATURE is PP2 (post).
+# (two-date duration accepted). Corroborated completion now exists (date repair, Codex
+# 2340): an end-only duration WITH fiscal framing completes only when the resolved window
+# agrees (test_date_repair_*); without framing it still parks, as pinned here.
 
 def test_duration_end_only_parks():
     with pytest.raises(PeriodResolutionError) as exc:
@@ -1223,3 +1239,163 @@ def test_calendar_with_ticker_never_calls_corrected_fye():
     # the CALENDAR window, not the company-fiscal one — the two differ here,
     # so this pins that the override actually changed the answer
     assert out["period_u_id"] == "gp_2025-07-01_2025-09-30", out["period_u_id"]
+
+
+# ---- date repair 2026-09-23 (Codex 2340): real DRI #062 failures + lawful controls ----
+# Independent expected window for Darden FY2026 Q3: the served 8-K states "the third
+# quarter ended February 22, 2026"; the FY2025 annual report states a 52/53-week year
+# ending the last Sunday in May; the prior quarter (Q2) ended 2025-11-23, so Q3 runs
+# 2025-11-24..2026-02-22. The old graph window below is the month-math GuidancePeriod
+# the live existing-window lookup returned (gp_2025-12-01_2026-02-28).
+
+_DRI_Q3 = {"fiscal_year": 2026, "fiscal_quarter": 3, "time_type": "duration"}
+_OLD_EXISTING = {"period_u_id": "gp_2025-12-01_2026-02-28",
+                 "start_date": "2025-12-01", "end_date": "2026-02-28"}
+_SEC_Q3 = {"start": "2025-11-24", "end": "2026-02-22"}
+
+
+def _dri_lk(existing=None, sec=None, predict=None, corrected=None):
+    return {"existing": lambda t, fy, fq: existing, "sec": lambda t, fy, sfx: sec,
+            "predict": lambda t, fy, fq: predict, "corrected_fye": lambda t: corrected}
+
+
+def test_date_repair_R01_exact_fiscal_evidence_beats_an_old_existing_window():
+    out = resolve(dict(_DRI_Q3), fye=5, ticker="DRI",
+                  lookups=_dri_lk(existing=_OLD_EXISTING, sec=_SEC_Q3))
+    assert out["period_u_id"] == "gp_2025-11-24_2026-02-22"
+    assert (out["gp_start_date"], out["gp_end_date"]) == ("2025-11-24", "2026-02-22")
+    assert out["period_scope"] == "quarter" and out["time_type"] == "duration"
+
+
+def test_date_repair_existing_window_still_answers_when_sec_misses():
+    out = resolve(dict(_DRI_Q3), fye=5, ticker="DRI",
+                  lookups=_dri_lk(existing=_OLD_EXISTING, predict=_SEC_Q3))
+    assert out["period_u_id"] == "gp_2025-12-01_2026-02-28"      # unchanged fallback order
+
+
+def test_date_repair_R02_end_only_duration_completes_from_fiscal_evidence():
+    item = dict(_DRI_Q3, period_end_date="2026-02-22")
+    out = resolve(item, fye=5, ticker="DRI", lookups=_dri_lk(existing=_OLD_EXISTING, sec=_SEC_Q3))
+    assert out["period_u_id"] == "gp_2025-11-24_2026-02-22"
+    assert out["gp_end_date"] == "2026-02-22" and out["period_scope"] == "quarter"
+
+
+def test_date_repair_start_only_duration_completes_symmetrically():
+    item = dict(_DRI_Q3, period_start_date="2025-11-24")
+    out = resolve(item, fye=5, ticker="DRI", lookups=_dri_lk(sec=_SEC_Q3))
+    assert out["period_u_id"] == "gp_2025-11-24_2026-02-22"
+
+
+def test_date_repair_supplied_endpoint_constrains_never_thrown_away():
+    # qualified exact dates that disagree with the supplied endpoint: PARK, never replaced
+    with pytest.raises(PeriodResolutionError, match="conflicts"):
+        resolve(dict(_DRI_Q3, period_end_date="2026-02-21"), fye=5, ticker="DRI",
+                lookups=_dri_lk(sec=_SEC_Q3))
+    # only an old stored window is available: it is NOT evidence for the missing start
+    # (candidate 1 wrongly let a matching endpoint stand in for proof) -> truthful park
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve(dict(_DRI_Q3, period_end_date="2026-02-28"), fye=5, ticker="DRI",
+                lookups=_dri_lk(existing=_OLD_EXISTING))
+
+
+def test_date_repair_pure_lane_end_only_never_completes_from_month_math():
+    # no ticker, no calendar mode: month math is an approximation, not proof of the start
+    # (a December FYE alone does not establish calendar mode) -> park, even when it matches
+    q1 = {"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"}
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve(dict(q1, period_end_date="2025-03-31"))
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve(dict(_DRI_Q3, period_end_date="2026-02-22"), fye=5)
+
+
+def test_date_repair_calendar_mode_end_only_uses_calendar_window():
+    out = resolve({"fiscal_year": 2025, "fiscal_quarter": 2, "time_type": "duration",
+                   "period_end_date": "2025-06-30"}, fye=9, ticker="OIL",
+                  calendar_override=True,
+                  lookups={k: (lambda *a: pytest.fail("calendar mode skips lookups"))
+                           for k in ("existing", "sec", "predict", "corrected_fye")})
+    assert out["period_u_id"] == "gp_2025-04-01_2025-06-30"
+
+
+def test_date_repair_end_only_without_framing_still_parks_truthfully():
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve({"period_end_date": "2026-02-22", "time_type": "duration"})
+    with pytest.raises(PeriodResolutionError, match="needs period_end_date"):
+        resolve({"period_start_date": "2025-11-24", "time_type": "duration"})
+
+
+def test_date_repair_malformed_or_invalid_supplied_endpoint_parks():
+    for bad in ("2026-02-30", "2026/02/22", "20260222"):
+        with pytest.raises(PeriodResolutionError):
+            resolve(dict(_DRI_Q3, period_end_date=bad), fye=5, ticker="DRI",
+                    lookups=_dri_lk(sec=_SEC_Q3))
+
+
+def test_date_repair_malformed_lookup_answer_still_parks_on_end_only():
+    with pytest.raises(PeriodResolutionError, match="ISO|PERIOD_SYM"):
+        resolve(dict(_DRI_Q3, period_end_date="2026-02-22"), fye=5, ticker="DRI",
+                lookups=_dri_lk(sec={"start": "2025-11-24", "end": "22-02-2026"}))
+
+
+def test_date_repair_complete_dates_keep_priority_over_lookups():
+    item = dict(_DRI_Q3, period_start_date="2025-11-24", period_end_date="2026-02-22")
+    out = resolve(item, fye=5, ticker="DRI",
+                  lookups={k: (lambda *a: pytest.fail("exact dates never consult lookups"))
+                           for k in ("existing", "sec", "predict", "corrected_fye")})
+    assert out["period_u_id"] == "gp_2025-11-24_2026-02-22"
+
+
+def test_date_repair_instant_single_date_paths_unchanged():
+    out = resolve({"period_end_date": "2026-02-22", "time_type": "instant"})
+    assert out["period_u_id"] == "gp_2026-02-22_2026-02-22"
+    with pytest.raises(PeriodResolutionError, match="needs period_end_date"):
+        resolve({"period_start_date": "2026-02-22", "time_type": "instant"})
+
+
+def test_date_repair_end_only_ytd_company_fiscal_parks_calendar_mode_completes():
+    ytd = {"fiscal_year": 2025, "fiscal_quarter": 2, "period_scope": "ytd", "time_type": "duration"}
+    # company fiscal cumulative window: no qualified exact evidence for its start -> park
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve(dict(ytd, period_end_date="2025-06-30"))
+    # explicit calendar mode: the calendar definition supplies the range, still validated
+    out = resolve(dict(ytd, period_end_date="2025-06-30"), calendar_override=True)
+    assert out["period_u_id"] == "gp_2025-01-01_2025-06-30" and out["period_scope"] == "ytd"
+    with pytest.raises(PeriodResolutionError, match="conflicts"):
+        resolve(dict(ytd, period_end_date="2025-06-28"), calendar_override=True)
+
+
+# ---- candidate 2 (Codex 2341): real Darden FY2021 Q3 counterexamples ----
+# Primary filing (dri-20210228): quarter ended 2021-02-28; opening equity balance at
+# 2020-11-29, so the quarter began 2020-11-30. Month math gives 2020-12-01 (wrong start).
+_DRI21 = {"fiscal_year": 2021, "fiscal_quarter": 3, "time_type": "duration",
+          "period_end_date": "2021-02-28"}
+_GUESS21 = {"period_u_id": "gp_2020-12-01_2021-02-28", "start_date": "2020-12-01",
+            "end_date": "2021-02-28"}
+
+
+def test_candidate2_all_lookup_misses_never_accept_a_month_math_start():
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve(dict(_DRI21), fye=5, ticker="DRI", lookups=_dri_lk())
+
+
+def test_candidate2_stored_or_predicted_guess_is_not_proof_of_the_missing_start():
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve(dict(_DRI21), fye=5, ticker="DRI", lookups=_dri_lk(existing=_GUESS21))
+    with pytest.raises(PeriodResolutionError, match="needs period_start_date"):
+        resolve(dict(_DRI21), fye=5, ticker="DRI",
+                lookups=_dri_lk(predict={"start": "2020-12-01", "end": "2021-02-28"}))
+
+
+def test_candidate2_exact_cache_window_is_the_positive_control():
+    out = resolve(dict(_DRI21), fye=5, ticker="DRI",
+                  lookups=_dri_lk(existing=_GUESS21, sec={"start": "2020-11-30", "end": "2021-02-28"}))
+    assert out["period_u_id"] == "gp_2020-11-30_2021-02-28" and out["period_scope"] == "quarter"
+
+
+def test_candidate2_completed_window_passes_the_same_full_window_check():
+    # a 273-day "quarter" from the cache must be refused exactly as the complete-date input is
+    bad = {"start": "2020-06-01", "end": "2021-02-28"}
+    with pytest.raises(PeriodResolutionError, match="quarter declared but the window is 273 days"):
+        resolve(dict(_DRI21), fye=5, ticker="DRI", lookups=_dri_lk(sec=bad))
+    with pytest.raises(PeriodResolutionError, match="quarter declared but the window is 273 days"):
+        resolve(dict(_DRI21, period_start_date="2020-06-01"), fye=5, ticker="DRI", lookups=_dri_lk(sec=bad))

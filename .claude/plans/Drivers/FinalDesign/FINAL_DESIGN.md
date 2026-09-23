@@ -217,6 +217,8 @@ period=<period_u_id>
 
 ### 6.2 Periods — PER-01..21
 
+> **Date review still needed (2026-09-23):** Some stored or cached company fiscal dates and fallback dates may be wrong. For Darden FY2026 Q3, we changed the shared code to prefer SEC filing dates (2025-11-24–2026-02-22) over the old stored window (2025-12-01–2026-02-28). Recheck other company calendars and fallback paths before broader use.
+
 - `DriverPeriod` = the actual calendar window the fact is about; not event date, raw "Q1", forecast marker, or a fact-type substitute. One generic node serves all four lanes (`DriverPeriod` label, `gp_` IDs). Nodes store only `id`, `u_id`, `start_date`, `end_date`; fiscal framing stays on the fact.
 - One `HAS_PERIOD` edge; meaning comes from the lane. Guidance REQUIRES its target period (real resolved period OR explicit sentinel). Metric/surprise use a stated, clearly implied, or safely derived real period. Action has a period only when a real window is stated — never force one; periodless action has no edge.
 - Actual surprise uses the reported period; `guidance_vs_consensus` uses the guidance TARGET period even if ended (OD-21). Event metadata may supply an implied reported period only when exact, never for guidance-vs-consensus.

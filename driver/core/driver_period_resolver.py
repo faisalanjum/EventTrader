@@ -6,7 +6,10 @@ Wraps the existing guidance period machinery BY REFERENCE (never copied):
     HISTORICALLY RECORDED and UNDER INDEPENDENT RE-MEASUREMENT (E1) — it is not a
     current certification, and it never described exact-window accuracy at all; exact
     calendar windows come only from the date/SEC branches above the math fallback
-  - cascade:   existing-graph window -> SEC exact dates -> predicted quarter -> pure math
+  - cascade:   SEC exact dates -> existing-graph window -> predicted quarter -> pure math
+    (date repair, Codex 2340: an old stored window never displaces exact SEC dates; a
+    duration with ONE supplied endpoint completes only from explicit calendar mode or the
+    qualified exact SEC window, then passes the complete-window check — Codex 2341)
 New-law deltas over the old substrate (each anchored): exact-date branch first + ytd/ttm
 windows (GuidancePeriod.md) · calendar_override routed BEFORE any company lookup (BUILD §10
 hazard) · time_type required, label hint never overrides (FACT-18) · no quiet gp_UNDEF, no
@@ -207,7 +210,11 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
         raise PeriodResolutionError(f"input period_scope may only be ytd/ttm, got {scope_in!r}")
 
     # 1. exact source/XBRL dates ALWAYS win over computed math (test 20; 52/53-week safety)
-    if item.get("period_start_date") or item.get("period_end_date"):
+    start, end = item.get("period_start_date"), item.get("period_end_date")
+    if time_type == "duration" and bool(start) != bool(end):
+        return _complete_from_framing(item, fact_type=fact_type, fye_month=fye_month,
+                                      ticker=ticker, calendar_override=cal, lookups=lookups)
+    if start or end:
         return _exact_dates(item, time_type, scope_in)
 
     # 2. explicit sentinel
@@ -236,6 +243,17 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
         # non-None result ({} included) is an affirmative answer and must be
         # lawful or PARK; nothing falls through on truthiness.
         want_scope = "quarter" if fq else "annual"
+        # Date repair (Codex 2340): exact SEC fiscal dates are asked FIRST. The old
+        # existing-graph window is a first-write reuse of whatever an earlier write
+        # stored (reproduced: a month-math 2025-12-01..2026-02-28 window displaced the
+        # SEC 2025-11-24..2026-02-22 quarter); it must never displace exact evidence,
+        # so it only answers when the SEC cache has no answer.
+        sec = lk["sec"](ticker, fy, f"Q{fq}" if fq else "FY")
+        if sec is not None:
+            sec = _lawful_hit("sec", sec, want_scope, time_type)
+            return _result(build_period_id(sec["start"], sec["end"]),
+                           want_scope, "duration",
+                           sec["start"], sec["end"])
         found = lk["existing"](ticker, fy, fq)
         if found is not None:
             found = _lawful_hit("existing", found, want_scope, time_type)
@@ -243,12 +261,6 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
                            found.get("period_scope") or want_scope,
                            found.get("time_type") or "duration",
                            found.get("start_date"), found.get("end_date"))
-        sec = lk["sec"](ticker, fy, f"Q{fq}" if fq else "FY")
-        if sec is not None:
-            sec = _lawful_hit("sec", sec, want_scope, time_type)
-            return _result(build_period_id(sec["start"], sec["end"]),
-                           want_scope, "duration",
-                           sec["start"], sec["end"])
         if fq:
             pred = lk["predict"](ticker, fy, fq)
             if pred is not None:
@@ -287,6 +299,58 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     scope = "exact_range" if built["period_scope"] == "long_range" else built["period_scope"]
     return _result(built["u_id"], scope, built["time_type"],
                    built["start_date"], built["end_date"])
+
+
+def _complete_from_framing(item, *, fact_type, fye_month, ticker, calendar_override, lookups):
+    """A duration with ONE supplied exact endpoint (date repair, Codex 2340/2341; step1.md A5 item 6).
+    The missing endpoint is never invented and never taken from an approximation: an old stored
+    window, a predicted quarter or month math is NOT proof of it merely because the supplied
+    endpoint happens to match (Codex 2341: Darden FY2021 Q3 began 2020-11-30, month math says
+    2020-12-01). Only two sources may complete it:
+      - explicit calendar mode: the calendar definition of the item's own framing;
+      - company fiscal: the qualified exact SEC dates for a standard quarter/annual framing.
+    The completed window must contain the supplied endpoint unchanged and then passes the SAME
+    complete-window check as fully supplied dates (_exact_dates). Anything else PARKS, typed."""
+    start, end = item.get("period_start_date"), item.get("period_end_date")
+    key, supplied, other = (("period_end_date", end, "period_start_date") if end
+                            else ("period_start_date", start, "period_end_date"))
+    try:
+        date.fromisoformat(supplied)
+    except (TypeError, ValueError):
+        raise PeriodResolutionError(f"ISO: supplied {key}={supplied!r} is not a date — park")
+    time_type, scope_in = item.get("time_type"), item.get("period_scope")
+    refuse = (f"duration exact-date input needs {other}: the supplied {key} can be completed only "
+              f"from explicit calendar mode or qualified exact fiscal dates")
+    if calendar_override:
+        framing = {k: v for k, v in item.items() if k not in ("period_start_date", "period_end_date")}
+        try:
+            got = ensure_driver_period(framing, fact_type=fact_type, fye_month=fye_month,
+                                       ticker=ticker, calendar_override=True, lookups=lookups)
+        except PeriodResolutionError as e:
+            raise PeriodResolutionError(f"{refuse} ({e}) — park")
+        if got is None or got["gp_start_date"] is None:
+            raise PeriodResolutionError(f"{refuse} (no dated calendar window) — park")
+        window = (got["gp_start_date"], got["gp_end_date"])
+    else:
+        fy, fq = item.get("fiscal_year"), item.get("fiscal_quarter")
+        standard = (scope_in is None and fy and not item.get("half") and not item.get("month")
+                    and not item.get("long_range_end_year"))
+        if not (standard and ticker):
+            raise PeriodResolutionError(f"{refuse} (company fiscal framing is not a standard "
+                                        f"quarter/annual with a ticker) — park")
+        lk = lookups if lookups is not None else _default_lookups()
+        sec = lk["sec"](ticker, fy, f"Q{fq}" if fq else "FY")
+        if sec is None:
+            raise PeriodResolutionError(f"{refuse}; none exists for {ticker} FY{fy}"
+                                        f"{' Q%s' % fq if fq else ''} — park")
+        sec = _lawful_hit("sec", sec, "quarter" if fq else "annual", time_type)
+        window = (sec["start"], sec["end"])
+    if supplied != (window[1] if key == "period_end_date" else window[0]):
+        raise PeriodResolutionError(
+            f"PERIOD_SYM: supplied {key}={supplied!r} conflicts with the exact window "
+            f"{window[0]}..{window[1]} — park, never replaced")
+    return _exact_dates(dict(item, period_start_date=window[0], period_end_date=window[1]),
+                        time_type, scope_in)
 
 
 def _exact_dates(item, time_type, scope_in):
