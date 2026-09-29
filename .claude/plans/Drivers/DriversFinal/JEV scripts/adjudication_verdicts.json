@@ -1,0 +1,157 @@
+{
+ "1": {
+  "id": 68,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "2": {
+  "id": 56,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "3": {
+  "id": 60,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "4": {
+  "id": 62,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "5": {
+  "id": 73,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "6": {
+  "id": 77,
+  "ruling": "action_event",
+  "category": "Jev wrong"
+ },
+ "7": {
+  "id": 58,
+  "ruling": "metric",
+  "category": "label wrong"
+ },
+ "8": {
+  "id": 49,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "9": {
+  "id": 78,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "10": {
+  "id": 54,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "11": {
+  "id": 65,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "12": {
+  "id": 66,
+  "ruling": "action_event",
+  "category": "B-only wrong"
+ },
+ "13": {
+  "id": 42,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "14": {
+  "id": 52,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "15": {
+  "id": 61,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "16": {
+  "id": 83,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "17": {
+  "id": 97,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "18": {
+  "id": 93,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "19": {
+  "id": 98,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "20": {
+  "id": 100,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "21": {
+  "id": 111,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "22": {
+  "id": 86,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "23": {
+  "id": 104,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "24": {
+  "id": 108,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "25": {
+  "id": 85,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "26": {
+  "id": 92,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "27": {
+  "id": 96,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "28": {
+  "id": 109,
+  "ruling": null,
+  "category": "unclear"
+ },
+ "29": {
+  "id": 94,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "30": {
+  "id": 101,
+  "ruling": "guidance",
+  "category": "Jev wrong"
+ },
+ "31": {
+  "id": 28,
+  "ruling": null,
+  "category": "unclear"
+ }
+}

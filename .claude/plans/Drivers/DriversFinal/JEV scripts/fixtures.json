@@ -1,0 +1,1152 @@
+[
+ {
+  "src": "0000006201-26-000032",
+  "quote": "cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively",
+  "label": "metric",
+  "name": "co_branded_credit_card_partner_payments",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 0
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Endeavor Pilots 1,770 ALPA January 1, 2029",
+  "label": "metric",
+  "name": "union_represented_employees",
+  "section": "business",
+  "runs": 2,
+  "agreed": true,
+  "id": 1
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025.",
+  "label": "metric",
+  "name": "total_operating_cost_per_available_seat_mile",
+  "section": "mdna",
+  "runs": 6,
+  "agreed": true,
+  "id": 2
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "and $3.5 billion in total undrawn capacity under revolving credit and other facilities",
+  "label": "metric",
+  "name": "undrawn_revolving_credit_and_other_facilities_capacity",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 3
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Our 2025 operating income was $5.8 billion, a decrease of $173 million compared to 2024",
+  "label": "metric",
+  "name": "operating_income",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 4
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "market spot prices ranging from a low of approximately $1.86 per gallon to a high of approximately $4.75 per gallon during the first quarter of 2026",
+  "label": "metric",
+  "name": "aircraft_fuel_spot_price_per_gallon",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 5
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We currently own an approximately 11% equity stake in LATAM.",
+  "label": "metric",
+  "name": "equity_ownership_stake",
+  "section": "business",
+  "runs": 2,
+  "agreed": true,
+  "id": 6
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Remuneration from American Express was $8.2 billion during 2025, an increase of 11% compared to the prior year.",
+  "label": "metric",
+  "name": "american_express_remuneration",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 7
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "improving sequentially each month in the quarter",
+  "label": "metric",
+  "name": "total_revenue_per_asm",
+  "section": "exhibit_99_1",
+  "runs": 4,
+  "agreed": true,
+  "id": 8
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025",
+  "label": "metric",
+  "name": "cost_per_available_seat_mile_excluding_special_items_fuel_and_profit_sharing",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 9
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Condensed Consolidated Statements of Cash Flows (In millions)(Unaudited) 3 Months Ended March 31, 2026 2025 Net cash provided by operating activities $ 4,223 $ 2,456",
+  "label": "metric",
+  "name": "operating_cash_flow",
+  "section": "exhibit_99_1",
+  "runs": 3,
+  "agreed": true,
+  "id": 10
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "As of the most recent applicable measurement dates, we were in compliance with each of the foregoing covenants.",
+  "label": "metric",
+  "name": "debt_covenant_compliance",
+  "section": "mdna",
+  "runs": 5,
+  "agreed": true,
+  "id": 11
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "a 3.6% increase in cargo yield",
+  "label": "metric",
+  "name": "cargo_yield",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 12
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Our cash, cash equivalents, short-term investments and aggregate principal amount committed and available to be drawn under our revolving credit facilities (\"liquidity\") at December 31, 2025 was $7.4 billion.",
+  "label": "metric",
+  "name": "liquidity",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 13
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "In the first quarter of 2026, we reported total operating revenues of $13.9 billion, an increase of $1.4 billion, or 10.8%, from the first quarter of 2025.",
+  "label": "metric",
+  "name": "total_operating_revenue",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 14
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "with market spot prices ranging from a low of approximately $1.86 per gallon to a high of approximately $4.75 per gallon during the first quarter of 2026",
+  "label": "metric",
+  "name": "aircraft_fuel_spot_price_per_gallon",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 15
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "At the end of 2025, we offered up to 5,500 peak-day flights to more than 300 destinations on six continents.",
+  "label": "metric",
+  "name": "peak_day_flights",
+  "section": "business",
+  "runs": 2,
+  "agreed": true,
+  "id": 16
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Our capital expenditures (i.e., property and equipment additions in our Consolidated Statements of Cash Flows (\"cash flows statement\")) were $4.5 billion and $5.1 billion in 2025 and 2024, respectively.",
+  "label": "metric",
+  "name": "capital_expenditures",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 17
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Fuel costs represented 17%, 19% and 21% of our operating expense in 2025, 2024 and 2023, respectively.",
+  "label": "metric",
+  "name": "fuel_costs",
+  "section": "risk",
+  "runs": 2,
+  "agreed": true,
+  "id": 18
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "American\u2019s net cash provided by operating activities was $4.2 billion and $2.3 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in American\u2019s air traffic liability and loyalty program deferred revenue.",
+  "label": "metric",
+  "name": "net_cash_provided_by_operating_activities",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 19
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "As of December 31, 2025, approximately 20% of our full-time equivalent employees were represented by unions.",
+  "label": "metric",
+  "name": "union_represented_employee_share",
+  "section": "business",
+  "runs": 2,
+  "agreed": true,
+  "id": 20
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Total operating expense increased $1.9 billion, or 3%, compared to 2024, primarily due to higher employee costs from increased wages, costs associated with a 3% increase in capacity, and higher expenses related to refinery sales to third parties.",
+  "label": "metric",
+  "name": "operating_expense",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 21
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Fuel expense decreased $747 million compared to 2024 primarily due to a 9% decrease in the market price of jet fuel partially offset by a 4% increase in consumption on a 3% increase in capacity.",
+  "label": "metric",
+  "name": "aircraft_fuel_expense",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 22
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "a 9% decrease in the market price of jet fuel",
+  "label": "metric",
+  "name": "jet_fuel_market_price",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 23
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "During the quarter, the company achieved record acquisitions and co-branded credit card spend was up 9% year over year.",
+  "label": "metric",
+  "name": "co_branded_credit_card_spend",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 24
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Operating activities in 2025 provided $8.3 billion of cash flow compared to $8.0 billion in 2024.",
+  "label": "metric",
+  "name": "operating_cash_flow",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 25
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "The principal amount of our debt and finance leases was $14.1 billion at December 31, 2025.",
+  "label": "metric",
+  "name": "total_debt_and_finance_leases",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 26
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We had minimum funding requirements of $70 million during 2025",
+  "label": "metric",
+  "name": "pension_minimum_funding_requirement",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 27
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "As of December 31, 2025, we had approximately $2.4 billion of U.S. federal pre-tax net operating loss carryforwards which we are expecting to utilize during 2026.",
+  "label": "metric",
+  "name": "federal_net_operating_loss_carryforwards",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 28
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Record first-quarter revenue of $13.9 billion",
+  "label": "metric",
+  "name": "operating_revenue",
+  "section": "exhibit_99_1",
+  "runs": 4,
+  "agreed": true,
+  "id": 29
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "operating income, adjusted (a non-GAAP financial measure) was $5.8 billion, a decrease of $212 million compared to 2024",
+  "label": "metric",
+  "name": "operating_income",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 30
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Our goodwill balance, which is related to the airline segment, was $9.8 billion at December 31, 2025.",
+  "label": "metric",
+  "name": "goodwill",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 31
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Excluding net special items1, first-quarter net loss of $267 million, or ($0.40) per diluted share",
+  "label": "metric",
+  "name": "net_income",
+  "section": "exhibit_99_1",
+  "runs": 7,
+  "agreed": true,
+  "id": 32
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Our premium yield growth has significantly outpaced main cabin as demand for premium products continues to grow.",
+  "label": "metric",
+  "name": "premium_yield",
+  "section": "business",
+  "runs": 2,
+  "agreed": true,
+  "id": 33
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Premium unit revenue continued to outperform the Main Cabin in the first quarter.",
+  "label": "metric",
+  "name": "premium_unit_revenue",
+  "section": "exhibit_99_1",
+  "runs": 3,
+  "agreed": true,
+  "id": 34
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "3 Months Ended March 31, 2026 (in millions) Net cash provided by operating activities $ 4,223 Adjusted net cash used in investing activities (1) (815) Free cash flow $ 3,408",
+  "label": "metric",
+  "name": "free_cash_flow",
+  "section": "exhibit_99_1",
+  "runs": 5,
+  "agreed": true,
+  "id": 35
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "a 4% increase in consumption",
+  "label": "metric",
+  "name": "fuel_consumption",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 36
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "Other operating expenses increased $142 million, or 8.7%, in the first quarter of 2026 from the first quarter of 2025, primarily driven by increased costs for crew travel, onboard food and catering, Wi-Fi, ground and cargo handling, passenger accommodation and certain general and administrative expenses.",
+  "label": "metric",
+  "name": "other_operating_expenses",
+  "section": "mdna",
+  "runs": 6,
+  "agreed": true,
+  "id": 37
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Our total operating cost per available seat mile (\"CASM\") of 19.31 cents was comparable to 2024, primarily due to lower fuel expense and a 3% increase in capacity offset by higher employee costs.",
+  "label": "metric",
+  "name": "operating_cost_per_available_seat_mile",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 38
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "During 2025, we continued our quarterly dividend program with $0.15 per share payments in the March 2025 and June 2025 quarters and $0.1875 per share payments in the September 2025 and December 2025 quarters.",
+  "label": "metric",
+  "name": "dividend_per_share",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 39
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "our exercise of purchase options for six Airbus A320 Family aircraft in April 2026",
+  "label": "action_event",
+  "name": "airbus_a320_purchase_option_exercise",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 40
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "The table above and the \u201c Contractual Obligations \u201d table below reflect our exercise of purchase options for six Airbus A320 Family aircraft in April 2026.",
+  "label": "action_event",
+  "name": "aircraft_purchase_option_exercise",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 41
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "The company delivered record first-quarter revenue of $13.9 billion, despite an estimated $320 million revenue impact from winter storms.",
+  "label": "action_event",
+  "name": "winter_storms",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 42
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "In January 2026, we entered into a $1.3 billion term loan issued by a group of lenders due December 2026.",
+  "label": "action_event",
+  "name": "term_loan_issuance",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 43
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "extended the maturity of each facility from June 4, 2029 to March 5, 2031",
+  "label": "action_event",
+  "name": "revolving_credit_facility_maturity_extension",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 44
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We continued to invest in our joint venture partnership with Korean Air through the introduction of a new route from Salt Lake City to Seoul-Incheon.",
+  "label": "action_event",
+  "name": "route_network",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 45
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "received approximately $870 million and $127 million in proceeds from enhanced equipment trust certificates (EETCs) under the 2026-1 Class (B)R Aircraft EETCs and the 2025-1 Class A and B EETCs, respectively, in connection with the financing of certain aircraft",
+  "label": "action_event",
+  "name": "eetc_proceeds_2026_1_class_br_aircraft",
+  "section": "mdna",
+  "runs": 6,
+  "agreed": true,
+  "id": 46
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "Cash remuneration for the first quarter of 2026 included a one-time cash payment associated with the extension of a partner agreement announced in 2025.",
+  "label": "action_event",
+  "name": "partner_agreement_extension_cash_payment",
+  "section": "mdna",
+  "runs": 6,
+  "agreed": true,
+  "id": 47
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "In 2024, other, net investing activities primarily included proceeds from the sale of our equity ownership in Clear Secure, Inc.",
+  "label": "action_event",
+  "name": "equity_ownership_sale",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 48
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "Labor contract expenses for the three months ended March 31, 2025 included a one-time charge resulting from adjustments to vacation accruals due to pay rate increases effective January 1, 2025, following the ratification of the contract extension in the fourth quarter of 2024 with our mainline maintenance and fleet service team members.",
+  "label": "action_event",
+  "name": "labor_contract_expenses",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 49
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "The proceeds of the term loan were used to repay $957 million of the PSP loans due 2031 and for general corporate purposes.",
+  "label": "action_event",
+  "name": "psp_loan_repayment",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 50
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "repaid in full $629 million of the outstanding principal amount of the senior short-term term loan facility",
+  "label": "action_event",
+  "name": "senior_short_term_term_loan_facility_repayment",
+  "section": "mdna",
+  "runs": 7,
+  "agreed": true,
+  "id": 51
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "despite an estimated $320 million revenue impact from winter storms",
+  "label": "action_event",
+  "name": "winter_storms",
+  "section": "exhibit_99_1",
+  "runs": 4,
+  "agreed": true,
+  "id": 52
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "On January 12, 2026, we entered into a definitive agreement with The Boeing Company to acquire 30 Boeing 787-10 aircraft, with an option to purchase up to an additional 30 of the same aircraft.",
+  "label": "action_event",
+  "name": "boeing_787_10_aircraft_order",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 53
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "will pay another $1.3 billion in February 2026 in recognition of these achievements",
+  "label": "action_event",
+  "name": "profit_sharing",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 54
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "American invested in strengthening its schedules across the system and rebanking its operation at Dallas Fort Worth International Airport (DFW) to reinforce operational reliability, ensuring customers experience more on-time flights and an overall smoother travel experience at its largest and most impactful hub.",
+  "label": "action_event",
+  "name": "dfw_rebanking",
+  "section": "exhibit_99_1",
+  "runs": 5,
+  "agreed": true,
+  "id": 55
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "On November 12, 2025, the Court granted a stay of the final order pending the resolution of the case, the timing and outcome of which cannot be predicted at this time.",
+  "label": "action_event",
+  "name": "antitrust_immunity",
+  "section": "business",
+  "runs": 2,
+  "agreed": true,
+  "id": 56
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "The company is also rebanking its operation at Philadelphia International Airport (PHL) to a seven-bank structure to grow and improve trans-Atlantic connectivity.",
+  "label": "action_event",
+  "name": "phl_rebanking",
+  "section": "exhibit_99_1",
+  "runs": 6,
+  "agreed": true,
+  "id": 57
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "In the meantime, we and Aerom\u00e9xico continue to operate under the joint cooperation agreement.",
+  "label": "action_event",
+  "name": "joint_cooperation_agreement",
+  "section": "business",
+  "runs": 2,
+  "agreed": true,
+  "id": 58
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "On January 27, 2026, we entered into a definitive agreement with Airbus S.A.S. to purchase 16 Airbus A330-900 aircraft and 15 Airbus A350-900 aircraft, with an option to purchase up to an additional 20 widebody aircraft.",
+  "label": "action_event",
+  "name": "a330_900_aircraft_purchase",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 59
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "In addition, we have committed to purchase three used Bombardier CRJ900 aircraft which are scheduled to be delivered in 2026.",
+  "label": "action_event",
+  "name": "bombardier_crj900_aircraft_purchase_commitment",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 60
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "despite an estimated $320 million revenue impact from winter storms.",
+  "label": "action_event",
+  "name": "winter_storms",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 61
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "The company recently announced a multiyear investment in Concourse D in Miami, which is expected to enhance American\u2019s leading Latin America franchise with improved operations, elevated customer experience and more convenient international travel.",
+  "label": "action_event",
+  "name": "concourse_d_investment",
+  "section": "exhibit_99_1",
+  "runs": 7,
+  "agreed": true,
+  "id": 62
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "the sale of a portion of our equity investment in Unifi Aviation",
+  "label": "action_event",
+  "name": "equity_investment_sale",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 63
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "we introduced new routes and destinations to Europe and Africa in 2025",
+  "label": "action_event",
+  "name": "route_network",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 64
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "In September 2025, we and our indirect wholly-owned subsidiary SkyMiles IP Ltd. entered into an amendment to the SkyMiles Term Loan credit and guaranty agreement (the \"SkyMiles Credit Facility\"). This amendment, among other things, (i) refinanced the existing term loans with the proceeds of replacement term loans bearing interest at a variable rate equal to an adjusted term Secured Overnight Financing Rate (\"SOFR\"), plus a reduced margin of 1.50% per annum, payable quarterly; (ii) extended the scheduled maturity from October 2027 to October 2028; (iii) reduced the principal amortization payments from 20% to 1% per year, payable quarterly; and (iv) added a prepayment premium of 1.00% payable in connection with a Repricing Event (as defined in the amended SkyMiles Credit Facility) occurring within six months following September 30, 2025.",
+  "label": "action_event",
+  "name": "skymiles_credit_facility_amendment",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 65
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "we have committed to purchase three used Bombardier CRJ900 aircraft which are scheduled to be delivered in 2026",
+  "label": "action_event",
+  "name": "used_bombardier_crj900_aircraft_commitment",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 66
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "extended the maturity date of a revolving credit facility that provides for borrowing capacity of up to $350 million by an additional year to March 2028",
+  "label": "action_event",
+  "name": "revolving_credit_facility_maturity_extension",
+  "section": "mdna",
+  "runs": 7,
+  "agreed": true,
+  "id": 67
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "amended the 2025 AAdvantage Term Loan Facility to reduce the applicable interest rate margin",
+  "label": "action_event",
+  "name": "aadvantage_term_loan_facility_interest_rate_margin_amendment",
+  "section": "mdna",
+  "runs": 7,
+  "agreed": true,
+  "id": 68
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "American introduced new features in its digital app that provide transparent, real-time notifications and more self-service options for customers to independently manage their itineraries in one convenient location.",
+  "label": "action_event",
+  "name": "digital_app",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 69
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "In September 2025, we and our indirect wholly-owned subsidiary SkyMiles IP Ltd. entered into an amendment to the SkyMiles Term Loan credit and guaranty agreement (the \"SkyMiles Credit Facility\").",
+  "label": "action_event",
+  "name": "skymiles_credit_facility_amendment",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 70
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "the sale of our engine maintenance, repair and overhaul joint venture with Aerom\u00e9xico located in Queretaro, Mexico",
+  "label": "action_event",
+  "name": "joint_venture_sale",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 71
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "In October 2025, we acquired a 12.7% equity stake in WestJet for $276 million.",
+  "label": "action_event",
+  "name": "westjet_equity_investment",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 72
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "On February 4, 2026, the Board of Directors approved and we will pay a quarterly dividend of $0.1875 per share on March 19, 2026 to shareholders of record as of February 26, 2026.",
+  "label": "action_event",
+  "name": "dividend",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 73
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "we paid profit sharing of $1.4 billion in February 2025 to our employees",
+  "label": "action_event",
+  "name": "profit_sharing",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 74
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "At the beginning of the first quarter, American\u2019s exclusive and expanded co-branded credit card partnership with Citi took effect.",
+  "label": "action_event",
+  "name": "citi_cobranded_credit_card_partnership",
+  "section": "exhibit_99_1",
+  "runs": 7,
+  "agreed": true,
+  "id": 75
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "successfully rolling out free high-speed satellite Wi-Fi, sponsored by AT&T, for AAdvantage\u00ae members in January.",
+  "label": "action_event",
+  "name": "satellite_wifi_rollout",
+  "section": "exhibit_99_1",
+  "runs": 6,
+  "agreed": true,
+  "id": 76
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "During the December 2025 quarter, we performed qualitative assessments of goodwill and indefinite-lived intangible assets, including applicable factors noted above, and determined that there was no indication that the assets were impaired.",
+  "label": "action_event",
+  "name": "goodwill_impairment_assessment",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 77
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Delta has developed and is implementing plans to transition the fire suppression systems in affected aircraft maintenance hangars to systems that do not contain intentionally added PFAS.",
+  "label": "action_event",
+  "name": "pfas_fire_suppression_system_transition",
+  "section": "risk",
+  "runs": 2,
+  "agreed": true,
+  "id": 78
+ },
+ {
+  "src": "0000006201-26-000032",
+  "quote": "prepaid in full $1.0 billion of the outstanding principal amount of the 8.50% senior secured notes",
+  "label": "action_event",
+  "name": "senior_secured_notes_8_50_percent_prepayment",
+  "section": "mdna",
+  "runs": 7,
+  "agreed": true,
+  "id": 79
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We expect income tax cash payments to increase in 2026 based on our projected financial results.",
+  "label": "guidance",
+  "name": "income_tax_cash_payments",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 80
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Second-quarter adjusted EPS3 expected to be between ($0.20) and $0.20.",
+  "label": "guidance",
+  "name": "earnings_per_share",
+  "section": "exhibit_99_1",
+  "runs": 6,
+  "agreed": true,
+  "id": 81
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We expect to continue generating cash flows from operations during 2026.",
+  "label": "guidance",
+  "name": "operating_cash_flow",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 82
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Based on the forward fuel curve and the current revenue outlook, the midpoint of the company's full-year earnings guidance is approximately flat to 2025, despite a more than $4 billion increase in expense related to higher prices for jet fuel.",
+  "label": "guidance",
+  "name": "aircraft_fuel_expense",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 83
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We expect fuel consumption to increase in 2026 generally aligned with capacity.",
+  "label": "guidance",
+  "name": "fuel_consumption",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 84
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "despite a greater than $4 billion increase in expense related to higher prices for jet fuel",
+  "label": "guidance",
+  "name": "jet_fuel_expense",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 85
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "growth in corporate customer volumes",
+  "label": "guidance",
+  "name": "customer_volume",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 86
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "estimate that there will be approximately $5 million of minimum funding requirements under these plans in 2026",
+  "label": "guidance",
+  "name": "pension_minimum_funding_requirement",
+  "section": "mdna",
+  "runs": 2,
+  "agreed": true,
+  "id": 87
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Our expected 2026 capital spend of approximately $5.5 billion, which may vary depending on financing decisions, will be primarily for aircraft, including deliveries and advance deposit payments, as well as fleet modifications and technology enhancements.",
+  "label": "guidance",
+  "name": "capital_expenditures",
+  "section": "mdna",
+  "runs": 4,
+  "agreed": true,
+  "id": 88
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "FY 2026E Adjusted earnings (loss) per diluted share3 ($0.40) to $1.10",
+  "label": "guidance",
+  "name": "earnings_per_share",
+  "section": "exhibit_99_1",
+  "runs": 8,
+  "agreed": true,
+  "id": 89
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "we still anticipate modest profitability for the year assuming the current forward fuel curve",
+  "label": "guidance",
+  "name": "net_income",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 90
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+  "label": "guidance",
+  "name": "effective_tax_rate",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 91
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "currently assumed to be approximately $4.00 per gallon",
+  "label": "guidance",
+  "name": "jet_fuel_price_per_gallon",
+  "section": "exhibit_99_1",
+  "runs": 3,
+  "agreed": true,
+  "id": 92
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Q2 2026E (vs. Q2 2025) Available seat miles (ASMs) Up 4.0% to 6.0%",
+  "label": "guidance",
+  "name": "available_seat_miles",
+  "section": "exhibit_99_1",
+  "runs": 3,
+  "agreed": true,
+  "id": 93
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Total revenue Up 13.5% to 16.5%",
+  "label": "guidance",
+  "name": "total_revenue",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 94
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "we still anticipate modest profitability for the year assuming the current forward fuel curve.",
+  "label": "guidance",
+  "name": "net_income",
+  "section": "exhibit_99_1",
+  "runs": 3,
+  "agreed": true,
+  "id": 95
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "The company\u2019s second-quarter 2026 guidance assumes continued revenue improvement in the domestic entity, growth in corporate customer volumes and the ability to partially recapture elevated fuel prices, currently assumed to be approximately $4.00 per gallon.",
+  "label": "guidance",
+  "name": "jet_fuel_price_per_gallon",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 96
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "the ability to partially recapture elevated fuel prices, currently assumed to be approximately $4.00 per gallon.",
+  "label": "guidance",
+  "name": "aircraft_fuel_price_per_gallon",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 97
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Available seat miles (ASMs) Up 4.0% to 6.0%",
+  "label": "guidance",
+  "name": "available_seat_miles",
+  "section": "exhibit_99_1",
+  "runs": 5,
+  "agreed": true,
+  "id": 98
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter.",
+  "label": "guidance",
+  "name": "revenue",
+  "section": "exhibit_99_1",
+  "runs": 4,
+  "agreed": true,
+  "id": 99
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "CASM excluding net special items, fuel and profit sharing4 Up 2.0% to 4.0%",
+  "label": "guidance",
+  "name": "cost_per_available_seat_mile",
+  "section": "exhibit_99_1",
+  "runs": 7,
+  "agreed": true,
+  "id": 100
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "continued revenue improvement in the domestic entity",
+  "label": "guidance",
+  "name": "total_revenue",
+  "section": "exhibit_99_1",
+  "runs": 2,
+  "agreed": true,
+  "id": 101
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "Benefit payments for these obligations are expected to be approximately $500 million on an annual basis over the next five years.",
+  "label": "guidance",
+  "name": "postretirement_postemployment_benefit_payments",
+  "section": "mdna",
+  "runs": 3,
+  "agreed": true,
+  "id": 102
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We expect to meet our long-term liquidity needs with cash flows from operations and financing arrangements.",
+  "label": "guidance",
+  "name": "liquidity",
+  "section": "mdna",
+  "runs": 1,
+  "agreed": false,
+  "id": 103
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Q2 2026E (vs. Q2 2025) Available seat miles (ASMs) Up 4.0% to 6.0% Total revenue Up 13.5% to 16.5% CASM excluding net special items, fuel and profit sharing4 Up 2.0% to 4.0% Adjusted earnings (loss) per diluted share3 ($0.20) to $0.20",
+  "label": "guidance",
+  "name": "earnings_per_share",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 104
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "which we expect to grow to $10 billion over the next few years",
+  "label": "guidance",
+  "name": "amex_remuneration",
+  "section": "business",
+  "runs": 1,
+  "agreed": false,
+  "id": 105
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Demand remains strong, and based on current bookings, American expects total revenue growth between 13.5% and 16.5% in the second quarter.",
+  "label": "guidance",
+  "name": "total_revenue",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 106
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Adjusted earnings (loss) per diluted share3 ($0.20) to $0.20",
+  "label": "guidance",
+  "name": "earnings_per_share",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 107
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "the ability to partially recapture elevated fuel prices",
+  "label": "guidance",
+  "name": "fuel_cost_recapture_through_pricing",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 108
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "currently assumed to be approximately $4.00 per gallon.",
+  "label": "guidance",
+  "name": "jet_fuel_price_per_gallon",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 109
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "based on current bookings, American expects total revenue growth between 13.5% and 16.5% in the second quarter.",
+  "label": "guidance",
+  "name": "operating_revenue",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 110
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "Q2 2026E (vs. Q2 2025) Available seat miles (ASMs) Up 4.0% to 6.0% Total revenue Up 13.5% to 16.5% CASM excluding net special items, fuel and profit sharing4 Up 2.0% to 4.0%",
+  "label": "guidance",
+  "name": "cost_per_available_seat_mile",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 111
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "We expect to meet our liquidity needs for the next twelve months with cash and cash equivalents, restricted cash equivalents and cash flows from operations.",
+  "label": "guidance",
+  "name": "liquidity",
+  "section": "mdna",
+  "runs": 1,
+  "agreed": false,
+  "id": 112
+ },
+ {
+  "src": "0000027904-26-000013",
+  "quote": "we project our annual effective tax rate to be between 23% and 25% for 2026.",
+  "label": "guidance",
+  "name": "effective_tax_rate",
+  "section": "mdna",
+  "runs": 1,
+  "agreed": false,
+  "id": 113
+ },
+ {
+  "src": "0000006201-26-000031",
+  "quote": "we\u2019re on track for another record in the second quarter",
+  "label": "guidance",
+  "name": "total_revenue",
+  "section": "exhibit_99_1",
+  "runs": 1,
+  "agreed": false,
+  "id": 114
+ }
+]

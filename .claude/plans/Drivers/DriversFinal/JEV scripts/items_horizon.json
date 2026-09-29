@@ -1,0 +1,639 @@
+[
+ {
+  "id": "HZ000",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Second, for the full year, revenue increased to $541 million versus $446 million last year, representing 21% growth. This makes it 6%. consecutive years of top line growth. Third, our funded backlog also doubled from fiscal year 2022 to set another record at $424 million. This backlog was driven by more than $750 million in bookings throughout fiscal year 2023, reflecting strong demand for our solutions led by our small UAS or SUAS and tactical missile systems or TMS businesses.",
+   "quote": "And fourth, given recent performance trends and our visibility into coming quarters, we're providing fiscal year 2024 guidance that reflects nearly 20% growth in revenue, higher margins, and improved bottom line results.",
+   "text_after_quote": "The fundamentals of our business are strong and we're well positioned for significant expansion and value creation in fiscal year 2024 and beyond."
+  },
+  "cand": 1
+ },
+ {
+  "id": "HZ001",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "The improvement in the fourth quarter revenue was primarily due to higher SUIS and TMS sales, up 68% and more than 100%, respectively, compared to the prior year period. These results reflect ongoing demand for our Switchblade and PUMA products. Gross margin for the fourth quarter was $68.4 million, an increase of 41% versus last fiscal year's $48.6 million. Our gross margin as a percentage of sales was approximately 37% in both periods.",
+   "quote": "As previously discussed, we expect gross margins to remain strong in fiscal year 2024 as our revenue mix continues to shift to more favorable product sales.",
+   "text_after_quote": "As Kevin will cover in a moment, our pro forma bottom line profitability metrics were also much stronger this quarter. This improvement was primarily driven by higher revenues, which more than offset increased operating expenses."
+  },
+  "cand": 2
+ },
+ {
+  "id": "HZ002",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Now shifting gears to other product lines, our SUAS business delivered a record year of performance on the back of our largest ever foreign military sales award in support of Ukraine. We're proud that our Puma systems have again and again proven themselves on the battlefield and are providing scouting and support for all U.S. supplied artillery weapon systems deployed in Ukraine.",
+   "quote": "We expect SUAS revenue to remain strong in fiscal year 2024.",
+   "text_after_quote": "We have also launched several new products and additional enhancements to our SUIS portfolio and expect sales of these solutions to be a meaningful component of future revenues."
+  },
+  "cand": 5
+ },
+ {
+  "id": "HZ003",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Our unmanned ground vehicles, or UGV product line, achieved record levels of performance in the fourth quarter. Similar to our TMS segment, UGV revenue more than doubled year over year, resulting in the unit's best year since its inception. We're also marking solid progress providing Telemacs and Theodore ground vehicles to Ukraine under an accelerated schedule, and these vehicles are performing well on the battlefield.",
+   "quote": "We expect another growth year for this business in fiscal year 2024.",
+   "text_after_quote": "Our HAPS product line continues to make solid progress in the development of Next Generation Sunglider, the successfully commercialized stratospheric-based telecommunication services in partnership with SoftBank."
+  },
+  "cand": 6
+ },
+ {
+  "id": "HZ004",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We have deployed some of these capabilities within our product lines already and expect more in the future. This segment also continues to pursue new and exciting lines of business, such as space robotics and contested logistics that could become new business segments of their own for our environment.",
+   "quote": "But creating works grew significantly in fiscal year 2023, and we expect to see additional top line growth in fiscal year 2024.",
+   "text_after_quote": "Before turning the call over to Kevin, I would like to note that starting in Q1 of this fiscal year, AeroVironment will define our segments differently to reflect the larger, broader nature of our products and services and their associated end markets."
+  },
+  "cand": 7
+ },
+ {
+  "id": "HZ005",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Non-GAAP adjusted EBITDA of between $110 million and $120 million. and non-GAAP earnings for diluted share, excluding acquisition-related costs, amortization of intangible assets, and other one-time expenses of between $2.30 and $2.60. We expect to deliver adjusted EBITDA of between 16% and 18% of revenue for the full fiscal year, while R&D investment is anticipated to remain between 10% to 12% of revenue. Our funded backlog at the end of fiscal year 2023 was a record $424 million.",
+   "quote": "As a result, visibility to the midpoint of our fiscal year 2024 revenue guidance range is at 78%.",
+   "text_after_quote": "This visibility sets us up for a strong fiscal year 2024. We expect first half revenue to represent almost 50% of the full fiscal year. Further, Q1 revenue should account for nearly 40% of first half revenues."
+  },
+  "cand": 12
+ },
+ {
+  "id": "HZ006",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We expect to deliver adjusted EBITDA of between 16% and 18% of revenue for the full fiscal year, while R&D investment is anticipated to remain between 10% to 12% of revenue. Our funded backlog at the end of fiscal year 2023 was a record $424 million. As a result, visibility to the midpoint of our fiscal year 2024 revenue guidance range is at 78%. This visibility sets us up for a strong fiscal year 2024. We expect first half revenue to represent almost 50% of the full fiscal year.",
+   "quote": "Further, Q1 revenue should account for nearly 40% of first half revenues.",
+   "text_after_quote": "Before turning the call over for questions, let me once again summarize the key points from today's call. First, we delivered record fourth quarter performance and met or exceeded our expectations."
+  },
+  "cand": 13
+ },
+ {
+  "id": "HZ007",
+  "task": "horizon",
+  "L_key": "stated_window",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Further, Q1 revenue should account for nearly 40% of first half revenues. Before turning the call over for questions, let me once again summarize the key points from today's call. First, we delivered record fourth quarter performance and met or exceeded our expectations. Second, full year revenue was also a record, marking our sixth consecutive year of top line growth. Third, our funded backlog is at record levels, reflecting strong global demand for our solutions.",
+   "quote": "And fourth, the fundamentals of our business are as strong as they have ever been, and we expect fiscal year 2024 to be yet another record-setting year for the company.",
+   "text_after_quote": "I'm also excited to inform you that Admiral Phil Davidson recently joined our Board of Directors. Admiral Davidson's outstanding qualifications and credentials speak for themselves."
+  },
+  "cand": 14
+ },
+ {
+  "id": "HZ008",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We're humbled and honored to support the Ukraine defense efforts as the only Group 2-3 UAS solution named in the recent USAID package. The FTUS increments we had been awarded to date did not comprise significant revenue for our environment. We recorded a non-cash charge of $190.2 million in the fourth quarter related to the MUIS business, and Kevin will discuss its details further shortly.",
+   "quote": "Importantly, the Army's decision will not have a material impact on near-term revenue growth.",
+   "text_after_quote": "As we look ahead, we will focus on areas where we can improve to ensure we meet our customers' needs. Further, we'll remain focused on winning other key programs by continuing to leverage the strength of our robust portfolio of innovative unmanned solutions."
+  },
+  "cand": 4
+ },
+ {
+  "id": "HZ009",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Today's press release summarizing Zenon's second quarter financial results and the accompanying annual report on Form 10-Q will be made available under the investor section of our website at www.zenon-pharma.com and filed with the SEC and on CDAR. Now, I'd like to turn the call over to Ian.\", \"Ian Mortimer [117]: Thanks, Sherry. Good afternoon, everyone. Thanks for joining us on our call today. We are excited about the continued progress across all aspects of our business during the past quarter.",
+   "quote": "To begin, I'm pleased to announce that patient enrollment is now complete in our XEN 1101 Phase 2 Ex Nova Study in Major Depressive Disorder, or MDD, and we expect the last patients to be randomized in the very near term.",
+   "text_after_quote": "Based on the completion of screening, we estimate that more than 160 patients will be randomized."
+  },
+  "cand": 32
+ },
+ {
+  "id": "HZ010",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Importantly, our third quarter results also reflect our continued progress on the fundamental transformation of FedEx as we moved with urgency to realign our cost structure. Our cost reduction actions supported margin expansion at both ground and freight, but have not yet fully offset the impact of continued pressures at Express. Results at Express came in below where they need to be and below the potential we know exists in this business.",
+   "quote": "We're committed to addressing these cost imbalances, and we'll be taking further actions in the coming months, including a more pronounced readjustment of the air network.",
+   "text_after_quote": "Because of the magnitude of changes we are planning across our air network and our continued need to maintain high service levels, there's a lag in the timing of expense adjustments. We expect to see sequential progress in the fourth quarter."
+  },
+  "cand": 34
+ },
+ {
+  "id": "HZ011",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Looking forward, while food demand volumes are beginning to stabilize and service challenges across the entire supply chain have improved, we do expect customer destocking to persist through the second half of the year based on what we are hearing from our customers. This destocking, while temporary in nature, will continue to pressure our functional ingredients volume as we move through the second half.",
+   "quote": "Now moving to slide 11, our plan includes several near-term actions to improve performance in functional ingredients.",
+   "text_after_quote": "First and foremost, there are clear opportunities to enhance our go-to-market approach with several key customers and accelerate our pipeline to win more opportunities."
+  },
+  "cand": 35
+ },
+ {
+  "id": "HZ012",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Our exposure across multiple OEMs and geographies, and as such, we are not over-indexed to any product or customer concentration risk. We remain confident about the long-term growth prospects for heat pumps and our technology. It's important to note that European residential heat pumps represent only a quarter of our heat exchanger business. We see several solid growth vectors driven by sustainability tailwinds, and continue to share gains from other legacy heat exchanger technologies.",
+   "quote": "We have proactively expanded our capacity as we expect continued robust growth trajectory in heat exchangers, albeit with slightly lower rates in the near term as various dynamics in Europe slow down.",
+   "text_after_quote": "I close my prepared remarks by thanking our global teams for driving our strong financial performance during the quarter."
+  },
+  "cand": 43
+ },
+ {
+  "id": "HZ013",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "To this end, as Renee mentioned, our Board of Directors has authorized a $300 million share repurchase program. Before shifting to our financial outlook for the fiscal third quarter and full fiscal year 2023, I will provide insight about the impact we expect the macro environment to have on SMBs and our business. We anticipate the trends we've experienced in recent quarters will continue in the second half of fiscal 2023.",
+   "quote": "This will impact our business, most notably on near-term payment volume growth.",
+   "text_after_quote": "We estimate that bill standalone TPV growth in Q3 will be approximately flat on a year-over-year basis, reflecting both the continuation of macro trends and our expectations for typical seasonally softer payment volume in the March quarter compared to the December quarter."
+  },
+  "cand": 47
+ },
+ {
+  "id": "HZ014",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "In May, we launched the first version of our magical listing experience, which dramatically reduces this friction for our sellers via AI-generated item descriptions. We integrated Azure's OpenAI API into our core listing flow. And now sellers can choose to have detailed product information instantly populated by generative AI based on the product's title, category, and any item aspects that have been input.",
+   "quote": "During the quarter, we ramped this beta feature to more than 50% of iOS and Android users in the US and expect to reach 100% in the coming weeks.",
+   "text_after_quote": "Early signals have been extremely positive. Approximately 30% of users have tried the feature at least once, and we've observed acceptance rates of over 90% for AI-generated descriptions, including those with edits."
+  },
+  "cand": 48
+ },
+ {
+  "id": "HZ015",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Turning to slide 15, we ended the quarter with excess capital of approximately $400 million. We generated $200 million of capital in the third quarter and $800 million over the last 12 months, consistent with our 90% free cash flow conversion target. In the third quarter, we deployed approximately $300 million of capital. This included nearly $100 million of share repurchases and dividends. With the recent debt maturity behind us, our leverage ratio is now in the middle of our long-term range.",
+   "quote": "Given this, near-term capital deployment will be focused on share repurchases and dividends.",
+   "text_after_quote": "Our baseline expectations are to return approximately $200 million in the fourth quarter. Looking ahead, we will continue to prudently manage our balance sheet and deploy capital as we generate it."
+  },
+  "cand": 51
+ },
+ {
+  "id": "HZ016",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "The remunity pump for remodulin is gaining momentum with approximately one-third of subcutaneous patients now on remunity, especially as remunity is the only subcube pump widely available for new patients to try proximal therapy. So to wrap up, after reaching our goal of doubling the number of tibiasal patients, We're confident in our ability to double our annual revenue run rate from approximately $2 billion today to $4 billion by the end of 2025.",
+   "quote": "We expect continued Tyveso and Tyveso DPI uptake in both PAH and PHILD to drive most of our near-term revenue growth, supplemented by our rent-a-term growth through the expedite protocol and other research, and supported by continued remodeling resilience.",
+   "text_after_quote": "With that, I'll turn the call back over to Martine.\", \"Dr. Martine Rothblatt [809]: Michael, thank you so much for providing that wealth of detailed information, supporting this great growth sector we have going here from 2022 into 2023, 2024, 2025."
+  },
+  "cand": 57
+ },
+ {
+  "id": "HZ017",
+  "task": "horizon",
+  "L_key": "short_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Our global team continues to demonstrate excellent operational and commercial discipline and deliver exceptional results despite the challenging industry environment. Proactive engagement with customers and suppliers helped us mitigate the impact of semiconductor shortages and was a critical factor in driving our overall performance in the quarter. Adjusted free cash flow followed historical patterns and, as anticipated, was a negative $37 million in the quarter.",
+   "quote": "On the operational front, the company had a busy quarter with our products launching in 34 new vehicle models, which will help us to continue our sales growth in the near term.",
+   "text_after_quote": "The company also had a strong start to the year with $1.5 billion in new business wins for the first quarter. This puts us on track to achieve our full year goal of $6 billion in new business wins."
+  },
+  "cand": 58
+ },
+ {
+  "id": "HZ018",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "In Europe, while energy prices have remained lower than previously anticipated, higher inflation levels continue to weigh on both consumer and business sentiment, with manufacturing PMI continuing to contract since July of last year. In China, March industrial production rose 3.9% year-over-year and is recovering gradually with manufacturing PMI now at 50. March retail sales also rose 10.6% year-over-year at their fastest pace since July 2021.",
+   "quote": "Though recovery following the pandemic lockdowns has been slow, we continue to expect growth over the medium term.",
+   "text_after_quote": "Against this backdrop, we continue to take disciplined actions to manage our costs and deliver our target of $1 billion in cost savings in 2023. We're implementing our global workforce reduction program of approximately 2,000 roles."
+  },
+  "cand": 49
+ },
+ {
+  "id": "HZ019",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "I'll pause here and turn the discussion to Bruce to review the financials. Thanks, Jared. As I review our Q3 financial highlights, please reference the financial tables found in today's press release. For the quarter, we recognized $4.7 million of collaboration revenue, all of which was related to our Santa Fe collaboration. At the end of the quarter, our deferred revenue total on the balance sheet was approximately $43.8 million.",
+   "quote": "That reflects Santa Fe partnership revenue that we expect to recognize over the next several years, excluding the receipt of any potential future milestones.",
+   "text_after_quote": "As announced last week, Chimera will receive a $40 million milestone payment triggered by the first patient dosed in the KT474HS trial."
+  },
+  "cand": 59
+ },
+ {
+  "id": "HZ020",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We believe the investments we are making today position SIBO well to generate attractive returns in the years ahead. Now turning to a summary of full year guidance on the next slide, we are reaffirming the 23 guidance we introduced last quarter. In addition to the previously noted DNA organic net revenue growth rate of 7% to 10% range, and we are reaffirming our organic total net revenue growth range of 7% to 9% for 23.",
+   "quote": "This remains above our medium-term guidance of 5% to 7% introduced at our investor day a year and a half ago.",
+   "text_after_quote": "A function of our confidence in the durable growth of our business and the progress we are seeing behind the investments we have made to increase the access and distribution of our products and markets globally."
+  },
+  "cand": 61
+ },
+ {
+  "id": "HZ021",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "As a result of these factors, adjusted EBITDA is expected to be negative $4.3 billion in 2023, an improvement of $900 million versus 2022. We continue to rationalize our capital expenditures due to a greater focus on our core business. Capital expenditures in 2023 are expected to be $2 billion driven by additional investment in our normal and Georgia facilities, next generation technologies, and the continued build out of our go-to-market operations.",
+   "quote": "In addition to our 2023 guidance, I wanted to address the capital needs of the business over the medium term.",
+   "text_after_quote": "The largest lever in our forecast is the swing from $1 billion of gross profit in Q4 2022 to a step change in positive gross margin in 2024. There are three key levers that enable this improvement."
+  },
+  "cand": 62
+ },
+ {
+  "id": "HZ022",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "On today's call, we have Chris Winfrey, our President and CEO, Tom Rutledge, our Executive Chairman, and Jessica Fisher, our CFO. With that, let's turn the call over to Chris.\", \"Chris Winfrey [247]: Thanks, Stephan. During the second quarter, we added 77,000 internet customers, and we continue to benefit from our Spectrum One offering and our network expansion initiatives. We also added 648,000 Spectrum mobile lines. At the end of the second quarter, we had over 6.6 million total mobile lines.",
+   "quote": "Over 11% of our internet customers now have mobile service, and we expect mobile penetration to meaningfully grow over the next several years.",
+   "text_after_quote": "Spectrum Mobile is the nation's fastest mobile service. We see mobile lines as an extension of our Wi-Fi and seamless connectivity service, and we expect our increasing convergence capabilities will contribute to further Internet growth."
+  },
+  "cand": 63
+ },
+ {
+  "id": "HZ023",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Industry fundamentals remain strong for memory and storage as a widespread adoption of IoT, AI, and machine learning solutions create new growth opportunities for us. Now turning to our market outlook, starting with demand. We expect calendar 2023 DRAM bit demand to grow in the high single-digit percentage range, up from prior expectations for mid-single-digit growth. In NAND, we continue to expect calendar 2023 BIT demand growth in the high teens percentage range.",
+   "quote": "Looking forward, over the next few years, we expect BIT demand growth CAGRs of mid-teens in DRAM and low 20s percentage range in NAND.",
+   "text_after_quote": "We forecast calendar 2024 BIT demand growth for the industry to be near the long-term CAGR for DRAM and somewhat below the long-term CAGR for NAND."
+  },
+  "cand": 64
+ },
+ {
+  "id": "HZ024",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We're also conducting targeted drilling to inject solution to areas within the stockpile where solution may have been blocked over time. And our data and modeling can now provide information that targets specific areas of opportunity and we're gearing up to do this more at scale. We now believe we can scale these activities and double the incremental copper to 400 million pounds per annum over time. This is just from are applying our operating practices at a larger scale without relying on new technologies.",
+   "quote": "We're also continuing our work on the new technologies front and that's going to give us the opportunity with success to reach our ultimate goal of 800 million pounds per annum from this initiative over the next three to five years.",
+   "text_after_quote": "Remind everybody we have 40 billion pounds of copper in our stockpiles that's already been mined. This is not in our reserves, and it's an opportunity for us to get recoveries from this copper that previously was thought to be waste material."
+  },
+  "cand": 65
+ },
+ {
+  "id": "HZ025",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We invested in Viatech and Aculon, which accelerated our product electrification strategy. This week, we announced an equity investment in Uptronics and entered into a co-development agreement to create potential robotic applications for Terex products. And we continued our investment in technology, new product development, and our Mexico facility, which continues to progress on time and on budget. I am proud of our team members' accomplishments. Turning to slide six.",
+   "quote": "In our recent investor day, we presented five key themes to our strategy that will drive our growth for the next several years.",
+   "text_after_quote": "The first is capitalizing on megatrends. which are driven by an increasing focus on sustainability. Our products are well positioned to benefit from electrification, waste recycling, and infrastructure investments."
+  },
+  "cand": 66
+ },
+ {
+  "id": "HZ026",
+  "task": "horizon",
+  "L_key": "medium_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "I will now turn the call over to John.\", \"John Stouck [145]: Thank you, Shelly, and good morning, everyone. Let's begin with slide four, titled Executive Summary. We closed out 2022 with strong sales, segment income, and adjusted EPS, which is a direct result of the hard work and dedication of our focused employees across the world. Sales increased 9% to $4.1 billion, Segment income rose 12% to $768 million. ROS expanded by 40 basis points to 18.6%. And adjusted EPS increased 8% to $3.68.",
+   "quote": "A few of our key wins during the year include strategic progress on our transformation initiatives, which we expect to drive significant margin expansion over the next several years.",
+   "text_after_quote": "The acquisition of Manitowoc ice, a complimentary and accretive acquisition which further enhances our commercial water solutions business, and recognition for our leadership and social responsibility and sustainability."
+  },
+  "cand": 67
+ },
+ {
+  "id": "HZ027",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We have significantly added to our inventory depth, successfully integrated the acquisition into our existing operations, and have efficiently accelerated the inherited Wells in Progress inventory. We see opportunities for further upside going forward, and we are eager to bring our fully OVINTIV designed and executed wells online before the end of the year. We once again increased our full year 2023 production guidance and we've tightened the range on our capital spending.",
+   "quote": "Over the long term, we believe that value creation in the E&P space will come from companies that can demonstrate durability in both their return on invested capital and their return of cash to shareholders.",
+   "text_after_quote": "We are positioned to deliver on this value proposition through our relentless focus on innovation, execution, disciplined capital allocation, responsible operations, and leading capital efficiency. This concludes our prepared remarks."
+  },
+  "cand": 16
+ },
+ {
+  "id": "HZ028",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "At the summit, a thousand of our client-facing associates came together from around the world to take stock of all of what we have and what we need to accelerate growth. I was so deeply moved by the warmth and the enthusiasm I was greeted with. We set ourselves a goal to be an employer of choice which we believe will be a pivot for growth. I plan to spend the next several months meeting with so many associates, clients, partners, and shareholders as much as I can.",
+   "quote": "I will listen carefully with an open mind, build trust, and learn all I can about how best to unlock more value for clients, make progress in accelerating top-line growth, and drive long-term shareholder value.",
+   "text_after_quote": "Because I like to be highly visible with clients and associates, my plan is to meet with 100 clients over 100 days, whether in person or virtually, and to visit with as many of our global teams as I can."
+  },
+  "cand": 20
+ },
+ {
+  "id": "HZ029",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "In the quarter, we also completed two acquisitions, Austin CSI and Delegation, for a total purchase price of approximately $370 million. In addition, we announced the acquisitions of Mobica and the professional services and management practices of OneSource Virtual, These acquisitions are expected to improve our digital revenue mix and enhance our consulting capabilities. Our capital allocation framework remains unchanged.",
+   "quote": "Over the longer term, we continue to expect to deploy a balanced capital allocation policy, returning to an aggregate of approximately 50% of free cash flow to shareholders in form of dividends and share repurchases, and allocating the remaining 50% to inorganic investments.",
+   "text_after_quote": "Turning to our forward outlook, as Ravi mentioned, and you will see in our earnings materials, we are only providing revenue guidance for the first quarter of 2023."
+  },
+  "cand": 21
+ },
+ {
+  "id": "HZ030",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "In closing, We have a unique portfolio of diverse yet complementary businesses that contribute to our industry-leading returns. As we have reached the midpoint of 2023, it's a good time to reiterate our strategic priorities that we believe will continue to drive our success. First, leveraging our product breadth and competitive advantage across the P&C and group benefits platforms will drive profitable organic growth.",
+   "quote": "Second, underwriting discipline will guide a balanced risk profile supporting long-term book value growth.",
+   "text_after_quote": "Third, we will continue to prioritize digital, analytics, and data science investments that enhance the customer and agent experience to improve underwriting and claims decision making."
+  },
+  "cand": 23
+ },
+ {
+  "id": "HZ031",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We expect continued progress from our medical improvement plan initiatives over the course of the year. Below the line, interest in other is reduced to a range of $100 million to $120 million, while we are maintaining an effective tax rate in the range of 23% to 25%. We do expect the tax favorability we saw in the first quarter to be offset in Q2. We are also lowering our shares outlook to approximately $249 million, which reflects the already completed $500 million of our baseline share repurchase.",
+   "quote": "I want to reiterate that as we started investor day, neither our fiscal 24 guidance nor our long-term targets reflect M&A, which is difficult to predict in timing or magnitude, or additional opportunistic deployments of capital to share repurchases beyond our baseline repurchase.",
+   "text_after_quote": "We will continue to evaluate both opportunistically to drive long-term value. So, an overall successful first quarter. The Cardinal team has a lot to be proud of with respect to our accomplishments."
+  },
+  "cand": 25
+ },
+ {
+  "id": "HZ032",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Now a brief overview of our second quarter financial performance. One Oaks second quarter 2023 net income totaled $468 million, or $1.04 per share. Second quarter adjusted EBITDA totaled $971 million, a 10% increase year over year. If you exclude merger-related and third-party fractionation costs, second quarter adjusted EBITDA increased nearly 15% and would exceed $1 billion. In June 2023, we redeemed $500 million of our 7.5% senior notes due September 2023 with cash on hand.",
+   "quote": "Our net debt to EBITDA remains well below our long-term target of 3.5 times, and we had more than $100 million of cash and equivalents as of June 30.",
+   "text_after_quote": "Early in the second quarter, Moody's upgraded OneOaks credit rating to BAA2 from BAA3."
+  },
+  "cand": 40
+ },
+ {
+  "id": "HZ033",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Beyond our push to drive operational efficiency, innovations that deliver both improved performance and range, as well as simplified production, are core focus of our development teams. Much of the work we are doing on R1, including EnduroDrive units, simplified network architecture, and updated sensor set and compute, directly translates to our R2 platform. We are utilizing R1 to help capture and drive learnings to ensure a smooth ramp of R2.",
+   "quote": "This alignment of technical roadmaps between R1 and R2 will help further drive long-term cost efficiencies.",
+   "text_after_quote": "Finally, we continue to progress the purchase process, process and service experience."
+  },
+  "cand": 44
+ },
+ {
+  "id": "HZ034",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "With that, I'll pass the call over to Claire for more details on our financial and operating performance for Q1. Thanks, RJ.\", \"Claire McDonough [372]: The team's achievements during Q1 establish an important base of new technologies that will benefit Rivian for quarters to come through greater material cost reduction, enhanced range efficiency, and access to additional market segments.",
+   "quote": "Technologies such as Enduro and LFP are critical to achieve our long-term target cost structure across current vehicle platforms as well as R2.",
+   "text_after_quote": "Turning to our first quarter results. We produced 9,395 vehicles and delivered 7,946 vehicles, which was the primary driver of the $661 million of revenue we generated."
+  },
+  "cand": 45
+ },
+ {
+  "id": "HZ035",
+  "task": "horizon",
+  "L_key": "long_term",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Walt and Kevin will talk more about the early work that we are doing on the Elk Creek and West Texas natural gas liquids pipelines. Regarding our pending acquisition of Magellan Midstream, we've recently accomplished two critical milestones toward completing the transaction, including the expiration of the HSR waiting period in June and the filing of the definitive proxy materials with the SEC in July. Proxy mailings are already hitting investors' mailboxes.",
+   "quote": "As we look ahead to the shareholder and unit holder votes on September 21st, we're confident that the investors of both companies will see the compelling long-term value proposition this transaction brings, with immediate financial benefits and incremental growth through the combination of these two companies.",
+   "text_after_quote": "Today we will walk you through both the macro and micro takeaways of our synergy assumptions. I will cover the macro, and Kevin will go into more detail with the micro explanations."
+  },
+  "cand": 39
+ },
+ {
+  "id": "HZ036",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "In the fourth quarter, we returned $355 million to shareholders, including $191 million through share repurchases, which represents 5.4 million shares, or about 1.5% of shares outstanding. As a result, we've returned approximately $1.9 million of cash to shareholders in 2022. In October, our board of directors authorized an additional $1.5 billion of share repurchases. At year end, our total authorization was approximately $3.2 billion.",
+   "quote": "Going forward, we are committed to returning cash through maintaining our dividend and through opportunistic share repurchases.",
+   "text_after_quote": "Investment excellence is essential to growing earnings and cash."
+  },
+  "cand": 15
+ },
+ {
+  "id": "HZ037",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Rate adequacy means that we expect business to have rate sufficient to provide investors with a return commensurate with the volatility they assume. We believe the property tax business is now broadly rate adequate. That said, inflation and climate change will continue to increase risk, which will require ongoing monitoring and careful underwriting. We are watching other property closely as substantial rate increases continue to flow through this business, especially in property NS.",
+   "quote": "Over time, this should increase the amount of other property business that is rate adequate, which should provide us fertile ground for future growth.",
+   "text_after_quote": "Another source of future growth could be substantial unmet demand for reinsurance. In part, this is because overall demand for traditional reinsurance at the mid-year renewal was down, particularly in Florida. There were several reasons for this."
+  },
+  "cand": 17
+ },
+ {
+  "id": "HZ038",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "While we are managing the short-term sales weakness related to the biopharma end market and electronic cycle, we're getting closer to anniversarying that pressure in fiscal 2024. Related to the BioPharma product lines in our medical fluid components division, we believe we have seen the bottom of the customer's unique supply chain destocking trend and will anniversary this pressure in the first quarter of fiscal 2024.",
+   "quote": "Following this period, we cautiously expect the medical fluid components business to return to its historical mid to high single-digit growth rate over time.",
+   "text_after_quote": "Moving on to electronics and markets, I visited our electronics processing solutions leadership team in Carlsbad, California earlier this month."
+  },
+  "cand": 18
+ },
+ {
+  "id": "HZ039",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "For the quarter, we utilized cash consistent with our 2023 capital allocation objectives, including returning approximately $79 million to shareholders through dividends and $196 million in charity purchases. That brings me to our capital allocations in slide 16. Our execution remained consistent with the updated objectives we communicated at the start of the year. First, as always, increase the dividend in line with non-GAAP net income. Last November, we increased the dividend 18% to $2.36 annually.",
+   "quote": "Going forward, we'll continue to target a 25% payout ratio.",
+   "text_after_quote": "Second, ensure we have the right capital structure in place for the targeted net leverage ratio. We ended the second quarter at 2.6 times flat to the end of the first quarter within our new range of two to three times."
+  },
+  "cand": 19
+ },
+ {
+  "id": "HZ040",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "As noted in our earnings release, we have reached a tentative agreement to settle the legacy IRS tax matter related to the Cryovac acquisition from W.R. Grace. Our 2023 free cash flow range excludes any potential cash settlement as a tentative agreement, is subject to further review and approval. As it relates to reInvent 2.0, we plan to include both the costs and the benefits in our adjusted results as we accelerate our digital transformation to drive higher levels of productivity and operating efficiency.",
+   "quote": "As we've highlighted before in our C operating model on slide seven, our digital transformation will be driving 1% growth over time by broadening our sales reach, making it easier to do business with us and delivering 30 basis point operational efficiency gains.",
+   "text_after_quote": "So as we look ahead to 2023, we anticipate continued softness in the first half. We will remain disciplined to drive the necessary actions to preserve our margins and generate strong free cash flow."
+  },
+  "cand": 22
+ },
+ {
+  "id": "HZ041",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "ARB has been family owned and operated in the United States for three generations. They have a longstanding position in the U.S. process industries markets. They have a large installed base of products throughout the U.S. and sell primarily through bearing distributors to a fragmented base of OEMs and end users. These are markets and channels that Timken knows very well, and we are confident that we can create value for customers and shareholders through integrating ARB into Timken's engineered bearings portfolio.",
+   "quote": "ARB enters the portfolio at modest EBITDA margins, but we expect over time to get it to process industries level margins.",
+   "text_after_quote": "Nadella will add a combination of new products to our portfolio and also expand existing product lines and market positions. The largest product line is linear motion actuators."
+  },
+  "cand": 27
+ },
+ {
+  "id": "HZ042",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "We continue to proactively manage distribution inventory, decreasing inventory in the channel by $79 million sequentially and at historically low levels with weeks of inventory at seven weeks compared to 7.3 weeks in Q4. Total debt was 3.5 billion and net leverage is 0.25. In Q1, we accrued $41 million in our balance sheet under property, plant and equipment related to the 25% investment tax credit for investments in our U.S. factories.",
+   "quote": "This will eventually flow through our income statement as lower depreciation and will receive the associated cash benefit in the future.",
+   "text_after_quote": "Let me now provide you key elements of our non-GAAP guidance for the second quarter. The table detailing our GAAP and non-GAAP guidance is provided in the press release related to our first quarter results."
+  },
+  "cand": 38
+ },
+ {
+  "id": "HZ043",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Our backlog continued to normalize in the quarter in tandem with lead times as we shipped longer-dated orders from our books. Broadly speaking, margins performance in the quarter was exceptional, reaching an all-time high driven by productivity, cost controls, and disciplined pricing, which more than offset the negative product mix in pumps and process solutions.",
+   "quote": "The proactive structural cost actions we have undertaken over the last 12 months are paying dividends and should support strong margin conversions going forward.",
+   "text_after_quote": "Our recent portfolio moves, the acquisition of FW Murphy and the sale of Dosteco, follow the portfolio intent and priorities that we reiterated our investor day earlier in the year and continue our portfolio evolution towards higher growth and higher return businesses that attract evaluations."
+  },
+  "cand": 42
+ },
+ {
+  "id": "HZ044",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Given we are now in a new fiscal year, the LCNRV charge of $229 million you will see on our statement of cash flows is reflected of the charge on new inventory purchased and firm purchase commitments entered into in Q1. The cumulative LCNRV and firm purchase commitments of $822 million represents a $98 million decrease versus the prior quarter, due primarily to significant reductions in material costs for the EDV and an increase in average selling price for our R1 vehicles.",
+   "quote": "As the cumulative LCNRV inventory write-down decreases, we expect to see an increase in net inventory balances and over time, a net decrease in cost of goods sold per vehicle.",
+   "text_after_quote": "We forecast reaching positive gross profit in 2024 and therefore expect by the end of 2024, we will no longer have material LCNRV inventory charges and losses on firm purchase commitments associated with our production at our normal plant."
+  },
+  "cand": 46
+ },
+ {
+  "id": "HZ045",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Specifically, the transition away from our former international distribution partnership to Allianz GI contributed $3.3 billion of the overall $4.3 billion of net outflows in the third quarter. With this transition now largely behind us, we can build on the momentum with our Allianz GI partnership, which has added $3 billion of net flows since inception. Additionally, a majority of the general account assets have now transitioned back to venerable.",
+   "quote": "The remaining general account and variable portfolio assets will transfer over time and is included in our margin and revenue guidance.",
+   "text_after_quote": "Looking forward, we have a strong unfunded pipeline of over $10 billion from a diverse source of strategies and expect to return to our organic growth target of over 2% next year. Turning to slide 14."
+  },
+  "cand": 50
+ },
+ {
+  "id": "HZ046",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "Our customers want them to do so, and UNFI's opportunity is to build the capabilities necessary for this to happen seamlessly. We're also focused on building related capabilities and streamlining legacy processes to help customers and suppliers grow faster and more profitably together and to ensure that UNFI is rewarded appropriately for the value created.",
+   "quote": "Over time, our goal is to evolve our go-to-market programs to reduce complexity and drive accelerated supplier brand growth with and for UNFI customers.",
+   "text_after_quote": "The third area of our transformation focus is enhancing our digital offering, which is another way that we can more effectively connect our customers and suppliers to grow their businesses collectively and profitably."
+  },
+  "cand": 52
+ },
+ {
+  "id": "HZ047",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "As stated last quarter, we are interested in driving overall market share gains and company growth, period. And we're doing just that. Finally, I wanted to say a few words about our updated guidance. First, do not interpret our guidance as a lack of confidence in the long-term outlook of the SES market. Our growth drivers are where the company is headed.",
+   "quote": "We believe the market is on a path to recovery and will eventually return to sustained historic growth rates.",
+   "text_after_quote": "Along with the organizational changes we discussed, the scaling of our Costa Rica manufacturing facility, and our future product line, we believe we can generate significant future returns, including improved revenue growth, enhanced margins, and increased operating leverage, setting us up for success in 2024 and beyond."
+  },
+  "cand": 53
+ },
+ {
+  "id": "HZ048",
+  "task": "horizon",
+  "L_key": "undefined",
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "forward-looking statement",
+   "text_before_quote": "In addition, one-third of the deals we signed in the quarter were flipped deals, where we replaced an incumbent provider, and that speaks to our superior platform and scale. And similar to the first quarter, our international business continues to be a source of new customers. as over 40% of net new customer bookings came from markets outside the United States.",
+   "quote": "We expect that international momentum will be a key growth driver going forward and represents a key advantage for Marketo.",
+   "text_after_quote": "Our single-stack platform allows customers to easily launch in more than 40 countries where Marketo platform is enabled. The most recent expansion is in Brazil with our new partner, FitBank."
+  },
+  "cand": 55
+ }
+]

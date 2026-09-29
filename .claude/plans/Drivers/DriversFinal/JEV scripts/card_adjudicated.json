@@ -1,0 +1,38 @@
+{
+ "state": {
+  "n": 718,
+  "raw": 660,
+  "jev_wrong": 14,
+  "label_wrong": 7,
+  "unclear": 37,
+  "adj": "667/681=97.9%",
+  "strict": "667/718=92.9%"
+ },
+ "unit_level": {
+  "n": 643,
+  "raw": 626,
+  "jev_wrong": 12,
+  "label_wrong": 1,
+  "unclear": 4,
+  "adj": "627/639=98.1%",
+  "strict": "627/643=97.5%"
+ },
+ "unit_change": {
+  "n": 239,
+  "raw": 233,
+  "jev_wrong": 6,
+  "label_wrong": 0,
+  "unclear": 0,
+  "adj": "233/239=97.5%",
+  "strict": "233/239=97.5%"
+ },
+ "time_type": {
+  "n": 866,
+  "raw": 815,
+  "jev_wrong": 0,
+  "label_wrong": 12,
+  "unclear": 39,
+  "adj": "827/827=100.0%",
+  "strict": "827/866=95.5%"
+ }
+}

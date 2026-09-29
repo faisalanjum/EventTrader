@@ -1,0 +1,436 @@
+[
+ {
+  "set": "H3",
+  "id": "H3-000",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "operating cost per available seat mile",
+   "text_before_quote": "Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts Yield (cents) 21.34 20.21 5.6 % Passenger revenue per ASM (cents) 17.35 16.30 6.5 % Total revenue per ASM (cents) 19.32 17.95 7.6 % Cargo ton miles (millions) 527 483 9.0 % Cargo yield per ton mile (cents) 40.55 39.14 3.6 % Fuel consumption (gallons in millions) 1,066 1,042 2.3 % Average aircraft fuel price including related taxes (dollars per gallon) 2.75 2.48 10.7 % Operating cost per ASM (cents) 19.38 18.34 5.6 % Operating cost per ASM excluding net special items (cents) 19.36 18.24 6.1 % Operating cost per ASM excluding net special items and fuel (cents) 15.29 14.54 5.2 %",
+   "quote": "Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 %",
+   "text_after_quote": "Passenger enplanements (thousands) 51,770 51,034 1.4 % Departures (thousands): Mainline 279 278 0.6 % Regional 255 250 1.6 % Total 534 528 1.1 % Average stage length (miles): Mainline 1,200 1,176 2.0 % Regional 478 470 1.7 % Total 856 841 1.7 % Aircraft at end of period: Mainline (2) 1,022 985 3.8 % Regional (3) 572 567 0.9 % Total 1,594 1,552 2.7 % Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 % Total 138,900 133,100 4.4 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-001",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "full time equivalent employees",
+   "text_before_quote": "Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts Yield (cents) 21.34 20.21 5.6 % Passenger revenue per ASM (cents) 17.35 16.30 6.5 % Total revenue per ASM (cents) 19.32 17.95 7.6 % Cargo ton miles (millions) 527 483 9.0 % Cargo yield per ton mile (cents) 40.55 39.14 3.6 % Fuel consumption (gallons in millions) 1,066 1,042 2.3 % Average aircraft fuel price including related taxes (dollars per gallon) 2.75 2.48 10.7 % Operating cost per ASM (cents) 19.38 18.34 5.6 % Operating cost per ASM excluding net special items (cents) 19.36 18.24 6.1 % Operating cost per ASM excluding net special items and fuel (cents) 15.29 14.54 5.2 % Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 % Passenger enplanements (thousands) 51,770 51,034 1.4 % Departures (thousands): Mainline 279 278 0.6 % Regional 255 250 1.6 % Total 534 528 1.1 % Average stage length (miles): Mainline 1,200 1,176 2.0 % Regional 478 470 1.7 % Total 856 841 1.7 % Aircraft at end of period: Mainline (2) 1,022 985 3.8 % Regional (3) 572 567 0.9 % Total 1,594 1,552 2.7 %",
+   "quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 % Total 138,900 133,100 4.4 %",
+   "text_after_quote": "Note: Amounts may not recalculate due to rounding. (1)Unless otherwise noted, operating statistics include mainline and regional operations. Regional includes wholly-owned regional airline subsidiaries and operating results from capacity purchase carriers."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-002",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "operating income",
+   "text_before_quote": "The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.\n\n[Table] Refinery segment financial information Year Ended December 31,\n\n% Increase (Decrease) (1)\n\n(in millions, except per gallon data) 2025 2024 Exchanged products $ 580 $ 1,473 (61) % Sales of refined products 154 231 (33) % Sales to airline segment 1,150 1,421 (19) % Third-party sales 5,077 4,642 9 %",
+   "quote": "Operating revenue $ 6,961 $ 7,767 (10) % Operating income $ 157 $ 38 NM",
+   "text_after_quote": "Refinery segment impact on average price per fuel gallon $ (0.04) $ (0.01) NM [End of table]\n\n(1) Certain variances are labeled as not meaningful (\"NM\") throughout management's discussion and analysis."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-003",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "loyalty program enrollments",
+   "text_before_quote": "Premium unit revenue continued to outperform the Main Cabin in the first quarter. Lead in loyalty American\u2019s AAdvantage\u00ae program is the largest airline loyalty program, offering the highest value per mile of any airline in the U.S., numerous ways to earn and redeem miles and greater opportunities for member engagement. The AAdvantage\u00ae program continues to evolve and American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 3 resonate with customers,",
+   "quote": "as evidenced by record enrollments in the first quarter, up 25% year over year.",
+   "text_after_quote": "At the beginning of the first quarter, American\u2019s exclusive and expanded co-branded credit card partnership with Citi took effect. During the quarter, the company achieved record acquisitions and co-branded credit card spend was up 9% year over year."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-004",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "demand",
+   "text_before_quote": "\u201cThis revenue momentum is the result of focus on our four commercial priorities \u2014 elevating the customer experience, growing our global network, driving premium revenue and leading in loyalty. Even in a volatile operating environment, our pretax margin improved by nearly 2 points year over year, and we still anticipate modest profitability for the year assuming the current forward fuel curve.",
+   "quote": "Demand for our product is growing",
+   "text_after_quote": "and our customer satisfaction scores are improving. We have built a strong foundation to deliver value for our customers, team members and shareholders in 2026 and beyond.\u201d American\u2019s four multiyear commercial initiatives are driving results."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-005",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "passenger yield",
+   "text_before_quote": "AAG\u2019s Results of Operations\n\nOperating Statistics\n\nThe table below sets forth selected operating data for the three months ended March 31, 2026 and 2025. Amounts may not recalculate due to rounding.\n\n  Three Months Ended March 31, Increase   2026 2025 Revenue passenger miles (millions) (a)\n\n58,551 56,356 3.9% Available seat miles (millions) (b)\n\n72,009 69,904 3.0% Passenger load factor (percent) (c)\n\n81.3 80.6 0.7pts",
+   "quote": "Yield (cents) (d) \n\n21.34 20.21 5.6%",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-006",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "monroe refinery employees represented by unions",
+   "text_before_quote": "[Table] Domestic airline employees represented by collective bargaining agreements by group Employee Group Approximate Number of Employees Represented Union Date on which Collective Bargaining Agreement Becomes Amendable Delta Pilots 17,260 ALPA December 31, 2026 Delta Flight Superintendents (Dispatchers) 530 PAFCA August 1, 2030 Endeavor Pilots 1,770 ALPA January 1, 2029\n\nEndeavor Flight Attendants\n\n1,910 AFA March 31, 2027 [End of table]\n\nIn addition to the domestic airline employee groups discussed above,",
+   "quote": "approximately 200 refinery employees of Monroe are represented by the United Steel Workers under an agreement that expires on February 28, 2026",
+   "text_after_quote": "This agreement is governed by the National Labor Relations Act (\"NLRA\"), which generally allows either party to engage in self-help upon the expiration of the agreement."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-007",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "equity ownership stake",
+   "text_before_quote": "\u2022 A joint venture agreement with LATAM with respect to traffic flows between North and South America, allowing our passengers to access more than 300 destinations between the United States/Canada and Argentina, Brazil, Chile, Colombia, Ecuador, Paraguay, Peru and Uruguay. We currently own an approximately 11% equity stake in LATAM.\n\n\u2022 A joint venture agreement with Korean Air with respect to traffic flows between the United States and certain countries in Asia. In addition to the joint venture,",
+   "quote": "we own just under 15% of the outstanding common stock of Hanjin-KAL",
+   "text_after_quote": "the largest shareholder of Korean Air.\n\nEach of our joint venture or joint cooperation agreements described above has been approved and granted antitrust immunity from the U.S. Department of Transportation (\"DOT\")."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-008",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "refinery consumption share",
+   "text_before_quote": "[Table]\n\n[End of table]\n\nItem 7. MD&A - Refinery Segment\n\nRefinery Segment\n\nThe refinery operated by our wholly owned subsidiary, Monroe, primarily produces gasoline, diesel and jet fuel. Monroe has agreements in place to exchange or sell the non-jet fuel products the refinery produces with third parties to obtain jet fuel for consumption in our airline operations.",
+   "quote": "The refinery provides approximately 200,000 barrels per day, or approximately 75% of our consumption, for use in our airline operations through the production of jet fuel and through exchanges and sales of gasoline and diesel fuel produced by the refinery.",
+   "text_after_quote": "The refinery regularly optimizes its sales and exchange activities of non-jet fuel products based on market conditions and the availability of counterparties for exchanges."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-009",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "Refinery revenues decreased in 2025, primarily driven by lower pricing of refined products. The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.\n\n[Table] Refinery segment financial information Year Ended December 31,\n\n% Increase (Decrease) (1)\n\n(in millions, except per gallon data) 2025 2024 Exchanged products $ 580 $ 1,473 (61) % Sales of refined products 154 231 (33) %",
+   "quote": "Sales to airline segment 1,150 1,421 (19) %",
+   "text_after_quote": "Third-party sales 5,077 4,642 9 % Operating revenue $ 6,961 $ 7,767 (10) % Operating income $ 157 $ 38 NM Refinery segment impact on average price per fuel gallon $ (0.04) $ (0.01) NM [End of table]"
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-010",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "fuel hedging contracts",
+   "text_before_quote": "Fuel\n\nAircraft fuel and related taxes was $2.9 billion in the first quarter of 2026, which was $341 million, or 13.2%, higher as compared to the first quarter of 2025. This was primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+   "quote": "As of March 31, 2026, we did not have any fuel hedging contracts outstanding to hedge our fuel consumption.",
+   "text_after_quote": "Our current policy is not to enter into transactions to hedge our fuel consumption, although we review this policy from time to time based on market conditions and other factors."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-011",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "contracted services expense",
+   "text_before_quote": "The increase in these expenses was primarily related to higher refinery sales to third parties, which increased $435 million compared to 2024. See \"Refinery Segment\" below for additional details on the refinery's operations, including third party refinery sales. In addition, the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.\n\nContracted Services.",
+   "quote": "The increase in contracted services resulted from inflationary rate increases in our operations, volume increases on a 3% increase in capacity and additional contract labor costs associated with the expansion of our Sky Club network, particularly our Delta One lounges.",
+   "text_after_quote": "Landing Fees and Other Rents. The increase in landing fees and other rents resulted from higher rates charged by airports following extensive redevelopment projects at numerous facilities and more flights compared to 2024.\n\nRegional Carrier Expense."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-012",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "maintenance materials and repairs",
+   "text_before_quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to annual contractual wage rate increases and a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025.",
+   "quote": "Maintenance, materials and repairs increased $60 million, or 6.5%, in the first quarter of 2026 from the first quarter of 2025, primarily due to increased costs for airframe heavy checks, component part repairs and engine overhauls driven by higher volume and cost of materials.",
+   "text_after_quote": "Other rent and landing fees increased $64 million, or 7.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to rate increases at certain airports."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-013",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "net income",
+   "text_before_quote": "",
+   "quote": "Reconciliation of Net Loss Excluding Net Special Items March 31, Decrease 2026 2025 (in millions, except share and per share amounts) Net loss as reported $ (382) $ (473) Net special items: Total pre-tax net special items (1), (2) 149 118 Net tax effect of net special items (34) (31) Net loss excluding net special items $ (267) $ (386) (30.8%)",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-014",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "non service pension and opeb income",
+   "text_before_quote": "In the first quarter of 2025, other nonoperating expense, net primarily included $48 million of net special charges for mark-to-market net unrealized losses associated with certain equity investments and debt refinancings and extinguishments, as well as $11 million of foreign currency losses,",
+   "quote": "offset in part by $11 million of non-service-related pension and other postretirement benefit plan income",
+   "text_after_quote": "Income Taxes\n\nIn the first quarter of 2026, we recorded an income tax benefit of $94 million. Substantially all of our loss before income taxes is attributable to the United States."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-015",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "debt covenant compliance",
+   "text_before_quote": "Total dividend payments during the year ended December 31, 2025 were $440 million.\n\nOn February 4, 2026, the Board of Directors approved and we will pay a quarterly dividend of $0.1875 per share on March 19, 2026 to shareholders of record as of February 26, 2026.\n\nUndrawn Lines of Credit. As of December 31, 2025 we had approximately $3.1 billion undrawn and available under our revolving credit facilities.\n\nCovenants.",
+   "quote": "We were in compliance with the covenants in our debt agreements at December 31, 2025.",
+   "text_after_quote": "See Note 6 of the Notes to the Consolidated Financial Statements for more information on the covenants in our debt agreements."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-016",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "loyalty program deferred revenue",
+   "text_before_quote": "As of the most recent applicable measurement dates, we were in compliance with each of the foregoing covenants.\n\nSources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by",
+   "quote": "working capital increases principally in our air traffic liability and loyalty program deferred revenue",
+   "text_after_quote": "Investing Activities\n\nOur net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-017",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "income tax benefit",
+   "text_before_quote": "In the first quarter of 2025, other nonoperating expense, net primarily included $48 million of net special charges for mark-to-market net unrealized losses associated with certain equity investments and debt refinancings and extinguishments, as well as $11 million of foreign currency losses, offset in part by $11 million of non-service-related pension and other postretirement benefit plan income.\n\nIncome Taxes",
+   "quote": "In the first quarter of 2026, we recorded an income tax benefit of $94 million.",
+   "text_after_quote": "Substantially all of our loss before income taxes is attributable to the United States.\n\nSee Note 6 to AAG\u2019s Condensed Consolidated Financial Statements in Part I, Item 1A for additional information on income taxes."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-018",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "full time employee equivalents",
+   "text_before_quote": "Fuel Hedging Program\n\nWe closely monitor the hedge portfolio and rebalance the portfolio based on market conditions, which may result in locking in gains or losses on hedge contracts prior to their settlement dates.\n\nEmployee Matters\n\nHuman Capital Management\n\nWe believe that the Delta people and culture are our strongest competitive advantage, and the high-quality service that our employees provide sets us apart from other airlines. As of December 31, 2025,",
+   "quote": "we had approximately 103,000 full-time employee equivalents",
+   "text_after_quote": "of which approximately 100,000 were based in the U.S.\n\nOur principal human capital management objectives are to attract, retain and develop people who understand and are committed to delivering the \"Delta Difference\" that is core to our brand."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-019",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "operating lease obligations",
+   "text_before_quote": "nancial Condition and Liquidity\n\nAs of December 31, 2025 the total of these minimum amounts was $6.0 billion, decreasing on an annual basis from approximately $1.8 billion in 2026 to $300 million in 2030. See Note 9 of the Notes to the Consolidated Financial Statements for more information on our contract carrier obligations.\n\nOperating Lease Obligations. As described further in Note 7 of the Notes to the Consolidated Financial Statements,",
+   "quote": "as of December 31, 2025 we had a total of $7.8 billion of minimum operating lease obligations.",
+   "text_after_quote": "These minimum lease payments decrease on an annual basis from approximately $1.0 billion in 2026 to $500 million in 2030.\n\nOther Obligations."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-020",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "bombardier crj900 aircraft in temporary storage",
+   "text_before_quote": "(d) Yield \u2013 A measure of airline revenue derived by dividing passenger revenue by RPMs.\n\n(e) Passenger revenue per available seat mile (PRASM) \u2013 Passenger revenue divided by ASMs.\n\n(f) Total revenue per available seat mile (TRASM) \u2013 Total revenues divided by ASMs.\n\n(g) Total operating cost per available seat mile (CASM) \u2013 Total operating expenses divided by ASMs.\n\n(h) Includes aircraft owned and leased by American as well as aircraft operated by third-party regional carriers under capacity purchase agreements.",
+   "quote": "Excluded from the aircraft count above as of March 31, 2026 are three Airbus A321XLR mainline aircraft and two Bombardier CRJ900 regional aircraft held in temporary storage.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-021",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "loyalty program marketing agreement sales",
+   "text_before_quote": "Our contracts to sell miles under these marketing agreements have multiple performance obligations. Payments are typically due to us monthly based on the volume of miles sold during the period, and the initial terms of our marketing contracts are from one to thirteen years. During the years ended December 31, 2025, 2024 and 2023,",
+   "quote": "total cash sales from marketing agreements related to our loyalty program were $8.0 billion, $7.4 billion and $6.9 billion, respectively",
+   "text_after_quote": "which are allocated to travel and other performance obligations, as discussed below."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-022",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Risk Factors section of an annual report (10-K)",
+   "driver_name": "fuel price per gallon",
+   "text_before_quote": "High fuel costs or cost increases, including in the cost of crude oil, could have a material adverse effect on our results of operations.\n\nOur results of operations are significantly impacted by changes in the price of aircraft fuel. Fuel costs represented 17%, 19% and 21% of our operating expense in 2025, 2024 and 2023, respectively. Fuel prices are highly volatile and at times have increased substantially in relatively short periods of time.",
+   "quote": "Between 2023 and 2025, our average fuel price per gallon has ranged from a monthly high of $3.22 in October 2023 to a monthly low of $2.20 in August 2025.",
+   "text_after_quote": "We acquire a significant amount of jet fuel from Monroe. The cost of the jet fuel we purchase under these arrangements remains subject to volatility, including from the cost of crude oil."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-023",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "aircraft purchase commitments",
+   "text_before_quote": "The A330-900 aircraft will be powered by the Trent 7000 engine and the A350-900 aircraft will utilize the Trent XWB-84 EP engine, both manufactured by Rolls-Royce. Deliveries of the aircraft will begin in 2029.\n\nSee Note 9 of the Notes to the Consolidated Financial Statements for additional information regarding",
+   "quote": "our aircraft purchase commitments, which totaled approximately $15.4 billion as of December 31, 2025",
+   "text_after_quote": "Strategic Investment in WestJet. In October 2025, we acquired a 12.7% equity stake in WestJet for $276 million. As part of the transaction, we also assumed a commensurate portion of a shareholder loan receivable from the previous owner.\n\nOther ."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-024",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "passenger load factor",
+   "text_before_quote": "(1) See Note 2 to AAG\u2019s Condensed Consolidated Financial Statements in Part I, Item 1A for further information on net special items.\n\nAAG\u2019s Results of Operations\n\nOperating Statistics\n\nThe table below sets forth selected operating data for the three months ended March 31, 2026 and 2025. Amounts may not recalculate due to rounding.\n\n  Three Months Ended March 31, Increase   2026 2025 Revenue passenger miles (millions) (a)\n\n58,551 56,356 3.9% Available seat miles (millions) (b)\n\n72,009 69,904 3.0%",
+   "quote": "Passenger load factor (percent) (c) \n\n81.3 80.6 0.7pts",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-025",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "scheduled debt maturities",
+   "text_before_quote": "In the September 2025 quarter, Fitch Ratings upgraded its outlook for Delta to Positive from Stable. In January 2026, S&P Global upgraded its outlook for Delta to Positive from Stable.\n\nThe principal amount of our debt and finance leases was $14.1 billion at December 31, 2025.\n\nFuture Debt Obligations. As described further in Note 6 of the Notes to the Consolidated Financial Statements, as of December 31, 2025, scheduled maturities of our debt in 2026 are $1.4 billion,",
+   "quote": "with maturities from 2027 through 2030 ranging between $600 million and $3.5 billion annually",
+   "text_after_quote": "As of December 31, 2025, scheduled maturities after 2030 aggregate to $4.8 billion. In addition, we are obligated to make periodic interest payments at fixed and variable rates, depending on the terms of the applicable debt agreements."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-026",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "equity ownership stake",
+   "text_before_quote": "Regional Carriers\n\nThese arrangements enable us to better match capacity with demand in these markets.\n\n[Table]\n\n[End of table]\n\nItem 1. Business\n\nThrough our regional carrier program, Delta Connection \u00ae , we have contractual arrangements with regional carriers to operate aircraft using our \"DL\" designator code. We currently have contractual arrangements with:\n\n\u2022",
+   "quote": "Endeavor Air, Inc., a wholly owned subsidiary of ours (\"Endeavor\");",
+   "text_after_quote": "\u2022 Republic Airways, Inc.; and\n\n\u2022 SkyWest Airlines, Inc. (\"SkyWest Airlines\")."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-027",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "operating lease obligations",
+   "text_before_quote": "nancial Condition and Liquidity\n\nAs of December 31, 2025 the total of these minimum amounts was $6.0 billion, decreasing on an annual basis from approximately $1.8 billion in 2026 to $300 million in 2030. See Note 9 of the Notes to the Consolidated Financial Statements for more information on our contract carrier obligations.\n\nOperating Lease Obligations. As described further in Note 7 of the Notes to the Consolidated Financial Statements, as of December 31, 2025",
+   "quote": "we had a total of $7.8 billion of minimum operating lease obligations",
+   "text_after_quote": "These minimum lease payments decrease on an annual basis from approximately $1.0 billion in 2026 to $500 million in 2030.\n\nOther Obligations."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-028",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "full time equivalent employees",
+   "text_before_quote": "Three Months Ended March 31, Increase   2026 2025 Revenue passenger miles (millions) (a)\n\n58,551 56,356 3.9% Available seat miles (millions) (b)\n\n72,009 69,904 3.0% Passenger load factor (percent) (c)\n\n81.3 80.6 0.7pts Yield (cents) (d)\n\n21.34 20.21 5.6% Passenger revenue per available seat mile (cents) (e)\n\n17.35 16.30 6.5% Total revenue per available seat mile (cents) (f)\n\n19.32 17.95 7.6% Fuel consumption (gallons in millions)\n\n1,066 1,042 2.3% Average aircraft fuel price including related taxes (dollars per gallon)\n\n2.75 2.48 10.7% Total operating cost per available seat mile (cents) (g)\n\n19.38 18.34 5.6% Aircraft at end of period (h)\n\n1,594 1,552 2.7%",
+   "quote": "Full-time equivalent employees at end of period \n\n138,900 133,100 4.4%",
+   "text_after_quote": "(a) Revenue passenger mile (RPM) \u2013 A basic measure of sales volume. One RPM represents one passenger flown one mile.\n\n(b) Available seat mile (ASM) \u2013 A basic measure of production. One ASM represents one seat flown one mile."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-029",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "As of December 31, 2025, we do not plan to use exchange agreements to procure significant volumes of fuel. The decline in exchange transaction volume has driven an increase in third-party refinery sales. Refinery revenues decreased in 2025, primarily driven by lower pricing of refined products. The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.",
+   "quote": "##TABLE_START Refinery segment financial information Year Ended December 31, \n\n% Increase (Decrease) (1) \n\n(in millions, except per gallon data) 2025 2024 Exchanged products $ 580 $ 1,473 (61) % Sales of refined products 154 231 (33) % Sales to airline segment 1,150 1,421 (19) % Third-party sales 5,077 4,642 9 % Operating revenue $ 6,961 $ 7,767 (10) %",
+   "text_after_quote": "Operating income $ 157 $ 38 NM Refinery segment impact on average price per fuel gallon $ (0.04) $ (0.01) NM [End of table]\n\n(1) Certain variances are labeled as not meaningful (\"NM\") throughout management's discussion and analysis."
+  }
+ },
+ {
+  "set": "H3",
+  "id": "H3-030",
+  "src": "0000027904-26-000013",
+  "key": "action_event",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "a350 900 aircraft purchase",
+   "text_before_quote": "On January 12, 2026, we entered into a definitive agreement with The Boeing Company to acquire 30 Boeing 787-10 aircraft, with an option to purchase up to an additional 30 of the same aircraft. The B-787-10 aircraft will include GEnx engines manufactured by General Electric. Deliveries of the B-787-10 aircraft will begin in 2031.\n\nOn January 27, 2026, we entered into a definitive agreement with Airbus S.A.S. to purchase",
+   "quote": "16 Airbus A330-900 aircraft and 15 Airbus A350-900 aircraft, with an option to purchase up to an additional 20 widebody aircraft. The A330-900 aircraft will be powered by the Trent 7000 engine and the A350-900 aircraft will utilize the Trent XWB-84 EP engine, both manufactured by Rolls-Royce.",
+   "text_after_quote": "Deliveries of the aircraft will begin in 2029.\n\nSee Note 9 of the Notes to the Consolidated Financial Statements for additional information regarding our aircraft purchase commitments, which totaled approximately $15.4 billion as of December 31, 2025."
+  }
+ }
+]

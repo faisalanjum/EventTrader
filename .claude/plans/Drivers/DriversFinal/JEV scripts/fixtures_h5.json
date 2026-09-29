@@ -1,0 +1,977 @@
+[
+ {
+  "id": "H5G-40",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "adjusted ebitda",
+   "text_before_quote": "Fiscal 2025 Outlook Core & Main reaffirms its full-year outlook issued in March for fiscal 2025, a 52-week year compared to fiscal 2024, a 53-week year. \u2022Net sales of $7,600 to $7,800 million \u2022Net sales growth of 2% to 5%, reflecting average daily sales growth of 4% to 7% \u2022",
+   "quote": "Adjusted EBITDA (Non-GAAP) of $950 to $1,000 million",
+   "text_after_quote": "\u2022Adjusted EBITDA margin (Non-GAAP) of 12.5% to 12.8% \u2022Operating Cash Flow of $570 to $650 million Conference Call & Webcast Information Core & Main will host a conference call and webcast on June 10, 2025 at 8:30 a.m."
+  }
+ },
+ {
+  "id": "H5G-41",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "net income",
+   "text_before_quote": "Updated Guidance Previous Guidance (in millions, except per share data) Low end High end Low end High end Net sales no change no change $ 6,070.0 $ 6,350.0 Sales growth no change no change (1.5) % +3.0 % Comparable sales no change no change (4.0) % 1.0 % Gross margin rate no change no change 34.3 % 34.7 %",
+   "quote": "GAAP net income no change no change $ 455 $ 530",
+   "text_after_quote": "GAAP earnings per common share, diluted $ 6.05 $ 7.05 $ 5.90 $ 6.90 Diluted weighted average common shares outstanding ~75 ~75 ~77 ~77 Capital expenditures no change no change $ 225 $ 275 Adjusted free cash flow (1) no change no change $ 290 $ 375 (1) Adjusted free cash flow is a non-GAAP measure."
+  }
+ },
+ {
+  "id": "H5G-42",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "net sales growth",
+   "text_before_quote": "Depending on the ultimate scope and duration of supply chain disruptions, we may experience increases in product costs which we may not be able to pass on to our customers, loss of sales due to lack of product availability or potential customer claims from the inability to provide products in accordance with contractual terms. Greater product availability from supply chain improvements may lead to increased competition along with price and volume declines.",
+   "quote": "For fiscal 2023, we expect recent year-over-year growth rates to moderate as we anniversary the effects of inflation in fiscal 2022.",
+   "text_after_quote": "As we have experienced significant inflation over a relatively short period, there is increased risk that we may experience lower levels of inflation, deflation or substantially lower net sales growth than in recent periods, particularly as a result of greater product availability for certain suppliers and product lines."
+  }
+ },
+ {
+  "id": "H5G-43",
+  "set": "H5G",
+  "key": "unclear",
+  "note": "dividend declaration under per-share driver",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "EXHIBIT 99.1 News Release CMC ANNOUNCES QUARTERLY DIVIDEND OF $0.16 PER SHARE Irving, Texas - October 10, 2023 -",
+   "quote": "Today, October 10, 2023, the board of directors of Commercial Metals Company (\"CMC\") (NYSE: CMC) declared a regular quarterly cash dividend of $0.16 per share of CMC common stock. CMC\u2019s 236th consecutive quarterly dividend will be paid on November 9, 2023, to stockholders of record as of the close of business on October 26, 2023.",
+   "text_after_quote": "About CMC CMC is an innovative solutions provider helping build a stronger, safer and more sustainable world."
+  }
+ },
+ {
+  "id": "H5G-44",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "comp store sales growth",
+   "text_before_quote": "The Company expects to deliver comparable net sales growth in the low-to-mid-single digits for the enterprise, mid-single-digits in the Dollar Tree segment, and low-single-digits in the Family Dollar segment. Adjusted diluted EPS is expected to range from $6.50 to $7.00. Our fiscal 2024 outlook reflects approximately $0.20 to $0.30 of incremental transportation and other costs related to the loss of our Marietta distribution center.",
+   "quote": "The Company expects consolidated net sales for the second quarter will range from $7.3 billion to $7.6 billion, based on comparable net sales growth in the low-single-digits for the enterprise, 2.0 to 4.0 percent for the Dollar Tree segment, and approximately flat for the Family Dollar segment.",
+   "text_after_quote": "Adjusted diluted EPS for the quarter is estimated to be in the range of $1.00 to $1.10. Our second quarter outlook reflects approximately $0.10 of incremental transportation and other costs related to the loss of our Marietta distribution center."
+  }
+ },
+ {
+  "id": "H5G-45",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "comparable store sales growth",
+   "text_before_quote": "The Company estimates the following outlook for fiscal 2024. A comparison of new and previous outlook figures is contained in the table below. Changes to the fiscal 2024 net sales and comparable store outlook figures are primarily the result of our third quarter results, as the outlook figures for fourth quarter are largely unchanged.: New Previous New store openings 50 50 Store closures (1) 3 2 Net sales $2.270 to $2.280 billion $2.276 to $2.291 billion",
+   "quote": "Comparable store sales increase 2.7% to 3.0%",
+   "text_after_quote": "2.7% to 3.2% Gross margin 40.0% 40.0% Operating income $251 to $258 million $252 to $259 million Adjusted net income(2) $199 to $203 million $199 to $203 million Adjusted net income per diluted share(2) $3.22 to $3.30 $3.22 to $3.30 Annual effective tax rate (excludes excess tax benefits related to stock-based compensation) 25.0% 25.0% Diluted weighted average shares outstanding 62 million 62 million Capital expenditures $104 million $104 million (1) Store closures include two planned closures where the Company chose not to renew the leases and one unplanned temporary closure related to Hurricane Helene."
+  }
+ },
+ {
+  "id": "H5G-46",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "capital expenditures",
+   "text_before_quote": "To the extent we elect to finance our long-term liquidity needs, we believe that the potential financing capital available to us in the future is sufficient.",
+   "quote": "We estimate that our 2024 capital spending will range from $550 million to $600 million. We regularly assess our capital spending based on current and expected results and the amount is subject to change.",
+   "text_after_quote": "As of August 31, 2023 and 2022, we had no off-balance sheet arrangements that may have a current or future material effect on our financial condition, revenues or expenses, results of operations, liquidity, capital expenditures or capital resources."
+  }
+ },
+ {
+  "id": "H5G-47",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "underutilization charges",
+   "text_before_quote": "We expect wafer starts will remain below peak capacity levels for the second quarter of 2024 as we remain focused on managing down our inventories and controlling our supply. We recognized period costs from fabrication facility underutilization of $165 million in first quarter of 2024 and $222 million in the fourth quarter of 2023 due to wafer start reductions.",
+   "quote": "We expect reduced underutilization charges in the second quarter of 2024.",
+   "text_after_quote": "In addition, we have strategically diverted underutilized equipment toward ramping new technology nodes, which will help us increase leading edge production in a capital efficient manner."
+  }
+ },
+ {
+  "id": "H5G-48",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "interest expense savings",
+   "text_before_quote": "The Company will use the net proceeds from the Notes Offering to redeem the Company\u2019s $993 million 7.625% senior unsecured notes due 2026 (the \u201c2026 Unsecured Notes\u201d). The condition to completion of the redemption of the 2026 Unsecured Notes was satisfied upon closing of the Notes offering, and the redemption will occur on May 22, 2025. The Notes Offering and the redemption of the 2026 Unsecured Notes are a continuation of the Company\u2019s strategy to reduce interest expense and manage its future debt maturities.",
+   "quote": "The Company expects to reduce net interest expense by over $20 million through the scheduled maturity date of the 2026 Unsecured Notes as a result of the transaction and its partial redemption of $350 million of the 2026 Unsecured Notes earlier this year.",
+   "text_after_quote": "In addition, the indenture that governs the Notes has investment grade-style covenants. The Notes will pay interest semi-annually on June 15 and December 15 of each year, beginning on December 15, 2025, at a rate of 5.875% per year."
+  }
+ },
+ {
+  "id": "H5G-49",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "capex",
+   "text_before_quote": "\u2022Net income is expected to be in the range of $220 million to $244 million. Adjusted net income(4) is expected to be in the range of $241 million to $261 million. \u2022Diluted income per common share is expected to be in the range of $3.98 to $4.41 on approximately 55.3 million diluted weighted average shares outstanding. Adjusted diluted income per common share(4) is expected to be in the range of $4.35 to $4.71. \u2022",
+   "quote": "Gross capital expenditures are expected to be approximately $335 million to $345 million in fiscal 2024.",
+   "text_after_quote": "(4) Adjusted net income and adjusted diluted income per common share exclude the impact of nonrecurring or non-cash items which includes asset disposals, retention awards, stock compensation benefits, costs associated with cost-optimization initiatives, and a settlement of employment-related litigation, net of income tax impacts."
+  }
+ },
+ {
+  "id": "H5G-50",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "fast lng unit cost",
+   "text_before_quote": "This does not include any capital expenditures related to Klondike. We have secured financing commitments to continue to develop our Barcarena Power Plant and PortoCem Power Plant, which represents approximately $294 million of our upcoming committed capital expenditures.",
+   "quote": "We expect fully completed Fast LNG units to cost between $1.0 billion and $2.0 billion per unit on average.",
+   "text_after_quote": "Unlike engineering, procurement and construction agreements for traditional liquefaction construction, our contracts with vendors to construct the Fast LNG units allow us to closely control the timing of our spending and construction schedules so that we can complete each project in time frames to meet our business needs."
+  }
+ },
+ {
+  "id": "H5G-51",
+  "set": "H5G",
+  "key": "metric",
+  "note": "committed amount as of date",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "capex",
+   "text_before_quote": "Our expectations of future liquidity needs and sources include numerous assumptions that are subject to various risks and uncertainties. Refer to Note 2 \u2013 \u201cSignificant Accounting Policies\u201d for further information on liquidity and \u201cItem 1A. Risk Factors\u201d for risks and uncertainties that may cause our results to differ from our expectations, each in our Annual Report on Form 10-K.",
+   "quote": "Our remaining committed capital expenditures is approximately $1,446 million and includes remaining expenditures to complete our first Fast LNG project and our onshore liquefaction project at Altamira, as well as committed expenditures necessary to complete the Puerto Sandino Facility, Barcarena Facility, Barcarena and PortoCem Power Plants, and Santa Catarina Facility.",
+   "text_after_quote": "This does not include any capital expenditures related to Klondike."
+  }
+ },
+ {
+  "id": "H5G-52",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "capex",
+   "text_before_quote": "Share Repurchases\n\nAt January 28, 2023, we had $1.85 billion remaining under our Board repurchase authorization.\n\nFunding Requirements\n\nOverview\n\nWe expect our cash needs for opening new stores and expanding existing stores in fiscal 2023 to total approximately $690.0 million, which includes capital expenditures, initial inventory and pre-opening costs.",
+   "quote": "Our total estimated capital expenditures for fiscal 2023 are approximately $2.0 billion, including planned expenditures for our new and expanded stores, store renovations, supply chain and information technology investments, and other property improvements.",
+   "text_after_quote": "We believe that we can adequately fund our working capital requirements and planned capital expenditures for the foreseeable future from net cash provided by operations and potential borrowings under our revolving credit facility."
+  }
+ },
+ {
+  "id": "H5G-53",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "revenue growth",
+   "text_before_quote": "If the U.S. dollar strengthens against other currencies, resulting in unfavorable currency translation, our revenues, revenue growth and results of operations in U.S. dollars may be lower. The U.S. dollar weakened against various currencies during the first quarter of fiscal 2024 compared to the first quarter of fiscal 2023, resulting in favorable currency translation and U.S. dollar revenue growth that was approximately 1.5% higher than our revenue growth in local currency.",
+   "quote": "Assuming that exchange rates stay within recent ranges for the remainder of fiscal 2024, we estimate that our full fiscal 2024 revenue growth in U.S. dollars will be approximately equal to our revenue growth in local currency.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5G-54",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "capex",
+   "text_before_quote": "Capital Expenditures\n\nThe following table summarizes our capital expenditures for the thirteen weeks ended May 3, 2025 and May 4, 2024 (amounts in thousands):\n\nThirteen Weeks Ended May 3, 2025 May 4, 2024 New stores $ 25,970   $ 16,789 Corporate, e-commerce and information technology programs 22,953   9,706 Updates for existing stores and distribution centers 1,907   5,732 Total capital expenditures $ 50,830   $ 32,227",
+   "quote": "We expect capital expenditures for fiscal year 2025 to be between $180 million and $220 million.",
+   "text_after_quote": "The following table summarizes our forecasted allocation of capital expenditures for fiscal year 2025:\n\n2025 New stores 60 % Corporate, e-commerce and information technology programs 20 % Updates for existing stores and distribution centers 20 %"
+  }
+ },
+ {
+  "id": "H5G-55",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "When combined with results from continuing operations, our diluted net earnings per share was $7.99 for fiscal 2023 and $7.39 for fiscal 2022.\n\nOutlook\n\nOn June 14, 2023, we completed our acquisition of Ruth\u2019s, a Delaware corporation, for $21.50 per share in cash. Ruth\u2019s is the owner, operator and franchisor of Ruth\u2019s Chris Steak House restaurants.",
+   "quote": "We expect fiscal 2024 sales from continuing operations to increase between 9.5 percent and 10.5 percent, driven by the addition of the Ruth\u2019s Chris Steak House restaurants to our portfolio, Darden same-restaurant sales growth of 2.5 percent to 3.5 percent, and sales from approximately 50 new restaurant openings.",
+   "text_after_quote": "In fiscal 2024, we expect our annual effective tax rate to be 12 percent to 12.5 percent and we expect capital expenditures incurred to build new restaurants, remodel and maintain existing restaurants and technology initiatives to be between $550 million and $600 million."
+  }
+ },
+ {
+  "id": "H5G-56",
+  "set": "H5G",
+  "key": "metric",
+  "note": "method in use (advice group 7)",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "tax rate",
+   "text_before_quote": "We believe it is useful to exclude these expenses in order to better understand the long-term performance of our core business and to facilitate comparison of our results to those of peer companies and over multiple periods. In addition to these exclusions, we subtract an assumed provision for income taxes to calculate non-GAAP net income. We utilize a fixed long-term projected tax rate in our computation of the non-GAAP income tax provision to provide better consistency across the reporting periods.",
+   "quote": "For fiscal 2024 and fiscal 2025, we have determined the projected non-GAAP tax rate to be 20%.",
+   "text_after_quote": "Free cash flow : We define free cash flow as net cash provided by operating activities less purchases of property and equipment."
+  }
+ },
+ {
+  "id": "H5G-57",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "capex",
+   "text_before_quote": "Net Income\n\nAs a result of the foregoing, net income increas ed t o $41.1 million in th e thirteen weeks ended May 3, 2025 from $31.5 million in the thirteen weeks ended May 4, 2024, an increase of $9.6 million or 30.8%.\n\nLiquidity and Capital Resources\n\nOverview\n\nCash capital expenditures typically vary depending on the timing of new store openings and infrastructure-related investments.",
+   "quote": "We plan to make cash capital expenditures of approximately $210 million to $230 million in fiscal 2025, which exclude the impact of tenant allowances, and which we expect to fund from cash generated from operations, cash on hand, investments and, as needed, borrowings under our Revolving Credit Facility.",
+   "text_after_quote": "We expect to incur approximately $120 million of our cash capital expenditure budget in fiscal 2025 to construct and open approximately 150 net new stores, with the remainder projected to be spent on our store relocations and remodels, corporate infrastructure and shipcenter facilities."
+  }
+ },
+ {
+  "id": "H5G-58",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "adjusted eps diluted",
+   "text_before_quote": "Fiscal 2024 Outlook Our outlook for the fiscal year ending February 1, 2025 (\u201cfiscal 2024\u201d) reflects a 52 week year versus 53 weeks in fiscal 2023. The Company estimates the following for the fiscal year ending February 1, 2025: New New store openings, net of two closures 48 Net sales $2.248 to $2.273 billion Comparable store sales increase 1.0% to 2.0% Gross margin 40.0% Operating income $243 to $251 million Adjusted net income(1)(2) $192 to $198 million",
+   "quote": "Adjusted net income per diluted share(1)(2) $3.10 to $3.20",
+   "text_after_quote": "Annual effective tax rate (excludes excess tax benefits related to stock-based compensation) 25.0% Diluted weighted average shares outstanding 62 million Capital expenditures $85 million (1) The outlook ranges as provided for adjusted net income and adjusted net income per diluted share exclude the excess tax benefits related to stock-based compensation as the Company cannot predict such estimates without unreasonable effort."
+  }
+ },
+ {
+  "id": "H5G-59",
+  "set": "H5G",
+  "key": "unclear",
+  "note": "dividend declaration under per-share driver",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "The Company's balance sheet and liquidity position remained strong. As of May 31, 2024, cash and cash equivalents totaled $698.3 million, with available liquidity of nearly $1.5 billion. During the quarter, CMC repurchased 931,281 shares of common stock valued at $51.8 million in the aggregate. As of May 31, 2024, $458.6 million remained available under the current share repurchase authorization.",
+   "quote": "On June 19, 2024, the board of directors declared a quarterly dividend of $0.18 per share of CMC common stock payable to stockholders of record on July 1, 2024, representing an increase of approximately 13% on a year-over-year basis.",
+   "text_after_quote": "The dividend to be paid on July 10, 2024, marks the 239th consecutive quarterly payment by the Company."
+  }
+ },
+ {
+  "id": "H5G-60",
+  "set": "H5G",
+  "key": "unclear",
+  "note": "completed action + expected completion in one quote",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "network 2 0 integration",
+   "text_before_quote": "We have implemented Network 2.0 optimization in approximately 290 locations in the U.S and Canada as of May 31, 2025. Service providers will handle the pickup and delivery of Federal Express packages in some locations while employee couriers will handle others.",
+   "quote": "We completed Canada's implementation of Network 2.0 in the fourth quarter of 2025 and expect to complete the U.S. implementation by the end of calendar 2027.",
+   "text_after_quote": "In June 2024, Federal Express announced a workforce reduction plan in Europe as part of its ongoing measures to reduce structural costs. The plan will impact approximately 1,400 employees in Europe across back-office and commercial functions."
+  }
+ },
+ {
+  "id": "H5G-61",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "new store openings",
+   "text_before_quote": "Liquidity and Capital Resources\n\nOverview\n\nCash capital expenditures typically vary depending on the timing of new store openings and infrastructure-related investments. We plan to make cash capital expenditures of approximately $335 million in fiscal 2023, which exclude the impact of tenant allowances, and which we expect to fund from cash generated from operations, cash on hand, investments and, as needed, borrowings under our Revolving Credit Facility.",
+   "quote": "We expect to incur approximately $155 million of our cash capital expenditure budget in fiscal 2023 to construct and open over 200 new stores with the remainder projected to be spent on our store relocations and remodels, our shipcenters and our corporate infrastructure.",
+   "text_after_quote": "Our primary working capital requirements are for the purchase of store inventory and payment of payroll, rent, other store operating costs and distribution costs."
+  }
+ },
+ {
+  "id": "H5G-62",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "capex",
+   "text_before_quote": "For fiscal 2025, FedEx is forecasting: \u2022A low-to-mid single-digit percent revenue growth year over year; 3 \u2022Earnings per diluted share of $18.25 to $20.25 before the MTM retirement plans accounting adjustments and $20.00 to $22.00 after also excluding costs related to business optimization initiatives; \u2022Permanent cost reductions from the DRIVE transformation program of $2.2 billion; \u2022ETR of approximately 24.5% prior to the MTM retirement plans accounting adjustments; and \u2022",
+   "quote": "Capital spending of $5.2 billion, with a priority on investments in network optimization and efficiency improvement, including fleet and facility modernization and automation",
+   "text_after_quote": "These forecasts assume the company's current economic forecast and fuel price expectations, successful completion of the planned stock repurchases, and no additional adverse economic or geopolitical developments."
+  }
+ },
+ {
+  "id": "H5G-63",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "interest expense savings",
+   "text_before_quote": "The Repricing Transactions are a continuation of the Company\u2019s ongoing interest expense reduction.",
+   "quote": "The reduction in interest rates is expected to result in interest expense savings of approximately $18 million on an annualized basis.",
+   "text_after_quote": "The 2027 Repriced Loans and the 2028 Repriced Loans bear interest at a rate per annum equal to SOFR with a 0.75% floor, plus a margin equal to 2.00%."
+  }
+ },
+ {
+  "id": "H5G-64",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue",
+   "text_before_quote": "Total Accounts as of April 30, 2023 were 15.0 million, including 7.0 million other consumer-directed benefits (\"CDBs\"). Total HSA Assets as of April 30, 2023 were $22.3 billion, an increase of 10% year over year. Total HSA Assets included $14.1 billion of HSA cash and $8.2 billion of HSA investments. Client-held funds, which are deposits held on behalf of our Clients to facilitate administration of our CDBs, and from which we generate custodial revenue, were $0.9 billion as of April 30, 2023. Business outlook",
+   "quote": "For the fiscal year ending January 31, 2024, management expects revenue of $975 million to $985 million.",
+   "text_after_quote": "Its outlook for net income is between $9 million and $14 million, resulting in net income of $0.10 to $0.16 per diluted share."
+  }
+ },
+ {
+  "id": "H5G-65",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "income taxes payable",
+   "text_before_quote": "Nevertheless, we believe that our existing cash on hand, generation of future operating cash flows, and access to bank financing and capital markets will provide adequate resources to meet our short-term liquidity and long-term capital needs.\n\nBeginning in fiscal 2023, the Tax Cuts and Jobs Act of 2017 requires the capitalization of research and development costs for tax purposes and requires taxpayers to amortize such expenditures over five years.",
+   "quote": "We estimate that our income taxes payable for fiscal 2024 will increase by approximately $77 million as a result of this provision, offset by a corresponding deferred tax asset.",
+   "text_after_quote": "The actual impact will depend on the amount of research and development costs incurred by the Company, whether the U.S. Congress modifies or repeals this provision and whether new guidance and interpretive rules are issued by the U.S."
+  }
+ },
+ {
+  "id": "H5G-66",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "global minimum tax impact",
+   "text_before_quote": "Refer to our consolidated financial statements for additional discussion of contingencies.\n\nKnown Trends and Uncertainties\n\n\u2022 We believe the volatility in the cost of fuel and increases in other related costs are reasonably likely to continue to impact our profitability in both the short and long-term.\n\n\u2022 We believe inflation and interest rates are reasonably likely to continue to impact our profitability.\n\n\u2022",
+   "quote": "We believe a global minimum tax could affect us in 2026, with the potential for a one-year deferral. Prior to any mitigating actions, we believe the annual impact could be approximately $200 million.",
+   "text_after_quote": "We continue to evaluate the impact of these rules and are currently evaluating a variety of mitigating actions to minimize the impact."
+  }
+ },
+ {
+  "id": "H5G-67",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "effective tax rate",
+   "text_before_quote": "\u2022Average selling price in the range of $490,000 to $500,000. \u2022Homebuilding operating income as a percentage of revenues in the range of 9.5% to 10.5%, assuming no inventory-related charges. \u25e6Housing gross profit margin in the range of 20.0% to 21.0%, assuming no inventory-related charges. \u25e6Selling, general and administrative expenses as a percentage of housing revenues anticipated to be approximately 10.3% to 10.8%. 3 \u2022",
+   "quote": "Effective tax rate of approximately 23%.",
+   "text_after_quote": "\u2022Average community count up in the range of 15% to 20%."
+  }
+ },
+ {
+  "id": "H5G-68",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "net sales",
+   "text_before_quote": "Outlook For fiscal 2024 ending on February 1, 2025, the Company revised its sales and EPS guidance. The Company now expects net sales in a range of $1.51 billion to $1.54 billion as compared to net sales of $1.57 billion in fiscal 2023. In fiscal 2024, GAAP EPS is expected to be between $6.28 and $6.58 compared to fiscal 2023 GAAP EPS of $3.82. Adjusted EPS is expected to be between $7.00 and $7.30, compared to fiscal 2023 adjusted EPS of $10.15.",
+   "quote": "For the third quarter of fiscal 2024, the Company expects net sales to be between $310 million and $325 million compared to net sales of $327 million in the third quarter of fiscal 2023.",
+   "text_after_quote": "Earnings on a GAAP basis per share are expected to be in a range of a loss of $0.16 to net earnings of $0.04 in the third quarter compared to GAAP net earnings per share of $0.68 in the third quarter of fiscal 2023."
+  }
+ },
+ {
+  "id": "H5G-69",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "capex",
+   "text_before_quote": "Net Income\n\nAs a result of the foregoing, net income decreased to $64.5 million in the twenty-six weeks ended August 3, 2024 from $84.3 million in the twenty-six weeks ended July 29, 2023, a decrease of $19.8 million or 23.5%.\n\nLiquidity and Capital Resources\n\nOverview\n\nCash capital expenditures typically vary depending on the timing of new store openings and infrastructure-related investments.",
+   "quote": "We plan to make cash capital expenditures of approximately $335 million to $345 million in fiscal 2024, which exclude the impact of tenant allowances, and which we expect to fund from cash generated from operations, cash on hand, investments and, as needed, borrowings under our Revolving Credit Facility.",
+   "text_after_quote": "We expect to incur approximately $170 million of our cash capital expenditure budget in fiscal 2024 to construct and open approximately 230 new stores, with the remainder projected to be spent on our store relocations and remodels, our shipcenters, which includes the expansion of two shipcenters, and our corporate infrastructure."
+  }
+ },
+ {
+  "id": "H5G-70",
+  "set": "H5G",
+  "key": "unclear",
+  "note": "became subject + expected impact in one quote",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "eu ets expense",
+   "text_before_quote": "The application of the rules continues to evolve, and its outcome may alter our tax obligations in certain countries in which we operate.\n\n\u2022 We believe the increasing global focus on climate change, including the reduction of greenhouse gas emissions and new and evolving regulatory requirements, is reasonably likely to have a material negative impact on our future financial results.",
+   "quote": "We became subject to the EU ETS on January 1, 2024, which includes a three-year phase-in period. The impact in 2024 will be approximately $50 million.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5G-71",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "new store openings",
+   "text_before_quote": "For the thirty-nine weeks ended October 28, 2023, we spent $81.4 million for capital expenditures compared to $38.9 million for the thirty-nine weeks ended October 29, 2022. We expect to fund capital expenditures from cash on hand generated from operations. We opened 23 new stores during the thirty-nine weeks ended October 28, 2023, and we recently completed the expansion of our York, PA distribution center, which provides an additional 201,000 square feet of distribution capacity.",
+   "quote": "We expect to open approximately 45 stores during fiscal 2023.",
+   "text_after_quote": "Included in our plans is the construction of our fourth distribution center in Princeton, IL, as well as store-level initiatives at our existing stores, and general corporate capital expenditures, including information technology."
+  }
+ },
+ {
+  "id": "H5G-72",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "interest and other expense",
+   "text_before_quote": "Third Quarter of Fiscal Year 2026 Outlook (in millions, except per share data) Net sales $ 266.0 +/- $5.0 Non-GAAP Financial Measures Adjusted gross margin* 53.0% +/- 50 bps Adjusted operating expenses, net* $ 88.8 +/- $1.0 Adjusted operating income* $ 52.2 +/- $3.0 Adjusted operating margin* 19.6% +/- 80 bps",
+   "quote": "Adjusted interest and other expense, net* $ (5.0)",
+   "text_after_quote": "Adjusted normalized tax rate* 15% Adjusted diluted earnings per share* $ 0.44 +/- $0.03 Adjusted EBITDA* $ 60.0 +/- $3.0 Adjusted EBITDA margin* 22.5% +/- 80 bps Non-GAAP diluted share count* 91.6 3 Semtech Announces Second Quarter of Fiscal Year 2026 Results *See \"Non-GAAP Financial Measures\" below for additional information about our non-GAAP financial results."
+  }
+ },
+ {
+  "id": "H5G-73",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue",
+   "text_before_quote": "Comparable sales decreased 5.0% versus the restated and comparable period ended July 15, 2023. As a result,",
+   "quote": "the Company now expects sales for the fiscal second quarter ending August 3, 2024 to be in the range of $820 million to $826 million",
+   "text_after_quote": "and assumes an approximate 6% to 7% decrease in comparable sales. Diluted income per common share is expected to be in the range of $0.53 to $0.56."
+  }
+ },
+ {
+  "id": "H5G-74",
+  "set": "H5G",
+  "key": "guidance",
+  "note": "blind label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "finished steel shipments",
+   "text_before_quote": "These factors more than offset the positive impacts from the addition of CMC Anchoring Systems and strong profitability within the Company's heat-treating operations. Setting aside weather disruptions, demand conditions in our North American markets remained solid during the quarter. Adjusted EBITDA margin of 11.5% represented a decline of 580 basis points relative to the prior year period. Outlook Mr. Matt said, \"",
+   "quote": "Finished steel shipments within our North America Steel Group are expected to follow a typical seasonal pattern during the third quarter, while adjusted EBITDA margin should be largely stable on a sequential basis.",
+   "text_after_quote": "Conditions in Europe are expected to remain challenging, but adjusted EBITDA is anticipated to approach breakeven levels during the third quarter."
+  }
+ },
+ {
+  "id": "H5M-000",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "salaries wages and benefits",
+   "text_before_quote": "Aircraft fuel and related taxes increased $341 million, or 13.2%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+   "quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to annual contractual wage rate increases and a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-001",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "available seat miles",
+   "text_before_quote": "(1)Not meaningful or greater than 100% change. American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 8 American Airlines Group Inc. Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 %",
+   "quote": "Available seat miles (ASM) (millions) 72,009 69,904 3.0 %",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-002",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "regional carrier expense",
+   "text_before_quote": "Landing Fees and Other Rents. The increase in landing fees and other rents resulted from higher rates charged by airports following extensive redevelopment projects at numerous facilities and more flights compared to 2024.\n\nRegional Carrier Expense.",
+   "quote": "The increase in regional carrier expense primarily resulted from higher volume of regional flights and annual rate increases.",
+   "text_after_quote": "[Table]\n\n[End of table]\n\nItem 7. MD&A - Results of Operations\n\nAircraft Maintenance Materials and Outside Repairs."
+  }
+ },
+ {
+  "id": "H5M-003",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "investing cash flow",
+   "text_before_quote": "Total non-operating income was $363 million in 2025, compared to total non-operating expense of $1.3 billion in 2024, primarily due to mark-to-market gains on certain of our equity investments in 2025 compared to losses in 2024.\n\nCash Flow. During 2025, operating activities generated $8.3 billion, primarily from ticket sales and the sale of SkyMiles to our partners. Remuneration from American Express related to the SkyMiles program were $8.2 billion during 2025, an increase of approximately 11% compared to 2024.",
+   "quote": "Investing activities resulted in net cash outflows of approximately $4.2 billion, primarily for capital expenditures.",
+   "text_after_quote": "After adjusting for our strategic investment in WestJet and certain other items, these results generated $4.6 billion of free cash flow (a non-GAAP financial measure) in 2025."
+  }
+ },
+ {
+  "id": "H5M-004",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "profit sharing payments",
+   "text_before_quote": "People and Culture\n\nWe believe that Delta's brand transcends the industry, powered by our people's outstanding work and passion for serving our customers. For 2025, Delta was named No. 15 on the Fortune 100 Best Companies to Work For list and was ranked No. 2 in the Forbes ranking of the World's Best Employers.\n\nOur industry-leading profit sharing program directly aligns our employees' interests with the company's long-term success and",
+   "quote": "for 2025, we are rewarding them with $1.3 billion in profit sharing payments in February 2026.",
+   "text_after_quote": "The company also maintains a Shared Rewards program to incentivize operational performance, and our employees earned $67 million under this program in 2025."
+  }
+ },
+ {
+  "id": "H5M-005",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue",
+   "text_before_quote": "Consolidated Revenue Statistics by Region (Unaudited) 3 Months Ended Increase March 31, (Decrease) 2026 2025 Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 % Latin America (2) Revenue passenger miles (millions) 10,289 10,022 2.7 % Available seat miles (millions) 12,403 12,004 3.3 % Passenger load factor (percent) 83.0 83.5 (0.5) pts Passenger revenue (dollars in millions) 1,963 1,906 3.0 % Yield (cents) 19.07 19.01 0.3 % Passenger revenue per ASM (cents) 15.82 15.88 (0.3) % Atlantic Revenue passenger miles (millions) 6,213 5,934 4.7 % Available seat miles (millions) 7,794 7,963 (2.1) % Passenger load factor (percent) 79.7 74.5 5.2 pts Passenger revenue (dollars in millions) 1,102 965 14.2 % Yield (cents) 17.74 16.27 9.1 % Passenger revenue per ASM (cents) 14.14 12.12 16.7 %",
+   "quote": "Pacific Revenue passenger miles (millions) 2,882 2,707 6.5 % Available seat miles (millions) 3,398 3,268 4.0 % Passenger load factor (percent) 84.8 82.8 2.0 pts Passenger revenue (dollars in millions) 440 393 12.1 %",
+   "text_after_quote": "Yield (cents) 15.28 14.51 5.3 % Passenger revenue per ASM (cents) 12.96 12.02 7.8 % Total International Revenue passenger miles (millions) 19,384 18,663 3.9 % Available seat miles (millions) 23,595 23,235 1.5 % Passenger load factor (percent) 82.2 80.3 1.9 pts Passenger revenue (dollars in millions) 3,505 3,264 7.4 % Yield (cents) 18.08 17.49 3.4 % Passenger revenue per ASM (cents) 14.85 14.05 5.7 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "id": "H5M-006",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "These increases were partially offset by a decline in main cabin revenue due to industry-wide supply exceeding demand for main cabin travel in the uncertain economic environment.\n\nPassenger Revenue by Geographic Region\n\n[Table] Increase (Decrease) vs. Year Ended December 31, 2024 (in millions) Year Ended December 31, 2025 Passenger Revenue RPMs (Traffic)\n\nASMs (Capacity) Passenger Mile Yield PRASM Load Factor Domestic $ 35,731 1 % \u2014 % 3 % 2 % (2) % (3) pts Atlantic 9,270 2 % 2 % 3 % (1) % (2) % (1) pt",
+   "quote": "Latin America 3,980 \u2014 % \u2014 % 1 % \u2014 % (1) % (1) pt",
+   "text_after_quote": "Pacific 2,787 10 % 16 % 9 % (5) % \u2014 % 4 pts Total passenger revenue $ 51,768 2 % 1 % 3 % \u2014 % (2) % (2) pts [End of table]\n\nDomestic\n\nDomestic passenger revenue in 2025 increased 1% on a 3% increase in capacity compared to 2024."
+  }
+ },
+ {
+  "id": "H5M-007",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "selling expenses",
+   "text_before_quote": "Maintenance, materials and repairs increased $60 million, or 6.5%, in the first quarter of 2026 from the first quarter of 2025, primarily due to increased costs for airframe heavy checks, component part repairs and engine overhauls driven by higher volume and cost of materials.\n\nOther rent and landing fees increased $64 million, or 7.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to rate increases at certain airports.",
+   "quote": "Selling expenses increased $57 million, or 12.8%, in the first quarter of 2026 from the first quarter of 2025",
+   "text_after_quote": "primarily due to higher commissions from renegotiated agency contracts, higher credit card fees driven by the overall increase in passenger revenue and increased advertising expenses."
+  }
+ },
+ {
+  "id": "H5M-008",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "interest expense",
+   "text_before_quote": "Nonoperating Results\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Interest income $ 192 $ 236 $ (44) (18.6)",
+   "quote": "Interest expense, net (400) (452) 52 (11.5)",
+   "text_after_quote": "Other expense, net (94) (44) (50) nm Total nonoperating expense, net $ (302) $ (260) $ (42) 16.0"
+  }
+ },
+ {
+  "id": "H5M-009",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "total revenue",
+   "text_before_quote": "We have built a strong foundation to deliver value for our customers, team members and shareholders in 2026 and beyond.\u201d American\u2019s four multiyear commercial initiatives are driving results. The company delivered record first-quarter revenue of $13.9 billion, despite an estimated $320 million revenue impact from winter storms. Demand was strong in the first quarter, and American recorded the nine highest revenue intake weeks in its 100-year history.",
+   "quote": "American had year-over-year total revenue growth of 10.8% in the quarter.",
+   "text_after_quote": "Total unit revenue was 7.6% higher year over year, improving sequentially each month in the quarter, culminating with March domestic and international passenger unit revenue both up more than 10% year over year."
+  }
+ },
+ {
+  "id": "H5M-010",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "mainline operating special items",
+   "text_before_quote": "Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025.",
+   "quote": "The increase in CASM was primarily driven by higher costs for salaries, wages and benefits, aircraft fuel and other operating expenses, offset in part by a decrease in mainline operating special items, net.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-011",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "other operating expense",
+   "text_before_quote": "[Table] Year Ended December 31,\n\nIncrease (Decrease) % Increase (Decrease) (in millions) 2025 2024 Salaries and related costs $ 17,520 $ 16,161 $ 1,359 8 % Aircraft fuel and related taxes 9,819 10,566 (747) (7) % Ancillary businesses and refinery 5,987 5,416 571 11 % Contracted services 4,617 4,228 389 9 % Landing fees and other rents 3,564 3,150 414 13 % Regional carrier expense 2,553 2,328 225 10 % Passenger commissions and other selling expenses 2,485 2,485 \u2014 \u2014 % Depreciation and amortization 2,443 2,513 (70) (3) % Aircraft maintenance materials and outside repairs 2,432 2,616 (184) (7) % Passenger service 1,855 1,788 67 4 % Profit sharing 1,337 1,389 (52) (4) % Aircraft rent 542 548 (6) (1) %",
+   "quote": "Other 2,388 2,460 (72) (3) %",
+   "text_after_quote": "Total operating expense $ 57,542 $ 55,648 $ 1,894 3 % [End of table]\n\nSalaries and Related Costs."
+  }
+ },
+ {
+  "id": "H5M-012",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "Refinery sales and MRO are included in other revenue, discussed below. These increases were partially offset by a decline in main cabin revenue due to industry-wide supply exceeding demand for main cabin travel in the uncertain economic environment.\n\nPassenger Revenue by Geographic Region\n\n[Table] Increase (Decrease) vs. Year Ended December 31, 2024",
+   "quote": "(in millions) Year Ended December 31, 2025 Passenger Revenue RPMs (Traffic) \n\nASMs (Capacity) Passenger Mile Yield PRASM Load Factor Domestic $ 35,731 1 % \u2014 % 3 % 2 % (2) % (3) pts",
+   "text_after_quote": "Atlantic 9,270 2 % 2 % 3 % (1) % (2) % (1) pt Latin America 3,980 \u2014 % \u2014 % 1 % \u2014 % (1) % (1) pt Pacific 2,787 10 % 16 % 9 % (5) % \u2014 % 4 pts Total passenger revenue $ 51,768 2 % 1 % 3 % \u2014 % (2) % (2) pts [End of table]"
+  }
+ },
+ {
+  "id": "H5M-013",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "cargo ton miles",
+   "text_before_quote": "American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 8 American Airlines Group Inc. Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts Yield (cents) 21.34 20.21 5.6 % Passenger revenue per ASM (cents) 17.35 16.30 6.5 % Total revenue per ASM (cents) 19.32 17.95 7.6 %",
+   "quote": "Cargo ton miles (millions) 527 483 9.0 %",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-014",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "aircraft purchase commitments",
+   "text_before_quote": "Aircraft and Engine Purchase Commitments\n\nAs of March 31, 2026, we had definitive purchase agreements for the acquisition of the following new aircraft (1) :\n\nRemainder of 2026 2027 2028 2029 and Thereafter Total Airbus\n\nA320 Family (2)\n\n15 23 48 75 161 Boeing 737 Family 5 \u2014 \u2014 115 120 787 Family 1 3 5 10 19 Embraer E175 17 14 17 30 78",
+   "quote": "Total 38 40 70 230 378",
+   "text_after_quote": "(1) Delivery schedule represents our best estimate as of the date of this report as described in footnote (d) to the \u201cContractual Obligations\u201d table below."
+  }
+ },
+ {
+  "id": "H5M-015",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "passenger enplanements",
+   "text_before_quote": "Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts Yield (cents) 21.34 20.21 5.6 % Passenger revenue per ASM (cents) 17.35 16.30 6.5 % Total revenue per ASM (cents) 19.32 17.95 7.6 % Cargo ton miles (millions) 527 483 9.0 % Cargo yield per ton mile (cents) 40.55 39.14 3.6 % Fuel consumption (gallons in millions) 1,066 1,042 2.3 % Average aircraft fuel price including related taxes (dollars per gallon) 2.75 2.48 10.7 % Operating cost per ASM (cents) 19.38 18.34 5.6 % Operating cost per ASM excluding net special items (cents) 19.36 18.24 6.1 % Operating cost per ASM excluding net special items and fuel (cents) 15.29 14.54 5.2 % Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 %",
+   "quote": "Passenger enplanements (thousands) 51,770 51,034 1.4 %",
+   "text_after_quote": "Departures (thousands): Mainline 279 278 0.6 % Regional 255 250 1.6 % Total 534 528 1.1 % Average stage length (miles): Mainline 1,200 1,176 2.0 % Regional 478 470 1.7 % Total 856 841 1.7 % Aircraft at end of period: Mainline (2) 1,022 985 3.8 % Regional (3) 572 567 0.9 % Total 1,594 1,552 2.7 % Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 % Total 138,900 133,100 4.4 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "id": "H5M-016",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "wifi enabled aircraft",
+   "text_before_quote": "App-enabled bag drop and touchless ID expansion across our network are expediting customer movement through airport lobbies and security screening checkpoints. We are able to deliver more detailed notifications and recommended next steps for customers experiencing flight disruptions.\n\nOnboard the aircraft, we continue to invest in our in-flight entertainment and are expanding fast and free Wi-Fi for all customers through a free SkyMiles account.",
+   "quote": "In December 2025, we celebrated an important milestone with our 1,000 th free Wi-Fi-enabled aircraft entering service",
+   "text_after_quote": "We also continue to innovate and enhance our digital customer platform on board our aircraft, which will enable the creation of more personalized experiences over the next several years."
+  }
+ },
+ {
+  "id": "H5M-017",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "operating margin",
+   "text_before_quote": "The adjustment to exclude net special items, fuel and profit sharing provides management with an additional tool to understand and analyze the Company\u2019s non-fuel costs and core operating performance. 3 Months Ended Percent Reconciliation of Operating Loss Excluding Net Special Items March 31, Decrease 2026 2025 (in millions) Operating loss as reported $ (41) $ (270) Operating net special items: Mainline operating special items, net (1) 14 70 Operating loss excluding net special items $ (27) $ (200) (86.5%)",
+   "quote": "Calculation of Operating Margin Operating loss as reported $ (41) $ (270) Total operating revenues as reported $ 13,912 $ 12,551 Operating margin (0.3 %) (2.2 %)",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-018",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "landing fees and other rents",
+   "text_before_quote": "In addition, the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.\n\nContracted Services. The increase in contracted services resulted from inflationary rate increases in our operations, volume increases on a 3% increase in capacity and additional contract labor costs associated with the expansion of our Sky Club network, particularly our Delta One lounges.\n\nLanding Fees and Other Rents.",
+   "quote": "The increase in landing fees and other rents resulted from higher rates charged by airports following extensive redevelopment projects at numerous facilities and more flights compared to 2024.",
+   "text_after_quote": "Regional Carrier Expense. The increase in regional carrier expense primarily resulted from higher volume of regional flights and annual rate increases.\n\n[Table]\n\n[End of table]\n\nItem 7."
+  }
+ },
+ {
+  "id": "H5M-019",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "refinery operating income",
+   "text_before_quote": "The volume of exchange transactions has declined in recent years due to changes in the counterparties used to supply jet fuel and our related buy/sell agreements. As of December 31, 2025, we do not plan to use exchange agreements to procure significant volumes of fuel. The decline in exchange transaction volume has driven an increase in third-party refinery sales. Refinery revenues decreased in 2025, primarily driven by lower pricing of refined products.",
+   "quote": "The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-020",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "interest expense net",
+   "text_before_quote": "Interest income decreased $44 million, or 18.6%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a decrease in the average balance of American\u2019s short-term investments and lower interest rates, resulting in reduced returns.",
+   "quote": "Interest expense, net decreased $52 million, or 11.5%, in the first quarter of 2026 from the first quarter of 2025, primarily due to lower interest rates on its variable-rate debt instruments and lower outstanding debt subsequent to the first quarter of 2025, as American continues its efforts to strengthen the balance sheet.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-021",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "customers served",
+   "text_before_quote": "[Business]\n ITEM 1. BUSINESS\n\nGeneral\n\nAs a global airline based in the United States, we connect customers across our expansive global network with a commitment to ensuring that the future of travel is connected, personalized and enjoyable.",
+   "quote": "In 2025, we served over 200 million customers safely, reliably and with industry-leading customer service innovation.",
+   "text_after_quote": "Competitive Advantages and Brand Strength\n\nAs we celebrated our centennial year in 2025, we continued to differentiate Delta from the industry and to invest in extending our competitive advantages."
+  }
+ },
+ {
+  "id": "H5M-022",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "aircraft purchase commitments",
+   "text_before_quote": "Commitments\n\nSignificant Indebtedness\n\nAs of March 31, 2026, American had $23.6 billion in long-term debt, including current maturities of $4.1 billion. All material changes in our significant indebtedness since our 2025 Form 10-K are discussed in Note 5 to AAG\u2019s Condensed Consolidated Financial Statements in Part I, Item 1A and Note 4 to American\u2019s Condensed Consolidated Financial Statements in Part I, Item 1B.\n\nAircraft and Engine Purchase Commitments",
+   "quote": "As of March 31, 2026, we had definitive purchase agreements for the acquisition of the following new aircraft",
+   "text_after_quote": "(1) :\n\nRemainder of 2026 2027 2028 2029 and Thereafter Total Airbus\n\nA320 Family (2)\n\n15 23 48 75 161 Boeing 737 Family 5 \u2014 \u2014 115 120 787 Family 1 3 5 10 19 Embraer E175 17 14 17 30 78 Total 38 40 70 230 378"
+  }
+ },
+ {
+  "id": "H5M-023",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "total revenue per available seat mile",
+   "text_before_quote": "Results of Operations\n\nOperating Revenue [Table] Year Ended December 31,\n\nIncrease (Decrease) % Increase (Decrease)\n\n(in millions) (1)\n\n2025 2024 Ticket - Main cabin $ 23,391 $ 24,497 $ (1,106) (5) % Ticket - Premium products 22,097 20,599 1,498 7 % Loyalty travel awards 4,237 3,841 396 10 % Travel-related services 2,043 1,957 86 4 % Total passenger revenue $ 51,768 $ 50,894 $ 874 2 % Cargo 900 822 78 9 % Other 10,696 9,927 769 8 % Total operating revenue $ 63,364 $ 61,643 $ 1,721 3 %",
+   "quote": "TRASM (cents) 21.26 \u00a2 21.37 \u00a2 (0.11) \u00a2 (1) %",
+   "text_after_quote": "Third-party refinery sales (2)\n\n(1.70) (1.61) (0.09) 6 % TRASM, adjusted (cents) 19.56 \u00a2 19.76 \u00a2 (0.20) \u00a2 (1) % [End of table]\n\n(1) Total amounts in the table above may not calculate exactly due to rounding."
+  }
+ },
+ {
+  "id": "H5M-024",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "total nonoperating expense",
+   "text_before_quote": "Nonoperating Results\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Interest income $ 55 $ 94 $ (39) (41.3) Interest expense, net (397) (428) 31 (7.3) Other expense, net (93) (44) (49) nm (1)",
+   "quote": "Total nonoperating expense, net $ (435) $ (378) $ (57) 15.1",
+   "text_after_quote": "(1) Not meaningful or greater than 100% change."
+  }
+ },
+ {
+  "id": "H5M-025",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Risk Factors section of an annual report (10-K)",
+   "driver_name": "saf price",
+   "text_before_quote": "The legislation also provides for a review of the effectiveness of CORSIA in 2026 that could, if CORSIA is not deemed sufficiently effective, lead to the application of EU ETS to all flights departing the EU and EEA, which would increase costs. Also in 2023, the EU adopted legislation that established a SAF mandate on fuel supplied at EU airports. Beginning in 2025, the mandate required 2% of the jet fuel supplied in the EU to be SAF, and the percentage increases incrementally over time to 70% in 2050.",
+   "quote": "This mandate has increased SAF prices in the EU for the airline industry.",
+   "text_after_quote": "In 2024, the UK also adopted SAF mandate legislation, and other countries are also considering mandates."
+  }
+ },
+ {
+  "id": "H5M-026",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "wifi enabled aircraft",
+   "text_before_quote": "App-enabled bag drop and touchless ID expansion across our network are expediting customer movement through airport lobbies and security screening checkpoints. We are able to deliver more detailed notifications and recommended next steps for customers experiencing flight disruptions.\n\nOnboard the aircraft, we continue to invest in our in-flight entertainment and are expanding fast and free Wi-Fi for all customers through a free SkyMiles account.",
+   "quote": "In December 2025, we celebrated an important milestone with our 1,000 th free Wi-Fi-enabled aircraft entering service.",
+   "text_after_quote": "We also continue to innovate and enhance our digital customer platform on board our aircraft, which will enable the creation of more personalized experiences over the next several years."
+  }
+ },
+ {
+  "id": "H5M-027",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "profit sharing",
+   "text_before_quote": "People and Culture\n\nWe believe that Delta's brand transcends the industry, powered by our people's outstanding work and passion for serving our customers. For 2025, Delta was named No. 15 on the Fortune 100 Best Companies to Work For list and was ranked No. 2 in the Forbes ranking of the World's Best Employers.\n\nOur industry-leading profit sharing program directly aligns our employees' interests with the company's long-term success and for 2025,",
+   "quote": "we are rewarding them with $1.3 billion in profit sharing payments in February 2026",
+   "text_after_quote": "The company also maintains a Shared Rewards program to incentivize operational performance, and our employees earned $67 million under this program in 2025."
+  }
+ },
+ {
+  "id": "H5M-028",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "non operating income",
+   "text_before_quote": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.\n\nNon-Operating Results.",
+   "quote": "Total non-operating income was $363 million in 2025, compared to total non-operating expense of $1.3 billion in 2024, primarily due to mark-to-market gains on certain of our equity investments in 2025 compared to losses in 2024",
+   "text_after_quote": "Cash Flow. During 2025, operating activities generated $8.3 billion, primarily from ticket sales and the sale of SkyMiles to our partners."
+  }
+ },
+ {
+  "id": "H5M-029",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "delta flight superintendents represented by unions",
+   "text_before_quote": "Collective Bargaining\n\nAs of December 31, 2025, approximately 20% of our full-time equivalent employees were represented by unions.\n\n[Table] Domestic airline employees represented by collective bargaining agreements by group Employee Group Approximate Number of Employees Represented Union Date on which Collective Bargaining Agreement Becomes Amendable Delta Pilots 17,260 ALPA December 31, 2026",
+   "quote": "Delta Flight Superintendents (Dispatchers) 530 PAFCA August 1, 2030",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-030",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "net cash used in financing activities",
+   "text_before_quote": "Our principal investing activities in the first quarter of 2025 included $824 million of capital expenditures, which primarily related to the purchase of seven Boeing 737 MAX aircraft, two Embraer E175 aircraft, two Bombardier CRJ900 aircraft, one Airbus A321neo aircraft and four aircraft engines. Additionally, we had $457 million in net purchases of short-term investments.\n\nFinancing Activities",
+   "quote": "Our net cash used in financing activities was $1.9 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-031",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "salaries wages and benefits",
+   "text_before_quote": "Aircraft fuel and related taxes increased $341 million, or 13.2%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+   "quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025",
+   "text_after_quote": "primarily due to annual contractual wage rate increases and a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025."
+  }
+ },
+ {
+  "id": "H5M-032",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "other revenue",
+   "text_before_quote": "Any forward-looking statements speak only as of the date hereof or as of the dates indicated in the statement. American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 7 American Airlines Group Inc. Condensed Consolidated Statements of Operations (In millions, except share and per share amounts) (Unaudited) Percent 3 Months Ended Increase March 31, (Decrease) 2026 2025 Operating revenues: Passenger $ 12,495 $ 11,391 9.7",
+   "quote": "Cargo 214 189 12.9 Other 1,203 971 23.9 Total operating revenues 13,912 12,551 10.8",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H5M-033",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "total revenue per available seat mile",
+   "text_before_quote": "[Table] Year Ended December 31,\n\nIncrease (Decrease) % Increase (Decrease)\n\n(in millions) (1)\n\n2025 2024 Ticket - Main cabin $ 23,391 $ 24,497 $ (1,106) (5) % Ticket - Premium products 22,097 20,599 1,498 7 % Loyalty travel awards 4,237 3,841 396 10 % Travel-related services 2,043 1,957 86 4 % Total passenger revenue $ 51,768 $ 50,894 $ 874 2 % Cargo 900 822 78 9 % Other 10,696 9,927 769 8 % Total operating revenue $ 63,364 $ 61,643 $ 1,721 3 % TRASM (cents) 21.26 \u00a2 21.37 \u00a2 (0.11) \u00a2 (1) %\n\nThird-party refinery sales (2)\n\n(1.70) (1.61) (0.09) 6 %",
+   "quote": "TRASM, adjusted (cents) 19.56 \u00a2 19.76 \u00a2",
+   "text_after_quote": "(0.20) \u00a2 (1) % [End of table]\n\n(1) Total amounts in the table above may not calculate exactly due to rounding.\n\n(2) For additional information on adjustments to TRASM, see \"Supplemental Information\" below."
+  }
+ },
+ {
+  "id": "H5M-034",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "passenger revenue per available seat mile",
+   "text_before_quote": "Consolidated Revenue Statistics by Region (Unaudited) 3 Months Ended Increase March 31, (Decrease) 2026 2025 Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 % Latin America (2) Revenue passenger miles (millions) 10,289 10,022 2.7 % Available seat miles (millions) 12,403 12,004 3.3 % Passenger load factor (percent) 83.0 83.5 (0.5) pts Passenger revenue (dollars in millions) 1,963 1,906 3.0 % Yield (cents) 19.07 19.01 0.3 % Passenger revenue per ASM (cents) 15.82 15.88 (0.3) % Atlantic Revenue passenger miles (millions) 6,213 5,934 4.7 % Available seat miles (millions) 7,794 7,963 (2.1) % Passenger load factor (percent) 79.7 74.5 5.2 pts Passenger revenue (dollars in millions) 1,102 965 14.2 % Yield (cents) 17.74 16.27 9.1 %",
+   "quote": "Passenger revenue per ASM (cents) 14.14 12.12 16.7 %",
+   "text_after_quote": "Pacific Revenue passenger miles (millions) 2,882 2,707 6.5 % Available seat miles (millions) 3,398 3,268 4.0 % Passenger load factor (percent) 84.8 82.8 2.0 pts Passenger revenue (dollars in millions) 440 393 12.1 % Yield (cents) 15.28 14.51 5.3 % Passenger revenue per ASM (cents) 12.96 12.02 7.8 % Total International Revenue passenger miles (millions) 19,384 18,663 3.9 % Available seat miles (millions) 23,595 23,235 1.5 % Passenger load factor (percent) 82.2 80.3 1.9 pts Passenger revenue (dollars in millions) 3,505 3,264 7.4 % Yield (cents) 18.08 17.49 3.4 % Passenger revenue per ASM (cents) 14.85 14.05 5.7 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "id": "H5M-035",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "undrawn revolving credit facilities",
+   "text_before_quote": "During 2025, we continued our quarterly dividend program with $0.15 per share payments in the March 2025 and June 2025 quarters and $0.1875 per share payments in the September 2025 and December 2025 quarters. Total dividend payments during the year ended December 31, 2025 were $440 million.\n\nOn February 4, 2026, the Board of Directors approved and we will pay a quarterly dividend of $0.1875 per share on March 19, 2026 to shareholders of record as of February 26, 2026.\n\nUndrawn Lines of Credit.",
+   "quote": "As of December 31, 2025 we had approximately $3.1 billion undrawn and available under our revolving credit facilities.",
+   "text_after_quote": "Covenants. We were in compliance with the covenants in our debt agreements at December 31, 2025. See Note 6 of the Notes to the Consolidated Financial Statements for more information on the covenants in our debt agreements."
+  }
+ },
+ {
+  "id": "H5M-036",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "long term debt and finance lease repayments",
+   "text_before_quote": "Additionally, we had $457 million in net purchases of short-term investments.\n\nFinancing Activities\n\nOur net cash used in financing activities was $1.9 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal financing activities in the first quarter of 2026 included $2.3 billion in long-term debt and finance lease repayments, consisting of the $1.0 billion early repayment on the outstanding principal amount of the 8.50% senior secured notes and $1.3 billion in scheduled repayments, including the outstanding principal amount of the senior short-term term loan facility.",
+   "text_after_quote": "Additionally, we incurred $554 million in net payments on fuel financing transactions. These cash outflows were offset in part by $997 million of proceeds from the issuance of EETCs in connection with the financing of certain aircraft."
+  }
+ },
+ {
+  "id": "H5M-037",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "employee base pay",
+   "text_before_quote": "Salaries and Related Costs. The increase in salaries and related costs primarily resulted from the implementation of base pay increases for eligible employees of 5% effective June 1, 2024 and",
+   "quote": "4% effective June 1, 2025",
+   "text_after_quote": "and 4% for Delta pilots on January 1, 2025.\n\nAircraft Fuel and Related Taxes."
+  }
+ },
+ {
+  "id": "H5M-038",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "foreign currency losses",
+   "text_before_quote": "In the first quarter of 2025, other nonoperating expense, net primarily included $48 million of net special charges for mark-to-market net unrealized losses associated with certain equity investments and debt refinancings and extinguishments,",
+   "quote": "as well as $11 million of foreign currency losses",
+   "text_after_quote": "offset in part by $11 million of non-service-related pension and other postretirement benefit plan income.\n\nIncome Taxes\n\nIn the first quarter of 2026, we recorded an income tax benefit of $94 million."
+  }
+ },
+ {
+  "id": "H5M-039",
+  "set": "H5M",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "mainline full time equivalent employees",
+   "text_before_quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to annual contractual wage rate increases and",
+   "quote": "a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025",
+   "text_after_quote": ""
+  }
+ }
+]

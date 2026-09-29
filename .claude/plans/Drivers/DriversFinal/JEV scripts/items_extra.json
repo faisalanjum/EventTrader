@@ -1,0 +1,626 @@
+[
+ {
+  "id": "DIV-H1-001-amount",
+  "set": "DIV",
+  "key": "metric",
+  "note": "amount claim under the per-share driver",
+  "state": {
+   "where_it_appears": "Other Events item of a current report (8-K)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "Item 8.01 Other Events.\n\nOn June 19, 2024, Commercial Metals Company (NYSE: CMC) (the \"Company\") issued a press release announcing that the board of directors of the Company declared",
+   "quote": "a regular quarterly cash dividend of $0.18 per share of CMC common stock",
+   "text_after_quote": "The dividend will be paid on July 10, 2024, to stockholders of record as of the close of business on July 1, 2024.\n\nA copy of the Company's press release is attached hereto as Exhibit 99.1 and is incorporated herein by reference."
+  }
+ },
+ {
+  "id": "DIV-H1-001-decision",
+  "set": "DIV",
+  "key": "action_event",
+  "note": "declaring decision under the dividend driver",
+  "state": {
+   "where_it_appears": "Other Events item of a current report (8-K)",
+   "driver_name": "dividend",
+   "text_before_quote": "Item 8.01 Other Events.\n\nOn June 19, 2024, Commercial Metals Company (NYSE: CMC) (the \"Company\") issued a press release announcing that",
+   "quote": "the board of directors of the Company declared a regular quarterly cash dividend",
+   "text_after_quote": "of $0.18 per share of CMC common stock. The dividend will be paid on July 10, 2024, to stockholders of record as of the close of business on July 1, 2024."
+  }
+ },
+ {
+  "id": "DIV-H1-035-amount",
+  "set": "DIV",
+  "key": "metric",
+  "note": "amount claim under the per-share driver",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "We continually evaluate if share repurchases reflect a prudent use of our capital and, subject to compliance with our ABL Credit Facility and Senior Secured Notes, we may purchase shares in the future. As of May 27, 2023, we have $330.0 million remaining on our Board approved repurchase authorization.\n\nOn May 17, 2023, our Board of Directors approved",
+   "quote": "a quarterly cash dividend of $0.27 per share",
+   "text_after_quote": "payable on June 28, 2023, to common stockholders of record at the close of business on June 14, 2023.\n\nContractual Obligations and Commercial Commitments\n\nThere have been no material changes in our contractual obligations since the end of Fiscal 2022."
+  }
+ },
+ {
+  "id": "DIV-H1-035-decision",
+  "set": "DIV",
+  "key": "action_event",
+  "note": "declaring decision under the dividend driver",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "dividend",
+   "text_before_quote": "We continually evaluate if share repurchases reflect a prudent use of our capital and, subject to compliance with our ABL Credit Facility and Senior Secured Notes, we may purchase shares in the future. As of May 27, 2023, we have $330.0 million remaining on our Board approved repurchase authorization.",
+   "quote": "On May 17, 2023, our Board of Directors approved a quarterly cash dividend",
+   "text_after_quote": "of $0.27 per share payable on June 28, 2023, to common stockholders of record at the close of business on June 14, 2023."
+  }
+ },
+ {
+  "id": "DIV-H5G-43-amount",
+  "set": "DIV",
+  "key": "metric",
+  "note": "amount claim under the per-share driver",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "EXHIBIT 99.1 News Release CMC ANNOUNCES QUARTERLY DIVIDEND OF $0.16 PER SHARE Irving, Texas - October 10, 2023 - Today, October 10, 2023, the board of directors of Commercial Metals Company (\"CMC\") (NYSE: CMC) declared",
+   "quote": "a regular quarterly cash dividend of $0.16 per share of CMC common stock",
+   "text_after_quote": "CMC\u2019s 236th consecutive quarterly dividend will be paid on November 9, 2023, to stockholders of record as of the close of business on October 26, 2023."
+  }
+ },
+ {
+  "id": "DIV-H5G-43-decision",
+  "set": "DIV",
+  "key": "action_event",
+  "note": "declaring decision under the dividend driver",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend",
+   "text_before_quote": "EXHIBIT 99.1 News Release CMC ANNOUNCES QUARTERLY DIVIDEND OF $0.16 PER SHARE Irving, Texas - October 10, 2023 -",
+   "quote": "Today, October 10, 2023, the board of directors of Commercial Metals Company (\"CMC\") (NYSE: CMC) declared a regular quarterly cash dividend",
+   "text_after_quote": "of $0.16 per share of CMC common stock. CMC\u2019s 236th consecutive quarterly dividend will be paid on November 9, 2023, to stockholders of record as of the close of business on October 26, 2023."
+  }
+ },
+ {
+  "id": "DIV-H5G-59-amount",
+  "set": "DIV",
+  "key": "metric",
+  "note": "amount claim under the per-share driver",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "The Company's balance sheet and liquidity position remained strong. As of May 31, 2024, cash and cash equivalents totaled $698.3 million, with available liquidity of nearly $1.5 billion. During the quarter, CMC repurchased 931,281 shares of common stock valued at $51.8 million in the aggregate. As of May 31, 2024, $458.6 million remained available under the current share repurchase authorization. On June 19, 2024, the board of directors declared",
+   "quote": "a quarterly dividend of $0.18 per share of CMC common stock",
+   "text_after_quote": "payable to stockholders of record on July 1, 2024, representing an increase of approximately 13% on a year-over-year basis. The dividend to be paid on July 10, 2024, marks the 239th consecutive quarterly payment by the Company."
+  }
+ },
+ {
+  "id": "DIV-H5G-59-decision",
+  "set": "DIV",
+  "key": "action_event",
+  "note": "declaring decision under the dividend driver",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend",
+   "text_before_quote": "The Company's balance sheet and liquidity position remained strong. As of May 31, 2024, cash and cash equivalents totaled $698.3 million, with available liquidity of nearly $1.5 billion. During the quarter, CMC repurchased 931,281 shares of common stock valued at $51.8 million in the aggregate. As of May 31, 2024, $458.6 million remained available under the current share repurchase authorization.",
+   "quote": "On June 19, 2024, the board of directors declared a quarterly dividend",
+   "text_after_quote": "of $0.18 per share of CMC common stock payable to stockholders of record on July 1, 2024, representing an increase of approximately 13% on a year-over-year basis."
+  }
+ },
+ {
+  "id": "H6-000",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "operating cost per available seat mile",
+   "text_before_quote": "Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts Yield (cents) 21.34 20.21 5.6 % Passenger revenue per ASM (cents) 17.35 16.30 6.5 % Total revenue per ASM (cents) 19.32 17.95 7.6 % Cargo ton miles (millions) 527 483 9.0 % Cargo yield per ton mile (cents) 40.55 39.14 3.6 % Fuel consumption (gallons in millions) 1,066 1,042 2.3 % Average aircraft fuel price including related taxes (dollars per gallon) 2.75 2.48 10.7 %",
+   "quote": "Operating cost per ASM (cents) 19.38 18.34 5.6 %",
+   "text_after_quote": "Operating cost per ASM excluding net special items (cents) 19.36 18.24 6.1 % Operating cost per ASM excluding net special items and fuel (cents) 15.29 14.54 5.2 % Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 % Passenger enplanements (thousands) 51,770 51,034 1.4 % Departures (thousands): Mainline 279 278 0.6 % Regional 255 250 1.6 % Total 534 528 1.1 % Average stage length (miles): Mainline 1,200 1,176 2.0 % Regional 478 470 1.7 % Total 856 841 1.7 % Aircraft at end of period: Mainline (2) 1,022 985 3.8 % Regional (3) 572 567 0.9 % Total 1,594 1,552 2.7 % Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 % Total 138,900 133,100 4.4 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "id": "H6-001",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "shared rewards payments",
+   "text_before_quote": "People and Culture\n\nFor 2025, Delta was named No. 15 on the Fortune 100 Best Companies to Work For list and was ranked No. 2 in the Forbes ranking of the World's Best Employers.\n\nOur industry-leading profit sharing program directly aligns our employees' interests with the company's long-term success and for 2025, we are rewarding them with $1.3 billion in profit sharing payments in February 2026. The company also maintains a Shared Rewards program to incentivize operational performance, and",
+   "quote": "our employees earned $67 million under this program in 2025.",
+   "text_after_quote": "Operational Reliability\n\nWe remain committed to industry-leading reliability as the foundation for our brand promise and efficiency."
+  }
+ },
+ {
+  "id": "H6-002",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "premium seat count",
+   "text_before_quote": "American is increasing the number of premium seats across its fleet through new deliveries and retrofits. In the first quarter,",
+   "quote": "lie-flat and Premium Economy seats grew more than twice as fast as Main Cabin seats.",
+   "text_after_quote": "In addition, the company has improved connectivity and elevated the inflight experience, successfully rolling out free high-speed satellite Wi-Fi, sponsored by AT&T, for AAdvantage\u00ae members in January."
+  }
+ },
+ {
+  "id": "H6-003",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "aircraft fleet count",
+   "text_before_quote": "Three Months Ended March 31, Increase   2026 2025 Revenue passenger miles (millions) (a)\n\n58,551 56,356 3.9% Available seat miles (millions) (b)\n\n72,009 69,904 3.0% Passenger load factor (percent) (c)\n\n81.3 80.6 0.7pts Yield (cents) (d)\n\n21.34 20.21 5.6% Passenger revenue per available seat mile (cents) (e)\n\n17.35 16.30 6.5% Total revenue per available seat mile (cents) (f)\n\n19.32 17.95 7.6% Fuel consumption (gallons in millions)\n\n1,066 1,042 2.3% Average aircraft fuel price including related taxes (dollars per gallon)\n\n2.75 2.48 10.7% Total operating cost per available seat mile (cents) (g)\n\n19.38 18.34 5.6%",
+   "quote": "Aircraft at end of period (h) \n\n1,594 1,552 2.7%",
+   "text_after_quote": "Full-time equivalent employees at end of period\n\n138,900 133,100 4.4%\n\n(a) Revenue passenger mile (RPM) \u2013 A basic measure of sales volume. One RPM represents one passenger flown one mile.\n\n(b) Available seat mile (ASM) \u2013 A basic measure of production."
+  }
+ },
+ {
+  "id": "H6-004",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "award tickets redeemed",
+   "text_before_quote": "SkyMiles Program\n\nMiles may also be earned by using certain services offered by program partners, such as credit card, retail, ridesharing, car rental and hotel companies. To facilitate transactions with participating companies, we sell miles to non-airline businesses and other airlines.\n\nMiles may be used toward award redemptions such as flights and upgrades on Delta, our regional carriers and other participating airlines as well as donations to specific charities and more.",
+   "quote": "In 2025, 12% of revenue miles flown on Delta were from award travel, as program members redeemed miles in the loyalty program for approximately 35 million award tickets",
+   "text_after_quote": "Our most significant and valuable contract to sell miles relates to our co-brand credit card relationship with American Express."
+  }
+ },
+ {
+  "id": "H6-005",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "aircraft rent expense",
+   "text_before_quote": "[Table] Year Ended December 31,\n\nIncrease (Decrease) % Increase (Decrease) (in millions) 2025 2024 Salaries and related costs $ 17,520 $ 16,161 $ 1,359 8 % Aircraft fuel and related taxes 9,819 10,566 (747) (7) % Ancillary businesses and refinery 5,987 5,416 571 11 % Contracted services 4,617 4,228 389 9 % Landing fees and other rents 3,564 3,150 414 13 % Regional carrier expense 2,553 2,328 225 10 % Passenger commissions and other selling expenses 2,485 2,485 \u2014 \u2014 % Depreciation and amortization 2,443 2,513 (70) (3) % Aircraft maintenance materials and outside repairs 2,432 2,616 (184) (7) % Passenger service 1,855 1,788 67 4 % Profit sharing 1,337 1,389 (52) (4) %",
+   "quote": "Aircraft rent 542 548 (6) (1) %",
+   "text_after_quote": "Other 2,388 2,460 (72) (3) % Total operating expense $ 57,542 $ 55,648 $ 1,894 3 % [End of table]\n\nSalaries and Related Costs."
+  }
+ },
+ {
+  "id": "H6-006",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "shared rewards",
+   "text_before_quote": "People and Culture\n\nFor 2025, Delta was named No. 15 on the Fortune 100 Best Companies to Work For list and was ranked No. 2 in the Forbes ranking of the World's Best Employers.\n\nOur industry-leading profit sharing program directly aligns our employees' interests with the company's long-term success and for 2025, we are rewarding them with $1.3 billion in profit sharing payments in February 2026. The company also maintains a Shared Rewards program to incentivize operational performance, and",
+   "quote": "our employees earned $67 million under this program in 2025",
+   "text_after_quote": "Operational Reliability\n\nWe remain committed to industry-leading reliability as the foundation for our brand promise and efficiency."
+  }
+ },
+ {
+  "id": "H6-007",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "total operating expenses",
+   "text_before_quote": "Operating Expenses\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Aircraft fuel and related taxes $ 2,928 $ 2,587 $ 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Regional expenses 1,404 1,351 53 3.9 Maintenance, materials and repairs 982 922 60 6.5 Other rent and landing fees 890 826 64 7.7 Aircraft rent 309 297 12 3.9 Selling expenses 507 450 57 12.8 Depreciation and amortization 475 468 7 1.6",
+   "quote": "Mainline operating special items, net 14 70 (56) (80.6) Other 1,770 1,628 142 8.7 Total operating expenses $ 13,953 $ 12,821 $ 1,132 8.8",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H6-008",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "minimum unrestricted cash covenant requirement",
+   "text_before_quote": "Pursuant to such agreements, if the applicable LTV or collateral coverage ratio exceeds or falls below a specified threshold, as the case may be, we will be required, as applicable, to pledge additional qualifying collateral (which in some cases may include cash or investment securities), withhold additional cash in certain accounts, or pay down such financing, in whole or in part, or the interest rate for the relevant financing will be increased. Additionally,",
+   "quote": "a significant portion of our debt financing agreements contain covenants requiring us to maintain an aggregate of at least $2.0 billion of unrestricted cash and cash equivalents and amounts available to be drawn under revolving credit facilities.",
+   "text_after_quote": "The AAdvantage Financing contains a peak debt service coverage ratio, pursuant to which failure to comply with a certain threshold may result in early repayment, in whole or in part, of the AAdvantage Financing."
+  }
+ },
+ {
+  "id": "H6-009",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "identifiable intangible assets",
+   "text_before_quote": "Goodwill . Our goodwill balance, which is related to the airline segment, was $9.8 billion at December 31, 2025.\n\n[Table]\n\n[End of table]\n\nItem 7. MD&A - Critical Accounting Estimates\n\nIdentifiable Intangible Assets.",
+   "quote": "Our identifiable intangible assets, which are related to the airline segment, had a net carrying amount of $6.0 billion at December 31, 2025, of which $5.9 billion related to indefinite-lived intangible assets.",
+   "text_after_quote": "Indefinite-lived assets are not amortized and consist of routes, slots, the Delta tradename and assets related to alliances and collaborative arrangements. Definite-lived assets consist primarily of marketing and maintenance service agreements."
+  }
+ },
+ {
+  "id": "H6-010",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "loss on extinguishment of debt",
+   "text_before_quote": "These decreases were partially offset by a higher volume of airframe checks in 2025.\n\nOther . The decrease in other operating expense primarily resulted from gains from several sale-leaseback transactions and lower irregular operations expense in 2025.\n\nNon-Operating Results [Table] Year Ended December 31,\n\nFavorable (Unfavorable) (in millions) 2025 2024 Interest expense, net $ (679) $ (747) $ 68 Gain/(loss) on investments, net 1,212 (319) 1,531",
+   "quote": "Loss on extinguishment of debt (26) (39) 13",
+   "text_after_quote": "Miscellaneous, net (144) (232) 88 Total non-operating income/(expense), net $ 363 $ (1,337) $ 1,700 [End of table]\n\nInterest expense, net. Interest expense, net includes interest expense and interest income."
+  }
+ },
+ {
+  "id": "H6-011",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "net cash used in investing activities",
+   "text_before_quote": "As of the most recent applicable measurement dates, we were in compliance with each of the foregoing covenants.\n\nSources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities",
+   "quote": "Our net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H6-012",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "other nonoperating expense",
+   "text_before_quote": "Nonoperating Results\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Interest income $ 192 $ 236 $ (44) (18.6) Interest expense, net (400) (452) 52 (11.5)",
+   "quote": "Other expense, net (94) (44) (50) nm",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H6-013",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "mainline operating special items net",
+   "text_before_quote": "Other operating expenses increased $142 million, or 8.7%, in the first quarter of 2026 from the first quarter of 2025, primarily driven by increased costs for crew travel, onboard food and catering, Wi-Fi, ground and cargo handling, passenger accommodation and certain general and administrative expenses.\n\nOperating Special Items, Net\n\n  Three Months Ended March 31,   2026 2025 (In millions) Litigation reserve adjustments $ 12 $ 30\n\nLabor contract expenses (1)\n\n2 31 Other operating special items, net \u2014 9",
+   "quote": "Mainline operating special items, net $ 14 $ 70",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H6-014",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "mro business expense",
+   "text_before_quote": "Ancillary Businesses and Refinery. Ancillary businesses and refinery includes expenses associated with refinery sales to third parties, MRO and our vacation package operations. The increase in these expenses was primarily related to higher refinery sales to third parties, which increased $435 million compared to 2024. See \"Refinery Segment\" below for additional details on the refinery's operations, including third party refinery sales. In addition,",
+   "quote": "the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business",
+   "text_after_quote": "Contracted Services."
+  }
+ },
+ {
+  "id": "H6-015",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "nonoperating net special items",
+   "text_before_quote": "Interest expense, net decreased $31 million, or 7.3%, in the first quarter of 2026 from the first quarter of 2025, primarily due to lower interest rates on our variable-rate debt instruments and lower outstanding debt subsequent to the first quarter of 2025, as we continue our efforts to strengthen the balance sheet.\n\nIn the first quarter of 2026,",
+   "quote": "other nonoperating expense, net included $135 million of net special items primarily for mark-to-market net unrealized losses associated with certain equity investments and costs associated with debt refinancings and extinguishments",
+   "text_after_quote": "offset in part by $18 million of non-service-related pension and other postretirement benefit plan income."
+  }
+ },
+ {
+  "id": "H6-016",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "average aircraft fuel price per gallon",
+   "text_before_quote": "AAG\u2019s Results of Operations\n\nOperating Statistics\n\nAmounts may not recalculate due to rounding.\n\n  Three Months Ended March 31, Increase   2026 2025 Revenue passenger miles (millions) (a)\n\n58,551 56,356 3.9% Available seat miles (millions) (b)\n\n72,009 69,904 3.0% Passenger load factor (percent) (c)\n\n81.3 80.6 0.7pts Yield (cents) (d)\n\n21.34 20.21 5.6% Passenger revenue per available seat mile (cents) (e)\n\n17.35 16.30 6.5% Total revenue per available seat mile (cents) (f)\n\n19.32 17.95 7.6% Fuel consumption (gallons in millions)\n\n1,066 1,042 2.3%",
+   "quote": "Average aircraft fuel price including related taxes (dollars per gallon) \n\n2.75 2.48 10.7%",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H6-017",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "fuel gallons consumed",
+   "text_before_quote": "We are currently able to obtain adequate supplies of aircraft fuel, including fuel produced by the Trainer refinery operated by our subsidiary Monroe Energy, LLC (\"Monroe\") and its pipeline subsidiary, or procured through the sale of gasoline, diesel and other refined petroleum products (\"non-jet fuel products\") the refinery produces, and crude oil for Monroe's operations.\n\nThe following table shows our aircraft fuel consumption and costs:\n\n[Table] Fuel consumption and expense by year",
+   "quote": "Year Gallons Consumed (1) \n\n(in millions) \n\nCost (1)(2) \n\n(in millions) \n\nAverage Price Per Gallon (1)(2) \n\nPercentage of Total Operating Expense (1)(2) \n\n2025 4,269 $ 9,819 $ 2.30 17 % 2024 4,114 $ 10,566 $ 2.57 19 % 2023 3,926 $ 11,069 $ 2.82 21 %",
+   "text_after_quote": "(1) Includes the operations of our regional carriers operating under capacity purchase agreements.\n\n(2) Includes the impact of fuel hedge activity and refinery segment results."
+  }
+ },
+ {
+  "id": "H6-018",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue",
+   "text_before_quote": "Consolidated Revenue Statistics by Region (Unaudited) 3 Months Ended Increase March 31, (Decrease) 2026 2025 Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "quote": "Latin America (2) Revenue passenger miles (millions) 10,289 10,022 2.7 % Available seat miles (millions) 12,403 12,004 3.3 % Passenger load factor (percent) 83.0 83.5 (0.5) pts Passenger revenue (dollars in millions) 1,963 1,906 3.0 %",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H6-019",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "passenger load factor",
+   "text_before_quote": "MD&A - Operating Statistics\n\nOperating Statistics [Table] Year Ended December 31,\n\nConsolidated (1)\n\n2025 2024 Revenue passenger miles (in millions) 249,578 246,145 Available seat miles (in millions) 298,045 288,394 Passenger mile yield 20.74 \u00a2 20.68 \u00a2 Passenger revenue per available seat mile (\"PRASM\") 17.37 \u00a2 17.65 \u00a2 Total revenue per available seat mile (\"TRASM\") 21.26 \u00a2 21.37 \u00a2\n\nTRASM, adjusted (2)\n\n19.56 \u00a2 19.76 \u00a2 Cost per available seat mile (\"CASM\") 19.31 \u00a2 19.30 \u00a2\n\nCASM-Ex (2)\n\n13.86 \u00a2 13.54 \u00a2",
+   "quote": "Passenger load factor 84 % 85 %",
+   "text_after_quote": "Fuel gallons consumed (in millions) 4,269 4,114\n\nAverage price per fuel gallon (3)\n\n$ 2.30 $ 2.57\n\nAverage price per fuel gallon, adjusted (2)(3)\n\n$ 2.30 $ 2.56 Approximate full-time equivalent employees, end of period 103,000 103,000 [End of table]"
+  }
+ },
+ {
+  "id": "H6-020",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "debt interest obligations",
+   "text_before_quote": "As of December 31, 2025, scheduled maturities after 2030 aggregate to $4.8 billion. In addition, we are obligated to make periodic interest payments at fixed and variable rates, depending on the terms of the applicable debt agreements. Based on applicable interest rates and scheduled debt maturities as of December 31, 2025,",
+   "quote": "these interest obligations total approximately $2.4 billion",
+   "text_after_quote": "decreasing on an annual basis from approximately $500 million in 2026 to $200 million in 2030.\n\nFinance Lease Obligations."
+  }
+ },
+ {
+  "id": "H6-021",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "delta pilots base pay",
+   "text_before_quote": "Salaries and Related Costs. The increase in salaries and related costs primarily resulted from the implementation of base pay increases for eligible employees of 5% effective June 1, 2024 and 4% effective June 1, 2025, and",
+   "quote": "4% for Delta pilots on January 1, 2025",
+   "text_after_quote": "Aircraft Fuel and Related Taxes. Fuel expense decreased $747 million compared to 2024 primarily due to a 9% decrease in the market price of jet fuel partially offset by a 4% increase in consumption on a 3% increase in capacity."
+  }
+ },
+ {
+  "id": "H6-022",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "aircraft fuel price per gallon",
+   "text_before_quote": "Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts Yield (cents) 21.34 20.21 5.6 % Passenger revenue per ASM (cents) 17.35 16.30 6.5 % Total revenue per ASM (cents) 19.32 17.95 7.6 % Cargo ton miles (millions) 527 483 9.0 % Cargo yield per ton mile (cents) 40.55 39.14 3.6 % Fuel consumption (gallons in millions) 1,066 1,042 2.3 %",
+   "quote": "Average aircraft fuel price including related taxes (dollars per gallon) 2.75 2.48 10.7 %",
+   "text_after_quote": "Operating cost per ASM (cents) 19.38 18.34 5.6 % Operating cost per ASM excluding net special items (cents) 19.36 18.24 6.1 % Operating cost per ASM excluding net special items and fuel (cents) 15.29 14.54 5.2 % Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 % Passenger enplanements (thousands) 51,770 51,034 1.4 % Departures (thousands): Mainline 279 278 0.6 % Regional 255 250 1.6 % Total 534 528 1.1 % Average stage length (miles): Mainline 1,200 1,176 2.0 % Regional 478 470 1.7 % Total 856 841 1.7 % Aircraft at end of period: Mainline (2) 1,022 985 3.8 % Regional (3) 572 567 0.9 % Total 1,594 1,552 2.7 % Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 % Total 138,900 133,100 4.4 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "id": "H6-023",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "pension expected long term rate of return",
+   "text_before_quote": "The investment strategy for our defined benefit pension plan assets is to earn a long-term return that meets or exceeds our annualized return target while taking an acceptable level of risk and maintaining sufficient liquidity to pay current benefits and other cash obligations of the plan. This is achieved by investing in a globally diversified mix of public and private equity, fixed income, real assets, hedge funds and other assets and instruments.",
+   "quote": "The expected long-term rate of return on our defined benefit pension plan assets is 6.96%.",
+   "text_after_quote": "The impact of a 0.50% change in weighted average discount rate and 1.00% change in expected long-term rate of return on assets are shown in the table below:"
+  }
+ },
+ {
+  "id": "H6-024",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "rins compliance costs",
+   "text_before_quote": "A refinery is subject to annual EPA requirements to blend renewable fuels into the gasoline and on-road diesel fuel it produces. A refinery may meet its obligation by blending the necessary volumes of renewable fuels, by purchasing Renewable Identification Numbers (\"RINs\") in the open market, or through a combination of blending and purchasing RINs. Because Monroe is able to blend only a small amount of renewable fuels, it must purchase the majority of its RINs requirement in the secondary market.",
+   "quote": "Monroe incurred $312 million in RINs compliance costs during 2025, compared to $203 million incurred in 2024.",
+   "text_after_quote": "For more information regarding the refinery's results, see Note 14 of the Notes to the Consolidated Financial Statements."
+  }
+ },
+ {
+  "id": "H6-025",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "total nonoperating expense",
+   "text_before_quote": "Nonoperating Results\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Interest income $ 192 $ 236 $ (44) (18.6) Interest expense, net (400) (452) 52 (11.5) Other expense, net (94) (44) (50) nm",
+   "quote": "Total nonoperating expense, net $ (302) $ (260) $ (42) 16.0",
+   "text_after_quote": "Interest income decreased $44 million, or 18.6%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a decrease in the average balance of American\u2019s short-term investments and lower interest rates, resulting in reduced returns."
+  }
+ },
+ {
+  "id": "H6-026",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "total debt",
+   "text_before_quote": "At the beginning of the first quarter, American\u2019s exclusive and expanded co-branded credit card partnership with Citi took effect. During the quarter, the company achieved record acquisitions and co-branded credit card spend was up 9% year over year. Balance sheet and liquidity The company has made significant progress on its financial priorities,",
+   "quote": "ending the quarter with total debt2 of $34.7 billion, the first time it has been below $35 billion since mid-20152",
+   "text_after_quote": "The company finished the quarter with $10.8 billion in liquidity and more than $27 billion in unencumbered assets and first-lien borrowing capacity. This strong financial position provides significant flexibility in the current environment."
+  }
+ },
+ {
+  "id": "H6-027",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "interest income",
+   "text_before_quote": "(1) Labor contract expenses for the three months ended March 31, 2025 included a one-time charge resulting from adjustments to vacation accruals due to pay rate increases effective January 1, 2025, following the ratification of the contract extension in the fourth quarter of 2024 with American\u2019s mainline maintenance and fleet service team members.\n\nNonoperating Results\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes)",
+   "quote": "Interest income $ 192 $ 236 $ (44) (18.6)",
+   "text_after_quote": "Interest expense, net (400) (452) 52 (11.5) Other expense, net (94) (44) (50) nm Total nonoperating expense, net $ (302) $ (260) $ (42) 16.0"
+  }
+ },
+ {
+  "id": "H6-028",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "passenger revenue",
+   "text_before_quote": "[Table]\n\n[End of table]\n\nItem 7. MD&A - Results of Operations\n\nRevenue in the Latin America region remained consistent with 2024 on a slight increase in capacity. We experienced slight revenue growth in the Caribbean and South America compared to 2024. In South America, we continued to build on the strength of our joint venture with LATAM through greater network connectivity and a more streamlined airport experience.",
+   "quote": "Revenue in the Pacific region increased 10% on a 9% increase in capacity compared to 2024 on strong demand to Japan and South Korea, particularly with our premium product offerings.",
+   "text_after_quote": "We continued to invest in our joint venture partnership with Korean Air through the introduction of a new route from Salt Lake City to Seoul-Incheon."
+  }
+ },
+ {
+  "id": "H6-029",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "fuel pct of operating expense",
+   "text_before_quote": "We are currently able to obtain adequate supplies of aircraft fuel, including fuel produced by the Trainer refinery operated by our subsidiary Monroe Energy, LLC (\"Monroe\") and its pipeline subsidiary, or procured through the sale of gasoline, diesel and other refined petroleum products (\"non-jet fuel products\") the refinery produces, and crude oil for Monroe's operations.\n\nThe following table shows our aircraft fuel consumption and costs:",
+   "quote": "Fuel consumption and expense by year Year Gallons Consumed (1) \n\n(in millions) \n\nCost (1)(2) \n\n(in millions) \n\nAverage Price Per Gallon (1)(2) \n\nPercentage of Total Operating Expense (1)(2) \n\n2025 4,269 $ 9,819 $ 2.30 17 % 2024 4,114 $ 10,566 $ 2.57 19 % 2023 3,926 $ 11,069 $ 2.82 21 %",
+   "text_after_quote": "(1) Includes the operations of our regional carriers operating under capacity purchase agreements.\n\n(2) Includes the impact of fuel hedge activity and refinery segment results."
+  }
+ },
+ {
+  "id": "H6-030",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "Ancillary Businesses and Refinery. Ancillary businesses and refinery includes expenses associated with refinery sales to third parties, MRO and our vacation package operations. The increase in these expenses was primarily related to higher refinery sales to third parties, which increased $435 million compared to 2024. See \"Refinery Segment\" below for additional details on the refinery's operations, including third party refinery sales. In addition,",
+   "quote": "the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.",
+   "text_after_quote": "Contracted Services."
+  }
+ },
+ {
+  "id": "H6-031",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "equity ownership stake",
+   "text_before_quote": "These arrangements may include reciprocal codesharing, loyalty program participation, airport lounge access, joint sales cooperation or promotions, shared airport facilities, office co-location and other activities.\n\nSome of these relationships include minority equity investments.",
+   "quote": "For example, we own a 2% equity interest in China Eastern, with whom we have a strategic joint marketing and commercial cooperation arrangement covering traffic flows between China and the U.S.",
+   "text_after_quote": "In 2025, we acquired an approximately 13% minority equity stake in WestJet, with whom we have a strategic commercial cooperation agreement covering traffic flows between the U.S. and Canada.\n\nSkyTeam . We are a member of the SkyTeam global airline alliance."
+  }
+ },
+ {
+  "id": "H6-032",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "scheduled debt maturities",
+   "text_before_quote": "In the September 2025 quarter, Fitch Ratings upgraded its outlook for Delta to Positive from Stable. In January 2026, S&P Global upgraded its outlook for Delta to Positive from Stable.\n\nThe principal amount of our debt and finance leases was $14.1 billion at December 31, 2025.\n\nFuture Debt Obligations. As described further in Note 6 of the Notes to the Consolidated Financial Statements, as of December 31, 2025,",
+   "quote": "scheduled maturities of our debt in 2026 are $1.4 billion",
+   "text_after_quote": "with maturities from 2027 through 2030 ranging between $600 million and $3.5 billion annually. As of December 31, 2025, scheduled maturities after 2030 aggregate to $4.8 billion."
+  }
+ },
+ {
+  "id": "H6-033",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "profit sharing",
+   "text_before_quote": "Profit Sharing. Our broad-based employee profit sharing program provides that, for each year in which we have an annual pre-tax profit, as defined by the terms of the program, we will pay a specified portion of that profit to employees. In determining the amount of profit sharing, the program defines profit as pre-tax profit adjusted for profit sharing and certain other items.\n\nWe pay profit sharing annually in February.",
+   "quote": "We paid $1.4 billion in 2025 to our employees in recognition of their contributions toward meeting our financial goals.",
+   "text_after_quote": "During the year ended December 31, 2025, we recorded $1.3 billion in profit sharing expense based on 2025 pre-tax profit, which we will pay to employees in February 2026.\n\n[Table]\n\n[End of table]\n\nItem 7."
+  }
+ },
+ {
+  "id": "H6-034",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue per available seat mile",
+   "text_before_quote": "Demand was strong in the first quarter, and American recorded the nine highest revenue intake weeks in its 100-year history. American had year-over-year total revenue growth of 10.8% in the quarter. Total unit revenue was 7.6% higher year over year, improving sequentially each month in the quarter, culminating with March domestic and international passenger unit revenue both up more than 10% year over year.",
+   "quote": "American\u2019s domestic, Pacific and Atlantic entities delivered positive unit revenue growth year over year",
+   "text_after_quote": "with Atlantic passenger unit revenue up 16.7%. Demand remains strong, and based on current bookings, American expects total revenue growth between 13.5% and 16.5% in the second quarter."
+  }
+ },
+ {
+  "id": "H6-035",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Risk Factors section of an annual report (10-K)",
+   "driver_name": "eu saf blending mandate",
+   "text_before_quote": "The legislation also provides for a review of the effectiveness of CORSIA in 2026 that could, if CORSIA is not deemed sufficiently effective, lead to the application of EU ETS to all flights departing the EU and EEA, which would increase costs. Also in 2023, the EU adopted legislation that established a SAF mandate on fuel supplied at EU airports. Beginning in 2025, the mandate required 2% of the jet fuel supplied in the EU to be SAF, and",
+   "quote": "the percentage increases incrementally over time to 70% in 2050",
+   "text_after_quote": "This mandate has increased SAF prices in the EU for the airline industry. In 2024, the UK also adopted SAF mandate legislation, and other countries are also considering mandates."
+  }
+ },
+ {
+  "id": "H6-036",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "available seat miles",
+   "text_before_quote": "(1) See Note 2 to AAG\u2019s Condensed Consolidated Financial Statements in Part I, Item 1A for further information on net special items.\n\nAAG\u2019s Results of Operations\n\nOperating Statistics\n\nThe table below sets forth selected operating data for the three months ended March 31, 2026 and 2025. Amounts may not recalculate due to rounding.\n\n  Three Months Ended March 31, Increase   2026 2025 Revenue passenger miles (millions) (a)\n\n58,551 56,356 3.9%",
+   "quote": "Available seat miles (millions) (b) \n\n72,009 69,904 3.0%",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "H6-037",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "investing cash flow",
+   "text_before_quote": "\u2022 Strategic investments and related. Certain cash flows related to our investments in and related transactions with other airlines and associated companies are included in our GAAP investing activities. We adjust for this activity because it provides a more meaningful comparison to our airline industry peers.",
+   "quote": "Free cash flow reconciliation Year Ended December 31, (in millions) 2025 Net cash provided by operating activities $ 8,342 Net cash used in investing activities (4,186)",
+   "text_after_quote": "Adjusted for: Pension plan contributions 70 Net cash flows related to certain airport construction projects and other 141 Strategic investments and related 276 Free cash flow $ 4,643 [End of table]"
+  }
+ },
+ {
+  "id": "H6-038",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue passenger miles",
+   "text_before_quote": "Monroe incurred $312 million in RINs compliance costs during 2025, compared to $203 million incurred in 2024.\n\nFor more information regarding the refinery's results, see Note 14 of the Notes to the Consolidated Financial Statements.\n\n[Table]\n\n[End of table]\n\nItem 7. MD&A - Operating Statistics\n\nOperating Statistics [Table] Year Ended December 31,",
+   "quote": "Consolidated (1) \n\n2025 2024 Revenue passenger miles (in millions) 249,578 246,145",
+   "text_after_quote": "Available seat miles (in millions) 298,045 288,394 Passenger mile yield 20.74 \u00a2 20.68 \u00a2 Passenger revenue per available seat mile (\"PRASM\") 17.37 \u00a2 17.65 \u00a2 Total revenue per available seat mile (\"TRASM\") 21.26 \u00a2 21.37 \u00a2\n\nTRASM, adjusted (2)\n\n19.56 \u00a2 19.76 \u00a2 Cost per available seat mile (\"CASM\") 19.31 \u00a2 19.30 \u00a2\n\nCASM-Ex (2)\n\n13.86 \u00a2 13.54 \u00a2 Passenger load factor 84 % 85 % Fuel gallons consumed (in millions) 4,269 4,114\n\nAverage price per fuel gallon (3)\n\n$ 2.30 $ 2.57\n\nAverage price per fuel gallon, adjusted (2)(3)\n\n$ 2.30 $ 2.56 Approximate full-time equivalent employees, end of period 103,000 103,000 [End of table]"
+  }
+ },
+ {
+  "id": "H6-039",
+  "set": "H6",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "total operating expenses",
+   "text_before_quote": "Operating Expenses\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Aircraft fuel and related taxes $ 2,928 $ 2,587 $ 341 13.2 Salaries, wages and benefits 4,672 4,220 452 10.7 Regional expenses 1,399 1,349 50 3.7 Maintenance, materials and repairs 982 922 60 6.5 Other rent and landing fees 890 826 64 7.7 Aircraft rent 309 297 12 3.9 Selling expenses 507 450 57 12.8 Depreciation and amortization 475 467 8 1.7 Mainline operating special items, net 14 70 (56) (80.6) Other 1,771 1,629 142 8.7",
+   "quote": "Total operating expenses $ 13,947 $ 12,817 $ 1,130 8.8",
+   "text_after_quote": ""
+  }
+ }
+]

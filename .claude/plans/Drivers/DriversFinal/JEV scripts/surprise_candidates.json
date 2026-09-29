@@ -1,0 +1,583 @@
+[
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_30822970",
+  "quote": "Lincoln National Q4 EPS $0.97 Misses $1.80 Estimate, Sales $4.68B Beat $4.56B Estimate",
+  "after": "Lincoln National (NYSE: LNC ) reported quarterly earnings of $0.97 per share which missed the analyst consensus estimate of $1.80 by 46.11 percent. This is a 37.82 percent decrease over earnings of $1.56 per share from the same period last year. The company reported quarterly sales of $4.68 billion "
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_30844813",
+  "quote": "Cloudflare Q4 EPS $0.06 Beats $0.04 Estimate, Sales $274.70M Beat $274.02M Estimate",
+  "after": "Cloudflare (NYSE: NET ) reported quarterly earnings of $0.06 per share which beat the analyst consensus estimate of $0.04 by 50 percent. The company reported quarterly sales of $274.70 million which beat the analyst consensus estimate of $274.02 million by 0.25 percent. This is a 41.89 percent incre"
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_30696567",
+  "quote": "Gilead Sciences Q4 Adj. EPS $1.67 Beats $1.49 Estimate, Sales $7.39B Beat $6.64B Estimate",
+  "after": "Gilead Sciences (NASDAQ: GILD ) reported quarterly earnings of $1.67 per share which beat the analyst consensus estimate of $1.49 by 12.08 percent. This is a 142.03 percent increase over earnings of $0.69 per share from the same period last year. The company reported quarterly sales of $7.39 billion"
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_30599764",
+  "quote": "Autoliv Q4 EPS $1.83 Beats $1.76 Estimate, Sales $2.33B Miss $2.44B Estimate",
+  "after": "Autoliv (NYSE: ALV ) reported quarterly earnings of $1.83 per share which beat the analyst consensus estimate of $1.76 by 3.98 percent. This is a 40.77 percent increase over earnings of $1.30 per share from the same period last year. The company reported quarterly sales of $2.33 billion which missed"
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_31065018",
+  "quote": "AES Q4 Adj EPS $0.49 Beats $0.46 Estimate, Sales $3.06B Beat $2.99B Estimate",
+  "after": "AES (NYSE: AES ) reported quarterly adj. earnings of $0.49 per share which beat the analyst consensus estimate of $0.46 by 6.52 percent. This is a 8.89 percent increase over earnings of $0.45 per share from the same period last year. The company reported quarterly sales of $3.06 billion which beat t"
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_30779187",
+  "quote": "Vertex Pharmaceuticals Q4 Adj. EPS $3.76 Beats $3.51 Estimate, Sales $2.30B Beat $2.30B Estimate",
+  "after": ""
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_31004359",
+  "quote": "Sinclair Broadcast Group Q4 Adj. EPS $0.90 Beats $0.42 Estimate, Sales $960.00M Miss $981.98M Estimate",
+  "after": "Sinclair Broadcast Group (NASDAQ: SBGI ) reported quarterly earnings of $0.90 per share which beat the analyst consensus estimate of $0.42 by 114.29 percent. This is a 190.91 percent increase over losses of $(0.99) per share from the same period last year. The company reported quarterly sales of $96"
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_31086022",
+  "quote": "Sempra Energy Q4 Adj. EPS $2.35 Beats $2.04 Estimate, Sales $3.46B Miss $3.79B Estimate",
+  "after": "Sempra Energy (NYSE: SRE ) reported quarterly earnings of $2.35 per share which beat the analyst consensus estimate of $2.04 by 15.2 percent. This is a 8.8 percent increase over earnings of $2.16 per share from the same period last year. The company reported quarterly sales of $3.46 billion which mi"
+ },
+ {
+  "cat": "news_beat",
+  "src": "news",
+  "id": "bzNews_30939665",
+  "quote": "Blueprint Medicines Q4 EPS $(2.65), Inline, Sales $38.78M Beat $34.43M Estimate",
+  "after": "Blueprint Medicines (NASDAQ: BPMC ) reported quarterly losses of $(2.65) per share which met the analyst consensus estimate. This is a 167.68 percent decrease over losses of $(0.99) per share from the same period last year. The company reported quarterly sales of $38.78 million which beat the analys"
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_30958839",
+  "quote": "American Axle & Mfg Hldgs Q4 Adj EPS $(0.07) Misses $0.01 Estimate, Sales $1.39B Beat $1.39B Estimate",
+  "after": "American Axle & Mfg Hldgs (NYSE: AXL ) reported quarterly adjusted losses of $(0.07) per share which missed the analyst consensus estimate of $0.01 by 800 percent. This is a 22.22 percent increase over losses of $(0.09) per share from the same period last year. The company reported quarterly sales o"
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_30636657",
+  "quote": "Polaris Q4 EPS Adj $3.46 Beats $3.27 Estimate, Sales $2.40B Miss $2.41B Estimate",
+  "after": "Polaris (NYSE: PII ) reported quarterly earnings of $3.46 per share which beat the analyst consensus estimate of $3.27 by 5.81 percent. This is a 60.19 percent increase over earnings of $2.16 per share from the same period last year. The company reported quarterly sales of $2.40 billion which missed"
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_30996000",
+  "quote": "Coinbase Global Q4 EPS $(2.46) Misses $(2.39) Estimate, Sales $629.11M Beat $586.23M Estimate",
+  "after": "Coinbase Global (NASDAQ: COIN ) reported quarterly losses of $(2.46) per share which missed the analyst consensus estimate of $(2.39) by 2.93 percent. This is a 174.1 percent decrease over earnings of $3.32 per share from the same period last year. The company reported quarterly sales of $629.11 mil"
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_30940063",
+  "quote": "Watsco Q4 EPS $2.35 Beats $2.12 Estimate, Sales $1.58B Miss $1.61B Estimate",
+  "after": ""
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_32133402",
+  "quote": "Sprouts Farmers Market Q1 EPS $0.73 Misses $0.85 Estimate, Sales $1.73B Beat $1.72B Estimate",
+  "after": "Sprouts Farmers Market (NASDAQ: SFM ) reported quarterly earnings of $0.73 per share which missed the analyst consensus estimate of $0.85 by 14.12 percent. This is a 7.59 percent decrease over earnings of $0.79 per share from the same period last year. The company reported quarterly sales of $1.73 b"
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_32225907",
+  "quote": "Apellis Pharmaceuticals Q1 EPS $(1.56) Misses $(1.46) Estimate, Sales $44.85M Beat $26.10M Estimate",
+  "after": "Apellis Pharmaceuticals (NASDAQ: APLS ) reported quarterly losses of $(1.56) per share which missed the analyst consensus estimate of $(1.46) by 6.85 percent. This is a 9.86 percent decrease over losses of $(1.42) per share from the same period last year. The company reported quarterly sales of $44."
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_31038171",
+  "quote": "Primerica Q4 Adj. EPS $3.49 Beats $2.93 Estimate, Sales $686.94M Miss $696.17M Estimate",
+  "after": "Primerica (NYSE: PRI ) reported quarterly earnings of $3.49 per share which beat the analyst consensus estimate of $2.93 by 19.11 percent. This is a 18.71 percent increase over earnings of $2.94 per share from the same period last year. The company reported quarterly sales of $686.94 million which m"
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_32060499",
+  "quote": "FirstEnergy Q1 EPS $0.60 Misses $0.61 Estimate",
+  "after": "FirstEnergy (NYSE: FE ) reported quarterly earnings of $0.60 per share which missed the analyst consensus estimate of $0.61 by 1.64 percent. This is unchanged from the same period last year."
+ },
+ {
+  "cat": "news_miss",
+  "src": "news",
+  "id": "bzNews_32326031",
+  "quote": "Genpact Q1 Adj EPS $0.68 Beats $0.65 Estimate, Sales $1.089B Miss $1.10B Estimate",
+  "after": "Genpact (NYSE: G ) reported quarterly adjusted earnings of $0.68 per share which beat the analyst consensus estimate of $0.65 by 4.62 percent. This is a 13.33 percent increase over earnings of $0.60 per share from the same period last year. The company reported quarterly sales of $1.089 billion whic"
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_40096623",
+  "quote": "Dun & Bradstreet Hldgs Q2 Adj $0.23 In Line, Sales $576.20M Miss $580.72M Estimate",
+  "after": "Dun & Bradstreet Hldgs (NYSE: DNB ) reported quarterly earnings of $0.23 per share.This is a 4.55 percent increase over earnings of $0.22 per share from the same period last year. The company reported quarterly sales of $576.20 million which missed the analyst consensus estimate of $580.72 million b"
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_41223658",
+  "quote": "PepsiCo For FY24 Now Sees A Low-Single-Digit Increase In Organic Revenue (Prior ~4% Organic); Reaffirms Adj. EPS Outlook Of At Least $8.15 In line With $8.15 Estimate",
+  "after": "Guidance and Outlook The Company provides guidance on a non-GAAP basis as we cannot predict certain elements which are included in reported GAAP results, including the impact of foreign exchange translation and commodity mark-to-market net impacts. For 2024, the Company now expects: \u2022 A low-single-d"
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_41730768",
+  "quote": "NXP Semiconductors Shares Dip After Q3 Results: EPS Beat, Revenues In-Line, Q4 Guidance Below Estimates",
+  "after": "NXP Semiconductors N.V. (NASDAQ: NXPI ) reported its third-quarter results after Monday's closing bell. Here's a look at the key figures from the quarter. The Details: NXP Semiconductors reported quarterly earnings of $3.45 per share, which beat the analyst consensus estimate of $3.43. Quarterly rev"
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_35328174",
+  "quote": "American Airlines CFO Says Two Narrow-Body Aircraft Deliveries Have Been Delayed Into 2024, So We Now Anticipate Taking Delivery Of A Total Of 21 Aircraft In 2023; Post Labor Day Bookings Have Been In Line With Estimates",
+  "after": "-Reuters"
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_33608874",
+  "quote": "Palantir Reports Q2 Earnings In Line With Estimates, Announces $1 Billion Buyback, Raises Guidance As AI Demand Soars",
+  "after": "Palantir Technologies Inc (NYSE: PLTR ) reported second-quarter financial results after the bell. Here's a rundown of the results. Q2 Earnings: Palantir said second-quarter revenue increased 13% year-over-year to $533.32 million, which was in line with consensus estimates, according to Benzinga Pro."
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_48473043",
+  "quote": "Sysco shares are trading lower after the company affirmed FY2026 EPS and sales roughly guidance in line with estimates.",
+  "after": ""
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_50161524",
+  "quote": "CORRECTION: Sysco Q2 Adj. EPS $0.99 Beats $0.98 Estimate, Sales $20.762B In-line With Estimate",
+  "after": ""
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_33413660",
+  "quote": "KBR Q2 Adj. EPS $0.74 Beats $0.72 Estimate, Sales $1.75B In-Line $1.75B Estimate",
+  "after": "KBR (NYSE: KBR ) reported quarterly adjusted earnings of $0.74 per share which beat the analyst consensus estimate of $0.72 by 2.78 percent. This is a 2.63 percent decrease over earnings of $0.76 per share from the same period last year. The company reported quarterly sales of $1.75 billion, which w"
+ },
+ {
+  "cat": "news_inline",
+  "src": "news",
+  "id": "bzNews_42472970",
+  "quote": "Broadcom Reports Mixed Q4 Results: EPS Beat, Revenues Miss, Q1 Guidance In Line With Estimates",
+  "after": "Broadcom Inc. (NASDAQ: AVGO ) reported its fourth-quarter results after Thursday's closing bell. Here's a look at the key figures from the quarter. The Details: Broadcom reported quarterly earnings of $1.42 per share, which beat the analyst consensus estimate of $1.38. Quarterly revenue came in at $"
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_44161882",
+  "quote": "BJ's Wholesale Sees FY25 Adjusted EPS Of $4.10-$4.30 Vs. $4.30 Estimate, Sees Capital Expenditures Of Approximately $800M",
+  "after": ""
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_33432849",
+  "quote": "Mettler-Toledo Cuts FY23 Adjusted EPS Forecast From $43.65-$43.95 To $40.30-$41.20, Estimate $43.39",
+  "after": ""
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_30684644",
+  "quote": "Lear Forecasts FY23 Sales Of $21.2B-$22.2B Versus Consensus Of $22.4B",
+  "after": "The company expects core operating earnings of $875 - $1,075 million and adjusted EBITDA of $1,475 - $1,675 million."
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_42571509",
+  "quote": "Lamb Weston Lowers FY25 Outlook: Sees Net sales of $6.35B-$6.45B Vs. $6.65B Estimate (Prior View: $6.6B-$6.8B), Projects Adjusted EPS Of $3.05-$3.20 Vs. $4.20 Estimate (Prior View: $4.15-$4.35)",
+  "after": ""
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_36941952",
+  "quote": "Palantir Sees FY24 Revenue $2.652B-$2.668B Vs $2.658B Estimate",
+  "after": ""
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_41709703",
+  "quote": "Marriott Sees FY24 Adj. EPS $9.19-$9.27 Vs $9.36 Estimate",
+  "after": ""
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_38504837",
+  "quote": "Coursera Reports Mixed Q1, Guides Q2 And FY24 Revenue Below Estimates",
+  "after": "Coursera, Inc. (NYSE: COUR ) reported its first-quarter financial results after the bell Monday. Here's a look at the details. The Details: Coursera reported quarterly earnings of 7 cents per share which beat the analyst estimate. The company reported quarterly sales of $169.1 million which missed t"
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_43123349",
+  "quote": "Teledyne Technologies Expects Q1 Adjusted EPS Of $4.80-$4.90 Vs. $5.03 Estimate; Sees 2025 Adjusted EPS Guidance Of $21.10-$21.50 Vs. $21.58 Estimate",
+  "after": ""
+ },
+ {
+  "cat": "news_sees",
+  "src": "news",
+  "id": "bzNews_38694831",
+  "quote": "Elanco Animal Health Forecasts 2024 Revenue Of $4.46B-$4.515B Versus Prior Guidance Of $4.45B-$4.54B And Consensus Of $4.49B",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "IBP_2023-11-08T10.00_pr",
+  "quote": "For the first nine months of 2023, total incremental adjusted EBITDA margins were 45%, substantially above our target range.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "BXP_2023-08-02T10.00_pr",
+  "quote": "Our results exceeded the midpoint of our guidance range by $0.06 per share.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "INCY_2023-05-02T08.00_pr",
+  "quote": "Given the strong underlying patient demand, we are confident in our full-year outlook and are raising the low end of our guidance to a new range of $2.55 to $2.63 billion for the full year.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "KRC_2023-02-02T13.00_pr",
+  "quote": "For the full year, cash same-store NOI was up 7% ahead of our increased guidance of 5.5% to 6.5%.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "OC_2023-07-26T09.00_pr",
+  "quote": "Finally, Our outlook for capital additions is unchanged at approximately $520 million, which is at or below depreciation and amortization estimated to range between $520 and $530 million.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "VOYA_2023-08-02T10.00_pr",
+  "quote": "Looking ahead, we expect full-year margins to be at the high end of our 27% to 33% target range.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "PCRX_2023-02-28T08.30_pr",
+  "quote": "For the full year, non-GAAP SG&A expense was $219 million, slightly below our guided range of $220 to $230 million.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "JAMF_2023-08-08T16.30_pr",
+  "quote": "We ended Q2 with revenue growth of 17% year-over-year, exceeding the midpoint of our outlook.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "SHW_2023-10-24T11.00_pr",
+  "quote": "EBITDA also grew by a double digit percentage with adjusted EBITDA margin of 20.7% near the high end of our current 19 to 21% target range.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "QRVO_2023-08-02T17.00_pr",
+  "quote": "Revenue, margin, and EPS were all above the midpoint of the outlook we provided on our May 3rd earnings call.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "VRTX_2024-02-05T16.30_pr",
+  "quote": "This benefit lowered the Q4 rate and brought the full year 2023 effective tax rate to 19.4%, slightly below our guidance range of 20 to 21%.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "SBAC_2023-11-02T17.00_pr",
+  "quote": "Non-Sprint-related domestic churn was in line with our prior projections and continues to range between 1 and 2 percent of our domestic leasing revenue.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "CDLX_2023-11-08T17.00_pr",
+  "quote": "Adjusted EBITDA exceeded the high end of guidance and was positive for the first time in 2023 at $3.9 million, which is $16.7 million better than Q3 of 2022.",
+  "after": ""
+ },
+ {
+  "cat": "remark_guidance",
+  "src": "transcript",
+  "id": "WDC_2023-10-30T20.30_pr",
+  "quote": "We continued to tightly manage our operating expenses, which were down 19% year-over-year to $555 million, well below our guidance range.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "LUV_2026-01-29T10.00_pr",
+  "quote": "While being well above Wall Street consensus, we are providing EPS guidance that represents the lower end of our internal forecast.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "HUM_2023-02-01T09.00_pr",
+  "quote": "We reported fourth quarter adjusted EPS of $1.62 above internal expectations and consensus estimates.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "CNS_2026-01-23T10.00_pr",
+  "quote": "Our view is for above consensus global growth, inflation, and interest rates. we believe the economic and market rotation is well underway.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "SON_2026-02-17T08.00_pr",
+  "quote": "I'll let Paul go through the numbers in detail, but we improved revenue, operating profit, adjusted EBITDA, and adjusted EBS above consensus and our own expectations.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "RGA_2023-11-03T10.00_pr",
+  "quote": "The first three quarters of 2023 have been particularly strong, with each quarter coming in ahead of consensus estimates and expectations.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "MMC_2024-07-18T08.30_pr",
+  "quote": "And the consensus probability of a near-term recession for major economies continues to decrease.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "MSTR_2026-02-05T17.00_pr",
+  "quote": "So I don't think there's any particular \\u2013 policies to be advocating right now other than to support all the various communities and facilitate consensus at the right time to do the right things.",
+  "after": ""
+ },
+ {
+  "cat": "remark_consensus",
+  "src": "transcript",
+  "id": "ABT_2023-04-19T09.00_pr",
+  "quote": "First quarter adjusted earnings per share were $1.03, which was above consensus estimates, driven entirely by strong underlying base business performance, excluding COVID testing.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0001140361-25-036875_EX-EX-10.3",
+  "quote": "The JSC shall act by consensus, with each Party having, collectively, one (1) vote on behalf of such Party.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0000950170-24-055609_EX-EX-10.1",
+  "quote": "(a)The JPC will be an advisory committee to the Parties and shall make recommendations by consensus (or by unanimous written consent), with the representatives from 41 301144389 v2 each Party having, collectively, one (1) vote on behalf of that Party for purposes of making such recommendations.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0001447362-24-000168_EX-EX-99.3",
+  "quote": "CMRO. 2023. 1 2 3 BUILD \u00a92024 Castle Biosciences 12 Advancing penetration of our tests with clinicians and payers Expert Consensus & Guidelines1 Reimbursement Strategy Castle Commercial Playbook PENETRATE 1.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0000077476-24-000010_EX-EX-99.1",
+  "quote": "In addition, the Company expects an approximate 1-percentage-point foreign exchange translation headwind to impact reported net revenue and core EPS growth based on current market consensus rates.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0001158463-26-000004_EX-EX-99.3",
+  "quote": "The full year fuel price estimate utilizes the same methodology for the jet crack spread, and for crude utilizes a weighted combination of the forward Brent crude curve and consensus estimates.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0001193125-26-008307_EX-EX-99.1",
+  "quote": "Consensus analyst forecasts per FactSet (Dec. 2025). 2.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0001140361-25-019410_EX-EX-99.1",
+  "quote": "Cox\u2019s assets have been valued using Cox\u2019s 2025 estimated Adjusted EBITDA, multiplied by Charter\u2019s total enterprise value to 2025 estimated Adjusted EBITDA trading multiple of 6.44x, based on: \u2022 Wall Street consensus for Charter\u2019s 2025 Adjusted EBITDA, and \u2022 Charter\u2019s (NASDAQ: CHTR) 60-day Volume Weighted Average Price of $353.64, as of 4/25/25.",
+  "after": ""
+ },
+ {
+  "cat": "exhibit_consensus",
+  "src": "8k",
+  "id": "0001104659-26-008982_EX-EX-99.2",
+  "quote": "Source is Factset consensus. 2) Pro forma, as of 9/30/2025.",
+  "after": ""
+ },
+ {
+  "cat": "neg_guidance_move",
+  "src": "transcript",
+  "id": "EAT_2026-01-28T10.00_pr",
+  "quote": "In terms of our expectations for the balance of the year, as noted in this morning's press release, we're raising our fiscal 2026 guidance, which includes annual revenues in the range of $5.76 billion to $5.83 billion. adjusted diluted EPS in the range of $10.45 to $10.85, capital expenditures in the range of $250 million to $260 million, and weighted average shares in the range of $44.7 million to $45.2 million.",
+  "after": ""
+ },
+ {
+  "cat": "neg_guidance_move",
+  "src": "transcript",
+  "id": "GO_2023-05-09T16.30_pr",
+  "quote": "For the full year, we are raising our guidance for adjusted EBITDA to be in the range of $240 to $246 million.",
+  "after": ""
+ },
+ {
+  "cat": "neg_guidance_move",
+  "src": "transcript",
+  "id": "CAG_2023-01-05T09.30_pr",
+  "quote": "As Sean mentioned, we are raising our fiscal 23 guidance for net sales growth, adjusted operating margin, and adjusted diluted earnings per share given our strong performance in the first half of fiscal 23 and expectations for a solid performance for the balance of the year.",
+  "after": ""
+ },
+ {
+  "cat": "neg_guidance_move",
+  "src": "transcript",
+  "id": "ARRY_2023-08-08T17.00_pr",
+  "quote": "At the midpoint, this is an increase of $35 million, or 14% from our previous guidance, and roughly 123% over 2022 adjusted EBITDA.",
+  "after": ""
+ },
+ {
+  "cat": "neg_guidance_move",
+  "src": "transcript",
+  "id": "TMO_2024-07-24T08.30_pr",
+  "quote": "Our 2024 updated guidance range assumes an adjusted operating income margin between 22.5% and 22.8%, slightly higher than the prior guide.",
+  "after": ""
+ },
+ {
+  "cat": "neg_guidance_move",
+  "src": "transcript",
+  "id": "OHI_2025-10-31T10.00_pr",
+  "quote": "This is a 3.5 penny increase over the midpoint of our August guidance.",
+  "after": ""
+ },
+ {
+  "cat": "neg_vs_prior_year",
+  "src": "transcript",
+  "id": "KMT_2023-05-02T08.00_pr",
+  "quote": "Sales increased by 5% year-over-year, with 8% organic growth and favorable workdays of 1%, partially offset by headwinds from foreign currency of 4%.",
+  "after": ""
+ },
+ {
+  "cat": "neg_vs_prior_year",
+  "src": "transcript",
+  "id": "MAN_2023-07-20T08.30_pr",
+  "quote": "Organic gross profit in our experienced brand decreased 13% in constant currency year over year.",
+  "after": ""
+ },
+ {
+  "cat": "neg_vs_prior_year",
+  "src": "transcript",
+  "id": "SMPL_2023-01-05T08.30_pr",
+  "quote": "In fiscal Q1-23, depreciation and amortization expense was $4.9 million and similar to the year-ago period, and stock-based compensation of $3.3 million increased $700,000 versus last year.",
+  "after": ""
+ },
+ {
+  "cat": "neg_vs_prior_year",
+  "src": "transcript",
+  "id": "RPD_2023-02-08T16.30_pr",
+  "quote": "Our customer base grew 6% year over year to end 2022 with over 10,900 customers globally.",
+  "after": ""
+ },
+ {
+  "cat": "neg_vs_prior_year",
+  "src": "transcript",
+  "id": "OC_2023-07-26T09.00_pr",
+  "quote": "Q2 revenues were $905 million, a 3% decrease from the second quarter of 2022, while EBIT grew 4% year over year.",
+  "after": ""
+ },
+ {
+  "cat": "neg_vs_prior_year",
+  "src": "transcript",
+  "id": "BAX_2023-02-09T08.30_pr",
+  "quote": "Moving through the rest of the P&L, adjusted gross margin of 41.6%, decreased 270 basis points versus the prior year, reflecting increased cost of goods sold, primarily driven by the factors we've discussed around inflation, freight, and supply chain constraints.",
+  "after": ""
+ },
+ {
+  "cat": "vague_expectations",
+  "src": "transcript",
+  "id": "NOG_2024-07-31T09.00_pr",
+  "quote": "Oil differentials were better than our expectations at an average of $3.55 per barrel, below the lower end of our guidance.",
+  "after": ""
+ },
+ {
+  "cat": "vague_expectations",
+  "src": "transcript",
+  "id": "MCK_2023-02-01T16.30_pr",
+  "quote": "And specific to fiscal 2023, through the month of January, we observed brand pharmaceutical pricing that was modestly above our expectations.",
+  "after": ""
+ },
+ {
+  "cat": "vague_expectations",
+  "src": "transcript",
+  "id": "BK_2023-01-13T10.00_pr",
+  "quote": "Once again, NIR in the quarter exceeded our expectations as non-interest-bearing deposits remain elevated.",
+  "after": ""
+ },
+ {
+  "cat": "vague_expectations",
+  "src": "transcript",
+  "id": "OLLI_2023-12-06T08.30_pr",
+  "quote": "Our new store productivity was very strong in the quarter, and our new stores continue to perform above our expectations across both new and existing markets.",
+  "after": ""
+ },
+ {
+  "cat": "vague_expectations",
+  "src": "transcript",
+  "id": "NYT_2023-02-08T08.00_pr",
+  "quote": "Advertising revenues exceeded our expectations in the quarter in both digital and print, demonstrating the enduring value of our first-party data and premium ad products and the appeal of the Times brand to a wide range of marketers, even in a challenging macroeconomic environment.",
+  "after": ""
+ }
+]

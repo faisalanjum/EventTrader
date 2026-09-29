@@ -1,0 +1,28 @@
+{
+ "fact_type": {
+  "type": "choice",
+  "instructions": {
+   "question": "Which kind of fact does `quote` state?",
+   "read": "Judge `quote`. `text_before_quote` and `text_after_quote` are the text around it; use them to see what `quote` refers to, including any heading or table title.",
+   "order": "A statement that compares with an outside expectation is a surprise. Otherwise a statement of the company's own forward outlook is guidance, even when it contains a number, a rate or a table row. Otherwise it is a metric if it describes a standing variable, or an action_event if it describes a single thing that happened."
+  },
+  "criteria": {
+   "surprise": {
+    "what": "A company value, delivered (an actual) or promised (a company forecast), compared with an expectation held by another party (analyst consensus or the Street), or an actual compared with the company's own earlier forecast.",
+    "not_for": "A comparison with the prior period's actual, or a new forecast compared with the company's own earlier forecast."
+   },
+   "guidance": {
+    "what": "The company's own forward outlook, target or forecast for a future period, including a forecast range or estimate. Outlook verbs such as expect, anticipate, target and plan to make a statement guidance. A table row counts when its table or section is an outlook, guidance, forecast or estimate.",
+    "not_for": "Something that already happened or is true now."
+   },
+   "metric": {
+    "what": "A standing variable that can be read again over time: a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand. A figure that a company reports for each period (revenue, an expense, income, a cash flow, a balance) is such a variable, even when the sentence describes it with a verb like recorded, increased or decreased.",
+    "not_for": "A forecast (that is guidance) or a single thing that happened (that is an action_event)."
+   },
+   "action_event": {
+    "what": "A discrete thing that happened: a decision, transaction, incident, approval or one-off charge.",
+    "not_for": "A standing variable or condition, or a forecast. A figure reported for each period is not an action_event just because the sentence uses a verb like recorded or increased."
+   }
+  }
+ }
+}

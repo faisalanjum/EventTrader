@@ -1,0 +1,1202 @@
+[
+ {
+  "id": "S000",
+  "cand": 0,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share",
+   "text_before_quote": "Lincoln National",
+   "quote": "Q4 EPS $0.97 Misses $1.80 Estimate",
+   "text_after_quote": ", Sales $4.68B Beat $4.56B Estimate Lincoln National (NYSE: LNC ) reported quarterly earnings of $0.97 per share which missed the analyst consensus estimate of $1.80 by 46.11 percent. This is a 37.82 percent decrease over earnings of $1"
+  }
+ },
+ {
+  "id": "S001",
+  "cand": 0,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "Lincoln National Q4 EPS $0.97 Misses $1.80 Estimate,",
+   "quote": "Sales $4.68B Beat $4.56B Estimate",
+   "text_after_quote": "Lincoln National (NYSE: LNC ) reported quarterly earnings of $0.97 per share which missed the analyst consensus estimate of $1.80 by 46.11 percent. This is a 37.82 percent decrease over earnings of $1"
+  }
+ },
+ {
+  "id": "S002",
+  "cand": 3,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share",
+   "text_before_quote": "Autoliv",
+   "quote": "Q4 EPS $1.83 Beats $1.76 Estimate",
+   "text_after_quote": ", Sales $2.33B Miss $2.44B Estimate Autoliv (NYSE: ALV ) reported quarterly earnings of $1.83 per share which beat the analyst consensus estimate of $1.76 by 3.98 percent. This is a 40.77 percent increase over earnings of $1.30 per shar"
+  }
+ },
+ {
+  "id": "S003",
+  "cand": 3,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "Autoliv Q4 EPS $1.83 Beats $1.76 Estimate,",
+   "quote": "Sales $2.33B Miss $2.44B Estimate",
+   "text_after_quote": "Autoliv (NYSE: ALV ) reported quarterly earnings of $1.83 per share which beat the analyst consensus estimate of $1.76 by 3.98 percent. This is a 40.77 percent increase over earnings of $1.30 per shar"
+  }
+ },
+ {
+  "id": "S004",
+  "cand": 8,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "in_line",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share",
+   "text_before_quote": "Blueprint Medicines",
+   "quote": "Q4 EPS $(2.65), Inline",
+   "text_after_quote": ", Sales $38.78M Beat $34.43M Estimate Blueprint Medicines (NASDAQ: BPMC ) reported quarterly losses of $(2.65) per share which met the analyst consensus estimate. This is a 167.68 percent decrease over losses of $(0.99) per share from the"
+  }
+ },
+ {
+  "id": "S005",
+  "cand": 8,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "Blueprint Medicines Q4 EPS $(2.65), Inline,",
+   "quote": "Sales $38.78M Beat $34.43M Estimate",
+   "text_after_quote": "Blueprint Medicines (NASDAQ: BPMC ) reported quarterly losses of $(2.65) per share which met the analyst consensus estimate. This is a 167.68 percent decrease over losses of $(0.99) per share from the"
+  }
+ },
+ {
+  "id": "S006",
+  "cand": 16,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share",
+   "text_before_quote": "",
+   "quote": "FirstEnergy Q1 EPS $0.60 Misses $0.61 Estimate",
+   "text_after_quote": "FirstEnergy (NYSE: FE ) reported quarterly earnings of $0.60 per share which missed the analyst consensus estimate of $0.61 by 1.64 percent. This is unchanged from the same period last year."
+  }
+ },
+ {
+  "id": "S007",
+  "cand": 18,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "in_line",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "Dun & Bradstreet Hldgs",
+   "quote": "Q2 Adj $0.23 In Line",
+   "text_after_quote": ", Sales $576.20M Miss $580.72M Estimate Dun & Bradstreet Hldgs (NYSE: DNB ) reported quarterly earnings of $0.23 per share.This is a 4.55 percent increase over earnings of $0.22 per share from the same period last year. The company reported"
+  }
+ },
+ {
+  "id": "S008",
+  "cand": 18,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "Dun & Bradstreet Hldgs Q2 Adj $0.23 In Line,",
+   "quote": "Sales $576.20M Miss $580.72M Estimate",
+   "text_after_quote": "Dun & Bradstreet Hldgs (NYSE: DNB ) reported quarterly earnings of $0.23 per share.This is a 4.55 percent increase over earnings of $0.22 per share from the same period last year. The company reported"
+  }
+ },
+ {
+  "id": "S009",
+  "cand": 24,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "in_line",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "CORRECTION: Sysco Q2 Adj. EPS $0.99 Beats $0.98 Estimate,",
+   "quote": "Sales $20.762B In-line With Estimate",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S010",
+  "cand": 11,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share",
+   "text_before_quote": "Coinbase Global",
+   "quote": "Q4 EPS $(2.46) Misses $(2.39) Estimate",
+   "text_after_quote": ", Sales $629.11M Beat $586.23M Estimate Coinbase Global (NASDAQ: COIN ) reported quarterly losses of $(2.46) per share which missed the analyst consensus estimate of $(2.39) by 2.93 percent. This is a 174.1 percent decrease over earnings of"
+  }
+ },
+ {
+  "id": "S011",
+  "cand": 2,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "EPS and sales both beat",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share",
+   "text_before_quote": "",
+   "quote": "Gilead Sciences Q4 Adj. EPS $1.67 Beats $1.49 Estimate, Sales $7.39B Beat $6.64B Estimate",
+   "text_after_quote": "Gilead Sciences (NASDAQ: GILD ) reported quarterly earnings of $1.67 per share which beat the analyst consensus estimate of $1.49 by 12.08 percent. This is a 142.03 percent increase over earnings of $"
+  }
+ },
+ {
+  "id": "S012",
+  "cand": 29,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "missed",
+  "note": "range below consensus",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "sales",
+   "text_before_quote": "",
+   "quote": "Lear Forecasts FY23 Sales Of $21.2B-$22.2B Versus Consensus Of $22.4B",
+   "text_after_quote": "The company expects core operating earnings of $875 - $1,075 million and adjusted EBITDA of $1,475 - $1,675 million."
+  }
+ },
+ {
+  "id": "S013",
+  "cand": 32,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "missed",
+  "note": "range below estimate",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "",
+   "quote": "Marriott Sees FY24 Adj. EPS $9.19-$9.27 Vs $9.36 Estimate",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S014",
+  "cand": 31,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "in_line",
+  "note": "range contains the estimate (rule 4.10)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "",
+   "quote": "Palantir Sees FY24 Revenue $2.652B-$2.668B Vs $2.658B Estimate",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S015",
+  "cand": 27,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "in_line",
+  "note": "estimate on the edge of the range (rule 4.10)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "BJ's Wholesale",
+   "quote": "Sees FY25 Adjusted EPS Of $4.10-$4.30 Vs. $4.30 Estimate",
+   "text_after_quote": ", Sees Capital Expenditures Of Approximately $800M"
+  }
+ },
+ {
+  "id": "S016",
+  "cand": 34,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "missed",
+  "note": "both guided ranges below estimate",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "",
+   "quote": "Teledyne Technologies Expects Q1 Adjusted EPS Of $4.80-$4.90 Vs. $5.03 Estimate; Sees 2025 Adjusted EPS Guidance Of $21.10-$21.50 Vs. $21.58 Estimate",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S017",
+  "cand": 33,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "Coursera Reports Mixed Q1,",
+   "quote": "Guides Q2 And FY24 Revenue Below Estimates",
+   "text_after_quote": "Coursera, Inc. (NYSE: COUR ) reported its first-quarter financial results after the bell Monday. Here's a look at the details. The Details: Coursera reported quarterly earnings of 7 cents per share wh"
+  }
+ },
+ {
+  "id": "S018",
+  "cand": 23,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "in_line",
+  "note": "affirmed guidance in line with estimates",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share and sales",
+   "text_before_quote": "",
+   "quote": "Sysco shares are trading lower after the company affirmed FY2026 EPS and sales roughly guidance in line with estimates.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S019",
+  "cand": 19,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "in_line",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "PepsiCo For FY24 Now Sees A Low-Single-Digit Increase In Organic Revenue (Prior ~4% Organic);",
+   "quote": "Reaffirms Adj. EPS Outlook Of At Least $8.15 In line With $8.15 Estimate",
+   "text_after_quote": "Guidance and Outlook The Company provides guidance on a non-GAAP basis as we cannot predict certain elements which are included in reported GAAP results, including the impact of foreign exchange trans"
+  }
+ },
+ {
+  "id": "S020",
+  "cand": 20,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings per share",
+   "text_before_quote": "NXP Semiconductors Shares Dip After Q3 Results:",
+   "quote": "EPS Beat",
+   "text_after_quote": ", Revenues In-Line, Q4 Guidance Below Estimates NXP Semiconductors N.V. (NASDAQ: NXPI ) reported its third-quarter results after Monday's closing bell. Here's a look at the key figures from the quarter. The Details: NXP Semiconductors reported quar"
+  }
+ },
+ {
+  "id": "S021",
+  "cand": 20,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "in_line",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "NXP Semiconductors Shares Dip After Q3 Results: EPS Beat,",
+   "quote": "Revenues In-Line",
+   "text_after_quote": ", Q4 Guidance Below Estimates NXP Semiconductors N.V. (NASDAQ: NXPI ) reported its third-quarter results after Monday's closing bell. Here's a look at the key figures from the quarter. The Details: NXP Semiconductors reported quar"
+  }
+ },
+ {
+  "id": "S022",
+  "cand": 20,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "guidance",
+   "text_before_quote": "NXP Semiconductors Shares Dip After Q3 Results: EPS Beat, Revenues In-Line,",
+   "quote": "Q4 Guidance Below Estimates",
+   "text_after_quote": "NXP Semiconductors N.V. (NASDAQ: NXPI ) reported its third-quarter results after Monday's closing bell. Here's a look at the key figures from the quarter. The Details: NXP Semiconductors reported quar"
+  }
+ },
+ {
+  "id": "S023",
+  "cand": 26,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "missed",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "Broadcom Reports Mixed Q4 Results: EPS Beat,",
+   "quote": "Revenues Miss",
+   "text_after_quote": ", Q1 Guidance In Line With Estimates Broadcom Inc. (NASDAQ: AVGO ) reported its fourth-quarter results after Thursday's closing bell. Here's a look at the key figures from the quarter. The Details: Broadcom reported quarterly earnings of"
+  }
+ },
+ {
+  "id": "S024",
+  "cand": 26,
+  "key": "surprise",
+  "kind": "guidance_vs_consensus",
+  "state_key": "in_line",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "guidance",
+   "text_before_quote": "Broadcom Reports Mixed Q4 Results: EPS Beat, Revenues Miss,",
+   "quote": "Q1 Guidance In Line With Estimates",
+   "text_after_quote": "Broadcom Inc. (NASDAQ: AVGO ) reported its fourth-quarter results after Thursday's closing bell. Here's a look at the key figures from the quarter. The Details: Broadcom reported quarterly earnings of"
+  }
+ },
+ {
+  "id": "S025",
+  "cand": 22,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "in_line",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "earnings",
+   "text_before_quote": "Palantir",
+   "quote": "Reports Q2 Earnings In Line With Estimates",
+   "text_after_quote": ", Announces $1 Billion Buyback, Raises Guidance As AI Demand Soars Palantir Technologies Inc (NYSE: PLTR ) reported second-quarter financial results after the bell. Here's a rundown of the results. Q2 Earnings: Palantir said second-quarter revenue increased 13% year-"
+  }
+ },
+ {
+  "id": "S026",
+  "cand": 37,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "earnings per share",
+   "text_before_quote": "So our financing plan is to pay off the $500 million bond expiring in September with cash, refinance our $700 million bond prior to its maturity in February 2024, either through the secured or the unsecured market, refinance our mortgage maturities, and continue to maintain ample liquidity. Now turning to our earnings results. For the second quarter, we reported funds from operations of $1.86 per share.",
+   "quote": "Our results exceeded the midpoint of our guidance range by $0.06 per share.",
+   "text_after_quote": "The outperformance was due to $0.02 of better than expected revenues in the portfolio, combined with $0.04 of lower than expected operating expenses. The stronger revenues were spread across the portfolio."
+  }
+ },
+ {
+  "id": "S027",
+  "cand": 39,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "cash same-store net operating income growth",
+   "text_before_quote": "That completes my remarks. Now I'll turn the call over to Elliot.\", \"Elliot Trencher [627]: Thank you, John. FFO was $1.17 per share in the fourth quarter, similar to the third quarter. On a same-store basis, fourth quarter cash NOI was down roughly 1%. There were several one-time items in the prior period from termination fees, tenant catch-up payments, and real estate tax true-ups. Excluding non-recurring items, same-store would have grown roughly 2.5%.",
+   "quote": "For the full year, cash same-store NOI was up 7% ahead of our increased guidance of 5.5% to 6.5%.",
+   "text_after_quote": "At the end of the quarter, our stabilized portfolio was roughly 91.5% occupied, slightly ahead of our full year guidance. The portfolio remained roughly 93% leased. Toward the end of the quarter, we commenced revenue recognition for Indeed's lease in Austin."
+  }
+ },
+ {
+  "id": "S028",
+  "cand": 42,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "unknown",
+  "note": "outside the range, no good/bad words, expense has a common opposite story (rule 4.12)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "non-GAAP SG&A expense",
+   "text_before_quote": "The supply of this part have now been replenished, and we have not experienced elevated batch failures since early in the first quarter of 2023. Fourth quarter non-GAAP R&D expense was $15.7 million, reflecting ongoing investments in label expansion studies, as well as our clinical stage pipeline. For full year, non-GAAP R&D was $78.2 million, and in line with our guided range of $75 to $85 million. Our fourth quarter non-GAAP SG&A expense was $54.7 million.",
+   "quote": "For the full year, non-GAAP SG&A expense was $219 million, slightly below our guided range of $220 to $230 million.",
+   "text_after_quote": "Interest expense was $11 million for the fourth quarter of 2022. To remind you, most of the interest expense relates to our term loan B finance, which has a floating interest rate of SOFR plus 700 basis points."
+  }
+ },
+ {
+  "id": "S029",
+  "cand": 43,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "revenue growth",
+   "text_before_quote": "We recently announced support for both Google Chromebook and Windows devices and are working on making improvements to the offering, including making Jamf State's internet available in more countries with in-country server locations, providing us with a roadmap for the future. We look forward to what Q3 brings as we finish out the education season. With that, now I'll turn it over to Ian.\", \"Ian Goodkind [1442]: Thanks, John.",
+   "quote": "We ended Q2 with revenue growth of 17% year-over-year, exceeding the midpoint of our outlook.",
+   "text_after_quote": "SAS recurring revenue, the strategic core of Jamf's business, remains strong. Less strategic revenue sources like license, services, and on-premise revenues were lower than anticipated."
+  }
+ },
+ {
+  "id": "S030",
+  "cand": 44,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "in_line",
+  "note": "inside the target range, no good/bad words; target wording = previous_guidance (rule 3.52)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted EBITDA margin",
+   "text_before_quote": "A high single digit increase in SG&A over the prior year third quarter reflects those investments, which are deliberately being made at a higher level to take advantage of current market uncertainty. and are aimed at driving the success of our customers and growth across all businesses. Operating margin expanded year over year and adjusted diluted net income per share grew by a double digit percentage.",
+   "quote": "EBITDA also grew by a double digit percentage with adjusted EBITDA margin of 20.7% near the high end of our current 19 to 21% target range.",
+   "text_after_quote": "In addition, we returned $566 million to our shareholders through dividends and share repurchases during the quarter. Let me now turn it over to Heidi, who will provide some commentary on our third quarter results by segment."
+  }
+ },
+ {
+  "id": "S031",
+  "cand": 45,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "revenue, margin and earnings per share",
+   "text_before_quote": "Joining us today are Bob Bruggerworth, President and CEO, Grant Brown, CFO, Dave Fullwood, Senior Vice President of Sales and Marketing, and other members of Corvus management team. And with that, I'll turn the call over to Bob.\", \"Bob Bruggerworth [118]: Thanks, Doug, and welcome everyone to Corvus fiscal 2024 first quarter call.",
+   "quote": "Revenue, margin, and EPS were all above the midpoint of the outlook we provided on our May 3rd earnings call.",
+   "text_after_quote": "End market demand in the June quarter was consistent with our expectations. Within the Android ecosystem, channel inventories continue to be consumed, and Corvo continued to undership to end market demand."
+  }
+ },
+ {
+  "id": "S032",
+  "cand": 46,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "unclear",
+  "note": "\"This benefit\" may frame it as good; state unclear",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "effective tax rate",
+   "text_before_quote": "In addition, approximately $400 million of the year-over-year increase in operating expenses was the result of increased AIP R&D costs from new business development. Fourth quarter 2023 non-GAAP operating income was $1.15 billion, consistent with $1.15 billion in non-GAAP operating income in the fourth quarter of 2022. Full year 2023 non-GAAP operating income was $4.37 billion compared to $4.79 billion in 2022. Fourth quarter 2023 effective tax rate of 16.3% reflects an increase in our 2023 U.S. R&D tax credits.",
+   "quote": "This benefit lowered the Q4 rate and brought the full year 2023 effective tax rate to 19.4%, slightly below our guidance range of 20 to 21%.",
+   "text_after_quote": "Fourth quarter 2023 non-gap earnings per share were $4.20, representing 12% growth compared to $3.76 in the fourth quarter of 2022. Full year 2023 non-gap earnings per share were $15.23 compared to $14.88 in 2022."
+  }
+ },
+ {
+  "id": "S033",
+  "cand": 47,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "in_line",
+  "note": "in line with prior projections",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "domestic churn",
+   "text_before_quote": "During the third quarter, domestic churn was slightly below our prior projections due to a slower pace of decommissioning of legacy Sprint leases than we had projected. Our overall expectations for Sprint-related churn remain the same, but there will likely continue to be small variations in timing of realizing this churn over the next several years. We currently expect Sprint-related churn for 2023 to be $28 million. 2024 Sprint-related churn is currently estimated to be approximately $30 million.",
+   "quote": "Non-Sprint-related domestic churn was in line with our prior projections and continues to range between 1 and 2 percent of our domestic leasing revenue.",
+   "text_after_quote": "Internationally, on a constant currency basis, third quarter same-tower cash leasing revenue growth was 4.5 percent net, including 4.9 percent of churn, or 9.4 percent on a gross basis."
+  }
+ },
+ {
+  "id": "S034",
+  "cand": 36,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "company target range = previous_guidance (rule 3.52)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted EBITDA margin",
+   "text_before_quote": "During the third quarter, our same branch adjusted EBITDA growth was positive, while our same branch sales were lower than the prior year. This very strong result rendered the calculation of our same branch incremental margin meaningless during the third quarter. But we continue to target full-year, long-term, incremental adjusted EBITDA margins in the range of 20% to 25%.",
+   "quote": "For the first nine months of 2023, total incremental adjusted EBITDA margins were 45%, substantially above our target range.",
+   "text_after_quote": "Although we do not provide comprehensive financial guidance, based on recent acquisitions, we expect fourth quarter 2023 amortization expense of approximately $11 million and full year 2023 expense of approximately $44 million."
+  }
+ },
+ {
+  "id": "S035",
+  "cand": 78,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "\"better than our expectations\", below the low end of guidance",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "oil differential",
+   "text_before_quote": "Free cash flow of 134 million in the quarter was higher sequentially and nearly tripled from the same period last year due to the strength of our underlying assets and the pull forward of activity in the prior quarter, which kept capital in check. We anticipate free cash flow to continue to stay elevated in Q3 and remain elevated for the balance of 2024 as the remainder of our tills come online and begin to contribute to production and revenue.",
+   "quote": "Oil differentials were better than our expectations at an average of $3.55 per barrel, below the lower end of our guidance.",
+   "text_after_quote": "Wilson differentials trended down in the second quarter as we anticipated, and Permian differentials were also improved, normalizing for winter months. We also saw better realizations from our joint development projects."
+  }
+ },
+ {
+  "id": "S036",
+  "cand": 48,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted EBITDA",
+   "text_before_quote": "As Karim said, we launched Ripple in August and have added 33 million profiles to our database with the line of sight to adding additional profiles in the near term, which enables us to scale and drive network effects. Adjusted contribution grew 22%, with the margin calculated off of revenue of 54% compared to 48% one year ago. We are seeing the benefits of our partner share renegotiation with JPMorgan Chase, as well as product improvements.",
+   "quote": "Adjusted EBITDA exceeded the high end of guidance",
+   "text_after_quote": "and was positive for the first time in 2023 at $3.9 million, which is $16.7 million better than Q3 of 2022. Bridge was profitable for the second quarter in a row. Operating cash flow was $1.2 million and positive for the second consecutive quarter."
+  }
+ },
+ {
+  "id": "S037",
+  "cand": 49,
+  "key": "surprise",
+  "kind": "actual_vs_guidance",
+  "state_key": "beat",
+  "note": "\"tightly manage\" frames it as good",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "operating expenses",
+   "text_before_quote": "Flash gross margin was negative 10.3%, underutilization charges due to reduced manufacturing volumes were 142 million, and flash inventory write downs were 9 million, resulting in a combined 9.7 percentage points headwind to gross margin. HDD gross margin was 22.9%. Underutilization charges were higher than expected at $83 million, or a 7 percentage point headwind to gross margin. We continued to tightly manage our operating expenses, which were down 19% year-over-year to $555 million,",
+   "quote": "well below our guidance range",
+   "text_after_quote": "Operating loss was $443 million, which included underutilization charges and inventory write downs totaling $234 million. Income tax expense in the fiscal first quarter was $25 million."
+  }
+ },
+ {
+  "id": "S038",
+  "cand": 51,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "also above internal expectations; consensus is explicit",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "Before discussing details of our performance and outlook, I would note that we realigned our reportable segments in December, moving to two distinct segments, insurance and center well. I will speak to our 2022 results and 2023 outlook in terms of the new segment structure with references to the old segments to provide clarity as needed. I will start by discussing our fourth quarter results and underlying trends before turning to our 2023 expectations.",
+   "quote": "We reported fourth quarter adjusted EPS of $1.62 above internal expectations and consensus estimates.",
+   "text_after_quote": "Results for our insurance segment were modestly favorable to expectations."
+  }
+ },
+ {
+  "id": "S039",
+  "cand": 53,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "revenue, operating profit, adjusted EBITDA and adjusted earnings per share",
+   "text_before_quote": "And we concluded our portfolio transformation following the successful divestiture of ThermoSafe and further simplified our consumer packaging segment by consolidating our global metal packaging and rigid paper containers business into a single integrated structure driven geographically, which we believe enhances our go-to-market strategy and will drive additional synergies across global channels.",
+   "quote": "I'll let Paul go through the numbers in detail, but we improved revenue, operating profit, adjusted EBITDA, and adjusted EBS above consensus and our own expectations.",
+   "text_after_quote": "We achieved this improvement despite the defestiture of ThermoSafe earlier in the quarter. Providing some context for the quarter, October was a strong month for all of our businesses, while November was a bit weaker than we had expected."
+  }
+ },
+ {
+  "id": "S040",
+  "cand": 54,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "ungrounded generic beat (rule 4.15)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "quarterly results",
+   "text_before_quote": "We expect to remain active in deploying capital into attractive growth opportunities in our organic flow and enforced block transactions and returning excess capital to shareholders through dividends and share repurchases. We continued our long track record of increasing book value per share. As shown on slide 15, Our book value per share, excluding AOCI, increased to $142.63, which represents a compounded annual growth rate of 10.8% since the beginning of 2021.",
+   "quote": "The first three quarters of 2023 have been particularly strong, with each quarter coming in ahead of consensus estimates and expectations.",
+   "text_after_quote": "So I thought it would be helpful to go through the main drivers from our perspective. First, very strong organic new business and in-force transactions."
+  }
+ },
+ {
+  "id": "S041",
+  "cand": 57,
+  "key": "surprise",
+  "kind": "actual_vs_consensus",
+  "state_key": "beat",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "Unless otherwise noted, our commentary on sales growth refers to organic sales growth, which is defined in the quarterly results press release issued earlier today. With that, I will now turn the call over to Robert.\", \"Robert Ford [171]: Thanks, Scott. Good morning, everyone, and thank you for joining us. Today, we reported strong results to start the year.",
+   "quote": "First quarter adjusted earnings per share were $1.03, which was above consensus estimates, driven entirely by strong underlying base business performance, excluding COVID testing.",
+   "text_after_quote": "Organic sales growth excluded COVID testing increased 10%, led by double-digit growth in medical devices, established pharmaceuticals, and nutrition."
+  }
+ },
+ {
+  "id": "S042",
+  "cand": 38,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "new guide vs own old guide = guidance movement (4.1)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "full-year revenue guidance",
+   "text_before_quote": "Moving to slide five, taking a closer look at the Q1 dynamics that affected net sales in the quarter for Jackathai and Opsilor. Jackathai patient demand was strong across all indications, growing 7% on a year-on-year basis. On growth to net, we had the typical Q1 negative effect, with higher deductions due to an increase in Medicare coverage gap rebates and patient deductibles. We also had an increase in 340B purchases. Separately, channel inventories fell below normal level, resulting in an $11 million impact.",
+   "quote": "Given the strong underlying patient demand, we are confident in our full-year outlook and are raising the low end of our guidance to a new range of $2.55 to $2.63 billion for the full year.",
+   "text_after_quote": "Turning to OPCEL1, there are three components to fully understand the dynamics of the first quarter. we saw a continuation of strong trends in weekly prescription growth in the quarter. 60,000 new patients were treated with Opsalua."
+  }
+ },
+ {
+  "id": "S043",
+  "cand": 40,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "reaffirmed outlook; compared with D&A estimates of its own",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "capital additions outlook",
+   "text_before_quote": "We continue to expect our full year effective tax rate to be 24 to 26% of adjusted pre-tax earnings and our cash tax rate to be 26 to 28% of adjusted pre-tax earnings.",
+   "quote": "Finally, Our outlook for capital additions is unchanged at approximately $520 million, which is at or below depreciation and amortization estimated to range between $520 and $530 million.",
+   "text_after_quote": "Now, please turn to slide 12, and I'll turn the call back to Brian to further discuss our outlook. Brian.\", \"Brian Chambers [1242]: Thank you, Ken."
+  }
+ },
+ {
+  "id": "S044",
+  "cand": 67,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "raised guidance",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted EBITDA guidance",
+   "text_before_quote": "In total, we now project fiscal 2023 net sales of approximately $3.9 billion. We expect gross margin for the second quarter and full year of approximately 30.7%. This represents an increase in our full year guidance reflecting our strong Q1 performance along with normal seasonal margin moderation in the back half of the year. With respect to the bottom line, we expect second quarter adjusted EBITDA of approximately 6.3% of sales.",
+   "quote": "For the full year, we are raising our guidance for adjusted EBITDA to be in the range of $240 to $246 million.",
+   "text_after_quote": "Moving down the P&L, we continue to expect net interest expense of approximately $22 million for the year, which reflects projected forward interest rates on $300 million of outstanding debt."
+  }
+ },
+ {
+  "id": "S045",
+  "cand": 69,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs previous guidance (movement)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted EBITDA guidance",
+   "text_before_quote": "The increase was driven by both improved profitability and the continued improvement in our cash conversion cycle. Now, I'd like to go to slide 8, where I will discuss our updated outlook for 2023. For the full year 2023, we now expect revenue to be in the range of $1.65 billion to $1.725 billion due to the factors Kevin previously discussed. However, we are raising our adjusted EBITDA guidance on continued strength of our gross margin performance. We now expect to be in the range of $280 million to $295 million.",
+   "quote": "At the midpoint, this is an increase of $35 million, or 14% from our previous guidance, and roughly 123% over 2022 adjusted EBITDA.",
+   "text_after_quote": "Also, our adjusted EBITDA margin at the new midpoint is an increase of 300 basis points to 17% from previous guidance of 14%, and roughly 8% in 2022. Further, we are increasing our adjusted EPS range, where we now expect between $1 and $1.07."
+  }
+ },
+ {
+  "id": "S046",
+  "cand": 70,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior guide (movement)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted operating income margin guidance",
+   "text_before_quote": "The improved revenue guidance does not change the core organic revenue growth rounding for the year, so we still continue to assume core organic revenue growth will be in the range of minus 1% to positive 1% for 2024. And we continue to assume that the market declines low single digits this year. Our proven growth strategy and PPI business system execution will enable us to continue to take share once again.",
+   "quote": "Our 2024 updated guidance range assumes an adjusted operating income margin between 22.5% and 22.8%, slightly higher than the prior guide.",
+   "text_after_quote": "Our PPI business system is continuing to enable excellent execution, manage costs appropriately, and fund the right long-term investments to enable us to further advance our industry leadership."
+  }
+ },
+ {
+  "id": "S047",
+  "cand": 71,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs August guidance (movement)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "earnings per share guidance",
+   "text_before_quote": "In addition, next week, we plan to put in place a new $2 billion ATM program. We are excited as our balance sheet and cost of capital have positioned us for significant adjusted FFO growth as we opportunistically look to the capital markets to fund our active pipeline. Turning to guidance, as Taylor mentioned, we raised and narrowed our full year adjusted FFO guidance to a range between $3.08 to $3.10 per share.",
+   "quote": "This is a 3.5 penny increase over the midpoint of our August guidance.",
+   "text_after_quote": "The increase was due primarily to the completion of $374 million of new investments that closed post our second quarter earnings call."
+  }
+ },
+ {
+  "id": "S048",
+  "cand": 27,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "forecast with no comparison",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "capital expenditures",
+   "text_before_quote": "BJ's Wholesale Sees FY25 Adjusted EPS Of $4.10-$4.30 Vs. $4.30 Estimate,",
+   "quote": "Sees Capital Expenditures Of Approximately $800M",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S049",
+  "cand": 19,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "new guide vs own prior guide",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "organic revenue growth",
+   "text_before_quote": "PepsiCo For FY24",
+   "quote": "Now Sees A Low-Single-Digit Increase In Organic Revenue (Prior ~4% Organic)",
+   "text_after_quote": "; Reaffirms Adj. EPS Outlook Of At Least $8.15 In line With $8.15 Estimate Guidance and Outlook The Company provides guidance on a non-GAAP basis as we cannot predict certain elements which are included in reported GAAP results, including the impact of foreign exchange trans"
+  }
+ },
+ {
+  "id": "S050",
+  "cand": 22,
+  "key": "guidance",
+  "kind": "none",
+  "state_key": "",
+  "note": "raised guidance, no expectation compared",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "guidance",
+   "text_before_quote": "Palantir Reports Q2 Earnings In Line With Estimates, Announces $1 Billion Buyback,",
+   "quote": "Raises Guidance As AI Demand Soars",
+   "text_after_quote": "Palantir Technologies Inc (NYSE: PLTR ) reported second-quarter financial results after the bell. Here's a rundown of the results. Q2 Earnings: Palantir said second-quarter revenue increased 13% year-"
+  }
+ },
+ {
+  "id": "S051",
+  "cand": 72,
+  "key": "metric",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior year (metric change, 4.1)",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "sales",
+   "text_before_quote": "Before I begin, please note that, like last quarter, we did not record any non-GAAP adjustments this quarter. Therefore, adjusted numbers are not presented for the current quarter, and for today's discussion, year-over-year comparisons will be against the prior year's adjusted results. The quarter's results show that we continue to execute our initiatives in the face of continued headwinds from inflation, foreign exchange, and the lingering effects of COVID disruptions in China.",
+   "quote": "Sales increased by 5% year-over-year, with 8% organic growth and favorable workdays of 1%, partially offset by headwinds from foreign currency of 4%.",
+   "text_after_quote": "As Chris pointed out, price remains a large portion of the sales increase. On a sequential basis from Q2, Sales growth of 8% was above our normal Q2 to Q3 seasonal pattern of up 3% to 4%, driven by increased volume and more favorable foreign exchange."
+  }
+ },
+ {
+  "id": "S052",
+  "cand": 73,
+  "key": "metric",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior year",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "organic gross profit",
+   "text_before_quote": "Other items resulted in a 20 basis point margin decrease. Moving on to our gross profit by business line, during the quarter, the Manpower brand comprised 58% of gross profit, Our experienced professional business comprised 25%, and talent solutions comprised 17%. During the quarter, our consolidated gross profit decreased 6% on an organic constant currency basis year over year. Our manpower brand reported an organic gross profit decrease of 3% in constant currency year over year.",
+   "quote": "Organic gross profit in our experienced brand decreased 13% in constant currency year over year.",
+   "text_after_quote": "Permanent recruitment decreases within experience drove the higher rate of overall GP decrease for the brand. Organic gross profit and talent solutions decreased 7% in constant currency year over year."
+  }
+ },
+ {
+  "id": "S053",
+  "cand": 75,
+  "key": "metric",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior year",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "customers",
+   "text_before_quote": "As Corey mentioned earlier, we saw growth moderate within our mid-market customer segment in the fourth quarter as these customers navigate more uncertain macroeconomic picture. This drove a moderation in new ARR bookings in this segment alongside a modest headwind to retention rates in international markets. We continue to see a mix of growth coming from both new and existing customers with a growing bias toward existing customers in this environment.",
+   "quote": "Our customer base grew 6% year over year to end 2022 with over 10,900 customers globally.",
+   "text_after_quote": "ARR per customer grew 12% over the prior year to $65,400 at year end as customers continue to expand and use more of our Insight platform. Full year revenue of $685 million grew 28% over the prior year and exceeded the high end of our guidance range."
+  }
+ },
+ {
+  "id": "S054",
+  "cand": 76,
+  "key": "metric",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior year",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "revenue",
+   "text_before_quote": "We remain focused on consistently generating strong free cash flow returning approximately 50% to investors over time and maintaining an investment grade balance sheet while executing on our business strategies to grow our company. Now turning to slide eight, I'll provide more details on the performance of each of the businesses. The insulation business delivered a strong second quarter with margin expansion both year over year and sequentially.",
+   "quote": "Q2 revenues were $905 million, a 3% decrease from the second quarter of 2022, while EBIT grew 4% year over year.",
+   "text_after_quote": "We continue to see solid realization of previously announced pricing actions and favorable product and customer mix across the business, more than offsetting the impact of lower volumes and ongoing inflation."
+  }
+ },
+ {
+  "id": "S055",
+  "cand": 77,
+  "key": "metric",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior year",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted gross margin",
+   "text_before_quote": "Within the quarter, we were able to secure some additional electromechanical components on the spot market, which enabled us to address a portion of the backlog associated with the frontline care business. Sales and patient support systems declined low single digits in the quarter, primarily driven by lower rental revenues in quarter as the prior year period benefited from more than 10 million in sales due to COVID-related rentals.",
+   "quote": "Moving through the rest of the P&L, adjusted gross margin of 41.6%, decreased 270 basis points versus the prior year, reflecting increased cost of goods sold, primarily driven by the factors we've discussed around inflation, freight, and supply chain constraints.",
+   "text_after_quote": "Adjusted SG&A of $797 million represented 20.5 as a percentage of sales, an increase of 30 basis points versus the prior year, driven by the addition of HILROM as well as higher freight expenses."
+  }
+ },
+ {
+  "id": "S056",
+  "cand": 48,
+  "key": "metric",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior year quarter",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "adjusted EBITDA",
+   "text_before_quote": "Adjusted contribution grew 22%, with the margin calculated off of revenue of 54% compared to 48% one year ago. We are seeing the benefits of our partner share renegotiation with JPMorgan Chase, as well as product improvements. Adjusted EBITDA exceeded the high end of guidance and was positive for the first time in 2023 at $3.9 million,",
+   "quote": "which is $16.7 million better than Q3 of 2022",
+   "text_after_quote": "Bridge was profitable for the second quarter in a row. Operating cash flow was $1.2 million and positive for the second consecutive quarter."
+  }
+ },
+ {
+  "id": "S057",
+  "cand": 49,
+  "key": "metric",
+  "kind": "none",
+  "state_key": "",
+  "note": "vs prior year",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "operating expenses",
+   "text_before_quote": "In total, these charges represented an 8.5 percentage point headwind to gross margin. Flash gross margin was negative 10.3%, underutilization charges due to reduced manufacturing volumes were 142 million, and flash inventory write downs were 9 million, resulting in a combined 9.7 percentage points headwind to gross margin. HDD gross margin was 22.9%. Underutilization charges were higher than expected at $83 million, or a 7 percentage point headwind to gross margin. We continued to tightly manage our",
+   "quote": "operating expenses, which were down 19% year-over-year to $555 million",
+   "text_after_quote": "well below our guidance range. Operating loss was $443 million, which included underutilization charges and inventory write downs totaling $234 million. Income tax expense in the fiscal first quarter was $25 million."
+  }
+ },
+ {
+  "id": "S058",
+  "cand": 22,
+  "key": "action_event",
+  "kind": "none",
+  "state_key": "",
+  "note": "",
+  "scored": true,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "share repurchase",
+   "text_before_quote": "Palantir Reports Q2 Earnings In Line With Estimates,",
+   "quote": "Announces $1 Billion Buyback",
+   "text_after_quote": ", Raises Guidance As AI Demand Soars Palantir Technologies Inc (NYSE: PLTR ) reported second-quarter financial results after the bell. Here's a rundown of the results. Q2 Earnings: Palantir said second-quarter revenue increased 13% year-"
+  }
+ },
+ {
+  "id": "S059",
+  "cand": 55,
+  "key": "not_surprise",
+  "kind": "none",
+  "state_key": "",
+  "note": "the word consensus, not a company value vs expectation",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "recession probability",
+   "text_before_quote": "Uncertainty also remains around the frequency of extreme weather, escalating cyber attacks, and key variables in the economic outlook, like the persistence of inflation and the timing of changes to central bank policy. Despite this uncertainty, the environment remains supportive of growth in our business. In general, we see continued economic growth in most of our major markets. The cost of risk in healthcare continues to rise, and labor markets remain tight.",
+   "quote": "And the consensus probability of a near-term recession for major economies continues to decrease.",
+   "text_after_quote": "We have performed well across economic cycles due to the resilience of our business, sustained demand for our advice and solutions, and consistent execution for our clients."
+  }
+ },
+ {
+  "id": "S060",
+  "cand": 56,
+  "key": "not_surprise",
+  "kind": "none",
+  "state_key": "",
+  "note": "the word consensus in another sense",
+  "scored": true,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "policy support",
+   "text_before_quote": "It's quite possible we'll actually pop out. You remember the world was going to end in climate change, death, you know, 26 years ago, when 26 years went by and none of those things happened, we were going to, you know, Bitcoin was going to boil the ocean and use all the energy on Earth as late as 2018, and that never happened. So it's possible that whatever happens in the quantum domain will actually improve the security of the Bitcoin network inadvertently before we have to even discuss a protocol change.",
+   "quote": "So I don't think there's any particular \\u2013 policies to be advocating right now other than to support all the various communities and facilitate consensus at the right time to do the right things.",
+   "text_after_quote": "The second topic is really one of the catalysts for Bitcoin price to improve. I think the fundamental catalysts are regulatory support."
+  }
+ },
+ {
+  "id": "S061",
+  "cand": 58,
+  "key": "not_surprise",
+  "kind": "none",
+  "state_key": "",
+  "note": "contract clause",
+  "scored": true,
+  "state": {
+   "where_it_appears": "exhibit to a current report (8-K)",
+   "driver_name": "joint steering committee decisions",
+   "text_before_quote": "In such event, the Parties\u2019 respective JSC members shall reasonably cooperate to convene a JSC meeting as soon as reasonably practicable following receipt of such notice. Each Party will bear the Cost of its respective JSC members\u2019 participation in JSC meetings. Meetings of the JSC shall be effective only if at least one (1) member of each Party is participating in such meeting. 17 Section 7.5 Decision-Making Authority.",
+   "quote": "The JSC shall act by consensus, with each Party having, collectively, one (1) vote on behalf of such Party.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S062",
+  "cand": 61,
+  "key": "not_surprise",
+  "kind": "none",
+  "state_key": "",
+  "note": "consensus rates used as an input to a forecast",
+  "scored": true,
+  "state": {
+   "where_it_appears": "exhibit to a current report (8-K)",
+   "driver_name": "foreign exchange translation",
+   "text_before_quote": "For 2024, the Company now expects: \u2022At least 4 percent increase in organic revenue; \u2022At least 8 percent increase in core constant currency EPS; In addition, the Company expects: \u2022A core annual effective tax rate of 20 percent; and \u2022Total cash returns to shareholders of approximately $8.2 billion, comprised of dividends of $7.2 billion and share repurchases of $1.0 billion.",
+   "quote": "In addition, the Company expects an approximate 1-percentage-point foreign exchange translation headwind to impact reported net revenue and core EPS growth based on current market consensus rates.",
+   "text_after_quote": "This assumption and the guidance above imply 2024 core EPS of at least $8.15, a 7 percent increase compared to 2023 core EPS of $7.62."
+  }
+ },
+ {
+  "id": "S063",
+  "cand": 62,
+  "key": "not_surprise",
+  "kind": "none",
+  "state_key": "",
+  "note": "method input",
+  "scored": true,
+  "state": {
+   "where_it_appears": "exhibit to a current report (8-K)",
+   "driver_name": "fuel price estimate",
+   "text_before_quote": "(2) Includes fuel taxes and other fuel fees. (3) As of January 9, 2026, the first quarter fuel price estimate utilizes the forward Brent crude curve and the forward Brent crude to jet crack spread to calculate fuel price.",
+   "quote": "The full year fuel price estimate utilizes the same methodology for the jet crack spread, and for crude utilizes a weighted combination of the forward Brent crude curve and consensus estimates.",
+   "text_after_quote": "(4) Capital expenditures exclude one Airbus A321neo XLR, which JetBlue has entered into an agreement to sell. Note: FY 2026 guidance assumes mid-single digit average aircraft on ground due to GTF engine issues."
+  }
+ },
+ {
+  "id": "S064",
+  "cand": 63,
+  "key": "not_surprise",
+  "kind": "none",
+  "state_key": "",
+  "note": "footnote naming a data source",
+  "scored": true,
+  "state": {
+   "where_it_appears": "exhibit to a current report (8-K)",
+   "driver_name": "consensus analyst forecasts",
+   "text_before_quote": "Nativi-Nicolau et al, ESC Heart Failure, 2021. 4. Gillmore et al, American Heart Association Scientific Sessions, 2022. 5. Fontana et al, NEJM, 2024. 6. Gillmore et al, NEJM, 2024. CM: cardiomyopathy; CV: cardiovascular; GI: gastrointestinal; PN: polyneuropathy; TTR: transthyretin; 6MWT: 6-Minute Walk Test. Seeking to Meet Patient and Provider Needs in a Large and Growing ATTR Market If approved, nex-z would present an opportunity for significant revenues and healthcare system savings 1.",
+   "quote": "Consensus analyst forecasts per FactSet (Dec. 2025). 2.",
+   "text_after_quote": "Intellia commissioned ATTR patient and caregiver interviews (n=46). 3. Intellia commissioned physician quantitative survey (n=232) based on nex-z target product profile."
+  }
+ },
+ {
+  "id": "S065",
+  "cand": 21,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "\"estimates\" not clearly analysts",
+  "scored": false,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "bookings",
+   "text_before_quote": "",
+   "quote": "American Airlines CFO Says Two Narrow-Body Aircraft Deliveries Have Been Delayed Into 2024, So We Now Anticipate Taking Delivery Of A Total Of 21 Aircraft In 2023; Post Labor Day Bookings Have Been In Line With Estimates",
+   "text_after_quote": "-Reuters"
+  }
+ },
+ {
+  "id": "S066",
+  "cand": 28,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "new guide vs own old guide AND vs consensus in one headline (4.16)",
+  "scored": false,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "adjusted earnings per share",
+   "text_before_quote": "",
+   "quote": "Mettler-Toledo Cuts FY23 Adjusted EPS Forecast From $43.65-$43.95 To $40.30-$41.20, Estimate $43.39",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S067",
+  "cand": 30,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "same mixed pattern (4.16)",
+  "scored": false,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "net sales",
+   "text_before_quote": "",
+   "quote": "Lamb Weston Lowers FY25 Outlook: Sees Net sales of $6.35B-$6.45B Vs. $6.65B Estimate (Prior View: $6.6B-$6.8B), Projects Adjusted EPS Of $3.05-$3.20 Vs. $4.20 Estimate (Prior View: $4.15-$4.35)",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S068",
+  "cand": 35,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "vs prior guidance AND vs consensus (4.16)",
+  "scored": false,
+  "state": {
+   "where_it_appears": "news headline",
+   "driver_name": "revenue",
+   "text_before_quote": "",
+   "quote": "Elanco Animal Health Forecasts 2024 Revenue Of $4.46B-$4.515B Versus Prior Guidance Of $4.45B-$4.54B And Consensus Of $4.49B",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "id": "S069",
+  "cand": 50,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "which value is above consensus?",
+  "scored": false,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "earnings per share",
+   "text_before_quote": "And for 2026, we are forecasting earnings that are dramatically higher than 2025. For the full year, we are not yet guiding an EPS range.",
+   "quote": "While being well above Wall Street consensus, we are providing EPS guidance that represents the lower end of our internal forecast.",
+   "text_after_quote": "With that qualifier, we are guiding full year 2026 adjusted EPS of at least $4, which is materially higher than 2025 adjusted EPS of 93 cents. Let me share our reasoning why we are not yet providing an upper range for 2026 earnings."
+  }
+ },
+ {
+  "id": "S070",
+  "cand": 52,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "company macro view vs consensus, not its own metric",
+  "scored": false,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "global growth",
+   "text_before_quote": "Turning to our economic and investment outlook, last quarter I noted that economic growth for 2025 was historically narrow. the so-called K-shaped economy. Unsurprisingly, corporate profit growth and market performance have also been narrow. As we enter 2026, we expect economic activity and market returns to broaden after several years of highly concentrated gains.",
+   "quote": "Our view is for above consensus global growth, inflation, and interest rates. we believe the economic and market rotation is well underway.",
+   "text_after_quote": "Real assets, which have lagged for some time, are evidence of this shift. In 2025, a diversified portfolio of real assets outperformed equities, with virtually all categories generating double-digit returns."
+  }
+ },
+ {
+  "id": "S071",
+  "cand": 79,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "\"our expectations\": internal, neither consensus nor guidance (3.52 gap)",
+  "scored": false,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "brand pharmaceutical pricing",
+   "text_before_quote": "We continue to execute and invest against our oncology strategy. And as Brian touched on earlier, We continue to add practices and providers to our scaled and growing US oncology network, and we are well positioned to capture increased oncology volumes. Third, we have a scaled and efficient generic sourcing operation, delivering stability of supply and low-cost products for our customers and patients.",
+   "quote": "And specific to fiscal 2023, through the month of January, we observed brand pharmaceutical pricing that was modestly above our expectations.",
+   "text_after_quote": "While fiscal 2023 results benefit from this modest increase, I would make the following two comments."
+  }
+ },
+ {
+  "id": "S072",
+  "cand": 80,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "\"our expectations\" (3.52 gap)",
+  "scored": false,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "net interest revenue",
+   "text_before_quote": "Our CET1 ratio was 11.2%, up approximately 120 basis points, driven by the increase in capital and lower risk-weighted assets. And finally, our LCR was 118%, up 2 percentage points sequentially. Turning to our net interest revenue and balance sheet trends on page 6, which I will also talk about in sequential terms. Net interest revenue of $1.1 billion was up 14% sequentially. This increase primarily reflects higher yields on interest-earning assets partially offset by higher funding costs.",
+   "quote": "Once again, NIR in the quarter exceeded our expectations as non-interest-bearing deposits remain elevated.",
+   "text_after_quote": "Average deposit balances decreased by 2%. Within this, interest-bearing deposits increased by 2% and non-interest-bearing deposits declined by 11%."
+  }
+ },
+ {
+  "id": "S073",
+  "cand": 81,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "\"our expectations\" (3.52 gap)",
+  "scored": false,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "new store productivity",
+   "text_before_quote": "Our comp store sales growth was driven primarily by transactions, and as John indicated, over 60% of our product categories comp positive in the quarter. Ali's Army increased 4.8% to 13.7 million members, and sales to the Army represented over 80% of total sales. During the quarter, we opened 23 new stores, ending with 500 new stores in 30 states, an increase year over year of 9.1%.",
+   "quote": "Our new store productivity was very strong in the quarter, and our new stores continue to perform above our expectations across both new and existing markets.",
+   "text_after_quote": "Gross margin improved 100 basis points to 40.4% compared to last year, primarily driven by favorable supply chain costs, slightly offset by higher shrink in merchandise mix."
+  }
+ },
+ {
+  "id": "S074",
+  "cand": 82,
+  "key": "unclear",
+  "kind": "",
+  "state_key": "",
+  "note": "\"our expectations\" (3.52 gap)",
+  "scored": false,
+  "state": {
+   "where_it_appears": "prepared remarks in an earnings call transcript",
+   "driver_name": "advertising revenues",
+   "text_before_quote": "Digital subscriber revenue in the quarter grew in line with our expectations, driven mostly by the continued transition of early tenured subscribers to higher prices. Including the athletic, consolidated digital ARPU grew sequentially for the second consecutive quarter. We expect that positive ARPU trend to continue throughout 2023 as more subscribers transition to paying higher prices.",
+   "quote": "Advertising revenues exceeded our expectations in the quarter in both digital and print, demonstrating the enduring value of our first-party data and premium ad products and the appeal of the Times brand to a wide range of marketers, even in a challenging macroeconomic environment.",
+   "text_after_quote": "Print advertising, which we still expect to decline over the long term, was notably resilient in Q4."
+  }
+ }
+]

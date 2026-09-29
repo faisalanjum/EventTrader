@@ -1,0 +1,562 @@
+[
+ {
+  "set": "H4",
+  "id": "H4-000",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "contract carrier obligations",
+   "text_before_quote": "[Table]\n\n[End of table]\n\nItem 7. MD&A - Financial Condition and Liquidity\n\nContract Carrier Obligations. We have certain estimated minimum fixed obligations under capacity purchase agreements with third-party regional carriers. These minimum amounts are based on the required minimum levels of flying by the regional carriers under the respective agreements and assumptions regarding the costs associated with such minimum levels of flying.",
+   "quote": "As of December 31, 2025 the total of these minimum amounts was $6.0 billion, decreasing on an annual basis from approximately $1.8 billion in 2026 to $300 million in 2030.",
+   "text_after_quote": "See Note 9 of the Notes to the Consolidated Financial Statements for more information on our contract carrier obligations.\n\nOperating Lease Obligations."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-001",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "total operating expenses",
+   "text_before_quote": "Condensed Consolidated Statements of Operations (In millions, except share and per share amounts) (Unaudited) Percent 3 Months Ended Increase March 31, (Decrease) 2026 2025 Operating revenues: Passenger $ 12,495 $ 11,391 9.7 Cargo 214 189 12.9 Other 1,203 971 23.9 Total operating revenues 13,912 12,551 10.8 Operating expenses: Aircraft fuel and related taxes 2,928 2,587 13.2 Salaries, wages and benefits 4,674 4,222 10.7 Regional expenses: Regional operating expenses 1,313 1,272 3.2 Regional depreciation and amortization 91 79 15.4 Maintenance, materials and repairs 982 922 6.5 Other rent and landing fees 890 826 7.7 Aircraft rent 309 297 3.9 Selling expenses 507 450 12.8 Depreciation and amortization 475 468 1.6 Special items, net 14 70 (80.6) Other 1,770 1,628 8.7",
+   "quote": "Total operating expenses 13,953 12,821 8.8",
+   "text_after_quote": "Operating loss (41) (270) (85.0) Nonoperating income (expense): Interest income 55 94 (41.3) Interest expense, net (397) (428) (7.3) Other expense, net (93) (44) nm (1) Total nonoperating expense, net (435) (378) 15.1 Loss before income taxes (476) (648) (26.6) Income tax benefit (94) (175) (46.7) Net loss $ (382) $ (473) (19.2) Loss per common share: Basic and diluted $ (0.58) $ (0.72) Weighted average shares outstanding (in thousands): Basic and diluted 661,181 658,880 Note: Percent change may not recalculate due to rounding."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-002",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue",
+   "text_before_quote": "Any forward-looking statements speak only as of the date hereof or as of the dates indicated in the statement. American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 7 American Airlines Group Inc. Condensed Consolidated Statements of Operations",
+   "quote": "(In millions, except share and per share amounts) (Unaudited) Percent 3 Months Ended Increase March 31, (Decrease) 2026 2025 Operating revenues: Passenger $ 12,495 $ 11,391 9.7 Cargo 214 189 12.9",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-003",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "fleet size",
+   "text_before_quote": "The most significant of these arrangements are commercial joint ventures or cooperation agreements that include joint sales and marketing coordination, co-location of airport facilities and other commercial cooperation arrangements. In some cases, we have reinforced strategic alliances through equity investments where we have the opportunity to create deep relationships and maximize commercial cooperation.\n\n[Table]\n\n[End of table]\n\nItem 1. Business",
+   "quote": "Our global network is supported by a fleet of 1,314 aircraft as of December 31, 2025 that are varied in size and capabilities, giving us flexibility to adjust aircraft to the network.",
+   "text_after_quote": "We are continuing to refresh our fleet by acquiring new and more fuel-efficient aircraft with increased premium seating and cargo capacity to replace retiring aircraft, while modifying our existing aircraft cabins to increase premium offerings and harmonize interiors."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-004",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "restricted cash and short term investments",
+   "text_before_quote": "Income Taxes\n\nAmerican is a member of AAG\u2019s consolidated federal and certain state income tax returns.\n\nIn the first quarter of 2026, American recorded an income tax benefit of $64 million. Substantially all of American\u2019s loss before income taxes is attributable to the United States.\n\nSee Note 5 to American\u2019s Condensed Consolidated Financial Statements in Part I, Item 1B for additional information on income taxes.\n\nLiquidity and Capital Resources\n\nLiquidity",
+   "quote": "At March 31, 2026, AAG had $10.8 billion in total available liquidity and $717 million in restricted cash and short-term investments.",
+   "text_after_quote": "Additional detail regarding our available liquidity is provided in the table below (in millions):"
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-005",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "effective tax rate",
+   "text_before_quote": "Miscellaneous, net. Miscellaneous, net primarily includes employee benefit plans net periodic cost, charitable contributions, our share of our equity method investments' results, dividend income from our equity investments and foreign exchange gains/(losses). The decrease compared to 2024 primarily relates to lower employee benefit plan costs and an increase in dividend income. See Note 4 of the Notes to the Consolidated Financial Statements for additional information on our equity investments.\n\nIncome Taxes",
+   "quote": "Our effective tax rate was 19% and 26% for 2025 and 2024, respectively.",
+   "text_after_quote": "Our effective tax rate is impacted by net pre-tax income or loss recognized on our equity investments, which are considered capital assets for tax purposes, because realized capital losses can only be deducted against realized capital gains."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-006",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "interest income",
+   "text_before_quote": "Nonoperating Results\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Interest income $ 55 $ 94 $ (39) (41.3) Interest expense, net (397) (428) 31 (7.3) Other expense, net (93) (44) (49) nm (1)\n\nTotal nonoperating expense, net $ (435) $ (378) $ (57) 15.1\n\n(1) Not meaningful or greater than 100% change.",
+   "quote": "Interest income decreased $39 million, or 41.3%, in the first quarter of 2026 from the first quarter of 2025",
+   "text_after_quote": "primarily due to a decrease in the average balance of our short-term investments and lower interest rates, resulting in reduced returns."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-007",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "other operating expense",
+   "text_before_quote": "[Table]\n\n[End of table]\n\nItem 7. MD&A - Results of Operations\n\nAircraft Maintenance Materials and Outside Repairs. The decrease in aircraft maintenance materials and outside repairs expense primarily resulted from the timing of engine maintenance activities, renegotiated engine maintenance agreements and a gain from the sale of our MRO JV located in Queretaro, Mexico. These decreases were partially offset by a higher volume of airframe checks in 2025.\n\nOther .",
+   "quote": "The decrease in other operating expense primarily resulted from gains from several sale-leaseback transactions and lower irregular operations expense in 2025.",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-008",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "operating margin",
+   "text_before_quote": "The adjustment to exclude net special items, fuel and profit sharing provides management with an additional tool to understand and analyze the Company\u2019s non-fuel costs and core operating performance. 3 Months Ended Percent Reconciliation of Operating Loss Excluding Net Special Items March 31, Decrease 2026 2025 (in millions) Operating loss as reported $ (41) $ (270) Operating net special items: Mainline operating special items, net (1) 14 70 Operating loss excluding net special items $ (27) $ (200) (86.5%) Calculation of Operating Margin Operating loss as reported $ (41) $ (270) Total operating revenues as reported $ 13,912 $ 12,551 Operating margin (0.3 %) (2.2 %) Calculation of Operating Margin Excluding Net Special Items Operating loss excluding net special items $ (27) $ (200) Total operating revenues as reported $ 13,912 $ 12,551",
+   "quote": "Operating margin excluding net special items (0.2 %) (1.6 %)",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-009",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "pension plan assets",
+   "text_before_quote": "Defined Benefit Pension Plans\n\nWe sponsor defined benefit pension plans for eligible employees and retirees. These plans are generally closed to new entrants and frozen for future benefit accruals. As of December 31, 2025, the funded status for these plans recorded on our balance sheets was $2.3 billion, which is the net of our benefit obligation of $15.0 billion and",
+   "quote": "plan assets of $17.3 billion",
+   "text_after_quote": "We had minimum funding requirements of $70 million during 2025 and estimate that there will be approximately $5 million of minimum funding requirements under these plans in 2026."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-010",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "passenger revenue",
+   "text_before_quote": "(4)Regional full-time equivalent employees only include our wholly-owned regional airline subsidiaries. American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 9 American Airlines Group Inc. Consolidated Revenue Statistics by Region (Unaudited) 3 Months Ended Increase March 31, (Decrease) 2026 2025 Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts",
+   "quote": "Passenger revenue (dollars in millions) 8,990 8,127 10.6 %",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-011",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "average aircraft fuel price per gallon",
+   "text_before_quote": "Our total revenue per available seat mile (TRASM) was 19.32 cents in the first quarter of 2026, a 7.6% increase as compared to 17.95 cents in the first quarter of 2025.\n\nFuel\n\nAircraft fuel and related taxes was $2.9 billion in the first quarter of 2026, which was $341 million, or 13.2%, higher as compared to the first quarter of 2025. This was primarily due to",
+   "quote": "a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025",
+   "text_after_quote": "and a 2.3% increase in gallons of fuel consumed due to increased capacity.\n\nAs of March 31, 2026, we did not have any fuel hedging contracts outstanding to hedge our fuel consumption."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-012",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "revenue passenger miles",
+   "text_before_quote": "(1) See Note 2 to AAG\u2019s Condensed Consolidated Financial Statements in Part I, Item 1A for further information on net special items.\n\nAAG\u2019s Results of Operations\n\nOperating Statistics\n\nThe table below sets forth selected operating data for the three months ended March 31, 2026 and 2025. Amounts may not recalculate due to rounding.\n\n  Three Months Ended March 31, Increase   2026 2025",
+   "quote": "Revenue passenger miles (millions) (a) \n\n58,551 56,356 3.9%",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-013",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "equity ownership stake",
+   "text_before_quote": "Our implemented commercial joint ventures/cooperation agreements consist of the following:\n\n\u2022 A combined joint venture agreement with Air France, KLM and Virgin Atlantic with respect to transatlantic traffic flows. In addition to the joint venture,",
+   "quote": "we own a non-controlling 49% equity stake in Virgin Atlantic Limited",
+   "text_after_quote": "the parent company of Virgin Atlantic Airways, and a 3% ownership stake in the parent company of Air France and KLM.\n\n\u2022 A joint cooperation agreement with Aerom\u00e9xico with respect to trans-border traffic flows between the U.S. and Mexico."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-014",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "free cash flow",
+   "text_before_quote": "Cash Flow. During 2025, operating activities generated $8.3 billion, primarily from ticket sales and the sale of SkyMiles to our partners. Remuneration from American Express related to the SkyMiles program were $8.2 billion during 2025, an increase of approximately 11% compared to 2024. Investing activities resulted in net cash outflows of approximately $4.2 billion, primarily for capital expenditures. After adjusting for our strategic investment in WestJet and certain other items,",
+   "quote": "these results generated $4.6 billion of free cash flow (a non-GAAP financial measure) in 2025.",
+   "text_after_quote": "Also, during 2025 we had financing cash outflows of $4.8 billion related to repayment of our debt and finance leases, including $2.9 billion for early repayments and the remainder for scheduled maturities."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-015",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "aircraft fleet",
+   "text_before_quote": "Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts Yield (cents) 21.34 20.21 5.6 % Passenger revenue per ASM (cents) 17.35 16.30 6.5 % Total revenue per ASM (cents) 19.32 17.95 7.6 % Cargo ton miles (millions) 527 483 9.0 % Cargo yield per ton mile (cents) 40.55 39.14 3.6 % Fuel consumption (gallons in millions) 1,066 1,042 2.3 % Average aircraft fuel price including related taxes (dollars per gallon) 2.75 2.48 10.7 % Operating cost per ASM (cents) 19.38 18.34 5.6 % Operating cost per ASM excluding net special items (cents) 19.36 18.24 6.1 % Operating cost per ASM excluding net special items and fuel (cents) 15.29 14.54 5.2 % Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 % Passenger enplanements (thousands) 51,770 51,034 1.4 % Departures (thousands): Mainline 279 278 0.6 % Regional 255 250 1.6 % Total 534 528 1.1 % Average stage length (miles): Mainline 1,200 1,176 2.0 % Regional 478 470 1.7 % Total 856 841 1.7 %",
+   "quote": "Aircraft at end of period: Mainline (2) 1,022 985 3.8 % Regional (3) 572 567 0.9 % Total 1,594 1,552 2.7 %",
+   "text_after_quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 % Total 138,900 133,100 4.4 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-016",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "refinery crude oil capacity per day",
+   "text_before_quote": "Monroe Energy\n\nThese companies are distinct from our airline operation, operating under their own management teams and with their own boards. We own Monroe as part of our strategy to mitigate the cost of the refining margin reflected in the price of jet fuel, as well as to maintain sufficiency of supply to our New York operations.\n\nRefinery Operations .",
+   "quote": "The facility is capable of refining approximately 200,000 barrels of crude oil per day",
+   "text_after_quote": "and sources domestic and foreign crude oil supply from a variety of providers.\n\n[Table]\n\n[End of table]\n\nItem 1. Business\n\nEnvironmental Sustainability ."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-017",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "pretax margin",
+   "text_before_quote": "",
+   "quote": "Pre-tax margin excluding net special items (2.4 %) (4.2 %)",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-018",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "[Table]\n\n[End of table]\n\nItem 7. MD&A - Results of Operations\n\nResults of Operations\n\nOperating Revenue [Table] Year Ended December 31,\n\nIncrease (Decrease) % Increase (Decrease)\n\n(in millions) (1)\n\n2025 2024 Ticket - Main cabin $ 23,391 $ 24,497 $ (1,106) (5) % Ticket - Premium products 22,097 20,599 1,498 7 % Loyalty travel awards 4,237 3,841 396 10 % Travel-related services 2,043 1,957 86 4 % Total passenger revenue $ 51,768 $ 50,894 $ 874 2 %",
+   "quote": "Cargo 900 822 78 9 %",
+   "text_after_quote": "Other 10,696 9,927 769 8 % Total operating revenue $ 63,364 $ 61,643 $ 1,721 3 % TRASM (cents) 21.26 \u00a2 21.37 \u00a2 (0.11) \u00a2 (1) %\n\nThird-party refinery sales (2)\n\n(1.70) (1.61) (0.09) 6 % TRASM, adjusted (cents) 19.56 \u00a2 19.76 \u00a2 (0.20) \u00a2 (1) % [End of table]"
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-019",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "endeavor flight attendants represented by unions",
+   "text_before_quote": "Collective Bargaining\n\nAs of December 31, 2025, approximately 20% of our full-time equivalent employees were represented by unions.\n\n[Table] Domestic airline employees represented by collective bargaining agreements by group Employee Group Approximate Number of Employees Represented Union Date on which Collective Bargaining Agreement Becomes Amendable Delta Pilots 17,260 ALPA December 31, 2026 Delta Flight Superintendents (Dispatchers) 530 PAFCA August 1, 2030 Endeavor Pilots 1,770 ALPA January 1, 2029",
+   "quote": "Endeavor Flight Attendants \n\n1,910 AFA March 31, 2027",
+   "text_after_quote": "In addition to the domestic airline employee groups discussed above, approximately 200 refinery employees of Monroe are represented by the United Steel Workers under an agreement that expires on February 28, 2026."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-020",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "other operating revenue",
+   "text_before_quote": "This increase was primarily driven by a 5.6% increase in passenger yield, while load factor increased 0.7pts compared to the first quarter of 2025.\n\nCargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 9.0% increase in cargo ton miles and a 3.6% increase in cargo yield.",
+   "quote": "Other operating revenue increased $232 million, or 23.9%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with our loyalty program.",
+   "text_after_quote": "During the three months ended March 31, 2026 and 2025, cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-021",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "revenue",
+   "text_before_quote": "Passenger Revenue by Geographic Region\n\n[Table] Increase (Decrease) vs. Year Ended December 31, 2024 (in millions) Year Ended December 31, 2025 Passenger Revenue RPMs (Traffic)\n\nASMs (Capacity) Passenger Mile Yield PRASM Load Factor Domestic $ 35,731 1 % \u2014 % 3 % 2 % (2) % (3) pts Atlantic 9,270 2 % 2 % 3 % (1) % (2) % (1) pt Latin America 3,980 \u2014 % \u2014 % 1 % \u2014 % (1) % (1) pt",
+   "quote": "Pacific 2,787 10 % 16 % 9 % (5) % \u2014 % 4 pts",
+   "text_after_quote": "Total passenger revenue $ 51,768 2 % 1 % 3 % \u2014 % (2) % (2) pts [End of table]\n\nDomestic\n\nDomestic passenger revenue in 2025 increased 1% on a 3% increase in capacity compared to 2024."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-022",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "aircraft fuel consumption",
+   "text_before_quote": "AAG\u2019s Results of Operations\n\nOperating Statistics\n\nAmounts may not recalculate due to rounding.\n\n  Three Months Ended March 31, Increase   2026 2025 Revenue passenger miles (millions) (a)\n\n58,551 56,356 3.9% Available seat miles (millions) (b)\n\n72,009 69,904 3.0% Passenger load factor (percent) (c)\n\n81.3 80.6 0.7pts Yield (cents) (d)\n\n21.34 20.21 5.6% Passenger revenue per available seat mile (cents) (e)\n\n17.35 16.30 6.5% Total revenue per available seat mile (cents) (f)\n\n19.32 17.95 7.6%",
+   "quote": "Fuel consumption (gallons in millions) \n\n1,066 1,042 2.3%",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-023",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "skymiles deferred revenue",
+   "text_before_quote": "We use statistical models to estimate mileage breakage based on historical redemption patterns. A change in assumptions regarding the redemption activity for miles or the estimated fair value of miles expected to be redeemed could have a material impact on our revenue in the year in which the change occurs and in future years. We recognize mileage breakage proportionally during the period in which the remaining miles are actually redeemed.",
+   "quote": "At December 31, 2025, the aggregate deferred revenue balance associated with the SkyMiles program was $9.3 billion.",
+   "text_after_quote": "A hypothetical 10% change in the number of outstanding miles estimated to be redeemed would result in an impact of less than 1% of total operating revenue recognized for the year ended December 31, 2025."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-024",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "net purchases of short term investments",
+   "text_before_quote": "Sources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nOur net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments",
+   "text_after_quote": "and $811 million of capital expenditures, which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-025",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "capital expenditures",
+   "text_before_quote": "American\n\nOperating Activities\n\nAmerican\u2019s net cash provided by operating activities was $4.2 billion and $2.3 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in American\u2019s air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nAmerican\u2019s net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "American\u2019s principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments and $788 million of capital expenditures, which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines. \n\nAmerican\u2019s principal investing activities in the first quarter of 2025 included $805 million of capital expenditures, which primarily related to the purchase of seven Boeing 737 MAX aircraft, two Embraer E175 aircraft, two Bombardier CRJ900 aircraft, one Airbus A321neo aircraft and four aircraft engines. Additionally, American had $457 million in net purchases of short-term investments.",
+   "text_after_quote": "Financing Activities\n\nAmerican\u2019s net cash used in financing activities was $1.9 billion and $1.1 billion for the first quarter of 2026 and 2025, respectively."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-026",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "load factor",
+   "text_before_quote": "Revenue\n\nPassenger revenue was $12.5 billion in the first quarter of 2026, an increase of $1.1 billion, or 9.7%, from the first quarter of 2025. Passenger revenue performance improved in the first quarter of 2026, primarily due to higher domestic and international demand for air travel with passenger revenue per available seat mile (PRASM) increasing 6.5% compared to the first quarter of 2025.",
+   "quote": "This increase was primarily driven by a 5.6% increase in passenger yield, while load factor increased 0.7pts compared to the first quarter of 2025.",
+   "text_after_quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 9.0% increase in cargo ton miles and a 3.6% increase in cargo yield."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-027",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "net purchases of short term investments investing",
+   "text_before_quote": "Sources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nOur net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments and $811 million of capital expenditures",
+   "text_after_quote": "which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-028",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "finance lease obligations",
+   "text_before_quote": "Based on applicable interest rates and scheduled debt maturities as of December 31, 2025, these interest obligations total approximately $2.4 billion, decreasing on an annual basis from approximately $500 million in 2026 to $200 million in 2030.\n\nFinance Lease Obligations. As described further in Note 7 of the Notes to the Consolidated Financial Statements, as of December 31, 2025",
+   "quote": "we had a total of $870 million of minimum finance lease obligations",
+   "text_after_quote": "These minimum lease payments are generally decreasing on an annual basis from approximately $300 million in 2026 to $100 million in 2030.\n\nCapital Returns to Shareholders."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-029",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue",
+   "text_before_quote": "Consolidated Revenue Statistics by Region (Unaudited) 3 Months Ended Increase March 31, (Decrease) 2026 2025 Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 % Latin America (2) Revenue passenger miles (millions) 10,289 10,022 2.7 % Available seat miles (millions) 12,403 12,004 3.3 % Passenger load factor (percent) 83.0 83.5 (0.5) pts Passenger revenue (dollars in millions) 1,963 1,906 3.0 % Yield (cents) 19.07 19.01 0.3 % Passenger revenue per ASM (cents) 15.82 15.88 (0.3) %",
+   "quote": "Atlantic Revenue passenger miles (millions) 6,213 5,934 4.7 % Available seat miles (millions) 7,794 7,963 (2.1) % Passenger load factor (percent) 79.7 74.5 5.2 pts Passenger revenue (dollars in millions) 1,102 965 14.2 %",
+   "text_after_quote": "Yield (cents) 17.74 16.27 9.1 % Passenger revenue per ASM (cents) 14.14 12.12 16.7 % Pacific Revenue passenger miles (millions) 2,882 2,707 6.5 % Available seat miles (millions) 3,398 3,268 4.0 % Passenger load factor (percent) 84.8 82.8 2.0 pts Passenger revenue (dollars in millions) 440 393 12.1 % Yield (cents) 15.28 14.51 5.3 % Passenger revenue per ASM (cents) 12.96 12.02 7.8 % Total International Revenue passenger miles (millions) 19,384 18,663 3.9 % Available seat miles (millions) 23,595 23,235 1.5 % Passenger load factor (percent) 82.2 80.3 1.9 pts Passenger revenue (dollars in millions) 3,505 3,264 7.4 % Yield (cents) 18.08 17.49 3.4 % Passenger revenue per ASM (cents) 14.85 14.05 5.7 % Note: Amounts may not recalculate due to rounding."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-030",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "total revenue per available seat mile",
+   "text_before_quote": "American\u2019s four multiyear commercial initiatives are driving results. The company delivered record first-quarter revenue of $13.9 billion, despite an estimated $320 million revenue impact from winter storms. Demand was strong in the first quarter, and American recorded the nine highest revenue intake weeks in its 100-year history. American had year-over-year total revenue growth of 10.8% in the quarter.",
+   "quote": "Total unit revenue was 7.6% higher year over year",
+   "text_after_quote": "improving sequentially each month in the quarter, culminating with March domestic and international passenger unit revenue both up more than 10% year over year."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-031",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "revenue",
+   "text_before_quote": "Any forward-looking statements speak only as of the date hereof or as of the dates indicated in the statement. American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 7 American Airlines Group Inc. Condensed Consolidated Statements of Operations",
+   "quote": "(In millions, except share and per share amounts) (Unaudited) Percent 3 Months Ended Increase March 31, (Decrease) 2026 2025 Operating revenues: Passenger $ 12,495 $ 11,391 9.7",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-032",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "equity ownership stake",
+   "text_before_quote": "Our implemented commercial joint ventures/cooperation agreements consist of the following:\n\n\u2022 A combined joint venture agreement with Air France, KLM and Virgin Atlantic with respect to transatlantic traffic flows.",
+   "quote": "In addition to the joint venture, we own a non-controlling 49% equity stake in Virgin Atlantic Limited, the parent company of Virgin Atlantic Airways, and a 3% ownership stake in the parent company of Air France and KLM.",
+   "text_after_quote": "\u2022 A joint cooperation agreement with Aerom\u00e9xico with respect to trans-border traffic flows between the U.S. and Mexico."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-033",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "total available liquidity",
+   "text_before_quote": "Substantially all of American\u2019s loss before income taxes is attributable to the United States.\n\nSee Note 5 to American\u2019s Condensed Consolidated Financial Statements in Part I, Item 1B for additional information on income taxes.\n\nLiquidity and Capital Resources\n\nLiquidity\n\nAt March 31, 2026, AAG had $10.8 billion in total available liquidity and $717 million in restricted cash and short-term investments. Additional detail regarding our available liquidity is provided in the table below",
+   "quote": "(in millions):   \n\n  AAG American   March 31, 2026 December 31, 2025 March 31, 2026 December 31, 2025 Cash $ 903 $ 954 $ 889 $ 936 Short-term investments 6,391 4,882 6,388 4,880 Undrawn facilities 3,510 3,397 3,510 3,397 Total available liquidity $ 10,804 $ 9,233",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-034",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "passenger revenue per available seat mile",
+   "text_before_quote": "Revenue\n\nIn the first quarter of 2026, we reported total operating revenues of $13.9 billion, an increase of $1.4 billion, or 10.8%, from the first quarter of 2025. Passenger revenue was $12.5 billion in the first quarter of 2026, an increase of $1.1 billion, or 9.7%, from the first quarter of 2025. Passenger revenue performance improved in the first quarter of 2026, primarily due to higher domestic and international demand for air travel",
+   "quote": "with passenger revenue per available seat mile (PRASM) increasing 6.5% compared to the first quarter of 2025",
+   "text_after_quote": "This increase was primarily driven by a 5.6% increase in passenger yield, while load factor increased 0.7pts compared to the first quarter of 2025."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-035",
+  "src": "0000006201-26-000031",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "yield",
+   "text_before_quote": "(1)Not meaningful or greater than 100% change. American Airlines Reports First-Quarter 2026 Financial Results April 23, 2026 Page 8 American Airlines Group Inc. Consolidated Operating Statistics (1) (Unaudited) 3 Months Ended March 31, Increase 2026 2025 Revenue passenger miles (millions) 58,551 56,356 3.9 % Available seat miles (ASM) (millions) 72,009 69,904 3.0 % Passenger load factor (percent) 81.3 80.6 0.7 pts",
+   "quote": "Yield (cents) 21.34 20.21 5.6 %",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-036",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "other nonoperating expense",
+   "text_before_quote": "Nonoperating Results\n\n  Three Months Ended March 31, Increase (Decrease) Percent Increase (Decrease)   2026 2025   (In millions, except percentage changes) Interest income $ 55 $ 94 $ (39) (41.3) Interest expense, net (397) (428) 31 (7.3)",
+   "quote": "Other expense, net (93) (44) (49) nm",
+   "text_after_quote": "(1)\n\nTotal nonoperating expense, net $ (435) $ (378) $ (57) 15.1\n\n(1) Not meaningful or greater than 100% change."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-037",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "total available liquidity",
+   "text_before_quote": "In the first quarter of 2026, American recorded an income tax benefit of $64 million. Substantially all of American\u2019s loss before income taxes is attributable to the United States.\n\nSee Note 5 to American\u2019s Condensed Consolidated Financial Statements in Part I, Item 1B for additional information on income taxes.\n\nLiquidity and Capital Resources\n\nLiquidity\n\nAt March 31, 2026, AAG had $10.8 billion in total available liquidity and $717 million in restricted cash and short-term investments.",
+   "quote": "Additional detail regarding our available liquidity is provided in the table below (in millions):   \n\n  AAG American   March 31, 2026 December 31, 2025 March 31, 2026 December 31, 2025 Cash $ 903 $ 954 $ 889 $ 936 Short-term investments 6,391 4,882 6,388 4,880 Undrawn facilities 3,510 3,397 3,510 3,397 Total available liquidity $ 10,804 $ 9,233 $ 10,787 $ 9,213",
+   "text_after_quote": ""
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-038",
+  "src": "0000006201-26-000032",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an quarterly report (10-Q)",
+   "driver_name": "short term investments net purchases",
+   "text_before_quote": "Sources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nOur net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments and $811 million of capital expenditures, which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines. \n\nOur principal investing activities in the first quarter of 2025 included $824 million of capital expenditures, which primarily related to the purchase of seven Boeing 737 MAX aircraft, two Embraer E175 aircraft, two Bombardier CRJ900 aircraft, one Airbus A321neo aircraft and four aircraft engines. Additionally, we had $457 million in net purchases of short-term investments.",
+   "text_after_quote": "Financing Activities\n\nOur net cash used in financing activities was $1.9 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively."
+  }
+ },
+ {
+  "set": "H4",
+  "id": "H4-039",
+  "src": "0000027904-26-000013",
+  "key": "metric",
+  "note": "earlier-model label",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "us based employees",
+   "text_before_quote": "Fuel Hedging Program\n\nWe closely monitor the hedge portfolio and rebalance the portfolio based on market conditions, which may result in locking in gains or losses on hedge contracts prior to their settlement dates.\n\nEmployee Matters\n\nHuman Capital Management\n\nWe believe that the Delta people and culture are our strongest competitive advantage, and the high-quality service that our employees provide sets us apart from other airlines. As of December 31, 2025, we had approximately 103,000 full-time employee equivalents,",
+   "quote": "of which approximately 100,000 were based in the U.S.",
+   "text_after_quote": "Our principal human capital management objectives are to attract, retain and develop people who understand and are committed to delivering the \"Delta Difference\" that is core to our brand."
+  }
+ }
+]
