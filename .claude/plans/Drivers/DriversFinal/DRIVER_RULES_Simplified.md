@@ -144,7 +144,7 @@ company ◄── source event ◄── fact (DriverUpdate) ──► Driver �
   - Action Drivers have no family. A family comes only from a final suffix, never guessed from name prefixes.
   - *Why separate:* a result and a forecast are different signals that can move the stock opposite ways on the same day ("beat this quarter, cut next year's guidance" → down); merged, you'd lose which one moved it.
   - *Why a family:* to ask "did revenue beat its own forecast?" *Why by name:* the name already says which family a Driver belongs to, so nothing needs to be stored.
-- 1.19 Synonym link = same meaning, reversible; none is created for now (6.20). Family = related flavors, read from the name (1.18). Never use one in place of the other; passing the family check (2.26) never creates or implies a synonym link. In a synonym group, one name is the current representative (the "head"): the earliest, then alphabetical order. Example chain: `net_sales_guidance` → (same family, by name) → `net_sales` → synonym → `revenue`. A missing synonym link only costs a missed comparison, never a wrong merged number.
+- 1.19 Synonym link = same meaning, reversible; none is created for now (6.20). Family = related flavors, read from the name (1.18). Never use one in place of the other; passing the family check (2.26) never creates or implies a synonym link. In a synonym group, one name is the current representative (the "head"): the earliest, then alphabetical order. Example chain: `net_sales_guidance` → (same family, by name) → `net_sales` → synonym → `revenue`. A missing synonym link costs a missed comparison, never a wrong merged number.
 
 ### Which companies
 
