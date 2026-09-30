@@ -1,0 +1,976 @@
+[
+ {
+  "name": "sec|8-K|ResultsofOperationsandFinancialCondition",
+  "group": "prose sections",
+  "total_chars": 11577799,
+  "docs": 40,
+  "sample_chars": 32249,
+  "sample_units": 205,
+  "units_per_char": 0.0063567862569382,
+  "ci": [
+   0.005650499958452206,
+   0.007189934092270821
+  ],
+  "est_calls": 73597.59356879283,
+  "est_calls_ci": [
+   65420.352768467994,
+   83243.61174355901
+  ],
+  "mean_unit_chars": 154.60487804878048,
+  "median_unit_chars": 106
+ },
+ {
+  "name": "sec|8-K|FinancialStatementsandExhibits",
+  "group": "prose sections",
+  "total_chars": 12756444,
+  "docs": 40,
+  "sample_chars": 21420,
+  "sample_units": 304,
+  "units_per_char": 0.01419234360410831,
+  "ci": [
+   0.00987284509108693,
+   0.01927978563492582
+  ],
+  "est_calls": 181043.83641456583,
+  "est_calls_ci": [
+   125942.39552512532,
+   245941.5057839357
+  ],
+  "mean_unit_chars": 66.09210526315789,
+  "median_unit_chars": 37.0
+ },
+ {
+  "name": "sec|8-K|EntryintoaMaterialDefinitiveAgreement",
+  "group": "prose sections",
+  "total_chars": 14677882,
+  "docs": 40,
+  "sample_chars": 156582,
+  "sample_units": 676,
+  "units_per_char": 0.004317226756587603,
+  "ci": [
+   0.003981216282751063,
+   0.00470802768452899
+  ],
+  "est_calls": 63367.74490043556,
+  "est_calls_ci": [
+   58435.82281469874,
+   69103.87480624975
+  ],
+  "mean_unit_chars": 228.93934911242604,
+  "median_unit_chars": 180.0
+ },
+ {
+  "name": "sec|8-K|RegulationFDDisclosure",
+  "group": "prose sections",
+  "total_chars": 10812686,
+  "docs": 40,
+  "sample_chars": 62817,
+  "sample_units": 348,
+  "units_per_char": 0.0055399016189884905,
+  "ci": [
+   0.004991928473860673,
+   0.006186057577920533
+  ],
+  "est_calls": 59901.216677014185,
+  "est_calls_ci": [
+   53976.15512231467,
+   66887.89816797525
+  ],
+  "mean_unit_chars": 177.3994252873563,
+  "median_unit_chars": 141.0
+ },
+ {
+  "name": "sec|8-K|OtherEvents",
+  "group": "prose sections",
+  "total_chars": 14473643,
+  "docs": 40,
+  "sample_chars": 81486,
+  "sample_units": 453,
+  "units_per_char": 0.005559237169575142,
+  "ci": [
+   0.004707066893209993,
+   0.0069685135464974375
+  ],
+  "est_calls": 80462.41414476106,
+  "est_calls_ci": [
+   68128.40578944057,
+   100859.77731266781
+  ],
+  "mean_unit_chars": 175.72406181015452,
+  "median_unit_chars": 136
+ },
+ {
+  "name": "sec|8-K|DepartureofDirectorsorCertainOfficers;El",
+  "group": "prose sections",
+  "total_chars": 15420028,
+  "docs": 40,
+  "sample_chars": 91426,
+  "sample_units": 806,
+  "units_per_char": 0.008815872946426618,
+  "ci": [
+   0.008148678940212399,
+   0.009704258493148578
+  ],
+  "est_calls": 135941.00767834095,
+  "est_calls_ci": [
+   125652.85742108551,
+   149639.93768358888
+  ],
+  "mean_unit_chars": 111.54714640198512,
+  "median_unit_chars": 86.0
+ },
+ {
+  "name": "sec|8-K|SubmissionofMatterstoaVoteofSecurityHold",
+  "group": "prose sections",
+  "total_chars": 6502171,
+  "docs": 40,
+  "sample_chars": 106202,
+  "sample_units": 1233,
+  "units_per_char": 0.011609950848383269,
+  "ci": [
+   0.01054468765907934,
+   0.012673052387027975
+  ],
+  "est_calls": 75489.8857177831,
+  "est_calls_ci": [
+   68563.36230092357,
+   82402.35371241407
+  ],
+  "mean_unit_chars": 80.4330900243309,
+  "median_unit_chars": 57
+ },
+ {
+  "name": "sec|8-K|other",
+  "group": "prose sections",
+  "total_chars": 6093432,
+  "docs": 30,
+  "sample_chars": 30648,
+  "sample_units": 163,
+  "units_per_char": 0.00531845471156356,
+  "ci": [
+   0.004560260586319218,
+   0.006662402728920158
+  ],
+  "est_calls": 32407.642129992168,
+  "est_calls_ci": [
+   27787.637785016286,
+   40596.89798528942
+  ],
+  "mean_unit_chars": 184.84662576687117,
+  "median_unit_chars": 124
+ },
+ {
+  "name": "sec|10-Q|ManagementDiscussionandAnalysisofFinanci",
+  "group": "prose sections",
+  "total_chars": 408930560,
+  "docs": 40,
+  "sample_chars": 2439140,
+  "sample_units": 16229,
+  "units_per_char": 0.006653574620562985,
+  "ci": [
+   0.006278237698386999,
+   0.007114884739038238
+  ],
+  "est_calls": 2720849.995588609,
+  "est_calls_ci": [
+   2567363.2578145065,
+   2909493.8006703607
+  ],
+  "mean_unit_chars": 146.08558752849837,
+  "median_unit_chars": 122
+ },
+ {
+  "name": "sec|10-Q|FinancialStatements",
+  "group": "FS sections",
+  "total_chars": 564909786,
+  "docs": 40,
+  "sample_chars": 2838605,
+  "sample_units": 19840,
+  "units_per_char": 0.006989348641322058,
+  "ci": [
+   0.006629143127776734,
+   0.00738028382104757
+  ],
+  "est_calls": 3948351.4452486346,
+  "est_calls_ci": [
+   3744867.8256757255,
+   4169194.553967245
+  ],
+  "mean_unit_chars": 136.24274193548388,
+  "median_unit_chars": 104.0
+ },
+ {
+  "name": "sec|10-Q|RiskFactors",
+  "group": "prose sections",
+  "total_chars": 221835079,
+  "docs": 40,
+  "sample_chars": 1535465,
+  "sample_units": 8024,
+  "units_per_char": 0.005225778510093033,
+  "ci": [
+   0.005094102982860251,
+   0.005378107741085644
+  ],
+  "est_calls": 1159260.9886229904,
+  "est_calls_ci": [
+   1130050.7376369394,
+   1193052.9556142455
+  ],
+  "mean_unit_chars": 189.48878364905283,
+  "median_unit_chars": 172.0
+ },
+ {
+  "name": "sec|10-Q|other",
+  "group": "prose sections",
+  "total_chars": 87446220,
+  "docs": 30,
+  "sample_chars": 162492,
+  "sample_units": 1390,
+  "units_per_char": 0.008554267287004898,
+  "ci": [
+   0.007035790761700826,
+   0.009349327665835615
+  ],
+  "est_calls": 748038.3391182334,
+  "est_calls_ci": [
+   615253.306821658,
+   817563.3639187476
+  ],
+  "mean_unit_chars": 111.61438848920864,
+  "median_unit_chars": 82.0
+ },
+ {
+  "name": "sec|8-K/A|DepartureofDirectorsorCertainOfficers;El",
+  "group": "prose sections",
+  "total_chars": 548417,
+  "docs": 40,
+  "sample_chars": 69165,
+  "sample_units": 582,
+  "units_per_char": 0.008414660594231186,
+  "ci": [
+   0.007551463742629564,
+   0.009525455213080762
+  ],
+  "est_calls": 4614.742919106484,
+  "est_calls_ci": [
+   4141.351091341678,
+   5223.921571592112
+  ],
+  "mean_unit_chars": 117.05498281786942,
+  "median_unit_chars": 97.5
+ },
+ {
+  "name": "sec|8-K/A|FinancialStatementsandExhibits",
+  "group": "prose sections",
+  "total_chars": 275925,
+  "docs": 40,
+  "sample_chars": 31416,
+  "sample_units": 308,
+  "units_per_char": 0.00980392156862745,
+  "ci": [
+   0.008500836372610853,
+   0.012448334548991004
+  ],
+  "est_calls": 2705.1470588235293,
+  "est_calls_ci": [
+   2345.5932761126496,
+   3434.8067104303427
+  ],
+  "mean_unit_chars": 97.9512987012987,
+  "median_unit_chars": 44.0
+ },
+ {
+  "name": "sec|8-K/A|ResultsofOperationsandFinancialCondition",
+  "group": "prose sections",
+  "total_chars": 115732,
+  "docs": 40,
+  "sample_chars": 60518,
+  "sample_units": 323,
+  "units_per_char": 0.005337255031560858,
+  "ci": [
+   0.0044567985589167025,
+   0.0061791796434961235
+  ],
+  "est_calls": 617.6911993126013,
+  "est_calls_ci": [
+   515.7942108205478,
+   715.1288185010934
+  ],
+  "mean_unit_chars": 179.02786377708978,
+  "median_unit_chars": 127
+ },
+ {
+  "name": "sec|8-K/A|SubmissionofMatterstoaVoteofSecurityHold",
+  "group": "prose sections",
+  "total_chars": 107272,
+  "docs": 40,
+  "sample_chars": 51473,
+  "sample_units": 516,
+  "units_per_char": 0.010024673129601928,
+  "ci": [
+   0.007336738132890882,
+   0.012186635739138193
+  ],
+  "est_calls": 1075.366735958658,
+  "est_calls_ci": [
+   787.0265729914707,
+   1307.2847890088321
+  ],
+  "mean_unit_chars": 93.59689922480621,
+  "median_unit_chars": 52.0
+ },
+ {
+  "name": "sec|8-K/A|OtherEvents",
+  "group": "prose sections",
+  "total_chars": 43542,
+  "docs": 30,
+  "sample_chars": 43542,
+  "sample_units": 238,
+  "units_per_char": 0.005465986863258463,
+  "ci": [
+   0.004500182748538012,
+   0.006536209800304756
+  ],
+  "est_calls": 238.0,
+  "est_calls_ci": [
+   195.9469572368421,
+   284.5996471248697
+  ],
+  "mean_unit_chars": 179.95378151260505,
+  "median_unit_chars": 127.5
+ },
+ {
+  "name": "sec|8-K/A|CostsAssociatedwithExitorDisposalActivit",
+  "group": "prose sections",
+  "total_chars": 84835,
+  "docs": 21,
+  "sample_chars": 84835,
+  "sample_units": 456,
+  "units_per_char": 0.005375139977603583,
+  "ci": [
+   0.004724803242873312,
+   0.006083396702048979
+  ],
+  "est_calls": 456.0,
+  "est_calls_ci": [
+   400.82868310915745,
+   516.0849592183251
+  ],
+  "mean_unit_chars": 183.7280701754386,
+  "median_unit_chars": 159.0
+ },
+ {
+  "name": "sec|8-K/A|EntryintoaMaterialDefinitiveAgreement",
+  "group": "prose sections",
+  "total_chars": 83830,
+  "docs": 19,
+  "sample_chars": 83830,
+  "sample_units": 307,
+  "units_per_char": 0.0036621734462602886,
+  "ci": [
+   0.0031791314724692807,
+   0.0042454650714010035
+  ],
+  "est_calls": 307.0,
+  "est_calls_ci": [
+   266.5065913370998,
+   355.89733693554615
+  ],
+  "mean_unit_chars": 270.7361563517915,
+  "median_unit_chars": 219
+ },
+ {
+  "name": "sec|8-K/A|RegulationFDDisclosure",
+  "group": "prose sections",
+  "total_chars": 44346,
+  "docs": 29,
+  "sample_chars": 44346,
+  "sample_units": 236,
+  "units_per_char": 0.005321787759888152,
+  "ci": [
+   0.004722005254562238,
+   0.006024409244352116
+  ],
+  "est_calls": 236.0,
+  "est_calls_ci": [
+   209.402045018817,
+   267.15845235003894
+  ],
+  "mean_unit_chars": 185.22457627118644,
+  "median_unit_chars": 136.0
+ },
+ {
+  "name": "sec|8-K/A|other",
+  "group": "prose sections",
+  "total_chars": 86025,
+  "docs": 30,
+  "sample_chars": 51929,
+  "sample_units": 270,
+  "units_per_char": 0.005199406882474148,
+  "ci": [
+   0.004690226876090751,
+   0.0059565269604899725
+  ],
+  "est_calls": 447.27897706483856,
+  "est_calls_ci": [
+   403.47676701570686,
+   512.4102317761499
+  ],
+  "mean_unit_chars": 189.72592592592594,
+  "median_unit_chars": 148.0
+ },
+ {
+  "name": "sec|10-K|RiskFactors",
+  "group": "prose sections",
+  "total_chars": 312923237,
+  "docs": 40,
+  "sample_chars": 3932381,
+  "sample_units": 20197,
+  "units_per_char": 0.005136074047758852,
+  "ci": [
+   0.00502952335077854,
+   0.005270605550626493
+  ],
+  "est_calls": 1607196.9164963923,
+  "est_calls_ci": [
+   1573854.7274927073,
+   1649294.9498522095
+  ],
+  "mean_unit_chars": 192.50616428182403,
+  "median_unit_chars": 173
+ },
+ {
+  "name": "sec|10-K|Business",
+  "group": "prose sections",
+  "total_chars": 182795151,
+  "docs": 40,
+  "sample_chars": 2068003,
+  "sample_units": 14343,
+  "units_per_char": 0.006935676592345369,
+  "ci": [
+   0.006640671324745306,
+   0.0072888956411054735
+  ],
+  "est_calls": 1267808.049984937,
+  "est_calls_ci": [
+   1213882.5175481883,
+   1332374.7793391168
+  ],
+  "mean_unit_chars": 141.83741197796834,
+  "median_unit_chars": 134
+ },
+ {
+  "name": "sec|10-K|Management\u2019sDiscussionandAnalysisofFinan",
+  "group": "prose sections",
+  "total_chars": 213890093,
+  "docs": 40,
+  "sample_chars": 2939641,
+  "sample_units": 20015,
+  "units_per_char": 0.006808654526181938,
+  "ci": [
+   0.0065805848573132234,
+   0.007071026569173273
+  ],
+  "est_calls": 1456303.7498099257,
+  "est_calls_ci": [
+   1407521.907125117,
+   1512422.5304859423
+  ],
+  "mean_unit_chars": 141.4290781913565,
+  "median_unit_chars": 126
+ },
+ {
+  "name": "sec|10-K|FinancialStatementsandSupplementaryData",
+  "group": "FS sections",
+  "total_chars": 354903671,
+  "docs": 40,
+  "sample_chars": 4808300,
+  "sample_units": 34590,
+  "units_per_char": 0.007193810702327226,
+  "ci": [
+   0.00677252314831764,
+   0.007708362540468323
+  ],
+  "est_calls": 2553109.8267350206,
+  "est_calls_ci": [
+   2403593.327270408,
+   2735726.1630110936
+  ],
+  "mean_unit_chars": 131.25319456490314,
+  "median_unit_chars": 106.0
+ },
+ {
+  "name": "sec|10-K|ExhibitsandFinancialStatementSchedules",
+  "group": "FS sections",
+  "total_chars": 186454268,
+  "docs": 40,
+  "sample_chars": 2122705,
+  "sample_units": 18351,
+  "units_per_char": 0.008645101415410996,
+  "ci": [
+   0.007812255589273373,
+   0.009780846859249062
+  ],
+  "est_calls": 1611916.0561962212,
+  "est_calls_ci": [
+   1456628.3973268755,
+   1823680.641561383
+  ],
+  "mean_unit_chars": 105.24418287831726,
+  "median_unit_chars": 63
+ },
+ {
+  "name": "sec|10-K|other",
+  "group": "prose sections",
+  "total_chars": 96052387,
+  "docs": 30,
+  "sample_chars": 93778,
+  "sample_units": 547,
+  "units_per_char": 0.005832924566529463,
+  "ci": [
+   0.004863747777190368,
+   0.0073865014442264015
+  ],
+  "est_calls": 560266.3278060952,
+  "est_calls_ci": [
+   467174.58376507903,
+   709491.0952968933
+  ],
+  "mean_unit_chars": 168.55393053016454,
+  "median_unit_chars": 134
+ },
+ {
+  "name": "sec|10-K/A|Directors,ExecutiveOfficersandCorporateG",
+  "group": "prose sections",
+  "total_chars": 2286997,
+  "docs": 40,
+  "sample_chars": 1340953,
+  "sample_units": 13465,
+  "units_per_char": 0.010041366103062523,
+  "ci": [
+   0.009508243754258686,
+   0.010672551166630871
+  ],
+  "est_calls": 22964.57415360568,
+  "est_calls_ci": [
+   21745.324941258354,
+   24408.092500431303
+  ],
+  "mean_unit_chars": 95.14043817304122,
+  "median_unit_chars": 60
+ },
+ {
+  "name": "sec|10-K/A|ExecutiveCompensation",
+  "group": "prose sections",
+  "total_chars": 6978836,
+  "docs": 40,
+  "sample_chars": 4130961,
+  "sample_units": 33410,
+  "units_per_char": 0.008087706468301202,
+  "ci": [
+   0.007632267054625416,
+   0.008654169182817598
+  ],
+  "est_calls": 56442.77705841329,
+  "est_calls_ci": [
+   53264.34008243382,
+   60396.02744313803
+  ],
+  "mean_unit_chars": 116.17536665668962,
+  "median_unit_chars": 80.0
+ },
+ {
+  "name": "sec|10-K/A|CertainRelationshipsandRelatedTransactio",
+  "group": "prose sections",
+  "total_chars": 786272,
+  "docs": 40,
+  "sample_chars": 367619,
+  "sample_units": 2144,
+  "units_per_char": 0.005832125107788227,
+  "ci": [
+   0.005057576177398193,
+   0.007162026441872335
+  ],
+  "est_calls": 4585.636672750865,
+  "est_calls_ci": [
+   3976.6305361552318,
+   5631.300854503845
+  ],
+  "mean_unit_chars": 167.07042910447763,
+  "median_unit_chars": 125.5
+ },
+ {
+  "name": "sec|10-K/A|ExhibitsandFinancialStatementSchedules",
+  "group": "FS sections",
+  "total_chars": 2937548,
+  "docs": 40,
+  "sample_chars": 1043749,
+  "sample_units": 8169,
+  "units_per_char": 0.00782659432488079,
+  "ci": [
+   0.006816493200715054,
+   0.009053691598949478
+  ],
+  "est_calls": 22990.996505864914,
+  "est_calls_ci": [
+   20023.775968774105,
+   26595.65364911084
+  ],
+  "mean_unit_chars": 112.67303219488309,
+  "median_unit_chars": 70
+ },
+ {
+  "name": "sec|10-K/A|FinancialStatementsandSupplementaryData",
+  "group": "FS sections",
+  "total_chars": 3365148,
+  "docs": 26,
+  "sample_chars": 3365148,
+  "sample_units": 26114,
+  "units_per_char": 0.007760134175376536,
+  "ci": [
+   0.00661035041858871,
+   0.009398339831005062
+  ],
+  "est_calls": 26114.0,
+  "est_calls_ci": [
+   22244.80749041296,
+   31626.80448562702
+  ],
+  "mean_unit_chars": 120.90667841004824,
+  "median_unit_chars": 83.0
+ },
+ {
+  "name": "sec|10-K/A|Business",
+  "group": "prose sections",
+  "total_chars": 888515,
+  "docs": 11,
+  "sample_chars": 888515,
+  "sample_units": 5812,
+  "units_per_char": 0.006541251413875962,
+  "ci": [
+   0.005974057858341176,
+   0.007462382172258562
+  ],
+  "est_calls": 5812.0,
+  "est_calls_ci": [
+   5308.040018004011,
+   6630.438495784316
+  ],
+  "mean_unit_chars": 148.3491052993806,
+  "median_unit_chars": 137.5
+ },
+ {
+  "name": "sec|10-K/A|RiskFactors",
+  "group": "prose sections",
+  "total_chars": 1906694,
+  "docs": 13,
+  "sample_chars": 1906694,
+  "sample_units": 9591,
+  "units_per_char": 0.005030172644378175,
+  "ci": [
+   0.004821257471826553,
+   0.005251543291524654
+  ],
+  "est_calls": 9591.0,
+  "est_calls_ci": [
+   9192.662693986858,
+   10013.086084690309
+  ],
+  "mean_unit_chars": 196.49984360337817,
+  "median_unit_chars": 178
+ },
+ {
+  "name": "sec|10-K/A|Management\u2019sDiscussionandAnalysisofFinan",
+  "group": "prose sections",
+  "total_chars": 1019911,
+  "docs": 12,
+  "sample_chars": 1019911,
+  "sample_units": 7436,
+  "units_per_char": 0.007290832239283624,
+  "ci": [
+   0.0060487366569580096,
+   0.008794188017023771
+  ],
+  "est_calls": 7436.0,
+  "est_calls_ci": [
+   6169.1730525347,
+   8969.28909463073
+  ],
+  "mean_unit_chars": 131.11027434104358,
+  "median_unit_chars": 108.5
+ },
+ {
+  "name": "sec|10-K/A|other",
+  "group": "prose sections",
+  "total_chars": 1347650,
+  "docs": 30,
+  "sample_chars": 177039,
+  "sample_units": 1562,
+  "units_per_char": 0.008822914725004094,
+  "ci": [
+   0.0073196796148738376,
+   0.010573348542249068
+  ],
+  "est_calls": 11890.201029151767,
+  "est_calls_ci": [
+   9864.366232984727,
+   14249.173162961957
+  ],
+  "mean_unit_chars": 106.79193341869399,
+  "median_unit_chars": 70.0
+ },
+ {
+  "name": "sec|10-Q/A|ControlsandProcedures",
+  "group": "prose sections",
+  "total_chars": 100094,
+  "docs": 24,
+  "sample_chars": 100094,
+  "sample_units": 544,
+  "units_per_char": 0.0054348912022698665,
+  "ci": [
+   0.005128920833187956,
+   0.005688338493292053
+  ],
+  "est_calls": 544.0,
+  "est_calls_ci": [
+   513.3742018771152,
+   569.3685531475747
+  ],
+  "mean_unit_chars": 181.4375,
+  "median_unit_chars": 163.5
+ },
+ {
+  "name": "sec|10-Q/A|ManagementDiscussionandAnalysisofFinanci",
+  "group": "prose sections",
+  "total_chars": 1091192,
+  "docs": 21,
+  "sample_chars": 1091192,
+  "sample_units": 7584,
+  "units_per_char": 0.00695019758209371,
+  "ci": [
+   0.006490308688726697,
+   0.007458511276319126
+  ],
+  "est_calls": 7584.0,
+  "est_calls_ci": [
+   7082.172918669063,
+   8138.667836629219
+  ],
+  "mean_unit_chars": 137.93275316455697,
+  "median_unit_chars": 110.0
+ },
+ {
+  "name": "sec|10-Q/A|FinancialStatements",
+  "group": "FS sections",
+  "total_chars": 1632769,
+  "docs": 20,
+  "sample_chars": 1632769,
+  "sample_units": 14983,
+  "units_per_char": 0.00917643585834861,
+  "ci": [
+   0.008384656187169869,
+   0.009834288458607903
+  ],
+  "est_calls": 14983.0,
+  "est_calls_ci": [
+   13690.20669806916,
+   16057.121332272767
+  ],
+  "mean_unit_chars": 92.72288593739572,
+  "median_unit_chars": 53
+ },
+ {
+  "name": "sec|10-Q/A|Exhibits",
+  "group": "prose sections",
+  "total_chars": 101522,
+  "docs": 40,
+  "sample_chars": 101522,
+  "sample_units": 1363,
+  "units_per_char": 0.013425661432989894,
+  "ci": [
+   0.01145223408585653,
+   0.015776699029126214
+  ],
+  "est_calls": 1363.0,
+  "est_calls_ci": [
+   1162.6537088643267,
+   1601.6820388349515
+  ],
+  "mean_unit_chars": 69.1452677916361,
+  "median_unit_chars": 24
+ },
+ {
+  "name": "sec|10-Q/A|other",
+  "group": "prose sections",
+  "total_chars": 188046,
+  "docs": 30,
+  "sample_chars": 49213,
+  "sample_units": 362,
+  "units_per_char": 0.007355779976835389,
+  "ci": [
+   0.006223726592782661,
+   0.009224890829694323
+  ],
+  "est_calls": 1383.2250015239877,
+  "est_calls_ci": [
+   1170.3468908664083,
+   1734.7038209606987
+  ],
+  "mean_unit_chars": 132.82872928176795,
+  "median_unit_chars": 109.0
+ },
+ {
+  "name": "exh|EX-99.other",
+  "group": "press release exhibits",
+  "total_chars": 158181461,
+  "docs": 60,
+  "sample_chars": 1415761,
+  "sample_units": 5070,
+  "units_per_char": 0.0035811129138322074,
+  "ci": [
+   0.0031327954572786267,
+   0.004178694621437883
+  ],
+  "est_calls": 566465.6727159456,
+  "est_calls_ci": [
+   495550.16244649625,
+   660992.0202918863
+  ],
+  "mean_unit_chars": 278.2493096646943,
+  "median_unit_chars": 169.0
+ },
+ {
+  "name": "exh|EX-10",
+  "group": "contract exhibits",
+  "total_chars": 1514010947,
+  "docs": 60,
+  "sample_chars": 6475681,
+  "sample_units": 18332,
+  "units_per_char": 0.002830899174928475,
+  "ci": [
+   0.0025433641227736578,
+   0.0032123729998765993
+  ],
+  "est_calls": 4286012.340694979,
+  "est_calls_ci": [
+   3850681.1240863698,
+   4863567.887660401
+  ],
+  "mean_unit_chars": 352.24487235435305,
+  "median_unit_chars": 245.0
+ },
+ {
+  "name": "exh|EX-99.1",
+  "group": "press release exhibits",
+  "total_chars": 447740490,
+  "docs": 60,
+  "sample_chars": 1828392,
+  "sample_units": 7306,
+  "units_per_char": 0.003995860843845302,
+  "ci": [
+   0.0035782223447963736,
+   0.0045759440765751
+  ],
+  "est_calls": 1789108.692195109,
+  "est_calls_ci": [
+   1602115.0259880773,
+   2048835.4430583327
+  ],
+  "mean_unit_chars": 249.25225841773886,
+  "median_unit_chars": 168.0
+ },
+ {
+  "name": "filing text only (425, 13D, ...)",
+  "group": "filing text only",
+  "total_chars": 196145537,
+  "docs": 40,
+  "sample_chars": 3326111,
+  "sample_units": 9088,
+  "units_per_char": 0.00273232011799967,
+  "ci": [
+   0.0023871155135811646,
+   0.0036579532588133837
+  ],
+  "est_calls": 535932.3968009487,
+  "est_calls_ci": [
+   468222.05429240834,
+   717491.2062708511
+  ],
+  "mean_unit_chars": 364.9823943661972,
+  "median_unit_chars": 231.5
+ },
+ {
+  "name": "prepared remarks",
+  "group": "prepared remarks",
+  "total_chars": 182887167,
+  "docs": 60,
+  "sample_chars": 1174964,
+  "sample_units": 8860,
+  "units_per_char": 0.007540656564796879,
+  "ci": [
+   0.00730143898507621,
+   0.007797377316673292
+  ],
+  "est_calls": 1379089.3164556532,
+  "est_calls_ci": [
+   1335339.4910039434,
+   1426040.2474764402
+  ],
+  "mean_unit_chars": 131.6212189616253,
+  "median_unit_chars": 122.0
+ },
+ {
+  "name": "Q&A exchanges (json chars)",
+  "group": "Q&A",
+  "total_chars": 333245333,
+  "docs": 100,
+  "sample_chars": 188076,
+  "sample_units": 1675,
+  "units_per_char": 0.008905974180650375,
+  "ci": [
+   0.008505488707142775,
+   0.009299117918599348
+  ],
+  "est_calls": 2967874.3315202366,
+  "est_calls_ci": [
+   2834414.4165395335,
+   3098887.647389907
+  ],
+  "mean_unit_chars": 97.0113432835821,
+  "median_unit_chars": 75,
+  "text_over_json": 0.8731151236734086
+ },
+ {
+  "name": "news bodies",
+  "group": "news bodies",
+  "total_chars": 373480512,
+  "docs": 250,
+  "sample_chars": 319440,
+  "sample_units": 2353,
+  "units_per_char": 0.007366015527172552,
+  "ci": [
+   0.007088173384267561,
+   0.007624129034522702
+  ],
+  "est_calls": 2751063.250488355,
+  "est_calls_ci": [
+   2647294.6247010212,
+   2847463.6153676044
+  ],
+  "mean_unit_chars": 134.8491287717807,
+  "median_unit_chars": 122
+ },
+ {
+  "name": "news titles",
+  "group": "news titles",
+  "total_chars": 27283376,
+  "docs": 0,
+  "est_calls": 348670.0,
+  "est_calls_ci": [
+   348670.0,
+   348670.0
+  ],
+  "mean_unit_chars": 78.24985229586716,
+  "units_per_char": 0.012779576838291565
+ }
+]

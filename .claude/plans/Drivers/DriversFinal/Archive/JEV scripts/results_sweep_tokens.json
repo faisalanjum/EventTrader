@@ -1,0 +1,14 @@
+{
+ "A|fact_type": 1446.375,
+ "A|state": 1017.375,
+ "A|unit": 1140.375,
+ "A|time_type": 732.375,
+ "A|baseline": 908.375,
+ "A|ALL5": 3243.375,
+ "B|is_fact": 608,
+ "B|is_forecast": 605,
+ "B|vs_expectation": 600,
+ "B|has_number": 595,
+ "B|kind": 680,
+ "B|ALL5": 1136
+}

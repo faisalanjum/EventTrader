@@ -16,7 +16,7 @@
 
 **Before you do anything:**
 - **Don't redo the fact-type test.** Start from V6 (§7, Appendix A.1) and `JEV scripts/README.md`, which gives the run order for every test.
-- **Get the owner's OK before every new Jev test.** Pay-per-use was approved on 2026-09-29; the scope wasn't stated, so treat it as covering tests only. Each test costs cents; the whole session cost about $1.3.
+- **Get the owner's OK before every new Jev test.** Pay-per-use was approved on 2026-09-29; the scope wasn't stated, so treat it as covering tests only. Each test costs cents; the whole session cost about $6.1 (Jev only; Sonnet and Haiku helper runs are on the subscription).
 - **Get owner approval for prompt clauses or rules edits.** That covers any clause beyond the rules' locked wording, and any change to the rules file.
 - **Treat "rulings" in this file as proposals.** They come from two outside reviewers and from Claude, not from the owner (§3).
 
@@ -51,6 +51,10 @@
 - **Jev is not perfectly repeatable.** Identical calls differ on about 1% of items (2/288, 3/413), always at low confidence, so cache decisions (rules 2.46, 5.4).
 - **Detect surprises with the comparison-kind question (S2), not the type question.** One quote backs both a surprise and its home fact (§6.2).
 - **The claim checker catches a different reader's errors, not Jev's own.** It flags planted wrong labels (97% state, 89% fact type) but only 2 of 32 real Jev mistakes (§6.5).
+- **Tags can screen the corpus (§6.6).** Five plain yes/no tags with the boilerplate tag subtracted catch 99.1–99.6% of 762 known facts and flag 28–37% of sentences (the old tags flagged 62%). Tags on every sentence, then the full fact card only on the flagged ones, cost about $2.5–2.9K instead of $4.5K. The docs-style structured wording did not beat plain wording. On 240 fresh, blind-labeled units the plain 70% cutoff caught 92% of facts (35% flagged) and the boilerplate rules 96–100% (31–41% flagged).
+- **Whole-corpus sweep (§6.7):** about 33M units (sentences and table rows) across filings, transcripts and news. Five questions per call cost $1.2K (plain tags) to $4.5K (full fact card). It takes 2–7 days at the call rate we observed and 19 days at the documented limit.
+- **Identity (§6.8):** no tested setting had under 1% wrong merges and under 20% missed matches. As a veto (fresh half, cutoff picked on the dev half), one question + sentence ruled out 94% of different pairs and lost 3 of 73 same pairs.
+- **XBRL concept linking (§6.9):** on 12 fresh companies Jev kept 72.6% of correct concept links with the first prompt, 80.8% with the rules' fixed conventions added, 95.0% with naming hints that Claude wrote after seeing its misses (4 wrong, all net income → `ProfitLoss`), and 88.1% with published definitions and company labels instead of hand hints (10 wrong, 8 of them `ProfitLoss`). Haiku kept 88.6% (10 wrong), and 84.9% with 0 wrong after verify and code checks. OpenAI `gpt-6-luna` (ChatGPT subscription, no hints) kept 92.7% with 1 wrong at xhigh (0 wrong after code checks), 90.9% at low and 90.0% at medium (2 and 4 wrong after code checks). Members and axes are untested.
 - **Recommended setup: mixed.** Jev decides meaning; code does exact checks, math and saving. The owner has not decided (§8).
 - **How far to trust the numbers:** keys are silver (earlier-model labels, reviewer rulings, Claude's labels). The fact-card and claim-checker state tests come from 3 filings of 2 airlines, and V4–V6 were tuned on the same items, so industry coverage is untested and the scores are optimistic.
 - **Recommended next step:** stop new capability tests, settle the rulings (§3), then run every task once on a fresh multi-industry test set with keys the owner approves, locked before any call (rule 8.17).
@@ -72,6 +76,9 @@ Decided items. Keys are silver: earlier-model labels, reviewer rulings, or Claud
 | Horizon (3.40) | 39/49; 47/49 once "over time" = undefined | Claude's labels | 6.4 |
 | Slice kind (3.13–3.15) | 81.1% raw; 237/237 where the rules decide; 95.1% excluding two rule gaps | kf labels | 6.4 |
 | Claim checker (idea H) | Planted wrong labels flagged: state 97%, fact type 89%. Real Jev mistakes flagged: 2/32. Re-classify and compare: 99.3% | Planted and real errors | 6.5 |
+| Tags as a cheap screen (idea D) | 99.1–99.6% of 762 known facts caught, 28–37% of sentences flagged (old tags 62%); two-stage cost $2.5–2.9K vs $4.5K; on 240 fresh units 92% (plain 70% cutoff) to 96–100% (boilerplate rule) | Earlier-reader facts (mostly airline) + 360 blind Claude labels | 6.6 |
+| Whole-corpus sweep estimate (task 9) | 33.1M units; $1.2K (plain tags) to $4.5K (full card); 2–7 days observed | Neo4j counts + sampled units and real tokens | 6.7 |
+| XBRL concept link (pick a concept for a metric name) | 12 fresh companies: Jev 72.6% → 80.8% (+ rule text) → 95.0% (+ naming hints) or 88.1% (+ definitions and company labels) of correct links kept, 4–10 wrong; Haiku 88.6%, 10 wrong (0 wrong, 84.9%, with verify + code); Luna xhigh 92.7%, 1 wrong (0 with code checks) | Two Sonnet labelers; hints written after seeing DEV misses | 6.9 |
 
 ## 3. Waiting on the owner
 
@@ -80,9 +87,10 @@ Decided items. Keys are silver: earlier-model labels, reviewer rulings, or Claud
 - A Jev flag is an available option. Nothing has been ruled on what a flag does.
 - Confidence bars and raw probabilities come later.
 - Jev pay-per-use is approved.
+- (2026-09-30) The same measure reported by two different companies is one driver (rule 2.42).
 
 ### 3.2 Decisions waiting
-1. **What next?** Recommended: stop new capability tests; settle the rulings below; build one fresh multi-industry test set with owner-approved keys, locked before any call (8.17); run every task once on it. Other options:
+1. **What next?** Recommended: stop new capability tests; settle the rulings below; build one fresh multi-industry test set with owner-approved keys, locked before any call (8.17); run every task once on it (include the tag screen of §6.6 and its metric-tag wording fix). Other options:
    - run the claim checker against a different reader's real errors (needs Phase 6 approval for a reader model);
    - test the identity funnel (ideas B, C, L; §9.2), which first needs a same/different key we don't have.
 2. **V6:** approve its clauses and the matching rules edit (rules 1.5, 1.6, 1.7, 7.7 and the new interpretations; §7)? Or keep round 1's locked-wording prompt? It scores 94.1% vs V6's 97.3–97.6% on tuned items, and differs by only 2 of 39 on fresh data.
@@ -90,6 +98,8 @@ Decided items. Keys are silver: earlier-model labels, reviewer rulings, or Claud
 4. **Mixed quotes:** who splits them? Recommended: the reader, with a rule written for it.
 5. **Architecture:** choose code-heavy, Jev-heavy or mixed (§8).
 6. **Rule S4:** align its wording with the escalation ruling. This is a rules-file edit and has not been done.
+7. **Identity:** approve the added sentence (rule 2.40 / Jev prompt, §6.8); rule on regional slice vs total (pilot: Claude U, Sonnet D).
+8. **XBRL concept linking (§6.9):** approve the naming hints (rules 1.9/2.21/2.44) or the published definitions and company labels (no hand text, 88.1% vs 95.0%), and decide where the metric-side meaning would live (for example a definition stored with each driver, rule 2.1; a full driver list would need one per name whose concept wording differs); rule on `ProfitLoss` (A or B); choose the concept-pick option. Options, trade-offs and my recommendation (option 6 with a sample audit, rule A) are in the §6.9 decision guide.
 
 ### 3.3 Open rule questions (no ruling yet)
 
@@ -515,6 +525,162 @@ Main clarification, which **needs owner approval because it conflicts with the b
 
 **Prompt text:** Appendix A.10. **Files:** `claim_prompts.py` (`CHECK`, `TYPE_DEF`, `TYPE_DEF_V2`, `STATE_DEF`), `build_claims.py`, `build_real.py`, `run_claims.py`, `score_claims.py`, `build_claims_v2.py`, `compare_claims.py`, `compare_reclassify.py`. Results: `results_claims*.json`, `results_real_reader.json`.
 
+### 6.6 Tags as a cheap screen: recall test (idea D, task 9)
+
+**Question.** Can five quick yes/no "tags" per sentence decide which sentences deserve the expensive full fact card, without dropping real facts?
+
+**Setup**
+- **Five Noul tags in one request:** `states_metric`, `states_guidance`, `states_surprise`, `states_action_event` (the four types of rule 1.5, worded from the rules) and `is_boilerplate` (rule 2.33). One condition each, a high value means yes, the complete question sits in `instructions`, probabilities are stored and thresholds live in code (docs: Noul, Advanced, composite scoring).
+- **Three styles of the same questions** (docs: "try with and without criteria"): **P** plain (definition inside one instruction string); **C** short question + `true`/`false` strings; **S** structured, mirroring the docs' `requests_credentials` example (`question`, `inspect`, `focus`, `true`/`false` objects with `what` and `examples`; the examples are invented, none from test data). A checklist built from sentences of the docs runs in `tag_prompts.validate()`. **B0** = the five short tags of the sweep estimate.
+- **Items:** 762 known facts (decided fact-type set, fact-card set, and the surprise test's 42 claims; de-duplicated by quote; no driver name) and 120 random corpus units (15 per source group) that Claude labeled by reading them **before any Jev call** (hash `a193e9c8b9a213f2`: 28 fact, 80 not a fact, 12 unclear). The surprise test's 23 look-alike controls are hard negatives for the surprise tag. 3,552 calls, $0.18.
+
+**Results** (corpus flagged share = background rates weighted by each source group's call count)
+
+| Rule | Known facts caught | Random facts (28) | Non-facts flagged (80) | Corpus flagged | Tokens per call |
+|---|---|---|---|---|---|
+| B0, is_fact ≥ 0.5 or kind ≠ none | 100% | 28 | 41% | 62% | 1,148 |
+| P, any type tag ≥ 0.5 | 99.5% | 27 | 32% | 51% | 863 |
+| C, same | 96.9% | 27 | 32% | 49% | 1,121 |
+| S, same | 97.1% | 27 | 29% | 46% | 1,592 |
+| **P, max type tag − 0.5 × `is_boilerplate` ≥ 0.41** | **99.6%** | 27 | 12% | **37%** | 863 |
+| P, same, ≥ 0.55 | 99.1% | 25 | 5% | 28% | 863 |
+| S, max type tag − 1.0 × `is_boilerplate` ≥ 0.26 | 99.6% | 27 | 11% | 33% | 1,592 |
+
+**Findings**
+- **Plain wins per token.** At matched recall S flags about the same share (33% vs 36%) for 84% more tokens; C lost recall at 0.5. Structure helped only on the subtle surprise boundary: 0 of 23 look-alike controls flagged (S) vs 7 of 23 (P), with 41/44 vs 42/44 surprise claims caught.
+- **Combining the tags offline works.** Subtracting `is_boilerplate` cuts the flagged share from 56% to 36–37% at ≥ 99.5% recall, with no new call. Noisy-or was worse.
+- **The threshold is stable.** 200 split-half runs (threshold picked on half the known facts for ≥ 99% recall, tested on the other half): t ranged 0.41–0.64, test recall averaged 99.0%, worst 95.8%.
+- **Misses are a pattern.** Of the 7 known facts and 3 random facts missed at t = 0.55, most are "explanation of a change" sentences ("The increase in revenues was primarily driven by growth in…"): the metric tag is too narrow. A wording fix is untested and needs fresh data, since these misses were read.
+- **Non-facts still flagged** (P, 26/80 at 0.5): contract clauses and accounting-policy sentences read as metrics; the boilerplate tag suppresses most of them.
+- **Paragraph level** (P on paragraph chunks up to 1,200 characters; known-fact paragraph proxies and 360 random chunks): 98.4–98.8% recall but 48–69% of random paragraphs flagged (58% at the 98.4% point). Too coarse to filter.
+- **Two-stage cost** (plain tags on every sentence, then the full card only on the flagged): tags-only $1,209 for the corpus; + card on 28% flagged = $2,471; on 36–37% = $2,830–$2,880; on the old 62% = $4,005; card on everything $4,510.
+- **Fresh hold-out (2026-09-30).** 240 random units from a separate document sample (30 per source group), labeled by Claude before any call and frozen (hash `b36e075dbcf11785`: 50 facts, 167 non-facts, 23 unclear). The rules were fixed before the run and never tuned on these units. Two-stage cost = $1,209 + flagged share × $4,510.
+
+| Rule (fixed in advance) | Facts caught (50) | Non-facts flagged (167) | Corpus flagged | Two-stage cost |
+|---|---|---|---|---|
+| B0 old tags | 100% | 40% | 57% | $3,780 |
+| **P plain, any fact tag ≥ 0.70 (the owner's 70%)** | **92%** [81–97] | 14% | 35% | $2,788 |
+| P plain, any fact tag ≥ 0.85 | 74% | 6% | 20% | $2,111 |
+| P, max tag − 0.5 × boilerplate ≥ 0.41 (loose) | 100% [93–100] | 19% | 41% | $3,058 |
+| P, same, ≥ 0.55 (strict) | 96% [87–99] | 13% | 31% | $2,607 |
+| S structured, any fact tag ≥ 0.70 | 80% | 14% | 30% | n/a |
+| S, max tag − 1.0 × boilerplate ≥ 0.26 | 96% | 15% | 34% | n/a |
+
+  - Out of sample every figure moved the wrong way: the plain 70% rule caught 92% of the fresh facts (97.8% of the known facts), the boilerplate rules 96–100% (99.1–99.6% before), and 13–19% of non-facts were flagged (5–12% before). The tuned figures above were optimistic.
+  - The 4 facts the plain 70% rule missed were just under the cutoff (tag values 0.60–0.69): a tripling of shipped content packs, a product-prototype announcement, and two "This indicates a decrease/increase in top-line earnings" sentences that depend on the sentence before them.
+  - No cutoff on this screen reaches the launch bar (under 1% wrong, 8.17) as a hard filter. The loose boilerplate rule is the safest (100% of 50, lower bound 93%) at 41% flagged. Files: `build_tag_holdout.py`, `run_tags_holdout.py`, `tag_holdout_labels.json`, `results_tags_holdout.json`.
+
+**Caveats:** the known facts were chosen by an earlier reader (mostly airline, clearer than average), so recall is optimistic, and the 28 random facts caught 25–28 depending on the threshold; 80 non-facts give ±5 points; the labels are Claude's, not owner-approved; thresholds and weights were tuned on the same data; a recall gap of 0.4–1% uses a large share of the rule 8.17 budget (under 1% wrong), so a screen saves cost and does not replace reading (8.10); S's `examples` conflict with rules 1.9, 2.21, 2.44 unless the owner allows generic examples.
+
+**Prompt text:** Appendix A.11 (P), A.12 (S), A.13 (B0); C is `variant("C")` in `tag_prompts.py`. **Files:** `tag_prompts.py`, `build_tag_items.py`, `run_tags.py`, `run_tags_para.py`, `score_tags.py`, `score_tags2.py`; `items_tags_pos.json`, `tag_labels.json`, `results_tags*.json`.
+
+### 6.7 Whole-corpus sweep: calls, tokens, cost, time (task 9)
+
+**Question.** What does it cost to send every sentence and table row of every filing, transcript and news story to Jev, with 5 questions per call?
+
+**Corpus** (exact, Neo4j aggregates)
+- **Filing sections** (10-K, 10-Q, 8-K, amendments): 2.75B characters (10-K 1.35B, 10-Q 1.28B, 8-K 92M). **Exhibits:** 2.12B (EX-10 contracts 1.5B, EX-99.1 452M). **Filing text of filings with no sections or exhibits** (425, 13D…): 196M.
+- **Transcripts:** prepared remarks 183M characters (9,320); Q&A 333M JSON characters (170,654 exchanges). **News:** 348,670 stories, 373M body and 27M title characters (35,249 empty bodies).
+- **Left out:** structured XBRL statements (`FinancialStatementContent`, 1.05B characters) and the full-filing text stored beside sections and exhibits (duplicates, 1.05B).
+
+**Units.** A unit is one sentence, or one table row (a label plus its numbers, rebuilt from cells), cut at 1,000 characters. Sampled by section type (about 40 documents per stratum; ratio estimator, bootstrap 95% interval): **33.1M units [32.1–34.3M]**: filing sections 18.5M, exhibits 7.2M (contracts 4.3M), transcripts 4.4M, news 3.1M. Cutting run-on tables at 500 characters gives 36.1M (+9%), at 300 gives 40.2M (+21%), at 2,000 or none 32.0–32.2M. Financial-statement blocks are 0.94 per unit, so a finer definition does not inflate the count.
+
+**Tokens per call** (real calls on sampled units; sentence plus about 520 characters before and 260 after): about 901 + 0.322 × state characters for the five short tags (1,075–1,395 per call by source), plain tags 618 + 0.322 × characters (868); the five full fact-card questions add 2,095 (about 3,200). Five full questions in one call cost 38% less than five calls (3,243 vs 5,243 tokens).
+
+| Scope (5 questions in one call per unit) | Calls | Short tags (B0) | Full fact card |
+|---|---|---|---|
+| Filing sections | 18.5M | $885 | $2,516 |
+| + exhibits and text-only filings (all filings) | 25.7M | $1,249 | $3,507 |
+| + transcripts | 30.1M | $1,445 | $4,079 |
+| **+ news = everything** | **33.1M** | **$1,570** [1,526–1,642] | **$4,515** [4,357–4,651] |
+
+The interval is sampling error only; the unit definition adds −4% to +21% calls. Every 100 tokens of question text adds about $139 across the corpus. Plain tags (§6.6): $1,209.
+
+**Levers (untested)**
+- **Skip small units:** under 25 characters −11% of calls (−18% under 40). Skip financial-statement sections −25%; skip contract exhibits −13%.
+- **Reuse identical input:** across a company's earlier filings the whole input (sentence and both context windows) repeats 12–49% by section (about 15–20% overall); the sentence text alone repeats 30–76% (about 55%). Rule 2.46 needs identical input.
+- **Shorter input:** no context saves about 15% of tokens; questions cut to 60% about 20%.
+
+**Paragraph units.** Real paragraph breaks where the source has them; flat text (8-K exhibits, transcripts, news, 425s) packed sentence by sentence up to 1,200 characters; a paragraph under 200 characters merges with the next. 9.2M chunks (up to 600 characters: 13.1M; 2,500: 7.2M), 2.5–8.4 sentences each. Tags only $343–$430. One answer per paragraph makes the full card invalid for multi-fact paragraphs ($1,240 if forced).
+
+**Fan-out check.** All ten questions (tags + card) in one call would cost about $5,190, more than the card alone: the questions are about 5× the size of the sentence. The docs' saving is for a big document with small questions (`primitives`: "asking a question you might not need is close to free" holds for time, not for our cost).
+
+**Time.** Documented: 1,200 requests/min gives 19 days for 33.1M calls. Observed (30-second probes, no retries): 4 threads 1,319 calls/min, 8 → 2,670, 16 → 5,319, 32 → 10,550/min, no 429s, median latency 0.17 s, 180k input tokens/s (documented cap 250k). About 2.2 days for short tags at the observed rate, 1.7 at the token cap; the full card about 5 days at the cap. Sustained limits are unknown and the docs say they change without notice.
+
+**Billing cross-check.** The owner's dashboard read 31.49M input tokens = $1.3227 (exactly $0.042 per million), 31,395 requests (about 1,003 input tokens per request) and 1.78M free output tokens; Claude's tally matched within about 1%. The sweep measurements since then cost about $0.7 (rate probe $0.42, tag test $0.22); the session total is about $2.
+
+**Not counted:** retries, account credits, duplicate news across stories. **Files:** `sweep_corpus.py` (`units`, `tokens`, `paragraphs` stages), `sweep_sensitivity.py`, `probe_rate.py`, `measure_sweep_tokens.py`, `sweep_flag_rate.py`; `sweep_units_stats.json`, `sweep_tokens_stats.json`, `sweep_paragraph_stats.json`. The sampled documents (with filing text) are not saved: rerun `sweep_corpus.py units` (needs the venv).
+
+### 6.8 Steps 3/5/6 and identity test (2026-09-30; ~$0.36 Jev + 32 Sonnet helper runs)
+
+- **Workflows:** the owner's 4 steps and a 7-step alternative proposed by Claude (adds identity, pre-save re-ask + code checks, save with outcome): claude.ai/artifact/3pD1XfuEB3kfTmt32v3EFN (private).
+- **Steps 3, 6** (50 fresh facts, Claude's key): V6 type right on 39 of 42, identical on both runs; a planted wrong type differed from V6's answer in 123 of 126 cases. The 3 misses: a plan to file, a guidance table, a revenue-drop explanation (confidence 0.87, 0.54, 0.99). State re-ask (card STATE prompt) matched 20/20 true states and differed from 80/80 planted wrong states; the claim wording accepted 18/20 true and rejected 77/80 planted. Tokens per call: type 1,457, state 1,022, claim 717 ($0.000061 / 0.000043 / 0.00003).
+- **Pool:** loose tag rule flagged 1,805 of 3,396 units (53%); Sonnet named 1,500 of them: 746 facts, 754 not. V6's Choice has no "none" option.
+- **Identity data:** 640 look-alike pairs from that pool (687 companies, 11 sectors; TF-IDF neighbours plus same-name pairs). Two blind Sonnet labelers gave the same S or D on 603: 433 different (246 not labeled "unrelated") + 170 same (159 cross-company); 37 unresolved (16 S-vs-D).
+- **Results** (wrong merges of 433 · same pairs missed of 170; run 0, run 1 differs by ≤ 2 and ≤ 5): four checks (rule 2.40 wording) ≥ 0.7 [frozen] 0·165, ≥ 0.5 0·157; one question ≥ 0.5 3·104, ≥ 0.7 1·152; with the added sentence: four checks ≥ 0.5 1·104, ≥ 0.7 0·152; one question ≥ 0.5 11·32, ≥ 0.7 2·81. No setting had under 1% wrong merges and under 20% missed. Four checks at ≥ 0.5, same pairs with an answer < 0.5: same_mechanism 86%, same_scope 59%, same_object 46%, coherent 4%. Sentence (`READ3` in `id_prompts.py`; new clause, rules 1.9/2.21/2.44 require approval): compare "what kind of thing is measured and how, not which company reports it" (rule 2.42).
+- **Veto** (cutoff picked on the dev half so ≤ 5% of same pairs are lost; fresh half = 230 different + 73 same): one question + sentence, veto if answer < 0.29: 217/230 different vetoed (94%; hard 116/129), 3/73 same lost; 83 of 303 pairs unvetoed. Without the sentence (< 0.10): 178/230 (77%; hard 77/129), 3/73 lost; 122 unvetoed.
+- **Cost:** tokens per pair call: one question 747–789, four checks 1,168–1,336 (× $0.042/M). Extrapolation assuming 5 candidates per fact and 6.9M facts (half of 13.6M flagged units): $1.1K (one question) to $1.9K (four checks).
+- **Pilot** (55 pairs from 2 airlines' facts, labeled by Claude + one Sonnet helper; used to pick the frozen setting): four checks ≥ 0.7 0/43 wrong merges, 1–2/12 missed; ≥ 0.5 1/43 (spot-price range vs average price paid, same name); one question ≥ 0.5 2/43.
+- **Limits:** keys are two Sonnet labelers (same model family), not owner-approved. Claude's audit of random samples: 24 of 24 hard "different" agreed with the key; on 3–4 of 16 "same" Claude disagreed or was unsure. 246 hard different pairs < the ~300 of rule 8.17. Not tested: check 4 (competing driver), the strong model's own error rate, a second vendor.
+- **Files:** `build_wf_keys.py`, `run_wf_steps.py`, `score_wf.py`, `id_prompts.py` (V1–V4), `build_id_pairs.py`, `build_id2_*.py`, `make_id2_key.py`, `run_id2_*.py`, `score_id2_*.py`, `run_id_check.py`, `score_id_check.py`; `wf_keys.json`, `id_key.json`, `id2_*.json`, `results_wf.json`, `results_id*.json`.
+
+### 6.9 XBRL concept linking, Jev vs Haiku vs Luna (2026-09-30; ~$3.8 Jev + 36 Sonnet and 72 Haiku helper runs + Luna on the ChatGPT subscription)
+
+- **Rules:** a concept link goes on metric facts only. A model picks one concept, or none, from the company's own consolidated numeric concepts, then a strict verifier and code checks follow (rules 6.1–6.8; FINAL_DESIGN §8 locks Haiku as picker). A member link must match one real tagged fact exactly (6.9); which axes are slices is decided offline from their members (3.16). **Only concept picks were tested; members and axes were not.**
+- **Setup:** 24 random companies (2 per sector, +1 each for Technology and Healthcare) × 29 metric names = 696 cells. Each company's list = its latest 10-K's numeric concepts (226–477). Jev gets 200 concepts + "none" per call, a final Choice among chunk winners, then a Jev verify. Key = two blind Sonnet labelers who agreed (687 of 696 cells; 428 with a concept). The old linker code was not used; the code checks (`xbrl_checks.py`) were written fresh from rules 6.4/6.6. Haiku ran as one helper per company on the whole list (`qname|label`) with the pick and verify prompts of `concept_linker.py`.
+- **Prompts:** P0 = rule 6.5 only. P1 = P0 + the rule text the labelers were given (6.4 never-link list, 6.6 fixed conventions). P2 = P1 + **naming hints**. P3 = P1's wording + each option carries the concept's published documentation (first 40 words) and the company's own other labels for it (up to 3), read by the definitions reader (`scripts/xbrl_metadata_pilot/`, `XBRL_Definitions.md`) with **no hand-written text**; run on TEST only.
+- **Where the naming hints came from:** Claude wrote them after seeing Jev's P0 misses on the 24 companies. They are general accounting vocabulary, not text from the rules, the key or Haiku: "net sales", "total revenue" and "revenue" = the consolidated revenue line; "capital expenditures" = payments to acquire property, plant and equipment or productive assets; "total debt" = the company's total debt line (may be labeled long-term debt including current maturities); "cost of revenue" = cost of goods and services sold. They are a new clause (rules 1.9/2.21/2.44 need approval), cover 4 of the 23 linkable names, and how many a full driver vocabulary would need is unmeasured.
+- **Fair test:** because the hints were written after seeing those 24 companies' misses, the 24 are DEV. TEST = 12 companies not seen before (BLK, CBRL, D, EPAM, G, GRPN, HCAT, MTDR, NWL, SLG, TSE, WSO), key made after the hints were fixed: 348 cells, 345 agreed, 219 with a concept.
+- **Pilot first:** 3 companies, the exact requests and options printed and checked; the new runner reproduced the first run in 86 of 87 cells (1 flip).
+- **Luna:** `gpt-6-luna` through `codex exec` on the ChatGPT subscription (`OPENAI_API_KEY` removed from the environment, read-only, no saved session). TEST only, one call per company (4 in parallel), the same whole list (`qname|label`) and the same pick and verify prompts as Haiku, no hand hints. Reasoning effort xhigh (pick and verify), then low and medium (pick only). Time per company: xhigh 38–561 s, low 18–61 s, medium 16–41 s.
+
+| Setup | DEV (24 co.): correct links kept / wrong | TEST (12 fresh): correct links kept / wrong |
+|---|---|---|
+| Jev P0, pick only | 74.5% / 9 | 72.6% / 11 |
+| Jev P1 | 82.5% / 10 | 80.8% / 5 |
+| Jev P2 | 96.7% / 8 | 95.0% / 5 |
+| Jev P2 + code checks | 96.7% / 8 | 95.0% / 4 |
+| Jev P3 (definitions + company labels, no hand hints) | not run | 88.1% / 10 |
+| Haiku pick | 85.7% / 5 | 88.6% / 10 |
+| Haiku + verify | 83.6% / 2 | 84.9% / 3 |
+| Haiku + verify + code checks | 83.6% / 1 | 84.9% / 0 |
+| Luna xhigh, pick only | not run | 92.7% / 1 |
+| Luna xhigh + code checks | not run | 92.7% / 0 |
+| Luna xhigh + verify + code checks | not run | 88.1% / 0 |
+| Luna medium, pick only / + code checks | not run | 90.0% / 5 · 90.0% / 4 |
+| Luna low, pick only / + code checks | not run | 90.9% / 4 · 90.9% / 2 |
+
+- **Observations:**
+  - P0's misses concentrate where the concept's label differs from the name (net sales or total revenue vs "Revenue from Contract with Customer", capex vs "Payments to Acquire Property, Plant, and Equipment", total debt, bare EPS vs "Diluted"). No chunk effect: 2-chunk lists missed 24%, 3-chunk lists 20%.
+  - Jev P2's wrong links on TEST: 4 × net income → `ProfitLoss` (labelers chose `NetIncomeLoss`; the earlier harness's family accepts `ProfitLoss`; ruling open) and 1 adjusted-EBITDA leak that the code guard removes. If `ProfitLoss` is accepted, Jev P2 has 4 wrong on DEV and 1 on TEST (0 with code checks); Haiku is unchanged.
+  - Code checks with the old prompt: removed 4 of 11 wrong on TEST and 1 of 9 on DEV (bare EPS → basic), blocked 0 correct. With P1 or P2: 0–1 removed.
+  - Verify: no fewer wrong links for Jev, 1–6 correct links lost. For Haiku: wrong 10 → 3 on TEST (194 → 186 correct kept) and 5 → 2 on DEV.
+  - Haiku's 10 wrong on TEST: bare EPS → basic × 3 (the code veto catches these), total debt → `LongTermDebt` × 2, adjusted EBITDA, capex, G&A, cost of revenue, operating expenses.
+  - **P3 (definitions + company labels), TEST:** 193 of 219 correct links kept (88.1%), 10 wrong: 8 × net income → `ProfitLoss` (4 with P2), 1 adjusted-EBITDA leak, 1 capex → `PaymentsForProceedsFromProductiveAssets`. With verify + code: 182 kept, 8 wrong. 2-company pilot first; the reader ran on the 12 filings in about 3 minutes (about 15 s each including the taxonomy download); 99.4% of the 4,232 concepts had documentation and 86% had company labels (+27.6 words per concept). Tokens per cell 37k vs 21k; $0.55 for 348 cells.
+  - P3 by name: it works where the company's own label matches the name ("net sales": 3 of 3 where the company labels the concept "Net sales"; capex 8 of 11) and fails where the company says "Revenue" or "Total revenue" ("net sales" 3 of 11; P2 got 11) and for total debt (2 of 5). The `ProfitLoss` definition ("the consolidated profit or loss…") reads like a match for "net income", so which concept the driver means needs a driver-side definition or a ruling.
+  - **Luna, TEST:** xhigh kept 203 of 219 correct links (92.7%), 16 missed, 1 wrong (adjusted EBITDA → `AdjustedEarningsBeforeInterestTaxesDepreciationAndAmortization`, removed by the code guard); it picked `NetIncomeLoss` for net income at all 12 companies (no `ProfitLoss`). Luna verify lost 10 correct links and removed 0 wrong (193 kept).
+  - **Luna at lower effort:** wrong links after code checks: low 2 (both total debt → `LongTermDebt`, where the key has no total-debt concept); medium 4 (3 × total debt → `LongTermDebt`, `LongTermDebtAndCapitalLeaseObligations`, `LongTermDebtNoncurrent`, and MTDR total revenue → `RevenueFromContractWithCustomerExcludingAssessedTax` where the key is `Revenues`). xhigh picked none for total debt in those cases. One run per effort, so 90.0% vs 90.9% is not a difference.
+  - **Two models must agree (TEST, after code checks):** Luna xhigh + Haiku pick: 188 links, 0 wrong (85.8%). Luna xhigh + Jev P2: 192 links, 0 wrong (87.7%). Luna low + Haiku pick: 183 links, 1 wrong (83.1%); Luna low + Jev P2: 188 links, 0 wrong.
+  - **Code checks at scale (`xbrl_checks.py`):** they can only refuse a link, never create one. They blocked 0 of 203 correct Luna xhigh links, and 0 of 2,983 correct picks over all pick-only arms on DEV and TEST (the same cell counted once per arm). Run on all 290 real metric names, the guard's substring matching wrongly blocked names ("ratio" inside "operations"); it was changed to whole-word matching (52 → 44 blocked, TEST results unchanged). The 44 still include real line items (for example "interest rate swap notional amount", "growth capital expenditure"), because the word lists are crude. The checks were written fresh from rules 6.4/6.6, not from the old linker code.
+- **Decision guide (concept linking).**
+  - **Scope:** tested = a driver (metric name) → concept, per company. Per the rules it is resolved once per company and driver, and every driver update carries it (guidance and surprise inherit, actions never link). **Not tested:** a driver update → its exact tagged fact, members and axes (rule 6.9).
+  - **Options** (TEST, 219 correct links; wrong counts include the `ProfitLoss` picks):
+
+| # | Option | Correct links kept | Wrong | Trade-offs |
+|---|---|---|---|---|
+| 1 | Haiku + verify + code checks | 84.9% | 0 | Subscription, so rule 8.12 is met and there is no dollar cost. One vendor: the verify is the same model. |
+| 2 | Jev alone, hand hints + code | 95.0% | 4 (0 if `ProfitLoss` accepted) | Hints written by Claude after seeing misses (new clause). Jev pay-per-use in production needs a rule 8.12 exception. About $30 for ~32K cells (795 companies × ~40 names; extrapolated). |
+| 3 | Jev alone, definitions + company labels + code | 88.1% | 9 (1 if accepted) | No hand text; needs the reader run per company. About $50 for ~32K cells. Same 8.12 exception. |
+| 4 | Jev and Haiku must agree, + code | 84.9% (hints) / 79.0% (definitions) | 0 | Second vendor. Both run; unlinked when they disagree; 8.12 exception. |
+| 5 | Option 1, Jev audits a random ~10% | as option 1 | as option 1 | Untested. |
+| 6 | Luna xhigh alone + code checks | 92.7% | 0 | ChatGPT subscription (a usage limit, not dollars; rule 8.12 says "subscriptions only" but also "no switching providers", so a non-Anthropic model needs a ruling). No tuning or hand text. A different vendor from Haiku and from the Sonnet key makers. Slow: 38–561 s per company. Low/medium: 90.9% / 2 wrong and 90.0% / 4 wrong (total debt → a debt concept where the key has none). One run, 12 companies. |
+
+  - **`ProfitLoss` ruling:** A = "net income" links to `NetIncomeLoss` only (attributable to the parent); `ProfitLoss` (including noncontrolling interest) is another driver; add the convention to rule 6.6, Jev's prompt and the code veto. B = accept either. Affects 4–8 of 219 links.
+  - **Precision:** none of this can prove 100%. 0 wrong of 186 links bounds the rate under ~1.6% (95% confidence); ~300 links with 0 wrong would bound it under 1%. Missing links are harmless (rule 6.1).
+  - **Recommendation (Claude):** rule A on `ProfitLoss`. Main path: option 6 (Luna xhigh + code checks; highest kept links with 0 wrong, no hand text, no dollars) if you rule a second provider acceptable under 8.12 ("no switching providers"), otherwise option 1 (Haiku). Add a sample audit by a second model (option 5) either way, and log every link the code checks block, with an offline review of the guard word lists before rollout. Use Jev as a second vote (option 4) only if you grant the 8.12 exception. Rerun on ~12 more fresh companies with the `ProfitLoss` convention added; do not use low or medium (more wrong links, one run each).
+- **Limits:** key = Sonnet labelers (same vendor as Haiku; Jev is a different vendor), not owner-approved. TEST is 12 companies. Luna ran on TEST only, once per effort, through `codex exec` (not the Anthropic-SDK path of the rules). The hints were designed after seeing DEV. Haiku's input differs from Jev's (whole list `qname|label` vs chunks with label, period, balance and type) and it ran as helper agents. The earlier published Haiku figures (93.7% recall, 1 wrong; rule 6.x says about 70%) were not reproduced or reconciled.
+- **Files** (in `DriversFinal/Archive/JEV scripts/`): `build_xbrl_c1.py`, `build_xbrl_c1_test.py`, `make_xbrl_c1_key.py`, `make_xbrl_c1_test_key.py`, `xbrl_checks.py`, `run_xbrl_c1.py`, `run_xbrl_c1_v.py`, `build_hk_verify.py`, `build_c1_defs.py`, `score_xbrl_c1.py`, `score_xbrl_c1_compare.py`, `score_xbrl_c1_v.py`; `c1_menus.json`, `c1_test_menus.json`, `c1_test_menus_defs.json`, `xbrl_c1_key.json`, `xbrl_c1_test_key.json`, `results_xbrl_c1*.json`. Reader output for the 12 filings: `scripts/xbrl_metadata_pilot/evidence/c1_test/`.
+
 ## 7. Fact-type prompt versions
 
 **Where the texts are:**
@@ -595,7 +761,7 @@ This covers 220 of the 221 rules; rule 5.8 is plain code with no Jev role. It is
 | 6 | Identity judge: five yes/no per candidate, family gate, Choice among K candidates + "none" (K + none ≤ 255). Highest stakes; test last | 2.4, 2.26, 2.32, 2.40, 2.43, 2.47 | B, C, L, Z |
 | 7 | XBRL line-item matcher | 6.1, 6.4, 6.5 | C |
 | 8 | Forecast bookkeeping: corrections, withdrawal scope | 4.5, 4.18, 4.19, 4.21 | P |
-| 9 | Missed-fact sweep: tag every sentence and table row, compare with the reader's output. Whole corpus: about 22–58M calls, 13–34 days at 1,200 requests/min, $0.5–3K | 8.14, ⚠ under 4.17 | D |
+| 9 | Missed-fact sweep: tag every sentence and table row, compare with the reader's output. Whole corpus: 33.1M units, $1.2K (plain tags) to $4.5K (full card), 2–7 days at the observed rate, 19 at the documented one (§6.7). Tag screen tested (§6.6) | 8.14, ⚠ under 4.17 | D |
 | 10 | Rule-gap finder: low confidence flags ambiguous rules | — | T |
 | 11 | Second grader for the launch test (qualify it first) | 8.17, 8.18 | X |
 | 12 | Price-move verdicts: Choice long/short + Score weight + confidence; separately approved source; multi-step, least likely to reach 99% | A2.3 | F |
@@ -611,7 +777,7 @@ This covers 220 of the 221 rules; rule 5.8 is plain code with no Jev role. It is
 | A | Code finds candidate numbers; Jev picks the value, change or baseline and reads shape and sign; code copies the pick | `pre_parsed_value_extraction_cookbook` | 3.50, 4.6, 3.48, 3.34, 1.13, 1.17 | **Fits.** Jev can't pick a number code missed; number words need a frozen list (8.6); spans must lie inside the quote (3.29) |
 | B | Broad to narrow: family, sub-group, driver (Choice ≤ 255 options) | `hierarchical_classification`, `classification_using_confidence` | Identity 2.40, 2.43 | **Needs OK.** Proposer only (8.2). If unsure, keep the fact's own name (1.12, 2.43), never join the parent family |
 | C | Shortlist the top 3 (code or Jev), then one yes/no re-check each | `skill_suggestion`, `entity_alignment`, `rerank_typesafe` | Identity; XBRL 6.1, 6.5 | **Needs OK.** Paid embeddings need approval (8.12), BM25 is free; the approver never sees scores (8.2); a refusal is final (2.47) |
-| D | Find the lines that state a driver; per-line yes/no | `semantic_find` | Missed-fact check (⚠ under 4.17, 8.14) | **Needs OK.** Before saving only (6.20); a flagged event needs an outcome rule (8.14, 8.15) |
+| D | Find the lines that state a driver; per-line yes/no | `semantic_find` | Missed-fact check (⚠ under 4.17, 8.14) | **Needs OK.** Before saving only (6.20); a flagged event needs an outcome rule (8.14, 8.15). Tag screen tested (§6.6) |
 | E | Rebuild headings from flat text | `autoformat` | Flat 8-K text | **Conflicts** with 1.17 (8-K tables: original only); can't rebuild tables anyway. Low value |
 | F | Text to numeric features that predict returns | `autoresearch_feature_discovery` | Trading side (1.3, 1.4) | **Needs OK, outside the rules:** A2.1, A2.5, 1.14 (no returns shown to producers; walk forward), 9.5 |
 | G | Jev reads date parts; code does the calendar math | `date_extraction_cookbook` | Periods 3.36–3.47 | **Fits.** The docs' relative dates don't occur here; ours are fiscal wording |
@@ -634,6 +800,13 @@ This covers 220 of the 221 rules; rule 5.8 is plain code with no Jev role. It is
 | X | Label accelerator: Jev pre-labels answer keys; people review low-confidence items and a sample | Use-case map | Keys; second grader (8.17) | **Setup-only.** Qualify graders first; a key made with Jev can't test Jev |
 | Y | Qualifier check: does the quote hold a modifier the tags miss? | From the rules | 3.25, 3.26 | **Fits** |
 | Z | Veto-only merge checker: the five identity yes/no (2.40); any "no" = keep separate | From the rules | 2.40, 1.12, ⚠ one vendor | **Fits.** More near-duplicates; qualify first (8.13) |
+| AA | One field registry: every prompt (pick, verify, tag) generated from one `field` spec that holds the verbatim rule text | `primitives/advanced`; `sde_cascade` | 1.9, ⚠ rule drift | **Fits (process).** Claim-checker v1 wording had drifted from V6's definitions (§6.5) |
+| AB | Structured claims: `field` + `extracted_value` Noul instead of an English claim sentence | `primitives/advanced` | 1.11, 8.17 | **Untested.** Targets literal-reading false flags ("fuel hedging persists"); ask a Choice (re-classify) and the Noul (verify) in one call |
+| AC | Identity the docs' way: one Noul per candidate record (name, type, frozen evidence as an object), fixed question, database id in the question id, all candidates in one request | `primitives/noul` (resume duplicates) | 2.40, 2.43 | **Needs OK.** Refines C and Z; the five checks of 2.40 as an array or five Nouls per candidate |
+| AD | Option subtrees as values (children + sample leaves) with beam search on probabilities | `primitives/advanced` (taxonomy walk), `hierarchical_classification` | Identity 2.43 | **Needs OK.** Refines B and L |
+| AE | Second-best probability as a "second fact" signal (docs: notify a second team above 0.25) | `primitives/choice` | Mixed quotes 4.1, 4.14 | **Needs a frozen threshold (8.6).** Cheap to test on the split dividend claims |
+| AF | `inspect` and `focus` keys; `true`/`false` objects with `what` + `examples` | `primitives/advanced`, `primitives/noul` | Tags; 1.9, 2.21, 2.44 | **Tested (§6.6):** no overall gain over plain wording, helped the surprise boundary; examples need owner OK |
+| AG | Combine tags in code: max type tag minus a boilerplate weight, threshold tuned offline | `patterns/composite-scoring` | 8.6 (weights and bars are owner-frozen) | **Tested (§6.6):** flagged share 56% → 36–37% at ≥ 99.5% recall |
 
 ### 9.3 Combinations, checks and first tests
 
@@ -659,7 +832,7 @@ Mixed probes (one question asked as yes/no and as Choice; disagreement = hold) m
 - Does adding questions to a request change the answers? The docs say it does not.
 - The Python SDK has an async client and retries.
 
-**Claims to verify on our data:** "0.8 means right 8 times in 10" (Video 1); "42,000x cheaper" (Video 1); "available on OpenRouter" (Video 1; not in the docs). Every docs threshold is an illustration.
+**Claims to verify on our data:** "0.8 means right 8 times in 10" (Video 1); "42,000x cheaper" (Video 1); "available on OpenRouter" (Video 1; not in the docs). Every docs threshold is an illustration. Measured: the docs say extra questions are "close to free" (`primitives`); true for time, not for our cost, because the questions are about 5× the size of the sentence (§6.7).
 
 **Suggested first tests** (each costs cents):
 1. H against a different reader's real errors (needs Phase 6 approval for a reader model).
@@ -670,7 +843,7 @@ Mixed probes (one question asked as yes/no and as Choice; disagreement = hold) m
 6. U, stability.
 
 **Docs**
-- **Read:** 4 patterns, 18 cookbooks, the use-case map, build guide, state, Choice, Noul, Score, advanced, confidence, models, API limits, the smart-home demo, coding-agents.
+- **Read:** 4 patterns, 18 cookbooks, the use-case map, build guide, state, Choice, Noul, Score, advanced, confidence, models, API limits, the smart-home demo, coding-agents. The primitives pages (overview, Choice, Noul, Score, advanced) and `patterns/fan-out` were re-read raw on 2026-09-30.
 - **Not read:** Quick Start, AI Primer, System One page, Agent Skill, Legal, SDK pages.
 
 ## 10. Constraints from the rules
@@ -703,6 +876,7 @@ Mixed probes (one question asked as yes/no and as Choice; disagreement = hold) m
 12. **8.17:** "under 1% wrong at 95% confidence" needs about 300 graded facts.
 
 ## 11. Where things are
+- **Note (2026-09-30):** the owner moved `JEV scripts/` and the older rules files into `DriversFinal/Archive/`; paths in this file that say `JEV scripts/` now mean `DriversFinal/Archive/JEV scripts/`.
 - **Data:**
   - labels: `.claude/plans/Drivers/experiments/runs/kf-*`;
   - source text: `.claude/plans/Drivers/experiments/fixtures/events/*.json`.
@@ -711,7 +885,8 @@ Mixed probes (one question asked as yes/no and as Choice; disagreement = hold) m
   - the input builder, every prompt version, and the build/run/score scripts;
   - the frozen labels and inputs, with their hashes;
   - the per-rule fit map;
-  - the claim-checker results.
+  - the claim-checker results;
+  - the sweep and tag scripts, their stats files (`sweep_*_stats.json`) and the frozen tag labels (`tag_labels.json`).
   - Not saved (regenerate for cents): `h1_raw.json` (`pull_h1.py`, needs Neo4j) and the other `results_*.json` (rerun that test's `run_*.py`). The original working copy in `/tmp` is gone.
 - **Pre-reorganization copy of this file:** `~/.claude/projects/-home-faisal-EventMarketDB/backups/JEV.before-reorg-2026-09-29.md`. Git commit `424d2e5af` has an older draft.
 
@@ -884,6 +1059,264 @@ Metric-state claim (the rows of rule 3.6). `{n}` is the driver name:
  "unchanged": "{n} is unchanged (the quote states it is flat).",
  "persists": "{n} persists (the quote says it is ongoing, with no direction).",
  "reported": "{n} is reported as a bare value (the quote gives a value with no direction and no prior value)."
+}
+```
+
+</details>
+
+<details>
+<summary>A.11 Tags, plain wording P (recommended) — <code>tag_prompts.py</code> <code>variant("P")</code> (five Noul questions in one request; the state has the four named fields of §5.3 without the driver name)</summary>
+
+```json
+{
+ "states_metric": {
+  "type": "noul",
+  "instructions": "Does `quote` state a value or condition, of something about the company or its markets, that is a standing variable readable again over time (a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand)? `text_before_quote` and `text_after_quote` are the text around `quote`; use them only to see what `quote` refers to."
+ },
+ "states_guidance": {
+  "type": "noul",
+  "instructions": "Does `quote` state the company's own forward outlook, target or forecast? `text_before_quote` and `text_after_quote` are the text around `quote`; use them only to see what `quote` refers to."
+ },
+ "states_surprise": {
+  "type": "noul",
+  "instructions": "Does `quote` state a company value, delivered (an actual) or promised (a company forecast), compared with an expectation held by another party (analyst consensus or the Street, or for an actual the company's own earlier forecast)? `text_before_quote` and `text_after_quote` are the text around `quote`; use them only to see what `quote` refers to."
+ },
+ "states_action_event": {
+  "type": "noul",
+  "instructions": "Does `quote` state a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)? `text_before_quote` and `text_after_quote` are the text around `quote`; use them only to see what `quote` refers to."
+ },
+ "is_boilerplate": {
+  "type": "noul",
+  "instructions": "Is `quote` only boilerplate, a heading, a cross-reference, a definition or a disclaimer, with no specific fact about the company? `text_before_quote` and `text_after_quote` are the text around `quote`; use them only to see what `quote` refers to."
+ }
+}
+```
+
+</details>
+
+<details>
+<summary>A.12 Tags, structured wording S (docs style; the examples are invented) — <code>tag_prompts.py</code> <code>variant("S")</code></summary>
+
+```json
+{
+ "states_metric": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` state a value or condition, of something about the company or its markets, that is a standing variable?",
+   "inspect": "quote",
+   "focus": "Judge what `quote` itself states. A heading, a page reference or a row label without a value states nothing."
+  },
+  "criteria": {
+   "true": {
+    "what": "It states a value or condition that is a standing variable readable again over time (a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand).",
+    "examples": [
+     "Net sales were $2.1 billion.",
+     "The workforce numbered 4,500 at year end.",
+     "Our credit facility remains in place."
+    ]
+   },
+   "false": {
+    "what": "It states no such value or condition: it is a heading, a cross-reference, a forecast, a one-time happening or a comparison with an outside expectation, or it names a measure without stating it.",
+    "examples": [
+     "See Note 6 for more information.",
+     "Total revenue",
+     "We expect margins to improve."
+    ]
+   }
+  }
+ },
+ "states_guidance": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` state the company's own forecast?",
+   "inspect": "quote",
+   "focus": "Only the company's own outlook counts, not an analyst's or another party's expectation."
+  },
+  "criteria": {
+   "true": {
+    "what": "It states the company's own forward outlook, target or forecast.",
+    "examples": [
+     "We expect margins to improve in the second half.",
+     "The company is targeting $500 million in savings by 2028."
+    ]
+   },
+   "false": {
+    "what": "It reports what already happened or what is true now, or the forecast belongs to someone other than the company.",
+    "examples": [
+     "Revenue grew 5% last year.",
+     "Analysts expect strong growth next year."
+    ]
+   }
+  }
+ },
+ "states_surprise": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` compare a company result or forecast with an outside expectation?",
+   "inspect": "quote",
+   "focus": "The comparison must be with an outside expectation, or for a result the company's own earlier forecast, and not with the prior period."
+  },
+  "criteria": {
+   "true": {
+    "what": "It states a company value, delivered (an actual) or promised (a company forecast), compared with an expectation held by another party (analyst consensus or the Street, or for an actual the company's own earlier forecast).",
+    "examples": [
+     "Earnings per share of $1.20 beat the consensus estimate of $1.10.",
+     "Results were in line with the Street's expectations."
+    ]
+   },
+   "false": {
+    "what": "It states no such comparison. A comparison with the prior period, or a new forecast set against the company's own earlier forecast, is not one.",
+    "examples": [
+     "Revenue rose 5% from a year earlier.",
+     "We raised our full-year outlook from our earlier forecast."
+    ]
+   }
+  }
+ },
+ "states_action_event": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` state something that happened at one point in time?",
+   "inspect": "quote",
+   "focus": "A continuing condition or a standing level is not a discrete happening."
+  },
+  "criteria": {
+   "true": {
+    "what": "It states a discrete thing that happened (a decision, transaction, incident, approval or one-off charge).",
+    "examples": [
+     "The board approved a $200 million share repurchase.",
+     "The company completed the acquisition on March 3.",
+     "We recorded a one-time impairment charge."
+    ]
+   },
+   "false": {
+    "what": "It states a standing level or condition, a forecast or plan, or nothing that happened.",
+    "examples": [
+     "Our fleet includes 900 aircraft.",
+     "We intend to grow through acquisitions."
+    ]
+   }
+  }
+ },
+ "is_boilerplate": {
+  "type": "noul",
+  "instructions": {
+   "question": "Is `quote` only boilerplate?",
+   "inspect": "quote",
+   "focus": "Boilerplate says nothing specific to this company's results, plans or events."
+  },
+  "criteria": {
+   "true": {
+    "what": "It is only boilerplate, a heading, a cross-reference, a definition or a disclaimer, and states no specific fact about the company.",
+    "examples": [
+     "Forward-looking statements involve risks and uncertainties.",
+     "See Item 1A for more information.",
+     "Table of Contents"
+    ]
+   },
+   "false": {
+    "what": "It states something specific about the company's results, position, plans or events.",
+    "examples": [
+     "Net sales were $2.1 billion.",
+     "The board approved a dividend."
+    ]
+   }
+  }
+ }
+}
+```
+
+</details>
+
+<details>
+<summary>A.13 Tags, old short set B0 (used for the sweep estimate) — <code>sweep_corpus.py</code> <code>SET_B</code></summary>
+
+```json
+{
+ "is_fact": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` state a fact about the company?",
+   "read": "Judge `quote`. `text_before_quote` and `text_after_quote` are the text around it; use them only to see what `quote` refers to."
+  },
+  "criteria": {
+   "true": {
+    "what": "It states something that is true or planned for the company."
+   },
+   "false": {
+    "what": "It is boilerplate, a disclaimer, a heading or a bare mention."
+   }
+  }
+ },
+ "is_forecast": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` give the company's own forecast or outlook?",
+   "read": "Judge `quote`. `text_before_quote` and `text_after_quote` are the text around it; use them only to see what `quote` refers to."
+  },
+  "criteria": {
+   "true": {
+    "what": "The company itself says what it expects or targets."
+   },
+   "false": {
+    "what": "It reports what happened, or the forecast is someone else's."
+   }
+  }
+ },
+ "vs_expectation": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` compare a result or forecast with an outside expectation such as the consensus?",
+   "read": "Judge `quote`. `text_before_quote` and `text_after_quote` are the text around it; use them only to see what `quote` refers to."
+  },
+  "criteria": {
+   "true": {
+    "what": "It compares with analysts or another outside party."
+   },
+   "false": {
+    "what": "No such comparison."
+   }
+  }
+ },
+ "has_number": {
+  "type": "noul",
+  "instructions": {
+   "question": "Does `quote` state a number or an amount?",
+   "read": "Judge `quote`. `text_before_quote` and `text_after_quote` are the text around it; use them only to see what `quote` refers to."
+  },
+  "criteria": {
+   "true": {
+    "what": "It gives a number, an amount or a percentage."
+   },
+   "false": {
+    "what": "It gives none."
+   }
+  }
+ },
+ "kind": {
+  "type": "choice",
+  "instructions": {
+   "question": "Which kind of fact does `quote` state?",
+   "read": "Judge `quote`. `text_before_quote` and `text_after_quote` are the text around it; use them only to see what `quote` refers to."
+  },
+  "criteria": {
+   "metric": {
+    "what": "A standing level that can be read again."
+   },
+   "guidance": {
+    "what": "The company's own forecast."
+   },
+   "surprise": {
+    "what": "A result compared with an outside expectation."
+   },
+   "action_event": {
+    "what": "A one-time happening."
+   },
+   "none": {
+    "what": "No fact."
+   }
+  }
+ }
 }
 ```
 

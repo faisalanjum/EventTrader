@@ -1725,6 +1725,171 @@ Rule lists are script-made from the file: 221 rules, each in exactly one home.
 **2026-09-29, owner (Codex's approval note, "Is this already done?"):** approve recording P7 and the two diagram clarifications, with wording: "keep verdict production blind to the return" (not "change the Learner"; its after-the-event learning role may stay separate); "grading against a return the producer already saw is not an independent test" (not "the grade means nothing"); keep the one-fact-per-verdict-key restriction; this records the unresolved choice, it approves no change to the Learner or the blindness rules.
 → Fable: P7 row reworded accordingly in both rules files and in Notion S5 → Open questions (checks: 221 rules once, 906/906 lines). The one-fact-per-key restriction stays in the EXPLAINED_BY row. Nothing else changed.
 
+**2026-09-29, owner:** "Can you put this link somewhere on the main workflow in Notion? https://github.com/faisalanjum/EventTrader/tree/main/.claude/plans/Drivers/DriversFinal" → Claude added one line on the Workflow page under the "Graph in Neo4j" line, in the same style: "📁 **Rules files on GitHub** — the rules, their sorted copy, the audit and the notes: [open the folder](…)". Nothing else changed.
+
+**2026-09-29, owner:** "Is there a driver harness or driver folder with core inside it?"
+- Claude: yes, `driver/core/` at the repo root: the new system's shared core, 56 files, 35 of them tests, single owner per its README. Next to it: `driver/channels/` (fiscal_ai) and `driver/relocation/`.
+- Separate: `drivers_harness/`, the older offline Pass-1 name-cleaner test setup (49 files, no `core` folder).
+
+**2026-09-30, owner:** "ready for compaction?" → resume point saved in memory. Uncommitted: only these scratchpad log lines.
+
+**2026-09-30, owner (after compaction):** "vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Categorized.md do you understand this well enough and any background context + everything in my Notion Drivers folder? Spend enough time to become fully aware of everything related to this. ultrathink"
+- Claude re-read (read only, nothing changed): all 1,343 lines of DRIVER_RULES_Categorized.md; all 32 Notion pages under Drivers (Drivers, Workflow, 11 box pages incl. System and Graph in Neo4j, 19 section pages); this log's decisions and owner words; DRIVER_CODE_GUIDE.md (new, another session); v1.1 Part B and C4; AUDIT_1_to_4.md outcome; JEV.md §1–3 and §10; FINAL_DESIGN §2 and §7.
+- Checked by script: Simplified and Categorized still match line for line (906 lines, 221 rules, 118 structure lines); every Notion "Rules here" list matches its section in the file (19/19, 221 rules).
+- Noticed (raised, not changed):
+  - Q1 (what green means) has no explicit answer; D15 says "covered and fully vetted", read as "design decided, not built";
+  - 2.30 (2a): unclear bare-name evidence → action_event with a warning outside live use, but skipped in live use; with no catalog run any more, what counts as live?
+  - S5 is on in release 1, but News is release ③ and A2.8 makes news the source of macro facts → release-1 verdicts can only point at facts from filings and calls (plus P7);
+  - 9 lines in the Categorized file cite the original section numbers (§1, §3, §4, §6, §7), which match no heading there; §N = the rules numbered N.x.
+
+**2026-09-30, owner:** "tldr" → Claude gave a 5-line summary.
+
+**2026-09-30, owner (new session, same request):** "…DRIVER_RULES_Categorized.md do you understand this well enough and any background context + everything in my Notion Drivers folder? Spend enough time to become fully aware of everything related to this. ultrathink"
+- Claude re-read (read only, nothing changed): all 1,343 lines of DRIVER_RULES_Categorized.md; all 32 Notion pages under Drivers (none has comments); this log (decisions, owner words, plans); DRIVER_CODE_GUIDE.md; AUDIT_1_to_4.md outcome and D1–D10; v1.1 Part B and C4; JEV.md §0–3. By search only: FINAL_DESIGN (OD-1, OD-2, OD-10, the 2026-07-15 Q3 ruling), FinalPlan Phase 6.
+- Checked by script: Simplified and Categorized still match (906 lines, 221 rules, 118 structure lines); every Notion "Rules here" list matches the file (19/19).
+- New points (raised, not changed):
+  1. The rules still hold two ways a Driver is born: an offline name list built once before go-live (the "catalog": Word list, 2.26, 2.36, 1.21, 8.17; unclear bare names → action with a warning, 2.30) and "live" creation (unclear → skipped, 2.30; 10.2). Origin: FINAL_DESIGN OD-1 "batch Track A AND live governed-create" and the owner ruling of 2026-07-15 (Q3: the catalog is an offline artifact; Driver nodes are born at their first fact). The Notion flow shows one route. "Live" also means "new events as they arrive" in the Word list. This sharpens the earlier 2.30 point.
+  2. Model choice: S4's ⚠ says "one strong model per task … no cascades, votes or fallbacks"; the owner allowed escalation to a generative model on 2026-09-29 (JEV.md §3.1, "Rule S4's wording is not yet updated"). Not on the parking list. The project CLAUDE.md still names FinalPlan Phase 6 (cheapest first, then escalate) as the authority.
+  3. S5 is on in release 1, so 10.1's three questions (how big a move counts, where a macro fact comes from, two causes for one move) are release-1 questions now; with News in ③, A2.8 leaves macro moves with no fact to point at (extends the earlier S5 point).
+  4. More pointers made stale by sorting (Categorized only): "see the top of this file" in home 1's picture legend (the source order is in the Overview), and "folded Part A2" in 3.12, S2 "Out" and 9.7 (A2 is open in S5).
+- Housekeeping: the "Start-here check" still listed as open was done by the audit (Backward row: 52 sentences, 0 hidden rules, 1 contradiction = D6). Not in git: DRIVER_CODE_GUIDE.md, 20 new files in JEV scripts/, and these log lines.
+
+**2026-09-30, owner:** "Now I want you to do one thorough analysis based on a varied, stratified sample of all financial text that you can find from my Neo4j database. For the driver, are the four types an exhaustive set? Plus, why are we trying to use the driver in terms of changing the unstructured text to structured text and using it as something to predict? Are these four fact types (metric, guidance, surprise, action, event) the perfect possible Sets But before you start, in a couple of lines, tell me what exactly you understood our primary goal is. ultrathink"
+- Claude (before starting, nothing run): stated the goal: predict how a stock moves after an event and trade on it; Drivers = one reusable name per cause + exact point-in-time facts, so the system can grade which causes really moved prices, give the predictor relevant past cases, and later trigger trades; under 1% wrong, no hindsight, simplest design, no human in the loop.
+- Noted a drift: `archive/ConceptualRequirements.md` ("Driver Summary" 1.5: "a driver is anything that led to a change in stock prices … never gets promoted to becoming a driver") vs rule 2.33 ("Whether a fact is stored never depends on whether it moved the stock").
+- Proposed a read-only plan (about 600 stratified sentences/table rows; 2 blind Sonnet labelers using the locked wording, 1.9; Claude checks every disagreement and misfit; report). Waiting for the owner's "go".
+
+**2026-09-30, owner:** "Our primary goal is to turn financial text into consistent, source-backed facts about reusable Drivers—so we can track changes, explain stock moves, learn what matters, and improve predictions. You want to challenge whether **metric, guidance, surprise, and action\_event** are the most useful and complete categories for that goal, using a varied, stratified sample from Neo4j—including evidence that might expose missing categories, overlaps, or unnecessary distinctions. . And now, is there a way to not use so many Sonnet helpers, but maybe use something simpler, but still have absolute confidence? First, tell me."
+- ✅ Goal (owner's wording) recorded as above: today's scope (every real fact, rule 2.33), not only price-moving causes.
+- Claude (nothing run): proposed a simpler method: script-drawn sample (fixed seed) → Claude labels every item → ONE blind Sonnet helper re-checks every flagged item plus a random 1 in 10 of the rest → every gap shown with its exact quote. About 2–4 helper runs instead of about 50. Honest limit: a sample proves a gap with certainty but can only bound "nothing missing" (600 clean items → under about 0.5% at 95% confidence). Noted: nothing can fit no type (metric vs action is a yes/no test, 1.5), so the hunt is for bad fits. Waiting for "go".
+
+**2026-09-30, owner:** "Yes, do that, but do not rush in. Take as much time as you need. I want an absolute guarantee beyond an ounce of doubt. ultrathink"
+- Done (read only; no rules, Notion or database changed). Report: `~/.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/FACT_TYPES_STUDY_2026-09-30.md` (all inputs, labels, scripts and helper files in the same folder).
+- Method: 873 pieces of text, 17 kinds, 331 companies, 11 sectors, 2021–2026 (fixed seed; re-run byte-identical, sha256 c50c0904…); Claude labeled all; 4 blind Sonnet helpers labeled 317 (the 178 flagged + a random 139 of the rest; 1 in 5 instead of the planned 1 in 10, for the "absolute" ask); 37 adjudication changes logged with reasons.
+- Results: 510 facts, all typed (by design, 1.5). Clean 90.2% [87.3–92.5]; filings 92.7%, calls 88.6%, news 82.0%. Claude's miss rate on items called fine: 2/139 = 1.4%. Any unseen kind of misfit < 0.34% of text (95%).
+- Findings: (1) cause links between facts have no home: 15% of fact-bearing pieces, 29% on calls (helper agreed 42/50); (2) someone else's forecast/rating (analyst targets) has no proper type: 18% of news facts, 0% of filing facts; 46% of all news stories (19/20 agreed); (3) metric-vs-action overlap 1–3% (contested; one-off charge lines, lawsuits, activity counts, policy starts); (4) guidance-vs-action 4–6 pieces; (5) sensitivities/contributions; (6) "vs peers" state gap NOT confirmed (0/4); (7) surprise could merge into its home fact (2.4% of facts, 0 from filings): keep for now.
+- Side findings: physical units missing from 3.28 (14% of earnings releases); the stock's own move inside source text (1.14 risk); two-date maturity schedules; date-valued facts; analyst-stated facts in Q&A look like company facts; KPI redefinitions with restated history; encoded junk text in some filings.
+- Recommendations given (nothing applied): decide a fact→fact "explained by" link during the S5 study; an `expectation` type with a "whose" field when News is admitted; clarifying sentences for metric-vs-action in 2a; keep surprise for now; ask whether physical units become a parking item.
+
+**2026-09-30, owner:** "TLDR" → Claude gave a short summary of the study: the four types fit what companies say about themselves (90% clean); the gaps are why something changed (cause links) and other people's forecasts and ratings (news); smaller: metric-vs-action overlaps, missing physical units. It put the two decisions off to the S5 study and the News release (the owner overruled that in the next message: whole design).
+
+**2026-09-30, owner:** "First thing is, this is the entire design, not release 1 versus release 2, so why something changed We need to think about it. As well as, like you said, both one and two, we need to think about it. But what I want right now is for you to have a look at this file that Codex created and tell me what additional information is needed so that all of that work that you did is absolutely not wasted. Meaning, when I pass it to a new agent, it can build off of what you did, not necessarily in terms of code, but in terms of your recommendations and reasoning, and especially why you provide that kind of reasoning. vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/fact_types.md Before you start, tell me exactly where you differ and what you would like to change, and why, especially those two things. We are not looking for 90% facts. Also, if there are any units or something missing, we need a comprehensive list as well, so we can be sure.  Like I said, we are looking at close to 100%, so those two things are also important that you mentioned. For now, tell me exactly where you differ and what you would add to that file, and why. The idea is also to pick up the best of both worlds. Once you give me this, I can pass it to Codex to validate.  ultrathink"
+- ✅ Owner rulings: whole design, not release 1 vs release 2 (releases only decide when parts switch on); aim for close to 100%, not 90%; both items (why something changed; others' forecasts and ratings) are designed now.
+- Found: Codex had already rewritten DriversFinal/fact_types.md at 09:57 (it includes my study and 4 corrections; `~/driver_typology_audit_20260930/claude_review_verification.json`). At 10:00 DriversFinal was reorganized, not by Claude: Simplified, DRIVER_RULES.md, AUDIT_1_to_4.md and this log moved to DriversFinal/Archive/.
+- Accepted Codex's corrections (checked against my files). They correct the numbers in the study entry above:
+  - fact-level miss rate 2/41 = 4.9% [1.3–16.1], not 2/139 (98 of the 139 had no facts);
+  - the "< 0.34%" bound is withdrawn;
+  - my helper guide stated the third-party premise, so the 19/20 agreement proves nothing on that point;
+  - new: helpers saw facts in 3 of 98 pieces I had dropped as boilerplate (S04-047, S10-010, S14-029).
+- New read-only evidence:
+  - units: all 12.4M tagged filing numbers are 98.6% dollars, shares, ratios or dollars per share; in 9,100 random documents a physical unit appears in 14.5% of 8-K press-release exhibits, 20.9% of MD&A, 46.8% of 10-K Business/Properties, 21.5% of call remarks, 2.1% of Q&A and 1.7% of news;
+  - news (4,000 random stories): price target 48.3%, rating actions 42.9%, analyst estimates 10.8%.
+- Claude's differences from Codex (nothing applied):
+  - (1) why something changed: a stated-cause link between two facts of the same source, designed now with a spec, not "evaluate";
+  - (2) others' targets, estimates and consensus: a forecast home (pick: a 5th type `expectation`) plus a named holder in the series; ratings: agree with Codex;
+  - (3) units: the official XBRL unit registry now, not a parking item;
+  - also: whole-design framing; the owner's goal words verbatim; CPI-style surprise now, as one shared macro fact; a counted "fits nowhere" outcome.
+- Also given: a 35-item gap list; projection: all 50 non-clean facts get a named home; proof plan: fresh test, 1 piece per document, neutral guide, 2 labelers, ≥300 facts per source.
+- Review file for Codex (outside the repo): `~/.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/CLAUDE_REVIEW_OF_fact_types.md`; scan files in `units_scan/` next to it. 7 edits to fact_types.md proposed, not applied.
+
+**2026-09-30, owner:** "Yeah, keep logging there, but for now, wait for Codex's reply."
+- ✅ This log stays at DriversFinal/Archive/WORKFLOW_SCRATCHPAD.md. Waiting for Codex's reply; nothing else done.
+
+**2026-09-30, owner:** "Can you check the fact types.md and ensure it's perfect and in line with everything that you wanted? Leave no stones unturned. Do not rush in. Take as much time as you need because I want the conclusions put in there to be perfect and 100% accurate, and think independently. vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/fact_types.md ultrathink"
+- Claude: review started (read only). fact_types.md last changed 10:35 (not by Claude); other files in DriversFinal are also changing (XBRL_Definitions.md 10:37, JEV.md 10:29).
+- Review done (fact_types.md untouched). Reviewed the 10:39 version (Codex's 10:35 text plus a new "Actionable recommendations" top section), Codex's 35-item cross-check (`~/driver_typology_audit_20260930/claude_review_20260930/review_findings.json`) and its other check files.
+- Verdict: accurate in substance, and Codex adopted Claude's main points: whole design; a 5th type `expectation`; stated-cause links; units and currencies now; macro surprise; counted `no_type_fits`. Codex's corrections to Claude were checked and accepted (for example: blanket cash-flow clause withdrawn, 1.8/2.27; "common = boilerplate" test withdrawn; 6.20 does not govern the new link; 39 currencies, not 43).
+- Proposed, not applied (waiting for the owner's yes):
+  - 7 wording fixes: a misquote ("50 gaps fixed"); "My earlier" means Codex; "forms" → types; the Driver definition in the rules' words; 2.30 is live-use only; coverage wording (4.4); 9,100 source parts, not pieces;
+  - 5 missing conclusions: metric-vs-action boundary (17 of the 50 non-clean facts); someone else's pending decision; capture rule (2.33); a rules-to-reconcile line; unit symbol trap (text "MT" = metric tons, registry MT = million tons; registry M = month);
+  - 2 evidence items: key reproducible screens; a link to Claude's errata.
+- New Claude files (outside the repo): `backups/fact_types_study_2026-09-30/CLAUDE_ERRATA_2026-09-30.md`, `capture_disputes.py` (helpers saw facts in 10 pieces the final labels lack, not 3), and in `units_scan/`: `strict.py` (110/112 hand-checked hits real), `news_analyst_screen.py`, `news_channels.py` (7-channel union 161,624 = 46.35%).
+
+**2026-09-30, owner:** "Okay, while Codex is checking your work, is it fine if I give you a side task, basically a conversation between me and Codex, so you can come up with your own answer after rigorous thinking and independent analysis?"
+- Claude: yes. The fact_types.md edits stay on hold (none applied) until Codex's check and the owner's yes.
+
+**2026-09-30, owner (side task):** pasted a Codex exchange. Codex had proposed: keep creating Drivers one at a time; remember "fact A caused fact B" with temporary refs; process A, then B; resolve to accepted DriverUpdate IDs; independent check; write the edge idempotently; no link if either fact fails (driver/core/driver_writer.py:156). Owner's question to Codex: "Can you add this? Can you first rethink this? Is this the actual way? Because it might even be possible that I might be feeding individual sentences or individual paragraphs to, let's say, JEV. In that case, what you suggested above may not be possible because it wouldn't even know what the references are unless those two are found together. Or another better way, I don't know. What are you suggesting? Keeping costs of reading tokens down, but still finding references which are certain and not anything uncertain. I want you to think through all of these and then tell me." Codex started rethinking (link within the supplied text, add nearby context only when needed, resolve IDs after acceptance). Owner asked Claude for an independent answer.
+- Claude's independent answer (read only; nothing edited; no model calls):
+  - Measured where stated causes sit, on the saved random sample: about 1M cause-word sentences across MD&A, 8-K exhibits and calls; 93 hand-checked.
+  - Of the real links: about 3/4 have both sides in one sentence, about 1/5 point one sentence (or the table) back, a few % sit in a "the following:" list; 0 of 93 were farther. About 40% of cause-word sentences are not links (safe-harbor boilerplate, definitions, table headers).
+  - Recommendation: accept facts first (any chunk size). Code then pairs accepted facts of the same event that sit in one small window (same sentence / plus the one before / lead-in + bullets). A judge (JEV or a Phase 6 model) answers one question per pair on that window. Code checks direction and amounts. The edge is written in the same per-event batch (driver_writer plan_event_write), keyed against duplicates. Anything else gets no link and a counted reason.
+  - Rough cost: $100–300 for the corpus at JEV's billed price. A locked pilot is needed (owner OK).
+  - Files: `backups/fact_types_study_2026-09-30/cause_link_locality/`.
+
+**2026-09-30, owner:** "TLDR Please explain to me what you are saying. What is your opinion or your plan for this?" → Claude gave a short plain summary of the cause-link plan (facts first, then code pairs nearby facts, a judge says yes/no, uncertain = no link).
+
+**2026-09-30, owner:** "I don't like any code because it is specific stuff, because it can't have an exhaustive list, and we will miss everything. We need something more concrete. Read what Codex did in fact types.md, and maybe you have a suggestion there."
+- ✅ Owner ruling: no code word lists (cause words) for finding links; lists are never complete. Claude re-reading fact_types.md for a meaning-based design.
+- Read Codex's 11:03 fact_types.md edit and `~/driver_typology_audit_20260930/causal_links_chunked_design/design_review.json`. Codex also says a cue-word regex must not be the gate. Its design: the reader finds both claims inside its own chunk (+1 bounded expansion); cross-chunk pairs stay unlinked ("sacrifices coverage").
+- Claude's suggestion (not applied):
+  - drop the word list;
+  - facts first; each keeps its exact place (one packet = one event with its ordered text, ChannelContract §3);
+  - one meaning question with each fact's normal checks ("does the text say why this changed / what offset or made it up?");
+  - for yes-facts, a menu of the other accepted facts in that sentence, the one before, or its list lead-in; the judge decides each by meaning;
+  - save clear links in the event write; the rest unlinked and counted;
+  - this keeps the ~1/5 of links that point one sentence back, which Codex's design drops.
+
+**2026-09-30, owner:** "Can you explain to me what your code does in as few lines as possible, or what your above algorithm does in as few lines as possible, and how it is different from Codex in terms of simplicity and cost?" → Claude: 4-line summary + a Codex comparison table (who finds the link, the previous-sentence case, works with JEV, cost, simplicity).
+
+**2026-09-30, owner:** "Okay, side by side, can you add yours also, like your paragraph, your algorithm versus Codex, and keep it in that file, but make sure to keep it concise? I'm trying to maintain it nicely and clearly. When a new bot is reading your suggestions, he should have a complete understanding just by reading it, not have to decipher anything. Keep both his recommendation versus yours."
+- ✅ Done (owner-requested edit), 11:19. DriversFinal/fact_types.md:
+  - Codex's paragraph replaced by a section "Cause links with sentence/paragraph inputs — two proposals (owner to choose)": a Shared line, Codex's paragraph verbatim, Claude's 4-step paragraph, and a 6-row comparison table;
+  - top bullet 2 points to it.
+  - Backup: `~/.claude/projects/-home-faisal-EventMarketDB/backups/fact_types.before_claude_side_by_side_111829.md`.
+- At the same moment (11:19:05) Codex applied its own revision on top: five types; 10 capture disputes; metric/action; units trap; rules-to-reconcile line (adds 8.9–8.10: 8.10 requires whole-event reading); errata link; revision review `claude_revision_2_20260930/`. Both edits are intact (checked).
+- Codex caught a Claude error, checked and accepted: the unit hand check was 113 excerpts with 107 real, not 110/112 (4 flattened-table rows mispaired). A dated correction was added to Claude's errata.
+
+**2026-09-30, owner:** "Check the document again and see if you agree with everything." (pasted Codex's summary: every proposed edit independently reviewed, scripts rerun, rules and official definitions checked, 28 live source checks; supported corrections and missing conclusions added; 110/112 rejected (113 excerpts, at least 6 wrong number–unit pairs); unresolved typing questions and untested cost/accuracy kept explicit; "Preserved the concurrent cause-link comparison separately, with independent qualifications.")
+- Claude re-review (fact_types.md 11:24 version; nothing edited):
+  - Agrees with all of Codex's other changes (all 14 earlier suggestions applied). Verified: UTR MT = one million US tons; rule 8.10 = the AI reader sees the whole event.
+  - Found: Codex replaced the owner-requested side-by-side with one merged paragraph (it now adopts Claude's menu idea: code supplies nearby facts, Jev judges) and moved the comparison to `claude_revision_2_20260930/concurrent_cause_comparison.md`.
+  - Accepted Codex's critiques of Claude's comparison: the "re-extract / text-writing reader" rows were inaccurate; the judge still reads the window; cost and locality are unmeasured; the per-fact gate can miss links. Claude's own window was one-sided: 5 of 62 real links have the cause after the fact.
+  - Saved per-item labels for the 93 hand checks (`cause_link_locality/cause_link_item_labels.json`).
+  - Proposed (waiting for the owner's yes): add the owner's "no word lists" ruling (top bullet + cause paragraph); a concrete starting window (sentence, one before, one after, list lead-in + items); a one-line "open choices" note (per-fact screen, window size). Owner to choose A (merged + additions) or B (restore a corrected side-by-side).
+
+**2026-09-30, owner:** "do not Do not change the fact types, MD. You can just provide your suggestions here."
+- ✅ Owner ruling: Claude must not edit DriversFinal/fact_types.md; suggestions go in chat only.
+- Claude re-read the 11:29 version. Codex's cause paragraph now says: meaning decides, no cue-word gate; a menu of nearby extracted facts; small overlapping passages; per-fact gate optional; the PVH case needs a target two sentences back (verified against the source).
+- Claude agrees with the file. Small chat-only suggestions: the top bullet should also say "meaning decides, no word lists"; give the overlapping passage a starting size (tuned by the test); note that the per-item labels for the 93 checks are now saved; the side-by-side is the owner's call (Claude prefers the merged text).
+
+**2026-09-30, owner:** "Remember, your task is to understand and not rubber-stamp. And independently, thoroughly, and rigorously understand every single thing, and if you agree"
+- Claude checked every claim in fact_types.md (11:29 version) itself, read only, no edits:
+  - rule texts: 1.6/1.9/9.2/4.9/9.8/1.12/1.13/1.17/2.30/2.33/3.1–3.3/4.4/7.7/8.9–8.10/A1/P4/P5;
+  - the official unit list (MT = one million US tons);
+  - both links load;
+  - the PVH source text;
+  - its own data (41/98/10; screens; 113/6);
+  - Codex's scan copies match Claude's byte for byte;
+  - Notion index = 32 pages;
+  - bound 1−0.05^(1/300) = 0.99%;
+  - P7: ACTUAL_RETURN at earnings_orchestrator.py:3151 inside `_build_learner_prompt`;
+  - live Neo4j: 204/38,946 exhibits start with %PDF; transcript SBGI_2023-05-03 is the Axcelis call; OXY_2025-11-11T13.00_qa__3 has only a question.
+- Verdict: agrees with the substance.
+- Not independently checked: Codex's labels on the 321 passages beyond the ~25 cases read, and its other 28 live checks (4 spot-checked).
+- Five small suggestions, given in chat:
+  - the "no word lists" ruling in the top bullet;
+  - metric-vs-action in the top boundaries bullet;
+  - a starting passage size (3 sentences, sliding by one);
+  - the 93-check labels now exist;
+  - 2.33 wording is extended, not quoted.
+
+**2026-09-30, owner:** "Can you explain to me super simply the finalized algorithm? What needs to be done and how?" → Claude explained the merged cause-link algorithm from fact_types.md in plain steps with the PVH example, plus what must be built, tested and decided.
+
+**2026-09-30, owner:** "And you definitely agree with creating a new fact type, beyond a doubt.? ultrathink"
+- Claude's answer:
+  - Beyond doubt: the rules give other parties' estimates and consensus no home today (1.6/1.9 forecast words → guidance; 9.2/4.9 company-only; 9.8 no text on metrics). Price targets could be squeezed into action/metric, but lose period and raise/lower meaning.
+  - Not beyond doubt: that a 5th type is the only fix. Widening guidance with a forecaster field is viable (Codex says so too); keeping analyst forecasts out is also a choice. A 5th type is recommended as the safest.
+  - Predictive value is unmeasured by anyone.
+  - Suggests softening the file's "Use five types" headline to "Recommended".
+
+**2026-09-30, owner:** "tldr" → Claude: a 4-line summary of the 5th-type answer.
+
+**2026-09-30, owner:** pasted Codex's reply: "Yes—with two qualifications… Window size: start with 3 sentences, advance by 1; allow one expansion to 5. These are pilot settings… New labels: all 93 reproduce exactly… The top bullets now include meaning-based matching and metric/action boundaries. The capture wording clearly identifies our proposed clarification of rule 2.33." Owner: "All good."
+- Claude checked the 11:40 file (read only): the top bullets now carry "Meaning decides; no cue-word lists" and "one-off events from standing levels"; the cause paragraph now has a pilot window (3 sentences, advance 1, one expansion to 5); Capture now says "Proposed clarification" of 2.33. One leftover remains: the top bullet still says "Use five types" (Claude suggested "Recommended").
+
+**2026-09-30, owner:** "lets commit & push this folder: …/.claude/plans/Drivers/DriversFinal"
+- Claude checked the folder before committing: no hard-coded secrets; none of the 17 secret values from `.env` appear in any file or inside the two archives; about 25 MB of new files (two 2.4 MB evidence archives, JEV test data). Staging only DriversFinal (unrelated repo changes left out), committing on main and pushing.
+
 # Archived: approved no-stages proposal — 2026-09-28
 
 *Historical record: the approved 2026-09-28 proposal, appended here unchanged on 2026-09-29 (formerly the separate file `Driver_NoStages_Proposal_2026-09-28.md`). The current rules (`DRIVER_RULES_Simplified.md`, `DRIVER_RULES_Categorized.md`) take precedence over anything below.*

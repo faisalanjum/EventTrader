@@ -1,0 +1,305 @@
+{
+ "hash": "3577655d6f3c241a",
+ "keys": {
+  "H|prose sections|06": {
+   "n": 1,
+   "type": "M",
+   "state": "increased",
+   "name": "passenger revenues"
+  },
+  "H|prose sections|12": {
+   "n": 2,
+   "type": "A",
+   "state": null,
+   "name": "CereLink ICP Monitor System"
+  },
+  "H|prose sections|22": {
+   "n": 3,
+   "type": "M",
+   "state": "reported",
+   "name": "royalties payable under license agreements"
+  },
+  "H|FS sections|02": {
+   "n": 4,
+   "type": "U",
+   "state": null,
+   "name": "insurance receivables"
+  },
+  "H|FS sections|05": {
+   "n": 5,
+   "type": "M",
+   "state": null,
+   "name": "related-party accounts receivable"
+  },
+  "H|FS sections|08": {
+   "n": 6,
+   "type": "M",
+   "state": "increased",
+   "name": "total lease cost"
+  },
+  "H|FS sections|26": {
+   "n": 7,
+   "type": "M",
+   "state": "reported",
+   "name": "loan valuation input, indicative quotes"
+  },
+  "H|FS sections|27": {
+   "n": 8,
+   "type": "U",
+   "state": null,
+   "name": "cost savings actions"
+  },
+  "H|FS sections|29": {
+   "n": 9,
+   "type": "M",
+   "state": "reported",
+   "name": "other intangible assets"
+  },
+  "H|press release exhibits|04": {
+   "n": 10,
+   "type": "M",
+   "state": "decreased",
+   "name": "Propulsion segment sales"
+  },
+  "H|press release exhibits|08": {
+   "n": 11,
+   "type": "M",
+   "state": null,
+   "name": "energy use of the portfolio"
+  },
+  "H|press release exhibits|10": {
+   "n": 12,
+   "type": "G",
+   "state": null,
+   "name": "Adjusted EBITDA"
+  },
+  "H|press release exhibits|11": {
+   "n": 13,
+   "type": "U",
+   "state": null,
+   "name": "global supply chain centers"
+  },
+  "H|press release exhibits|12": {
+   "n": 14,
+   "type": "U",
+   "state": null,
+   "name": "net cost savings"
+  },
+  "H|press release exhibits|13": {
+   "n": 15,
+   "type": "M",
+   "state": null,
+   "name": "total revenue"
+  },
+  "H|press release exhibits|14": {
+   "n": 16,
+   "type": "M",
+   "state": "decreased",
+   "name": "net income attributable to Teledyne"
+  },
+  "H|press release exhibits|23": {
+   "n": 17,
+   "type": "M",
+   "state": "decreased",
+   "name": "net income (loss) attributable to AeroVironment"
+  },
+  "H|press release exhibits|24": {
+   "n": 18,
+   "type": "U",
+   "state": null,
+   "name": "legal settlement gains"
+  },
+  "H|press release exhibits|27": {
+   "n": 19,
+   "type": "A",
+   "state": null,
+   "name": "Fanatics partnership"
+  },
+  "H|filing text only|04": {
+   "n": 20,
+   "type": "G",
+   "state": null,
+   "name": "revenue synergies"
+  },
+  "H|filing text only|18": {
+   "n": 21,
+   "type": "A",
+   "state": null,
+   "name": "Shutterstock and Getty Images merger review"
+  },
+  "H|filing text only|28": {
+   "n": 22,
+   "type": "M",
+   "state": "increased",
+   "name": "interest expense pro forma adjustment"
+  },
+  "H|prepared remarks|05": {
+   "n": 23,
+   "type": "G",
+   "state": null,
+   "name": "bariatrics and Asia headwinds"
+  },
+  "H|prepared remarks|06": {
+   "n": 24,
+   "type": "M",
+   "state": "increased",
+   "name": "earnings per diluted share"
+  },
+  "H|prepared remarks|08": {
+   "n": 25,
+   "type": "M",
+   "state": "reported",
+   "name": "cash balance"
+  },
+  "H|prepared remarks|09": {
+   "n": 26,
+   "type": "G",
+   "state": null,
+   "name": "free cash flow"
+  },
+  "H|prepared remarks|11": {
+   "n": 27,
+   "type": "G",
+   "state": null,
+   "name": "tariff cost impact"
+  },
+  "H|prepared remarks|16": {
+   "n": 28,
+   "type": "M",
+   "state": null,
+   "name": "Americas volume"
+  },
+  "H|prepared remarks|17": {
+   "n": 29,
+   "type": "U",
+   "state": null,
+   "name": "ending inventories"
+  },
+  "H|prepared remarks|19": {
+   "n": 30,
+   "type": "M",
+   "state": "decreased",
+   "name": "international segment operating profit"
+  },
+  "H|prepared remarks|20": {
+   "n": 31,
+   "type": "U",
+   "state": null,
+   "name": "content packs"
+  },
+  "H|prepared remarks|21": {
+   "n": 32,
+   "type": "M",
+   "state": "increased",
+   "name": "customers using two or more products"
+  },
+  "H|prepared remarks|22": {
+   "n": 33,
+   "type": "M",
+   "state": null,
+   "name": "MG Asia AOI margin"
+  },
+  "H|prepared remarks|23": {
+   "n": 34,
+   "type": "M",
+   "state": "increased",
+   "name": "remote steps completed by customers"
+  },
+  "H|prepared remarks|25": {
+   "n": 35,
+   "type": "M",
+   "state": "decreased",
+   "name": "MacroGEM total revenue"
+  },
+  "H|prepared remarks|27": {
+   "n": 36,
+   "type": "M",
+   "state": "reported",
+   "name": "organizations building Blueprints"
+  },
+  "H|prepared remarks|29": {
+   "n": 37,
+   "type": "A",
+   "state": null,
+   "name": "Azar expansion into the U.S."
+  },
+  "H|Q&A|21": {
+   "n": 38,
+   "type": "G",
+   "state": null,
+   "name": "promotional velocity"
+  },
+  "H|Q&A|22": {
+   "n": 39,
+   "type": "U",
+   "state": null,
+   "name": "cost savings"
+  },
+  "H|Q&A|24": {
+   "n": 40,
+   "type": "G",
+   "state": null,
+   "name": "market conditions in the first quarter"
+  },
+  "H|Q&A|26": {
+   "n": 41,
+   "type": "S",
+   "state": null,
+   "name": "vehicle units"
+  },
+  "H|news bodies|05": {
+   "n": 42,
+   "type": "S",
+   "state": null,
+   "name": "quarterly revenue"
+  },
+  "H|news bodies|06": {
+   "n": 43,
+   "type": "A",
+   "state": null,
+   "name": "GameStop equity offering"
+  },
+  "H|news bodies|07": {
+   "n": 44,
+   "type": "M",
+   "state": "decreased",
+   "name": "Tesla Model Y and Model 3 prices"
+  },
+  "H|news bodies|10": {
+   "n": 45,
+   "type": "G",
+   "state": null,
+   "name": "Cytokinetics marketing application"
+  },
+  "H|news bodies|11": {
+   "n": 46,
+   "type": "A",
+   "state": null,
+   "name": "SABERHUNT prototype kit"
+  },
+  "H|news bodies|12": {
+   "n": 47,
+   "type": "M",
+   "state": "decreased",
+   "name": "Westlake top-line earnings"
+  },
+  "H|news bodies|17": {
+   "n": 48,
+   "type": "M",
+   "state": "reported",
+   "name": "Zoom return on assets"
+  },
+  "H|news bodies|23": {
+   "n": 49,
+   "type": "S",
+   "state": null,
+   "name": "quarterly EPS"
+  },
+  "H|news bodies|29": {
+   "n": 50,
+   "type": "M",
+   "state": "increased",
+   "name": "Intellia top-line earnings"
+  }
+ }
+}

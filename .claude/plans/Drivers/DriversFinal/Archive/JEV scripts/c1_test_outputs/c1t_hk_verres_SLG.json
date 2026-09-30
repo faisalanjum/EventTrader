@@ -1,0 +1,15 @@
+[
+  {"name": "total revenue", "real": true},
+  {"name": "revenue", "real": true},
+  {"name": "net income", "real": true},
+  {"name": "diluted earnings per share", "real": true},
+  {"name": "basic earnings per share", "real": true},
+  {"name": "cash and cash equivalents", "real": true},
+  {"name": "shares outstanding", "real": true},
+  {"name": "weighted average diluted shares outstanding", "real": true},
+  {"name": "operating income", "real": true},
+  {"name": "operating cash flow", "real": true},
+  {"name": "selling general and administrative expense", "real": true},
+  {"name": "operating expenses", "real": true},
+  {"name": "dividend per share", "real": true}
+]
