@@ -36,7 +36,7 @@ if __name__=="__main__":
     import json
     for n,q in (('BASELINE',BASELINE),('HORIZON',HORIZON),('SLICE',SLICE)): print("=====",n,"\n",json.dumps(q,ensure_ascii=False)[:2600])
 
-# ---- after the three proposed rulings (JEV.md 3.15) ----
+# ---- after the three proposed rulings (JEV.md §6.4) ----
 import copy
 HORIZON2=copy.deepcopy(HORIZON)
 HORIZON2["horizon"]["criteria"]["long_term"]["what"]="The quote itself says long term, long-range or longer term, in words, with no dates."

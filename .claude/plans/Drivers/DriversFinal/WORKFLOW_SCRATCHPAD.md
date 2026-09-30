@@ -152,38 +152,27 @@ Structure only, with the same requirements and template as the Driver (D41).
 | create Driver (was "Create") | 3e8a0a3f3106810ab7eafc6a8d8c0e46 |
 | add DriverUpdate (was "Update") | 3e8a0a3f3106814dadbdfecacaad4c4a |
 | propose Driver | 3e8a0a3f3106813289f0ef6c8edebdae |
-| create Driver › name | 3e8a0a3f3106819cb947dcb262272d50 |
-| create Driver › fact type | 3e8a0a3f3106816995adc41faf9f4555 |
-| create Driver › links | 3e8a0a3f310681a4b419c9d2c671898d |
-| create Driver › standing & repair | 3e8a0a3f310681f2b25eece0fcc01281 |
-| create Driver › birth & evidence | 3e8a0a3f310681dc8221d5b30c01a9cd |
-| name › role test | 3e8a0a3f310681fda166cb3f36391ee2 |
-| name › suffix names | 3e8a0a3f31068184a70fe4ee8e551815 |
-| name › per-unit names | 3e8a0a3f3106813684cfe25ba1879354 |
-| (skip, trashed D39) | 3e8a0a3f31068174ad15d9e70ceedde0 |
-| add DriverUpdate › identity | 3e8a0a3f3106817fbc8ceec565c84c74 |
-| add DriverUpdate › period | 3e8a0a3f3106810da7a9e0ef8235572f |
-| period › working out the dates | 3e8a0a3f31068133a431caac7ffaf090 |
-| add DriverUpdate › slice | 3e8a0a3f3106815b9d5cc7bb26d01d90 |
-| slice › slices from filing breakdowns | 3e8a0a3f310681058b12c8bfe8274a4d |
-| slice › picking a slice value | 3e8a0a3f31068111877eee6d77caa315 |
-| add DriverUpdate › measurement tags | 3e8a0a3f310681a5a705e2a550a18d08 |
-| add DriverUpdate › state | 3e8a0a3f31068114a879fb2be505decd |
-| add DriverUpdate › amount | 3e8a0a3f310681d7a82fc56261730f11 |
-| amount › units & scale | 3e8a0a3f3106819fa9e9c1eca4db960a |
-| amount › growth, signs & value-or-change | 3e8a0a3f3106819d82efd2db7ed7d8c4 |
-| amount › shapes & comparisons | 3e8a0a3f3106815eb90ff5febed826dc |
-| add DriverUpdate › guidance & surprise | 3e8a0a3f310681b0a89ad85b490f213b |
-| guidance & surprise › guidance facts | 3e8a0a3f31068117af52e7cadd3fa2dd |
-| guidance & surprise › surprise facts | 3e8a0a3f3106816683e2c4a369d84faa |
-| guidance & surprise › withdrawals | 3e8a0a3f310681fe8135fe21bc0b9dc8 |
-| add DriverUpdate › evidence & time | 3e8a0a3f310681b5859aed7a9ad896a0 |
-| add DriverUpdate › fact links | 3e8a0a3f31068190bd78f5e7281db2f2 |
-| fact links › official filing data (XBRL) | 3e8a0a3f310681829a5ce07c8dbd0c56 |
-| add DriverUpdate › save | 3e8a0a3f3106813db9e2d9275a0de5e7 |
-| save › repeats & conflicts | 3e8a0a3f310681cb93fdea4710bc11d6 |
-| save › corrections & amendments | 3e8a0a3f3106816a824dc32b61477894 |
-| save › outcomes & holds (shared by every flow) | 3e8a0a3f3106819ba873ef6885392d3b |
+| System (2026-09-29; side box "Rules for every step" on the main chart; lives under Workflow) | 3eaa0a3f310681329681cec325306e80 |
+| create Driver › 1 · Driver record & relationships (was "links") | 3e8a0a3f310681a4b419c9d2c671898d |
+| create Driver › 2a · Fact type (was "fact type") | 3e8a0a3f3106816995adc41faf9f4555 |
+| create Driver › 2b · Name (was "name") | 3e8a0a3f3106819cb947dcb262272d50 |
+| create Driver › 2c · Which name & family (new) | 3eaa0a3f3106811a8d6adcf099153cbb |
+| create Driver › 3 · Creating a Driver (was "birth & evidence") | 3e8a0a3f310681dc8221d5b30c01a9cd |
+| add DriverUpdate › U1a · Record & evidence (was "identity") | 3e8a0a3f3106817fbc8ceec565c84c74 |
+| add DriverUpdate › U1b · Period (was "period") | 3e8a0a3f3106810da7a9e0ef8235572f |
+| add DriverUpdate › U1c · Slices & measurement tags (was "slice") | 3e8a0a3f3106815b9d5cc7bb26d01d90 |
+| add DriverUpdate › U1d · States & amounts (was "amount") | 3e8a0a3f310681d7a82fc56261730f11 |
+| add DriverUpdate › U2a · Saving (was "save") | 3e8a0a3f3106813db9e2d9275a0de5e7 |
+| add DriverUpdate › U2b · Links to filing data (was "official filing data (XBRL)") | 3e8a0a3f310681829a5ce07c8dbd0c56 |
+| add DriverUpdate › U2c · Reading & comparing (new) | 3eaa0a3f31068178a75ad6e915b8ee2c |
+| add DriverUpdate › U3a · Forecasts (was "guidance facts") | 3e8a0a3f31068117af52e7cadd3fa2dd |
+| add DriverUpdate › U3b · Surprises (was "surprise facts") | 3e8a0a3f3106816683e2c4a369d84faa |
+| System › S1 · Ground rules (read first) (new) | 3eaa0a3f31068187bf07decbfd36592f |
+| System › S2 · Purpose, sources & companies (new) | 3eaa0a3f310681888703cd8b3ec10a78 |
+| System › S3 · Processing, timing & retries (was "outcomes & holds") | 3e8a0a3f3106819ba873ef6885392d3b |
+| System › S4 · AI use & testing (new) | 3eaa0a3f3106816fa17ad65a5a718d51 |
+| System › S5 · Price-move explanations (active in release 1) (new) | 3eaa0a3f310681ceacd1ddf1c99c6f25 |
+| Trashed 2026-09-29 (18; Notion keeps trash 30 days; exact pre-change copies of all 42 touched pages: `~/.claude/projects/-home-faisal-EventMarketDB/backups/notion_before_restructure_2026-09-29/`): standing & repair, role test, suffix names, per-unit names, evidence & time, measurement tags, state, working out the dates, slices from filing breakdowns, picking a slice value, units & scale, growth signs & value-or-change, shapes & comparisons, repeats & conflicts, corrections & amendments, fact links, guidance & surprise, withdrawals | — |
 
 - New box pages are created under Workflow and then moved inside the folded "Box pages" list with `update_content`: add the `<page>` tags inside the list and remove them from the end of the page in the same call, so no page is deleted.
 
@@ -1433,6 +1422,290 @@ Before any edit, still needed: the D9 answer, the master-file choice (Codex sugg
 Re-checked: 0 lines missing, 118 structure lines, every text exactly once, folds balanced. AUDIT_1_to_4.md outcome updated.
 
 Not changed (asking): 1.19 still says "A missing synonym link only costs a missed comparison, never a wrong merged number." Then: commit and push DriversFinal on main (owner's instruction).
+
+**2026-09-29, owner (after the push):** "Now A look at my Notion and understand the differences Between what we have in Notion, the components Versus …/DriversFinal/DRIVER_RULES_Categorized.md. Leave the main page. Workflow page as is, but focus on driver update, and where would you put the The third category system, or if anything else, give me the entire full plan so I can get it validated. How do you plan to change my Notion? I like, so far, what we have there on the first page, but everything else, like the categories and subcategories, needs to be changed." (+ "ultrathink") → Claude: reading Notion (read-only), then a full restructure plan for validation. No Notion edits.
+
+## 🟡 Notion restructure plan (Claude, 2026-09-29, waiting for validation). Notion was read only; nothing changed.
+
+**Current Notion, read today:**
+- Workflow: main chart, legend and the "Box pages" fold. It stays untouched.
+- "create Driver" inside chart: name (role test, suffix names, per-unit names) · fact type · links · standing & repair · birth & evidence → first DriverUpdate.
+- "add DriverUpdate" inside chart, in 3 bands:
+  - Which fact: identity, period (working out the dates), slice (slices from filing breakdowns, picking a slice value), measurement tags;
+  - What it says: state, amount (units & scale; growth, signs & value-or-change; shapes & comparisons), guidance & surprise (guidance facts, surprise facts, withdrawals);
+  - Proof & links: evidence & time, fact links (official filing data (XBRL)).
+  - Then → save (repeats & conflicts, corrections & amendments, outcomes & holds).
+- All part pages are empty templates.
+
+**Target (the homes of DRIVER_RULES_Categorized.md):**
+- **Driver** (inside "create Driver"; the page title stays because it is a box on the main page):
+  - 1 Record & relationships (17): reuse "birth & evidence", merge "links".
+  - 2a Fact type (17): reuse "fact type", merge "suffix names".
+  - 2b Name (16): reuse "name", merge "role test" and "per-unit names".
+  - 2c Which name & family (12): NEW.
+  - 3 Creating a Driver (7): NEW, then → first DriverUpdate.
+  - Remove "standing & repair".
+- **DriverUpdate** (inside "add DriverUpdate", title stays):
+  - U1 Describing one fact:
+    - U1a Record & evidence (10): identity + evidence & time;
+    - U1b Period (12): period + working out the dates;
+    - U1c Slices & measurement tags (16): slice + its 2 subs + measurement tags;
+    - U1d States & amounts (18): amount + its 3 subs + state.
+  - U2 Saving, linking & reading:
+    - U2a Saving (8): save + repeats & conflicts + corrections & amendments;
+    - U2b Links to filing data (13): fact links + official filing data;
+    - U2c Reading & comparing (10): NEW.
+  - U3 Forecasts & surprises:
+    - U3a Forecasts (12): guidance & surprise + guidance facts + withdrawals;
+    - U3b Surprises (11): surprise facts.
+- **System**: a NEW page next to Workflow (under Drivers), so the main page is untouched.
+  - S1 Ground rules, read first (13).
+  - S2 Purpose, sources & companies (10).
+  - S3 Processing, timing & retries (5): reuse "outcomes & holds".
+  - S4 AI use & testing (4).
+  - S5 Price-move explanations, release 1 (10).
+  - Linked from a "Read first: System ▸" line on the Driver and DriverUpdate pages. Their "held · skipped · rejected" line points to S3.
+- **Overview** (Start here, intros, outline): stays only in the file.
+
+**Home pages:**
+- Keep the owner's template (Flowchart, Examples, ⚠ Watch-outs, Your design, folded Open questions / Don't reopen / Rules).
+- The header gets: Kind "home"; a one-line Question; "Rules here: <numbers>" plus a GitHub link to that Categorized section.
+- Parking items go in "Open questions".
+- The verbatim rules are added last (as the template says), copied by script from Categorized.
+
+**Execution after the OK:**
+1. Create System and its homes.
+2. Reuse 12 pages (rename + move); create 8 new ones (2c, 3, U2c, System, S1, S2, S4, S5).
+3. Redraw the 2 inside charts in place (update_content, keeping Preview).
+4. Fill the headers.
+5. Trash 19 merged, empty pages: links, standing & repair, role test, suffix names, per-unit names, evidence & time, measurement tags, state, working out the dates, slices from filing breakdowns, picking a slice value, units & scale, growth signs & value-or-change, shapes & comparisons, repeats & conflicts, corrections & amendments, official filing data (XBRL), guidance facts, withdrawals.
+6. Verify: every home is one click away, every link works, the main page is unchanged.
+
+**Decisions for the owner:**
+1. System next to Workflow (recommended) or in the main page's box-page list?
+2. Rule numbers + GitHub link now, verbatim rules last (recommended)?
+3. Trash the 19 empty pages (recommended) or fold them as "old pages"?
+4. Leave the unchanged box pages without pointers (recommended)?
+
+**2026-09-29, owner:** "Are you ready for compaction?" → Claude saved the resume point to memory:
+- the audit is done, applied and pushed (424d2e5af);
+- the Notion restructure plan (above) waits for validation, with decisions 1–4 open; nothing changed in Notion;
+- open questions: remove "only" from 1.19? commit the old-path DRIVER_RULES.md deletion?
+
+**2026-09-29, owner (after compaction):** "Now, I want you to compare both plans from Codex and Fable and pick the best of both worlds.Do you have access to Notion, and have you read it and understood it?" → Claude re-read the Drivers and Workflow pages (Workflow last edited 2026-09-27, unchanged); no Codex or Fable plan found in the files or recent Notion pages.
+
+**2026-09-29, owner (interrupting):** "I will give you those Codex plans, but do you remember your own plan?" → Claude: yes, recapped the 🟡 Notion restructure plan above; waiting for the Codex and Fable plans, then compare them with it independently and merge.
+
+**2026-09-29, owner (to the Fable session):** pasted the 🟡 Notion restructure plan above and asked for it to be validated.
+→ **Validation (Fable session; Notion read only, nothing changed):**
+- Every rule count in the plan matches DRIVER_RULES_Categorized.md (221 rules after the audit added 5.8; U2a = 8 is right).
+- All 19 pages listed for the trash were opened: each holds only the empty template plus its one-line question (two also carry a "See also" line). Merging loses nothing.
+- Reuse 12 + create 8 = 20 pages (19 homes + System); today's 31 part pages = 12 reused + 19 trashed. Adds up.
+- The Categorized file is pushed (424d2e5af), so GitHub section links will work; test one anchor first.
+- Suggested changes: (1) decision 4: add one pointer line on "propose Driver" (→ 2a Fact type, 2b Name; its line "Rules: 2.40, 2.41 · Part B" is stale, Part B no longer exists) and on "Driver already exists?" (→ 2c), so the main page has no dead ends; (2) the 5 cross-home overlap pairs from the file's header (2.19/4.2 · 2.34/6.11 · 3.50/7.8 · 3.35/7.2 · 1.14/7.6) go into "Open questions" of both homes; (3) redraw the DriverUpdate chart first and let the owner confirm Preview mode survived before the Driver chart (untested, see "Chart conventions"); (4) keep the four fact-type boxes under 2a; (5) after any rules edit (e.g. the 9.7/P5 fix) re-run the verbatim copy and the read-back check.
+- Decisions 1–3: agree with the plan (System next to Workflow; rule numbers + link now, verbatim last; trash the 19). Decision 4: add the pointers. Waiting for the owner.
+
+**2026-09-29, owner:** "codex said:" + pasted Codex text + "Make the best of both worlds plan. Doing anything which may make it better  ultrathink"
+- Codex's text, verbatim: "The structure is right. I checked the live Notion pages against the current file: keep the 5 Driver, 9 DriverUpdate and 5 System sections. / I'd give Claude these clarifications before proceeding: / "Read first" should open S1 Ground rules directly, not the entire System section. System beside Workflow is a good placement. / Add the useful shortcuts: "propose Driver" → Fact type and Name; "Driver already exists?" → Which name & family. These are links to the same pages, with no duplicated rules. The main Workflow page stays unchanged. / The inside charts are study maps, not execution sequences. In particular, forecasts and surprises appearing last does not mean they are handled after saving. DriverUpdate also covers a new Driver's first fact; keep "Driver and first fact saved together, both or neither" explicit. / Redirect existing links before trashing old pages. I found links to pages scheduled for removal—for example, Identity → "repeats & conflicts." Update those and the parent-navigation links first. The pages otherwise contain empty templates, so retaining another archive is unnecessary. / When rules are copied later, copy each complete section, including tables, warnings, examples and notes—not merely numbered rules. A script can verify that copy; it does not automatically prevent later drift. / Keep the existing visual style, red borders without "Open" inside boxes, and rules linked rather than filled in during this scaffolding step."
+
+**2026-09-29, owner:** "And this is the rule from Fable: ensure you pick the best one or borrow anything useful, but think independently." + pasted Fable reply (same points as the Fable validation entry above, plus its answers: 1 System next to Workflow, "It is not a workflow step"; 2 numbers + link now, word-for-word last, plus re-copy after edits; 3 trash, "Notion keeps trash for 30 days"; 4 yes, add pointers) + "Then provide the final plan.  ultrathink"
+- Claude's checks so far: Fable's rule counts are right (221; S5 = A2.1–A2.8 + 9.7 + 10.1); the 8 overlap pairs are in the file's header, 5 cross-home (2.19/4.2 · 2.34/6.11 · 3.50/7.8 · 3.35/7.2 · 1.14/7.6) and 3 inside one home (1.7/7.7 in 2a · 2.2/2.38 in 1 · 1.15/6.21 in S1); Codex's example link (identity → repeats & conflicts) is live; "propose Driver" still says "Rules: 2.40, 2.41 · Part B" (2.40/2.41 are in 2c; Part B is gone); the "propose without seeing existing names" order is a 1.14 sub-bullet in S3; Preview survival after an in-place chart edit was never confirmed in this log; all 19 home headings sit outside folds, so their GitHub links can land (not tested: no `gh` here).
+- Also found: rule 1.19's "only" was removed in both rules files after the push (not by Claude; uncommitted).
+
+## (Superseded by the "✅ Combined Notion plan v2" entry below) FINAL Notion restructure plan (Claude, merged with Codex + Fable, 2026-09-29)
+
+**What and why:** Notion's inside pages still follow the old parts (31 empty pages under "create Driver" and "add DriverUpdate"). The rules now sit in 19 homes (`DRIVER_RULES_Categorized.md`). Rebuild the two inside charts and their pages to match the homes, and add a System page. The Workflow page stays as it is.
+
+**Agreed by all three (Claude, Codex, Fable):** 5 Driver homes, 9 DriverUpdate homes, 5 System homes on a new System page next to Workflow. The 4 decisions: System next to Workflow; rule numbers + a file link now, the word-for-word rules later; trash the leftover pages; add pointers (Claude changed its answer to yes).
+
+**Based on a full read of all 36 pages (2026-09-29):** every page is the empty template plus a one-line question; a few also have "See also" / "Also in the key" lines; the main-page box pages have real notes (left alone except the two pointers below).
+
+### 1. Pages
+- Titles = the file's headings, exactly (e.g. "2c · Which name & family").
+- **Changed by Claude after the inventory:** each home reuses the page that other pages already link to, so those links stay right with no edits (1 link to fix instead of 4). Result: reuse 13, create 7, trash 18 (was 12 / 8 / 19). Total after = 20 pages (19 homes + System).
+- Reuse 13 (renamed; same pages):
+  - links → 1 · fact type → 2a · name → 2b · birth & evidence → 3;
+  - identity → U1a · period → U1b · slice → U1c · amount → U1d · save → U2a;
+  - official filing data (XBRL) → U2b · guidance facts → U3a · surprise facts → U3b (these 3 move up, next to the other homes);
+  - outcomes & holds → S3 (moves to System).
+- Create 7: System (under Drivers) · 2c (under create Driver) · U2c (under add DriverUpdate) · S1, S2, S4, S5 (under System).
+- Trash 18, as the last step: standing & repair, role test, suffix names, per-unit names, evidence & time, measurement tags, state, working out the dates, slices from filing breakdowns, picking a slice value, units & scale, growth signs & value-or-change, shapes & comparisons, repeats & conflicts, corrections & amendments, fact links, guidance & surprise, withdrawals.
+
+### 2. Charts (same look: colours, fonts, box sizes; red border = open; no "Open" text inside boxes)
+- create Driver: 1 — 2a (its 4 fact-type boxes stay under it) — 2b — 2c — 3 ⇒ first DriverUpdate ▸. The only arrow is the last one, a real step.
+- add DriverUpdate: 3 bands: U1 Describing one fact (U1a–U1d) · U2 Saving, linking & reading (U2a–U2c) · U3 Forecasts & surprises (U3a–U3b). The old "save" arrow goes (saving is now U2a).
+- System: S1 (read first) — S2 — S3 — S4 — S5.
+- Caption on each chart: "Study map: the order to study, not the order the bot runs."
+- The DriverUpdate chart is redrawn first; the owner checks it still shows as a picture (Preview); then the other two.
+
+### 3. The chart pages
+- create Driver keeps "Saved together: the Driver and its first DriverUpdate, both or neither (rule 2.35)."
+- add DriverUpdate's "Means" line adds: "The same rules apply to a new Driver's first DriverUpdate, saved together with its Driver (2.35)."
+- Both get "Read first: S1 · Ground rules ▸" (opens S1 directly).
+- The grey-exits line keeps its link; that page becomes S3.
+- The "Part pages" fold becomes "Home pages"; emptied "Sub-pages" folds are removed.
+- System page: "Rules for every step. Read S1 first." · its chart · "The file's Overview (Start here, outline) stays in the file ▸" · fold "Home pages".
+
+### 4. Each home page (scaffold only; the rules text comes later)
+- Trail for its new place, plus "Next: <next home in the file's study order> ▸" (S1 → 1 → 2a → 2b → 2c → 3 → U1a … U3b → S2 → S3 → S4 → S5).
+- Kind: home · Status: 🔴 Open.
+- Question: see the table. The questions and See-also lines of merged pages move in word for word under "Also covers:".
+- "Rules here: <numbers> · read in the file ▸" (GitHub link to that section; the first link is tested before the rest).
+- Open questions fold: the home's parking items (P1, P2 → U2a · P4 → U1a · P5 → S2 · P6 → S3 · P3 → S5) and overlap pairs (all 8 from the file's header: 2.19/4.2 · 2.34/6.11 · 3.50/7.8 · 3.35/7.2 · 1.14/7.6 on both homes; 1.7/7.7 in 2a · 2.2/2.38 in 1 · 1.15/6.21 in S1).
+- "Rules (verbatim, added last)" stays empty.
+
+| Home | Rules here | Question (✎ = new wording, needs OK) | Also covers (moved in word for word) |
+|---|---|---|---|
+| 1 · Driver record & relationships | 1.1, 1.2, 1.19, 2.1, 2.2, 2.38, 5.6, 6.13–6.17, 6.19, 9.6, 9.9, 9.10, 10.2 | How does a Driver link to others: family, synonym, declared rename? | ✎ "Don't reopen" fold: "Driver stages and after-save repair were removed on 2026-09-28 (2.2, 6.20)." (in place of the "standing & repair" question: How does a Driver's standing change, and how are mistakes undone?) |
+| 2a · Fact type | 1.5–1.10, 2.19, 2.22–2.25, 2.27–2.31, 7.7 | Which of the 4 types is this Driver? (Set once, never changed.) | When may a name end in _guidance or _surprise? |
+| 2b · Name | 2.3, 2.5–2.18, 2.21 | How is a Driver's name built from the source? | Does each phrase go in the name, a slice, or a measurement tag? · When does a "per X" stay in the name? |
+| 2c · Which name & family | 1.18, 2.4, 2.26, 2.32, 2.40–2.47 | ✎ Does the proposal match an existing Driver, and which family is it in? | — |
+| 3 · Creating a Driver | 2.20, 2.33–2.37, 2.39 | When may a Driver be created, and what evidence is it born with? | — |
+| U1a · Record & evidence | 1.11, 1.13, 1.17, 3.1–3.3, 3.7, 3.9, 3.10, 3.12 | What makes a fact unique? (source + Driver + scope) — keeps its "Also in the key" line; its tie-breaker link → U2a | What proves the fact, and when was it public? |
+| U1b · Period | 3.36–3.47 | Which calendar window is the fact about? | How are the exact dates worked out? |
+| U1c · Slices & measurement tags | 3.13–3.27, 9.3 | Which part of the company is the fact about? (keeps its See also → U2b) | Which filing breakdowns count as slices? · Reuse an existing slice value, or create a new one? · How was the number measured (adjusted, diluted…)? |
+| U1d · States & amounts | 3.5, 3.6, 3.8, 3.28–3.35, 3.48–3.52, 9.1, 10.4 | Which numbers are stored, in what unit, with what sign? (keeps its See also) | What does the fact say happened? (+ its See also: raised, lowered… · beat, missed, in_line) · Which unit and scale, and what proves them? · Value or change? Which growth basis? Which sign? · Point, range or bound, and compared with what? |
+| U2a · Saving | 3.4, 5.1–5.5, 5.7, 5.8 | Is the fact already stored, and what happens then? | Same fact, a compatible piece, or a conflict? · What may change after a fact is saved? |
+| U2b · Links to filing data | 3.11, 6.1–6.12 (+ Part A1, switched off, folded) | Which official line item, if any, does a fact link to? | What is the fact tied to (its Driver, source, period, filing data)? |
+| U2c · Reading & comparing | 7.1–7.6, 7.8–7.11 | How are facts read back? (the file's own §7 question) | — |
+| U3a · Forecasts | 4.4–4.9, 4.18–4.21, 9.2, 9.8 | How is a company forecast recorded? (keeps its See also → period) | When does a withdrawal cover other forecasts? · What extra rules apply to forecasts and surprises? |
+| U3b · Surprises | 4.1–4.3, 4.10–4.17 | Beat, miss or in line, and against what? (keeps its See also) | — |
+| S1 · Ground rules (read first) | 1.12, 1.15, 1.16, 6.18, 6.20, 6.21, 8.1–8.7 | What must every build respect? (the file's own §8 question) | — |
+| S2 · Purpose, sources & companies | 1.3, 1.4, 1.20, 1.21, 8.8–8.11, 9.4, 9.5 | ✎ What am I recording, from which sources, for which companies? | — |
+| S3 · Processing, timing & retries | 1.14, 8.14–8.16, 10.3 | Which of the five outcomes (written, merged, held, skipped, rejected), and when is a held item retried? + ✎ What may a run see, and how does it run? | — |
+| S4 · AI use & testing | 8.12, 8.13, 8.17, 8.18 | ✎ How may AI be used, and how is it tested? | — |
+| S5 · Price-move explanations (active in release 1) | 9.7, 10.1, A2.1–A2.8 | ✎ How are price moves explained? | — |
+
+Rule lists are script-made from the file: 221 rules, each in exactly one home.
+
+### 5. Main-page box pages (the Workflow page and its chart stay unchanged)
+- propose Driver: its stale line "Rules: 2.40, 2.41 · Part B." becomes "Rules: 2a ▸ · 2b ▸ (what to propose) · S3 ▸ (1.14: propose before seeing names) · 2c ▸ (2.40, 2.41: the check)." (Part B no longer exists; the "propose first" order is a 1.14 sub-bullet in S3.)
+- Driver already exists?: add "Rules: 2c · Which name & family ▸".
+- The other 5 box pages keep their notes. The rule numbers they cite (1.4, 1.13, 1.14, 6.11, 8.17, 9.7) all still exist in the file.
+- Found, not changed: the Predictor/Learner page says rule 9.7 keeps price-move attribution off in release ①, but the owner decided price moves are on in release 1. That belongs to parking item P5.
+
+### 6. Links to fix before trashing
+- 1 content link: identity's "tie-breaker … → repeats & conflicts" → U2a.
+- Trails of the 4 moved pages (guidance facts, surprise facts, official filing data → "Workflow › add DriverUpdate"; outcomes & holds → "Drivers › System").
+- Chart box links and the "Part pages" / "Sub-pages" folds: redone with the charts and folds.
+- The other See-also links already point to reused pages, so they stay right: amount → guidance facts (U3a) and surprise facts (U3b); slice → official filing data (U2b); guidance facts → period; surprise facts → period and identity; state's line (moving into U1d) → guidance facts and surprise facts.
+
+### 7. Later: the word-for-word copy
+- Whole sections, by script: tables, ⚠ lines, examples, notes and Why lines, not only numbered rules; read back and compared line by line.
+- The file stays the master. Each copy is stamped with the commit it came from. After any rules edit (e.g. the 9.7/P5 fix), that home is re-copied and re-checked.
+
+### 8. Safety
+- Before any edit: a local snapshot of every page involved, saved in `~/.claude/projects/-home-faisal-EventMarketDB/backups/`, so any page can be restored exactly.
+- Codex and Fable pause Notion edits while this runs; each page is re-read right before its edit.
+- Moving pages and editing folds is the delicate step (a wrong edit can delete a page): one call at a time, checked after each.
+- Trash is last, and only when no link points to those pages. Notion keeps trash for 30 days.
+
+### 9. Run order
+0 snapshot → 1 create the 7 new pages → 2 move 4 pages, rename the 13 → 3 headers (test the first file link) → 4 fix the 1 link and the trails → 5 DriverUpdate chart → ⏸ owner checks Preview → Driver and System charts, chart-page lines → 6 the two box-page pointers → 7 checks → 8 trash the 18, remove emptied folds → 9 re-check, log, memory, report.
+
+**Done when:** the Workflow page matches its snapshot · 19 homes with exact titles, each one click from its chart, System one click from Drivers · every chart box opens the right page · no link points to a trashed page · each home's rule list matches the file (script).
+
+**Who suggested what:**
+- Codex: Read first → S1; the shortcuts; study-map captions and the first-fact line; fix links and trails before trashing; later copy whole sections; keep the look and link the rules for now.
+- Fable: the pointers and the Part B fix; overlap pairs in Open questions; one chart first for Preview; keep the 4 fact-type boxes; re-copy after edits; verified the counts.
+- Claude: reuse the already-linked pages (13/7/18, 1 link to fix); exact file titles; carry every old question and See-also line over; all 8 overlap pairs; the S3 and 2c parts of the propose Driver pointer; "Next ▸" links; the standing & repair "Don't reopen" line; snapshot and pause other editors; rule lists checked by script.
+
+**2026-09-29, owner:** "What is the plan? Can you show me how it will look? Just draw it, and then answer me: are you going to put all the rules verbatim in those pages? What's the plan?"
+- Claude: drew the page tree, the 3 inside charts and one sample section page (U2a).
+- On the rules text: not in this step. Each page gets its rule numbers and a link to its section of the file. The word-for-word copy comes last for each section, as the template says ("Rules (verbatim, filled last)"): every line of the section, copied by script and checked line by line.
+- The alternative was offered: copy all 19 now, folded, at the cost of a re-copy after every rules edit. Claude's pick: copy each section once its study is finished.
+
+**2026-09-29, owner (to the Fable session):** pasted the FINAL plan summary: "All perfect. If not, let me know your final recommendations in a concise manner to be given to Opus. Remember the rules and also keep it well organized and easier to redesign one component at a time."
+→ **Fable's final check of the 🟡 FINAL plan (read in full above; Notion not touched):** page mapping (13 / 7 / 18), rule lists (221, all match), links to fix, safety, run order and the 4 decisions all check out. Five small recommendations, then go:
+1. Home 1's question is the old "links" question and misses what a Driver *is* (2.1, 2.2, 2.38). Draft (✎, needs OK): "What is stored on a Driver, and how does it link to others (family, synonym, rename)?"
+2. One question per page: S3 has two; merge them into one line (✎, Opus drafts, owner OKs).
+3. Every new sentence in ONE block for one OK: the 6 already flagged + the chart caption, the add-DriverUpdate "Means" addition, the two "Read first" lines, the System page's lines, the two pointer lines, the "Also covers:" and "Next ▸" labels.
+4. The new chart block on the System page will show code until the owner sets Preview by hand once (Notion keeps the mode per block; new blocks start as code). Add a ⏸ after the System chart, like the DriverUpdate one.
+5. Rule 1.19: the word "only" was dropped ("A missing synonym link [only] costs a missed comparison…") in both files, uncommitted, author unknown. The two files still match line for line (Fable's check ran on the edited files). Owner: commit or revert before the run; no rule changes during sorting.
+
+**2026-09-29, owner:** "Want you to pick the best of both worlds, but don't rubber-stamp. Think independently and then create one combined plan: the best of all the worlds. .codex:" + pasted Codex final recommendations + "and fable said:" + pasted Fable's 5 fixes (same as the Fable entry above) + "ultrathink"; then, mid-turn: "And once built, go ahead and apply it to Notion and let me know."
+- Codex's text, verbatim: "Keep the 19-section structure. I read the final plan; these are my final recommendations for Opus: / Use one clear question matching each new section. Don't carry every old template question over word for word—they are scaffolding, not rules. Driver 1 must cover the stored record, not just links. The Driver/source/period connections belong in U1a; U2b covers filing-data links. Remove the generic "forecasts and surprises" question from Forecasts. / Make S5's question precise: "How are price-move explanations checked and recorded?" The current rules say this system receives those explanations from an approved source. / Add a short correction on Predictor/Learner: "Price-move explanations are included in release 1; updating the older rule wording is tracked under P5." Leave the main Workflow unchanged. / Ensure the linked file includes the latest approved wording, including the removal of "only" from 1.19. / Everything else—including S1 first, "Next" links, folded open questions, backups and checking links before deletion—is suitable. No further categories or processes are needed. Nothing changed."
+
+## ✅ Combined Notion plan v2 (Claude + Codex + Fable, 2026-09-29). Owner: "once built, go ahead and apply it to Notion and let me know."
+
+**Unchanged from the FINAL plan above:** 19 homes; System next to Workflow; reuse 13, create 7, trash 18 (same mapping); snapshot first; the Workflow page untouched; rule lists; Open questions (parking items + all 8 overlap pairs); "Next ▸" links; link fixes before trashing; the rules text copied later, section by section.
+
+**What changed, and why (independent verdicts):**
+- ONE question per page, written for the whole section (Codex; Fable #1, #2). Old template questions are scaffolding (Claude wrote them on 2026-09-27), not rules, so they are not carried over. Dropped: "Also covers:" lines, and Claude's proposed "Don't reopen" line on home 1 (that fold is filled while studying).
+- Kept (Claude): the existing See-also / "Also in the key" lines on the reused pages. They stay accurate, since their mentions now show the new section names. The one link to a deleted page (identity → repeats & conflicts) is redirected to U2a. The trashed state page's See-also line is not carried: the file's own U1d line already says it ("Guidance and surprise states are in §4: 4.4 and 4.10–4.12").
+- S5's question and the Predictor/Learner correction: Codex's wording, checked against A2.1 (the system only receives verdicts from an approved source) and the S5 note (price moves on in release 1; wording fix under P5).
+- The System chart is new, so it will show as code until the owner clicks Preview once (Fable #4, true per D24). The owner asked to apply and then report, so there is no mid-run pause: at the end the owner checks the 2 redrawn charts and clicks Preview on the System chart. Worst case, a redrawn chart also needs one click.
+- 1.19 "only": the owner's call (Fable #5); Claude recommends keeping the removal (same reason as the owner's 1.12 decision). It does not block the Notion run: the section links work either way. Once decided: commit; the owner pushes, so GitHub shows it (Codex).
+
+**Every new sentence (one block, for the owner's single OK):**
+- Questions: 1 "What is stored on a Driver, what stays fixed, and which relationships are allowed?" · 2a "Which of the 4 types is this Driver, and what decides it? (Set once, never changed.)" · 2b "How is a Driver's name built from the source?" (kept) · 2c "Does the proposal match an existing Driver, and which family is it in?" · 3 "When may a Driver be created, and what evidence is it born with?" (kept) · U1a "What makes a fact unique, and what links and evidence must it carry?" · U1b "Which calendar window is the fact about, and how are its dates worked out?" · U1c "Which part of the company is the fact about, and how was the number measured?" · U1d "What does the fact say happened, and which number, unit and sign does it store?" · U2a "Is this fact already stored, and what may change after saving?" · U2b "Which official line item or breakdown member may a fact link to?" · U2c "How are facts read back and compared?" · U3a "How are company forecasts recorded, revised and withdrawn?" · U3b "Beat, miss or in line, and against what?" (kept) · S1 "What must every build respect?" (the file's §8 question) · S2 "What is this for, which sources feed it, and which companies are covered?" · S3 "How are sources processed over time, with what outcomes and retry rules?" · S4 "How may AI be used, and how is it tested?" · S5 "How are price-move explanations checked and recorded?"
+- Section page labels: "**Kind:** home · **Status:** 🔴 Open"; trail + "· **Next:** ‹next section›"; "**Rules here:** ‹numbers› · [read in the file](https://github.com/faisalanjum/EventTrader/blob/main/.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Categorized.md#‹anchor›)"; Open questions: "**Parking items:** P1, P2 (in this section of the file)" and "**Overlaps to review** (both kept for now): 2.19 / 4.2 (‹U3b›)".
+- create Driver: "**Read first:** ‹S1›"; legend → "Study map: left to right = the order to study, not the order the bot runs · thick arrow = a real next step · ▸ = opens its own page · red border = open." (as built: the 5 sections sit in a row under "Driver")
+- add DriverUpdate: "**Means:** a new DriverUpdate on an existing Driver. The same rules apply to a new Driver's first DriverUpdate, saved together with its Driver (2.35)."; "**Read first:** ‹S1›"; legend → "Study map: top to bottom = the order to study, not the order the bot runs · ▸ = opens its own page · red border = open. The Driver's fact type decides which parts apply." (as built: the 3 bands stack in a column)
+- Both chart pages: fold "Part pages" → "Home pages".
+- System page: "← Back to ‹Drivers›" · "**Kind:** rules for every step · **Status:** 🔴 Open" · "**Read first:** ‹S1›" · "## Inside System" + chart · "▸ = opens its own page · red border = open." · "**Full rules file:** [DRIVER_RULES_Categorized.md](https://github.com/faisalanjum/EventTrader/blob/main/.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Categorized.md)" · fold "Home pages".
+- propose Driver: "Rules: 2.40, 2.41 · Part B." → "Rules: ‹2a› and ‹2b› (what to propose) · ‹S3› (1.14: propose before seeing existing names) · ‹2c› (2.40, 2.41: the check)."
+- Driver already exists?: "**Rules:** ‹2c›".
+- Predictor/Learner, under its ⚠ callout: "**Update (2026-09-29):** Price-move explanations are included in release 1; updating the older rule wording is tracked under P5."
+
+**2026-09-29, owner (mid-turn):** "also" + pasted (Codex): "Mostly yes. Give Opus these final clarifications: / Home 1: "What is stored on a Driver, what stays fixed, and which relationships are allowed?" This avoids implying that family is a stored link—it is read from the name. / S3: "How are sources processed over time, with what outcomes and retry rules?" / Agreed: collect all new visible wording into one approval block. Preserve the earlier S5 wording and release-1 correction too. / Check System's display after creation. Pause for you only if Preview needs changing; don't assume every new block necessarily shows code. / The author is known: I removed "only" at your explicit request. Keep that approved change and commit it separately before the Notion work. It is not an unexplained edit. / No further structural changes needed."
+- Claude: adopted both questions. Home 1: family is read from the name, not stored (1.18, 1.19), so the old draft's "link to others (family…)" was misleading. S3: the question now maps onto the section title. Both are updated in the combined plan v2 above.
+- 1.19 committed separately: 2eae6eb41 (both rules files; still 0 lines missing between them). Not pushed: GitHub shows it after the owner pushes.
+- Display check: the Notion tool cannot see Code vs Preview, so the owner checks the charts at the end and clicks Preview only where code shows.
+
+**2026-09-29, owner (mid-run):** "The only thing is, I think that system page or system design should be inside workflow somewhere appropriately. That should be the linkage because I think I will be reading it from one page. That should be my main hub. You've separated out the system, which I don't like. The only thing I need is a link from this page, kind of shown as a side component visually that I can click and come back to it and so on."
+- Claude: System moves under Workflow, into its "Box pages" fold. The main chart gets a separate side box, "System ▸" in its own band "Rules for every step" and not connected to the flow, which opens the System page. The legend gets that box's colour. Trails become "Workflow › System". This replaces decision 1 ("System next to Workflow"). Workflow is the one hub.
+
+**2026-09-29, owner (mid-run):** "Make sure you thoroughly check that everything is also perfect. Like it says, everything is colored bordered red because nothing has been reviewed yet." · "I think most of them have the red borders."
+
+**✅ 2026-09-29, Claude: Notion restructure APPLIED (combined plan v2 + System inside Workflow).**
+- Before any edit, exact copies of all 42 touched pages were saved: `~/.claude/projects/-home-faisal-EventMarketDB/backups/notion_before_restructure_2026-09-29/` (index.tsv; all captured before the first edit).
+- Workflow (the hub) is unchanged except:
+  - a side band "Rules for every step" holding "System ▸" (grey fill, red border), not connected to the flow;
+  - a legend entry for that colour;
+  - System in the Box pages fold.
+- System now lives under Workflow; the Drivers page shows only Workflow.
+- create Driver: chart = Driver → 1 · 2a (+ metric/guidance/surprise/action_event) · 2b · 2c · 3 ⇒ first DriverUpdate; "Read first: S1"; new legend; fold "Home pages" (1, 2a, 2b, 2c, 3).
+- add DriverUpdate: chart = 3 bands U1/U2/U3 with 9 sections; new "Means" line; "Read first"; new legend; fold "Home pages" (U1a…U3b).
+- System: chart S1–S5; "Read first"; a link to the full rules file; fold "Home pages" (S1…S5).
+- 19 section pages have exact file titles, trail + Next ▸, "Kind: home · Status: 🔴 Open", one question, "Rules here" + a GitHub section link, and Open questions (parking items + all 8 overlap pairs). Kept See-also lines: U1a (its tie-breaker link now → U2a), U1c, U1d, U3a, U3b.
+- Box pages: propose Driver (pointer line; "Part B" gone), Driver already exists? (Rules: 2c), Predictor/Learner (release-1 note). The other 4 box pages are unchanged.
+- Trashed 18: Notion shows each as "deleted" (in trash for 30 days).
+- Verified by script (`scratchpad/notion/check_notion.py`) on fresh fetches of all 49 pages: 895 checks passed, 0 failed. It covers:
+  - titles, parents, trails, Next links, question, rule line, open questions, leftover folds;
+  - every chart box red-bordered, click targets, fold order;
+  - Workflow/box-page diffs against the backups;
+  - no link to a deleted page.
+- The checker itself was proven by planting 4 errors: it caught all 4.
+- GitHub file page loads, with the section headings present.
+- Not verifiable by tool: whether each chart shows as a picture or as code. The owner checks the 4 charts and clicks Preview if one shows code (the new System chart is the most likely).
+- Pending the owner: push 2eae6eb41 (the 1.19 change) with `! git push origin main`.
+- The owner pushed it: `424d2e5af..2eae6eb41 main -> main`. GitHub now shows the approved 1.19 wording.
+
+**2026-09-29, owner:** "One last very important thing: can you take this file and organize it nicely so it's concise and has everything important we may need later, but nothing unnecessary? Make it concise and well-organized." (DriversFinal/JEV.md) + mid-turn: "The idea is that this file can be passed to another new agent with no context in a new session, and it should be able to know every detail that we could possibly use. This is just an experiment that we created, but it seems like a wall of text, so that's what"
+- Claude reorganized JEV.md for a no-context agent: §0 start here + glossary; §1–3 picture and owner decisions; §4–5 using and testing Jev; §6 evidence per test; §7 prompt versions; §8–11 reference; Appendix A = the 9 prompts verbatim, folded (inserted by script, identical to the files in JEV scripts/).
+- Nothing dropped: a script checked that every number, hash, file name and quoted rule text of the old file is in the new one.
+- Backup: ~/.claude/projects/-home-faisal-EventMarketDB/backups/JEV.before-reorg-2026-09-29.md.
+- Section references updated in JEV scripts/README.md (plus a fix: the claim-checker files were listed under baseline/horizon/slice) and in 10 scripts' header comments (comment-only; all compile). Not committed.
+
+**2026-09-29, owner (to the Fable session):** "in DRIVER_RULES_Categorized.md can you make this mermaid or whatever diagram proper since when printed - it doesn't show well [the text picture under 1.2] … ensure that you read all the links and everything … a big diagram which shows everything" + "Ensure to read every link and include it here." + "Mostly Neo4j links: how exactly will it be seen in a Neo4j database according to our design?"
+→ Fable (no file changes; waiting for yes): drew the Neo4j-level picture (nodes as labels, links as relationship names) from the rules file + FINAL_DESIGN §2/§7.3 + the writer code (`OF_DRIVER`, `FROM_SOURCE`, `HAS_PERIOD`, `MAPS_TO_MEMBER {slice_part, axis}`; `MAPS_TO_CONCEPT` named in FINAL_DESIGN, not written yet; `EXPLAINED_BY` verdict edge; `DailyCompanyMoveEvent` with `FOR_COMPANY`, `ON_DATE`) + the live Neo4j schema (Report `PRIMARY_FILER`, Company `HAS_TRANSCRIPT`, `INFLUENCES {returns}`, Date `HAS_PRICE`, XBRL Fact/Concept/Member/Dimension/Period, old Guidance nodes). Rendered with mermaid-cli 11.17 (Chrome) and checked. Review page: https://claude.ai/artifact/9Lcw85Fn1JVzWFR6xsCXYC (diagram, Mermaid source, one table row per link with rules and where each name comes from, open points). Proposed edit: replace the ```text block (Simplified 79–85, Categorized 20–26) with the Mermaid block + the tables in BOTH files; the legend rule line stays. Open points found: CONTINUES_AS between slice labels / measurement tags has no node to attach to (6.13); MAPS_TO_CONCEPT not in the writer; birth-evidence property names not fixed (2.1); verdict-as-edge comes from FINAL_DESIGN, the rules file is silent.
+
+**2026-09-29, owner:** "I think they are both more or less the same files. Can we delete one?" (PreviousRules.md, AUDIT_1_to_4.md)
+- Claude compared them line by line. PreviousRules.md is the audit report as first written (13:45).
+- AUDIT_1_to_4.md (16:15) has all of it, plus the Outcome section and corrected wording. The only lines unique to PreviousRules.md are 4 headings (bold text in AUDIT) and the out-of-date "No rules or source file was changed" sentence.
+- Deleted PreviousRules.md (uncommitted; a copy remains in git 424d2e5af). Nothing linked to it.
+
+**2026-09-29, owner (to the Fable session):** "You agree with Codex?" + Codex's review of the diagram draft (5 points: two implementation claims wrong — ContinuationClaim exists at FINAL_DESIGN.md:197, the writer plans first_fact_id + birth quotes at driver_write_cli.py:604; add the missing links (company → industry → sector, Context/Unit); say one source in total; separate existing / proposed / disabled; "dotted = no stored relationship"; test print readability).
+→ Fable: agrees on all five; both facts verified in the files. Print test by measurement: the one-picture version prints at 3.5 pt on A4 landscape (unreadable), so it is now three pictures (A fact and its Driver 8.2 pt · B companies, prices and verdicts 7.0 pt · C tagged filing data 8.5 pt) plus the tables; the 24 properties point to the 3.3 table. Status column: already in the database · new stored · new, named only in the older design (†) · off / release 2. Review page updated (same link). Still waiting for the owner's yes before touching the rules files.
+
+**2026-09-29, owner:** "Is it possible for you to create a link on that main workflow Notion page? Somewhere most appropriate without disturbing anything else and just provide a link to this diagram … Also, on your four open points MAPS_TO_CONCEPT and i will add while redesigning to main text."
+→ Fable: ADDED one line to the Notion Workflow page, between the legend chart and the "Box pages" fold: "🗺️ Graph in Neo4j — every node and link of the Driver design, as the database will show them: open the map" → https://claude.ai/artifact/9Lcw85Fn1JVzWFR6xsCXYC. Nothing else on the page touched (charts, legend, fold unchanged). NOTE for the restructure run: the Workflow page now differs from its snapshot by this one line, by owner order; the page also already carries the new "System ▸" box (other session, 21:17). Open points (MAPS_TO_CONCEPT not written yet; birth-evidence property names; verdict-as-edge and ContinuationClaim only in the older design): the owner will fold them into the main text during the redesign; no parking rows.
+
+**2026-09-29, owner:** "Yes to three pictures and the two tables. They're easier to read and study separately." + Codex's conditions: "Yes. Enlarge picture B's 7-point text and keep node names consistent across all three pictures. This approves the presentation, not any unresolved design choices."
+→ **APPLIED (Fable)** to `DRIVER_RULES_Simplified.md` (the old ```text picture at lines 79–85) and `DRIVER_RULES_Categorized.md` (home 1, after 1.2): one legend line + Picture A (a fact and its Driver, LR) + Picture B (companies, prices and verdicts, TB, group boxes removed so it prints larger: 8.9 pt) + Picture C (where the two filing-data links land, LR) + two tables (stored relationships with a Status column: already in the database · new stored · new planned † · off / release 2; and relations with no stored relationship). Node names identical across the pictures. The legend rule line after the picture (SAME_AS · CONTINUES_AS · Family) unchanged; no rule text changed. Backups: `~/.claude/projects/-home-faisal-EventMarketDB/backups/DRIVER_RULES_Simplified.before-neo4j-pictures-2026-09-29.md` (sha256 1e603788…) and `…/DRIVER_RULES_Categorized.before-neo4j-pictures-2026-09-29.md` (sha256 c68f5b6b…).
+- Checks after the edit: 221 rules in each file, each once; all 903 non-blank master lines appear once in the sorted copy; 118 structure lines unchanged; fences balanced (master 3 mermaid blocks; copy 3 + the outline block); the three blocks render from the saved master with mermaid-cli 11.17 (Chrome); print sizes on A4 landscape A 8.2 pt · B 8.9 pt · C 8.6 pt.
+- Not committed (with the earlier 1.19 edit). Review page updated: https://claude.ai/artifact/9Lcw85Fn1JVzWFR6xsCXYC. Approval = presentation only; † names stay older-design choices until the owner decides (to be folded into the main text during the redesign, owner 2026-09-29).
 
 # Archived: approved no-stages proposal — 2026-09-28
 

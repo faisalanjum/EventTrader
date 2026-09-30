@@ -1,4 +1,4 @@
-"""New slice keys from the proposed ruling 3 (JEV.md 3.15), frozen BEFORE the rescore run."""
+"""New slice keys from the proposed ruling 3 (JEV.md §6.4), frozen BEFORE the rescore run."""
 import json,hashlib
 items=json.load(open('items_more.json'))
 REMAP={'mainline':'unknown','regionalcarrier':'unknown','mro business':'unknown','salestoairlinesegment':'customer'}

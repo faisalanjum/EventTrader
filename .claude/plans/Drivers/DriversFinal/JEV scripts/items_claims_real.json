@@ -1,0 +1,514 @@
+[
+ {
+  "id": "RM|DEV-039|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "Finance Lease Obligations. As described further in Note 7 of the Notes to the Consolidated Financial Statements, as of December 31, 2025 we had a total of $870 million of minimum finance lease obligations. These minimum lease payments are generally decreasing on an annual basis from approximately $300 million in 2026 to $100 million in 2030.\n\nCapital Returns to Shareholders.",
+   "quote": "During 2025, we continued our quarterly dividend program with $0.15 per share payments in the March 2025 and June 2025 quarters and $0.1875 per share payments in the September 2025 and December 2025 quarters.",
+   "text_after_quote": "Total dividend payments during the year ended December 31, 2025 were $440 million.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|DEV-042|metric",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "winter storms",
+   "text_before_quote": "Even in a volatile operating environment, our pretax margin improved by nearly 2 points year over year, and we still anticipate modest profitability for the year assuming the current forward fuel curve. Demand for our product is growing, and our customer satisfaction scores are improving. We have built a strong foundation to deliver value for our customers, team members and shareholders in 2026 and beyond.\u201d American\u2019s four multiyear commercial initiatives are driving results.",
+   "quote": "The company delivered record first-quarter revenue of $13.9 billion, despite an estimated $320 million revenue impact from winter storms.",
+   "text_after_quote": "Demand was strong in the first quarter, and American recorded the nine highest revenue intake weeks in its 100-year history. American had year-over-year total revenue growth of 10.8% in the quarter.",
+   "claim": "The fact about winter storms is a metric fact: a standing variable readable again over time (a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand), not only a number."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "metric",
+  "L_key": "action_event",
+  "L_kind": "real action_event->metric [QC4]"
+ },
+ {
+  "id": "RM|DEV-052|metric",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "winter storms",
+   "text_before_quote": "Demand for our product is growing, and our customer satisfaction scores are improving. We have built a strong foundation to deliver value for our customers, team members and shareholders in 2026 and beyond.\u201d American\u2019s four multiyear commercial initiatives are driving results. The company delivered record first-quarter revenue of $13.9 billion,",
+   "quote": "despite an estimated $320 million revenue impact from winter storms",
+   "text_after_quote": "Demand was strong in the first quarter, and American recorded the nine highest revenue intake weeks in its 100-year history. American had year-over-year total revenue growth of 10.8% in the quarter.",
+   "claim": "The fact about winter storms is a metric fact: a standing variable readable again over time (a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand), not only a number."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "metric",
+  "L_key": "action_event",
+  "L_kind": "real action_event->metric [V6]"
+ },
+ {
+  "id": "RM|DEV-054|guidance",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "profit sharing",
+   "text_before_quote": "2025 Financial Overview\n\nThe decreases in operating income and operating income, adjusted primarily result from nearly offsetting increases in both revenue and operating expenses, as described below. As a result of our strong performance in 2024 and 2025, we paid profit sharing of $1.4 billion in February 2025 to our employees and",
+   "quote": "will pay another $1.3 billion in February 2026 in recognition of these achievements",
+   "text_after_quote": "Revenue.",
+   "claim": "The fact about profit sharing is a guidance fact: the company's own forward outlook, target or forecast."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "guidance",
+  "L_key": "action_event",
+  "L_kind": "real action_event->guidance [QC4]"
+ },
+ {
+  "id": "RM|DEV-061|metric",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "winter storms",
+   "text_before_quote": "Demand for our product is growing, and our customer satisfaction scores are improving. We have built a strong foundation to deliver value for our customers, team members and shareholders in 2026 and beyond.\u201d American\u2019s four multiyear commercial initiatives are driving results. The company delivered record first-quarter revenue of $13.9 billion,",
+   "quote": "despite an estimated $320 million revenue impact from winter storms.",
+   "text_after_quote": "Demand was strong in the first quarter, and American recorded the nine highest revenue intake weeks in its 100-year history. American had year-over-year total revenue growth of 10.8% in the quarter.",
+   "claim": "The fact about winter storms is a metric fact: a standing variable readable again over time (a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand), not only a number."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "metric",
+  "L_key": "action_event",
+  "L_kind": "real action_event->metric [V6]"
+ },
+ {
+  "id": "RM|DEV-085|metric",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "jet fuel expense",
+   "text_before_quote": "Based on the forward fuel curve and the current revenue outlook, the midpoint of the full-year guidance is expected to be approximately flat to 2025,",
+   "quote": "despite a greater than $4 billion increase in expense related to higher prices for jet fuel",
+   "text_after_quote": "\u201cAmerican delivered record revenue in the first quarter, and we\u2019re on track for another record in the second quarter,\u201d said American\u2019s CEO Robert Isom.",
+   "claim": "The fact about jet fuel expense is a metric fact: a standing variable readable again over time (a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand), not only a number."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "metric",
+  "L_key": "guidance",
+  "L_kind": "real guidance->metric [QC4+V6]"
+ },
+ {
+  "id": "RM|H1-001|action_event",
+  "state": {
+   "where_it_appears": "Other Events item of a current report (8-K)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "Item 8.01 Other Events.\n\nOn June 19, 2024, Commercial Metals Company (NYSE: CMC) (the \"Company\") issued a press release announcing that",
+   "quote": "the board of directors of the Company declared a regular quarterly cash dividend of $0.18 per share of CMC common stock. The dividend will be paid on July 10, 2024, to stockholders of record as of the close of business on July 1, 2024.",
+   "text_after_quote": "A copy of the Company's press release is attached hereto as Exhibit 99.1 and is incorporated herein by reference.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H1-013a|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "new store openings",
+   "text_before_quote": "\u201cNotes to Unaudited Condensed Consolidated Financial Statements.\u201d\n\nWe spent $19.0 million and $9.7 million for capital expenditures during the first quarters of fiscal 2023 and fiscal 2022, respectively. We expect to fund capital expenditures from cash on hand generated from operations.",
+   "quote": "We opened 9 new stores and closed one store during the first quarter of fiscal 2023",
+   "text_after_quote": "and we expect to open approximately 45 stores during fiscal 2023.",
+   "claim": "The fact about new store openings is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4+V6]"
+ },
+ {
+  "id": "RM|H1-035|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "dividends per share",
+   "text_before_quote": "We continually evaluate if share repurchases reflect a prudent use of our capital and, subject to compliance with our ABL Credit Facility and Senior Secured Notes, we may purchase shares in the future. As of May 27, 2023, we have $330.0 million remaining on our Board approved repurchase authorization.",
+   "quote": "On May 17, 2023, our Board of Directors approved a quarterly cash dividend of $0.27 per share payable on June 28, 2023, to common stockholders of record at the close of business on June 14, 2023.",
+   "text_after_quote": "Contractual Obligations and Commercial Commitments\n\nThere have been no material changes in our contractual obligations since the end of Fiscal 2022.",
+   "claim": "The fact about dividends per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4+V6]"
+ },
+ {
+  "id": "RM|H2-024|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "employee base pay",
+   "text_before_quote": "Salaries and Related Costs. The increase in salaries and related costs primarily resulted from the implementation of",
+   "quote": "base pay increases for eligible employees of 5% effective June 1, 2024",
+   "text_after_quote": "and 4% effective June 1, 2025, and 4% for Delta pilots on January 1, 2025.\n\nAircraft Fuel and Related Taxes.",
+   "claim": "The fact about employee base pay is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H2-025|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "long term debt and finance lease repayments",
+   "text_before_quote": "Additionally, we incurred $554 million in net payments on fuel financing transactions. These cash outflows were offset in part by $997 million of proceeds from the issuance of EETCs in connection with the financing of certain aircraft.",
+   "quote": "Our principal financing activities in the first quarter of 2025 primarily included $1.4 billion in long-term debt and finance lease repayments, consisting of $910 million in scheduled repayments, $308 million of early repayments toward portions of the outstanding principal amounts of the 10.75% senior secured IP notes and 10.75% senior secured LGA/DCA notes and $144 million of early repayments for the outstanding principal amount of equipment notes issued under an EETC.",
+   "text_after_quote": "These cash outflows were offset in part by $325 million of proceeds from the issuance of long-term debt, primarily from the issuance of equipment loans and other notes payable in connection with the financing of certain aircraft.",
+   "claim": "The fact about long term debt and finance lease repayments is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H2-039|action_event",
+  "state": {
+   "where_it_appears": "Business section of an annual report (10-K)",
+   "driver_name": "craf program participation",
+   "text_before_quote": "Market prices for RINs have been volatile and marked by periods of sharp increases and decreases.\n\nCivil Reserve Air Fleet Program\n\nWe participate in the Civil Reserve Air Fleet program (the \"CRAF Program\"), which permits the U.S. military to use the aircraft and crew resources of participating U.S. airlines during airlift emergencies, national emergencies or times of war.",
+   "quote": "We have agreed to make available under the CRAF Program a portion of our international aircraft during the contract period that ends on October 31, 2030, with the opportunity to opt in or out of the program every two years.",
+   "text_after_quote": "The CRAF Program has only been activated three times since it was created in 1951, most recently in 2021 to support the military\u2019s effort to evacuate people from Afghanistan following the withdrawal of U.S. troops from the country.",
+   "claim": "The fact about craf program participation is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4+V6]"
+ },
+ {
+  "id": "RM|H2-048|metric",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "debt early repayment",
+   "text_before_quote": "Investing activities resulted in net cash outflows of approximately $4.2 billion, primarily for capital expenditures. After adjusting for our strategic investment in WestJet and certain other items, these results generated $4.6 billion of free cash flow (a non-GAAP financial measure) in 2025.\n\nAlso, during 2025 we had financing cash outflows of $4.8 billion related to repayment of our debt and finance leases,",
+   "quote": "including $2.9 billion for early repayments and the remainder for scheduled maturities",
+   "text_after_quote": "Our proceeds from long-term obligations primarily related to the issuance of $2.0 billion in aggregate principal amount of unsecured notes.",
+   "claim": "The fact about debt early repayment is a metric fact: a standing variable readable again over time (a number, cost, price, rate, count or ratio, or a qualitative condition such as weather, sentiment, policy in force, labor or brand), not only a number."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "metric",
+  "L_key": "action_event",
+  "L_kind": "real action_event->metric [V6]"
+ },
+ {
+  "id": "RM|H4-007|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "other operating expense",
+   "text_before_quote": "[Table]\n\n[End of table]\n\nItem 7. MD&A - Results of Operations\n\nAircraft Maintenance Materials and Outside Repairs. The decrease in aircraft maintenance materials and outside repairs expense primarily resulted from the timing of engine maintenance activities, renegotiated engine maintenance agreements and a gain from the sale of our MRO JV located in Queretaro, Mexico. These decreases were partially offset by a higher volume of airframe checks in 2025.\n\nOther .",
+   "quote": "The decrease in other operating expense primarily resulted from gains from several sale-leaseback transactions and lower irregular operations expense in 2025.",
+   "text_after_quote": "",
+   "claim": "The fact about other operating expense is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [V6]"
+ },
+ {
+  "id": "RM|H4-024|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "net purchases of short term investments",
+   "text_before_quote": "Sources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nOur net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments",
+   "text_after_quote": "and $811 million of capital expenditures, which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines.",
+   "claim": "The fact about net purchases of short term investments is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H4-025|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "capital expenditures",
+   "text_before_quote": "American\n\nOperating Activities\n\nAmerican\u2019s net cash provided by operating activities was $4.2 billion and $2.3 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in American\u2019s air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nAmerican\u2019s net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "American\u2019s principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments and $788 million of capital expenditures, which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines. \n\nAmerican\u2019s principal investing activities in the first quarter of 2025 included $805 million of capital expenditures, which primarily related to the purchase of seven Boeing 737 MAX aircraft, two Embraer E175 aircraft, two Bombardier CRJ900 aircraft, one Airbus A321neo aircraft and four aircraft engines. Additionally, American had $457 million in net purchases of short-term investments.",
+   "text_after_quote": "Financing Activities\n\nAmerican\u2019s net cash used in financing activities was $1.9 billion and $1.1 billion for the first quarter of 2026 and 2025, respectively.",
+   "claim": "The fact about capital expenditures is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H4-027|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "net purchases of short term investments investing",
+   "text_before_quote": "Sources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nOur net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments and $811 million of capital expenditures",
+   "text_after_quote": "which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines.",
+   "claim": "The fact about net purchases of short term investments investing is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H4-038|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "short term investments net purchases",
+   "text_before_quote": "Sources and Uses of Cash\n\nAAG\n\nOperating Activities\n\nOur net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.\n\nInvesting Activities\n\nOur net cash used in investing activities was $2.3 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal investing activities in the first quarter of 2026 included $1.5 billion in net purchases of short-term investments and $811 million of capital expenditures, which primarily related to the purchase of nine Boeing 737 MAX aircraft, two Embraer E175 aircraft, one Bombardier CRJ900 aircraft and six aircraft engines. \n\nOur principal investing activities in the first quarter of 2025 included $824 million of capital expenditures, which primarily related to the purchase of seven Boeing 737 MAX aircraft, two Embraer E175 aircraft, two Bombardier CRJ900 aircraft, one Airbus A321neo aircraft and four aircraft engines. Additionally, we had $457 million in net purchases of short-term investments.",
+   "text_after_quote": "Financing Activities\n\nOur net cash used in financing activities was $1.9 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "claim": "The fact about short term investments net purchases is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H5G-43|action_event",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "EXHIBIT 99.1 News Release CMC ANNOUNCES QUARTERLY DIVIDEND OF $0.16 PER SHARE Irving, Texas - October 10, 2023 -",
+   "quote": "Today, October 10, 2023, the board of directors of Commercial Metals Company (\"CMC\") (NYSE: CMC) declared a regular quarterly cash dividend of $0.16 per share of CMC common stock. CMC\u2019s 236th consecutive quarterly dividend will be paid on November 9, 2023, to stockholders of record as of the close of business on October 26, 2023.",
+   "text_after_quote": "About CMC CMC is an innovative solutions provider helping build a stronger, safer and more sustainable world.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H5G-59|action_event",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "The Company's balance sheet and liquidity position remained strong. As of May 31, 2024, cash and cash equivalents totaled $698.3 million, with available liquidity of nearly $1.5 billion. During the quarter, CMC repurchased 931,281 shares of common stock valued at $51.8 million in the aggregate. As of May 31, 2024, $458.6 million remained available under the current share repurchase authorization.",
+   "quote": "On June 19, 2024, the board of directors declared a quarterly dividend of $0.18 per share of CMC common stock payable to stockholders of record on July 1, 2024, representing an increase of approximately 13% on a year-over-year basis.",
+   "text_after_quote": "The dividend to be paid on July 10, 2024, marks the 239th consecutive quarterly payment by the Company.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H5M-014|guidance",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "aircraft purchase commitments",
+   "text_before_quote": "Aircraft and Engine Purchase Commitments\n\nAs of March 31, 2026, we had definitive purchase agreements for the acquisition of the following new aircraft (1) :\n\nRemainder of 2026 2027 2028 2029 and Thereafter Total Airbus\n\nA320 Family (2)\n\n15 23 48 75 161 Boeing 737 Family 5 \u2014 \u2014 115 120 787 Family 1 3 5 10 19 Embraer E175 17 14 17 30 78",
+   "quote": "Total 38 40 70 230 378",
+   "text_after_quote": "(1) Delivery schedule represents our best estimate as of the date of this report as described in footnote (d) to the \u201cContractual Obligations\u201d table below.",
+   "claim": "The fact about aircraft purchase commitments is a guidance fact: the company's own forward outlook, target or forecast."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "guidance",
+  "L_key": "metric",
+  "L_kind": "real metric->guidance [QC4]"
+ },
+ {
+  "id": "RM|H5M-018|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "landing fees and other rents",
+   "text_before_quote": "In addition, the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.\n\nContracted Services. The increase in contracted services resulted from inflationary rate increases in our operations, volume increases on a 3% increase in capacity and additional contract labor costs associated with the expansion of our Sky Club network, particularly our Delta One lounges.\n\nLanding Fees and Other Rents.",
+   "quote": "The increase in landing fees and other rents resulted from higher rates charged by airports following extensive redevelopment projects at numerous facilities and more flights compared to 2024.",
+   "text_after_quote": "Regional Carrier Expense. The increase in regional carrier expense primarily resulted from higher volume of regional flights and annual rate increases.\n\n[Table]\n\n[End of table]\n\nItem 7.",
+   "claim": "The fact about landing fees and other rents is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [V6]"
+ },
+ {
+  "id": "RM|H5M-025|action_event",
+  "state": {
+   "where_it_appears": "Risk Factors section of an annual report (10-K)",
+   "driver_name": "saf price",
+   "text_before_quote": "The legislation also provides for a review of the effectiveness of CORSIA in 2026 that could, if CORSIA is not deemed sufficiently effective, lead to the application of EU ETS to all flights departing the EU and EEA, which would increase costs. Also in 2023, the EU adopted legislation that established a SAF mandate on fuel supplied at EU airports. Beginning in 2025, the mandate required 2% of the jet fuel supplied in the EU to be SAF, and the percentage increases incrementally over time to 70% in 2050.",
+   "quote": "This mandate has increased SAF prices in the EU for the airline industry.",
+   "text_after_quote": "In 2024, the UK also adopted SAF mandate legislation, and other countries are also considering mandates.",
+   "claim": "The fact about saf price is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H5M-036|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "long term debt and finance lease repayments",
+   "text_before_quote": "Additionally, we had $457 million in net purchases of short-term investments.\n\nFinancing Activities\n\nOur net cash used in financing activities was $1.9 billion and $1.2 billion for the first quarter of 2026 and 2025, respectively.",
+   "quote": "Our principal financing activities in the first quarter of 2026 included $2.3 billion in long-term debt and finance lease repayments, consisting of the $1.0 billion early repayment on the outstanding principal amount of the 8.50% senior secured notes and $1.3 billion in scheduled repayments, including the outstanding principal amount of the senior short-term term loan facility.",
+   "text_after_quote": "Additionally, we incurred $554 million in net payments on fuel financing transactions. These cash outflows were offset in part by $997 million of proceeds from the issuance of EETCs in connection with the financing of certain aircraft.",
+   "claim": "The fact about long term debt and finance lease repayments is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H5M-037|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "employee base pay",
+   "text_before_quote": "Salaries and Related Costs. The increase in salaries and related costs primarily resulted from the implementation of base pay increases for eligible employees of 5% effective June 1, 2024 and",
+   "quote": "4% effective June 1, 2025",
+   "text_after_quote": "and 4% for Delta pilots on January 1, 2025.\n\nAircraft Fuel and Related Taxes.",
+   "claim": "The fact about employee base pay is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|DIV-H1-001-amount|action_event",
+  "state": {
+   "where_it_appears": "Other Events item of a current report (8-K)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "Item 8.01 Other Events.\n\nOn June 19, 2024, Commercial Metals Company (NYSE: CMC) (the \"Company\") issued a press release announcing that the board of directors of the Company declared",
+   "quote": "a regular quarterly cash dividend of $0.18 per share of CMC common stock",
+   "text_after_quote": "The dividend will be paid on July 10, 2024, to stockholders of record as of the close of business on July 1, 2024.\n\nA copy of the Company's press release is attached hereto as Exhibit 99.1 and is incorporated herein by reference.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|DIV-H1-035-amount|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of a quarterly report (10-Q)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "We continually evaluate if share repurchases reflect a prudent use of our capital and, subject to compliance with our ABL Credit Facility and Senior Secured Notes, we may purchase shares in the future. As of May 27, 2023, we have $330.0 million remaining on our Board approved repurchase authorization.\n\nOn May 17, 2023, our Board of Directors approved",
+   "quote": "a quarterly cash dividend of $0.27 per share",
+   "text_after_quote": "payable on June 28, 2023, to common stockholders of record at the close of business on June 14, 2023.\n\nContractual Obligations and Commercial Commitments\n\nThere have been no material changes in our contractual obligations since the end of Fiscal 2022.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|DIV-H5G-43-amount|action_event",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "EXHIBIT 99.1 News Release CMC ANNOUNCES QUARTERLY DIVIDEND OF $0.16 PER SHARE Irving, Texas - October 10, 2023 - Today, October 10, 2023, the board of directors of Commercial Metals Company (\"CMC\") (NYSE: CMC) declared",
+   "quote": "a regular quarterly cash dividend of $0.16 per share of CMC common stock",
+   "text_after_quote": "CMC\u2019s 236th consecutive quarterly dividend will be paid on November 9, 2023, to stockholders of record as of the close of business on October 26, 2023.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|DIV-H5G-59-amount|action_event",
+  "state": {
+   "where_it_appears": "earnings press release (Exhibit 99.1)",
+   "driver_name": "dividend per share",
+   "text_before_quote": "The Company's balance sheet and liquidity position remained strong. As of May 31, 2024, cash and cash equivalents totaled $698.3 million, with available liquidity of nearly $1.5 billion. During the quarter, CMC repurchased 931,281 shares of common stock valued at $51.8 million in the aggregate. As of May 31, 2024, $458.6 million remained available under the current share repurchase authorization. On June 19, 2024, the board of directors declared",
+   "quote": "a quarterly dividend of $0.18 per share of CMC common stock",
+   "text_after_quote": "payable to stockholders of record on July 1, 2024, representing an increase of approximately 13% on a year-over-year basis. The dividend to be paid on July 10, 2024, marks the 239th consecutive quarterly payment by the Company.",
+   "claim": "The fact about dividend per share is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H6-021|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "delta pilots base pay",
+   "text_before_quote": "Salaries and Related Costs. The increase in salaries and related costs primarily resulted from the implementation of base pay increases for eligible employees of 5% effective June 1, 2024 and 4% effective June 1, 2025, and",
+   "quote": "4% for Delta pilots on January 1, 2025",
+   "text_after_quote": "Aircraft Fuel and Related Taxes. Fuel expense decreased $747 million compared to 2024 primarily due to a 9% decrease in the market price of jet fuel partially offset by a 4% increase in consumption on a 3% increase in capacity.",
+   "claim": "The fact about delta pilots base pay is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4]"
+ },
+ {
+  "id": "RM|H6-023|guidance",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "pension expected long term rate of return",
+   "text_before_quote": "The investment strategy for our defined benefit pension plan assets is to earn a long-term return that meets or exceeds our annualized return target while taking an acceptable level of risk and maintaining sufficient liquidity to pay current benefits and other cash obligations of the plan. This is achieved by investing in a globally diversified mix of public and private equity, fixed income, real assets, hedge funds and other assets and instruments.",
+   "quote": "The expected long-term rate of return on our defined benefit pension plan assets is 6.96%.",
+   "text_after_quote": "The impact of a 0.50% change in weighted average discount rate and 1.00% change in expected long-term rate of return on assets are shown in the table below:",
+   "claim": "The fact about pension expected long term rate of return is a guidance fact: the company's own forward outlook, target or forecast."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "guidance",
+  "L_key": "metric",
+  "L_kind": "real metric->guidance [QC4]"
+ },
+ {
+  "id": "RM|H6-033|action_event",
+  "state": {
+   "where_it_appears": "Management's Discussion and Analysis of an annual report (10-K)",
+   "driver_name": "profit sharing",
+   "text_before_quote": "Profit Sharing. Our broad-based employee profit sharing program provides that, for each year in which we have an annual pre-tax profit, as defined by the terms of the program, we will pay a specified portion of that profit to employees. In determining the amount of profit sharing, the program defines profit as pre-tax profit adjusted for profit sharing and certain other items.\n\nWe pay profit sharing annually in February.",
+   "quote": "We paid $1.4 billion in 2025 to our employees in recognition of their contributions toward meeting our financial goals.",
+   "text_after_quote": "During the year ended December 31, 2025, we recorded $1.3 billion in profit sharing expense based on 2025 pre-tax profit, which we will pay to employees in February 2026.\n\n[Table]\n\n[End of table]\n\nItem 7.",
+   "claim": "The fact about profit sharing is an action_event fact: a discrete thing that happened (a decision, transaction, incident, approval or one-off charge)."
+  },
+  "L_true": false,
+  "L_task": "type",
+  "L_claimed": "action_event",
+  "L_key": "metric",
+  "L_kind": "real metric->action_event [QC4+V6]"
+ }
+]
