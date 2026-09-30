@@ -6,7 +6,7 @@
 - **Preserve essential qualifiers.** Store text values, conditions, denials, participants and distinct dates when they affect meaning.
 - **Clarify fact boundaries.** Separate one-off events from standing levels/conditions, planned actions from forecast levels, and predicted misses from observed misses. Count unclear facts; never force them into a type.
 - **Share macro facts.** Reuse each source-backed macro release/comparison across affected companies, preserving its period and expectation source.
-- **Fix inputs and enforce information cutoffs.** Check unreadable text, company attribution and source versions. Exclude the outcome being predicted from prediction inputs. Document structure, tables and source locations: see [Dockling/dockling.md](Dockling/dockling.md).
+- **Fix inputs and enforce information cutoffs.** Check unreadable text, company attribution and source versions. Exclude the outcome being predicted from prediction inputs. Document structure, tables and source locations: see [Dockling/docling.md](Dockling/docling.md).
 - **Validate coverage and usefulness.** Use fresh, independently labeled text to measure misses, errors and facts that fit nowhere. Then test predictive improvement on unseen events.
 
 ---

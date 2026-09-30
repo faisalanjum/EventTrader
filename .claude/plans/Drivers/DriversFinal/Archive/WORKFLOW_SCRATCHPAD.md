@@ -2039,6 +2039,9 @@ Rule lists are script-made from the file: 221 rules, each in exactly one home.
 **2026-09-30, owner:** "Sorry, I meant Dockling. Did you update the Dockling fact_types.md? Maybe you can provide one small reference, but otherwise, what I was more worried about was Dockling. And also update, commit, and push the drivers final."
 - Claude: dockling.md already holds its appended section (18:44); the small reference is in fact_types.md. Secret check on 39 files: clean. Committing and pushing DriversFinal only (includes the other session's 12 JEV outputs and an empty Dockling/docling.md, flagged to the owner).
 
+**2026-09-30, owner:** "I corrected it. Now you can recommit and push." (The owner renamed Dockling/dockling.md → Dockling/docling.md; content identical.)
+- Claude fixed the fact_types.md link to point at the new name (it would have been broken); memory references updated. Committing and pushing.
+
 # Archived: approved no-stages proposal — 2026-09-28
 
 *Historical record: the approved 2026-09-28 proposal, appended here unchanged on 2026-09-29 (formerly the separate file `Driver_NoStages_Proposal_2026-09-28.md`). The current rules (`DRIVER_RULES_Simplified.md`, `DRIVER_RULES_Categorized.md`) take precedence over anything below.*
