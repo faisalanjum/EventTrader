@@ -17,72 +17,76 @@ Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories
 - 1.1 The same name is reused for the same cause across companies and over time. *Why:* then scattered mentions line up into one clean history per cause, and that history is what gets acted on.
 - 1.2 A Driver (the name) is separate from its facts. Each fact is added under an existing or new Driver and tagged with its source and event. A Driver can have facts from many events; one event can have facts for many Drivers.
 
-**How the pieces connect, as Neo4j holds them.** Three pictures (each prints on one landscape page) and two tables. `(:Label)` = a node · `CAPITALS` = a relationship, named as Neo4j shows it · solid arrow = a stored relationship · dotted arrow = no stored relationship (read from names or values, or worked out when read) · grey = already in the database · yellow = Driver · white = new · † = the name comes from the older design (`FinalDesign/FINAL_DESIGN.md`) or the driver code, not from this file: where this file is silent, the older documents decide (see the top of this file); the pictures approve the presentation, not those choices · "off" and "release 2" as the rules say · (n.n) = the rule.
+**How the pieces connect, as Neo4j holds them.** Three pictures (each prints on one landscape page) and two tables. `(:Label)` = node · `CAPITALS` = relationship name · solid = stored · dotted = no stored relationship · grey = already in the database · yellow = Driver · white = new · † = the name comes from the older design (`FinalDesign/FINAL_DESIGN.md`) or the driver code, not from this file; where this file is silent the older documents decide (see the top of this file), and the pictures approve the presentation, not those choices · "off" and "release 2" as the rules say · (n.n) = the rule · existing nodes show only the links the design uses.
 
 **Picture A — a fact and its Driver**
 
 ```mermaid
-%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 12, "rankSpacing": 28, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "13px", "lineColor": "#8a919c"}}}%%
+%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 12, "rankSpacing": 30, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "13px", "lineColor": "#8a919c"}}}%%
 flowchart LR
-    subgraph SRC["Sources — already in the database (their company links: picture B)"]
-        RP["<b>(:Report)</b> = one filing<br/>8-K · 10-Q · 10-K · created = public time · isAmendment (5.7)"]
-        TR["<b>(:Transcript)</b> = one call<br/>conference_datetime = public time"]
-        NW["<b>(:News)</b> = one story<br/>created = public time · tags"]
-        OG["<b>Old Guidance nodes</b><br/>evidence only, never linked (8.11)"]
-    end
-    subgraph NEW["Driver facts — new"]
-        DU["<b>(:DriverUpdate)</b> = one fact<br/>id = source event + Driver + scope (3.1)<br/>24 properties (3.3)"]
-        HF["<b>(:DriverUpdate)</b> = one fact<br/>its home fact (4.14)"]
-        DP["<b>(:DriverPeriod)</b><br/>id · start_date · end_date (3.36)"]
-        DR["<b>(:Driver)</b><br/>name · fact_type (2.38)<br/>birth evidence as properties (2.1)"]
-        DR2["<b>(:Driver)</b><br/>another Driver"]
-        CC["<b>(:ContinuationClaim)</b> † release 2<br/>a renamed slice label or measurement tag (6.13)<br/>matched by value, no edge"]
-    end
-    XS["<b>(:Concept)</b> = official line item · <b>(:Member)</b> = one breakdown value<br/>tagged filing data: picture C"]
+    DU["<b>(:DriverUpdate)</b> = one fact<br/>id = source event + Driver + scope (3.1)<br/>24 properties (3.3)"]
+    HF["<b>(:DriverUpdate)</b> = one fact<br/>its home fact (4.14)"]
+    DP["<b>(:DriverPeriod)</b><br/>id · start_date · end_date (3.36)"]
+    DR["<b>(:Driver)</b><br/>name · fact_type (2.38)<br/>birth evidence as properties (2.1)"]
+    DR2["<b>(:Driver)</b><br/>another Driver"]
+    CC["<b>(:ContinuationClaim)</b> † release 2<br/>a renamed slice label or measurement tag (6.13)<br/>matched by value, no edge"]
+    RP["<b>(:Report)</b> = one filing<br/>8-K · 10-Q · 10-K · created = public time · isAmendment (5.7)"]
+    TR["<b>(:Transcript)</b> = one call<br/>conference_datetime = public time"]
+    NW["<b>(:News)</b> = one story<br/>created = public time · tags"]
+    OG["<b>Old Guidance nodes</b><br/>evidence only; never bridged into Driver facts (8.11)"]
+    CN["<b>(:Concept)</b> = official line item<br/>picture C"]
+    MB["<b>(:Member)</b> = one breakdown value<br/>picture C"]
 
     DU -->|"OF_DRIVER · 1 (3.9)"| DR
     DU -->|"FROM_SOURCE · 1 in total,<br/>to one of these three (3.9)"| RP
     DU -->|"FROM_SOURCE"| TR
     DU -->|"FROM_SOURCE (A2.8)"| NW
     DU -->|"HAS_PERIOD · 0..1 (3.10)"| DP
-    DU -->|"MAPS_TO_CONCEPT † 0..1 · MAPS_TO_MEMBER † 0..n (3.11)"| XS
+    DU -->|"MAPS_TO_CONCEPT † · 0..1 (3.11)"| CN
+    DU -->|"MAPS_TO_MEMBER † · 0..n (3.11)"| MB
     DR -->|"SAME_AS · off: none for now (1.19, 6.20)"| DR2
-    DR -->|"CONTINUES_AS · release 2 (6.13–6.19, 9.10)"| DR2
+    DR -->|"CONTINUES_AS · per company, release 2 (6.13–6.19, 9.10)"| DR2
     DR -.->|"family: by name, no edge (1.18)"| DR2
     DR -.->|"birth fact: properties, no edge (2.1)"| DU
     DU -.->|"home fact: matched, no edge (4.14)"| HF
+    DR ~~~ CC
+    DR ~~~ OG
 
     classDef fact fill:#ffffff,stroke:#3c4043,stroke-width:2px,color:#3c4043
     classDef driver fill:#fff6d6,stroke:#3c4043,stroke-width:2px,color:#3c4043
     classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
     class DU,HF,DP,CC fact
     class DR,DR2 driver
-    class RP,TR,NW,OG,XS old
-    style SRC fill:#f6f8fa,stroke:#d0d7de,color:#5f6368
-    style NEW fill:#fffdf3,stroke:#e6d9a8,color:#5f6368
+    class RP,TR,NW,OG,CN,MB old
 ```
 
 **Picture B — companies, prices and verdicts**
 
 ```mermaid
-%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 10, "rankSpacing": 26, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "14px", "lineColor": "#8a919c"}}}%%
+%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 8, "rankSpacing": 24, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "14px", "lineColor": "#8a919c"}}}%%
 flowchart TB
-        RP["<b>(:Report)</b> = one filing"]
-        TR["<b>(:Transcript)</b> = one call"]
-        NW["<b>(:News)</b> = one story<br/>its INFLUENCES edge is a tag,<br/>not an owner: open (P4)"]
-        CO["<b>(:Company)</b><br/>id · cik · ticker<br/>fiscal year end (3.41)"]
-        INS["<b>(:Industry)</b> → BELONGS_TO →<br/><b>(:Sector)</b> → BELONGS_TO →<br/>(:MarketIndex) (1.20, 2.42)"]
-        DT["<b>(:Date)</b> = one day<br/>NEXT → the next day"]
-        DC["<b>(:DailyCompanyMoveEvent)</b> †<br/>one per company and<br/>trading day (A2.7)<br/>a verdict target only,<br/>never a source (A2.8)"]
-    DU["<b>(:DriverUpdate)</b> = one fact<br/>EXPLAINED_BY = a verdict, an edge<br/>from any of the four (A2.2, 3.12)<br/>its properties: table below (A2.3)<br/>9.7 says off; owner decision: on (P5)"]
+    RP["<b>(:Report)</b> = one filing"]
+    TR["<b>(:Transcript)</b> = one call"]
+    NW["<b>(:News)</b> = one story"]
+    CO["<b>(:Company)</b><br/>id · cik · ticker<br/>fiscal year end (3.41)"]
+    IN["<b>(:Industry)</b>"]
+    SC["<b>(:Sector)</b>"]
+    MI["<b>(:MarketIndex)</b>"]
+    DT["<b>(:Date)</b> = one day"]
+    DC["<b>(:DailyCompanyMoveEvent)</b> †<br/>one per company and<br/>trading day (A2.7)<br/>a verdict target only,<br/>never a source (A2.8)"]
+    DU["<b>(:DriverUpdate)</b> = one fact<br/>EXPLAINED_BY = a verdict,<br/>an edge from any of<br/>the four (A2.2, 3.12)<br/>properties: table below (A2.3)<br/>9.7 says off; owner: on (P5)"]
 
-    RP -->|"PRIMARY_FILER · owner (3.9)"| CO
+    RP -->|"PRIMARY_FILER · the owner (3.9)<br/>price returns on it:<br/>daily_stock … (1.14, A2.5)"| CO
+    RP -->|"REFERENCED_IN<br/>companies named in it,<br/>not owners"| CO
     CO -->|"HAS_TRANSCRIPT (3.9)"| TR
-    RP -->|"INFLUENCES #123;returns#125;<br/>(1.14, A2.5)"| CO
-    TR -->|"INFLUENCES #123;returns#125;"| CO
-    NW -->|"INFLUENCES #123;returns#125;"| CO
-    CO -->|"BELONGS_TO"| INS
-    DT -->|"HAS_PRICE #123;daily_return …#125;<br/>(A2.7)"| CO
+    TR -->|"INFLUENCES · price returns"| CO
+    NW -->|"INFLUENCES<br/>price returns; a tag,<br/>not an owner (P4)"| CO
+    CO -->|"BELONGS_TO (1.20, 2.42)"| IN
+    IN -->|"BELONGS_TO"| SC
+    SC -->|"BELONGS_TO"| MI
+    DT -->|"HAS_PRICE<br/>open, close, daily_return …<br/>(A2.7)"| CO
+    DT -->|"HAS_PRICE"| MI
+    DT -->|"NEXT"| DT
     DC -->|"FOR_COMPANY †"| CO
     DC -->|"ON_DATE †"| DT
     DC -->|"EXPLAINED_BY †"| DU
@@ -93,32 +97,30 @@ flowchart TB
     classDef fact fill:#ffffff,stroke:#3c4043,stroke-width:2px,color:#3c4043
     classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
     class DU,DC fact
-    class CO,INS,RP,TR,NW,DT old
+    class CO,IN,SC,MI,RP,TR,NW,DT old
 ```
 
 **Picture C — where the two filing-data links land (tagged filing data)**
 
 ```mermaid
-%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 12, "rankSpacing": 28, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "13px", "lineColor": "#8a919c"}}}%%
+%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 12, "rankSpacing": 30, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "13px", "lineColor": "#8a919c"}}}%%
 flowchart LR
     DU["<b>(:DriverUpdate)</b> = one fact"]
     RP["<b>(:Report)</b> = one filing<br/>10-Q or 10-K here (6.7)"]
     CO["<b>(:Company)</b>"]
-    subgraph XB["Tagged filing data (XBRL) — already in the database; 10-Q and 10-K only, never an 8-K (6.7)"]
-        XN["<b>(:XBRLNode)</b> = one filing's tagged data"]
-        XF["<b>(:Fact)</b> = one tagged figure<br/>value · decimals · qname"]
-        CN["<b>(:Concept)</b> = official line item<br/>qname (6.1)"]
-        MB["<b>(:Member)</b> = one breakdown value<br/>qname · label (6.9)"]
-        DM["<b>(:Dimension)</b> = one axis<br/>slice or not: decided offline (3.16)"]
-        XP["<b>(:Period)</b><br/>start_date · end_date"]
-        CX["<b>(:Context)</b>"]
-        UN["<b>(:Unit)</b>"]
-    end
+    XN["<b>(:XBRLNode)</b> = one filing's tagged data<br/>10-Q and 10-K only, never an 8-K (6.7)"]
+    XF["<b>(:Fact)</b> = one tagged figure<br/>value · decimals · qname"]
+    CN["<b>(:Concept)</b> = official line item<br/>qname (6.1)"]
+    MB["<b>(:Member)</b> = one breakdown value<br/>qname · label (6.9)"]
+    DM["<b>(:Dimension)</b> = one axis<br/>slice or not: decided offline (3.16)"]
+    XP["<b>(:Period)</b><br/>start_date · end_date"]
+    CX["<b>(:Context)</b>"]
+    UN["<b>(:Unit)</b>"]
 
     DU -->|"MAPS_TO_CONCEPT † · 0..1, metric facts only,<br/>= xbrl_qname (3.11, 6.1–6.8)"| CN
     DU -.->|"guidance and surprise facts: inherited<br/>from the base metric Driver when read (6.2)"| CN
-    DU -->|"MAPS_TO_MEMBER † #123;slice_part, axis#125;<br/>0..n, any fact type (3.11, 6.9)"| MB
-    MB -.->|"slice values offered when reading:<br/>the company's earlier members (3.17, 3.19)"| DU
+    DU -->|"MAPS_TO_MEMBER † · slice_part, axis<br/>0..n, any fact type (3.11, 6.9)"| MB
+    MB -.->|"slice values offered when reading: the company's<br/>earlier members plus values already used (3.17, 3.19)"| DU
     RP -->|"HAS_XBRL"| XN
     RP -->|"PRIMARY_FILER"| CO
     XF -->|"REPORTS"| XN
@@ -135,42 +137,42 @@ flowchart LR
     classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
     class DU fact
     class RP,CO,XN,XF,CN,MB,DM,XP,CX,UN old
-    style XB fill:#faf7ff,stroke:#d9cdee,color:#5f6368
 ```
 
-**Every stored relationship, one row each** (the 24 properties of a fact are the table in 3.3)
+**Stored relationships** (the 24 properties of a fact are the table in 3.3)
 
-| Relationship | From → to | How many · notes | Status | Rules | Name from |
-|---|---|---|---|---|---|
-| `OF_DRIVER` | (:DriverUpdate) → (:Driver) | exactly 1 | new · stored | 3.9 | writer code |
-| `FROM_SOURCE` | (:DriverUpdate) → one of (:Report), (:Transcript), (:News) | exactly 1 per fact in total; the fact's `source_type` must match the node's kind | new · stored | 3.9, 3.3, A2.8 | writer code |
-| `HAS_PERIOD` | (:DriverUpdate) → (:DriverPeriod) | 0 or 1; the same period id also sits in `fact_scope` | new · stored | 3.10, 3.36, 3.45, 3.46 | writer code |
-| `MAPS_TO_MEMBER {slice_part, axis}` | (:DriverUpdate) → (:Member) | 0 to many; any fact type; needs axis + member | new · stored | 3.11, 6.9, 6.10 | writer code |
-| `MAPS_TO_CONCEPT` † | (:DriverUpdate) → (:Concept) | 0 or 1; metric facts only; equals `xbrl_qname`; may fill in on a later run | new · planned; the writer does not write it yet | 3.11, 6.1–6.8 | FINAL_DESIGN §7.3 |
-| `SAME_AS` | (:Driver) → (:Driver) | none is created for now | off for now (reversible when used) | 1.15, 1.19, 2.4, 5.6, 6.20, 9.9 | this file |
-| `CONTINUES_AS {company_cik, source_event_id, evidence_quote, declared_at, created}` | (:Driver) → (:Driver), old → new | at most 1 active from one old label | release 2; switched off, never deleted | 6.13–6.19, 7.10, 9.10 | this file (name) · FINAL_DESIGN OD-20 (properties) |
-| `(:ContinuationClaim)` † node `{company_cik, kind, old, new, evidence_quote, source_event_id, declared_at, created}` | a node, not an edge: a renamed slice label or measurement tag, matched by value | one per declared rename | release 2 · older design; this file (6.13) only says such renames exist | 6.13–6.17 | FINAL_DESIGN, the CONTINUES_AS entry |
-| `EXPLAINED_BY` † `{producer, stock_impact, weightage, confidence, mode, created}` | (:Report), (:Transcript), (:News) or (:DailyCompanyMoveEvent) → (:DriverUpdate) | key = move target + Driver + scope + producer; 1 fact per key; live beats backfill | new · 9.7 says off; owner decision 2026-09-29: on in release 1 (P5) | 3.12, 9.7, A2.1–A2.6 | FINAL_DESIGN §7.3 ("an edge, never a node"); this file only says "a verdict links…" |
-| `FOR_COMPANY` † · `ON_DATE` † | (:DailyCompanyMoveEvent) → (:Company) · → (:Date) | 1 each; one move event per company and trading day | new · with the verdicts | A2.7, A2.8, P3 | FINAL_DESIGN §7.3 |
-| `PRIMARY_FILER` | (:Report) → (:Company) | exactly 1 owner, else the fact is held | already in the database | 3.9 | database |
-| `HAS_TRANSCRIPT` | (:Company) → (:Transcript) |  | already in the database | 3.9 | database |
-| `INFLUENCES {daily_stock, session_stock, …}` | (:Report), (:Transcript), (:News) → (:Company), (:Industry), (:Sector), (:MarketIndex) | the realized returns after the event live here | already in the database | 1.14, A2.5 (never shown to a producer) · P4 (for news it is a tag, not an owner) | database |
-| `BELONGS_TO` | (:Company) → (:Industry) → (:Sector) → (:MarketIndex) |  | already in the database | 1.20, 2.42, 7.11 | database |
-| `HAS_PRICE {open, close, daily_return, volume, …}` | (:Date) → (:Company) | one per trading day | already in the database | A2.7 | database |
-| `HAS_XBRL` · `REPORTS` · `HAS_CONCEPT` · `FACT_MEMBER` · `FACT_DIMENSION` · `HAS_PERIOD` · `IN_CONTEXT` · `HAS_UNIT` · `FOR_COMPANY` | (:Report) → (:XBRLNode) ← (:Fact) → (:Concept), (:Member), (:Dimension), (:Period), (:Context), (:Unit); (:Context) → (:Company), (:Period) | the tagged data the two new links land on | already in the database | 6.7, 6.9, 6.10, 3.16 | database |
+| Relationship | From → to | How many | Status | Rules |
+|---|---|---|---|---|
+| `OF_DRIVER` | (:DriverUpdate) → (:Driver) | exactly 1 | new | 3.9 |
+| `FROM_SOURCE` | (:DriverUpdate) → one of (:Report), (:Transcript), (:News) | exactly 1 in total; `source_type` must match the node's kind | new | 3.9, 3.3, A2.8 |
+| `HAS_PERIOD` | (:DriverUpdate) → (:DriverPeriod) | 0 or 1; the same period id also sits in `fact_scope` | new | 3.10, 3.36, 3.45, 3.46 |
+| `MAPS_TO_MEMBER` (slice_part, axis) | (:DriverUpdate) → (:Member) | 0 to many, any fact type | new | 3.11, 6.9, 6.10 |
+| `MAPS_TO_CONCEPT` † | (:DriverUpdate) → (:Concept) | 0 or 1, metric facts only, = `xbrl_qname` | new, not built yet | 3.11, 6.1–6.8 |
+| `SAME_AS` | (:Driver) → (:Driver) | none for now | off | 1.19, 6.20, 9.9 |
+| `CONTINUES_AS` (company_cik, source_event_id, evidence_quote, declared_at, created) | (:Driver) → (:Driver), old → new | at most 1 active per old label, per company | release 2 | 6.13–6.19, 9.10 |
+| `(:ContinuationClaim)` † (kind, old, new …), a node | a renamed slice label or measurement tag | one per declared rename | release 2 | 6.13 |
+| `EXPLAINED_BY` † (producer, stock_impact, weightage, confidence, mode) | (:Report), (:Transcript), (:News) or (:DailyCompanyMoveEvent) → (:DriverUpdate) | 1 fact per key: target + Driver + scope + producer; 0 to many verdicts per fact; several moves may share one fact (P3) | planned, not built yet · 9.7 says off; owner decision 2026-09-29: on in release 1 (P5, P7) | 3.12, A2.1–A2.6 |
+| `FOR_COMPANY` † · `ON_DATE` † | (:DailyCompanyMoveEvent) → (:Company) · (:Date) | 1 each | new | A2.7, A2.8 |
+| `PRIMARY_FILER` | (:Report) → (:Company) | exactly 1 owner; the price returns after the filing sit on it (daily_stock, session_stock …) | exists | 3.9, 1.14, A2.5 |
+| `REFERENCED_IN` | (:Report) → (:Company) | other companies the filing names, not owners; same return fields | exists | 3.9 |
+| `HAS_TRANSCRIPT` | (:Company) → (:Transcript) |  | exists | 3.9 |
+| `INFLUENCES` | (:Transcript), (:News) → (:Company); all three sources → (:Industry), (:Sector), (:MarketIndex) | price returns (daily_stock …); for news the company link is a tag, not an owner (P4) | exists | 1.14, A2.5, P4 |
+| `BELONGS_TO` | (:Company) → (:Industry) → (:Sector) → (:MarketIndex) |  | exists | 1.20, 2.42 |
+| `HAS_PRICE` (open, close, daily_return …) | (:Date) → (:Company), (:MarketIndex) | one per trading day; (:Date) → `NEXT` → (:Date) | exists | A2.7 |
+| `HAS_XBRL` · `REPORTS` · `HAS_CONCEPT` · `FACT_MEMBER` · `FACT_DIMENSION` · `HAS_PERIOD` · `IN_CONTEXT` · `HAS_UNIT` · `FOR_COMPANY` | the tagged-data structure in picture C |  | exists | 6.7, 6.9, 3.16 |
 
-**On the pictures, but no stored relationship**
+**No stored relationship**
 
-| Relation | From ⇢ to | How | Status | Rules | Name from |
-|---|---|---|---|---|---|
-| family | (:Driver) ⇢ (:Driver) | read from the name: strip one final `_guidance` or `_surprise` | no relationship; the old BASE_METRIC edge is gone | 1.18, 2.26, 7.1 | this file |
-| birth fact | (:Driver) ⇢ its first (:DriverUpdate) | the first fact's id and quote (and the context, 2.1) are stored as properties on the Driver; the writer already plans `first_fact_id` and `definitional_evidence.birth_quotes` | no relationship; stored as properties | 2.1, 2.35 | this file · `driver/core/driver_write_cli.py` (create_driver plan) |
-| home fact | a surprise (:DriverUpdate) ⇢ its metric or guidance (:DriverUpdate), same event | matched by family, period, slice, measurement and value | no relationship | 4.14–4.16 | this file |
-| inherited line item | a guidance or surprise fact ⇢ its base metric Driver's (:Concept) | worked out when read; never written | no relationship | 6.2 | this file |
-| slice values offered | the company's (:Member)s from earlier 10-Q / 10-K ⇢ the reader's list | plus values already used; cut at public time | no relationship | 3.17, 3.19, 3.20 | this file |
-| 8-K pairing | an earnings 8-K (:Report) ⇢ its exact 10-Q or 10-K | routing only | no relationship | 3.44 | this file |
-| read-time grouping | two labels sharing one (:Member) ⇢ one display group | within one company and slice part | no relationship | 7.9 | this file |
-| never | fact → company directly · action fact → line item · old Guidance data → anything · a day's move as a source |  | never | 3.9, 6.2, 8.11, A2.8 | this file |
+| Relation | Between | How | Rules |
+|---|---|---|---|
+| family | (:Driver) ⇢ (:Driver) | read from the name | 1.18, 2.26 |
+| birth fact | (:Driver) ⇢ its first (:DriverUpdate) | id, quote and needed context stored as properties on the Driver | 2.1, 2.35 |
+| home fact | a surprise fact ⇢ its metric or guidance fact, same event | matched by family, period, slice, measurement and value | 4.14 |
+| inherited line item | a guidance or surprise fact ⇢ its base metric's (:Concept) | worked out when read | 6.2 |
+| slice values offered | the company's earlier (:Member)s plus values already used ⇢ the reader's list | cut at public time | 3.17, 3.19 |
+| 8-K pairing | an earnings 8-K ⇢ its 10-Q or 10-K | routing only | 3.44 |
+| read-time grouping | two labels with the same axis and member, all their linked facts agreeing ⇢ one display group | within one company and slice part | 7.9 |
+| never | fact → company directly · action fact → line item · old Guidance data → Driver facts · a day's move as a source |  | 3.9, 6.2, 8.11, A2.8 |
 `SAME_AS` = same meaning (reversible; none created for now, 6.20) · `CONTINUES_AS` = a company's declared rename (dated; from release 2) · Family: read from the name (`revenue_guidance` belongs to `revenue`), not stored.
 
 - 1.19 Synonym link = same meaning, reversible; none is created for now (6.20). Family = related flavors, read from the name (1.18). Never use one in place of the other; passing the family check (2.26) never creates or implies a synonym link. In a synonym group, one name is the current representative (the "head"): the earliest, then alphabetical order. Example chain: `net_sales_guidance` → (same family, by name) → `net_sales` → synonym → `revenue`. A missing synonym link costs a missed comparison, never a wrong merged number.
@@ -1109,6 +1111,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 | # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
 |---|---|---|---|---|---|
 | P3 | A2.7 | Misses two locked points → can read as "every company, every day", and hides that one macro (economy-wide) fact can explain many companies' moves | Locked 2026-07-02/03: only significant moves; several companies' moves may point at one fact | Add both (draft: note P3); the rest stays in 10.1 | `archive/99_Codex_Decision_Audit.md:1237` "may point to the same DriverUpdate" · `archive/11_TrackB_DriverUpdate_Census.md:82` "a DCM is created only for a significant company/date move" |
+| P7 | 1.14, A2.1, A2.5 | The Learner is the planned verdict producer, but its prompt already receives the actual stock return (ACTUAL_RETURN), which 1.14 and A2.5 forbid for whatever produces a verdict → as built, its explanations cannot be stored as verdicts; grading against a return the producer already saw is not an independent test (A2.6) | Nothing yet | Decide before the Learner is connected to EXPLAINED_BY: keep verdict production blind to the return (the Learner's after-the-event learning stays a separate role), or allow after-the-event explanations as verdicts and change 1.14 and A2.5 | `scripts/earnings/earnings_orchestrator.py:3151` "ACTUAL_RETURN:" · `FinalDesign/FINAL_DESIGN.md:273` "EXPLAINED_BY verdict = an edge" |
 
 - **P3 draft**, after A2.7's first sentence: "It is made only for a significant move on a day with no filing event. Several companies' daily move events may point at the same fact (e.g. one Fed decision moving AAPL, MSFT and NVDA)."
 
