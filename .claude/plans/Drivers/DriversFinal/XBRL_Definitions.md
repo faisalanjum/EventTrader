@@ -1,55 +1,37 @@
-# XBRL definitions — session handoff (2026-09-30)
+# XBRL definitions — handoff (2026-09-30)
 
-## Goal and verified status
+## Purpose and result
 
-Automatically collect published definitions/descriptions for concepts, dimensions, members and other report metadata, preserving each report’s actual taxonomy version. Numeric facts link to metadata; they do not need definitions.
+Build a source-checked dictionary for each report: concepts, dimensions, members and company-created terms, using that report’s actual taxonomy. Numeric facts are checked only for identity.
 
-**Ten-report pilot passed:** Apple, Mercury, Gladstone, Merus and Mosaic; two reports each, with different actual taxonomy versions. **Read-only; no Neo4j or production changes.**
+**981/981 reports passed; failed or withheld: 0 (0%).** Covers all 795 companies with linked reports in the audit snapshot, 11 sectors and 78 version/form/size/dimension groups: 611 10-Q, 287 10-K and 83 amendments. Includes 618 previously untested reports, all 570 previously untested companies, and 301 reports from 300 separate companies reserved until the code was frozen.
 
-| Result | Count |
-|---|---:|
-| Report-metadata entries checked | 6,792 (4,824 distinct namespace/name identities) |
-| Published documentation found / absent | 5,753 / 1,039 |
-| Company documentation found / company entries | 1,345 / 1,362 |
-| Explicitly tagged company passages | 508 |
-| Stored fact/concept identities checked / mismatches | 13,207 / 0 |
+Of **670,751 report-metadata entries**, 574,074 have published documentation; **96,677 (14.4%) have none in the checked XBRL sources**. Absence is not an extraction failure. Company documentation sometimes merely repeats its label.
 
-All **13 tests passed**: source text, references, schemas, missing documentation, original three-report regression, version controls, failure handling and restart. Eleven typed dimensions were included. Extraction took **139 seconds using the existing download cache**; tests took 98 seconds. Restart skipped all ten unchanged reports. These timings do not establish whole-database performance.
+**33 tests passed**, including 26 deliberate field corruptions. Controlled download failure withheld metadata, continued and recovered on retry. Restart skipped all 981 unchanged reports. Five-file copy and real append/revision/retry checks passed. Repeated benchmarks used **31.4% less time**, with matching data; web checks fell 58.3% and output size 19.4%. No database writes.
 
-**Mosaic’s 17 missing company definitions are confirmed in source XML** (11 in 2022, six in 2025); their labels remain available. Of all 1,039 documentation gaps, 471 have references. No universal guarantee of complete descriptions.
+## Reuse
 
-## What the fields mean
-
-- **Taxonomy text:** preserve exact documentation, other labels/guidance, role and language. Documentation can be short; it is not automatically a rich explanation.
-- **References:** published pointers, not the referenced accounting text.
-- **Company passages:** complete text blocks attached only to their explicit concept, report and context. They can contain HTML/tables. No inferred links to other concepts/members and no AI-generated definitions.
-- **Correction:** XBRL supports long descriptions, guidance, examples and custom labels; two text fields were an oversimplification ([official guidance](https://www.xbrl.org/guidance/label-roles/)). A definition linkbase mainly supplies relationships. Gladstone’s standard `LineOfCredit` documentation is 217 words.
-
-## Reuse — do not repeat discovery
-
-Repository paths:
-
-- [Code and instructions](../../../../scripts/xbrl_metadata_pilot/README.md): `batch.py`, reusable reader, frozen `reports.json`, tests.
-- [Final results](../../../../scripts/xbrl_metadata_pilot/evidence/latest/RESULTS.md): company breakdown; adjacent JSON holds every extracted item, source, timing and status.
-- `scripts/xbrl_metadata_pilot/evidence/source_files/`: **199 exact source files**, named by content hash; each result’s `source_manifest` maps URLs/cache paths to hashes.
-- `evidence/latest/reviewed_snapshot.json`: code hashes, function/exception inventory and named untested cases. `artifact_hashes.json` verifies saved evidence.
-- `evidence/prior/`: preserved earlier scripts, comparisons, results and source checks. README explains restoring old temporary baselines for tests. Evidence is stored as regular project files, not only under `/tmp`.
-
-Run from the repository root:
+[Code and commands](../../../../scripts/xbrl_metadata_pilot/README.md). Copy only `batch.py`, `metadata_audit.py`, `verify.py`, `source_notices.json`, `requirements.txt`; three Python files, 762 lines including comments/blanks. Python 3.11, pinned dependencies, Neo4j credentials through environment or repository `.env`.
 
 ```bash
-venv/bin/python scripts/xbrl_metadata_pilot/batch.py --out scripts/xbrl_metadata_pilot/evidence/latest
+venv/bin/python scripts/xbrl_metadata_pilot/batch.py --reports INPUT.json --out OUTPUT_DIRECTORY
 ```
 
-Complete results resume only when input, code/dependency versions and checksums match. Failed/partial reports retry; use a new output directory for a fresh audit. Reader uses repository `.env` and Arelle’s cache. No credentials are stored in evidence.
+Input: JSON list of `accession`, `ticker`, `cik`, `instance_url`, selected from this graph. **Use `batch.py` as the acceptance boundary**; `run_report()` alone returns an unchecked candidate. Consume only `acceptance_status: accepted` with `verification.source_status: passed`. Failed checks withhold metadata text and return reasons.
 
-**Next bot:** reuse this reader and batch runner. Replace the frozen input list with a Neo4j report query; add bounded automatic retries/download pacing and per-report acceptance checks. Current `complete` means extraction completed, **not** that graph/source checks passed. Before database integration, preserve taxonomy-version identity and report-specific company text, and make repeated writes safe. Inventory actual database formats before adding support; validate wider coverage before claiming readiness. No AI or per-company scripts are needed for this scope.
+[Results and limits](../../../../scripts/xbrl_metadata_pilot/evidence/optimized_20260930/RESULTS.md), [failure percentages](../../../../scripts/xbrl_metadata_pilot/evidence/optimized_20260930/failure_rates.json). Same folder: canonical `final_results.json`, `selected_reports.json`, `final_code/`, `final_development_0…3`, `holdout_0…3`, tests, review inventory, artifact checksums and 5,847 source files archived by hash. Earlier runs are historical evidence.
 
-## Rules and remaining limits
+## Rules to preserve
 
-- Identity = **namespace + local name**; derive versions from schemas/imports, not report dates. Retain accession, source URL/hash, role and language. Keep latest-version comparisons separate.
-- Apply company additions per filing. Load supplemental documentation with `isSupplemental=True, isDiscovered=True`; capture filing relationships **before** adding supplements.
-- Separate present, absent, unsupported and failed retrieval. Do not substitute a short label for missing documentation; a failed download is not proof of absence.
-- Pilot covers SEC XML instances using US-GAAP/SRT/SEC taxonomies. IFRS, direct inline-XBRL auditing, generic labels on other object types, inferred company explanations, network recovery and full-database throughput remain unproven.
-- Earlier inventory: 10,468 reports, 618,754 concepts, 13,775,616 facts; structural checks only. Original 2026 comparisons changed 20 Apple, 68 Mercury and 20 Gladstone documentation entries.
-- Existing unrelated finding: six Gladstone facts retain rounded source copies; unfixed. Historical extraction-software version remains unknown. **Neo4j writes require explicit user approval.**
+- Identity is namespace + local name. Retain report accession and source URL/hash; never substitute today’s taxonomy for a historical report.
+- Preserve documentation, other labels, annotations, references, language/role, typed domains and report structure. References are pointers, not their underlying accounting text.
+- Company text blocks remain separate `company_passages`, attached only to their explicitly tagged concept/report/context; they can contain HTML. No inferred explanations.
+- Keep absent, unsupported and retrieval failure distinct. Preserve supplemental discovery and capture filing relationships before adding publisher documentation.
+- `verification.graph_status` is separate: 42 reports have existing graph warnings. Source acceptance does not certify database ingestion or numeric values.
+
+## Ongoing ingestion and limits
+
+[Integration contract](../../../../scripts/xbrl_metadata_pilot/INGESTION.md): append new reports; change a stable input `ingestion_revision` after re-ingestion to refresh that report. Unchanged inputs resume as snapshots; use a new folder for a fresh audit. One writer per output folder. The caller must supply a reliable completed-run signal/revision; no watcher is installed.
+
+Finite tests do not guarantee every future filing. Other formats/taxonomy families, orphan nodes and full independent XBRL relationship/type semantics remain outside proven coverage. Unsupported or failed sources must abstain. No AI layer, company-specific rules or production pipeline was added. Neo4j writes require explicit approval.

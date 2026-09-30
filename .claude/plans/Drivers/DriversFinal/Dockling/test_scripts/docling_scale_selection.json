@@ -1,0 +1,182 @@
+[
+ {
+  "acc": "0000769397-26-000015",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000769397-26-000015.htm",
+  "form": "10-K",
+  "ticker": "ADSK",
+  "cik": "0000769397",
+  "kind": "10-K",
+  "mb": 2.7
+ },
+ {
+  "acc": "0000874761-26-000063",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000874761-26-000063.htm",
+  "form": "10-K",
+  "ticker": "AES",
+  "cik": "0000874761",
+  "kind": "10-K",
+  "mb": 6.6
+ },
+ {
+  "acc": "0001559720-25-000010",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0001559720-25-000010.htm",
+  "form": "10-K",
+  "ticker": "ABNB",
+  "cik": "0001559720",
+  "kind": "10-K",
+  "mb": 2.2
+ },
+ {
+  "acc": "0000915913-26-000018",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000915913-26-000018.htm",
+  "form": "10-K",
+  "ticker": "ALB",
+  "cik": "0000915913",
+  "kind": "10-K",
+  "mb": 4.0
+ },
+ {
+  "acc": "0000007084-25-000011",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000007084-25-000011.htm",
+  "form": "10-K",
+  "ticker": "ADM",
+  "cik": "0000007084",
+  "kind": "10-K",
+  "mb": 3.5
+ },
+ {
+  "acc": "0000080661-23-000023",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000080661-23-000023.htm",
+  "form": "10-Q",
+  "ticker": "PGR",
+  "cik": "0000080661",
+  "kind": "10-Q",
+  "mb": 3.8
+ },
+ {
+  "acc": "0001039684-23-000061",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0001039684-23-000061.htm",
+  "form": "10-Q",
+  "ticker": "OKE",
+  "cik": "0001039684",
+  "kind": "10-Q",
+  "mb": 2.1
+ },
+ {
+  "acc": "0000950170-23-062199",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000950170-23-062199.htm",
+  "form": "10-Q",
+  "ticker": "SYNA",
+  "cik": "0000817720",
+  "kind": "10-Q",
+  "mb": 2.6
+ },
+ {
+  "acc": "0000038777-24-000006",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000038777-24-000006.htm",
+  "form": "10-Q",
+  "ticker": "BEN",
+  "cik": "0000038777",
+  "kind": "10-Q",
+  "mb": 1.6
+ },
+ {
+  "acc": "0001609711-25-000209",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0001609711-25-000209.htm",
+  "form": "10-Q",
+  "ticker": "GDDY",
+  "cik": "0001609711",
+  "kind": "10-Q",
+  "mb": 2.0
+ },
+ {
+  "acc": "0001564590-23-006915",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0001564590-23-006915.htm",
+  "form": "10-Q",
+  "ticker": "LAZ",
+  "cik": "0001311370",
+  "kind": "10-Q",
+  "mb": 5.3
+ },
+ {
+  "acc": "0001640147-25-000110",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0001640147-25-000110.htm",
+  "form": "10-Q",
+  "ticker": "SNOW",
+  "cik": "0001640147",
+  "kind": "10-Q",
+  "mb": 2.0
+ },
+ {
+  "acc": "0000864749-25-000245",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/inline_html_cache/0000864749-25-000245.htm",
+  "form": "10-Q",
+  "ticker": "TRMB",
+  "cik": "0000864749",
+  "kind": "10-Q",
+  "mb": 1.5
+ },
+ {
+  "acc": "0000097216-24-000010",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000097216-24-000010__EX-99.1.htm",
+  "form": "8-K",
+  "ticker": "TEX",
+  "cik": "0000097216",
+  "kind": "8-K EX-99.1",
+  "mb": 0.3
+ },
+ {
+  "acc": "0001571123-25-000104",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/exhibit_html_cache/0001571123-25-000104__EX-99.1.htm",
+  "form": "8-K",
+  "ticker": "SAIC",
+  "cik": "0001571123",
+  "kind": "8-K EX-99.1",
+  "mb": 0.4
+ },
+ {
+  "acc": "0000720005-23-000039",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000720005-23-000039__EX-99.1.htm",
+  "form": "8-K",
+  "ticker": "RJF",
+  "cik": "0000720005",
+  "kind": "8-K EX-99.1",
+  "mb": 1.4
+ },
+ {
+  "acc": "0001628280-26-011994",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/exhibit_html_cache/0001628280-26-011994__EX-99.1.htm",
+  "form": "8-K",
+  "ticker": "IBP",
+  "cik": "0001580905",
+  "kind": "8-K EX-99.1",
+  "mb": 0.5
+ },
+ {
+  "acc": "0000794170-24-000011",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000794170-24-000011__EX-99.1.htm",
+  "form": "8-K",
+  "ticker": "TOL",
+  "cik": "0000794170",
+  "kind": "8-K EX-99.1",
+  "mb": 0.4
+ },
+ {
+  "acc": "0000827054-24-000205",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000827054-24-000205__EX-99.1.htm",
+  "form": "8-K",
+  "ticker": "MCHP",
+  "cik": "0000827054",
+  "kind": "8-K EX-99.1",
+  "mb": 0.4
+ },
+ {
+  "acc": "0001582961-23-000028",
+  "path": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/exhibit_html_cache/0001582961-23-000028__EX-99.1.htm",
+  "form": "8-K",
+  "ticker": "DOCN",
+  "cik": "0001582961",
+  "kind": "8-K EX-99.1",
+  "mb": 0.2
+ }
+]

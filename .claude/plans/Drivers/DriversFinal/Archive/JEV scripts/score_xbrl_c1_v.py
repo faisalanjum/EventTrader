@@ -71,6 +71,14 @@ if S == "test":  # Luna at lower reasoning effort: picks only
             if os.path.exists(p):
                 for r in json.load(open(p)): E[f"{t}|{r['name']}"] = r.get("qname") if r.get("qname") in valid else None
         if len(E) == len(NAMES) * len(CO): A[f"Luna {eff} pick"] = {c: E.get(c) for c in cells}; A[f"Luna {eff} +code"] = {c: code(c, E.get(c)) for c in cells}
+if S == "test":  # local Qwen3.8 (exams/jev_replication/xbrl_results): picks only
+    QD = "/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_optimization/exams/jev_replication/xbrl_results"; E = {}
+    for t, v in CO.items():
+        valid = {c["q"] for c in v["concepts"]}; p = f"{QD}/c1t_qwen_pick_{t}.json"
+        if os.path.exists(p):
+            for r in json.load(open(p)): E[f"{t}|{r['name']}"] = r.get("qname") if r.get("qname") in valid else None
+    if len(E) == len(NAMES) * len(CO): A["Qwen pick"] = {c: E.get(c) for c in cells}; A["Qwen +code"] = {c: code(c, E.get(c)) for c in cells}
+    elif E: print(f"(Qwen: only {len(E)} of {len(NAMES) * len(CO)} cells present, arm not scored)")
 print(f"SET {S}: {len(cells)} cells scored (key = a concept {kc}, none {len(cells)-kc}); unresolved left out: {len(K['unresolved'])}\n")
 print(f"{'arm':22s} {'wrong':>5s} {'(ProfitLoss ok)':>15s} {'leaks':>5s} {'right':>6s} {'missed':>6s}   links kept right (of {kc})")
 for a, m in A.items():
@@ -84,7 +92,7 @@ for n in NAMES:
     r = [sum(outcome(A[a][c], c) in ("CORRECT", "ACCEPTABLE") for c in kk) for a in arms]; w = [sum(outcome(A[a][c], c) == "WRONG" for c in cs) for a in arms]
     print(f"  {n:45s} {'/'.join(f'{x:2d}' for x in r)} of {len(kk):2d}   wrong {'/'.join(str(x) for x in w)}")
 print("\nEVERY wrong link of P2 pick and Haiku pick: company | name | link | key")
-for a in ("P2 pick", "P3 pick", "Haiku pick", "Luna pick", "Luna high pick", "Luna medium pick", "Luna low pick"):
+for a in ("P2 pick", "P3 pick", "Haiku pick", "Luna pick", "Luna high pick", "Luna medium pick", "Luna low pick", "Qwen pick"):
     if a not in A: continue
     for c in cells:
         lk = A[a][c]

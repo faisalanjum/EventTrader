@@ -1889,6 +1889,155 @@ Rule lists are script-made from the file: 221 rules, each in exactly one home.
 
 **2026-09-30, owner:** "lets commit & push this folder: …/.claude/plans/Drivers/DriversFinal"
 - Claude checked the folder before committing: no hard-coded secrets; none of the 17 secret values from `.env` appear in any file or inside the two archives; about 25 MB of new files (two 2.4 MB evidence archives, JEV test data). Staging only DriversFinal (unrelated repo changes left out), committing on main and pushing.
+- ✅ Pushed commit 4764f3bb4 to origin/main (284 files, DriversFinal only). After it, another session added 12 Luna test outputs (`Archive/JEV scripts/c1_test_outputs/c1t_lunahigh_pick_*.json`) and a 6-line JEV.md edit (11:56). These, and this log line, are not in 4764f3bb4.
+
+**2026-09-30, owner:** "With a fresh perspective, I want to think about how I can benefit from this design with linkages. … There is one kind of linkage that you mentioned, which is found very close to each other, in the same paragraph, or one or two lines above, and so on. Are there other kinds of linkages also? Are there far and few in between, meaning are there too few to even worry about them? Or, thinking from a fresh perspective, looking at my driver design, is there some sort of other linking that I should pay attention to? … In addition to those kinds of linkages which are found right next to each other, are there more linkages that are found within a document or even outside two documents, and so on and so forth? Is there a linkage like that, and do you think my system could benefit from it?" + "If anything is not clear, let me know, but start by redefining what I asked. And only then, once I confirm, will you go ahead? ultrathink"
+- Claude: restated the question and asked 3 clarifying points; waiting for the owner's confirmation before any analysis.
+
+**2026-09-30, owner:** "Yes, but just keep it small and just tell me what you think."
+- Claude's view (reasoning plus today's data; no new runs; nothing changed):
+  - Keep one stored link type: nearby "why" links.
+  - Far-apart links inside a document mostly become nearby ones: the explaining sentence repeats what it explains, and it shares the Driver and period with the table number.
+  - Across documents, forecast→actual, repeated facts and corrections are already connected by the shared Driver + period (reads work out beat/raise, 4.4, 7.11).
+  - Price move→fact and macro→many companies are already planned (EXPLAINED_BY, shared macro fact). Company→company goes through shared Driver names (2.42) and counterparty roles.
+  - The real payoff: a read-time Driver→Driver "cause map" per industry, built from the nearby links.
+  - Don't build cross-document cause edges (redundant; they clash with 1.17 and 6.20).
+
+**2026-09-30, owner:** "Now I want to think conceptually. … reusing a driver … is one linkage. The other linkage … each driver links back to XBRL concepts, and XBRL concepts are somehow linked as well. It'll be a two-hop or three-hop check. … is there a natural way that I can capture linkages? Let's say oil prices led to higher revenue, which led to higher net income. It can be both oil volumes and oil prices. Those two are separate drivers. They lead to higher revenue, which could lead to higher net income or not. Those are for each instance or each period, not necessarily as a generic linkage. … forget about the cost … whether such a design … is even possible, and if yes, how we can reach close to maximum linkages … Once we have decided that … then maybe in the next step we can talk about how to optimize and reduce costs."
+- Claude: checking whether Neo4j holds XBRL concept-to-concept relationships (calculation trees) before answering (read only).
+- Found (read only): Neo4j already stores XBRL calculation links fact-to-fact, per filing and period (CALCULATION_EDGE 3,516,438; PRESENTATION_EDGE 11,728,578; props: report_id, context_id, weight ±1, network_name).
+  - Devon FY2025 10-K: net income $2,891M ← profit $2,942M ← continuing ops $3,712M = +revenues $15,940M − total expenses $12,228M. Revenue is split by oil / gas / NGL members.
+  - XBRL calculation links only add; price × volume is not in it.
+- Claude's answer: yes, possible, per instance, with three link kinds joined at shared facts: (1) same Driver (exists); (2) XBRL accounting tree (exists in the DB; needs the Driver-fact↔XBRL-fact bridge, §6, switched off); (3) stated causes from text and tables (being designed).
+  - Ceiling: links nobody states can only be learned across instances, not captured per instance.
+
+**2026-09-30, owner:** "Now, is this a better way, or would it be better to run a learning learner agent that, while attributing causes to price moves, finds these relationships in its reasoning trace versus building this hard-coded? What do you think is a better option if our end goal is making a super intelligent system? … Once we have that reasoning trace, somehow I can save that reasoning trace for every learner, and then the predictor could use that. Is that a better idea? Choose between those two, and what would you be certain about being a better design choice?"
+- Claude: build the source-backed links (facts + stated links + XBRL tree) as the foundation, and put the Learner on top as the judge and hypothesis-maker.
+  - If only one: the links.
+  - Certain because Learner traces are hindsight-shaped (it sees the return, P7; model knowledge includes later history), unverifiable (no quote), inconsistent and uncountable, and would re-derive the XBRL tree the DB already has.
+  - Learner outputs are saved as structured verdicts or hypotheses, never as facts; raw traces are kept for audit only.
+  - Unmeasured: how much the Learner's hypotheses add.
+
+**2026-09-30, owner:** "Explain, super simply and concisely, the crux of your idea: what and how. Out a wall of text because I'm not going to read so much" → Claude: 5-line crux.
+
+**2026-09-30, owner:** "So you don't agree with what Codex said. B. Do not rubber-stamp. Think independently." (pasted Codex: the Learner discovers relationships; the Driver system saves them structured, with facts, evidence and a flag for source-stated vs learner hypothesis; the predictor retrieves them; test on later events; not only reasoning traces (cites arXiv 2305.04388); extend the Learner output (SKILL.md:82) with DriverUpdate refs.)
+- Claude: checking SKILL.md:82, then an independent comparison.
+- Verified: SKILL.md lessons already carry lesson / mechanism / applies_when / invalid_if / evidence_refs, and every claim must cite the evidence ledger (Codex right). Rule 1.14: "Never show the realized stock return to whatever produces a fact or a verdict."
+- Claude's independent answer: agrees with Codex on separating evidence from hypotheses, structured records with DriverUpdate refs (extend the SKILL.md lessons), no fixed depth, and testing on later events.
+  - Disagrees on one point: stated links must be recorded blind, at publication, not by the Learner, because (1) 1.14 forbids a return-seeing producer of facts, and the Learner sees ACTUAL_RETURN (P7); (2) a move-explaining Learner records a biased sample, while learning what matters needs the links that didn't matter; (3) blind links are ready before the next move.
+  - Best of both: the Learner walks the evidence deeper and sends missed stated links to the blind checker.
+
+**2026-09-30, owner:** "tldr - This is the idea i am mentioning- now suggest which is better idea and why?" (pasted: Learner reasoning traces become a contextual graph, specific fact → relationship → specific fact, each edge with evidence, company/period and a source-stated vs learner-inferred label; the predictor follows and reuses the chains.)
+- Claude: same graph shape in both designs. The owner's idea is ~90% right. The one fix: the Learner must not stamp an edge "source-stated" (it has seen the return: 1.14, cherry-picking). Blind reading stamps "stated" (all documents, before the move); the Learner adds "inferred" edges and may suggest "stated" ones, which a blind check confirms.
+
+**2026-09-30, owner:** "Is this what you mean? Exactly. If not, what exactly do you mean?" (pasted Codex: now favors Claude's evidence-first ordering, foundation → Learner → Predictor, with the contextual graph separating evidence from interpretation; corrects 4 Claude claims: structured lessons are countable and evidence-linked; hindsight too absolute; XBRL = accounting relationships, not causation; "cheap and reliable" untested.)
+- Claude: yes, that is the design, with one addition Codex's summary leaves implicit: "stated" links are produced or confirmed blind, without the stock move (1.14); Learner additions stay "inferred" until a blind check confirms them. Claude concedes all 4 corrections as overstatements. Still certain: the ordering and the blind "stated" stamp. Unmeasured: prediction gain, cost, completeness.
+
+**2026-09-30, owner:** "Sorry, simply, you're saying we are not hardcoding any links at extraction time. The reader comes at the end. ?Just before learner" → Claude: no hard-coded links (yes); but the reader comes first, when the document is published, reading facts and stated links before the move; the Learner comes after the move; the predictor uses both at the next event.
+
+**2026-09-30, owner:** "so you are saying this reader job is: he's not going to look at the document. He's going to only look at the drivers. Is that correct? Is he going to look at both?" → Claude: both. The document text is the evidence; the facts found in that text are the menu of possible ends. Never links from Drivers alone.
+
+**2026-09-30, owner:** "Only one document at a time. ?" → Claude: yes. Stated links stay inside one document (quote from one source, 1.17). Across documents: the same Driver + period connects facts automatically; the Learner may add cross-document "inferred" links.
+
+**2026-09-30, owner:** "…fact_types.md … if we are to capture this idea as something that I may explore later, we need to bake it a little more. What links? The links will be a special kind of relationship, and that's it. Maybe on links, we can have a property just stating something. But I'm not sure how it will help. So, in that case, are you stating that our earlier idea that we mentioned in the document is not required (kind of capturing where exactly the driver came from and so on)?"
+- Claude:
+  - The earlier idea is still required: exact places let the reader find nearby facts and prove links with a quote.
+  - Proposed for the file (suggestion only, not applied): two link types never mixed. A stated link (blind reader; role, quote, source event, amount if printed, created time). An inferred link (Learner; role, evidence refs, confidence, applies_when/invalid_if, created time, test status).
+  - Plus the existing same-Driver and XBRL-tree connections. Each property is justified by a use.
+
+**2026-09-30, owner:** "It's too much. Can we simplify what you're trying to say? What's your main idea? Also, once we are already using a reader to define links between two drivers, I'm not sure why your previous idea is useful. I get it that we still need to capture where each fact sits in the document, but I think there was more you added earlier."
+- Claude: the main idea in 3 lines (facts keep their place; the reader saves a link only when the text says it, with the quote; the Learner may later add guesses, marked as guesses). The earlier "algorithm" is simply how the reader works, not a separate idea. The other extras (yes/no pre-check, cause map, chain view, long property list) are optional and can be dropped for now.
+
+**2026-09-30, owner:** "So, in one line, tell me you are saying the learner will also try to find what caused what. ?" → Claude: yes; the Learner also finds what caused what, but its links are saved as guesses; only the reader's quote-backed links count as stated.
+
+**2026-09-30, owner:** "Essentially, the only thing we did is we changed the implementation with the reader rather than the previous algorithm, which means we have actually increased the JEV cost."
+- Claude: no. The "reader" is the same algorithm (a few sentences + a menu of nearby facts + a JEV judge); it was just a simpler word for it, so JEV cost is unchanged. The Learner adds no JEV cost (it runs anyway). The only cost lever is the optional yes/no pre-check (dropped for now because it can miss links; it can come back if a test shows no loss).
+
+**2026-09-30, owner:** "Now, instead of a separate link, can you look at my current guidance updates and guidance nodes in my current database? There is a field, I think, in guidance update which has a field named condition. Rather than these links, should we just have those conditions? It might make it easier rather than linking them. I think it might make the extraction process straightforward, but I want your independent opinion."
+- Claude: checking GuidanceUpdate/Guidance in Neo4j (read only).
+- Found: GuidanceUpdate `conditions` is non-empty in 4,413 of 8,432. It is one free-text box mixing assumptions ("assumes no inventory-related charges"), causes ("predominantly as a result of less variable rate debt"), parts ("includes $1.25-$1.50/share tariff impact"), growth rates ("13% to 14% year-over-year growth") and context.
+- Claude's view: yes, put it on the fact instead of a separate link (simpler: no pairing or binding). But use two fields, not one free-text box:
+  - `conditions` = true assumptions/limits only;
+  - `caused_by` = the Driver name(s) the text gives as the reason + role (causes/offsets/part of) + amount if printed; the quote is the proof.
+  - Why: free text can't be counted or followed, and it mixes meanings (as the old data shows). A Driver name finds the cause's own fact in the same document by Driver + period, so it works like a link.
+  - Needs a rule change either way (9.8; new fact field).
+
+**2026-09-30, owner:** "One line, think and tell me, but that means the cause by the other driver needs to exist beforehand. ?" → Claude: no. The cause is usually its own fact in the same sentence, so its Driver is born in the same save. If the cause isn't a fact, nothing is named and the quote keeps the words.
+
+**2026-09-30, owner:** "anything to borrow from what codex said?" (pasted Codex: prefer exact fact references; a Driver name alone is the weakness; 992/8,432 guidance updates share document + name + period; lookup by name is still matching; the check can ride with existing validation; a cause Driver can be created in the same batch if its own fact passes admission.)
+- Claude verified in Neo4j (read only): 992 updates in 413 groups share source + Guidance + period. In 400 groups checked, 258 differ by segment and 160 by basis; 0 are identical once segment + basis are added.
+- Borrow all three: (1) reference the exact cause fact (Driver + full scope within the document), not name + period; (2) bind once in the document's save, not by a later lookup; (3) the interpretation check rides along with the existing fact checks. Plus: only accepted facts can be referenced. Claude's three claims were wrong/overstated.
+
+**2026-09-30, owner:** "now reexplain everything but super simply so i can understand the proposal in full but make it super simple and super concise. ultrathink" → Claude: final proposal in plain steps. Two fields on each fact (`caused_by` = exact cause fact ID + role + amount; `conditions` = assumptions only). Filled blind at publication by a judge reading a few sentences + the facts there. The Learner adds guesses separately after the move. Same-Driver and XBRL-tree connections already exist. Needs rule changes + a test.
+
+**2026-09-30, owner:** "codex: … - agree?" (Codex's 3 corrections: "no extra reading" is not guaranteed; drop "found by Driver + period" entirely; the quote is evidence, not proof, so check it supports the relationship.)
+- Claude: agrees with all 3; they fix Claude's overstatements. Updated wording for edits 1–2: the quote is evidence and the check confirms it supports the link; store the exact cause fact ID, resolved and checked before saving; reuse existing fact checks when they already hold both facts and the quote, otherwise one small extra check.
+
+**2026-09-30, owner:** "now reexplain everything but super simply so i can understand the proposal in full but make it super simple and super concise. ultrathink" (second time, after Codex's 3 corrections) → Claude: final simple summary including the corrections (exact fact ID checked before saving; the quote is evidence plus a check; reuse existing checks, else one small extra check).
+
+**2026-09-30, owner:** "how will you update fact_type.md?" → Claude: listed exact edits (suggestions only; owner rule: Claude does not edit fact_types.md).
+
+**2026-09-30, owner:** "agreed? codex said" (Codex: two additions: `caused_by` allows multiple entries, each with exact fact ID, role, supporting quote/location, printed amount with unit; preserve the event transaction and add rules 5.2–5.5 and 5.8 to the reconcile list so rereads or combining facts can't overwrite accepted cause entries; 4,413/8,432 rechecked; the window stays a pilot setting.)
+- Claude: checking rules 5.1–5.8 (read only).
+- Verified: 5.2 combines pieces of one fact by filling blanks only; 5.4 re-runs change nothing; 5.5 says for other fields the last write wins (so it would overwrite `caused_by`); 5.8 check and write happen together.
+- Claude: agrees with both additions (a list of entries, each with exact fact ID + role + its own quote/location + amount with unit; reconcile 5.2–5.5 and 5.8 so entries are added, never overwritten). One addition of its own: `caused_by` is not part of the fact's identity (3.1), so repeats of the same fact still combine (5.2) and their entries are added together.
+
+**2026-09-30, owner:** "then update …/DriversFinal/fact_types.md with your final recommendations"
+- ✅ Done 17:00 (owner-requested edit). Backup: `~/.claude/projects/-home-faisal-EventMarketDB/backups/fact_types.before_caused_by_170007.md`. 5 lines changed:
+  - top bullet: causes are stored on the fact as `caused_by` entries, one per cause (exact fact ID, role, quote/location, amount + unit), checked; `conditions` holds assumptions; Learner guesses are separate;
+  - "Why something changed" row: `caused_by`, not part of identity;
+  - "Values/time" row: `conditions` holds assumptions only (today's field mixes both, 4,413/8,432);
+  - cause paragraph: renamed "Filling `caused_by`"; the output is entries saved with the facts; quote = evidence + check; rereads add, never overwrite;
+  - rules line: fact fields, 3.1, 4.8, 5.2–5.5, 5.8, 9.8.
+- Not committed.
+
+**2026-09-30, owner:** "now - can you understand https://docling.ai/ and tell me what does it return in terms of first understanding the document structure of all 10k, 10q and 8k ultrathink"
+- Claude: reading Docling's site/docs and testing the repo's installed Docling on real 10-K / 10-Q / 8-K HTML (local, read only; no paid calls).
+
+**2026-09-30, owner:** "yes" (run the Docling test). The Docling MCP convert errored; the repo venv Docling 2.66 (HTML backend) was used on a cached 10-K (0001628280-24-005348), a 10-Q (0001113169-24-000013) and an 8-K EX-99.1 (0000002488-23-000007).
+- Result: 0 headings in all three; "Item 1A." etc. come out as plain text (27 in the 10-K, 12 in the 10-Q); only text/table/picture elements. Tables are real grids (89 / 52 / 20) but with padding columns repeated by colspan. Fast (1.2 / 0.9 / 0.2 s).
+- So Docling gives paragraphs + table grids, not the section structure; Items need a separate step (or the existing Neo4j sections).
+
+**2026-09-30, owner:** "No I am certain it also has this … keep checking until you find the answer" + links (docling blog, docling.ai, examples).
+- Found: Docling 2.131 HTML reader = headings only from real h1–h6 tags (0 headings on SEC HTML). Printing the filing to PDF (headless Chrome) + Docling's PDF layout pipeline = the answer: 10-Q 74 headings incl. all 13 Items/Parts (0 left as plain text), 45 tables, 90 s for 52 pages; the AMD 8-K EX-99.1 got 28 section headings (GAAP results, outlook, reconciliations…), 36 s.
+- Limit: every heading comes back at level 1 (flat, no Part > Item > Note tree); nesting needs a post-step. Outputs saved in the scratchpad (10q_docling.json, ex99_docling.json).
+
+**2026-09-30, owner:** "yes test everything you can …" / "you can even try mcp now" / "organize all your findings inside …/DriversFinal/Dockling/dockling.md"
+- ✅ Wrote DriversFinal/Dockling/dockling.md (+ test_scripts/; outputs in backups/docling_tests_20260930/).
+- Key findings:
+  - the PDF route finds sections;
+  - heading_hierarchy_options nests them (10-K good, 10-Q wrong because "Item" is not a known numbering → needs a small SEC rule);
+  - clean tables with header flags and page boxes;
+  - OCR reads image-only slides;
+  - the vision model takes 25 s/page on CPU;
+  - XBRL input rejects inline XBRL;
+  - the MCP works but uses defaults (flat headings).
+- The Docling-based SEC project was not found by search; the owner is asked for the link.
+
+**2026-09-30, owner:** "how about chunkless docling experiment" + "use the local model for speed" + asked about restarting (the other bot set DOCLING_MCP_KEEP_IMAGES=true).
+- Chunkless RAG (docling-agent DoclingRAGAgent, local Qwen 3.8 27B on the Mac GPU via ollama): 4/4 correct (AMD Q4 GM 43%, Q1 guide $5.3B ±$300M, the why, Abbott's 4 segments); 55–190 s each. It needs headings, so PDF route only.
+- render_page: 3 s, positions, still 0 headings. The local model has vision (VLM via the Mac is untested).
+- dockling.md updated (§3b, §3c); scripts in Dockling/test_scripts; log in backups. Safe to restart.
+
+**2026-09-30, owner (after restart):** "1. Did the GPU help? 2. What did we learn with Docling? Can it be used for our purposes, and how? … does it have the structure of everything, of every document? Any other learning in a concise manner"
+- Claude: GPU = used only for the chunkless answers (no CPU comparison measured); Docling conversion ran on this box's CPU. Short learnings list given.
+
+**2026-09-30, owner:** "1–3 now" (1 = AI-vision mode on the Mac GPU; 2 = SEC heading rule, rechecked on ~10 filings; 3 = scale test on ~20 filings).
+- Claude: started (local only; no paid calls; nothing written to Neo4j or the rules).
+- Done:
+  - 20/20 conversions;
+  - independent Item check 271/273 (99.3%; the 2 misses = one-row-table headings; the first check was circular and was discarded);
+  - SEC rule nests OKE correctly, ADM is noisy (page banners, missing PART lines, cover);
+  - speed 1.26 pages/s (10-K/10-Q), 0.9 (EX-99.1); corpus ≈ 25–30 days sequential on this CPU;
+  - vision via the Mac GPU: 18 s/slide, ~19 s/page, good quality. The Mac is shared (another program's qwen3.8:27b-mlx), so model swaps caused the slow calls.
+- Codex had rewritten dockling.md (own audit; found the SEC project agentic-graphrag-finance). Claude appended its section at the end (backup in backups/); did not touch Codex's text.
+
+**2026-09-30, owner:** "codex said: Do you agree? If not, then you can go ahead and add it. If you're 100% certain about yourself, then add it. Otherwise, listen to Codex." (Codex: a neutral link without numbers; 271/273 is sample-specific and "HTML finds none" too absolute.)
+- Claude agreed with Codex and added the neutral link to the fact_types.md "Fix inputs" bullet ("Document structure, tables and source locations: see Dockling/dockling.md"). Backup in backups/.
+- The fact_types.md diff vs git = the 5 caused_by lines + this link (6 lines). Not committed; waiting for the owner to review.
+
+**2026-09-30, owner:** "Sorry, I meant Dockling. Did you update the Dockling fact_types.md? Maybe you can provide one small reference, but otherwise, what I was more worried about was Dockling. And also update, commit, and push the drivers final."
+- Claude: dockling.md already holds its appended section (18:44); the small reference is in fact_types.md. Secret check on 39 files: clean. Committing and pushing DriversFinal only (includes the other session's 12 JEV outputs and an empty Dockling/docling.md, flagged to the owner).
 
 # Archived: approved no-stages proposal — 2026-09-28
 
