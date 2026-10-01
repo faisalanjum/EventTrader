@@ -1,0 +1,260 @@
+[
+ {
+  "id": "C00",
+  "window": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 9.0% increase in cargo ton miles and a 3.6% increase in cargo yield.",
+  "target": {
+   "id": "F1",
+   "name": "cargo_revenue",
+   "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "cargo_ton_miles",
+    "quote": "a 9.0% increase in cargo ton miles"
+   },
+   {
+    "id": "F2",
+    "name": "cargo_yield",
+    "quote": "a 3.6% increase in cargo yield"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2"
+  ],
+  "offset": []
+ },
+ {
+  "id": "C01",
+  "window": "Other operating revenue increased $232 million, or 23.9%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with our loyalty program. During the three months ended March 31, 2026 and 2025, cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively.",
+  "target": {
+   "id": "F1",
+   "name": "other_operating_revenue",
+   "quote": "Other operating revenue increased $232 million, or 23.9%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with our loyalty program.",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "co_branded_credit_card_cash_payments",
+    "quote": "cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively"
+   },
+   {
+    "id": "F2",
+    "name": "co_branded_credit_card_partner_payments",
+    "quote": "During the three months ended March 31, 2026 and 2025, cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively."
+   },
+   {
+    "id": "F3",
+    "name": "loyalty_program_revenue",
+    "quote": "driven primarily by higher revenue associated with our loyalty program"
+   }
+  ],
+  "gold": [
+   "F3"
+  ],
+  "offset": []
+ },
+ {
+  "id": "C02",
+  "window": "Aircraft fuel and related taxes was $2.9 billion in the first quarter of 2026, which was $341 million, or 13.2%, higher as compared to the first quarter of 2025. This was primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+  "target": {
+   "id": "F1",
+   "name": "aircraft_fuel_and_related_taxes",
+   "quote": "Aircraft fuel and related taxes was $2.9 billion in the first quarter of 2026, which was $341 million, or 13.2%, higher as compared to the first quarter of 2025.",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "average_aircraft_fuel_price_per_gallon",
+    "quote": "a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025"
+   },
+   {
+    "id": "F2",
+    "name": "aircraft_fuel_gallons_consumed",
+    "quote": "a 2.3% increase in gallons of fuel consumed due to increased capacity"
+   },
+   {
+    "id": "F3",
+    "name": "aircraft_fuel_price_per_gallon",
+    "quote": "This was primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity."
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2",
+   "F3"
+  ],
+  "offset": []
+ },
+ {
+  "id": "C03",
+  "window": "Passenger revenue increased $1.1 billion, or 9.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to higher domestic and international demand for air travel with PRASM increasing 6.5% compared to the first quarter of 2025. This increase was primarily driven by a 5.6% increase in passenger yield, while load factor increased 0.7pts compared to the first quarter of 2025.",
+  "target": {
+   "id": "F2",
+   "name": "passenger_load_factor",
+   "quote": "load factor increased 0.7pts compared to the first quarter of 2025",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "passenger_yield",
+    "quote": "a 5.6% increase in passenger yield"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "C04",
+  "window": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to annual contractual wage rate increases and a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025.",
+  "target": {
+   "id": "F1",
+   "name": "salaries_wages_and_benefits",
+   "quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "mainline_full_time_equivalent_employees",
+    "quote": "a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": []
+ },
+ {
+  "id": "C05",
+  "window": "Interest income decreased $39 million, or 41.3%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a decrease in the average balance of our short-term investments and lower interest rates, resulting in reduced returns. Interest expense, net decreased $31 million, or 7.3%, in the first quarter of 2026 from the first quarter of 2025, primarily due to lower interest rates on our variable-rate debt instruments and lower outstanding debt subsequent to the first quarter of 2025, as we continue our efforts to strengthen the balance sheet.",
+  "target": {
+   "id": "F1",
+   "name": "interest_income",
+   "quote": "Interest income decreased $39 million, or 41.3%, in the first quarter of 2026 from the first quarter of 2025",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "interest_expense_net",
+    "quote": "Interest expense, net decreased $31 million, or 7.3%, in the first quarter of 2026 from the first quarter of 2025"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "C06",
+  "window": "Our net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.",
+  "target": {
+   "id": "F1",
+   "name": "net_cash_provided_by_operating_activities",
+   "quote": "Our net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "air_traffic_liability",
+    "quote": "working capital increases principally in our air traffic liability and loyalty program deferred revenue"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": []
+ },
+ {
+  "id": "C07",
+  "window": "Aircraft Fuel and Related Taxes. Fuel expense decreased $747 million compared to 2024 primarily due to a 9% decrease in the market price of jet fuel partially offset by a 4% increase in consumption on a 3% increase in capacity.",
+  "target": {
+   "id": "F1",
+   "name": "aircraft_fuel_expense",
+   "quote": "Fuel expense decreased $747 million compared to 2024 primarily due to a 9% decrease in the market price of jet fuel partially offset by a 4% increase in consumption on a 3% increase in capacity.",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "jet_fuel_market_price",
+    "quote": "a 9% decrease in the market price of jet fuel"
+   },
+   {
+    "id": "F2",
+    "name": "fuel_consumption",
+    "quote": "a 4% increase in consumption"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": [
+   "F2"
+  ]
+ },
+ {
+  "id": "C08",
+  "window": "See \"Refinery Segment\" below for additional details on the refinery's operations, including third party refinery sales. In addition, the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.",
+  "target": {
+   "id": "F1",
+   "name": "mro_business_expense",
+   "quote": "the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "mro_business",
+    "quote": "due to an approximately 25% growth in that business"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": []
+ },
+ {
+  "id": "C09",
+  "window": "The refinery regularly optimizes its sales and exchange activities of non-jet fuel products based on market conditions and the availability of counterparties for exchanges. The volume of exchange transactions has declined in recent years due to changes in the counterparties used to supply jet fuel and our related buy/sell agreements. As of December 31, 2025, we do not plan to use exchange agreements to procure significant volumes of fuel.",
+  "target": {
+   "id": "F2",
+   "name": "refinery_exchange_transaction_volume",
+   "quote": "The volume of exchange transactions has declined in recent years due to changes in the counterparties used to supply jet fuel and our related buy/sell agreements.",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "fuel_exchange_agreements",
+    "quote": "As of December 31, 2025, we do not plan to use exchange agreements to procure significant volumes of fuel."
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "C10",
+  "window": "The decline in exchange transaction volume has driven an increase in third-party refinery sales. Refinery revenues decreased in 2025, primarily driven by lower pricing of refined products. The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.",
+  "target": {
+   "id": "F1",
+   "name": "refinery_revenue",
+   "quote": "Refinery revenues decreased in 2025, primarily driven by lower pricing of refined products.",
+   "fact_type": "metric"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "operating_income",
+    "quote": "The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins."
+   }
+  ],
+  "gold": [],
+  "offset": []
+ }
+]

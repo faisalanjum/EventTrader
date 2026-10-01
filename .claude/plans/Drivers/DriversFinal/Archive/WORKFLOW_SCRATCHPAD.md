@@ -2041,6 +2041,99 @@ Rule lists are script-made from the file: 221 rules, each in exactly one home.
 
 **2026-09-30, owner:** "I corrected it. Now you can recommit and push." (The owner renamed Dockling/dockling.md → Dockling/docling.md; content identical.)
 - Claude fixed the fact_types.md link to point at the new name (it would have been broken); memory references updated. Committing and pushing.
+- Done: pushed a09d24f95.
+
+**2026-09-30, owner:** Two choices for the whole reading setup, "does it even make sense? Or are we better off with the easier option one and just make that better…"
+- Option 1: send each piece of text to a smart model (facts, Driver names, `caused_by`); use JEV for small checks.
+- Option 2: a smart primary agent sees the Docling metadata, splits and hands out the pieces to Option 1 workers (small agents, JEV, local model), reads only their JSON, then finds links between drivers and sends follow-up tasks. For news, possibly no agent.
+- Goals: close to 100% accuracy, recall and precision; lowest cost; maximum speed; least code.
+- Claude recommends Option 1 plus three pieces borrowed from Option 2:
+  - Option 2 = Option 1 + a manager, so the manager adds cost and never removes any.
+  - Splitting by Docling sections is a rule for code.
+  - Links found from the JSON alone can't be quoted, so they are guesses, which belong to the Learner. This resembles the earlier "reader after extraction" idea that was replaced by `caused_by`.
+- Borrowed: heading path on each piece; follow-up only when a worker flags a far pointer; one end-of-filing check that merges new names. No file changes; waiting for the owner.
+
+**2026-09-30, owner:** "tldr" → Claude gave the short version: Option 1 plus the 3 borrowed pieces.
+
+**2026-09-30, owner:** "Yeah, but you understand that I'm using JEV for filling most of the fields… it just has a yes/no option, or we have to provide the cases, or… Ranking cases. Bottom line is, we are using one primary LLM, like… Astra or Opus… for driver naming. For the rest… JEV for the most part or a cheaper LLM. Bottom line is, will it still work, what you are suggesting above?"
+- Claude (after reading JEV.md and the fact_types.md `caused_by` section): yes, and Jev fits Option 1 better than Option 2.
+  - Jev needs a small passage plus a list of options. The `caused_by` pilot already builds a menu of nearby extracted facts, so it can be a Jev pick.
+  - Option 2's manager would need a writing model (Jev can't write), which adds the expensive kind of call.
+- Caveats:
+  - Jev on `caused_by` is untested.
+  - Jev missed sentences that depend on the sentence before (§6.6).
+  - Rule 8.10 (the reader sees the whole source event) conflicts with splitting; fact_types.md already flags this.
+  - The duplicate-name piece = the planned identity step, run once per filing; Jev is proven only as a veto there (§6.8).
+
+**2026-09-30, owner:** "Do you agree with this or no?" (Codex: "Use Option 1 as the starting design, with these corrections":
+1. keep the naming agent separate;
+2. several causes per fact, one question per candidate pair: causes / offsets / part of / unsupported / insufficient context;
+3. code retrieves known locations and the smart reader resolves a vague "see above"; 3 sentences is a starting window;
+4. check names against existing Drivers and newly accepted names;
+5. describe the tests accurately (271/273 = sampled heading matches; 94–99% = particular JEV tasks);
+6. reconcile rule 8.10 first.
+"The architecture makes sense. Its accuracy and cost advantage still need measurement.")
+- Claude agrees with all 6.
+  - Two correct Claude's own mistakes: "JEV picks one or none" would drop a second cause; "94–99%" were after-review figures (raw about 80% for horizon, 81% for slice kind, up to 99.6% for fact type; JEV.md §2).
+  - Added: each pair question must fix the direction (A caused B vs B caused A), so ask both ways or put the direction in the options.
+  - Nuances: a cheaper reader is untested (JEV.md idea W); resolving "see above" needs the earlier text, which is the rule 8.10 issue.
+
+**2026-09-30, owner:** (Codex, final clarifications:
+1. direction goes in the question text, "A caused B" with named endpoints; no automatic both-ways asking;
+2. don't claim concurrent duplicates are already prevented: one at a time must cover checking and saving across all filings; exact names need a database constraint; synonyms are not caught by that;
+3. report raw and reviewed scores separately, because some raw scores were already 94–99%;
+4. the pilot must count missed links: never proposed, missing from the menu, wrong direction, unsupported. A cheaper reader is a candidate, not a choice.)
+- Claude agrees with all 4. Two of them correct Claude again:
+  - duplicates were overclaimed;
+  - "94–99% = after review" was also too broad; raw vs reviewed per task is taken from JEV.md §2.
+- Clarification on 1: every fact takes a turn as the effect, so both directions get asked without a separate reverse question.
+- Addition on 4: the pilot's answer key must come from whole passages, labeled before any call. The 93 existing labels were picked by cause words, so they can't measure missed links.
+
+**2026-09-30, owner:** (set /effort max) "lets create a one pager type rough design.md inside …/DriversFinal but ensure it all makes sense. ultrathink"
+- Claude re-read fact_types.md, JEV.md, docling.md, the rules it relies on (1.12, 1.14, 2.43, 2.47, 5.2–5.5, 5.8, 6.20, 8.1–8.17, S4), Phase 6, driver_writer.py and the adapter's name-uniqueness check. Wrote DriversFinal/rough_design.md.
+- New in it, versus the chat: the reader proposes causes and JEV checks them.
+  - Reason: rule 8.2 says whatever proposes may not approve, and JEV's checker caught only 2 of 32 of its own mistakes.
+  - JEV's pair sweep becomes a missed-link net.
+- Also added:
+  - a missed-fact net (JEV tags, before saving);
+  - 6 owner decisions: 8.10, 8.12 for JEV, the 8.6 cutoff, S4, the reader/namer wording, models;
+  - the risk that errors add up across fields.
+- An independent Sonnet checker is testing every claim before the owner sees it. Not committed.
+- Checker result: 25 findings. Claude re-verified the key ones against the files and live Neo4j (read-only) and rewrote rough_design.md (67 lines). Main fixes:
+  1. Naming now comes before JEV. JEV's tested prompts take the Driver name; hiding it cost 96.4% → 94.2%.
+  2. The database has no duplicate-name rule today, and 0 Drivers exist.
+  3. `caused_by` has no place to be stored: the writer keeps exactly 24 fields, and "last write wins" (5.5) would need changing.
+  4. Confidence flags caught 64–100% of misses by field, and one fresh fact-type error sat at 0.99. So confidence routing alone won't reach the under-1% bar.
+  5. If a fact needed all 8 JEV picks, about 51% would come out fully right raw, 83–87% after review.
+  6. Cause checks are now one yes/no per pair: JEV.md §6.11's tiny pilots got 31 of 31 pairs right; a Choice finds only one cause.
+  7. The decisions table now has 10 areas: 8.10/8.9, evidence of record, JEV use, JEV's final word (8.1/8.2/3.16), cutoffs, prompt wording, `caused_by` storage, re-reads, wording, scope.
+  8. The pilot now has 3 arms (JEV fills · reader proposes and JEV checks · reader alone) and about 300 graded facts.
+- Not committed.
+
+**2026-09-30, owner:** "agree" + Codex review of rough_design.md: "Not perfect yet. Keep the six-step structure, but fix:
+1. check the exact relationship (A causes / offsets / is part of B), not only 'A caused B?';
+2. close the remaining duplicate race: final admission must account for newly added catalog names;
+3. remove the projected 51% (scores from different test sets);
+4. resolve references using actual text, not a headings-only outline;
+5. naming-first is a proposal; test that exact flow;
+6. remove two overclaims: a manager 'only adds cost'; 'most filings' exceed the local limit.
+Codex confirmed 0 Drivers, no constraints and the 24-field writer."
+- Claude agreed with all 6 and applied them to rough_design.md (now 69 lines).
+  1. Relations: the reader proposes "A causes / offsets / is part of B"; JEV verifies that exact claim; offsets and part-of untested.
+  2. Race: the match records the catalog version. If Drivers were added since, the event is held, its new names are matched against just the additions, and it retries (5.8, 8.15, 2.46).
+  3. The 51% was withdrawn. Claude's earlier chat claim "about 51% raw / 83–87% after review" is retracted; complete facts are measured directly in the pilot.
+  4. A vague "above" now gets the referring passage plus the earlier text; the outline only suggests where to look.
+  5. Naming-first is marked as a proposal; the pilot adds naming-order arms.
+  6. Both overclaims reworded; the share of filings over the local limit is to be measured with the model's own tokenizer.
+- Not committed.
+
+**2026-10-01, owner:** "So, if all done, then you can commit and push."
+- Claude first brought rough_design.md in line with JEV.md §6.11, which the other session had extended with pilot 3:
+  - 46/46 real links and 0 false among 23 non-links (36 items);
+  - offsets asked as "caused?" scored 0.03–0.53;
+  - an indirect cause was counted as a cause (0.94), so a direct-vs-indirect rule is needed;
+  - a cause 3 sentences away was found only after expansion.
+- Secret scan clean. Committing and pushing DriversFinal only: rough_design.md, the scratchpad, plus the other session's JEV.md §6.11 edit and 12 cause-pilot files.
 
 # Archived: approved no-stages proposal — 2026-09-28
 

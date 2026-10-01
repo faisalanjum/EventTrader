@@ -1,0 +1,543 @@
+[
+ {
+  "id": "E0-full",
+  "label": "pension swing: 2 causes in later sentences + distractor",
+  "window": "2022 earnings also included $157 million of excess capacity costs, a decrease of $60 million over 2021. Other expense was $14 million compared to other income of $147 million in 2021. This variance was primarily due to pension plan termination activities that were undertaken separately in each of the years. 2021 included a curtailment gain of $61 million resulting from the closure of the defined benefit plans acquired as part of the Bombardier acquisition. And in 2022, we terminated the frozen U.S. pension value plan A, which resulted in non-cash charges of $108 million.",
+  "n_sentences": 5,
+  "target": {
+   "name": "other_expense_swing",
+   "quote": "Other expense was $14 million compared to other income of $147 million in 2021"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "excess_capacity_costs",
+    "quote": "2022 earnings also included $157 million of excess capacity costs, a decrease of $60 million over 2021"
+   },
+   {
+    "id": "F2",
+    "name": "pension_curtailment_gain_2021",
+    "quote": "2021 included a curtailment gain of $61 million resulting from the closure of the defined benefit plans acquired as part of the Bombardier acquisition"
+   },
+   {
+    "id": "F3",
+    "name": "pension_plan_termination_charge_2022",
+    "quote": "in 2022, we terminated the frozen U.S. pension value plan A, which resulted in non-cash charges of $108 million"
+   }
+  ],
+  "gold": [
+   "F2",
+   "F3"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E0-short",
+  "label": "pension swing: 2 causes in later sentences + distractor",
+  "window": "Other expense was $14 million compared to other income of $147 million in 2021. This variance was primarily due to pension plan termination activities that were undertaken separately in each of the years. 2021 included a curtailment gain of $61 million resulting from the closure of the defined benefit plans acquired as part of the Bombardier acquisition.",
+  "n_sentences": 3,
+  "target": {
+   "name": "other_expense_swing",
+   "quote": "Other expense was $14 million compared to other income of $147 million in 2021"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "pension_curtailment_gain_2021",
+    "quote": "2021 included a curtailment gain of $61 million resulting from the closure of the defined benefit plans acquired as part of the Bombardier acquisition"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E1-full",
+  "label": "operating cash flow: 3 causes in later sentences + future-tax distractor",
+  "window": "Cash flow from operating activities was $27.4 billion, up from $15.3 billion a year ago and up from $16.6 billion a quarter ago. The year-on-year increase reflects higher revenue and timing of cash collections. The sequential increase was driven by higher revenue, timing of cash collections, and lower cash taxes. We expect a substantial increase in cash taxes in the second quarter related to estimated federal and state cash tax payments.",
+  "n_sentences": 4,
+  "target": {
+   "name": "operating_cash_flow",
+   "quote": "Cash flow from operating activities was $27.4 billion, up from $15.3 billion a year ago and up from $16.6 billion a quarter ago"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "higher_revenue",
+    "quote": "higher revenue"
+   },
+   {
+    "id": "F2",
+    "name": "cash_collection_timing",
+    "quote": "timing of cash collections"
+   },
+   {
+    "id": "F3",
+    "name": "lower_cash_taxes",
+    "quote": "lower cash taxes"
+   },
+   {
+    "id": "F4",
+    "name": "expected_q2_cash_tax_increase",
+    "quote": "We expect a substantial increase in cash taxes in the second quarter"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2",
+   "F3"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E1-short",
+  "label": "operating cash flow: 3 causes in later sentences + future-tax distractor",
+  "window": "Cash flow from operating activities was $27.4 billion, up from $15.3 billion a year ago and up from $16.6 billion a quarter ago. The year-on-year increase reflects higher revenue and timing of cash collections. The sequential increase was driven by higher revenue, timing of cash collections, and lower cash taxes.",
+  "n_sentences": 3,
+  "target": {
+   "name": "operating_cash_flow",
+   "quote": "Cash flow from operating activities was $27.4 billion, up from $15.3 billion a year ago and up from $16.6 billion a quarter ago"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "higher_revenue",
+    "quote": "higher revenue"
+   },
+   {
+    "id": "F2",
+    "name": "cash_collection_timing",
+    "quote": "timing of cash collections"
+   },
+   {
+    "id": "F3",
+    "name": "lower_cash_taxes",
+    "quote": "lower cash taxes"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2",
+   "F3"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E2-full",
+  "label": "interest expense: cause 3 sentences later, offset in between",
+  "window": "Interest expense increased by $2.0 million during the three months ended November 30, 2022, compared to the corresponding period. Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period. The increase in capitalized interest was due to construction of the Company's third micro mill in Mesa, Arizona. Offsetting the impact of increased capitalized interest was an increase in long-term debt interest expense of $3.9 million during the three months ended November 30, 2022, compared to the corresponding period, due to the additional long-term debt outstanding.",
+  "n_sentences": 4,
+  "target": {
+   "name": "interest_expense_increase",
+   "quote": "Interest expense increased by $2.0 million during the three months ended November 30, 2022"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "capitalized_interest",
+    "quote": "Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period"
+   },
+   {
+    "id": "F2",
+    "name": "third_micro_mill_construction",
+    "quote": "construction of the Company's third micro mill in Mesa, Arizona"
+   },
+   {
+    "id": "F3",
+    "name": "long_term_debt_interest_expense_increase",
+    "quote": "an increase in long-term debt interest expense of $3.9 million during the three months ended November 30, 2022"
+   }
+  ],
+  "gold": [
+   "F3"
+  ],
+  "offset": [
+   "F1",
+   "F2"
+  ]
+ },
+ {
+  "id": "E2-short",
+  "label": "interest expense: cause 3 sentences later, offset in between",
+  "window": "Interest expense increased by $2.0 million during the three months ended November 30, 2022, compared to the corresponding period. Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period. The increase in capitalized interest was due to construction of the Company's third micro mill in Mesa, Arizona.",
+  "n_sentences": 3,
+  "target": {
+   "name": "interest_expense_increase",
+   "quote": "Interest expense increased by $2.0 million during the three months ended November 30, 2022"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "capitalized_interest",
+    "quote": "Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period"
+   },
+   {
+    "id": "F2",
+    "name": "third_micro_mill_construction",
+    "quote": "construction of the Company's third micro mill in Mesa, Arizona"
+   }
+  ],
+  "gold": [],
+  "offset": [
+   "F1",
+   "F2"
+  ]
+ },
+ {
+  "id": "E3-full",
+  "label": "chain: capitalized interest <- micro mill (next sentence), debt interest as distractor",
+  "window": "Interest expense increased by $2.0 million during the three months ended November 30, 2022, compared to the corresponding period. Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period. The increase in capitalized interest was due to construction of the Company's third micro mill in Mesa, Arizona. Offsetting the impact of increased capitalized interest was an increase in long-term debt interest expense of $3.9 million during the three months ended November 30, 2022, compared to the corresponding period, due to the additional long-term debt outstanding.",
+  "n_sentences": 4,
+  "target": {
+   "name": "capitalized_interest",
+   "quote": "Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "third_micro_mill_construction",
+    "quote": "construction of the Company's third micro mill in Mesa, Arizona"
+   },
+   {
+    "id": "F2",
+    "name": "long_term_debt_interest_expense_increase",
+    "quote": "an increase in long-term debt interest expense of $3.9 million during the three months ended November 30, 2022"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E3-short",
+  "label": "chain: capitalized interest <- micro mill (next sentence), debt interest as distractor",
+  "window": "Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period. The increase in capitalized interest was due to construction of the Company's third micro mill in Mesa, Arizona. Offsetting the impact of increased capitalized interest was an increase in long-term debt interest expense of $3.9 million during the three months ended November 30, 2022, compared to the corresponding period, due to the additional long-term debt outstanding.",
+  "n_sentences": 3,
+  "target": {
+   "name": "capitalized_interest",
+   "quote": "Capitalized interest was $4.6 million during the three months ended November 30, 2022, compared to $1.5 million during the corresponding period"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "third_micro_mill_construction",
+    "quote": "construction of the Company's third micro mill in Mesa, Arizona"
+   },
+   {
+    "id": "F2",
+    "name": "long_term_debt_interest_expense_increase",
+    "quote": "an increase in long-term debt interest expense of $3.9 million during the three months ended November 30, 2022"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E4-full",
+  "label": "revenue: one cause shared with other effects, AAV resolution is NOT a cause of revenue",
+  "window": "Third Quarter Summary Results Revenues for the quarter increased $81 million or 4% compared to the same period in the prior year primarily due to ramp up in volume on existing and new contracts, partially offset by contract completions. Operating income as a percentage of revenues increased from the comparable prior year period primarily due to ramp up in volume on existing and new contracts, and the resolution of the Assault Amphibious Vehicle (\"AAV\") contract termination, partially offset by contract completions. Adjusted EBITDA(1) as a percentage of revenues for the quarter increased to 10.0% from 9.4% for the same period in the prior year primarily due to the resolution of the AAV contract termination, and ramp up in volume on existing and new contracts, partially offset by contract completions.",
+  "n_sentences": 3,
+  "target": {
+   "name": "revenue_increase",
+   "quote": "Revenues for the quarter increased $81 million or 4% compared to the same period in the prior year"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "volume_ramp_up",
+    "quote": "ramp up in volume on existing and new contracts"
+   },
+   {
+    "id": "F2",
+    "name": "aav_contract_termination_resolution",
+    "quote": "the resolution of the Assault Amphibious Vehicle"
+   },
+   {
+    "id": "F3",
+    "name": "contract_completions",
+    "quote": "contract completions"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": [
+   "F3"
+  ]
+ },
+ {
+  "id": "E5-full",
+  "label": "operating margin: 2 causes (one is not in the revenue sentence)",
+  "window": "Third Quarter Summary Results Revenues for the quarter increased $81 million or 4% compared to the same period in the prior year primarily due to ramp up in volume on existing and new contracts, partially offset by contract completions. Operating income as a percentage of revenues increased from the comparable prior year period primarily due to ramp up in volume on existing and new contracts, and the resolution of the Assault Amphibious Vehicle (\"AAV\") contract termination, partially offset by contract completions. Adjusted EBITDA(1) as a percentage of revenues for the quarter increased to 10.0% from 9.4% for the same period in the prior year primarily due to the resolution of the AAV contract termination, and ramp up in volume on existing and new contracts, partially offset by contract completions.",
+  "n_sentences": 3,
+  "target": {
+   "name": "operating_margin_increase",
+   "quote": "Operating income as a percentage of revenues increased from the comparable prior year period"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "volume_ramp_up",
+    "quote": "ramp up in volume on existing and new contracts"
+   },
+   {
+    "id": "F2",
+    "name": "aav_contract_termination_resolution",
+    "quote": "the resolution of the Assault Amphibious Vehicle"
+   },
+   {
+    "id": "F3",
+    "name": "contract_completions",
+    "quote": "contract completions"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2"
+  ],
+  "offset": [
+   "F3"
+  ]
+ },
+ {
+  "id": "E5-short",
+  "label": "operating margin: 2 causes (one is not in the revenue sentence)",
+  "window": "Operating income as a percentage of revenues increased from the comparable prior year period primarily due to ramp up in volume on existing and new contracts, and the resolution of the Assault Amphibious Vehicle (\"AAV\") contract termination, partially offset by contract completions. Adjusted EBITDA(1) as a percentage of revenues for the quarter increased to 10.0% from 9.4% for the same period in the prior year primarily due to the resolution of the AAV contract termination, and ramp up in volume on existing and new contracts, partially offset by contract completions.",
+  "n_sentences": 2,
+  "target": {
+   "name": "operating_margin_increase",
+   "quote": "Operating income as a percentage of revenues increased from the comparable prior year period"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "volume_ramp_up",
+    "quote": "ramp up in volume on existing and new contracts"
+   },
+   {
+    "id": "F2",
+    "name": "aav_contract_termination_resolution",
+    "quote": "the resolution of the Assault Amphibious Vehicle"
+   },
+   {
+    "id": "F3",
+    "name": "contract_completions",
+    "quote": "contract completions"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2"
+  ],
+  "offset": [
+   "F3"
+  ]
+ },
+ {
+  "id": "E6-full",
+  "label": "EBITDA margin decline: 4 causes in the sentence after + share distractor",
+  "window": "Aftermarket revenue finished at 37% of total revenue, which is up 100 basis points year over year. And the second quarter finished largely in line with expectations for revenue, adjusted EBITDA, and adjusted EPS, despite the dynamic macro environment, which demonstrates our ability to continue to execute well. The company delivered second quarter adjusted EBITDA of $509 million, with an adjusted EBITDA margin of 27%. The year-over-year decline in adjusted EBITDA margin was driven primarily by the flow-through on organic volume declines, as expected, the dilutive impact from recently acquired businesses, the dilutive impact of tariff pricing matching tariff costs one-for-one, and continued targeted investments to drive organic growth.",
+  "n_sentences": 4,
+  "target": {
+   "name": "adjusted_ebitda_margin",
+   "quote": "an adjusted EBITDA margin of 27%"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "aftermarket_revenue_share",
+    "quote": "Aftermarket revenue finished at 37% of total revenue"
+   },
+   {
+    "id": "F2",
+    "name": "organic_volume_declines",
+    "quote": "the flow-through on organic volume declines"
+   },
+   {
+    "id": "F3",
+    "name": "acquired_businesses_dilution",
+    "quote": "the dilutive impact from recently acquired businesses"
+   },
+   {
+    "id": "F4",
+    "name": "tariff_pricing_dilution",
+    "quote": "the dilutive impact of tariff pricing matching tariff costs one-for-one"
+   },
+   {
+    "id": "F5",
+    "name": "growth_investments",
+    "quote": "continued targeted investments to drive organic growth"
+   }
+  ],
+  "gold": [
+   "F2",
+   "F3",
+   "F4",
+   "F5"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E6-short",
+  "label": "EBITDA margin decline: 4 causes in the sentence after + share distractor",
+  "window": "The company delivered second quarter adjusted EBITDA of $509 million, with an adjusted EBITDA margin of 27%. The year-over-year decline in adjusted EBITDA margin was driven primarily by the flow-through on organic volume declines, as expected, the dilutive impact from recently acquired businesses, the dilutive impact of tariff pricing matching tariff costs one-for-one, and continued targeted investments to drive organic growth.",
+  "n_sentences": 2,
+  "target": {
+   "name": "adjusted_ebitda_margin",
+   "quote": "an adjusted EBITDA margin of 27%"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "organic_volume_declines",
+    "quote": "the flow-through on organic volume declines"
+   },
+   {
+    "id": "F2",
+    "name": "acquired_businesses_dilution",
+    "quote": "the dilutive impact from recently acquired businesses"
+   },
+   {
+    "id": "F3",
+    "name": "tariff_pricing_dilution",
+    "quote": "the dilutive impact of tariff pricing matching tariff costs one-for-one"
+   },
+   {
+    "id": "F4",
+    "name": "growth_investments",
+    "quote": "continued targeted investments to drive organic growth"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2",
+   "F3",
+   "F4"
+  ],
+  "offset": []
+ },
+ {
+  "id": "E7-full",
+  "label": "operating margin: 3 causes + 2 offsets in the next sentence",
+  "window": "Excluding amortization of acquisition-related intangibles, the adjusted operating margin increased to 24.4% in the first quarter of 2022 compared to 15.7% in the prior year period. The increase in operating margin was primarily driven by approximately eleven percentage points of margin expansion from favorable price realization, increased volumes and lower material costs. Those increases were partially offset by three percentage points of margin headwind due to increases in non-material cost inflation and investments in capacity, innovation and productivity.",
+  "n_sentences": 3,
+  "target": {
+   "name": "adjusted_operating_margin",
+   "quote": "the adjusted operating margin increased to 24.4% in the first quarter of 2022 compared to 15.7% in the prior year period"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "favorable_price_realization",
+    "quote": "favorable price realization"
+   },
+   {
+    "id": "F2",
+    "name": "increased_volumes",
+    "quote": "increased volumes"
+   },
+   {
+    "id": "F3",
+    "name": "lower_material_costs",
+    "quote": "lower material costs"
+   },
+   {
+    "id": "F4",
+    "name": "non_material_cost_inflation",
+    "quote": "increases in non-material cost inflation"
+   },
+   {
+    "id": "F5",
+    "name": "capacity_innovation_investments",
+    "quote": "investments in capacity, innovation and productivity"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2",
+   "F3"
+  ],
+  "offset": [
+   "F4",
+   "F5"
+  ]
+ },
+ {
+  "id": "E8-full",
+  "label": "volume decline: causes in the next two sentences, one indirect, one offset",
+  "window": "Freight revenues from bulk shipments decreased in the second quarter and six-month periods of 2024 compared to 2023 due to a 5% decline in volume and lower fuel surcharge revenues, partially offset by a positive mix of traffic from decreased coal shipments and core pricing gains. Volume declines in both periods were driven by reduced use of coal in electricity generation because of low natural gas prices. In addition, year-to-date coal volumes were negatively impacted by mild winter weather, partially offset by first quarter of 2023 outages and service challenges due to repeated snow events in Wyoming that negatively impacted coal volumes. Additionally, the volume declines in both periods were partially offset by increased fertilizer shipments in the second quarter of 2024 due to strong demand and a 2023 customer outage.",
+  "n_sentences": 4,
+  "target": {
+   "name": "bulk_freight_volume_decline",
+   "quote": "a 5% decline in volume"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "reduced_coal_use_in_power_generation",
+    "quote": "reduced use of coal in electricity generation"
+   },
+   {
+    "id": "F2",
+    "name": "low_natural_gas_prices",
+    "quote": "low natural gas prices"
+   },
+   {
+    "id": "F3",
+    "name": "mild_winter_weather",
+    "quote": "mild winter weather"
+   },
+   {
+    "id": "F4",
+    "name": "fertilizer_shipments_increase",
+    "quote": "increased fertilizer shipments in the second quarter of 2024"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F3"
+  ],
+  "offset": [
+   "F2",
+   "F4"
+  ]
+ },
+ {
+  "id": "E8-short",
+  "label": "volume decline: causes in the next two sentences, one indirect, one offset",
+  "window": "Freight revenues from bulk shipments decreased in the second quarter and six-month periods of 2024 compared to 2023 due to a 5% decline in volume and lower fuel surcharge revenues, partially offset by a positive mix of traffic from decreased coal shipments and core pricing gains. Volume declines in both periods were driven by reduced use of coal in electricity generation because of low natural gas prices. In addition, year-to-date coal volumes were negatively impacted by mild winter weather, partially offset by first quarter of 2023 outages and service challenges due to repeated snow events in Wyoming that negatively impacted coal volumes.",
+  "n_sentences": 3,
+  "target": {
+   "name": "bulk_freight_volume_decline",
+   "quote": "a 5% decline in volume"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "reduced_coal_use_in_power_generation",
+    "quote": "reduced use of coal in electricity generation"
+   },
+   {
+    "id": "F2",
+    "name": "low_natural_gas_prices",
+    "quote": "low natural gas prices"
+   },
+   {
+    "id": "F3",
+    "name": "mild_winter_weather",
+    "quote": "mild winter weather"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F3"
+  ],
+  "offset": [
+   "F2"
+  ]
+ }
+]

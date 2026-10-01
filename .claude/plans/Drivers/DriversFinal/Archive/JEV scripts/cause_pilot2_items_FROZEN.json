@@ -1,0 +1,207 @@
+[
+ {
+  "id": "D00",
+  "kind": "real: several causes (PVH, allocation)",
+  "window": "Earnings per share increased 14% versus last year to $2.45, exceeding our earnings guidance by 30 cents. Approximately 20 cents of that is due to the favorable shifts in timing of revenue and expenses between the first and second quarter I mentioned earlier. Approximately 5 cents is due to a lower tax rate and interest expense, and the remainder is due to modest business improvement compared to expectations.",
+  "target": {
+   "name": "eps_beat_vs_guidance",
+   "quote": "exceeding our earnings guidance by 30 cents"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "revenue_expense_timing_shift",
+    "quote": "Approximately 20 cents of that is due to the favorable shifts in timing of revenue and expenses between the first and second quarter"
+   },
+   {
+    "id": "F2",
+    "name": "lower_tax_rate_and_interest_expense",
+    "quote": "Approximately 5 cents is due to a lower tax rate and interest expense"
+   },
+   {
+    "id": "F3",
+    "name": "business_improvement_vs_expectations",
+    "quote": "the remainder is due to modest business improvement compared to expectations"
+   },
+   {
+    "id": "F4",
+    "name": "eps_growth",
+    "quote": "Earnings per share increased 14% versus last year to $2.45"
+   }
+  ],
+  "gold": [
+   "F1",
+   "F2",
+   "F3"
+  ],
+  "offset": []
+ },
+ {
+  "id": "D01",
+  "kind": "synthetic: negated cause (cargo)",
+  "window": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, and this was not due to a 9.0% increase in cargo ton miles or a 3.6% increase in cargo yield.",
+  "target": {
+   "name": "cargo_revenue",
+   "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "cargo_ton_miles",
+    "quote": "a 9.0% increase in cargo ton miles"
+   },
+   {
+    "id": "F2",
+    "name": "cargo_yield",
+    "quote": "a 3.6% increase in cargo yield"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "D02",
+  "kind": "synthetic: hedged cause (cargo)",
+  "window": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025. Management has not determined whether the increase was due to a 9.0% increase in cargo ton miles or a 3.6% increase in cargo yield.",
+  "target": {
+   "name": "cargo_revenue",
+   "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "cargo_ton_miles",
+    "quote": "a 9.0% increase in cargo ton miles"
+   },
+   {
+    "id": "F2",
+    "name": "cargo_yield",
+    "quote": "a 3.6% increase in cargo yield"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "D03",
+  "kind": "synthetic: co-mention, no stated cause (cargo)",
+  "window": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025. Separately, cargo ton miles increased 9.0% and cargo yield increased 3.6%.",
+  "target": {
+   "name": "cargo_revenue",
+   "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "cargo_ton_miles",
+    "quote": "cargo ton miles increased 9.0%"
+   },
+   {
+    "id": "F2",
+    "name": "cargo_yield",
+    "quote": "cargo yield increased 3.6%"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "D04",
+  "kind": "synthetic: negated cause (salaries)",
+  "window": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025, and this was not due to a 3.9% increase in mainline full-time equivalent employees.",
+  "target": {
+   "name": "salaries_wages_and_benefits",
+   "quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "mainline_full_time_equivalent_employees",
+    "quote": "a 3.9% increase in mainline full-time equivalent employees"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "D05",
+  "kind": "synthetic: hedged cause (salaries)",
+  "window": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025. It is not yet clear whether this was due to a 3.9% increase in mainline full-time equivalent employees.",
+  "target": {
+   "name": "salaries_wages_and_benefits",
+   "quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "mainline_full_time_equivalent_employees",
+    "quote": "a 3.9% increase in mainline full-time equivalent employees"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "D06",
+  "kind": "synthetic: co-mention, no stated cause (salaries)",
+  "window": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025. Mainline full-time equivalent employees increased 3.9% subsequent to the first quarter of 2025.",
+  "target": {
+   "name": "salaries_wages_and_benefits",
+   "quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "mainline_full_time_equivalent_employees",
+    "quote": "Mainline full-time equivalent employees increased 3.9% subsequent to the first quarter of 2025"
+   }
+  ],
+  "gold": [],
+  "offset": []
+ },
+ {
+  "id": "D07",
+  "kind": "real: cause in the next sentence ('This increase...'), distractor",
+  "window": "Passenger revenue increased $1.1 billion, or 9.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to higher domestic and international demand for air travel with PRASM increasing 6.5% compared to the first quarter of 2025. This increase was primarily driven by a 5.6% increase in passenger yield, while load factor increased 0.7pts compared to the first quarter of 2025.",
+  "target": {
+   "name": "prasm",
+   "quote": "PRASM increasing 6.5% compared to the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "passenger_yield",
+    "quote": "a 5.6% increase in passenger yield"
+   },
+   {
+    "id": "F2",
+    "name": "passenger_load_factor",
+    "quote": "load factor increased 0.7pts compared to the first quarter of 2025"
+   }
+  ],
+  "gold": [
+   "F1"
+  ],
+  "offset": []
+ },
+ {
+  "id": "D08",
+  "kind": "real: offset (not scored)",
+  "window": "Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025. The increase in CASM was primarily driven by higher costs for salaries, wages and benefits, aircraft fuel and other operating expenses, offset in part by a decrease in mainline operating special items, net.",
+  "target": {
+   "name": "total_operating_cost_per_available_seat_mile",
+   "quote": "Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025"
+  },
+  "menu": [
+   {
+    "id": "F1",
+    "name": "mainline_operating_special_items",
+    "quote": "offset in part by a decrease in mainline operating special items, net"
+   }
+  ],
+  "gold": [],
+  "offset": [
+   "F1"
+  ]
+ }
+]

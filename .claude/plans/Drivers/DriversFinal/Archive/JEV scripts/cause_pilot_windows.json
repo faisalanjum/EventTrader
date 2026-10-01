@@ -1,0 +1,318 @@
+[
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+  "cue_sentence": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "casm_excluding_net_special_items_fuel_and_profit_sharing",
+    "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "total_operating_cost_per_available_seat_mile",
+    "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000027904-26-000013",
+  "part": "mdna",
+  "window": "The refinery regularly optimizes its sales and exchange activities of non-jet fuel products based on market conditions and the availability of counterparties for exchanges. The volume of exchange transactions has declined in recent years due to changes in the counterparties used to supply jet fuel and our related buy/sell agreements. As of December 31, 2025, we do not plan to use exchange agreements to procure significant volumes of fuel.",
+  "cue_sentence": "The volume of exchange transactions has declined in recent years due to changes in the counterparties used to supply jet fuel and our related buy/sell agreements.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "fuel_exchange_agreements",
+    "quote": "As of December 31, 2025, we do not plan to use exchange agreements to procure significant volumes of fuel.",
+    "fact_type": "action_event"
+   },
+   {
+    "id": "F2",
+    "name": "refinery_exchange_transaction_volume",
+    "quote": "The volume of exchange transactions has declined in recent years due to changes in the counterparties used to supply jet fuel and our related buy/sell agreements.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Other operating revenue increased $233 million, or 24.1%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with American\u2019s loyalty program. During the three months ended March 31, 2026 and 2025, cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively.",
+  "cue_sentence": "Other operating revenue increased $233 million, or 24.1%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with American\u2019s loyalty program.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "co_branded_credit_card_cash_payments",
+    "quote": "cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "other_operating_revenue",
+    "quote": "Other operating revenue increased $233 million, or 24.1%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with American\u2019s loyalty program.",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F3",
+    "name": "co_branded_credit_card_partner_payments",
+    "quote": "During the three months ended March 31, 2026 and 2025, cash payments from co-branded credit card and other partners were $2.9 billion and $1.8 billion, respectively.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Aircraft fuel and related taxes was $2.9 billion in the first quarter of 2026, which was $341 million, or 13.2%, higher as compared to the first quarter of 2025. This was primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+  "cue_sentence": "This was primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "aircraft_fuel_and_related_taxes",
+    "quote": "Aircraft fuel and related taxes was $2.9 billion in the first quarter of 2026, which was $341 million, or 13.2%, higher as compared to the first quarter of 2025.",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "average_aircraft_fuel_price_per_gallon",
+    "quote": "a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F3",
+    "name": "aircraft_fuel_gallons_consumed",
+    "quote": "a 2.3% increase in gallons of fuel consumed due to increased capacity",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F4",
+    "name": "aircraft_fuel_price_per_gallon",
+    "quote": "This was primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Selling expenses increased $57 million, or 12.8%, in the first quarter of 2026 from the first quarter of 2025, primarily due to higher commissions from renegotiated agency contracts, higher credit card fees driven by the overall increase in passenger revenue and increased advertising expenses.",
+  "cue_sentence": "Selling expenses increased $57 million, or 12.8%, in the first quarter of 2026 from the first quarter of 2025, primarily due to higher commissions from renegotiated agency contracts, higher credit card fees driven by the overall increase in passenger revenue and increased advertising expenses.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "selling_expenses",
+    "quote": "Selling expenses increased $57 million, or 12.8%, in the first quarter of 2026 from the first quarter of 2025",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "selling_expenses",
+    "quote": "Selling expenses increased $57 million, or 12.8%, in the first quarter of 2026 from the first quarter of 2025, primarily due to higher commissions from renegotiated agency contracts, higher credit card fees driven by the overall increase in passenger revenue and increased advertising expenses.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Other rent and landing fees increased $64 million, or 7.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to rate increases at certain airports.",
+  "cue_sentence": "Other rent and landing fees increased $64 million, or 7.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to rate increases at certain airports.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "other_rent_and_landing_fees",
+    "quote": "Other rent and landing fees increased $64 million, or 7.7%, in the first quarter of 2026 from the first quarter of 2025",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "other_rent_and_landing_fees",
+    "quote": "Other rent and landing fees increased $64 million, or 7.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to rate increases at certain airports.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000027904-26-000013",
+  "part": "risk",
+  "window": "A significant individual, sustained or repeated failure of our information technology infrastructure, including third-party networks, software-as-a-service applications, cloud services, or technology that we utilize and on which we depend, could impact our operations and our customer service, result in loss of revenue and increased costs, and damage our reputation. While we have initiatives and disaster recovery plans in place to prevent or mitigate disruptions, we have experienced a significant disruption in the past, such as the global outage caused by a faulty update by cybersecurity vendor CrowdStrike in July 2024 that resulted in global information technology outages of Windows-based systems and significantly affected our information technology systems, disrupting our operations. While we continue to invest in improvements to our preventative initiatives and disaster recovery plans, the measures we have in place may not be adequate to prevent future business disruptions and any material adverse financial and reputational consequences to our business.",
+  "cue_sentence": "While we have initiatives and disaster recovery plans in place to prevent or mitigate disruptions, we have experienced a significant disruption in the past, such as the global outage caused by a faulty update by cybersecurity vendor CrowdStrike in July 2024 that resulted in global information technology outages of Windows-based systems and significantly affected our information technology systems, disrupting our operations.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "crowdstrike_outage",
+    "quote": "the global outage caused by a faulty update by cybersecurity vendor CrowdStrike in July 2024 that resulted in global information technology outages of Windows-based systems and significantly affected our information technology systems, disrupting our operations.",
+    "fact_type": "action_event"
+   },
+   {
+    "id": "F2",
+    "name": "crowdstrike_outage",
+    "quote": "such as the global outage caused by a faulty update by cybersecurity vendor CrowdStrike in July 2024 that resulted in global information technology outages of Windows-based systems and significantly affected our information technology systems, disrupting our operations",
+    "fact_type": "action_event"
+   }
+  ]
+ },
+ {
+  "src": "0000027904-26-000013",
+  "part": "mdna",
+  "window": "See \"Refinery Segment\" below for additional details on the refinery's operations, including third party refinery sales. In addition, the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.",
+  "cue_sentence": "In addition, the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "mro_business_expense",
+    "quote": "the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "mro_business",
+    "quote": "due to an approximately 25% growth in that business",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F3",
+    "name": "revenue",
+    "quote": "the expenses related to our MRO business increased $141 million, to $751 million during 2025, due to an approximately 25% growth in that business.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to an increase in cargo ton miles and cargo yield.",
+  "cue_sentence": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to an increase in cargo ton miles and cargo yield.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "cargo_revenue",
+    "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "cargo_revenue",
+    "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 9.0% increase in cargo ton miles and a 3.6% increase in cargo yield.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000027904-26-000013",
+  "part": "mdna",
+  "window": "The decreases in operating income and operating income, adjusted primarily result from nearly offsetting increases in both revenue and operating expenses, as described below. As a result of our strong performance in 2024 and 2025, we paid profit sharing of $1.4 billion in February 2025 to our employees and will pay another $1.3 billion in February 2026 in recognition of these achievements.",
+  "cue_sentence": "As a result of our strong performance in 2024 and 2025, we paid profit sharing of $1.4 billion in February 2025 to our employees and will pay another $1.3 billion in February 2026 in recognition of these achievements.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "profit_sharing",
+    "quote": "we paid profit sharing of $1.4 billion in February 2025 to our employees",
+    "fact_type": "action_event"
+   },
+   {
+    "id": "F2",
+    "name": "profit_sharing",
+    "quote": "will pay another $1.3 billion in February 2026 in recognition of these achievements",
+    "fact_type": "action_event"
+   }
+  ]
+ },
+ {
+  "src": "0000027904-26-000013",
+  "part": "mdna",
+  "window": "Refinery revenues decreased in 2025, primarily driven by lower pricing of refined products. The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.",
+  "cue_sentence": "The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "refinery_revenue",
+    "quote": "Refinery revenues decreased in 2025, primarily driven by lower pricing of refined products.",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "operating_income",
+    "quote": "The refinery's operating income increased in 2025 compared to 2024 mainly due to higher industry refining margins.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Aircraft fuel and related taxes increased $341 million, or 13.2%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+  "cue_sentence": "Aircraft fuel and related taxes increased $341 million, or 13.2%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "average_aircraft_fuel_price_per_gallon",
+    "quote": "a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "aircraft_fuel_gallons_consumed",
+    "quote": "a 2.3% increase in gallons of fuel consumed due to increased capacity",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F3",
+    "name": "aircraft_fuel_expense",
+    "quote": "Aircraft fuel and related taxes increased $341 million, or 13.2%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 10.7% increase in the average price per gallon of aircraft fuel including related taxes to $2.75 in the first quarter of 2026 from $2.48 in the first quarter of 2025 and a 2.3% increase in gallons of fuel consumed due to increased capacity.",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000006201-26-000032",
+  "part": "mdna",
+  "window": "Our net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.",
+  "cue_sentence": "Our net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "net_cash_provided_by_operating_activities",
+    "quote": "Our net cash provided by operating activities was $4.2 billion and $2.5 billion for the first quarter of 2026 and 2025, respectively, a $1.8 billion period-over-period increase driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue.",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "air_traffic_liability",
+    "quote": "driven primarily by working capital increases principally in our air traffic liability and loyalty program deferred revenue",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F3",
+    "name": "air_traffic_liability",
+    "quote": "working capital increases principally in our air traffic liability and loyalty program deferred revenue",
+    "fact_type": "metric"
+   }
+  ]
+ },
+ {
+  "src": "0000027904-26-000013",
+  "part": "mdna",
+  "window": "Total operating expense increased $1.9 billion, or 3%, compared to 2024, primarily due to higher employee costs from increased wages, costs associated with a 3% increase in capacity, and higher expenses related to refinery sales to third parties. These increases were partially offset by lower aircraft fuel costs.",
+  "cue_sentence": "Total operating expense increased $1.9 billion, or 3%, compared to 2024, primarily due to higher employee costs from increased wages, costs associated with a 3% increase in capacity, and higher expenses related to refinery sales to third parties.",
+  "menu": [
+   {
+    "id": "F1",
+    "name": "operating_expense",
+    "quote": "Total operating expense increased $1.9 billion, or 3%, compared to 2024",
+    "fact_type": "metric"
+   },
+   {
+    "id": "F2",
+    "name": "operating_expense",
+    "quote": "Total operating expense increased $1.9 billion, or 3%, compared to 2024, primarily due to higher employee costs from increased wages, costs associated with a 3% increase in capacity, and higher expenses related to refinery sales to third parties.",
+    "fact_type": "metric"
+   }
+  ]
+ }
+]
