@@ -45,12 +45,12 @@ def _text(row):
 #    kill this detector)
 # ---------------------------------------------------------------------------
 SITES = [
-    ("Site B raw `segment` key", 'production', 'driver/relocation/locator.py',
+    ("Site B raw `segment` key", 'production', 'driver_reference/relocation/locator.py',
      lambda r: (_text(r) == 'segment' and r['owner'] == 'seg_parse'
                 and r['use'].startswith('call:')),
      "fc.get('segment')", "fc.get('SENTINEL_REMOVED')"),
 
-    ("`_CANDIDATE_EXACT` unit words", 'production', 'driver/core/xbrl_attach.py',
+    ("`_CANDIDATE_EXACT` unit words", 'production', 'driver_reference/core/xbrl_attach.py',
      lambda r: r['binding'] == '_CANDIDATE_EXACT' and _text(r) == 'shares',
      "'shares'", "'SENTINEL_REMOVED'"),
 
@@ -61,7 +61,7 @@ SITES = [
     # FOLLOWED ITS VALUE to the one owner (#827 B1 packet 1 dedup): the URI
     # now lives at exact_numbers.ISO_4217_NAMESPACE and the consumers import it.
     ("the ISO-4217 namespace constant", 'production',
-     'driver/relocation/exact_numbers.py',
+     'driver_reference/relocation/exact_numbers.py',
      lambda r: (r['binding'] == 'ISO_4217_NAMESPACE'
                 and _text(r) == 'http://www.xbrl.org/2003/iso4217'),
      "ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217'",
@@ -79,7 +79,7 @@ SITES = [
     # FOLLOWED ITS VALUE to the one owner (#827 B1 packet 1 dedup), same as
     # the ISO-4217 row above.
     ("the XBRL instance namespace URI", 'production',
-     'driver/relocation/exact_numbers.py',
+     'driver_reference/relocation/exact_numbers.py',
      lambda r: (r['binding'] == 'XBRL_INSTANCE_NAMESPACE'
                 and _text(r) == 'http://www.xbrl.org/2003/instance'),
      "XBRL_INSTANCE_NAMESPACE = 'http://www.xbrl.org/2003/instance'",
@@ -321,7 +321,7 @@ def test_the_SCANNED_SET_EQUALS_the_independently_globbed_set(inventory):
     mistake this replaces.
     """
     expected = set()
-    for d in (os.path.join('driver', 'core'), os.path.join('driver', 'relocation')):
+    for d in (os.path.join('driver_reference', 'core'), os.path.join('driver_reference', 'relocation')):
         base = os.path.join(INV.ROOT, d)
         expected |= {os.path.relpath(os.path.join(base, n), INV.ROOT)
                      for n in os.listdir(base) if n.endswith('.py')}
@@ -651,7 +651,7 @@ def test_the_manifest_covers_EVERY_yielded_input_including_zero_row_files():
     assert manifested == yielded, sorted(yielded ^ manifested)
     zero = {f for fs in report.values() for f, rows in fs.items() if not rows}
     assert zero, 'expected at least one zero-row input to be retained'
-    assert 'driver/core/__init__.py' in zero, sorted(zero)
+    assert 'driver_reference/core/__init__.py' in zero, sorted(zero)
 
 
 _TWO_ON_ONE_LINE = (
@@ -792,9 +792,9 @@ def test_EVERY_rule_in_the_LIVE_inventory_carries_its_exact_source(inventory):
 # ---------------------------------------------------------------------------
 # SEQ 444: PRODUCTION SCOPE IS AN IMPORT CLOSURE, NOT TWO DIRECTORY NAMES.
 #
-# `driver/xml_names.py` holds two production functions and is imported by four
+# `driver_reference/xml_names.py` holds two production functions and is imported by four
 # scanned production modules, and the audit never saw it — because the scope
-# was `driver/core` + `driver/relocation` and that file sits one level up. Law
+# was `driver_reference/core` + `driver_reference/relocation` and that file sits one level up. Law
 # was moved OUT of `inline_html.py` INTO it during this very audit (its own
 # docstring records the move), so the inventory reported those rules gone from
 # the source and nothing reported them arrived anywhere.
@@ -933,7 +933,7 @@ def test_ONE_SNAPSHOT_binds_rules_and_hashes_to_the_SAME_bytes(tmp_path):
     assert hashlib.sha256(text.encode('utf-8')).hexdigest() == sha, rel
     # the rules really are built from the snapshot's text, not a re-read
     fake = dict(snap)
-    victim = os.path.join('driver', 'core', 'driver_ids.py')
+    victim = os.path.join('driver_reference', 'core', 'driver_ids.py')
     assert victim in fake, sorted(fake)[:3]
     b, _t, _s = fake[victim]
     marker = 'SEQ445_SNAPSHOT_ONLY_MARKER'
@@ -963,7 +963,7 @@ def test_the_RAW_view_carries_no_duplicated_source(tmp_path):
 # ---------------------------------------------------------------------------
 # SEQ 446: THE SECOND SCOPE CLASS — sys.path, not packages.
 #
-# `driver/core/driver_period_resolver.py` inserts
+# `driver_reference/core/driver_period_resolver.py` inserts
 # `.claude/skills/earnings-orchestrator/scripts` into `sys.path` and then
 # imports `fiscal_math` and `guidance_ids` by bare name; `unit_resolver.py`
 # does the same for `guidance_ids`. A package walk finds no such module and
@@ -988,14 +988,14 @@ def test_A_REPO_FILE_IS_NEVER_SILENTLY_THIRD_PARTY(tmp_path):
 
 def test_a_BARE_ENTRYPOINT_PATH_import_is_followed_not_called_third_party(tmp_path):
     """Found BY the check above, on the live tree: `import exact_numbers` in
-    `driver/relocation/locator.py` was classified third party.
+    `driver_reference/relocation/locator.py` was classified third party.
 
     CORRECTED (SEQ 447): my first explanation was wrong. Python does NOT put an
     imported module's own directory on `sys.path` — only the __main__ script's.
-    `import driver.relocation.locator` from the repo root really does fail on
+    `import driver_reference.relocation.locator` from the repo root really does fail on
     that bare import. It resolves because the ACTIVE Route-A entry points
     insert the directory themselves (`run_code_tier.py:28`,
-    `wp3_compliant_packet.py:17` add `driver/relocation`), which is the same
+    `wp3_compliant_packet.py:17` add `driver_reference/relocation`), which is the same
     class as the held Fiscal substrate: a search path an entry point creates.
 
     The closure resolves the bare name for that active route. The file it
@@ -1030,10 +1030,10 @@ def test_a_ZERO_RULE_production_file_stays_in_the_CLOSURE(tmp_path):
 
 def test_a_ZERO_RULE_input_survives_into_the_SNAPSHOT_and_MANIFEST():
     """SEQ 447 #2, live half — the real guarantee, on real state.
-    `driver/core/__init__.py` detects no literal at all, and it must still be
+    `driver_reference/core/__init__.py` detects no literal at all, and it must still be
     read, hashed and manifested like every other input."""
     snap = INV.snapshot()
-    victim = os.path.join('driver', 'core', '__init__.py')
+    victim = os.path.join('driver_reference', 'core', '__init__.py')
     assert victim in snap, 'a zero-rule input vanished from the snapshot'
     _bucket, text, sha = snap[victim]
     assert hashlib.sha256(text.encode('utf-8')).hexdigest() == sha
@@ -1062,7 +1062,7 @@ def test_the_HELD_shared_substrate_is_named_bound_and_really_imported():
         assert os.path.isfile(os.path.join(INV.ROOT, path)), path
         assert importers, path
         for imp in importers:
-            assert imp.startswith(os.path.join('driver', 'core')), (path, imp)
+            assert imp.startswith(os.path.join('driver_reference', 'core')), (path, imp)
     man = INV.held_substrate_manifest()
     assert set(man) == expected, sorted(man)
     for path, entry in man.items():
@@ -1097,17 +1097,17 @@ def test_CLOSURE_adds_xml_names_to_the_LIVE_production_scope():
                     directory_only.add(os.path.relpath(
                         os.path.join(dirpath, n), INV.ROOT))
     added = set(closed) - directory_only
-    assert added == {os.path.join('driver', 'xml_names.py')}, sorted(added)
+    assert added == {os.path.join('driver_reference', 'xml_names.py')}, sorted(added)
 
 
 def test_the_INVENTORY_scans_the_closed_set_and_reaches_xml_names(inventory):
     """One closure, reused. The inventory's own production bucket must contain
     the reached module — deriving the set twice is how the two drift apart."""
     prod = set(inventory.get('production', {}))
-    assert os.path.join('driver', 'xml_names.py') in prod, sorted(prod)[:5]
+    assert os.path.join('driver_reference', 'xml_names.py') in prod, sorted(prod)[:5]
     rules = INV.decision_rules(inventory)
     reached = [r for r in rules
-               if r['file'] == os.path.join('driver', 'xml_names.py')]
+               if r['file'] == os.path.join('driver_reference', 'xml_names.py')]
     assert reached, 'the module is scanned but contributes no rule'
     assert all(r['bucket'] == 'production' for r in reached), reached
     assert all(r['stmt_source'].strip() for r in reached), reached

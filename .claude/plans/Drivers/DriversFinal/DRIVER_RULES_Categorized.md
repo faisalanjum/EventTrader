@@ -480,7 +480,7 @@ flowchart LR
 
 | # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
 |---|---|---|---|---|---|
-| P4 | 3.9 | A news story has a company tag, not an owner → read strictly, every news fact (macro ones too) is held | All but 1 of 348,670 stories have exactly one tag (checked 2026-09-29; query: note P4) | Does the tag count as an owner? Decide when news is admitted (9.5) | `driver/core/driver_neo4j_adapter.py:5` "News currently has no proper ownership edge" |
+| P4 | 3.9 | A news story has a company tag, not an owner → read strictly, every news fact (macro ones too) is held | All but 1 of 348,670 stories have exactly one tag (checked 2026-09-29; query: note P4) | Does the tag count as an owner? Decide when news is admitted (9.5) | `driver_reference/core/driver_neo4j_adapter.py:5` "News currently has no proper ownership edge" |
 
 - **P4 query** (Neo4j): `MATCH (n:News) WITH n, COUNT { (n)-[:INFLUENCES]->(:Company) } AS k RETURN k, count(*)` → 1 story with 0 companies; 348,669 with exactly 1.
 
@@ -771,8 +771,8 @@ flowchart LR
 
 | # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
 |---|---|---|---|---|---|
-| P1 | 3.4, 5.3 | They say a conflict flag is stored → no such field exists, so a builder could add one | Only the tie-breaker in the extra fact's ID (3.2) marks a conflict; design and code agree | New wording (draft: note P1) | `archive/66_IssuesToBeHandled.md:343` "zero new stored artifacts" · `driver/core/driver_writer.py:365` "zero new stored artifacts" |
-| P2 | 5.3 | Names a fact's producer, but none of the 24 fields (§3) stores it → which channel and reader version made a fact is lost for good | Verdicts store theirs (A2.2); never part of a fact's identity; not a list (note P2) | Store it? In what form? (options: note P2) | `FinalDesign/FINAL_DESIGN.md:146` "Producer/model identity is never in the fact key" · `FinalDesign/ChannelContract.md:634` "Two channels may hit the SAME source event" · `driver/core/driver_writer.py:40` "assert len(STORED_FACT_FIELDS) == 24" |
+| P1 | 3.4, 5.3 | They say a conflict flag is stored → no such field exists, so a builder could add one | Only the tie-breaker in the extra fact's ID (3.2) marks a conflict; design and code agree | New wording (draft: note P1) | `archive/66_IssuesToBeHandled.md:343` "zero new stored artifacts" · `driver_reference/core/driver_writer.py:365` "zero new stored artifacts" |
+| P2 | 5.3 | Names a fact's producer, but none of the 24 fields (§3) stores it → which channel and reader version made a fact is lost for good | Verdicts store theirs (A2.2); never part of a fact's identity; not a list (note P2) | Store it? In what form? (options: note P2) | `FinalDesign/FINAL_DESIGN.md:146` "Producer/model identity is never in the fact key" · `FinalDesign/ChannelContract.md:634` "Two channels may hit the SAME source event" · `driver_reference/core/driver_writer.py:40` "assert len(STORED_FACT_FIELDS) == 24" |
 
 - **P1 draft:** 3.4 → "No other field is stored on a fact. A conflict (5.3) adds no field: the tie-breaker in the extra fact's ID marks it." · 5.3 table row → "add an extra fact, marked as a conflict (3.4); it stays readable (7.11)".
 - **P1 audit note (2026-09-29):** in `DRIVER_RULES_Categorized.md`, 3.4's "the 24" now sits in U2a, far from the 24-field table in U1a; when rewording 3.4, point to that table.

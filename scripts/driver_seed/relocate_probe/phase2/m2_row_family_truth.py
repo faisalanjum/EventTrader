@@ -24,7 +24,7 @@ _ROOT = os.path.abspath(os.path.join(_HERE, '..', '..', '..', '..'))
 sys.path.insert(0, _ROOT)
 sys.path.insert(0, _HERE)
 
-from driver.relocation import inline_html as IH
+from driver_reference.relocation import inline_html as IH
 from m1_transcript_census import NUM
 
 V2 = os.path.join(_HERE, 'm2_candidate_packets_v2.jsonl')

@@ -40,7 +40,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(PHASE2))
 
 from config import local_llm as L  # noqa: E402
-from driver.relocation import inline_html as IH  # noqa: E402
+from driver_reference.relocation import inline_html as IH  # noqa: E402
 import m1_structure_inventory as INV  # noqa: E402
 from m2_native_table_shadow_r3 import (  # noqa: E402
     _context_track,
@@ -553,7 +553,7 @@ def frozen_files(calls: list[dict]) -> dict[str, str]:
         FISCAL_GRADER,
         FISCAL_VALIDATOR,
         ROOT / "config/local_llm.py",
-        ROOT / "driver/relocation/inline_html.py",
+        ROOT / "driver_reference/relocation/inline_html.py",
         PHASE2 / "m1_structure_inventory.py",
         PHASE2 / "m1_transcript_census.py",
         PHASE2 / "m2_native_table_shadow_r3.py",

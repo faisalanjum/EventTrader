@@ -4,7 +4,7 @@ Retrieval = the O13-ratified positional pairing (the production adapter's law,
 S4-exercised), anchored on (Company {ticker}) + event_time because the 36
 events include transcripts/news that are not Report nodes. Classification,
 normalization, FS-20 and provisional handling come UNCHANGED from
-driver.core.slice_menu.build_menu (read-only import — sanctioned by the
+driver_reference.core.slice_menu.build_menu (read-only import — sanctioned by the
 work-order harness-imports table). Read-only; zero writes; zero LLM.
 
 Usage:  venv/bin/python harness/slice_menu_probe.py TICKER EVENT_TIME_ISO
@@ -18,8 +18,8 @@ import sys
 _REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".."))
 sys.path.insert(0, _REPO)
 
-from driver.core.slice_menu import build_menu                    # THE law
-from driver.core.driver_neo4j_adapter import _norm_uid           # proven CIK fix
+from driver_reference.core.slice_menu import build_menu                    # THE law
+from driver_reference.core.driver_neo4j_adapter import _norm_uid           # proven CIK fix
 
 def _driver():
     if not os.environ.get("NEO4J_URI"):

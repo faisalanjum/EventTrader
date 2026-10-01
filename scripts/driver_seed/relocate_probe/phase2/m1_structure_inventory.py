@@ -77,7 +77,7 @@ sys.path.insert(0, _ROOT)
 sys.path.insert(0, _HERE)
 
 from m1_transcript_census import NUM                      # the one shared recognizer
-from driver.relocation import inline_html as IH           # certified machinery
+from driver_reference.relocation import inline_html as IH           # certified machinery
 
 CACHE = os.path.join(_HERE, '..', 'exhibit_html_cache')
 SELECTION = os.path.join(_HERE, 'm1_canonical_selection_final.jsonl')

@@ -33,14 +33,14 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", "..", ".."))
 OUT = os.path.join(_HERE, "15_reviewer_case_map.json")
 
-R5 = "driver/relocation/test_bind_graph_fact.py"
-R8 = "driver/core/test_round8_xbrl_binding.py"
-R10 = "driver/core/test_round10_event_boundary.py"
-R12U = "driver/core/test_round12_pure_unit_law.py"
-V2 = "driver/core/test_v2_attacks.py"
+R5 = "driver_reference/relocation/test_bind_graph_fact.py"
+R8 = "driver_reference/core/test_round8_xbrl_binding.py"
+R10 = "driver_reference/core/test_round10_event_boundary.py"
+R12U = "driver_reference/core/test_round12_pure_unit_law.py"
+V2 = "driver_reference/core/test_v2_attacks.py"
 #: The round-9 public two-view bridge suite — where the EXACT namespace
 #: attacks live, each beside its lawful twin.
-BRIDGE = "driver/relocation/test_two_view_bridge.py"
+BRIDGE = "driver_reference/relocation/test_two_view_bridge.py"
 
 #: (source relay, VERBATIM case as the reviewer wrote it, [proof node ids]).
 #: The quotes are copied, never paraphrased — a paraphrase is where a case

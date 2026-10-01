@@ -16,7 +16,7 @@ import sys, os, json
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, ROOT)
-from driver.channels.fiscal_ai import run_code_tier as RC
+from driver_reference.channels.fiscal_ai import run_code_tier as RC
 
 TICKERS = ['A', 'AA', 'AAL', 'AAPL', 'ABT', 'ACI', 'ACN', 'ADM', 'AEE', 'AFL', 'CAG']
 

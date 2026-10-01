@@ -81,7 +81,7 @@ _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", ".."))
 EXPECTED = os.path.join(_HERE, "expected_test_nodes.txt")
 PINS = os.path.join(_HERE, "gate_pins.jsonl")
 
-TEST_ROOTS = ("driver/core", "driver/relocation",
+TEST_ROOTS = ("driver_reference/core", "driver_reference/relocation",
               ".claude/plans/Drivers/experiments/harness")
 CLEAN_LANE = "not live and not live_write"
 

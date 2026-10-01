@@ -38,7 +38,7 @@ import sys
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", "..", ".."))
 sys.path.insert(0, _REPO)
-sys.path.insert(0, os.path.join(_REPO, "driver", "relocation"))
+sys.path.insert(0, os.path.join(_REPO, "driver_reference", "relocation"))
 
 CACHE = os.path.join(_REPO, "scripts", "driver_seed", "relocate_probe",
                      "inline_html_cache")
@@ -75,7 +75,7 @@ def _bounded(start, end, length):
 
 
 def main():
-    from driver.relocation.inline_html import (PIECE_KEYS, PIECE_KINDS,
+    from driver_reference.relocation.inline_html import (PIECE_KEYS, PIECE_KINDS,
                                                SOURCE_EVIDENCE_KEYS, prepare)
 
     packets = sorted(glob.glob(os.path.join(

@@ -33,8 +33,8 @@ PKG = os.path.join(_HERE, "exp5_rev4_package.md")
 LEDGER = os.path.join(_HERE, "g_status_ledger.md")
 PINS = os.path.join(_HERE, "rev4_pin_inventory.md")
 PATCH = os.path.join(_HERE, "exp5_rev4_docs.patch")
-PROD_TESTS = os.path.join(_REPO, "driver", "core", "test_prepared_fact_v2.py")
-ATTACK_TESTS = os.path.join(_REPO, "driver", "core", "test_v2_attacks.py")
+PROD_TESTS = os.path.join(_REPO, "driver_reference", "core", "test_prepared_fact_v2.py")
+ATTACK_TESTS = os.path.join(_REPO, "driver_reference", "core", "test_v2_attacks.py")
 
 sys.path.insert(0, _HERE)
 
@@ -53,22 +53,22 @@ G_COVERAGE = {
     #
     # status vocabulary (closed): code | partial | grading | gated-switch
     # Every partial/grading/gated-switch row states what is NOT yet proven.
-    "G1": ("code", "driver/core/test_prepared_fact_v2.py::test_G1_converter_api_fence_by_reflection",
+    "G1": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G1_converter_api_fence_by_reflection",
             ""),
-    "G2": ("code", "driver/core/test_prepared_fact_v2.py::test_G2_quote_and_concept_name_cannot_alter_a_value",
+    "G2": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G2_quote_and_concept_name_cannot_alter_a_value",
             ""),
-    "G3": ("code", "driver/core/test_prepared_fact_v2.py::test_G3_percent_family_units_are_distinct",
+    "G3": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G3_percent_family_units_are_distinct",
             ""),
-    "G4": ("code", "driver/core/test_prepared_fact_v2.py::test_G4_scale_via_model_stated_multiplier",
+    "G4": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G4_scale_via_model_stated_multiplier",
             ""),
-    "G5": ("code", "driver/core/test_prepared_fact_v2.py::test_G5_slot_structure_failures",
+    "G5": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G5_slot_structure_failures",
             ""),
-    "G6": ("code", "driver/core/test_prepared_fact_v2.py::test_G6_wrong_scale_word_elsewhere_in_the_SAME_part_still_fails",
+    "G6": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G6_wrong_scale_word_elsewhere_in_the_SAME_part_still_fails",
             ""),
-    "G7": ("code", "driver/core/test_prepared_fact_v2.py::test_G7_unknown_units_still_multiply",
+    "G7": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G7_unknown_units_still_multiply",
             ""),
     "G8":  ("partial",
-        "driver/core/test_prepared_fact_v2.py::test_G8_per_x_rides_once_at_fact_level",
+        "driver_reference/core/test_prepared_fact_v2.py::test_G8_per_x_rides_once_at_fact_level",
         "per_x rides once at fact level and is proven; the NAME-13 denominator check "
         "is deleted from Core with check_per_x_against_name and moves to the POST "
         "per-X naming feature; wiring into the admission kernel remains unprovable "
@@ -76,9 +76,9 @@ G_COVERAGE = {
     "G9": ("gated-switch", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G9_one_shared_validation_entry_point_exists",
             "one shared validation entry point exists and is proven; the scorer and "
             "run_event both moving onto it IS the atomic switch"),
-    "G10": ("code", "driver/core/test_prepared_fact_v2.py::test_G10_order_free_under_full_permutation",
+    "G10": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G10_order_free_under_full_permutation",
             ""),
-    "G11": ("partial", "driver/relocation/test_packet_items_through_the_door.py::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence",
+    "G11": ("partial", "driver_reference/relocation/test_packet_items_through_the_door.py::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence",
             "re-pointed at the strongest proof: 11 saved packet items, loaded from "
             "the TRACKED wp3 packets, attach on their literal source evidence against "
             "real cached filings and live Neo4j. The remaining leg is genuinely "
@@ -101,7 +101,7 @@ G_COVERAGE = {
             "old-path removal is not provable until the owner-approved atomic switch"),
     "G17": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G17_transport_is_exact_and_refuses_ambiguity",
             ""),
-    "G18": ("partial", "driver/core/test_prepared_fact_v2.py::test_G18_the_new_modules_reach_no_graph_write",
+    "G18": ("partial", "driver_reference/core/test_prepared_fact_v2.py::test_G18_the_new_modules_reach_no_graph_write",
             "REASON RE-ADJUDICATED FROM CURRENT BYTES (Codex SEQ 1138.2). The old "
             "reason said the exam had not reached run_event; that is now FALSE — "
             "B-14 proves the replay reaches the public run_event, and the scoring "
@@ -116,7 +116,7 @@ G_COVERAGE = {
     "G19": ("partial", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G19_two_rebuilds_are_byte_identical",
             "docs-patch determinism is proven; contract/launcher/manifest "
             "regeneration happens at the switch"),
-    "G20": ("code", "driver/core/test_prepared_fact_v2.py::test_G20_table_wide_scale_applied_once",
+    "G20": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G20_table_wide_scale_applied_once",
             ""),
     # G21/G22/G30 — `partial`, AND THE FLIP-FLOP IS THE LESSON. One round moved
     # them to the real-data attach tests as "the strongest proof"; the next moved
@@ -126,14 +126,14 @@ G_COVERAGE = {
     # No single registered selector covers either rule end to end, and `code`
     # means one selector does. Naming the absent leg is the honest answer;
     # promoting the row is not.
-    "G21": ("partial", "driver/core/test_v2_attacks.py::test_ATTACK_a_wrong_declared_scale_fails_the_certified_reconcile",
+    "G21": ("partial", "driver_reference/core/test_v2_attacks.py::test_ATTACK_a_wrong_declared_scale_fails_the_certified_reconcile",
             "the never-double-scaled rule is proven on synthetic input; the same "
             "rule against a real Fiscal packet row is not exercised by this "
             "selector"),
-    "G22": ("partial", "driver/core/test_prepared_fact_v2.py::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence",
+    "G22": ("partial", "driver_reference/core/test_prepared_fact_v2.py::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence",
             "the XBRL lane is proven; the TEXT lane's matching requirement — the "
             "other half of the rule — is not touched by this selector"),
-    "G23": ("partial", "driver/core/test_round10_event_boundary.py::test_MIXED_TYPE_keys_are_refused_cleanly_at_every_door",
+    "G23": ("partial", "driver_reference/core/test_round10_event_boundary.py::test_MIXED_TYPE_keys_are_refused_cleanly_at_every_door",
             "an old payload now fails as an ordinary unexpected-key refusal at every "
             "door; the retired-name-specific branch and its message are deleted. "
             "Fiscal actually ceasing to emit the fields is O-f, after the boundary proof"),
@@ -142,38 +142,38 @@ G_COVERAGE = {
     # both '$13.9 billion' and '$382 million' with the multipliers swapped. The
     # check below requires the id to exist in the fixture registry AND to be
     # classified `grading` there — rename or reclassify it and this row fails.
-    "G24": ("grading", "driver/core/test_prepared_fact_v2.py::test_G24_membership_alone_cannot_catch_a_wrong_slot_assignment",
+    "G24": ("grading", "driver_reference/core/test_prepared_fact_v2.py::test_G24_membership_alone_cannot_catch_a_wrong_slot_assignment",
             "a MEANING error: only hidden grading can catch a wrong slot "
             "assignment (fixture A6_swapped_scale_inside_one_quote)"),
-    "G25": ("partial", "driver/core/test_prepared_fact_v2.py::test_G25_emit_once_violation_blocks_a_silent_pass",
+    "G25": ("partial", "driver_reference/core/test_prepared_fact_v2.py::test_G25_emit_once_violation_blocks_a_silent_pass",
             "emit-once detection is proven; the reliability gate that consumes it "
             "lives in the scorer, which moves at the switch"),
-    "G26": ("partial", "driver/core/test_prepared_fact_v2.py::test_G26_duration_and_instant_are_meaning_not_date_count",
+    "G26": ("partial", "driver_reference/core/test_prepared_fact_v2.py::test_G26_duration_and_instant_are_meaning_not_date_count",
             "the illegal combination is code-caught; 'a balance with a window still "
             "grades instant' is a MEANING judgment no code can prove"),
-    "G27": ("code", "driver/core/test_prepared_fact_v2.py::test_G27_a_point_is_not_a_floor",
+    "G27": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G27_a_point_is_not_a_floor",
             ""),
     "G28": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G28_source_id_echo_mismatch_is_refused",
             ""),
-    "G29": ("code", "driver/core/test_prepared_fact_v2.py::test_G29_two_shape_fields_together_park",
+    "G29": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G29_two_shape_fields_together_park",
             ""),
     # SAME AS G21/G22, and worse: the registered test is named "the LIVE fiscal
     # packet row" and is eight lines that load no packet, reach no store, and
     # touch no graph. Its synthetic row proves the consistency equation; the live
     # packet leg its own name promises is not exercised anywhere.
-    "G30": ("partial", "driver/relocation/test_real_726_end_to_end.py::test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing",
+    "G30": ("partial", "driver_reference/relocation/test_real_726_end_to_end.py::test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing",
             "the consistency equation is proven on a synthetic row; despite the "
             "test's name no live Fiscal packet is loaded, so the real-packet leg "
             "and the violation case are both unproven here"),
-    "G31": ("code", "driver/core/test_prepared_fact_v2.py::test_G31_compensated_misread_can_never_grade_correct",
+    "G31": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G31_compensated_misread_can_never_grade_correct",
             ""),
     "G32": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G32_every_assembled_event_view_is_exactly_the_authorized_fields",
             ""),
-    "G33": ("code", "driver/core/test_v2_attacks.py::test_ATTACK_an_invalid_slice_kind_is_rejected",
+    "G33": ("code", "driver_reference/core/test_v2_attacks.py::test_ATTACK_an_invalid_slice_kind_is_rejected",
             ""),
-    "G34": ("code", "driver/core/test_prepared_fact_v2.py::test_G34_company_confirmed_never_stores_a_guessed_false",
+    "G34": ("code", "driver_reference/core/test_prepared_fact_v2.py::test_G34_company_confirmed_never_stores_a_guessed_false",
             ""),
-    "G35": ("partial", "driver/core/test_prepared_fact_v2.py::test_G35_per_share_cell_lawfully_keeps_multiplier_one",
+    "G35": ("partial", "driver_reference/core/test_prepared_fact_v2.py::test_G35_per_share_cell_lawfully_keeps_multiplier_one",
             "the per-share cell is proven; the aggregate misreading is a MEANING "
             "error only grading can catch (fixture A6-class)"),
 }
@@ -194,14 +194,14 @@ def _test_names(path):
 # list of three names and stopped seeing the fourth).
 # ---------------------------------------------------------------------------
 # EXACT PATHS, not bare filenames. Matching on the basename alone let a staged
-# NAME in the WRONG DIRECTORY through — `driver/relocation/xbrl_attach.py` was
+# NAME in the WRONG DIRECTORY through — `driver_reference/relocation/xbrl_attach.py` was
 # accepted as "the staged file" although the staged file is
-# `driver/core/xbrl_attach.py`. A file is only staged where it was approved to
+# `driver_reference/core/xbrl_attach.py`. A file is only staged where it was approved to
 # live. The basename set below is DERIVED, so there is still ONE definition.
-STAGED_PATHS = frozenset({"driver/core/slot_convert.py",
-                          "driver/core/prepared_fact_v2.py",
-                          "driver/core/fact_match.py",
-                          "driver/core/xbrl_attach.py"})
+STAGED_PATHS = frozenset({"driver_reference/core/slot_convert.py",
+                          "driver_reference/core/prepared_fact_v2.py",
+                          "driver_reference/core/fact_match.py",
+                          "driver_reference/core/xbrl_attach.py"})
 STAGED_FILES = frozenset(p.rsplit("/", 1)[-1] for p in STAGED_PATHS)
 
 
@@ -238,7 +238,7 @@ def unexpected_production_files(status_lines, allowed, staged=STAGED_PATHS):
 
 
 _STATUS_VOCAB = ("code", "partial", "grading", "gated-switch")
-_TEST_ROOTS = ("driver", ".claude/plans/Drivers/experiments/harness")
+_TEST_ROOTS = ("driver_reference", ".claude/plans/Drivers/experiments/harness")
 
 def _live_test_inventory():
     """Every test function under the BOUNDED roots, RECURSIVELY, as node ids.
@@ -525,8 +525,8 @@ def _prompt_text():
 def test_G12_the_assembled_prompt_defines_every_value_it_demands():
     """A model cannot obey an enum it was never shown. Every value the schema
     can legally carry must be DEFINED in the prompt the model actually reads."""
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS
-    from driver.core.slot_convert import CANONICAL_UNITS
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS
+    from driver_reference.core.slot_convert import CANONICAL_UNITS
     prompt = _prompt_text()
     for f in ITEM_FIELDS:
         assert f in prompt, f"item field never named in the prompt: {f}"
@@ -581,8 +581,8 @@ def test_G13_the_code_catchable_attacks_are_actually_caught():
     the layer that owns the rule (production for meaning-adjacent law, the
     schema for transport structure)."""
     from decimal import Decimal
-    from driver.core import prepared_fact_v2 as p2
-    from driver.core.slot_convert import SlotConversionError, validate_slot
+    from driver_reference.core import prepared_fact_v2 as p2
+    from driver_reference.core.slot_convert import SlotConversionError, validate_slot
 
     def _item(**over):
         it = {k: None for k in p2.ITEM_FIELDS}
@@ -627,14 +627,14 @@ def test_G14_guidance_legacy_path_is_untouched():
     converter must not have changed the legacy stack under it."""
     r = subprocess.run([sys.executable, "-m", "pytest", "-q",
                         "-p", "no:cacheprovider",
-                        os.path.join(_REPO, "driver", "core", "test_driver_units.py")],
+                        os.path.join(_REPO, "driver_reference", "core", "test_driver_units.py")],
                        capture_output=True, text=True, cwd=_REPO)
     assert r.returncode == 0, r.stdout[-2000:]
     guidance = os.path.join(_REPO, ".claude", "skills", "earnings-orchestrator",
                             "scripts", "guidance_ids.py")
     src = io.open(guidance, encoding="utf-8").read()
     assert "_PRESCALE_BOUNDARY" in io.open(
-        os.path.join(_REPO, "driver", "core", "driver_units.py"),
+        os.path.join(_REPO, "driver_reference", "core", "driver_units.py"),
         encoding="utf-8").read(), "the legacy 999 guard was removed from the OLD path"
     # the legacy lane KEEPS its own hint machinery — the new path simply never
     # reaches it (a vacuous `assert src` used to stand here; it proved nothing)
@@ -648,7 +648,7 @@ def test_G15_xbrl_declared_metadata_path_is_untouched():
     # proves the LEGACY v1 XBRL suite only (G_COVERAGE row -> partial).
     r = subprocess.run([sys.executable, "-m", "pytest", "-q",
                         "-p", "no:cacheprovider",
-                        os.path.join(_REPO, "driver", "core", "test_prepared_fact.py")],
+                        os.path.join(_REPO, "driver_reference", "core", "test_prepared_fact.py")],
                        capture_output=True, text=True, cwd=_REPO)
     assert r.returncode == 0, "the v1 XBRL all-or-nothing suite must still pass"
 
@@ -668,11 +668,11 @@ def test_G16_old_path_removal_is_gated_on_the_switch():
     So this no longer asserts the engine is present — that assertion would now
     be asking for a file whose whole point was to stop existing.
     """
-    assert os.path.exists(os.path.join(_REPO, "driver", "core", "prepared_fact.py")), \
+    assert os.path.exists(os.path.join(_REPO, "driver_reference", "core", "prepared_fact.py")), \
         "v1 must still exist: the switch is not authorised yet"
     assert not os.path.exists(os.path.join(_HERE, "scorers", "fact16_checks.py")), \
         "the duplicate rule engine is deleted (B-10/B-16); this must stay gone"
-    from driver.core import fact_match, prepared_fact_v2, slot_convert
+    from driver_reference.core import fact_match, prepared_fact_v2, slot_convert
     for mod in (slot_convert, prepared_fact_v2, fact_match):
         src = io.open(mod.__file__, encoding="utf-8").read()
         assert "unit_resolver" not in src, f"{mod.__name__} imports a retired resolver"
@@ -696,7 +696,7 @@ def test_G18_the_new_modules_reach_no_graph_write():
     """AST, not text: an earlier version grepped the raw source and tripped on
     the word `transaction` inside the DIVERGENCE LEDGER's prose — the same
     crude-substring class as matching `cent` inside `percent`."""
-    from driver.core import fact_match, prepared_fact_v2, slot_convert
+    from driver_reference.core import fact_match, prepared_fact_v2, slot_convert
     banned_names = {"ENABLE_DRIVER_WRITES", "neo4j", "GraphDatabase"}
     banned_attrs = {"transaction", "execute_write", "write_transaction"}
     for mod in (slot_convert, prepared_fact_v2, fact_match):
@@ -807,8 +807,8 @@ def test_G9_one_shared_validation_entry_point_exists():
     one, so behaviour is lawful today — what is unproven is the NAMED DOORWAY.
     Closing it is a production change and belongs to the switch, not Step 3."""
     import inspect
-    from driver.core import driver_validators
-    from driver.core import prepared_fact_v2 as p2
+    from driver_reference.core import driver_validators
+    from driver_reference.core import prepared_fact_v2 as p2
     src = inspect.getsource(p2.validate_via_production)
     assert "validate_fact" in src, "v2 must delegate to production's validator"
     assert not hasattr(p2, "LANE_STATES") and not hasattr(p2, "PERIOD_SCOPES")
@@ -887,7 +887,7 @@ def test_G13_the_annual_sequential_attack_is_actually_run():
     """Fixture A4 claims 'caught_by: code'. That is only honest if the attack is
     EXECUTED — it was not, and V2 accepted it. It now runs through production."""
     from decimal import Decimal
-    from driver.core import prepared_fact_v2 as p2
+    from driver_reference.core import prepared_fact_v2 as p2
     item = {k: None for k in p2.ITEM_FIELDS}
     s5 = {"value": Decimal(5), "scale_multiplier": Decimal(1),
           "unit_scale_evidence": None}
@@ -917,14 +917,14 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
     other gated tests; until then, a failure here means the switch happened by
     accident."""
     import ast
-    core = os.path.join(_REPO, "driver", "core")
+    core = os.path.join(_REPO, "driver_reference", "core")
     # #821: the event door + filing binding moved OUT of prepared_fact_v2
     # into its own module. Same staged status, one more file.
     new = STAGED_FILES
 
     # 1. no PRE-EXISTING production file is modified beyond the DELIBERATE,
     #    individually-justified set (the switch has not happened).
-    #    SCOPE (fixed round 8): the whole of `driver/`, not just `driver/core`.
+    #    SCOPE (fixed round 8): the whole of `driver/`, not just `driver_reference/core`.
     #    Measuring one subtree and stating the conclusion for the tree is the
     #    exact scope-overclaim this programme keeps logging — the gate itself
     #    was committing it, so relocation changes were invisible here.
@@ -935,24 +935,24 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
         # fact's own fact_id / unit_ref / unit_name / is_divide / value, and the
         # filing company's CIK, so a verifier binds against the FILING and the
         # GRAPH rather than a caller's say-so.
-        "driver/core/driver_neo4j_adapter.py",
+        "driver_reference/core/driver_neo4j_adapter.py",
         # Owner-approved Option 1 (2026-07-27): the XBRL binding defects are
         # fixed INSIDE the shared Route-A binder, never duplicated in Core.
-        "driver/relocation/inline_html.py",
+        "driver_reference/relocation/inline_html.py",
         # ONE definition of the Route-A semantic-unit map, the graph-string
         # boolean law, and the stored-period-end rule. Each previously existed
         # twice (or was unreachable from the package path).
-        "driver/relocation/exact_numbers.py",
+        "driver_reference/relocation/exact_numbers.py",
         # Re-exports those two constants unchanged, so the pinned census test
         # and the probe scripts keep importing them from here.
-        "driver/relocation/locator.py",
+        "driver_reference/relocation/locator.py",
         # Drops its private copy of the exclusive-date rule for the shared one.
-        "driver/core/slice_menu.py",
+        "driver_reference/core/slice_menu.py",
         # #822 (reviewer-directed 2026-07-28): the LIVE CLI built the
         # (axis, member) pair set by hand, one of FOUR copies of a rule that now
         # has ONE owner in `slice_menu`. BEHAVIOUR-PRESERVING — the helper
         # returns the identical set — and de-duplication was the instruction.
-        "driver/core/driver_write_cli.py",
+        "driver_reference/core/driver_write_cli.py",
         # #819/#820 remainder (reviewer-directed 2026-07-28): the LIVE v1 run
         # input asked only "non-blank string" while the shared predicate
         # rejected the same id, so `x/y` bought several graph reads before
@@ -962,7 +962,7 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
         # broader evidence that nothing else was invalidated (a grep for one
         # literal spelling cannot prove "every fixture id", and an earlier note
         # of mine overclaimed exactly that).
-        "driver/core/prepared_fact.py",
+        "driver_reference/core/prepared_fact.py",
         # #820 (reviewer-directed 2026-07-27): `build_id`'s INLINE source-id
         # check is extracted as the named predicate `valid_source_id`, so the
         # run input and the event door ask the SAME law instead of copying its
@@ -970,7 +970,7 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
         # identical verdict to the inline check on every case tried, and the ID
         # law's own suite (56 tests, incl. the 14 pinned vectors whose hashes
         # would change if any rule moved) is unchanged and green.
-        "driver/core/driver_ids.py",
+        "driver_reference/core/driver_ids.py",
         # F7 + GRAPH-DECIMAL (#827, reviewer-authorized SEQ 948): the F7 boundary
         # owner's stored-spelling clause said an ungrouped value was "outside the
         # frozen canonical graph lexical contract". GRAPH-DECIMAL deleted that
@@ -982,7 +982,7 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
         # allowlist is not permission for arbitrary bytes: Gate 1 binds this path
         # to the exact accepted hash `1d14a6cb…` in the ledger cell F7+GRAPH-DECIMAL,
         # so different content fails there regardless of this entry.
-        "driver/core/graph_row_contract.py",
+        "driver_reference/core/graph_row_contract.py",
     }
     # PRODUCTION only (the assertion says so), and UNTRACKED files included:
     # both judged by the one derived helper, which a mutation test attacks.
@@ -1001,7 +1001,7 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
     #    second-owner problem this suite exists to catch.
 
     # 3. the adapter reaches production only through PURE functions
-    from driver.core import prepared_fact_v2 as p2
+    from driver_reference.core import prepared_fact_v2 as p2
     tree = ast.parse(io.open(p2.__file__, encoding="utf-8").read())
     pure = {"build_id", "norm", "IdLawError", "ensure_driver_period",
             "PeriodResolutionError", "compose_surprise_scope", "validate_fact",
@@ -1042,7 +1042,7 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
             # one-owner row put it there — the same authority, and the same
             # proof question, as the deliberate entries above. Re-checked at
             # close: two are pure functions (no I/O, no state), four are static
-            # literals. Thirteen of this module's nineteen driver.core imports
+            # literals. Thirteen of this module's nineteen driver_reference.core imports
             # are function-local, which is why a top-of-file reading saw one of
             # these and the gate's ast-walk sees six.
             #
@@ -1065,7 +1065,7 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
             # the EXISTING current-filing verifier — reused, never re-built
             "match_xbrl_fact", "check_member_refs", "convert_slot"}
     for node in ast.walk(tree):
-        if isinstance(node, ast.ImportFrom) and (node.module or "").startswith("driver.core"):
+        if isinstance(node, ast.ImportFrom) and (node.module or "").startswith("driver_reference.core"):
             for a in node.names:
                 assert a.name in pure, f"non-pure production import: {a.name}"
 
@@ -1237,25 +1237,25 @@ def test_the_attack_count_is_derived_not_transcribed():
 def test_the_gate_CATCHES_an_unexpected_untracked_production_file():
     """ATTACK: a brand-new production module is simply never `git add`ed. The
     old check dropped every `??` line, so it saw nothing at all."""
-    attack = ["?? driver/core/backdoor.py",
-              "?? driver/relocation/quiet_helper.py"]
+    attack = ["?? driver_reference/core/backdoor.py",
+              "?? driver_reference/relocation/quiet_helper.py"]
     caught = unexpected_production_files(attack, allowed=set())
-    assert caught == ["driver/core/backdoor.py",
-                      "driver/relocation/quiet_helper.py"], caught
+    assert caught == ["driver_reference/core/backdoor.py",
+                      "driver_reference/relocation/quiet_helper.py"], caught
     # NEGATIVE CONTROLS: the staged files themselves, an untracked TEST, and an
     # allowlisted modification are all lawful and must NOT be flagged.
     lawful = [f"?? {path}" for path in sorted(STAGED_PATHS)]
-    lawful += ["?? driver/core/test_something_new.py",
-               " M driver/core/driver_ids.py"]
+    lawful += ["?? driver_reference/core/test_something_new.py",
+               " M driver_reference/core/driver_ids.py"]
     assert unexpected_production_files(
-        lawful, allowed={"driver/core/driver_ids.py"}) == []
+        lawful, allowed={"driver_reference/core/driver_ids.py"}) == []
 
 
 def test_an_unallowlisted_MODIFICATION_is_still_caught():
     """The property the gate always had — kept under the rewrite."""
     assert unexpected_production_files(
-        [" M driver/core/driver_writer.py"], allowed=set()) == \
-        ["driver/core/driver_writer.py"]
+        [" M driver_reference/core/driver_writer.py"], allowed=set()) == \
+        ["driver_reference/core/driver_writer.py"]
 
 
 def test_the_gate_CATCHES_a_staged_NAME_in_the_WRONG_DIRECTORY():
@@ -1264,8 +1264,8 @@ def test_the_gate_CATCHES_a_staged_NAME_in_the_WRONG_DIRECTORY():
     file" — a staged module is staged only at its approved PATH."""
     for path in sorted(STAGED_PATHS):
         name = path.rsplit("/", 1)[-1]
-        for wrong in (f"driver/relocation/{name}", f"driver/{name}",
-                      f"driver/core/sub/{name}"):
+        for wrong in (f"driver_reference/relocation/{name}", f"driver/{name}",
+                      f"driver_reference/core/sub/{name}"):
             caught = unexpected_production_files([f"?? {wrong}"], allowed=set())
             assert caught == [wrong], f"{wrong} was accepted as staged"
     # NEGATIVE CONTROL: each staged file at its APPROVED path is still lawful
@@ -1290,7 +1290,7 @@ def test_the_manifest_gate_blocks_the_WHOLE_env_file_family_not_just_dot_env():
             f"a secrets file slipped past the manifest gate: {secret}"
     # POSITIVE CONTROLS: ordinary manifest files must NOT be blocked, or the
     # guard would simply refuse everything and prove nothing.
-    for ok in ("driver/core/xbrl_attach.py",
+    for ok in ("driver_reference/core/xbrl_attach.py",
                ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
                "scripts/driver_seed/relocate_probe/inline_html_cache/x.htm"):
         assert check_forbidden([ok]) == [], f"a lawful file was blocked: {ok}"
@@ -1310,7 +1310,7 @@ def test_a_forbidden_path_being_DELETED_does_not_count_as_containing_it():
     sys.path.insert(0, _HERE)
     from isolated_manifest_check import forbidden_present
 
-    SECRET, OTHER = "ibkr-mcp-server/.envrc", "driver/core/xbrl_attach.py"
+    SECRET, OTHER = "ibkr-mcp-server/.envrc", "driver_reference/core/xbrl_attach.py"
 
     # 1. ADDED and present -> must FAIL
     assert forbidden_present([SECRET], {SECRET, OTHER}) == [SECRET]
@@ -1914,7 +1914,7 @@ def test_827_census_gate_REFUSES_administration_including_SHOW_TERMINATE():
 #: marker is a SELECTOR, never a guard. One rule, one table — a third such lane
 #: is one row here, not a third copy of the reasoning.
 GUARDED_LANES = [
-    pytest.param(os.path.join(_REPO, "driver", "core",
+    pytest.param(os.path.join(_REPO, "driver_reference", "core",
                               "test_neo4j_numeric_roundtrip.py"),
                  "_require_opt_in", id="neo4j-write-probe"),
     pytest.param(os.path.join(_REPO, "drivers_harness", "tests",
@@ -2156,12 +2156,12 @@ def _credentials_gained_by_importing(module, extra_path=None):
     # sanitizes anything.
     with tempfile.TemporaryDirectory() as home:
         env = _gate().sanitized_env(_REPO, home)
-        # `driver/relocation` too: `locator` imports `exact_numbers` as a
+        # `driver_reference/relocation` too: `locator` imports `exact_numbers` as a
         # sibling, so the repo root alone cannot import it. That is an
         # import-convention fact about the module, not a credential question,
         # and it must not be mistaken for one.
         env["PYTHONPATH"] = os.pathsep.join(
-            [p for p in (_REPO, os.path.join(_REPO, "driver", "relocation"),
+            [p for p in (_REPO, os.path.join(_REPO, "driver_reference", "relocation"),
                          extra_path) if p])
         r = subprocess.run([sys.executable, "-c", probe], cwd=_REPO,
                            capture_output=True, text=True, env=env)
@@ -2175,10 +2175,10 @@ def _credentials_gained_by_importing(module, extra_path=None):
     # Retired path `scripts.driver_seed.build_packets` is ABSENT from the tree;
     # the folder-only move to its canonical home is published at da9afa06. The
     # credential invariant is unchanged — only the module parameter moves.
-    "driver.channels.fiscal_ai.build_packets",  # the transitive route that leaked
-    "driver.core.prepared_fact_v2",
-    "driver.core.xbrl_attach",
-    "driver.relocation.locator",
+    "driver_reference.channels.fiscal_ai.build_packets",  # the transitive route that leaked
+    "driver_reference.core.prepared_fact_v2",
+    "driver_reference.core.xbrl_attach",
+    "driver_reference.relocation.locator",
 ])
 def test_importing_a_module_gains_ZERO_credentials(module):
     gained = _credentials_gained_by_importing(module)
@@ -2194,7 +2194,7 @@ def test_the_credential_PROBE_ITSELF_can_detect_a_leak(tmp_path):
     probe must be shown a module that really does leak, and must see it.
 
     THE LEAKY MODULE IS BUILT HERE AND DIES HERE. My first version committed it to
-    `driver/core/_probe_sets_a_credential.py` — a permanent file in the shipped
+    `driver_reference/core/_probe_sets_a_credential.py` — a permanent file in the shipped
     tree whose only purpose was to set a fake credential, importable by anything
     and collected by every scan. A control needs to exist for one subprocess, not
     forever.

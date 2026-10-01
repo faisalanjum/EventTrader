@@ -31,8 +31,8 @@ OUT = os.path.join(_HERE, "17_two_view_mutations.json")
 #: THE PUBLIC SUITES these mutations are scored against. A mutation whose
 #: tests live outside this list selects nothing — which the rc-5 guard
 #: below turns into an ERROR rather than a verdict.
-SUITES = ["driver/relocation/test_two_view_bridge.py",
-          "driver/core/test_dimension_identity_at_the_door.py"]
+SUITES = ["driver_reference/relocation/test_two_view_bridge.py",
+          "driver_reference/core/test_dimension_identity_at_the_door.py"]
 
 #: name -> (what defect is re-introduced, the patch, the tests that must catch it)
 MUTATIONS = [
@@ -172,8 +172,8 @@ MUTATIONS = [
 PRELUDE = """
 import re, sys
 from lxml import etree as E
-import driver.relocation.inline_html as IH
-import driver.xml_names as XNM   # #827 B8: the moved XML-name owner
+import driver_reference.relocation.inline_html as IH
+import driver_reference.xml_names as XNM   # #827 B8: the moved XML-name owner
 _ASCII = re.compile(r'[A-Za-z_][A-Za-z0-9_.\\\\-]*\\\\Z')
 def _raising_prepare(html_text):
     return IH._semantic_parse(html_text) and {}

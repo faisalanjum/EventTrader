@@ -23,7 +23,7 @@ import os, sys, json, hashlib, collections, argparse, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, ROOT); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
-from driver.channels.fiscal_ai import run_code_tier as RC
+from driver_reference.channels.fiscal_ai import run_code_tier as RC
 import link_lib as L
 
 D = 'data/driver_catalog_seed/wp1'
@@ -76,7 +76,7 @@ def _validate_determinism(man):
 
 # round-21/22: EVERY code root the run imports counts toward dirt — harvest, shared exactness,
 # and the two earnings modules the pairing/trust gates come from. Tested by name.
-DIRT_PATHS = ('scripts/driver_seed', 'driver/relocation', 'scripts/earnings',
+DIRT_PATHS = ('scripts/driver_seed', 'driver_reference/relocation', 'scripts/earnings',
               '.claude/skills/earnings-orchestrator')
 
 

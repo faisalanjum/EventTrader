@@ -29,7 +29,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", ".."))
 
 # The real entry points. Everything they reach, transitively, is in scope.
-ENTRY_PRODUCTION = [os.path.join(_REPO, "driver", "core", "driver_write_cli.py")]
+ENTRY_PRODUCTION = [os.path.join(_REPO, "driver_reference", "core", "driver_write_cli.py")]
 ENTRY_EXAM = [os.path.join(_HERE, "kf_lint.py"),
               os.path.join(_HERE, "raw_transport.py"),
               os.path.join(_HERE, "scorers", "score_exp5.py")]
@@ -37,7 +37,7 @@ ENTRY_EXAM = [os.path.join(_HERE, "kf_lint.py"),
 # Where an imported module name may resolve to a file (the roots the code itself
 # puts on sys.path). Ordered; first hit wins.
 _SEARCH_ROOTS = [
-    os.path.join(_REPO, "driver", "core"),
+    os.path.join(_REPO, "driver_reference", "core"),
     _HERE,
     os.path.join(_HERE, "scorers"),
     os.path.join(_REPO, ".claude", "skills", "earnings-orchestrator", "scripts"),
@@ -634,7 +634,7 @@ def _mutated_failures(target_rel, extra="", replace=None):
         shutil.rmtree(tmp)
 
 
-_INLINE_HTML_REL = "driver/relocation/inline_html.py"
+_INLINE_HTML_REL = "driver_reference/relocation/inline_html.py"
 
 # B-17: the sites carry SEPARATE dispositions, so each must be shown
 # to be caught ON ITS OWN. A single module-level proof would not distinguish

@@ -506,8 +506,8 @@ def test_matcher_never_auto_matches_different_drivers_on_equal_value():
                    quote="Revenue was $100 million for the quarter, a solid result.")]
     prod = [_vfact("capital_expenditures", 100,
                    quote="Capital expenditures totalled $100 million in the period.")]
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     _mf = _match_with_positions
     _r = _mf(gold, prod)
     pairs, ambiguous = _r.links, _r.to_grading_gold
@@ -537,8 +537,8 @@ def test_matcher_rejects_same_name_value_DIFFERENT_PERIOD():
                     fiscal_year=2026, fiscal_quarter=1)]
     prod = [_idfact("revenue", 100, "Second quarter revenue came in at $100 million.",
                     fiscal_year=2026, fiscal_quarter=2)]
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     _mf = _match_with_positions
     _r = _mf(gold, prod)
     pairs, ambiguous = _r.links, _r.to_grading_gold
@@ -551,8 +551,8 @@ def test_matcher_rejects_same_name_value_DIFFERENT_SLICE():
                     slice_parts=["segment:a"])]
     prod = [_idfact("revenue", 100, "Segment B contributed $100 million of revenue.",
                     slice_parts=["segment:b"])]
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     _mf = _match_with_positions
     _r = _mf(gold, prod)
     pairs, ambiguous = _r.links, _r.to_grading_gold
@@ -564,8 +564,8 @@ def test_matcher_rejects_same_name_value_DIFFERENT_MEASUREMENT():
                     measurement_raw_spans=[])]
     prod = [_idfact("operating_income", 100, "Adjusted operating income totalled $100 million.",
                     measurement_raw_spans=["Adjusted"])]
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     _mf = _match_with_positions
     _r = _mf(gold, prod)
     pairs, ambiguous = _r.links, _r.to_grading_gold
@@ -577,8 +577,8 @@ def test_matcher_one_sentence_two_facts_is_order_free():
     A shared span is a candidate LINK, not proof — crediting whichever gold
     happens to come first is an order-dependent false credit."""
     import itertools
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     _mf = _match_with_positions
     S = ("Revenue was $100 million in the first quarter and $120 million "
          "in the second quarter.")
@@ -613,8 +613,8 @@ def test_matcher_exact_evidence_is_order_free_and_not_fuzzy():
     test also asserted has no current owner and is not carried forward.
     """
     import itertools
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     qa, qb = "Revenue rose five percent in the quarter.", "Costs fell two percent."
     conv = lambda f: PreparedFactV2.from_dict(f)
     g = [conv(_v2_fact(qa)), conv(_v2_fact(qb))]
@@ -632,8 +632,8 @@ def test_matcher_exact_evidence_is_order_free_and_not_fuzzy():
 def test_matcher_locator_distinguishes_repeats_of_one_sentence():
     """Same wording twice in a part is disambiguated by occurrence_in_part —
     exact identity, no fuzz."""
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     _mf = _match_with_positions
     q = "Revenue was $100 million."
     def f(occ):
@@ -1200,7 +1200,7 @@ def test_generator_idempotent_AND_matches_the_committed_artifacts(tmp_path):
     # which is the behaviour we want. The copy therefore reproduces the exact
     # subtrees the pins name, not just the harness.
     for rel in (os.path.join(".claude", "plans", "Drivers", "FinalDesign"),
-                os.path.join("driver", "core")):
+                os.path.join("driver_reference", "core")):
         src = os.path.join(_REPO, rel)
         dst = tmp_path / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
@@ -1291,7 +1291,7 @@ def test_wrong_driver_name_fails():
 def _slot_point():
     """The one numeric slot these home cases use. A function, not a constant, so
     each case gets its own instance and no test can mutate another's."""
-    from driver.core.test_v2_attacks import slot
+    from driver_reference.core.test_v2_attacks import slot
     return slot(5, 1, None)
 
 
@@ -1314,7 +1314,7 @@ def _home_route_case(sp_over, home_over, tmp_path):
     every case died before the home check ever ran and proved nothing.
     """
     import datetime
-    from driver.core.driver_write_cli import run_event
+    from driver_reference.core.driver_write_cli import run_event
     from scorers.score_exp5 import project_replay_items, replay_reader
     R = _core_route_fixtures()
     base = R._v2_events()[R.CE_EVENT]
@@ -1473,8 +1473,8 @@ def test_numberless_home_without_a_quote_is_REFUSED_by_the_route(tmp_path):
     Built without `_text_fact` deliberately: that helper supplies the raw item's
     own quote, so it cannot express "a fact with no quote".
     """
-    from driver.core.driver_write_cli import run_event
-    from driver.core.test_v2_attacks import item as v2_item
+    from driver_reference.core.driver_write_cli import run_event
+    from driver_reference.core.test_v2_attacks import item as v2_item
     from scorers.score_exp5 import project_replay_items, replay_reader
     import datetime
     R = _core_route_fixtures()
@@ -1692,8 +1692,8 @@ def test_827B4_actual_surprise_finds_its_metric_home():
 # These are EXPECTED RED before the Step 2 fix and must go green after it.
 
 def _v2_owner():
-    from driver.core import prepared_fact_v2 as PF
-    from driver.core import slot_convert as SC
+    from driver_reference.core import prepared_fact_v2 as PF
+    from driver_reference.core import slot_convert as SC
     return PF, SC
 
 
@@ -1719,7 +1719,7 @@ def _v2_slot(quote, evidence=None, value=726, mult=1):
     """Exactly slot_convert.SLOT_KEYS. Values are exact JSON numbers, which is
     what the slot owner accepts (a string is rejected: int/Decimal only).
     Evidence is quote-local by default."""
-    from driver.core.slot_convert import SLOT_KEYS
+    from driver_reference.core.slot_convert import SLOT_KEYS
     ev = evidence if evidence is not None else quote[:12]
     slot = {"value": value, "scale_multiplier": mult, "unit_scale_evidence": ev}
     assert set(slot) == set(SLOT_KEYS)
@@ -1728,7 +1728,7 @@ def _v2_slot(quote, evidence=None, value=726, mult=1):
 
 def _v2_item(quote, **over):
     """Exactly PreparedFactV2.ITEM_FIELDS; numeric slots are slot objects."""
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
     item = {k: None for k in ITEM_FIELDS}
     item.update({"driver_name": "revenue", "driver_state": "reported",
                  "quote": quote, "measurement_raw_spans": [], "slice_parts": []})
@@ -1741,7 +1741,7 @@ def _v2_item(quote, **over):
 
 def _v2_fact(quote=None, **over):
     """Exactly PreparedFactV2._FACT_KEYS — no gold wrapper, no outer quote."""
-    from driver.core.prepared_fact_v2 import PreparedFactV2 as P
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2 as P
     # The caller's quote used to be SILENTLY DISCARDED here: the parameter was
     # immediately overwritten by the default locator, so a test that passed a
     # quote from a different event got the default event's locator and failed
@@ -1764,7 +1764,7 @@ def _v2_lint(doc, source_id=None):
 
 def _v2_doc(facts, abstentions=None, source_id=None):
     """Exactly driver_write_cli.V2_REPLY_KEYS."""
-    from driver.core.driver_write_cli import V2_REPLY_KEYS
+    from driver_reference.core.driver_write_cli import V2_REPLY_KEYS
     d = {"source_id": source_id or SID, "facts": facts,
          "abstentions": abstentions or []}
     assert set(d) == set(V2_REPLY_KEYS)
@@ -1784,8 +1784,8 @@ def _match_with_positions(gold, produced):
     Returns the real MatchResult with an added `.pairs` view, so every other
     field (`to_grading_gold`, `produced_duplicates`, ...) stays visible.
     """
-    from driver.core.fact_match import match_facts
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import match_facts
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
 
     def _built(records):
         built, position = [], {}
@@ -1836,7 +1836,7 @@ def test_RED_lawful_v2_reply_is_refused(tmp_path):
 def test_RED_v2_fact_missing_a_core_fact_level_key_is_accepted(tmp_path):
     """B-02/B-04/B-06a mutation: drop one Core fact-level key and require
     refusal. Blocked behind the envelope fix above."""
-    from driver.core.prepared_fact_v2 import PreparedFactV2 as P
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2 as P
     q, _pr, _oc = _v2_locator()
     f = _v2_fact(q)
     f.pop("per_x")
@@ -1850,7 +1850,7 @@ def test_CONTROL_source_owned_field_in_the_v2_item_is_refused(tmp_path):
     `k not in SOURCE_OWNED_FIELDS` (prepared_fact_v2.py:445-446), so deriving
     the item surface from the owner PRESERVES this refusal. Injected into the
     V2 fact's item, beside the lawful V2 control above."""
-    from driver.core.prepared_fact_v2 import SOURCE_OWNED_FIELDS, ITEM_FIELDS
+    from driver_reference.core.prepared_fact_v2 import SOURCE_OWNED_FIELDS, ITEM_FIELDS
     assert not (set(SOURCE_OWNED_FIELDS) & set(ITEM_FIELDS))
     q, _pr, _oc = _v2_locator()
     f = _v2_fact(q)
@@ -1893,8 +1893,8 @@ def test_RED_model_reply_carrying_a_gold_only_field_is_accepted(tmp_path):
 
     One-field mutation of the lawful V2 reply: add the WorkOrder-owned review
     field du_worthy at fact level and require model-door refusal."""
-    from driver.core.prepared_fact_v2 import PreparedFactV2 as P, ITEM_FIELDS
-    from driver.core.driver_write_cli import V2_REPLY_KEYS
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2 as P, ITEM_FIELDS
+    from driver_reference.core.driver_write_cli import V2_REPLY_KEYS
     name = "du_worthy"
     assert name not in set(P._FACT_KEYS) | set(ITEM_FIELDS) | set(V2_REPLY_KEYS)
     q, _pr, _oc = _v2_locator()
@@ -1912,15 +1912,15 @@ def test_CONTROL_gold_document_surface_accepts_the_review_field(tmp_path):
     f = _fact(du_worthy=True)
     assert "du_worthy" in f
     assert _lint(tmp_path, [_doc([f])]) == 0
-    from driver.core.prepared_fact_v2 import PreparedFactV2 as P, ITEM_FIELDS
-    from driver.core.driver_write_cli import V2_REPLY_KEYS
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2 as P, ITEM_FIELDS
+    from driver_reference.core.driver_write_cli import V2_REPLY_KEYS
     assert "du_worthy" not in (set(P._FACT_KEYS) | set(ITEM_FIELDS)
                                | set(V2_REPLY_KEYS))
 
 
 
 def test_CONTROL_v2_owner_names_are_accepted():
-    from driver.core.prepared_fact_v2 import NUMERIC_SLOTS, ITEM_FIELDS
+    from driver_reference.core.prepared_fact_v2 import NUMERIC_SLOTS, ITEM_FIELDS
     assert set(NUMERIC_SLOTS) <= set(ITEM_FIELDS)
 
 
@@ -2175,7 +2175,7 @@ def test_prompt_demands_every_field_and_forbids_invention(tmp_path):
 def test_prompt_makes_the_source_id_echo_a_wrong_event_guard(tmp_path):
     """step2 §4 / A3: source_id is echoed AS the wrong-event guard, not merely
     listed as a key."""
-    from driver.core.driver_write_cli import V2_REPLY_KEYS
+    from driver_reference.core.driver_write_cli import V2_REPLY_KEYS
     for role, (_, flat) in _prompts(tmp_path).items():
         assert "wrong-event" in flat, f"{role}: echo is present but not as a guard"
         for k in V2_REPLY_KEYS:
@@ -2235,7 +2235,7 @@ def test_every_live_part_label_is_a_lawful_locator(tmp_path):
     """The lawful control, driven through the REAL checker over the REAL inputs:
     every part label the corpus actually uses must lint clean — including the
     ones that look nothing like `pNN`."""
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS      # noqa: F401
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS      # noqa: F401
     live = _live_part_labels()
     for label, (sid, part) in sorted(live.items()):
         quote = part["content"][:100]
@@ -2304,7 +2304,7 @@ def test_prompt_ends_with_the_event_after_the_untrusted_boundary(tmp_path):
 def test_prompt_is_text_only_and_names_xbrl_only_as_forbidden(tmp_path):
     """step2 §5: EXP-5 is text-only. The prompt may state that the source-owned
     XBRL fields are forbidden; it must never teach how an XBRL fact is built."""
-    from driver.core.prepared_fact_v2 import SOURCE_OWNED_FIELDS
+    from driver_reference.core.prepared_fact_v2 import SOURCE_OWNED_FIELDS
     for role, (raw, flat) in _prompts(tmp_path).items():
         for name in SOURCE_OWNED_FIELDS:
             assert name in flat, f"{role}: {name} not named as forbidden"
@@ -2317,8 +2317,8 @@ def test_prompt_is_text_only_and_names_xbrl_only_as_forbidden(tmp_path):
 def test_CONTROL_door_scoped_field_remains_lawful_reader_output():
     """B-22."""
     import re as _re
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS
-    from driver.core import prepared_fact as V1
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS
+    from driver_reference.core import prepared_fact as V1
     ct = open(os.path.join(_HERE, "..", "..", "FinalDesign",
                            "ChannelContract.md"), encoding="utf-8").read()
     surf = json.loads(_re.search(r"```json CONTRACT-SURFACES\n(.*?)\n```",
@@ -2563,7 +2563,7 @@ def test_RED_schema_owner_drift_breaks_the_generated_card():
     Core owners, so a drifted owner must change the card rather than be
     silently tolerated."""
     import build_exp5_contract as BEC
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS
     card = BEC.core_structure_card()
     for name in ITEM_FIELDS:
         assert name in card, f"generated card omits the Core item field {name!r}"
@@ -2840,8 +2840,8 @@ def test_a_plan_whose_manifest_door_is_missing_or_unknown_REFUSES(tmp_path, door
 def _core_route_fixtures():
     """Existing Core fixtures — imported by the TEST, never by scorer code."""
     import sys
-    sys.path.insert(0, os.path.join(_REPO, "driver", "core"))
-    from driver.core import test_v2_event_route as R
+    sys.path.insert(0, os.path.join(_REPO, "driver_reference", "core"))
+    from driver_reference.core import test_v2_event_route as R
     return R
 
 
@@ -2866,7 +2866,7 @@ def test_B14_replay_through_the_real_run_event_keeps_the_index_relation(
     `score_exp5.replay_reader`; no test helper builds it. Core fixtures supply
     only the store and the event shell.
     """
-    from driver.core.driver_write_cli import run_event
+    from driver_reference.core.driver_write_cli import run_event
     from scorers.score_exp5 import project_replay_items, replay_reader
     R = _core_route_fixtures()
     base = R._v2_events()[R.CE_EVENT]
@@ -2950,7 +2950,7 @@ def test_RED_score_arm_consumes_route_outcomes_rather_than_validating_itself():
 
 def test_RED_scorer_uses_core_fact_match_not_its_own_matcher():
     """B-15 (SEQ 1104/1106): the scorer must call ONLY
-    `driver.core.fact_match.match_facts` on records converted through
+    `driver_reference.core.fact_match.match_facts` on records converted through
     `PreparedFactV2.from_dict`, and must not retain the old graph/fixpoint/
     value/quote matcher under any name.
 
@@ -3147,7 +3147,7 @@ def _lane_case(facts):
 
 def _lane_fact(**over):
     import datetime
-    from driver.core.test_v2_attacks import slot
+    from driver_reference.core.test_v2_attacks import slot
     R = _core_route_fixtures()
     base = R._v2_events()[R.CE_EVENT]
     end = datetime.date.fromisoformat(base["event_time"][:10]) - datetime.timedelta(days=30)
@@ -3251,7 +3251,7 @@ def test_every_frozen_v2_field_is_measured_EXACTLY_ONCE():
     """
     from scorers.score_exp5 import (field_accounting, CODE_FIELDS, GRADER_OWNED,
                                     SPECIALIZED_COLLECTIONS, FACT_LEVEL_FIELDS)
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
 
     where = field_accounting()
     expected = set(ITEM_FIELDS) | set(FACT_LEVEL_FIELDS)
@@ -4560,7 +4560,7 @@ def _build_in(dest):
                     dirs_exist_ok=True,
                     ignore=shutil.ignore_patterns("__pycache__"))
     for rel in (os.path.join(".claude", "plans", "Drivers", "FinalDesign"),
-                os.path.join("driver", "core")):
+                os.path.join("driver_reference", "core")):
         d = dest / rel
         d.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(os.path.join(_REPO, rel), d, dirs_exist_ok=True,
@@ -5050,7 +5050,7 @@ def test_step3_7_a_reader_exception_is_a_LOUD_failed_run_not_an_outcome(tmp_path
     number would be computed from fabricated outcomes. Silence is the dangerous
     failure here, not the crash.
     """
-    from driver.core.driver_write_cli import run_event
+    from driver_reference.core.driver_write_cli import run_event
     from scorers.score_exp5 import project_replay_items, replay_reader
     R = _core_route_fixtures()
     base = R._v2_events()[R.CE_EVENT]
@@ -5114,7 +5114,7 @@ def test_step3_8_no_shortcut_can_create_a_link_structurally():
         assert retired not in defined, f"{retired} is defined again"
 
     # 4. `fact_match` is the ONLY thing that produces links
-    assert "from driver.core.fact_match import match_facts" in src
+    assert "from driver_reference.core.fact_match import match_facts" in src
     assert src.count("match_facts(") <= 3, (
         "more match_facts call sites than the scorer's known seams")
 

@@ -9,30 +9,30 @@ match the KPI's slice token (entity KPIs) or be undimensioned (aggregate KPIs).
 """
 import re, json, math, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                '..', '..', 'driver', 'relocation'))
+                                '..', '..', 'driver_reference', 'relocation'))
 import exact_numbers as XN     # THE shared exact-value helpers (Decimal-exact; no float round-trips)
 from country_names import COUNTRY_NAME   # generated ISO-3166 table (country:XX member expansion)
 
 
 # ---------- value-form generation (recall engine + oracle) ----------
-# _grp: WP2 Chunk 1 — relocated to driver/relocation/locator.py (row_quote's closure);
+# _grp: WP2 Chunk 1 — relocated to driver_reference/relocation/locator.py (row_quote's closure);
 # imported below with the other moved symbols.
-# _round_forms: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure). Not imported here; this file has no consumer for it.
+# _round_forms: WP2 Chunk-2 corrective — relocated to driver_reference/relocation/locator.py (the value_ok closure). Not imported here; this file has no consumer for it.
 
-# value_forms: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
+# value_forms: WP2 Chunk-2 corrective — relocated to driver_reference/relocation/locator.py (the value_ok closure); imported below.
 
 # ---------- gates ----------
-# at_boundary: WP2 Chunk 1 — relocated to driver/relocation/locator.py (row_quote's closure).
-# bounded_hit: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
+# at_boundary: WP2 Chunk 1 — relocated to driver_reference/relocation/locator.py (row_quote's closure).
+# bounded_hit: WP2 Chunk-2 corrective — relocated to driver_reference/relocation/locator.py (the value_ok closure); imported below.
 
-# exact_form: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
+# exact_form: WP2 Chunk-2 corrective — relocated to driver_reference/relocation/locator.py (the value_ok closure); imported below.
 
-# printed_negative: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
+# printed_negative: WP2 Chunk-2 corrective — relocated to driver_reference/relocation/locator.py (the value_ok closure); imported below.
 
 # _scale_tag_ok: DELETED (#827 B6, SEQ 322) — the round-14 scale law now lives inside
 # value_ok's single occurrence pass; the boolean prepass had no other production caller.
 
-# value_ok: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
+# value_ok: WP2 Chunk-2 corrective — relocated to driver_reference/relocation/locator.py (the value_ok closure); imported below.
 
 # ---------- Step-0 emit gates: anti-hallucination + graded value presence (0 tokens) ----------
 # Precision is STRUCTURAL, not trusted: an answer is emitted only if its quote is a verbatim substring
@@ -209,7 +209,7 @@ def seg_members(fc):
     return [m for _, m in seg_parse(fc)[0]]
 
 
-#: THE ONE OWNER of every scale/sign/quote rule is `driver/relocation/locator.py`
+#: THE ONE OWNER of every scale/sign/quote rule is `driver_reference/relocation/locator.py`
 #: (WP2 step 2 + Chunk-1/2 correctives). This file IMPORTS what it uses and
 #: re-exports only the two names its own seed consumers read — it does not
 #: mirror the owner's surface. Eight further names were imported and never used
@@ -455,14 +455,14 @@ def _toks(n):
     return [t for t in re.findall(r"[A-Za-z]{3,}", n) if t.lower() not in STOP]
 
 
-# _tableforms: WP2 Chunk 1 — relocated to driver/relocation/locator.py (row_quote's closure).
+# _tableforms: WP2 Chunk 1 — relocated to driver_reference/relocation/locator.py (row_quote's closure).
 def _tidy(s):
     """collapse whitespace/zero-width junk; content stays verbatim (same words, same numbers)."""
     return re.sub(r'\s+', ' ', s.replace('​', ' ')).strip()
 
 
 # row_quote + _table_active_start + _snippet_start: WP2 Chunk 1 — relocated to
-# driver/relocation/locator.py (THE quote-proof group's neutral home); imported below.
+# driver_reference/relocation/locator.py (THE quote-proof group's neutral home); imported below.
 def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False, with_context=False):
     """(clean_label_anchored_quote_or_None, up_to_`keep` candidate snippets).
     Collects up to max_hits boundary-valid occurrences, each windowed back to its header/label,

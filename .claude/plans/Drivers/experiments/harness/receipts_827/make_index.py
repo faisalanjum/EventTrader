@@ -45,8 +45,8 @@ PROVENANCE = {
     "01b_ix_input_manifest.txt": f"{PY}/scan_ix_transforms.py",
     "02_graph_census.json": f"{PY}/graph_census.py",
     "04_focused_824_825_run.txt":
-        "venv/bin/python -m pytest driver/core/test_v2_attacks.py "
-        "driver/core/test_round15_audit_evidence.py -q -p no:randomly "
+        "venv/bin/python -m pytest driver_reference/core/test_v2_attacks.py "
+        "driver_reference/core/test_round15_audit_evidence.py -q -p no:randomly "
         "-p no:cacheprovider --no-header --tb=line "
         "-m 'not live and not live_write'   (sanitized env)",
     "05_date_law_pins.txt":
@@ -58,11 +58,11 @@ PROVENANCE = {
     "07_live_door_lane.txt":
         "venv/bin/python -m pytest -q -p no:randomly -p no:cacheprovider "
         "--no-header --collect-only -m live  (and again -m live_write) "
-        "driver/core driver/relocation "
+        "driver_reference/core driver_reference/relocation "
         f"{HARNESS}   (the COLLECTED live-lane node ids: 43 live, 1 "
         "live_write, disjoint. The file ALSO records one separately EXECUTED "
         "read-only live run — `-m live "
-        "driver/relocation/test_packet_items_through_the_door.py`, 11 passed "
+        "driver_reference/relocation/test_packet_items_through_the_door.py`, 11 passed "
         "— bracketed by a Neo4j transaction snapshot that was unchanged "
         "either side. THE ISOLATED GATE DOES NOT RUN IT: the gate's clean lane "
         "is `-m \"not live and not live_write\"` "

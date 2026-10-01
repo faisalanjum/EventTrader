@@ -280,7 +280,7 @@ def main():
     # `numerator_not_derivable_from_graph` and named for the FILING-side census
     # to answer. Guessing a split here would fabricate the evidence.
     sys.path.insert(0, _REPO)
-    sys.path.insert(0, os.path.join(_REPO, "driver", "relocation"))
+    sys.path.insert(0, os.path.join(_REPO, "driver_reference", "relocation"))
     # The policy is no longer imported here: this census cannot supply its
     # input. It records the STORAGE SHAPES it can genuinely see and says so.
     shapes, buckets = [], {}

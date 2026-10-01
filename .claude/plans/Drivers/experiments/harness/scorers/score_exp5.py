@@ -45,8 +45,8 @@ if _REPO not in sys.path:
     sys.path.insert(0, _REPO)
 from decimal import Decimal                                             # noqa: E402
 
-from driver.core.driver_ids import dec_canon, norm as _norm             # noqa: E402
-from driver.core.driver_period_resolver import (PeriodResolutionError,  # noqa: E402
+from driver_reference.core.driver_ids import dec_canon, norm as _norm             # noqa: E402
+from driver_reference.core.driver_period_resolver import (PeriodResolutionError,  # noqa: E402
                                                 ensure_driver_period)
 
 
@@ -81,7 +81,7 @@ def _code_fields():
     below. Leaving them in pooled them AND counted them again in their
     specialized form, silently double-weighting those fields.
     """
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
     excluded = set(GRADER_OWNED) | set(NUMERIC_SLOTS) | set(SPECIALIZED_COLLECTIONS)
     excluded.add("quote")                     # evidence, not a scored field
     return [f for f in ITEM_FIELDS if f not in excluded]
@@ -94,7 +94,7 @@ def field_accounting():
     """Every frozen fact-level + item field, mapped to the ONE place it is
     measured. Derived, never a copied schema list — so a new V2 field shows up
     as unaccounted instead of silently going unscored (Codex SEQ 1132)."""
-    from driver.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
+    from driver_reference.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
     where = {}
     for f in FACT_LEVEL_FIELDS:
         where[f] = "fact_level"
@@ -218,8 +218,8 @@ def _canon_item_values(item):
     over the FROZEN `NUMERIC_SLOTS`, so a new slot is picked up automatically
     and a retired one disappears without a hand edit.
     """
-    from driver.core.prepared_fact_v2 import NUMERIC_SLOTS
-    from driver.core.slot_convert import SLOT_KEYS
+    from driver_reference.core.prepared_fact_v2 import NUMERIC_SLOTS
+    from driver_reference.core.slot_convert import SLOT_KEYS
     out = {}
     for name in NUMERIC_SLOTS:
         slot = item.get(name)
@@ -317,7 +317,7 @@ def _name_agrees(g_fact, p_fact):
     return bool(gn) and gn == pn
 
 
-from driver.core.driver_writer import FakeGraph as _PreBatchGraph
+from driver_reference.core.driver_writer import FakeGraph as _PreBatchGraph
 
 
 class _ReplayStore(_PreBatchGraph):
@@ -371,7 +371,7 @@ class _ReplayStore(_PreBatchGraph):
         return {"xbrl_members": [], "used_scopes": []}
 
     def get_xbrl_fact_dimensions(self, source_id, concept):
-        from driver.core.driver_neo4j_adapter import GraphFactRows
+        from driver_reference.core.driver_neo4j_adapter import GraphFactRows
         return GraphFactRows(rows=[], exclusions=())
 
     def transaction(self):
@@ -411,8 +411,8 @@ def route_reply(reply, event, audit_dir):
     purpose — no new module — and it is the only thing that calls `run_event`.
     `score_arm` consumes what this returns and never routes anything itself.
     """
-    from driver.core.driver_write_cli import run_event
-    from driver.core.prepared_fact_v2 import verify_occurrence
+    from driver_reference.core.driver_write_cli import run_event
+    from driver_reference.core.prepared_fact_v2 import verify_occurrence
     parts = {p["part"]: p["content"] for p in event.get("text_parts", [])}
     for i, abstention in enumerate(reply.get("abstentions") or []):
         part_ref = abstention.get("part_ref")
@@ -446,7 +446,7 @@ def _to_v2_with_positions(records):
     either conflate duplicates or re-implement matching — the very engine this
     change deletes. Transport bookkeeping; it states no rule.
     """
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     from kf_lint import GOLD_ONLY          # THE owner of the gold-only field set
     converted, position = [], {}
     for i, rec in enumerate(records):
@@ -471,8 +471,8 @@ def dedup_items(items):
     the matcher uses, so a union can never disagree with a match about whether
     two facts are the same fact.
     """
-    from driver.core.fact_match import record_key
-    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from driver_reference.core.fact_match import record_key
+    from driver_reference.core.prepared_fact_v2 import PreparedFactV2
     from kf_lint import GOLD_ONLY
     seen, out = set(), []
     for f in items:
@@ -834,7 +834,7 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
                                        "abstentions") or []))
         # ONE MATCHER (B-15), hoisted ABOVE the decision loop because the
         # deduplicated denominator needs the identity owner's answer first.
-        from driver.core.fact_match import match_facts
+        from driver_reference.core.fact_match import match_facts
         gold_v2, gold_pos = _to_v2_with_positions(du)
         prod_v2, prod_pos = _to_v2_with_positions(produced)
         mr = match_facts(gold_v2, prod_v2)
@@ -926,7 +926,7 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
         # duplicate/key-miss/unsupported would be charging the model for a
         # defect in the answer key (SEQ 1140.2). Identity comes from the ONE
         # owner: same `record_key` as an inconclusive gold row.
-        from driver.core.fact_match import record_key as _rk
+        from driver_reference.core.fact_match import record_key as _rk
         erratum_keys = {_rk(g) for grp in mr.gold_inconclusive for g in grp}
         blocked_by_erratum = {prod_pos[id(pr)] for pr in prod_v2
                               if _rk(pr) in erratum_keys}
@@ -1000,7 +1000,7 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
             # slot's three raw object fields must agree (WorkOrder §649). The
             # retired grouping ("level"/"comparison"/"change") came from the
             # unit RESOLVER's output, which no longer runs.
-            from driver.core.prepared_fact_v2 import NUMERIC_SLOTS
+            from driver_reference.core.prepared_fact_v2 import NUMERIC_SLOTS
             gc, pc = _canon_item_values(g_item), _canon_item_values(p_item)
             for slot in NUMERIC_SLOTS:
                 code_all += 1
@@ -1224,7 +1224,7 @@ def presence_disagreement(gold_by_event, arm_a, arm_b, event_meta,
             # SECOND call site of the retired matcher (presence capture). Same
             # law as the primary one: Core matches, MatchResult stays visible,
             # and the retired resolution path is gone rather than renamed.
-            from driver.core.fact_match import match_facts
+            from driver_reference.core.fact_match import match_facts
             gold_v2, gold_pos = _to_v2_with_positions(du)
             prod_v2, prod_pos = _to_v2_with_positions(
                 (arm.get(sid) or {}).get("facts", []))

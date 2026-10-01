@@ -68,7 +68,7 @@ def test_slice_literal_bytes_catch_reordering(tmp_path):
 
 def test_dirt_paths_cover_every_imported_root():
     """Round-22: the dirt check must name every code root the run imports."""
-    assert set(V.DIRT_PATHS) == {'scripts/driver_seed', 'driver/relocation', 'scripts/earnings',
+    assert set(V.DIRT_PATHS) == {'scripts/driver_seed', 'driver_reference/relocation', 'scripts/earnings',
                                  '.claude/skills/earnings-orchestrator'}, V.DIRT_PATHS
     print("[ok] all four imported code roots in the dirt check")
 

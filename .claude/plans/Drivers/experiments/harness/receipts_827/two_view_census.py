@@ -107,7 +107,7 @@ def before_state():
     file would run, because its own imports no longer exist.
     """
     src = subprocess.run(["git", "-C", _REPO, "show",
-                          f"{FROZEN_TREE}:driver/relocation/inline_html.py"],
+                          f"{FROZEN_TREE}:driver_reference/relocation/inline_html.py"],
                          capture_output=True, text=True, check=True).stdout
     wanted, out, keep = ("def _hidden_cell(", "def _visible_walk("), [], False
     for block in src.split("\n\n\n"):
@@ -162,7 +162,7 @@ def counterfactual_module():
     silently failed to remove the rule would report a false 'no difference'."""
     import importlib.util
     import tempfile
-    src_path = os.path.join(_REPO, "driver", "relocation", "inline_html.py")
+    src_path = os.path.join(_REPO, "driver_reference", "relocation", "inline_html.py")
     src = open(src_path, encoding="utf-8").read()
     if src.count(_CF_ANCHOR) != 1:
         raise CensusAborted(
@@ -293,7 +293,7 @@ def recall_populations(soup, IH):
 
 def main():
     baseline_walk, baseline_sha = before_state()
-    from driver.relocation import inline_html as IH   # the AFTER, under test
+    from driver_reference.relocation import inline_html as IH   # the AFTER, under test
 
     rows = manifest_rows()
     readable = refused = 0
@@ -409,7 +409,7 @@ def main():
                      "an acceptance, so the direction is measured, not asserted"),
         },
         "representation": {
-            "before_state": f"{FROZEN_TREE}:driver/relocation/inline_html.py"
+            "before_state": f"{FROZEN_TREE}:driver_reference/relocation/inline_html.py"
                             " _visible_walk + _hidden_cell + _SPAN_TAGS",
             "before_state_source_sha256": baseline_sha,
             "identical": unchanged,

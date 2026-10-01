@@ -30,7 +30,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.join(_HERE, '..'))
 sys.path.insert(0, os.path.join(_HERE, '..', '..', '..',
-                                'driver', 'relocation'))
+                                'driver_reference', 'relocation'))
 
 import route_a_component_census as RC              # noqa: E402
 

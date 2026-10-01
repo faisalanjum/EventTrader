@@ -42,10 +42,10 @@ OUT = os.path.join(_HERE, "10_step4_mutations.json")
 HARNESS_REL = os.path.join(".claude", "plans", "Drivers", "experiments",
                            "harness")
 G = f"{HARNESS_REL}/test_g_suite.py"
-R5 = "driver/relocation/test_bind_graph_fact.py"
-RA = "driver/relocation/test_route_a.py"
-RI = "driver/core/test_driver_ids.py"
-RN = "driver/core/test_neo4j_adapter_readonly.py"
+R5 = "driver_reference/relocation/test_bind_graph_fact.py"
+RA = "driver_reference/relocation/test_route_a.py"
+RI = "driver_reference/core/test_driver_ids.py"
+RN = "driver_reference/core/test_neo4j_adapter_readonly.py"
 #: THE EXACT PARAMETER NODES, not the parametrized function. Naming the
 #: function ran all fourteen cases, so a mutation was judged by a group rather
 #: than by the one case that proves it — "run alone" means alone.
@@ -61,10 +61,10 @@ TX_STATEMENT = "SHOW DATABASE neo4j YIELD lastCommittedTxn, databaseID"
 # (id, name, file, old, new, detector node id)
 MUTATIONS = [
     (1, "direct scaleb outside its owner",
-     "driver/core/fact_match.py",
+     "driver_reference/core/fact_match.py",
      "def record_key(f):",
      "def _mutant_scaleb(x):\n    return x.scaleb(1)\n\n\ndef record_key(f):",
-     "driver/core/test_round12_exact_scale.py::"
+     "driver_reference/core/test_round12_exact_scale.py::"
      "test_the_scaleb_scan_is_DERIVED_from_the_production_tree"),
 
     # RETARGETED (#827, Codex SEQ 938). The project-authored printed-number
@@ -75,14 +75,14 @@ MUTATIONS = [
     # so the mutation is re-aimed at the single current owner of that gate,
     # with the same detector. No `\d`, no new regex, no production change.
     (2, "the XSD decimal gate bypassed at the no-format door",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if not decimalPattern.fullmatch(collapsed):\n        return None",
      "    if False:      # MUTANT: the XSD decimal gate bypassed\n        return None",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_printed_value_rejects_NON_ASCII_numerals"),
 
     (3, "strict dateUnion parser given a fromisoformat fallback",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      '        raise ExactError(f"not a lawful xs:date or xs:dateTime: {raw!r}")',
      "        from datetime import date as _d\n"
      "        try:\n"
@@ -90,43 +90,43 @@ MUTATIONS = [
      "            m_d, kind, tz_text = True, 'date', None\n"
      "        except ValueError:\n"
      '            raise ExactError(f"not a lawful dateUnion: {raw!r}")',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_filing_boundary_REFUSES_every_malformed_form"),
 
     (4, "quote-occurrence check bypassed",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      "def verify_occurrence(part_text, quote, occurrence_in_part):",
      "def verify_occurrence(part_text, quote, occurrence_in_part):\n"
      "    return None",
-     "driver/core/test_round13_quote_occurrence.py::"
+     "driver_reference/core/test_round13_quote_occurrence.py::"
      "test_824_a_FABRICATED_quote_is_refused_and_costs_ZERO_io"),
 
     (5, "source-evidence comparison removed",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      '    if canonical["representation_sha256"] != evidence["representation_sha256"] \\\n'
      '            or tuple(canonical["quote_span"]) != evidence["quote_span"] \\\n'
      '            or canon_label != evidence["raw_label_span"]:',
      "    if False:",
-     "driver/core/test_round14_evidence_matrix.py::"
+     "driver_reference/core/test_round14_evidence_matrix.py::"
      "test_matrix_e_a_quote_span_shifted_by_one_either_way_is_refused"),
 
     (6, "member-check logs discarded",
-     "driver/core/slice_menu.py",
+     "driver_reference/core/slice_menu.py",
      "def check_member_refs(refs, fact_tokens, menu_tokens, matched_dims):",
      "def check_member_refs(refs, fact_tokens, menu_tokens, matched_dims):\n"
      "    return ([], [], [])",
-     "driver/core/test_driver_write_cli.py::"
+     "driver_reference/core/test_driver_write_cli.py::"
      "test_member_ref_supporting_no_fact_slice_parks_invalid"),
 
     (7, "the PRIVATE ITEM BINDER imported/called by the staged adapter",
-     "driver/core/prepared_fact_v2.py",
-     "    from driver.core.slot_convert import SlotConversionError",
-     "    from driver.core.slot_convert import SlotConversionError\n"
-     "    from driver.core.xbrl_attach import _verify_and_attach  # MUTANT",
+     "driver_reference/core/prepared_fact_v2.py",
+     "    from driver_reference.core.slot_convert import SlotConversionError",
+     "    from driver_reference.core.slot_convert import SlotConversionError\n"
+     "    from driver_reference.core.xbrl_attach import _verify_and_attach  # MUTANT",
      f"{G}::test_the_v2_modules_are_a_STAGED_read_only_adapter"),
 
     (8, "a checked-row field dropped from the row shape",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      # RETARGETED (#827, SEQ 938/939): F7 replaced the two hand-maintained key
      # lists with ONE imported interface object. Same rule, current owner.
      # CORRECTED (#827, intended-failure check): mutating the shared constant
@@ -136,14 +136,14 @@ MUTATIONS = [
      # row and the declared shape genuinely disagree.
      '    return MappingProxyType({**{k: raw[k] for k in _ROW_FIELDS},',
      '    return MappingProxyType({**{k: raw[k] for k in _ROW_FIELDS[:-1]},',
-     "driver/core/test_round11_outcomes.py::"
+     "driver_reference/core/test_round11_outcomes.py::"
      "test_the_checked_row_carries_ONLY_the_checked_fields"),
 
     (9, "one deep freeze removed",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "            member_menu=_deep_freeze({\"folds\": dict(member_folds),",
      "            member_menu=({\"folds\": dict(member_folds),",
-     "driver/core/test_round15_audit_evidence.py::"
+     "driver_reference/core/test_round15_audit_evidence.py::"
      "test_825p2_an_EMPTY_event_returns_the_SAME_RESULT_RECORD"),
 
     (10, "the G registry changed without regenerating its artifact",
@@ -170,58 +170,58 @@ MUTATIONS = [
     # that cannot run proves nothing about the detector, which is why `caught`
     # demands exit code 1 exactly.
     (12, "the calendar-edge guard removed from stored_period_end",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    except OverflowError:\n"
      "        # The day after `9999-12-31` is off the representable calendar.",
      "    except ZeroDivisionError:\n"
      "        # The day after `9999-12-31` is off the representable calendar.",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_stored_period_end_REFUSES_the_calendar_edge_as_an_ExactError"),
 
     (13, "the calendar-edge guard removed from filing_duration_ordered",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    except OverflowError:\n"
      "        # A date-only end means the FOLLOWING midnight; at the calendar",
      "    except ZeroDivisionError:\n"
      "        # A date-only end means the FOLLOWING midnight; at the calendar",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_duration_ordering_at_the_CALENDAR_EDGE_is_indeterminate_not_a_crash"),
 
     (14, "the date census timezone grammar widened back",
      f"{HARNESS_REL}/receipts_827/scan_filing_dates.py",
      r'_TZ = r"(?:Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00))"',
      r'_TZ = r"(?:Z|[+-][0-9]{2}:[0-9]{2})"',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_the_date_CENSUS_and_the_PRODUCTION_parser_agree_on_legality"),
 
     (15, "the date census year grammar widened back",
      f"{HARNESS_REL}/receipts_827/scan_filing_dates.py",
      r'_YEAR = r"-?(?:[1-9][0-9]{3,}|0[0-9]{3})"',
      r'_YEAR = r"-?[0-9]{4,}"',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_the_date_CENSUS_and_the_PRODUCTION_parser_agree_on_legality"),
 
     (16, "a public input field that nothing validates",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      "    calendar_override: bool = False",
      "    calendar_override: bool = False\n    label: str = ''",
-     "driver/core/test_v2_attacks.py::"
+     "driver_reference/core/test_v2_attacks.py::"
      "test_827_every_public_INPUT_FIELD_is_REALLY_VALIDATED"),
 
     (17, "a SIXTH public decision word the channel cannot read",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      'PUBLIC_DECISIONS = ("written", "merged", "parked", "skipped", "rejected")',
      'PUBLIC_DECISIONS = ("written", "merged", "parked", "skipped", '
      '"rejected", "deferred")',
-     "driver/core/test_v2_attacks.py::"
+     "driver_reference/core/test_v2_attacks.py::"
      "test_827_the_PUBLIC_DECISION_VOCABULARY_is_the_contract_s_five_words"),
 
     (18, "the locator's start compared as a RAW STRING again",
-     "driver/relocation/locator.py",
+     "driver_reference/relocation/locator.py",
      "                start = (None if shape[0] == 'instant'\n"
      "                         else XN.filing_boundary_graph_start(ds))",
      "                start = (None if shape[0] == 'instant' else ds)",
-     "driver/relocation/test_route_a.py::"
+     "driver_reference/relocation/test_route_a.py::"
      "test_827_the_LOCATOR_ITSELF_binds_a_lawful_midnight_dateTime_start"),
 
     # NO MUTATION FOR THE LOCATOR'S FORWARD-ORDER RULE, and the absence is the
@@ -256,18 +256,18 @@ MUTATIONS = [
     # alone, and why anchor uniqueness is asserted before any of them run.
 
     (22, "the period-KIND comparison removed",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if (not doc_start) != (period_type == 'instant'):",
      "    if False:",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_827_a_lawful_DURATION_document_never_binds_an_INSTANT_row"),
 
     (23, "the XSD mixed-timezone order widened back to always-indeterminate",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    if a.has_timezone == b.has_timezone:",
      "    if a.has_timezone != b.has_timezone:\n        return None\n"
      "    if a.has_timezone == b.has_timezone:",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_duration_ordering_handles_aware_naive_and_parks_when_indeterminate"),
 
 
@@ -288,20 +288,20 @@ MUTATIONS = [
     # being tested. The detector now carries a case only this rule can refuse
     # (a second, EMPTY entity), and the mutation deletes the rule outright.
     (28, "a context may carry two entities, two periods or two scenarios",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if len(entities) != 1 or len(periods) != 1 or len(scenarios) > 1:\n"
      "        return None",
      "    if False:\n        return None",
      f"{R5}::test_827R5_a_MISPLACED_context_element_refuses_with_ITS_OWN_reason"),
 
     (29, "an entity may carry two identifiers or two segments",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if len(idents) != 1 or len(segments) > 1:",
      "    if len(idents) < 1 or len(segments) > 99:",
      f"{R5}::test_827R5_a_MISPLACED_context_element_refuses_with_ITS_OWN_reason"),
 
     (30, "any mixture of period forms accepted (incl. two `forever`)",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if tuple(map(len, (inst, start, end, ever))) not in (\n"
      "            (1, 0, 0, 0), (0, 1, 1, 0), (0, 0, 0, 1)):",
      "    if False:",
@@ -331,7 +331,7 @@ MUTATIONS = [
     # identically after the deletion (9 refused, 2 lawful still allowed).
 
     (33, "a unit may mix plain measures with a divide, or declare nothing",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if len(divides) > 1 or (divides and plain) or not (divides or plain):",
      "    if False:",
      f"{R5}::test_827R5_a_MISPLACED_unit_element_refuses_with_ITS_OWN_reason"),
@@ -340,13 +340,13 @@ MUTATIONS = [
     # the stray-measure guard, so loosening this rule changed nothing and the
     # row escaped. An EMPTY second container isolates it.
     (34, "a divide may carry two numerators or two denominators",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if len(nums) != 1 or len(dens) != 1:\n            return None",
      "        if False:\n            return None",
      f"{R5}::test_827R5_a_MISPLACED_unit_element_refuses_with_ITS_OWN_reason"),
 
     (35, "a divide side may carry no measure at all",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if not n_meas or not d_meas:\n            return None",
      "        if False:\n            return None",
      f"{R5}::test_827R5_a_MISPLACED_unit_element_refuses_with_ITS_OWN_reason"),
@@ -354,33 +354,33 @@ MUTATIONS = [
     # THE REASON IS PART OF THE CONTRACT. These three restore the exact round-4
     # lie — malformed structure reported as a repeated id — and it must be seen.
     (36, "malformed context structure renamed back to a duplicate id",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        contexts[cid] = 'malformed_context_structure' if parsed is None else parsed",
      "        contexts[cid] = 'duplicate_context_id' if parsed is None else parsed",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_827R5_MALFORMED_structure_is_NEVER_called_a_duplicate_id"),
 
     (37, "malformed unit structure renamed back to a duplicate id",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        units[uid] = 'malformed_unit_structure' if parsed is None else parsed",
      "        units[uid] = 'duplicate_unit_id' if parsed is None else parsed",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_827R5_MALFORMED_structure_is_NEVER_called_a_duplicate_id"),
 
     (38, "the consumer stops carrying the context's own reason",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    ctx = prepared['contexts'].get(ctx_ref)\n"
      "    if isinstance(ctx, str):\n"
      "        return None, ctx",
      "    ctx = prepared['contexts'].get(ctx_ref)\n"
      "    if isinstance(ctx, str):\n"
      "        return None, 'duplicate_context_id'",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_827R5_MALFORMED_structure_is_NEVER_called_a_duplicate_id"),
 
     # ---- ROUND 5b: the crash, and the schema's declared order --------------
     (40, "dimension members sorted WITHOUT being validated (the TypeError)",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule — both halves of a dimension
      # must be VALIDATED QNames before anything sorts them, or an unvalidated
      # member raises TypeError instead of refusing. `_qname_ok(x, ns.declared)`
@@ -394,7 +394,7 @@ MUTATIONS = [
      f"{R5}::test_827R5_a_NAMELESS_dimension_REFUSES_and_never_crashes"),
 
     (41, "the context/entity/period sequence checks removed",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same required rule, current owner —
      # ns.i() gave way to (I, name) tuples and the element names are the
      # spec's camelCase. Owner line retargeted, not a comment or copy.
@@ -406,7 +406,7 @@ MUTATIONS = [
      f"{R5}::test_827R5_a_context_out_of_SCHEMA_ORDER_refuses"),
 
     (42, "the divide numerator/denominator sequence check removed",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same required rule, current owner —
      # the ns.i()/get() helpers were replaced by (I, name) tuples, _typed()
      # and named constants. Owner line retargeted, not a comment or copy.
@@ -416,20 +416,20 @@ MUTATIONS = [
      f"{R5}::test_827R5_a_divide_out_of_SCHEMA_ORDER_refuses"),
 
     (43, "_ordered stops looking at order at all",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return seen == sorted(seen)",
      "    return True",
      f"{R5}::test_827R5_a_context_out_of_SCHEMA_ORDER_refuses"),
 
     (39, "the consumer stops carrying the unit's own reason",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): identical branch, dedented four columns
      # when it moved out of its enclosing block. Same rule, same detector.
      "    if isinstance(unit, str):                # refused; the string says why\n"
      "        return None, unit",
      "    if isinstance(unit, str):\n"
      "        return None, 'duplicate_unit_id'",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_827R5_MALFORMED_structure_is_NEVER_called_a_duplicate_id"),
 
     # 24 and 25 are RETIRED: they mutated the AST coverage heuristic, which
@@ -449,7 +449,7 @@ MUTATIONS = [
 
     # ---- ROUND 6: identity, namespace, grammar, order ----------------------
     (44, "the SEC identifier scheme no longer checked",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule, current owner — the raw
      # attribute read became the typed accessor `_typed`.
      "    if (_typed(identifier, 'scheme') or '') != SEC_CIK_SCHEME:\n        return None",
@@ -457,7 +457,7 @@ MUTATIONS = [
      f"{R5}::test_827R6_a_MALFORMED_filer_identity_never_binds"),
 
     (45, "the ten-ASCII-digit CIK rule relaxed",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same required rule, current owner —
      # the ns.i()/get() helpers were replaced by (I, name) tuples, _typed()
      # and named constants. Owner line retargeted, not a comment or copy.
@@ -467,12 +467,12 @@ MUTATIONS = [
 
     # RETARGETED (#827, SEQ 938/939): the rule did not change, its OWNER MOVED
     # FILES. `graph_cik` is no longer defined in inline_html.py — it is imported
-    # from driver.core.driver_ids, and inline_html says so itself ("a second
+    # from driver_reference.core.driver_ids, and inline_html says so itself ("a second
     # public path to one rule"). The mutation now attacks the single owner where
     # it lives: validate-then-refuse becomes normalise-then-accept, which is
     # exactly what the rule forbids.
     (46, "the graph CIK normalised instead of validated",
-     "driver/core/driver_ids.py",
+     "driver_reference/core/driver_ids.py",
      # CORRECTED (#827, SEQ 940): a BLOCK anchor over the guard AND the return,
      # so the mutant performs the repair the rule forbids — a short stored CIK
      # is zero-filled and BINDS — instead of merely changing which mismatch
@@ -487,21 +487,21 @@ MUTATIONS = [
      f"{R5}::test_827R6_a_GRAPH_cik_outside_the_stored_form_never_binds"),
 
     (47, "period_type falls through as duration again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if period_type not in ('instant', 'duration'):\n"
      "        return None, 'malformed_period_type'",
      "    if False:\n        return None, 'malformed_period_type'",
      f"{R5}::test_827R6_a_period_type_outside_the_TWO_words_never_binds"),
 
     (48, "the year converted whole again (the >=4,300-digit crash)",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    year_mod_400 = int(year_digits[-4:])          # bounded: four digits at most",
      "    year_mod_400 = int(year_digits)",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_827R6_an_ENORMOUS_year_parks_and_never_crashes"),
 
     (49, "namespace resolution replaced by the literal prefix",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): the bound-namespace class this attacked
      # NO LONGER EXISTS. Elements are addressed by (uri, local) and a QName
      # VALUE is resolved in `_qname` from lxml's in-scope `nsmap`. Same rule —
@@ -514,7 +514,7 @@ MUTATIONS = [
      f"{R5}::test_827R6_a_lawful_INSTANCE_binding_binds_whatever_its_prefix"),
 
     (50, "an undeclared prefix given a fallback",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule at its current single owner —
      # an explicit prefix that nothing binds names nothing and must REFUSE,
      # never fall back to a guessed namespace. Distinct line, distinct rule
@@ -531,11 +531,11 @@ MUTATIONS = [
      # for and BINDS. Reproduced both ways through bind_graph_fact:
      #   clean  -> (None, 'exact_id_malformed_unit_structure')
      #   guess  -> binds, unit_measures_expanded ((instance, 'pure'),)
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_an_UNDECLARED_measure_prefix_gets_no_invented_namespace"),
 
     (51, "leaf elements may carry nested markup again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule, current single owner.
      # `_leaf` decides on lxml child tags now, not a bs4 find(True).
      # CORRECTED (#827, SEQ 940): mutate ONLY the guard. The previous mutant
@@ -549,7 +549,7 @@ MUTATIONS = [
      f"{R5}::test_827R6_item4_context_attacks"),
 
     (52, "unknown direct children of a unit allowed",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # The inline `known` set became the `_only` helper; checked for duplicate
      # attack first — no other mutation anchors on this line.
@@ -559,7 +559,7 @@ MUTATIONS = [
      f"{R5}::test_827R6_item4_an_unknown_direct_child_of_a_unit"),
 
     (53, "the self-ratio unit accepted again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule, current single owner.
      # The self-ratio test compares RESOLVED measure QNames now, not raw text.
      "        if (set(_qname(_measure_text(m), m) for m in n_meas)\n"
@@ -575,39 +575,39 @@ MUTATIONS = [
     # position is deleted; Arelle's pinned `decimalPattern` holds it now, inside
     # `parse_raw`. The detector is the same battery under its current name.
     (54, "the graph lexical gate bypassed before the finite-number owner",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if not decimalPattern.fullmatch(bare):\n        return None",
      "    if False:      # MUTANT: the graph lexical gate bypassed\n        return None",
      f"{R5}::test_827R6_a_value_NEITHER_XSD_decimal_NOR_grouped_transport_is_refused"),
 
     (55, "the fact id stripped in the identity key again (order decides)",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      # RETARGETED (#827, SEQ 938/939): same rule, current single owner.
      # The XML whitespace owner is named XML_WS here now.
      '            raw_id = row["fact_id"] or ""\n'
      '            out.append("" if not raw_id.strip(XML_WS) else raw_id)',
      '            out.append((row["fact_id"] or "").strip())',
-     "driver/core/test_round10_event_boundary.py::"
+     "driver_reference/core/test_round10_event_boundary.py::"
      "test_827R6_a_PADDED_fact_id_is_a_DIFFERENT_id_and_order_cannot_decide"),
 
     (56, "a public callable dropped from the explicit coverage ledger",
-     "driver/core/test_v2_attacks.py",
-     '    ("driver.core.slot_convert.validate_slot", "slot_name"):',
-     '    ("driver.core.slot_convert.RETIRED_ENTRY", "slot_name"):',
-     "driver/core/test_v2_attacks.py::"
+     "driver_reference/core/test_v2_attacks.py",
+     '    ("driver_reference.core.slot_convert.validate_slot", "slot_name"):',
+     '    ("driver_reference.core.slot_convert.RETIRED_ENTRY", "slot_name"):',
+     "driver_reference/core/test_v2_attacks.py::"
      "test_827R6_every_public_callable_NAMES_the_test_that_covers_it"),
 
     (57, "the ledger points at a test node that does not exist",
-     "driver/core/test_v2_attacks.py",
+     "driver_reference/core/test_v2_attacks.py",
      # THE PAIR KEY IS THE ANCHOR. The bare node string now appears four
      # times — several parameters share one covering test — so it stopped
      # being an anchor at all the moment the ledger was keyed on pairs.
-     '    ("driver.core.prepared_fact_v2.split_slice_part", "token"):\n'
-     '        "driver/core/test_prepared_fact_v2.py::'
+     '    ("driver_reference.core.prepared_fact_v2.split_slice_part", "token"):\n'
+     '        "driver_reference/core/test_prepared_fact_v2.py::'
      'test_G33_first_colon_only_split_keeps_a_colon_in_the_value",',
-     '    ("driver.core.prepared_fact_v2.split_slice_part", "token"):\n'
-     '        "driver/core/test_prepared_fact_v2.py::test_no_such_node",',
-     "driver/core/test_v2_attacks.py::"
+     '    ("driver_reference.core.prepared_fact_v2.split_slice_part", "token"):\n'
+     '        "driver_reference/core/test_prepared_fact_v2.py::test_no_such_node",',
+     "driver_reference/core/test_v2_attacks.py::"
      "test_827R6_every_named_test_node_really_exists"),
 
     # ---- #827 ROUND 7b: one mutation per rule closed this round. Each REMOVES
@@ -616,14 +616,14 @@ MUTATIONS = [
     # rows 21/24/27/28/31/34 escaped and had to be retired.
 
     (58, "the element id no longer has to be a lawful XML ID",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if _xml_id(str(element_id)) is None:\n"
      "        return None, 'malformed_id'",
      "    if False:\n        return None, 'malformed_id'",
      f"{R5}::test_827R7_an_UNLAWFUL_element_id_is_MALFORMED_under_its_own_name"),
 
     (59, "blankness decided by PYTHON whitespace again, at the binder door",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule and same line; the XML
      # whitespace owner is named XML_WS now. 59 and 62 attack this one line in
      # OPPOSITE directions (under- vs over-catching) with different detectors,
@@ -633,7 +633,7 @@ MUTATIONS = [
      f"{R5}::test_827R7_an_UNLAWFUL_element_id_is_MALFORMED_under_its_own_name"),
 
     (60, "the concept name no longer has to be a QName",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner —
      # `_qname_ok(raw, declared)` became `_qname(_typed(el, 'name'), el)`, which
      # resolves in the element's own scope. This check lives inside
@@ -664,7 +664,7 @@ MUTATIONS = [
     # is evidence, not a reason to preserve a retired architecture mutation.
 
     (62, "XML-blank ids stop reaching the identity fallback (OVER-catching)",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule and same line; the XML
      # whitespace owner is named XML_WS now. 59 and 62 attack this one line in
      # OPPOSITE directions (under- vs over-catching) with different detectors,
@@ -675,7 +675,7 @@ MUTATIONS = [
      "test_827R7_MUST_ALLOW_an_XML_blank_id_still_uses_the_identity_fallback"),
 
     (63, "the public id door calls U+00A0 blank again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939): same rule at the PUBLIC id door; the XML
      # whitespace owner is named XML_WS now. Different line from 59/62.
      "    if not element_id or not str(element_id).strip(XML_WS):",
@@ -688,387 +688,387 @@ MUTATIONS = [
     # extract cannot run their detector, and listing them here would report a
     # result for something that never executed.
     (64, "the locator repairs a non-string CIK back into a lawful spelling",
-     "driver/relocation/locator.py",
+     "driver_reference/relocation/locator.py",
      "        want_cik = graph_cik(source.get('company_cik'))",
      "        want_cik = graph_cik(str(source.get('company_cik') or ''))",
      f"{RA}::test_a_NON_STRING_expected_CIK_abstains_through_the_public_door"),
 
     (65, "the query inlines the guard instead of naming its one owner",
-     "driver/core/driver_neo4j_adapter.py",
+     "driver_reference/core/driver_neo4j_adapter.py",
      '"WHERE " + _CIK_GUARD + " "',
      '"WHERE co.cik =~ $cik_pattern AND co.cik <> $non_registrant "',
      f"{RN}::test_the_query_references_the_ONE_guard_BY_NAME"),
 
     (66, "graph_cik stops refusing the non-registrant marker",
-     "driver/core/driver_ids.py",
+     "driver_reference/core/driver_ids.py",
      "    return None if value == NON_REGISTRANT_CIK else value",
      "    return value",
      f"{RI}::test_graph_cik_refuses_the_non_registrant_marker"),
 
     (67, "_norm_uid stops requiring the matched company's exact prefix",
-     "driver/core/driver_neo4j_adapter.py",
+     "driver_reference/core/driver_neo4j_adapter.py",
      "    if not u_id.startswith(prefix):\n        return None",
      "    if False:\n        return None",
      f"{RN}::test_norm_uid_refuses_a_reference_that_is_not_this_company"),
 
     (68, "the parser module re-publishes the owner as a second import path",
-     "driver/relocation/inline_html.py",
-     "from driver.core.driver_ids import (SEC_CIK_10_PATTERN as "
+     "driver_reference/relocation/inline_html.py",
+     "from driver_reference.core.driver_ids import (SEC_CIK_10_PATTERN as "
      "_SEC_CIK_10_PATTERN,\n"
      "                                    graph_cik as _graph_cik)",
-     "from driver.core.driver_ids import SEC_CIK_10_PATTERN, graph_cik\n"
+     "from driver_reference.core.driver_ids import SEC_CIK_10_PATTERN, graph_cik\n"
      "_SEC_CIK_10_PATTERN = SEC_CIK_10_PATTERN\n_graph_cik = graph_cik",
      f"{RN}::test_the_owner_has_exactly_ONE_public_import_path"),
 
     (69, "the CIK rule stops being ASCII (Python's \\d admits other digits)",
-     "driver/core/driver_ids.py",
+     "driver_reference/core/driver_ids.py",
      'SEC_CIK_10_PATTERN = r"^[0-9]{10}$"',
      'SEC_CIK_10_PATTERN = r"^[\\d]{10}$"',
      f"{RI}::test_graph_cik_refuses_every_malformed_twin"),
 
     (72, "O1: the _lawful_fye gate removed (fye_month flows unvalidated)",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '    if v is not None and not (type(v) is int and 1 <= v <= 12):\n'
      '        raise PeriodResolutionError(f"fye_month out of range: {v!r} — park")\n'
      '    return v',
      '    return v',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_fye_month_thirteen_parks"),
 
     (73, "O10: time_type dropped from the 11-key vocabulary owner",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '                    "long_range_end_year", "sentinel_class", "time_type",\n'
      '                    "period_scope")',
      '                    "long_range_end_year", "sentinel_class",\n'
      '                    "period_scope")',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_time_type_only_parks_not_periodless"),
 
     (74, "C1 m1: percent_sequential removed from the one unit-vocabulary owner",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      'CANONICAL_UNITS = ("usd", "m_usd", "percent", "percent_yoy", "percent_sequential",\n'
      '                   "percent_points", "basis_points", "count", "x", "unknown")',
      'CANONICAL_UNITS = ("usd", "m_usd", "percent", "percent_yoy",\n'
      '                   "percent_points", "basis_points", "count", "x", "unknown")',
-     "driver/core/test_driver_units.py::test_enum_is_the_ten_units"),
+     "driver_reference/core/test_driver_units.py::test_enum_is_the_ten_units"),
 
     (75, "C1 m2: percent_qoq invented in the one unit-vocabulary owner",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      'CANONICAL_UNITS = ("usd", "m_usd", "percent", "percent_yoy", "percent_sequential",\n'
      '                   "percent_points", "basis_points", "count", "x", "unknown")',
      'CANONICAL_UNITS = ("usd", "m_usd", "percent", "percent_yoy", "percent_sequential",\n'
      '                   "percent_points", "basis_points", "count", "x", "unknown",\n'
      '                   "percent_qoq")',
-     "driver/core/test_driver_units.py::test_enum_is_the_ten_units"),
+     "driver_reference/core/test_driver_units.py::test_enum_is_the_ten_units"),
 
     (76, "C3 o1: the multiplier owner stops answering for x",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "    if unit in MULTIPLIER_ONE_UNITS:\n        return Decimal(1)\n    return None",
      '    if unit in MULTIPLIER_ONE_UNITS and unit != "x":\n        return Decimal(1)\n    return None',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_G3_multiplier_not_one_on_a_ratio_slot_parks[x]"),
 
     (77, "C3 o2: the multiplier owner answers Decimal(10)",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "    if unit in MULTIPLIER_ONE_UNITS:\n        return Decimal(1)\n    return None",
      "    if unit in MULTIPLIER_ONE_UNITS:\n        return Decimal(10)\n    return None",
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_G3_multiplier_not_one_on_a_ratio_slot_parks[percent]"),
 
     (78, "C3 s1: the validate door reverts to a drifted inline mult>1 copy",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "    _required = family_required_multiplier(stated_unit)\n"
      "    if _required is not None and mult != _required:",
      "    if stated_unit in MULTIPLIER_ONE_UNITS and mult > 1:",
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_G3_multiplier_not_one_on_a_ratio_slot_parks[percent]"),
 
     (79, "C2 p1: percent_sequential deleted from the numberless-growth pair",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      '    elif level_unit is not None and level_unit not in ("percent_yoy",\n'
      '                                                       "percent_sequential"):',
      '    elif level_unit is not None and level_unit not in ("percent_yoy",):',
-     "driver/core/test_driver_validators.py::"
+     "driver_reference/core/test_driver_validators.py::"
      "test_numberless_fact_with_unit_rules"),
 
     (80, "C2 p2: the annual percent_sequential rule goes dead",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      '    if fact.get("period_scope") == "annual" and "percent_sequential" in (',
      '    if fact.get("period_scope") == "never" and "percent_sequential" in (',
-     "driver/core/test_driver_validators.py::"
+     "driver_reference/core/test_driver_validators.py::"
      "test_units_required_with_numbers"),
 
     (81, "C2 p3: the numberless-growth pair widened with percent",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      '    elif level_unit is not None and level_unit not in ("percent_yoy",\n'
      '                                                       "percent_sequential"):',
      '    elif level_unit is not None and level_unit not in ("percent_yoy",\n'
      '                                                       "percent_sequential", "percent"):',
-     "driver/core/test_driver_validators.py::"
+     "driver_reference/core/test_driver_validators.py::"
      "test_numberless_fact_with_unit_rules"),
 
     (82, "T1: a rogue outcome token minted outside the one vocabulary",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      "    add = lambda code, action, msg: v.append(   # T1: every minted token passes",
      '    v.append(Violation("ROGUE_TOKEN", "REJECT", "mutant"))\n'
      "    add = lambda code, action, msg: v.append(   # T1: every minted token passes",
-     "driver/core/test_driver_validators.py::"
+     "driver_reference/core/test_driver_validators.py::"
      "test_the_one_outcome_code_module_owns_every_minted_token"),
 
     (83, "T2: the numeric-prose heuristic resurrected",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      '        elif len(vt) > 200:\n'
      '            add("VALUE_TEXT", "REJECT", "value_text over 200 chars")',
      '        elif len(vt) > 200:\n'
      '            add("VALUE_TEXT", "REJECT", "value_text over 200 chars")\n'
      '        elif __import__("re").search(r"\\b(?!(?:19|20)\\d\\d\\b)\\d+\\b", vt):\n'
      '            add("VALUE_TEXT", "REJECT", "mutant heuristic")',
-     "driver/core/test_driver_validators.py::"
+     "driver_reference/core/test_driver_validators.py::"
      "test_T2_timeframe_prose_is_lawful_value_text"),
 
     (84, "P-O2 a: the invariant call removed from _result",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      "    verdicts = period_invariant(u_id, scope, time_type, start, end)\n"
      "    if verdicts:",
      "    verdicts = ()\n"
      "    if verdicts:",
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_preserved_multiday_instant_parks"),
 
     (85, "P-O2 b: the invariant call removed from the validators' period door",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      "    for code, msg in period_invariant(u_id, fact.get(\"period_scope\"),",
      "    for code, msg in (lambda *a, **k: ())(u_id, fact.get(\"period_scope\"),",
-     "driver/core/test_driver_validators.py::"
+     "driver_reference/core/test_driver_validators.py::"
      "test_stray_period_metadata_without_id_rejected"),
 
     (86, "P-O3 a: the existing-hit checker unwrapped (hits trusted verbatim)",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '            found = _lawful_hit("existing", found, want_scope, time_type)',
      '            pass  # MUTANT: hit trusted verbatim',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_existing_hit_scope_mismatch_with_request_parks"),
 
     (87, "P-O3 b: the exact-allowed-keys law ignores extras",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      "    extra = keys - required - optional\n"
      "    if extra:",
      "    extra = frozenset()  # MUTANT: extras ignored\n"
      "    if extra:",
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_lookup_result_extra_key_parks"),
 
     (88, "P-O8: the quiet Q4 default restored",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      "    q = item.get(\"fiscal_quarter\")\n"
      "    if q is None:",
      "    q = item.get(\"fiscal_quarter\") or 4\n"
      "    if False:",
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_ytd_missing_quarter_parks"),
 
     (89, "P-O12 a: the keyword bool type law removed",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      "    if type(calendar_override) is not bool:",
      "    if False:",
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_calendar_keyword_type_law_parks_on_all_paths"),
 
     (90, "P-O12 b: the superseded item route resurrected",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      "    cal = calendar_override              # P-O12: keyword route ONLY, no coercion",
      '    cal = bool(calendar_override or item.get("calendar_override"))',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_calendar_keyword_type_law_parks_on_all_paths"),
 
     (91, "T4: a chosen year endpoint re-invented",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '                         ("fiscal_year", MINYEAR, MAXYEAR),',
      '                         ("fiscal_year", 1900, 2200),',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_strict_shape_check_rejects_mixed_and_incomplete_framing"),
 
     (92, "T7: the alias re-authored as a second tuple",
-     "driver/core/prepared_fact_v2.py",
-     "from driver.core.driver_validators import NUMERIC_FIELDS\n"
+     "driver_reference/core/prepared_fact_v2.py",
+     "from driver_reference.core.driver_validators import NUMERIC_FIELDS\n"
      "NUMERIC_SLOTS = NUMERIC_FIELDS",
      'NUMERIC_SLOTS = ("level_low", "level_high", "change_value",\n'
      '                 "comparison_low")  # MUTANT: drifted copy',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_G34_value_text_and_numeric_slots_are_mutually_exclusive"),
 
     (93, "C6 r1: the routing author answers level_unit for change_value",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '    return change_unit if name == "change_value" else level_unit',
      '    return level_unit',
      # detector REPOINTED (2026-08-08, C6 close): the G4 node only exercised
      # level slots and never caught this (the recorded coverage gap); the C6
      # card's five-field/two-door node is the honest detector.
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_slot_unit_routing_matches_the_FROZEN_contract"),
 
     (95, "C6 s2: the conversion door bypasses the helper with a flipped inline copy",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      "            unit = _unit_for_slot(name, it.level_unit, it.change_unit)",
      "            unit = it.level_unit",
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_slot_unit_routing_matches_the_FROZEN_contract"),
 
     (94, "T1/P-O2: a resolver emit site bypasses the mint gate with a rogue token",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '        out.append((require_known("SCOPE_PAIR"), f"period_scope {scope!r} not in the enum"))',
      '        out.append(("SCOPE_PAIRX", f"period_scope {scope!r} not in the enum"))',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_T1_the_resolver_mints_every_period_code_through_the_one_owner"),
 
     (96, "P-D5: the band table quietly widens the ytd cap",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '    "ytd": (None, 390),',
      '    "ytd": (None, 400),',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_band_boundary_rejects[ytd-391]"),
 
     (97, "P-D6: the repository-pin check is neutered",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      "    if actual is None or Path(actual).resolve() != expected:",
      "    if False:",
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_substrate_binding_one_authorized_path_both_orders"),
 
     (98, "T8: the pf2 lane gate is neutered",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # The trailing marker comment was removed from the owner line.
      "        if self.fact_type not in LANE_STATES:",
      "        if False:   # MUTANT",
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_T8_one_lane_vocabulary_owner"),
 
     (99, "T3: the producerless field sneaks back into the stored contract",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      '    "slice_parts", "measurement_tokens", "surprise",',
      '    "slice_parts", "measurement_tokens", "surprise", "fact_scope_period_token",',
-     "driver/core/test_driver_validators.py::"
+     "driver_reference/core/test_driver_validators.py::"
      "test_the_producerless_period_token_field_is_gone"),
 
     (100, "T6: a local id split grows back in the validators",
-     "driver/core/driver_validators.py",
+     "driver_reference/core/driver_validators.py",
      "        src = fact_source_id(fact.get(\"id\"))",
      "        src = (fact.get(\"id\") or \"\").split(\":\", 3)[1]",
-     "driver/core/test_driver_ids.py::"
+     "driver_reference/core/test_driver_ids.py::"
      "test_T6_the_minimal_fact_id_reader_lives_at_the_owner"),
 
     (101, "T9: the bool guard falls out of the exactness core",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      '    if isinstance(v, bool):\n        raise SlotConversionError(f"{name}: bool is not a number")',
      "    # bool guard gone",
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_T9_one_public_exact_number_predicate"),
 
     (102, "T10: the dead member_refs emission grows back",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '        "id": fact_id, "fact_scope": fact_scope,',
      '        "id": fact_id, "fact_scope": fact_scope,\n        "member_refs": it.member_refs,',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_T10_the_clean_path_emits_no_member_refs"),
 
     (103, "SLICE-GRAMMAR D1: member_token regrows a local KIND:VALUE f-string",
-     "driver/core/driver_member_fold.py",
+     "driver_reference/core/driver_member_fold.py",
      "    return slice_token(kind, member_label)   # D1: the owner's ONE spelling",
      '    value = norm(member_label)\n    return f"{kind}:{value}"',
-     "driver/core/test_driver_ids.py::"
+     "driver_reference/core/test_driver_ids.py::"
      "test_SLICE_GRAMMAR_one_owner_for_token_and_reader"),
 
     (104, "SLICE-GRAMMAR D2: slice_menu regrows a local scope reader",
-     "driver/core/slice_menu.py",
-     "from driver.core.driver_ids import slice_tokens_from_scope  # noqa: F401",
+     "driver_reference/core/slice_menu.py",
+     "from driver_reference.core.driver_ids import slice_tokens_from_scope  # noqa: F401",
      "def slice_tokens_from_scope(fact_scope):\n"
      "    for slot in (fact_scope or \"\").split(\"|\"):\n"
      "        if slot.startswith(\"slice=\"):\n"
      "            return set(slot[len(\"slice=\"):].split(\";\"))\n"
      "    return set()",
-     "driver/core/test_driver_ids.py::"
+     "driver_reference/core/test_driver_ids.py::"
      "test_SLICE_GRAMMAR_one_owner_for_token_and_reader"),
 
     (105, "XMLNAME-MIN: the unused prefix slot grows back",
-     "driver/xml_names.py",
+     "driver_reference/xml_names.py",
      "    return local",
      "    return (prefix, local)",
-     "driver/core/test_graph_qname_shape.py::"
+     "driver_reference/core/test_graph_qname_shape.py::"
      "test_a_LAWFUL_graph_qname_splits[ex:Revenue-Revenue-prefixed \\u2014 the alias is dropped, not returned]"),
 
     (106, "EU-039: the parse security policy silently expands hidden content",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_PARSER_OPTIONS = dict(recover=False, resolve_entities=False, load_dtd=False,",
      "_PARSER_OPTIONS = dict(recover=False, resolve_entities=True, load_dtd=True,",
-     "driver/relocation/test_parser_encoding_ownership.py::"
+     "driver_reference/relocation/test_parser_encoding_ownership.py::"
      "test_EU039_the_parser_policy_never_expands_hidden_content"),
 
     (107, "EU-070: the template prune is mistargeted",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if name == 'template':",
      "    if name == 'templatex':",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU070_template_contents_are_never_rendered"),
 
     (108, "EU-071: content-visibility:hidden stops pruning",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    prune = (st['display'] == 'none' or st['cv'] == 'hidden'",
      "    prune = (st['display'] == 'none' or st['cv'] == 'hiddenx'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU071_content_visibility_hidden_prunes"),
 
     (109, "EU-072: the element-name API token is misspelled",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    name = (getattr(el, 'name', '') or '').lower()",
      "    name = (getattr(el, 'nome', '') or '').lower()",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU072_ua_hidden_elements_stay_hidden_by_the_named_api"),
 
     (110, "EU-078: the Clark universal-name template drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return '{%s}%s' % (uri, local)",
      "    return '{%s}-%s' % (uri, local)",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds[ix]"),
 
     (111, "EU-121: the nsmap API token is misspelled",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if not isinstance(value, str) or not hasattr(el, 'nsmap'):",
      "    if not isinstance(value, str) or not hasattr(el, 'nsmapx'):",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds[ix]"),
 
     (112, "EU-122: the QName separator drifts off the REC grammar",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    prefix, sep, local = value.partition(':')",
      "    prefix, sep, local = value.partition('.')",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds[ix]"),
 
     (113, "EU-122: an empty prefix stops refusing",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if sep and not prefix:\n        return None",
      "    if False:\n        return None",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_the_reserved_xml_prefix_resolves_without_being_declared"),
 
     (114, "EU-122: the reserved xml binding is mistargeted",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        uri = el.nsmap.get(prefix) or (_XML_PREFIX_NS if prefix == 'xml'",
      "        uri = el.nsmap.get(prefix) or (_XML_PREFIX_NS if prefix == 'xmlx'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_the_reserved_xml_prefix_resolves_without_being_declared"),
 
     (115, "EU-131: foreign renderer-parse warnings go silent again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        warnings.simplefilter('error')\n        warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)",
      "        warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)",
-     "driver/relocation/test_parser_encoding_ownership.py::"
+     "driver_reference/relocation/test_parser_encoding_ownership.py::"
      "test_EU131_a_foreign_renderer_parse_warning_refuses_typed"),
 
     (116, "EU-132: the renderer view swaps tree builders",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): the renderer view no longer names a
      # builder string; production has ONE BeautifulSoup call and it passes the
      # preserving builder. Checked against M332, which anchors the same line:
@@ -1077,59 +1077,59 @@ MUTATIONS = [
      # proof twice.
      "            return BeautifulSoup(html_text, builder=_preserving_builder())",
      "            return BeautifulSoup(html_text, 'html.parser')",
-     "driver/relocation/test_parser_encoding_ownership.py::"
+     "driver_reference/relocation/test_parser_encoding_ownership.py::"
      "test_EU132_the_renderer_view_is_built_by_the_pinned_lxml_builder"),
 
     (117, "EU-137: 'display' drops out of the style-state vocabulary",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # The vocabulary gained 'white-space' and wrapped across two lines.
      "        if nm not in ('display', 'visibility', 'content-visibility', 'all',\n"
      "                      'white-space'):",
      "        if nm not in ('visibility', 'content-visibility', 'all'):",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_lawful_document_is_NOT_refused"),
 
     (118, "EU-138: the important-ordering key flips",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        key = (bool(d.important), i)",
      "        key = (not d.important, i)",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU138_an_important_earlier_winner_beats_a_later_plain_value"),
 
     (119, "EU-139: hidden=until-found stops refusing",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            and hv.lower() == 'until-found':",
      "            and hv.lower() == 'until-foundx':",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU139_hidden_until_found_refuses_as_unsupported"),
 
     (120, "EU-140: the empty style default silently styles",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # first draft used str(None) -> 'None', observationally EQUIVALENT (no
      # declarations either way) and lawfully uncaught; the real attack is a
      # NON-empty default, which must redden any visible-text node.
      "            tinycss2.parse_declaration_list(str(el.get('style') or ''))):",
      "            tinycss2.parse_declaration_list(str(el.get('style') or 'display:none'))):",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_lawful_document_is_NOT_refused"),
 
     (121, "EU-141: the all shorthand goes dead",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if nm == 'all':",
      "        if nm == 'allx':",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU141_the_all_shorthand_resets_an_earlier_display_none"),
 
     (122, "EU-142: the declaration node-type token drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if getattr(d, 'type', None) != 'declaration' or d.name.startswith('--'):",
      "        if getattr(d, 'type', None) != 'declarationx' or d.name.startswith('--'):",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_lawful_document_is_NOT_refused"),
 
     (123, "GRADE-DOMAIN/W9c: the item key-set widens to admit source-owned",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      # original anchors (the SOURCE-OWNED precheck raise) were DELETED by W9c
      # (proof-by-construction); the surviving boundary is the derived
      # ITEM_FIELDS exclusion, so the mutant re-admits the pair there.
@@ -1137,86 +1137,86 @@ MUTATIONS = [
      '                    if k not in SOURCE_OWNED_FIELDS and not k.startswith("_"))',
      'ITEM_FIELDS = tuple(k for k in PreparedItemV2.__dataclass_fields__\n'
      '                    if not k.startswith("_"))',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_GRADE_DOMAIN_source_owned_evidence_cannot_alter_selection"),
 
     (124, "W1: the polarity basis enum stops refusing",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '        if proof["basis"] not in ("source_framing", "metric_meaning"):',
      '        if False:',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_W1_an_invented_polarity_basis_is_refused"),
 
     (125, "W2: the retired-name special case grows back",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '        _check_keys(raw, ITEM_FIELDS,',
      '        if "level_unit_raw" in raw:\n'
      '            raise SchemaError("retired v1 field(s) — this payload predates v2")\n'
      '        _check_keys(raw, ITEM_FIELDS,',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_W2_a_retired_key_refuses_at_the_exact_key_owner"),
 
     (126, "W3: the deferral escape hatch grows back",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      "# W3 (#827): the deferral mechanism is DELETED — no deferred helper",
      'DEFERRED_HELPERS = ()\n# W3 (#827): the deferral mechanism is DELETED — no deferred helper',
-     "driver/core/test_round9_corrections.py::"
+     "driver_reference/core/test_round9_corrections.py::"
      "test_no_contract_helper_is_left_unreachable_from_production"),
 
     (127, "W4: a second 64-hex regex grows back in pf2",
-     "driver/core/prepared_fact_v2.py",
-     "    from driver.core.driver_ids import sha256_hex_ok   # W4: the ONE owner\n    if not sha256_hex_ok(value):",
+     "driver_reference/core/prepared_fact_v2.py",
+     "    from driver_reference.core.driver_ids import sha256_hex_ok   # W4: the ONE owner\n    if not sha256_hex_ok(value):",
      '    import re as _re\n    if not isinstance(value, str) or not _re.fullmatch(r"[0-9a-f]{64}", value):',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_W4_the_representation_sha_grammar_has_one_owner"),
 
     (128, "W16: the xbrl_backed switch flips its default",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "def validate_slot(slot_name, slot, *, stated_unit, quote, xbrl_backed=False):",
      "def validate_slot(slot_name, slot, *, stated_unit, quote, xbrl_backed=True):",
      # first detector (G5 structure) ran BEFORE the switch and lawfully missed
      # the flip; the honest detector is a node that RELIES on the default
      # applying the TEXT evidence law.
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_G6_evidence_must_sit_inside_the_quote"),
 
     (129, "W15: a removed name sneaks back into the export surface",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '__all__ = ["SchemaError", "ProductionValidationError", "SourceUnavailable",',
      '__all__ = ["SchemaError", "ProductionValidationError", "SourceUnavailable", "PreparedItemV2",',
-     "driver/core/test_round10_event_boundary.py::"
+     "driver_reference/core/test_round10_event_boundary.py::"
      "test_W15_the_declared_export_surface_is_exactly_the_retained_set"),
 
     (130, "W9: a second production constructor site appears",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      '            fact = PreparedFactV2._build(i["fact"], {   # the fact schema law\n'
      '                "xbrl_concept_raw": concept, "member_refs": i["member_refs"]})',
-     '            from driver.core.prepared_fact_v2 import PreparedItemV2 as _It\n'
+     '            from driver_reference.core.prepared_fact_v2 import PreparedItemV2 as _It\n'
      '            _It(**{})  # MUTANT: a second aliased constructor site\n'
      '            fact = PreparedFactV2._build(i["fact"], {   # the fact schema law\n'
      '                "xbrl_concept_raw": concept, "member_refs": i["member_refs"]})',
-     "driver/core/test_v2_attacks.py::"
+     "driver_reference/core/test_v2_attacks.py::"
      "test_W9_the_verified_bundle_boundary_is_static_and_singular"),
 
     (131, "W6: a surplus stored key sneaks into the emission",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '        "id": fact_id, "fact_scope": fact_scope,',
      '        "id": fact_id, "fact_scope": fact_scope, "rogue_key": None,',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_W6_every_emitted_stored_key_traces_to_a_named_owner"),
 
     (132, "W7: the instant start-exclusion law goes quiet",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '        if self.time_type == "instant" and self.period_start_date is not None:',
      '        if False:',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_W7_an_instant_bundle_carries_ONLY_its_end_date[instant_with_start]"),
 
     (133, "W11: the owner's closed polarity pair stops refusing",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '        if proof["polarity"] not in ("favorable", "unfavorable"):',
      '        if False:',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_W11_an_invented_polarity_token_is_refused"),
 
     # 134 REPLACED (SEQ 805): its target — the NON_RETRYABLE blacklist
@@ -1225,99 +1225,99 @@ MUTATIONS = [
     # generic OSError, and the unknown path-shape subclass catches it for
     # exactly the reopened reason (it would silently park again).
     (134, "F2 corrected: the positive transient set widens back to OSError",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "RETRYABLE_SOURCE_ERRORS = (ConnectionError, TimeoutError, InterruptedError)",
      "RETRYABLE_SOURCE_ERRORS = (OSError,)",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F2_only_genuinely_transient_provider_errors_park[is-a-directory-fails-loud]"),
 
     (135, "F3: the unreadable document goes back to fact-blame rejection",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "        if refused(prepared_doc):\n            raise SourceUnavailable(",
      "        if refused(prepared_doc):\n            raise SchemaError(",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F3_an_unreadable_served_document_parks_with_document_blame"),
 
     (136, "F5: the adapter's stored-null alias translation is neutered",
-     "driver/core/driver_neo4j_adapter.py",
+     "driver_reference/core/driver_neo4j_adapter.py",
      '                            "end_date": (None if r["end_date"] == "null"\n'
      '                                         else r["end_date"]), "dims": dims,',
      '                            "end_date": r["end_date"], "dims": dims,',
-     "driver/core/test_dimension_expanded_identity.py::"
+     "driver_reference/core/test_dimension_expanded_identity.py::"
      "test_the_ADAPTER_owns_the_stored_null_alias_and_emits_None"),
 
     (137, "F9: the attach alias drifts back to a private restatement",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "_PERIOD_TYPES = PERIOD_TIME_TYPES",
      '_PERIOD_TYPES = ("duration", "instant")',
-     "driver/core/test_driver_period_resolver.py::"
+     "driver_reference/core/test_driver_period_resolver.py::"
      "test_F9_the_period_kind_vocabulary_has_ONE_owner"),
 
     (138, "F8: the concept QName contract gate is neutered",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "            if graph_qname_parts(concept) is None:\n                raise SchemaError(",
      "            if False:\n                raise SchemaError(",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F8_a_malformed_concept_QName_is_refused_as_contract_input[a:b:c]"),
 
     (139, "F7: the adapter's emission drifts from the interface statement",
-     "driver/core/driver_neo4j_adapter.py",
+     "driver_reference/core/driver_neo4j_adapter.py",
      '                            "value": r.get("value"),',
      '                            "value": r.get("value"),\n                            "decimals": r.get("decimals"),',
-     "driver/core/test_dimension_expanded_identity.py::"
+     "driver_reference/core/test_dimension_expanded_identity.py::"
      "test_F7_the_adapter_and_consumer_share_ONE_interface_statement"),
 
     (140, "F11: the empty-set park regresses to a channel rejection",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "    if not lawful:\n        raise ProductionValidationError(",
      "    if False:\n        raise ProductionValidationError(",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F11_an_EMPTY_candidate_set_parks_as_route_limitation"),
 
     (141, "F12: the owner's level-pair requirement is neutered",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '            if name in (\"level_low\", \"level_high\"):\n                if slot_v is None:',
      '            if name in (\"level_low\", \"level_high\"):\n                if False:',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_F12_the_OWNER_requires_the_level_pair_on_an_xbrl_backed_fact"),
 
     (142, "F12: the owner's null-evidence rule on the xbrl lane is neutered",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "        if ev is not None:\n            raise SlotConversionError(",
      "        if False:\n            raise SlotConversionError(",
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_F12_the_OWNER_refuses_scale_evidence_on_an_xbrl_backed_slot"),
 
     (143, "F13: the company precheck falls back to the sloppy str test",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "        if graph_cik(entity_cik) is None:",
      '        if not str(entity_cik or \"\").strip():',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F13_a_non_canonical_graph_company_parks_at_the_PRECHECK[int]"),
 
     (144, "F13: the all-excluded read collapses back into carries-NO-fact",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "                if read.exclusions:",
      "                if False:",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F13_an_all_excluded_read_states_the_TRUTHFUL_availability"),
 
     (145, "F10: the one-representation graph guard is neutered",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "        if type(count) is not int or count != 1:",
      "        if False:",
-     "driver/core/test_round10_event_boundary.py::"
+     "driver_reference/core/test_round10_event_boundary.py::"
      "test_more_than_one_xbrl_representation_PARKS"),
 
     (146, "F14: SchemaError's authorized decision flips to parked",
-     "driver/core/prepared_fact_v2.py",
+     "driver_reference/core/prepared_fact_v2.py",
      '    return {SchemaError: "rejected",',
      '    return {SchemaError: "parked",',
-     "driver/core/test_round11_outcomes.py::"
+     "driver_reference/core/test_round11_outcomes.py::"
      "test_F14_the_authorized_class_outcome_table_at_its_owner"),
 
     (147, "F14: SchemaError's authorized default code drifts",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current owner — the
      # authorized code now passes through require_known().
      '(SchemaError, require_known("XBRL_CONTRACT_INVALID")),',
@@ -1325,70 +1325,70 @@ MUTATIONS = [
      # unknown code at IMPORT, so the old mutant failed by collection error, not
      # by the rule. It now drifts to a KNOWN but WRONG code — the real hazard.
      '(SchemaError, require_known("XBRL_BINDING_UNAVAILABLE")),',
-     "driver/core/test_round11_outcomes.py::"
+     "driver_reference/core/test_round11_outcomes.py::"
      "test_F14_the_authorized_class_outcome_table_at_its_owner"),
 
     (148, "F14: the event-wide fan-out reaches only the first item",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "        for idx, _f, _c, _e in checked:\n            outcomes.append(_outcome_row(idx, exc, code=code))",
      "        for idx, _f, _c, _e in checked[:1]:\n            outcomes.append(_outcome_row(idx, exc, code=code))",
-     "driver/core/test_round10_event_boundary.py::"
+     "driver_reference/core/test_round10_event_boundary.py::"
      "test_F14_an_event_wide_failure_reaches_EVERY_item"),
 
     (149, "F14: concept-local failures stop routing to their claimants",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "        exc = concept_failure.get(concept)",
      "        exc = None",
-     "driver/core/test_round10_event_boundary.py::"
+     "driver_reference/core/test_round10_event_boundary.py::"
      "test_the_guard_asks_the_GRAPH_not_only_the_channels_hashes"),
 
     (150, "F4: a published token escapes the T1 mint gate",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      '        return _fan_out(exc, code=require_known(\"SOURCE_COMPANY_AMBIGUOUS\"))',
      '        return _fan_out(exc, code=\"SOURCE_COMPANY_AMBIGUOUS\")',
-     "driver/core/test_round11_outcomes.py::"
+     "driver_reference/core/test_round11_outcomes.py::"
      "test_F4_every_attach_token_is_minted_through_the_T1_owner"),
 
     (151, "F6: the item gate's unlisted-vocabulary park is neutered",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "                if type(i) is dict and set(_EVENT_ITEM_KEYS) <= set(i):",
      "                if False:",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F6_an_UNLISTED_item_field_parks_and_a_missing_one_rejects"),
 
     (152, "F6: the evidence gate's unlisted-vocabulary park is neutered",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "        if type(value) is dict and set(SOURCE_EVIDENCE_KEYS) <= set(value):",
      "        if False:",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F6_an_UNLISTED_evidence_field_parks_never_rejects"),
 
     (153, "F6: the piece gate's unlisted-vocabulary park is neutered",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "            if type(piece) is dict and set(PIECE_KEYS) <= set(piece):",
      "            if False:",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F6_an_UNLISTED_piece_field_parks_and_a_missing_one_rejects"),
 
     (154, "F6: the unlisted piece kind regresses to a rejection",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "        if piece[\"kind\"] not in PIECE_KINDS:\n            raise ProductionValidationError(           # F6: unlisted -> park",
      "        if piece[\"kind\"] not in PIECE_KINDS:\n            raise SchemaError(",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F6_an_UNKNOWN_piece_kind_parks_never_rejects"),
 
     (155, "S2: the slot guard renders the caller's keys again",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      '        raise SlotConversionError(f"slot carries exactly {SLOT_KEYS}")',
      '        raise SlotConversionError(f"slot carries exactly {SLOT_KEYS}; got {sorted(slot)}")',
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_S2_a_mixed_key_slot_is_refused_without_rendering_caller_keys"),
 
     (156, "S8: a fixed precision cap replaces the operand-derived bound",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "            ctx.prec = need",
      "            ctx.prec = 60",
-     "driver/core/test_v2_attacks.py::"
+     "driver_reference/core/test_v2_attacks.py::"
      "test_ATTACK_a_65_digit_value_is_not_rounded"),
 
     # 157's first draft neutered the FLOAT branch — NOT CAUGHT rc=0: the
@@ -1397,107 +1397,107 @@ MUTATIONS = [
     # (the entry-120 precedent) with the LOAD-BEARING bool guard, whose
     # removal silently ACCEPTS True as the number 1.
     (157, "S9: the load-bearing bool guard at the shared numeric core is neutered",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "    if isinstance(v, bool):\n        raise SlotConversionError(",
      "    if False:\n        raise SlotConversionError(",
-     "driver/core/test_prepared_fact_v2.py::"
+     "driver_reference/core/test_prepared_fact_v2.py::"
      "test_S9_slot_numeric_types_at_the_public_door[value-bool]"),
 
     (158, "S7: the owner bound drifts one character NARROW (4095)",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "_MAX_STORED_CHARS = 4096",
      "_MAX_STORED_CHARS = 4095",
-     "driver/core/test_round12_exact_scale.py::"
+     "driver_reference/core/test_round12_exact_scale.py::"
      "test_the_storable_bound_matches_the_owner_contract"),
 
     (159, "S7: the owner bound drifts one character WIDE (4097)",
-     "driver/core/slot_convert.py",
+     "driver_reference/core/slot_convert.py",
      "_MAX_STORED_CHARS = 4096",
      "_MAX_STORED_CHARS = 4097",
-     "driver/core/test_round12_exact_scale.py::"
+     "driver_reference/core/test_round12_exact_scale.py::"
      "test_the_storable_bound_matches_the_owner_contract"),
 
     (160, "S11: the canonicalizer stops stripping trailing zeros",
-     "driver/core/driver_ids.py",
+     "driver_reference/core/driver_ids.py",
      '    if "." in out:\n        out = out.rstrip("0").rstrip(".")',
      '    if False:\n        out = out.rstrip("0").rstrip(".")',
-     "driver/core/test_v2_attacks.py::"
+     "driver_reference/core/test_v2_attacks.py::"
      "test_ATTACK_the_canonical_length_matches_the_real_canonicalizer"),
 
     (161, "EU-054: a Core-facing evidence key spelling drifts off the sheet",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "SOURCE_EVIDENCE_KEYS = ('representation_sha256', 'quote_span',\n                        'raw_label_span', 'pieces')",
      "SOURCE_EVIDENCE_KEYS = ('representation_sha256', 'quote_span',\n                        'raw_label_span', 'piecez')",
-     "driver/relocation/test_packet_items_through_the_door.py::"
+     "driver_reference/relocation/test_packet_items_through_the_door.py::"
      "test_EU054_the_core_facing_evidence_vocabulary_is_the_sheets"),
 
     (162, "EU-160: the binder's four-key result contract drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            'printed_value': printed_value(evidence.get('value_input'),",
      "            'printed_valu': printed_value(evidence.get('value_input'),",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_the_expected_numeric_object_is_returned_for_field_wise_binding"),
 
     (163, "EU-180: a prepared-record key spelling drifts at the writer",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                'fact_nodes': fact_nodes,",
      "                'fact_nodez': fact_nodes,",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_prior_row_carrying_an_ALTERNATE_PREFIX_fact_is_not_taken_as_a_section"),
 
     (164, "EU-185: the refusal-record reader's spelling drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return prepared.get('refused') if isinstance(prepared, dict) else None",
      "    return prepared.get('refuzed') if isinstance(prepared, dict) else None",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F3_an_unreadable_served_document_parks_with_document_blame"),
 
     (165, "EU-187: the evidence writer's result key drifts off the sheet",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            'quote_span': [span[0], span[1]],",
      "            'quote_spam': [span[0], span[1]],",
-     "driver/relocation/test_evidence_writer_contract.py::"
+     "driver_reference/relocation/test_evidence_writer_contract.py::"
      "test_EU187_the_evidence_writer_emits_exactly_the_sheets_four_keys"),
     (166, "EU-001: a canonical key drifts out of the Route-A compat table",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    'usd':   frozenset({'usd', 'usd_per_share'}),",
      "    'us_d':   frozenset({'usd', 'usd_per_share'}),",
-     "driver/relocation/test_unit_handoff_census.py::"
+     "driver_reference/relocation/test_unit_handoff_census.py::"
      "test_EU001_the_route_a_unit_maps_are_pinned_and_C1_membered"),
 
     (167, "EU-033: the divide branch key drifts and every per-share abstains",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    if declared.get('is_divide'):",
      "    if declared.get('is_divid'):",
-     "driver/relocation/test_unit_handoff_census.py::"
+     "driver_reference/relocation/test_unit_handoff_census.py::"
      "test_EU033_the_semantic_reader_is_fail_closed_on_its_branch_keys"),
 
     (168, "EU-007: a graph boolean spelling drifts off the boundary clause",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "ROUTE_A_BOOLS = {'0': False, '1': True}",
      "ROUTE_A_BOOLS = {'O': False, '1': True}",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause"),
 
     (169, "EU-011: the date separator mechanics drift off the clause",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      '        return date(*(int(part) for part in d.split("-")))',
      '        return date(*(int(part) for part in d.split("/")))',
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause"),
 
     (170, "EU-018: the exclusive-end +1 day is dropped",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      '        return (b.moment.date() + timedelta(days=1)).isoformat()',
      '        return (b.moment.date() + timedelta(days=0)).isoformat()',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_a_usd_fact_reports_usd"),
 
     (171, "EU-019: the ordered-duration exclusive-end math drops its +1",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      '        end_instant = (b.moment + timedelta(days=1) if b.kind == \"date\"',
      '        end_instant = (b.moment + timedelta(days=0) if b.kind == \"date\"',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_a_ONE_DAY_duration_with_equal_date_only_boundaries_is_LAWFUL[2025-03-31-2025-03-31]"),
 
     # 172 RE-REGISTERED per SEQ 811 (the first draft's '/'-join was
@@ -1505,187 +1505,187 @@ MUTATIONS = [
     # inserts nothing). This mutant changes the BETWEEN-BLOCKS join, which
     # every divide name exercises.
     (172, "EU-020: a separator appears between the divide name's two blocks",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "        return ''.join(numerator) + ''.join(denominator)",
      "        return ''.join(numerator) + '_' + ''.join(denominator)",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU020_the_graph_unit_join_spelling_is_the_clauses"),
 
     (174, "EU-029: the following-midnight representability pre-check is skipped",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "            try:\n                moment.date() + _td(days=1)\n            except OverflowError:",
      "            try:\n                moment.date() + _td(days=0)\n            except OverflowError:",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_the_CALENDAR_EDGE_parks_and_never_crashes[9999-12-31-None]"),
 
     (175, "EU-031: the XBRL period-ordering rule is switched off",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      '    if e < s:\n        raise ExactError(f"period ends before it starts: {start!r}..{end!r}")',
      '    if False:\n        raise ExactError(f"period ends before it starts: {start!r}..{end!r}")',
-     "driver/relocation/test_route_a.py::"
+     "driver_reference/relocation/test_route_a.py::"
      "test_827_a_BACKWARDS_duration_never_binds_through_the_public_door"),
 
     (176, "EU-032: plain() stops stripping to the canonical form",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    out = format(dec(value), 'f')\n    if '.' in out:",
      "    out = format(dec(value), 'f')\n    if False:",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU032_plain_is_the_one_canonical_decimal_form"),
 
     (177, "EU-034: the one exclusive-end implementation drops its +1",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "        return (_iso_date(iso) + timedelta(days=1)).isoformat()",
      "        return (_iso_date(iso) + timedelta(days=0)).isoformat()",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_the_exclusive_date_rule_has_exactly_one_implementation"),
 
     (178, "EU-100: the namespace-decided prefix drop is switched off",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return (resolved[1]\n            if resolved is not None\n            and resolved[0] == XBRL_INSTANCE_NAMESPACE else raw)",
      "    return (resolved[1]\n            if False\n            and resolved[0] == XBRL_INSTANCE_NAMESPACE else raw)",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_a_shares_fact_binds_although_the_filing_writes_xbrli_shares"),
 
     (179, "EU-126: the identity anchor's surrogate handling drifts to replace",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return hashlib.sha256(html_text.encode('utf-8', 'surrogatepass')).hexdigest()",
      "    return hashlib.sha256(html_text.encode('utf-8', 'replace')).hexdigest()",
-     "driver/relocation/test_parser_encoding_ownership.py::"
+     "driver_reference/relocation/test_parser_encoding_ownership.py::"
      "test_EU126_the_identity_anchor_encodes_lone_surrogates_by_the_clause"),
 
     (180, "EU-014: the binder-side float rejection is neutered",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      '    if isinstance(value, bool) or isinstance(value, float):\n        raise ExactError(f"floats are rejected (lossy): {value!r}")',
      '    if False:\n        raise ExactError(f"floats are rejected (lossy): {value!r}")',
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_dec_rejects_floats"),
 
     (181, "EU-015: the real-int exponent gate is switched off",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    if type(exponent) is not int:\n        raise ExactError(",
      "    if False:\n        raise ExactError(",
-     "driver/core/test_round12_exact_scale.py::"
+     "driver_reference/core/test_round12_exact_scale.py::"
      "test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[True]"),
 
     (182, "EU-030: the dateUnion lexical gate is switched off",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      '    if not (m_dt or m_d):\n        raise ExactError(f"not a lawful xs:date or xs:dateTime: {raw!r}")',
      '    if False:\n        raise ExactError(f"not a lawful xs:date or xs:dateTime: {raw!r}")',
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_filing_boundary_REFUSES_every_malformed_form[2023-6-30]"),
 
     (183, "EU-052/053: a binder abstention-token spelling drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "MALFORMED_FORMAT = 'malformed_format'",
      "MALFORMED_FORMAT = 'malformed_formatX'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_an_optional_attribute_is_absent_or_lawful_and_a_required_one_resolves[format present and empty]"),
 
     (184, "EU-097: the undefined-context refusal token drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "'undefined_context'",
      "'undefined_contextX'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ATTACK_a_context_or_unit_OUTSIDE_ix_resources_cannot_be_referenced[<body>-loose in the body, in no container at all]"),
 
     (185, "EU-134: the unsupported-style branch stops recognising its tag",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if tag == 'unsupported':",
      "        if tag == 'unsupportedX':",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_force_hidden_is_UNSUPPORTED_never_a_fallback"),
 
     (186, "EU-159: the malformed-is_divide token spelling drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "'malformed_is_divide'",
      "'malformed_is_divideX'",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_a_malformed_is_divide_flag_is_malformed_not_a_crash"),
 
     (187, "EU-164: the malformed-id token spelling drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        return None, 'malformed_id'",
      "        return None, 'malformed_idX'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_an_UNLAWFUL_xml_id_is_still_refused[1abc]"),
 
     (188, "EU-179: the duplicate-unit poison token drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "'duplicate_unit_id'",
      "'duplicate_unit_idX'",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_a_duplicated_unit_id_is_poisoned_not_last_wins"),
 
     (189, "EU-151: the blank-namespace gate weakens to type-only",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if not isinstance(concept_namespace, str) or not concept_namespace.strip():",
      "    if not isinstance(concept_namespace, str):",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_EU151_a_blank_concept_namespace_refuses_at_the_one_owner"),
 
     (190, "EU-153: the periodType vocabulary gate drifts a member",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if period_type not in ('instant', 'duration'):",
      "    if period_type not in ('instant', 'durationX'):",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_exactness_holds_through_the_whole_binding"),
 
     (191, "EU-154: the concept-equality arm of the binding ladder goes vacuous",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if evidence.get('name_expanded') != target:",
      "    if evidence.get('name_expanded') != target and False:",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_a_mismatched_identity_component_abstains"),
 
     (192, "EU-161: the prepared-document 'elements' spelling drifts at the consumer",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    el = prepared['elements'].get(element_id)",
      "    el = prepared['element'].get(element_id)",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_exactness_holds_through_the_whole_binding"),
 
     (193, "EU-162: the exactly-one id bound tolerates one duplicate",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if count > 1:",
      "    if count > 2:",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_a_duplicate_id_abstains_and_is_never_rescued"),
 
     (194, "EU-171: the no-unit identity normalization drifts in the candidate pool",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            if _qname(_typed(f.sem, 'name'), f.sem) == target\n"
      "            and (_typed(f.sem, 'unitRef') or '') == unit_ref]",
      "            if _qname(_typed(f.sem, 'name'), f.sem) == target\n"
      "            and (_typed(f.sem, 'unitRef') or 'X') == unit_ref]",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_EU171_an_absent_unitRef_is_the_no_unit_identity_in_the_pool"),
 
     (195, "EU-172: a refused stored qname flows on as an empty local name",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if local is None:\n        return None\n    return (concept_namespace, local)",
      "    if local is None:\n        local = ''\n    return (concept_namespace, local)",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_EU172_a_malformed_graph_qname_refuses_as_its_own_missing_identity"),
 
     (196, "EU-173: the exactly-one fallback bound tolerates an ambiguous pair",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if len(hits) > 1:\n        return None, 'ambiguous_identity'",
      "    if len(hits) > 2:\n        return None, 'ambiguous_identity'",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_827R8b_JOIN_two_prefixes_resolving_to_ONE_identity_are_AMBIGUOUS"),
 
     (197, "EU-174: disagreeing concept records pick one instead of parking",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if len(targets) != 1:\n        return None                      # none usable, or they disagree\n    return targets.pop()",
      "    if len(targets) < 1:\n        return None                      # none usable, or they disagree\n    return sorted(targets, key=repr)[0]",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_EU174_disagreeing_concept_records_park_never_pick"),
 
     (198, "EU-184: an unparseable graph raw claims reconciliation",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    raw = parse_raw(raw_value)\n    if raw is None:\n        return False",
      "    raw = parse_raw(raw_value)\n    if raw is None:\n        return True",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      # DETECTOR RENAMED (#827 GRAPH-DECIMAL): this row renamed the test when
      # "writer-alien" stopped being the authority; the mutation still named the
      # old id, so pytest exited 4 (no such test) and the escape was invisible to
@@ -1693,309 +1693,309 @@ MUTATIONS = [
      "test_827R6_the_DOOR_refuses_an_UNREADABLE_raw_as_non_reconciling"),
 
     (199, "EU-002: the optional timezone term becomes required",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "_DATE_RE = __import__(\"re\").compile(rf\"{_YEAR}{_MD}({_TZ})?\")",
      "_DATE_RE = __import__(\"re\").compile(rf\"{_YEAR}{_MD}({_TZ})\")",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU002_the_timezone_term_is_optional_exactly_as_the_datatype_says"),
 
     (200, "EU-003: the lexical day window widens past the spec",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "_MD = r\"-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])\"",
      "_MD = r\"-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[0-9])\"",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space"),
 
     (201, "EU-004: the timezone window admits +14:01",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "_TZ = r\"(?:Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00))\"",
      "_TZ = r\"(?:Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:0[01]))\"",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU002_the_timezone_term_is_optional_exactly_as_the_datatype_says"),
 
     (202, "EU-005: the XML whitespace owner swallows U+000B",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "XML_WS = \" \\t\\r\\n\"",
      "XML_WS = \" \\t\\r\\n\\x0b\"",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space"),
 
     (203, "EU-006: the leap-second admission is deleted and :60 refuses instead of parking",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "_TIME = r\"(?:[01][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9]|60)(?:\\.[0-9]+)?\"",
      "_TIME = r\"(?:[01][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9])(?:\\.[0-9]+)?\"",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space"),
 
     (204, "EU-010: the leap rule degrades to Julian",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "        leap = year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)",
      "        leap = year % 4 == 0",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU010_the_leap_rule_is_gregorian_not_julian"),
 
     (205, "EU-013: every mixed-timezone pair regresses to indeterminate",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "        if left < earliest:\n            return True\n        if left > latest:\n            return False\n        return None",
      "        return None",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU013_mixed_timezone_ordering_is_the_specs_window_not_a_guess"),
 
     (206, "EU-017: the date-kind branch spelling drifts and the +1 day vanishes",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    if b.kind == \"date\":\n        return (b.moment.date() + timedelta(days=1)).isoformat()",
      "    if b.kind == \"dateX\":\n        return (b.moment.date() + timedelta(days=1)).isoformat()",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
 
     (207, "EU-021: the kind enum's date arm drifts at birth",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    kind = \"dateTime\" if m_dt else \"date\"",
      "    kind = \"dateTime\" if m_dt else \"dateX\"",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
 
 
     (208, "EU-023: the representable-year digit bound widens to five",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    representable = not negative and len(year_digits) <= 4",
      "    representable = not negative and len(year_digits) <= 5",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL018_representability_parks_and_never_wraps_or_truncates"),
 
     (209, "EU-024: the sub-microsecond sentinel starts at the eighth digit",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "            sub_micro = any(d != \"0\" for d in frac_digits[6:])",
      "            sub_micro = any(d != \"0\" for d in frac_digits[7:])",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL018_representability_parks_and_never_wraps_or_truncates"),
 
     (210, "EU-025: the dateTime split separator drifts to lowercase",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    d_part, _, t_part = body.partition(\"T\")",
      "    d_part, _, t_part = body.partition(\"t\")",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
 
     (211, "EU-026: the year-zero prohibition goes vacuous",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "    if not any(d != \"0\" for d in year_digits):",
      "    if False and not any(d != \"0\" for d in year_digits):",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL018_representability_parks_and_never_wraps_or_truncates"),
 
     (212, "EU-027: the negative offset sign is read as positive",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "                      (1 if tz_text[0] == \"+\" else -1)",
      "                      (1)",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL018_representability_parks_and_never_wraps_or_truncates"),
 
     (213, "EU-028: the leap-second park gate looks for 61 and midnight-adjacent :60 binds the next day",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "        if seconds == 60:",
      "        if seconds == 61:",
-     "driver/relocation/test_exact_numbers.py::"
+     "driver_reference/relocation/test_exact_numbers.py::"
      "test_CL018_representability_parks_and_never_wraps_or_truncates"),
 
     (214, "EU-040: th stops being a cell and header-labeled rows lose evidence",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_CELL_TAGS = ['td', 'th']",
      "_CELL_TAGS = ['td']",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says"),
 
     (215, "EU-041: div leaves the block-ownership set and prose evidence shrinks to the inline wrapper",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_BLOCK_TAGS = ['p', 'li', 'div']",
      "_BLOCK_TAGS = ['p', 'li']",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU041_a_div_owns_its_prose_evidence_block"),
 
     (216, "EU-073: the leading-marker scan starts past the first character",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    i = 0\n    while i < len(text) and _is_edge_marker(text[i]):\n        i += 1\n    return text[i:]",
      "    i = 1\n    while i < len(text) and _is_edge_marker(text[i]):\n        i += 1\n    return text[i:]",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_a_BARE_parenthetical_is_still_not_selected"),
 
     (217, "EU-077: geometry overrides the explicit header relation again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return any(id(t) in fact_nodes and t.find_parent('th') is None\n               for t in row.find_all(True))",
      "    return any(id(t) in fact_nodes for t in row.find_all(True))",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU077_a_tagged_th_header_row_still_supplies_the_column_header"),
 
     (218, "EU-092: the in_table birth default is deleted from the evidence record",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        'in_table': False,\n        'row_span': None,",
      "        'row_span': None,",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_a_HIDDEN_fact_still_has_NO_visible_evidence"),
 
     (219, "EU-093: the row-label pick drifts from first-left to nearest-left",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                    _visible_slice(left[0], prepared)",
      "                    _visible_slice(left[-1], prepared)",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
 
     (220, "EU-094: the digit-exclusion heuristic is removed and digit rows become sections",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                                if _words(t) and not re.search(r'\\d', t)]",
      "                                if _words(t)]",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_section_TEXT_and_SPAN_come_from_the_SAME_cell"),
 
     (221, "EU-099: a table fact claims prose ownership at the one flag owner",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if cell is not None and row is not None:\n        return True, row",
      "    if cell is not None and row is not None:\n        return False, row",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
 
     (222, "EU-101: the any-element sweep narrows and a data row becomes a header",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "               for t in row.find_all(True))",
      "               for t in row.find_all('td'))",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU101_a_data_row_between_header_and_target_is_skipped_not_a_header"),
 
     (223, "EU-103: the dash class regresses to the hand-picked sample",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return ch == ' ' or unicodedata.category(ch) == 'Pd'",
      "    return ch in ' \u2014-'",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_a_DASH_ONLY_header_is_skipped_whatever_the_DASH_IS"),
 
     (224, "EU-150: digits become words and numeric cells become labels",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return re.findall(r\"[A-Za-z][A-Za-z\u2019'-]*\", value)",
      "    return re.findall(r\"[A-Za-z0-9][A-Za-z0-9\u2019'-]*\", value)",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_SEQ246_equal_CELLS_the_later_fact_keeps_its_OWN_label_window"),
 
     (225, "EU-008: the instance-namespace URI drifts one character",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "XBRL_INSTANCE_NAMESPACE = 'http://www.xbrl.org/2003/instance'",
      "XBRL_INSTANCE_NAMESPACE = 'http://www.xbrl.org/2003/instanceX'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
 
     (226, "EU-009: the iso4217 URI drifts one character",
-     "driver/relocation/exact_numbers.py",
+     "driver_reference/relocation/exact_numbers.py",
      "ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217'",
      "ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217X'",
-     "driver/relocation/test_route_a.py::"
+     "driver_reference/relocation/test_route_a.py::"
      "test_827R9_the_same_LOCAL_NAMES_under_DIFFERENT_URIs_stay_DIFFERENT"),
 
     (227, "EU-036: the context content model degrades to simple",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    'context': 'element-only', 'entity': 'element-only',",
      "    'context': 'simple', 'entity': 'element-only',",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_direct_TEXT_beside_a_member_is_malformed"),
 
     (228, "EU-037: the required scheme attribute becomes undeclared",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                'identifier': frozenset({'scheme'}),",
      "                'identifier': frozenset(),",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_a_SUPPORTED_explicit_member_still_binds"),
 
     (229, "EU-038: xs:date leaves the dateUnion triad",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                             (_XS_NS, 'date'), (_XS_NS, 'dateTime')})",
      "                             (_XS_NS, 'dateTime')})",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_MUST_ALLOW_every_lawful_shape"),
 
     (230, "EU-043: unitRef leaves the collapse set and padded IDREFs mismatch",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_COLLAPSED = frozenset({'id', 'name', 'contextRef', 'unitRef', 'format',",
      "_COLLAPSED = frozenset({'id', 'name', 'contextRef', 'format',",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space"),
 
     (231, "EU-044: the boolean lexical space admits TRUE",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_XS_TRUE, _XS_FALSE = ('true', '1'), ('false', '0')",
      "_XS_TRUE, _XS_FALSE = ('true', '1', 'TRUE'), ('false', '0')",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_nil_claim_OUTSIDE_the_boolean_lexical_space_is_malformed"),
 
     (232, "EU-045: the newline stops being replaced in attribute values",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_ATTR_WS = str.maketrans('\\t\\r\\n', '   ')",
      "_ATTR_WS = str.maketrans('\\t\\r', '  ')",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space"),
 
     (233, "EU-046: a nil fact stating accuracy stops being a contradiction",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            if dec is not None or prec is not None:\n                return None, MALFORMED_FACT_ACCURACY",
      "            if False and (dec is not None or prec is not None):\n                return None, MALFORMED_FACT_ACCURACY",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_true_nil_fact_STATING_ACCURACY_is_MALFORMED_not_lawfully_empty"),
 
     (234, "EU-047: the ix namespace URI drifts one character",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_INLINE_NS = 'http://www.xbrl.org/2013/inlineXBRL'",
      "_INLINE_NS = 'http://www.xbrl.org/2013/inlineXBRLX'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
 
     (235, "EU-048: the reserved xml namespace URI drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_XML_PREFIX_NS = 'http://www.w3.org/XML/1998/namespace'",
      "_XML_PREFIX_NS = 'http://www.w3.org/XML/1998/namespaceX'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_the_reserved_xml_prefix_resolves_without_being_declared"),
 
     (236, "EU-049: the xsi namespace URI drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_XSI_NS = 'http://www.w3.org/2001/XMLSchema-instance'",
      "_XSI_NS = 'http://www.w3.org/2001/XMLSchema-instanceX'",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_a_NO_NAMESPACE_custom_type_parks_as_unsupported"),
 
     (237, "EU-050: schemaLocation leaves the permitted-hints set",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_XSI_PASS = frozenset({'schemaLocation', 'noNamespaceSchemaLocation'})",
      "_XSI_PASS = frozenset({'noNamespaceSchemaLocation'})",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_MUST_ALLOW_every_lawful_shape"),
 
     (238, "EU-051: the xbrldi namespace URI drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_DIMENSION_NS = 'http://xbrl.org/2006/xbrldi'",
      "_DIMENSION_NS = 'http://xbrl.org/2006/xbrldiX'",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_a_SUPPORTED_explicit_member_still_binds"),
 
     (239, "EU-056: collapse leaves the visibility keyword set",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_VISIBILITY_VALUES = frozenset({'visible', 'hidden', 'collapse'})",
      "_VISIBILITY_VALUES = frozenset({'visible', 'hidden'})",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E_the_inline_style_law_decides_by_DECLARATION_not_substring"),
 
     (240, "EU-057: run-in leaves the display-outside set and none wins the cascade",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_DISPLAY_OUTSIDE = frozenset({'block', 'inline', 'run-in'})",
      "_DISPLAY_OUTSIDE = frozenset({'block', 'inline'})",
      # DETECTOR RETARGETED (#827, Codex SEQ 946): the named test does not exist;
      # this is the current node. M240 fails at its CASCADE assertion, M300 at
      # the third section's DEFAULT-VISIBILITY control — one node, two
      # independent failure sites, not one proof twice.
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses"),
 
     (241, "EU-060: the TR4 registry URI drifts a day",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_TR4 = 'http://www.xbrl.org/inlineXBRL/transformation/2020-02-12'",
      "_TR4 = 'http://www.xbrl.org/inlineXBRL/transformation/2020-02-13'",
-     "driver/relocation/test_transform_registry.py::"
+     "driver_reference/relocation/test_transform_registry.py::"
      "test_an_APPROVED_registry_with_a_real_signature_is_APPLIED"),
 
     # DELETED (#827 GRAPH-DECIMAL, Codex SEQ 938). RULE DELETED BY AN ACCEPTED
@@ -2007,269 +2007,269 @@ MUTATIONS = [
     # keeping it would require re-adding the deleted grammar to production.
 
     (243, "EU-063: a padded INF is accepted by the exact string-union member",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if raw == 'INF':                           # the exact string-union member",
      "    if raw.strip() == 'INF':                           # the exact string-union member",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_PADDED_INF_is_MALFORMED_because_that_union_member_PRESERVES"),
 
     (244, "EU-064: the both-or-neither accuracy gate accepts instead of rejecting",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if (dec is None) == (prec is None):        # both, or neither\n        return False",
      "    if (dec is None) == (prec is None):        # both, or neither\n        return True",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_NEITHER_decimals_nor_precision_is_refused"),
 
     (245, "EU-065: the nonzero-digit test vanishes and -0 precision refuses",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return not (raw.startswith('-') and any(c in '123456789' for c in raw))",
      "    return not raw.startswith('-')",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_precision_NON_NEGATIVITY_is_decided_WITHOUT_converting"),
 
     (246, "EU-067: the accuracy grammar anchor weakens to match",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if not _integer_pattern().fullmatch(collapsed):\n        return False",
      "    if not _integer_pattern().match(collapsed):\n        return False",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_EACH_rule_is_load_bearing_ALONE"),
 
     (247, "EU-074: the never-seen ordinal starts at one and twins mispair",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        ordinal = totals.get(spelling, 0)",
      "        ordinal = totals.get(spelling, 1)",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
 
     (248, "EU-075: the spelling census double-steps",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        totals[spelling] = ordinal + 1",
      "        totals[spelling] = ordinal + 2",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
 
     (249, "EU-079: the collapse join fuses tokens instead of single-spacing",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return ' '.join(part for part in value.translate(_ATTR_WS).split(' ')",
      "    return ''.join(part for part in value.translate(_ATTR_WS).split(' ')",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space"),
 
     (250, "EU-089: the typed-dimension refusal silently vanishes on a key drift",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if ctx['typed']:",
      "    if ctx.get('typedX'):",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_a_typed_dimension_keeps_its_own_reason"),
 
     (251, "EU-095: the veiled set reverts to a soft default and ix:hidden text leaks",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    veiled = prepared['hidden_nodes']",
      "    veiled = prepared.get('hidden_nodesX', frozenset())",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU095_ix_hidden_text_never_leaks_into_row_evidence"),
 
     (252, "EU-096: the absent-scale default drifts to ten",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    scale = 0 if raw_scale is None else xml_integer(raw_scale)",
      "    scale = 1 if raw_scale is None else xml_integer(raw_scale)",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_EU096_an_absent_scale_means_ten_to_the_zero"),
 
     (253, "EU-096: the sign law goes vacuous and a plus sign is accepted",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if raw_sign is not None and raw_sign != '-':\n        return None, 'malformed_sign'",
      "    if False and raw_sign is not None and raw_sign != '-':\n        return None, 'malformed_sign'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_sign_PRESERVES_whitespace_AT_THE_REAL_BIND_DOOR"),
 
     (254, "EU-098: the declared-units read reverts to a soft drifted default",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    declared = prepared['units'].get(unit_ref)",
      "    declared = (prepared.get('unitsX') or {}).get(unit_ref)",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_exactness_holds_through_the_whole_binding"),
 
     (255, "EU-105: an empty leaf fabricates a zero",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return (el.text or '') + ''.join(child.tail or '' for child in el)",
      "    return (el.text or '0') + ''.join(child.tail or '' for child in el)",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B14_comments_and_PIs_are_ignored_and_the_VALUE_is_rebuilt"),
 
     (256, "EU-106: the QName separator drifts and every prefixed handle misses",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return ('%s:%s' % (el.prefix, q.localname) if el.prefix",
      "    return ('%s_%s' % (el.prefix, q.localname) if el.prefix",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
 
     (257, "EU-108: a true nil claims a normal fact",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if raw in _XS_TRUE:\n        return True",
      "    if raw in _XS_TRUE:\n        return False",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_TRUE_nil_fact_is_LAWFUL_but_states_no_value"),
 
     (258, "EU-109: an explicit false nil claims nilness",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if raw in _XS_FALSE:\n        return False\n    raise _MalformedNil()",
      "    if raw in _XS_FALSE:\n        return True\n    raise _MalformedNil()",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_an_EXPLICIT_false_nil_is_a_normal_fact"),
 
     (259, "EU-110: the xsi:nil Clark read drifts and nil facts read as normal",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    raw = _typed(el, '{%s}nil' % _XSI_NS)",
      "    raw = _typed(el, '{%s}nilX' % _XSI_NS)",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_TRUE_nil_fact_is_LAWFUL_but_states_no_value"),
 
     (260, "EU-112: the non-negative bound weakens and a negative no-format fact binds",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if value < 0:                       # -0 compares equal to 0 and is lawful",
      "    if value < Decimal('-1'):                       # -0 compares equal to 0 and is lawful",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_EU112_a_negative_no_format_value_never_binds"),
 
     (261, "EU-113: the context malformed verdict arm drifts and bad shapes bind",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
      "        if verdict == 'malformedX':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_an_ORDINARY_attribute_is_malformed_everywhere"),
 
     (262, "EU-113: the context unsupported verdict arm drifts and unsupported types bind",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
      "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupportedX':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_a_NO_NAMESPACE_custom_type_parks_as_unsupported"),
 
     (263, "EU-114: the instant period pair is emitted with its positions swapped",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return {'period': ('', _leaf(inst[0])) if inst else",
      "    return {'period': (_leaf(inst[0]), '') if inst else",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B14_instant_value_is_rebuilt"),
 
     (264, "EU-115: the context period element name drifts and every context empties",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    entities, periods = _kids(context, I, 'entity'), _kids(context, I, 'period')",
      "    entities, periods = _kids(context, I, 'entity'), _kids(context, I, 'periodX')",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_an_ABSENT_segment_and_scenario_are_lawful"),
 
     (265, "EU-116: the explicitMember element name drifts and dimensions vanish",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    members = [m for b in boxes for m in _kids(b, D, 'explicitMember')]",
      "    members = [m for b in boxes for m in _kids(b, D, 'explicitMemberX')]",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B14_measure_and_explicitMember_values_are_rebuilt"),
 
     (266, "EU-118: the unit malformed verdict arm drifts and bad unit shapes bind",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return UNSUPPORTED_UNIT_TYPE",
      "        if verdict == 'malformedX':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return UNSUPPORTED_UNIT_TYPE",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B16_an_xsi_type_on_an_ANONYMOUS_unit_element_is_malformed"),
 
     (267, "EU-119: the unit record swaps its numerator and denominator slots",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            'is_divide': bool(divides), 'numerator': num, 'denominator': den,",
      "            'is_divide': bool(divides), 'numerator': den, 'denominator': num,",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B16_a_lawful_DIVIDE_still_binds"),
 
     (268, "EU-120: the unit measure element name drifts and every unit empties",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    plain = _kids(u, I, 'measure')",
      "    plain = _kids(u, I, 'measureX')",
-     "driver/relocation/test_route_a_unit_identity.py::"
+     "driver_reference/relocation/test_route_a_unit_identity.py::"
      "test_a_LAWFUL_ALIAS_for_the_official_currency_URI_is_the_same_unit"),
 
     (269, "EU-122: the QName separator drifts and no prefixed name resolves",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    prefix, sep, local = value.partition(':')",
      "    prefix, sep, local = value.partition('|')",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
 
     (270, "EU-124: the ix:resources element name drifts and every report empties",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            for r in _children(h) if _is(r, _INLINE_NS, 'resources')]",
      "            for r in _children(h) if _is(r, _INLINE_NS, 'resourcesX')]",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
 
     (271, "EU-125: the absent-scheme default flips and a scheme-less identifier binds",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if (_typed(identifier, 'scheme') or '') != SEC_CIK_SCHEME:",
      "    if (_typed(identifier, 'scheme') or SEC_CIK_SCHEME) != SEC_CIK_SCHEME:",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_EU125_an_identifier_without_a_scheme_is_never_read_as_a_SEC_CIK"),
 
     (272, "EU-127: the undeclared-attribute verdict drifts and the refusal goes invisible",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                return 'malformed'         # ordinary undeclared attribute",
      "                return 'malformedX'         # ordinary undeclared attribute",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_an_ORDINARY_attribute_is_malformed_everywhere"),
 
     (273, "EU-128: the absent-text default fabricates a character item",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    texts = [el.text or ''] + [c.tail or '' for c in el]",
      "    texts = [el.text or 'x'] + [c.tail or '' for c in el]",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_an_ABSENT_segment_and_scenario_are_lawful"),
 
     (274, "EU-129: the empty content-kind word drifts and the check is skipped",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if kind == 'empty':                    # NO character item at all,",
      "    if kind == 'emptyX':                    # NO character item at all,",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_a_NON_EMPTY_forever_is_malformed"),
 
     (275, "EU-130: the xsi:type Clark read drifts and asserted types go unseen",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    t = el.get('{%s}type' % _XSI_NS)",
      "    t = el.get('{%s}typeX' % _XSI_NS)",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_a_NON_EMPTY_forever_is_malformed"),
 
     (276, "EU-157/158: the hidden-evidence gate goes vacuous and hidden facts bind without evidence",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if evidence.get('hidden') and not (evidence.get('row_text')",
      "    if False and evidence.get('hidden') and not (evidence.get('row_text')",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_a_hidden_element_without_local_evidence_abstains"),
 
     (277, "EU-165: the no-id answer fabricates a handle",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return _typed(fact.sem, 'id') or ''",
      "    return _typed(fact.sem, 'id') or 'X'",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_the_fallback_abstains_when_it_is_not_unique"),
 
     (278, "EU-166: the decimals attribute name drifts at the accuracy read",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        dec, prec = _typed(node, 'decimals'), _typed(node, 'precision')",
      "        dec, prec = _typed(node, 'decimalsX'), _typed(node, 'precision')",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
 
     (279, "EU-167: the descent depth starts at one and the outer fact reads as nested",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    node, depth = el, 0",
      "    node, depth = el, 1",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_TRUE_nil_fact_is_LAWFUL_but_states_no_value"),
 
     (280, "EU-168: the nested absent-scale default drifts and a lawful pair disagrees",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        outer_n = 0 if outer_scale is None else xml_integer(outer_scale)",
      "        outer_n = 1 if outer_scale is None else xml_integer(outer_scale)",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_EU168_a_nested_pair_that_both_omit_scale_agrees_at_ten_to_the_zero"),
 
     # RETARGETED (#827 GRAPH-DECIMAL, Codex SEQ 938). SAME REQUIRED RULE — the
@@ -2277,171 +2277,171 @@ MUTATIONS = [
     # owner: `parse_raw` now strips commas into `bare` before the lexical gate,
     # instead of inlining the strip in a `Decimal()` call that no longer exists.
     (283, "EU-175: the graph grouping comma is replaced instead of removed",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    bare = raw.replace(',', '')",
      "    bare = raw.replace(',', '0')",
-     "driver/relocation/test_transform_registry.py::"
+     "driver_reference/relocation/test_transform_registry.py::"
      "test_DOOR_an_approved_registry_BINDS_a_transformed_fact"),
 
     (284, "EU-176: the id census double-steps and lawful ids read as duplicates",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            id_counts[eid] = id_counts.get(eid, 0) + 1",
      "            id_counts[eid] = id_counts.get(eid, 0) + 2",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_an_ABSENT_segment_and_scenario_are_lawful"),
 
     (285, "EU-177: the context resource element name drifts and the index empties",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    for context in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'context'):",
      "    for context in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'contextX'):",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_an_ABSENT_segment_and_scenario_are_lawful"),
 
     (286, "EU-178: the id attribute name drifts and no element carries an id",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        eid = _typed(el, 'id') if isinstance(el.tag, str) else None",
      "        eid = _typed(el, 'idX') if isinstance(el.tag, str) else None",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
 
     (287, "EU-181: the unit resource element name drifts and the unit index empties",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    for u in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'unit'):",
      "    for u in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'unitX'):",
-     "driver/relocation/test_route_a_unit_identity.py::"
+     "driver_reference/relocation/test_route_a_unit_identity.py::"
      "test_a_LAWFUL_ALIAS_for_the_official_currency_URI_is_the_same_unit"),
 
     (288, "EU-182: an empty display is defaulted into a printable zero",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    shown = displayed or ''",
      "    shown = displayed or '0'",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_EU182_an_empty_display_never_becomes_a_value"),
 
     (289, "EU-183: an absent sign is read as the negation flag",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    sign = '' if sign is None else sign",
      "    sign = '-' if sign is None else sign",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_EU183_an_absent_sign_is_the_positive_case"),
 
     (290, "EU-055: the unsupported style lane word drifts and the lane goes unreachable",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_UNSUPPORTED = ('unsupported', None)   # the generic unsupported winner tuple",
      "_UNSUPPORTED = ('unsupportedX', None)   # the generic unsupported winner tuple",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_an_UNRESOLVABLE_winner_is_the_truthful_unsupported_lane"),
 
     (291, "EU-068: the unsupported reason is dropped and the refusal disappears",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # The style-state return tuple grew (ws, block-ness, outside).
      "        return (False, vis, st['unsupported'], ws,\n"
      "                name in _UA_BLOCK_ELEMENTS, outside)",
      "        return (False, vis, None, ws,\n"
      "                name in _UA_BLOCK_ELEMENTS, outside)",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU139_hidden_until_found_refuses_as_unsupported"),
 
     (292, "EU-069: the template prune is withdrawn and template contents render",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # Same unconditional prune; the return tuple grew to six members.
      "        return True, vis, None, ws, False, 'nobox'",
      "        return False, vis, None, ws, False, 'nobox'",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU070_template_contents_are_never_rendered"),
 
     (293, "EU-081: the single-keyword arm stops matching one ident",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if len(s) == 1:\n        return s[0] in _DISPLAY_SINGLE",
      "    if len(s) == 0:\n        return s[0] in _DISPLAY_SINGLE",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_a_lawful_document_is_NOT_refused"),
 
     (294, "EU-082: the outside-inside pair arm stops matching two idents",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if len(s) == 2:\n        a, b = s",
      "    if len(s) == 3:\n        a, b = s",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
 
     (295, "EU-083: the list-item arm admits two outside keywords",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        return (len(out) <= 1 and len(ins) <= 1",
      "        return (len(out) <= 2 and len(ins) <= 1",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
 
     (296, "EU-084: the final grammar reject accepts every other shape",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                or (a in _DISPLAY_INSIDE and b in _DISPLAY_OUTSIDE))\n    return False",
      "                or (a in _DISPLAY_INSIDE and b in _DISPLAY_OUTSIDE))\n    return True",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
 
     (297, "EU-085: the list-item keyword drifts and its arm never matches",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if 'list-item' in s:",
      "    if 'list-itemX' in s:",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
 
     (298, "EU-086: the ancestry probe drifts and CSS-hidden ancestors vanish",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    while n is not None and getattr(n, 'get', None):",
      "    while n is not None and getattr(n, 'getX', None):",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU086_a_css_hidden_ancestor_still_hides_the_fact"),
 
     (299, "EU-087: a pruning ancestor stops reporting hidden",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if prune:\n            return True, None",
      "        if prune:\n            return False, None",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU086_a_css_hidden_ancestor_still_hides_the_fact"),
 
     (300, "EU-088: the visibility fold starts hidden instead of visible",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    vis = 'visible'",
      "    vis = 'hidden'",
      # DETECTOR RETARGETED (#827, Codex SEQ 946): the named test does not exist;
      # this is the current node. M240 fails at its CASCADE assertion, M300 at
      # the third section's DEFAULT-VISIBILITY control — one node, two
      # independent failure sites, not one proof twice.
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses"),
 
     (301, "EU-135: the cascade key drops source order and an earlier declaration wins",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        key = (bool(d.important), i)",
      "        key = (bool(d.important), 0)",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU141_the_all_shorthand_resets_an_earlier_display_none"),
 
     (302, "EU-136: the CSS-wide keyword gate admits a two-token value",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if len(idents) == 1 and idents[0] in _WIDE_LOCAL:",
      "        if len(idents) == 2 and idents[0] in _WIDE_LOCAL:",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
 
     (303, "EU-088 family: the ancestry fold runs leaf-first and loses the revival",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    vis = 'visible'\n    for el in reversed(chain):",
      "    vis = 'visible'\n    for el in chain:",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_E2_a_vis_hidden_FACT_with_its_own_visible_is_not_hidden"),
 
     (304, "EU-140: the absent style attribute declares display:none",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            tinycss2.parse_declaration_list(str(el.get('style') or ''))):",
      "            tinycss2.parse_declaration_list(str(el.get('style') or 'display:none'))):",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
 
     (305, "EU-062: U+200B becomes a fabricated space again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # The ZWSP strip is its own statement now; the split moved downstream.
      "                raw = str(node).replace(_ZWSP, '')",
@@ -2449,286 +2449,286 @@ MUTATIONS = [
      # `words.extend(...)`, which does not exist at this point any more, so it
      # raised NameError and a crash would have counted as the proof.
      "                raw = str(node).replace(_ZWSP, ' ')",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU062_zero_width_space_is_ZERO_WIDTH_not_a_separator"),
 
     (306, "EU-148: the span index key drifts and every recorded extent empties",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    span = prepared.get('node_spans', {}).get(id(node))",
      "    span = prepared.get('node_spansX', {}).get(id(node))",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
 
     (307, "EU-188: the bs4 element-name token drifts and every element reads as text",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # `walk` gained ws/outside parameters; the bs4 name token is unchanged.
      "        name = getattr(node, 'name', None)",
      "        name = getattr(node, 'nameX', None)",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
 
     (308, "EU-146: the colspan clamp is removed and absurd markup builds an absurd grid",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return min(max(_attr_int(value), 1), _COLSPAN_MAX)",
      "    return max(_attr_int(value), 1)",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
     (319, "EU-189: the token join separator disappears and adjacent words fuse",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # The join now pairs each word with the separator the SOURCE implied,
      # so the attack is to drop those separators rather than the space.
      "    text = ''.join(s + w for s, w in zip(seps, words))",
      "    text = ''.join(words)",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_EU189_a_zero_width_space_is_not_a_word_separator_in_the_walk"),
 
     (320, "EU-133: the retired shared max(1,...) span FLOOR returns to rowspan",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    return min(_attr_int(value), _ROWSPAN_MAX)",
      "    return min(max(_attr_int(value), 1), _ROWSPAN_MAX)",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
     (321, "EU-133: the absent/invalid span attribute stops defaulting to 1",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "def _attr_int(value, default=1):",
      "def _attr_int(value, default=0):",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
     (322, "EU-076: an explicit headers attribute stops replacing the automatic scan",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    declared = fact_cell.get('headers')",
      "    declared = None",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
 
     (323, "EU-076 step 4: the empty-cell removal stops removing empty cells",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                  if c.find(True) is not None",
      "                  if True or c.find(True) is not None",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
 
     (324, "EU-076 step 5: the duplicate removal stops deduplicating",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            if not any(cell is kept for kept in seen):",
      "            if True:",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
 
     (336, "EU-189: a spacer column becomes an evidence piece with a blank label",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "              and text.strip()]",
      "              ]",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU189_a_SPACER_column_is_not_a_label_and_never_becomes_a_piece"),
 
     (339, "EU-156: the forever/undated park stops naming its own reason",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "return None, 'forever_or_undated_period'",
      "return None, 'malformed_period_type'",
-     "driver/relocation/test_bind_graph_fact.py::test_EU156_a_forever_period_PARKS_under_its_own_named_reason"),
+     "driver_reference/relocation/test_bind_graph_fact.py::test_EU156_a_forever_period_PARKS_under_its_own_named_reason"),
 
     (340, "EU-163: the unreadable element-kind park stops naming its own reason",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "return None, 'unsupported_element_kind'",
      "return None, 'malformed_element'",
-     "driver/relocation/test_bind_graph_fact.py::test_EU163_an_unreadable_ix_element_kind_PARKS_under_its_own_named_reason"),
+     "driver_reference/relocation/test_bind_graph_fact.py::test_EU163_an_unreadable_ix_element_kind_PARKS_under_its_own_named_reason"),
 
     (341, "P-O6 m1: the ytd/ttm cumulative route stops preceding the cascade",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '    if scope_in in ("ytd", "ttm"):\n        return _cumulative(item, scope_in, time_type, fye, cal, ticker, lk)',
      '    if False:\n        return _cumulative(item, scope_in, time_type, fye, cal, ticker, lk)',
-     "driver/core/test_driver_period_resolver.py::test_ytd_with_ticker_routes_to_cumulative_before_cascade"),
+     "driver_reference/core/test_driver_period_resolver.py::test_ytd_with_ticker_routes_to_cumulative_before_cascade"),
 
     (342, "P-O6 m2: the cascade consumes SEC before the existing-graph window",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      '        found = lk["existing"](ticker, fy, fq)',
      '        found = None if lk["sec"](ticker, fy, f"Q{fq}" if fq else "FY") is None else None',
-     "driver/core/test_driver_period_resolver.py::test_cascade_order_existing_then_sec_then_predict"),
+     "driver_reference/core/test_driver_period_resolver.py::test_cascade_order_existing_then_sec_then_predict"),
 
     (343, "P-O6 m3: calendar_override stops keeping the cascade out of company lookups",
-     "driver/core/driver_period_resolver.py",
+     "driver_reference/core/driver_period_resolver.py",
      "    if is_standard and not cal and ticker and fy:",
      "    if is_standard and ticker and fy:",
-     "driver/core/test_driver_period_resolver.py::test_calendar_with_ticker_never_calls_corrected_fye"),
+     "driver_reference/core/test_driver_period_resolver.py::test_calendar_with_ticker_never_calls_corrected_fye"),
 
     (337, "EU-143: the until-found scope refusal stops naming what it refused",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      'hidden=until-found is outside the supported reader',
      'outside the supported reader',
-     "driver/relocation/test_two_view_bridge.py::test_EU139_hidden_until_found_refuses_as_unsupported"),
+     "driver_reference/relocation/test_two_view_bridge.py::test_EU139_hidden_until_found_refuses_as_unsupported"),
 
     (338, "EU-144: the force-hidden scope refusal stops naming what it refused",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # the source splits this refusal across TWO adjacent string literals, so
      # the anchor is the FIRST of them \u2014 one contiguous run of real bytes.
      "'visibility:force-hidden is official '",
      "'this value is not supported '",
-     "driver/relocation/test_two_view_bridge.py::test_EU144_force_hidden_parks_NAMING_the_construct_it_refused"),
+     "driver_reference/relocation/test_two_view_bridge.py::test_EU144_force_hidden_parks_NAMING_the_construct_it_refused"),
 
     (327, "EU-189: the token join fabricates a separator again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    text = ''.join(s + w for s, w in zip(seps, words))",
      "    text = ' '.join(words)",
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (328, "EU-189: a block boundary stops separating the text either side",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if sep:\n            pending = ' '\n        for child in node.children:",
      '        for child in node.children:',
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (329, "EU-189: br stops being a forced line break when display is overridden",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    sep = (not prune) and (own == 'block' or name in _UA_LINE_BREAK_ELEMENTS)",
      "    sep = (not prune) and own == 'block'",
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (330, "EU-189: the UA white-space:pre rule for pre/listing/plaintext/xmp is dropped",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    new_ws = st['ws'] or ('pre' if name in _UA_PRE_ELEMENTS else None) or ws",
      "    new_ws = st['ws'] or ws",
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (331, "EU-149: collapsing reverts to Python whitespace and eats NBSP",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      '                    toks = [t for t in _CSS_WS.split(raw) if t]',
      '                    toks = raw.split()',
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (332, "EU-189: the parse stops preserving whitespace-only text nodes",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      '            return BeautifulSoup(html_text, builder=_preserving_builder())',
      "            return BeautifulSoup(html_text, 'lxml')",
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (333, "EU-057: display:run-in stops taking the fail-closed lane",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      '        return _RUN_IN_UNSUPPORTED',
      "        return 'block'",
-     "driver/relocation/test_row_label_span.py::test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses"),
 
     (334, "EU-189: one display declaration stops feeding the outside slot",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        props = ('display', 'outside') if prop == 'display' else (prop,)",
      '        props = (prop,)',
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (335, "EU-189: display:inherit stops reading the parent's computed outside",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        own = outside or 'inline'",
      "        own = 'inline'",
-     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+     "driver_reference/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
 
     (325, "EU-145/149: white-space leaves the shared style-winner owner again",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
      # The shared style-winner vocabulary gained 'outside'.
      "    for p in ('display', 'visibility', 'cv', 'ws', 'outside'):",
      "    for p in ('display', 'visibility', 'cv'):",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law"),
 
     (326, "EU-145/149: white-space unset stops meaning inherit on the inherited property",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            if kw == 'inherit' or (kw == 'unset' and p in ('visibility', 'ws')):",
      "            if kw == 'inherit' or (kw == 'unset' and p == 'visibility'):",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law"),
 
     (309, "EU-146: rowspan zero stops growing downward and reads as one row",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            reach = len(rows) if height == 0 else row_number + height",
      "            reach = row_number + height",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
     (310, "EU-042: the SEC CIK scheme URI drifts and every filing refuses",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "SEC_CIK_SCHEME = 'http://www.sec.gov/CIK'",
      "SEC_CIK_SCHEME = 'http://www.sec.gov/CIKX'",
-     "driver/relocation/test_bind_graph_fact.py::"
+     "driver_reference/relocation/test_bind_graph_fact.py::"
      "test_RED_exactness_holds_through_the_whole_binding"),
 
     (311, "EU-059: the SEC registry URI drifts and its facts are reclassified",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "_SEC_REGISTRY = 'http://www.sec.gov/inlineXBRL/transformation/2015-08-31'",
      "_SEC_REGISTRY = 'http://www.sec.gov/inlineXBRL/transformation/2015-08-30'",
-     "driver/relocation/test_transform_registry.py::"
+     "driver_reference/relocation/test_transform_registry.py::"
      "test_the_SEC_registry_is_OFFICIAL_but_UNIMPLEMENTED"),
 
     (312, "EU-123: the memo bound is removed and the cache grows without limit",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    while len(_PREP_CACHE) >= _PREP_CACHE_MAX:",
      "    while False and len(_PREP_CACHE) >= _PREP_CACHE_MAX:",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU123_the_memo_capacity_is_derived_and_bounded"),
 
     (313, "EU-104: the arelle translator is left unarmed and the refusal path dies",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    if getattr(XPathContext, '_', None) is None:\n        import gettext\n        XPathContext._ = gettext.gettext",
      "    if False and getattr(XPathContext, '_', None) is None:\n        import gettext\n        XPathContext._ = gettext.gettext",
-     "driver/relocation/test_transform_registry.py::"
+     "driver_reference/relocation/test_transform_registry.py::"
      "test_EU104_the_arelle_refusal_type_is_pinned_and_its_translator_armed"),
 
     (314, "EU-058: a UA-hidden element leaves the set and leaks its text",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'})",
      "    'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'} - {'datalist'})",
-     "driver/relocation/test_two_view_bridge.py::"
+     "driver_reference/relocation/test_two_view_bridge.py::"
      "test_EU058_UA_default_hidden_elements_are_pruned_and_overridable"),
 
     (315, "EU-090: the non-XDT scope refusal token drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        return None, 'unsupported_non_xdt_context'",
      "        return None, 'unsupported_non_xdt_contextX'",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_lawful_NON_XDT_content_is_UNSUPPORTED_not_malformed"),
 
     (316, "EU-091: the typed-dimension scope refusal token drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        return None, 'typed_dimensions_unsupported'",
      "        return None, 'typed_dimensions_unsupportedX'",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_a_typed_dimension_keeps_its_own_reason"),
 
     (317, "EU-117: the unsupported-context-type scope token drifts",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "            return 'unsupported_context_type'  # caller stores it verbatim",
      "            return 'unsupported_context_typeX'  # caller stores it verbatim",
-     "driver/relocation/test_context_content_model.py::"
+     "driver_reference/relocation/test_context_content_model.py::"
      "test_827B12_a_NO_NAMESPACE_custom_type_parks_as_unsupported"),
 
     (318, "EU-145/149: the preserving white-space values stop preserving",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "                if ws in _WS_PRESERVE_ALL:",
      "                if False and ws in _WS_PRESERVE_ALL:",
-     "driver/relocation/test_row_label_span.py::"
+     "driver_reference/relocation/test_row_label_span.py::"
      "test_EU145_149_white_space_is_honoured_exactly_as_CSS_Text_3_defines_it"),
 
     (281, "EU-169: the exactly-one-child bound widens to two",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
      "        if len(kids) != 2 or len(elements) != 1 \\",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_NESTED_fact_agreeing_on_every_property_binds"),
 
     (282, "EU-170: the nested descent loop never runs",
-     "driver/relocation/inline_html.py",
+     "driver_reference/relocation/inline_html.py",
      "    node, depth = el, 0\n    while True:",
      "    node, depth = el, 0\n    while False:",
-     "driver/relocation/test_semantic_fact_value.py::"
+     "driver_reference/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
-     "driver/core/xbrl_attach.py",
+     "driver_reference/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'count', 'unknown'}),",
-     "driver/core/test_round8_xbrl_binding.py::"
+     "driver_reference/core/test_round8_xbrl_binding.py::"
      "test_F11_a_pure_fact_may_not_be_read_as_a_COUNT"),
 
 ]
@@ -2742,13 +2742,13 @@ MUTATIONS = [
 #: NOT zero-credential, and the receipt says so.
 LIVE_MUTATIONS = [
     (70, "the Cypher guard stops refusing the non-registrant marker",
-     "driver/core/driver_neo4j_adapter.py",
+     "driver_reference/core/driver_neo4j_adapter.py",
      '_CIK_GUARD = "co.cik =~ $cik_pattern AND co.cik <> $non_registrant"',
      '_CIK_GUARD = "co.cik =~ $cik_pattern"',
      LIVE_ALLZERO),
 
     (71, "the Cypher guard stops enforcing the ten-ASCII-digit contract",
-     "driver/core/driver_neo4j_adapter.py",
+     "driver_reference/core/driver_neo4j_adapter.py",
      '_CIK_GUARD = "co.cik =~ $cik_pattern AND co.cik <> $non_registrant"',
      '_CIK_GUARD = "co.cik <> $non_registrant"',
      LIVE_TOOSHORT),
@@ -2760,7 +2760,7 @@ LIVE_MUTATIONS = [
 #: carries the paid-OpenAI acting lane — without either, a detector cannot be
 #: collected at all, and a collection error (rc 4) is NOT a mutation proof.
 #: The 4.3 GiB filing cache is deliberately excluded: no detector here reads it.
-TREE_PATHS = ("driver", HARNESS_REL, "drivers_harness", "conftest.py",
+TREE_PATHS = ("driver_reference", HARNESS_REL, "drivers_harness", "conftest.py",
               "pytest.ini",
               os.path.join(".claude", "skills", "earnings-orchestrator",
                            "scripts"))
@@ -2809,7 +2809,7 @@ def run_detector(root, node_id):
     home = _tf.mkdtemp(prefix="step4_home_")
     env = sanitized_env(root, home)
     env["PYTHONPATH"] = os.pathsep.join(
-        [root, os.path.join(root, "driver", "relocation"),
+        [root, os.path.join(root, "driver_reference", "relocation"),
          os.path.join(root, ".claude", "skills", "earnings-orchestrator",
                       "scripts")])
     p = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p",
@@ -2830,7 +2830,7 @@ def run_live_detector(root, node_id):
     """
     env = dict(os.environ)
     env["PYTHONPATH"] = os.pathsep.join(
-        [root, os.path.join(root, "driver", "relocation"),
+        [root, os.path.join(root, "driver_reference", "relocation"),
          os.path.join(root, ".claude", "skills", "earnings-orchestrator",
                       "scripts")])
     p = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p",

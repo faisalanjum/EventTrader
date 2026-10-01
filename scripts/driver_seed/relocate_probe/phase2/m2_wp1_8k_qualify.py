@@ -36,7 +36,7 @@ sys.path.insert(0, os.path.join(_ROOT, 'scripts', 'driver_seed'))
 sys.path.insert(0, _HERE)
 
 import link_lib as L                                     # certified WP1 literal laws
-from driver.relocation import inline_html as IH
+from driver_reference.relocation import inline_html as IH
 import m1_structure_inventory as INV
 from m1_canonical_selector import _driver
 

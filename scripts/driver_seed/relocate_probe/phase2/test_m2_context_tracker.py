@@ -12,7 +12,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.abspath(os.path.join(_HERE, '..', '..', '..', '..')))
 
-from driver.relocation import inline_html as IH
+from driver_reference.relocation import inline_html as IH
 import m1_structure_inventory as INV
 from m2_native_table_shadow_r3 import _context_track, _numeric_data_cols
 

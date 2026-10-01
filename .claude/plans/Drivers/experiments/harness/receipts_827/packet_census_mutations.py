@@ -36,7 +36,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", "..", ".."))
 sys.path.insert(0, _HERE)
 sys.path.insert(0, _REPO)
-sys.path.insert(0, os.path.join(_REPO, "driver", "relocation"))
+sys.path.insert(0, os.path.join(_REPO, "driver_reference", "relocation"))
 OUT = os.path.join(_HERE, "12_packet_census_mutations.json")
 CACHE = os.path.join(_REPO, "scripts", "driver_seed", "relocate_probe",
                      "inline_html_cache")
@@ -76,7 +76,7 @@ def run_census(packet_paths, tmp):
 def _prepared(source_id, _cache={}):
     """The filing's prepared text — needed to build a LAWFUL second span."""
     if source_id not in _cache:
-        from driver.relocation.inline_html import prepare
+        from driver_reference.relocation.inline_html import prepare
         path = os.path.join(CACHE, f"{source_id}.htm")
         _cache[source_id] = prepare(
             open(path, encoding="utf-8", errors="replace").read())

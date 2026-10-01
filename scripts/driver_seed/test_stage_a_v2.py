@@ -14,15 +14,15 @@ import pytest
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
-FISCAL = ROOT / "driver" / "channels" / "fiscal_ai"
+FISCAL = ROOT / "driver_reference" / "channels" / "fiscal_ai"
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(ROOT / "driver" / "relocation"))
+sys.path.insert(0, str(ROOT / "driver_reference" / "relocation"))
 
-from driver.channels.fiscal_ai import build_packets as BP
-from driver.channels.fiscal_ai import public_contract as PC
-from driver.channels.fiscal_ai import run_code_tier as RC
-from driver.channels.fiscal_ai import route_a_source as SRC
+from driver_reference.channels.fiscal_ai import build_packets as BP
+from driver_reference.channels.fiscal_ai import public_contract as PC
+from driver_reference.channels.fiscal_ai import run_code_tier as RC
+from driver_reference.channels.fiscal_ai import route_a_source as SRC
 import locator as LOC
 import wp3_compliant_packet as WP3
 
@@ -301,7 +301,7 @@ def _real_v1_packets():
 
 
 def _prepared_text(source_id, cache):
-    from driver.relocation import inline_html as IH
+    from driver_reference.relocation import inline_html as IH
     path = ROOT / "scripts/driver_seed/relocate_probe/inline_html_cache" / f"{source_id}.htm"
     assert path.is_file(), f"real-data cache missing: {path}"
     if source_id not in cache:
@@ -474,7 +474,7 @@ def test_red_fiscal_staging_has_no_core_door_or_writer_import():
             elif isinstance(node, ast.ImportFrom):
                 modules.append(node.module or "")
                 names.extend(alias.name for alias in node.names)
-        assert not any(name.startswith("driver.core") for name in modules)
+        assert not any(name.startswith("driver_reference.core") for name in modules)
         assert not ({"attach_event_xbrl", "validate_via_production"} & set(names))
 
     source = BP.build_stage_a_v2.__doc__ + "\n" + __import__("inspect").getsource(

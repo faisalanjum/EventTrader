@@ -114,11 +114,11 @@ def test_scan_text_snips_are_exact_substrings_of_source():
 #   test_locate.py::...forwards_unit_identity...                monkeypatches `resolve`, so it
 #                                                               tests FORWARDING, not output
 #
-# That is the whole set: nothing else calls it. (`driver/core/fact_match.match_facts` is an
+# That is the whole set: nothing else calls it. (`driver_reference/core/fact_match.match_facts` is an
 # unrelated function that shares a name.)
 #
 # The public fail-closed contract is pinned once, at the door, in
-# `driver/relocation/test_match_facts.py`. Retirement accounting:
+# `driver_reference/relocation/test_match_facts.py`. Retirement accounting:
 # `receipts_827/26_withdrawn_certification_ledger.md`.
 def test_tier1_unit_class_guard():
     """Round-12: a currency KPI (is_currency=1) must not bind a shares-tagged fact.

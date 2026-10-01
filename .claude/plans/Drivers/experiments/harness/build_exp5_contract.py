@@ -118,11 +118,11 @@ def role_prompt_headers():
 
 def core_structure_card():
     """The structural half — generated from the Core owners, never copied."""
-    from driver.core.prepared_fact_v2 import (ITEM_FIELDS, NUMERIC_SLOTS,
+    from driver_reference.core.prepared_fact_v2 import (ITEM_FIELDS, NUMERIC_SLOTS,
                                               SOURCE_OWNED_FIELDS,
                                               PreparedFactV2)
-    from driver.core.slot_convert import CANONICAL_UNITS, SLOT_KEYS
-    from driver.core.driver_write_cli import (V2_ABSTENTION_KEYS,
+    from driver_reference.core.slot_convert import CANONICAL_UNITS, SLOT_KEYS
+    from driver_reference.core.driver_write_cli import (V2_ABSTENTION_KEYS,
                                               V2_REPLY_KEYS)
     j = " · ".join
     return (
@@ -148,7 +148,7 @@ def _skeleton_surfaces(skeleton):
     regex name-set could only ever prove "no Core name is missing" and could not
     see an EXTRA key, which is exactly how a copy becomes a second schema owner.
     """
-    from driver.core.slot_convert import SLOT_KEYS
+    from driver_reference.core.slot_convert import SLOT_KEYS
     doc = json.loads(skeleton)
     # Read each nested surface DEFENSIVELY: a renamed or dropped top-level key
     # must be reported as drift in the surface that owns it, not crash the
@@ -187,10 +187,10 @@ def _skeleton_surfaces(skeleton):
 def output_section():
     """A3 verbatim, with EVERY copied structural surface cross-checked against
     its Core owner, so no part of the answer shape can drift silently (§2)."""
-    from driver.core.prepared_fact_v2 import (ITEM_FIELDS, NUMERIC_SLOTS,
+    from driver_reference.core.prepared_fact_v2 import (ITEM_FIELDS, NUMERIC_SLOTS,
                                               PreparedFactV2)
-    from driver.core.slot_convert import SLOT_KEYS
-    from driver.core.driver_write_cli import (V2_ABSTENTION_KEYS, V2_REPLY_KEYS)
+    from driver_reference.core.slot_convert import SLOT_KEYS
+    from driver_reference.core.driver_write_cli import (V2_ABSTENTION_KEYS, V2_REPLY_KEYS)
     a3 = _section(_PKG, _OUTPUT)
     blocks = _fences(a3)
     if len(blocks) != 1:
@@ -250,7 +250,7 @@ def build(out_dir=_HERE):
            for t, h in (("role headers", _ROLE_HEADERS), ("active rules", _RULES),
                         ("output envelope", _OUTPUT), ("boundary", _BOUNDARY))]
     doc = {"version": "v2-prompt-contract",
-           "structure_owner": "driver.core (generated, not copied)",
+           "structure_owner": "driver_reference.core (generated, not copied)",
            "event_placeholder": EVENT_PLACEHOLDER,
            "prompts": manifest, "blocks": src}
     with open(os.path.join(out_dir, "exp5_prompt_contract.manifest.json"), "w",

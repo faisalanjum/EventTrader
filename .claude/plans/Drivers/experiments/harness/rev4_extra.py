@@ -92,8 +92,8 @@ EXTRA.setdefault(".claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md", 
 ("A channel never mints a name. It hands the shared core ONE object. That object has three blocks, and all three field-lists already exist in the locked design:",
  "A channel never mints a name. It SUBMITS raw evidence (ChannelContract v1.0); the SHARED CORE decomposer assembles this ONE internal object from that submission — including the per-slot numeric objects, which the channel never builds. The object has three blocks, and all three field-lists already exist in the locked design:"))
 EXTRA[".claude/plans/Drivers/FinalDesign/BUILD_AND_OPERATIONS.md"].extend([
-("frozen vectors: `driver/core/driver_ids.py` + `driver/core/test_driver_ids.py` (52 tests incl. 14 pinned\n  vectors with computed hashes; changing a pinned vector = an owner-level ID-law amendment).",
- "frozen vectors: `driver/core/driver_ids.py` + `driver/core/test_driver_ids.py` (the pinned computed-hash\n  vector suite — counts live in the test file itself, never restated here; changing a pinned vector = an\n  owner-level ID-law amendment)."),
+("frozen vectors: `driver_reference/core/driver_ids.py` + `driver_reference/core/test_driver_ids.py` (52 tests incl. 14 pinned\n  vectors with computed hashes; changing a pinned vector = an owner-level ID-law amendment).",
+ "frozen vectors: `driver_reference/core/driver_ids.py` + `driver_reference/core/test_driver_ids.py` (the pinned computed-hash\n  vector suite — counts live in the test file itself, never restated here; changing a pinned vector = an\n  owner-level ID-law amendment)."),
 ("   -> internal Candidate Fact Packet (frozen v1.0 — §2)",
  "   -> internal Candidate Fact Packet (frozen v1.0 → v2.0 re-freeze pending O-a — §2)"),
 ("## 2. The internal core packet (frozen Candidate Fact Packet v1.0)",

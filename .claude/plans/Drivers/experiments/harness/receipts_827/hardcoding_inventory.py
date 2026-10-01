@@ -34,7 +34,7 @@ def _repo_root(start):
     levels pointed one short and scanned an empty tree instead of failing."""
     d = os.path.abspath(start)
     while d != os.path.dirname(d):
-        if os.path.isdir(os.path.join(d, 'driver', 'core')):
+        if os.path.isdir(os.path.join(d, 'driver_reference', 'core')):
             return d
         d = os.path.dirname(d)
     raise SystemExit('cannot find the repo root above ' + start)
@@ -49,8 +49,8 @@ _HERE = os.path.relpath(os.path.dirname(__file__), ROOT)
 #: `evidence` (fixtures/tests) is INCLUDED BUT LABELLED, never silently
 #: dropped, because a fixture literal is what a filing said, not a rule.
 SCOPES = {
-    'production': [os.path.join('driver', 'core'),
-                   os.path.join('driver', 'relocation')],
+    'production': [os.path.join('driver_reference', 'core'),
+                   os.path.join('driver_reference', 'relocation')],
     'seed_route_a': [os.path.join('scripts', 'driver_seed')],
     'proof_tools': [_HERE],
 }
@@ -79,9 +79,9 @@ SEED_ROOTS = (
 #: into `sys.path` at runtime, so an ordinary package walk cannot see them and
 #: silently files them under "third party".
 #:
-#: `driver/core/driver_period_resolver.py` inserts
+#: `driver_reference/core/driver_period_resolver.py` inserts
 #: `.claude/skills/earnings-orchestrator/scripts` and imports `fiscal_math` and
-#: `guidance_ids`; `driver/core/unit_resolver.py` locates the same directory
+#: `guidance_ids`; `driver_reference/core/unit_resolver.py` locates the same directory
 #: and imports `guidance_ids`.
 #:
 #: They are NOT Core-owned #827 work. The frozen Core/Fiscal boundary names
@@ -124,8 +124,8 @@ def _import_targets(root, rel):
     """Every module path one file imports, as REPO-RELATIVE dotted names.
 
     Unlike `_local_imports` this keeps the FULL dotted path, because that is
-    what names a file: `from driver.xml_names import graph_qname_parts` points
-    at `driver/xml_names.py`, and truncating to the first component (`driver`)
+    what names a file: `from driver_reference.xml_names import graph_qname_parts` points
+    at `driver_reference/xml_names.py`, and truncating to the first component (`driver`)
     loses exactly the module that escaped this audit's scope.
 
     Relative imports are resolved against the importing file's own package so
@@ -189,7 +189,7 @@ def _place(root, dotted):
 def production_closure(root=None, dirs=None):
     """(files, held) — the production roots' transitive repo-local closure.
 
-    THE SCOPE USED TO BE TWO DIRECTORY NAMES, and `driver/xml_names.py` proved
+    THE SCOPE USED TO BE TWO DIRECTORY NAMES, and `driver_reference/xml_names.py` proved
     what that costs: two production functions, imported by four scanned
     production modules, one directory up and therefore invisible. Law had been
     moved there OUT of an audited file DURING the audit, so the inventory
@@ -224,11 +224,11 @@ def production_closure(root=None, dirs=None):
                 # CORRECTED (SEQ 447): this is NOT general Python behaviour.
                 # Python puts the __main__ SCRIPT's directory on `sys.path`,
                 # not an imported module's own directory — `import
-                # driver.relocation.locator` from the repo root really does
+                # driver_reference.relocation.locator` from the repo root really does
                 # fail on its bare `import exact_numbers`. It works because
                 # the active Route-A entry points insert that directory
                 # themselves: `scripts/driver_seed/run_code_tier.py:28` and
-                # `wp3_compliant_packet.py:17` add `driver/relocation`.
+                # `wp3_compliant_packet.py:17` add `driver_reference/relocation`.
                 #
                 # So this is the same class as the held substrate above — a
                 # search path an entry point creates — and it is resolved for
@@ -340,8 +340,8 @@ def seed_closure():
             if not hits:
                 # Not in the seed tree. Repo-local or third-party is decided by
                 # whether the repo holds a module of that name at all.
-                for cand in (os.path.join('driver', 'core', mod + '.py'),
-                             os.path.join('driver', 'relocation', mod + '.py'),
+                for cand in (os.path.join('driver_reference', 'core', mod + '.py'),
+                             os.path.join('driver_reference', 'relocation', mod + '.py'),
                              os.path.join('scripts', 'earnings', mod + '.py')):
                     if os.path.exists(os.path.join(ROOT, cand)):
                         held.setdefault(cand, set()).add(rel)
@@ -736,7 +736,7 @@ def build(snap=None):
     # EVERY YIELDED FILE IS RETAINED, including one that scans to zero rows.
     # Dropping empties made `report` a record of files WITH literals rather
     # than files SCANNED, so the manifest derived from it silently omitted
-    # `driver/core/__init__.py` — 104 inputs, 103 listed. An input that
+    # `driver_reference/core/__init__.py` — 104 inputs, 103 listed. An input that
     # contributed nothing is still an input, and its hash still pins the run.
     snap = snapshot() if snap is None else snap
     report = {}

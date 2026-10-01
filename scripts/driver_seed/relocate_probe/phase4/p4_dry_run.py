@@ -36,8 +36,8 @@ for p in (_ROOT, _SEED, _PROBE, _P2, _HERE):
 
 import m4_reader_residual as M4                     # scan(), real caps
 import route_a_component_census as CEN              # work() — the Route-A leg
-from driver.channels.fiscal_ai import run_code_tier as RC
-from driver.channels.fiscal_ai import build_packets as BP
+from driver_reference.channels.fiscal_ai import run_code_tier as RC
+from driver_reference.channels.fiscal_ai import build_packets as BP
 from m1_canonical_selector import _driver
 from m1_transcript_census import NUM, spoken_text
 

@@ -20,7 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, 'scripts', 'driver_seed'))
-from driver.channels.fiscal_ai import run_code_tier as RC
+from driver_reference.channels.fiscal_ai import run_code_tier as RC
 import link_lib as L
 
 THE_PAIR = ('us-gaap:StatementBusinessSegmentsAxis', 'aci:ReportableSegmentMember')

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """XBRL-FIRST deterministic lane (GPT final design, head-to-head verified 2026-07-13; #767 step 1).
 
-WP2: THIS FILE IS A THIN ADAPTER over `driver/relocation/locator.py`
+WP2: THIS FILE IS A THIN ADAPTER over `driver_reference/relocation/locator.py`
 (`match_facts` + `discover_pairings`), and the law it delegates to CHANGED in #827 Stage 3.
 
     WAS: exact concept identifier AS STORED (full qname when present; otherwise bare
@@ -32,7 +32,7 @@ seg_members list-fix broke 50/1761 certified records — STATE.md).
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'driver', 'relocation'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'driver_reference', 'relocation'))
 import locator as LOC
 
 HERE = os.path.dirname(__file__)

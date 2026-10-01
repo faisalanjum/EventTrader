@@ -309,7 +309,7 @@ def frozen_files(calls: list[dict]) -> dict[str, str]:
         V2.HIDDEN_KEY,
         V2.FISCAL_GRADER,
         ROOT / "config/local_llm.py",
-        ROOT / "driver/relocation/inline_html.py",
+        ROOT / "driver_reference/relocation/inline_html.py",
         V2.PHASE2 / "m1_structure_inventory.py",
         V2.PHASE2 / "m1_transcript_census.py",
         V2.PHASE2 / "m2_native_table_shadow_r3.py",

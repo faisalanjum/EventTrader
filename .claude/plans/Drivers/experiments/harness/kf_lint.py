@@ -36,10 +36,10 @@ from decimal import Decimal
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", ".."))
 sys.path.insert(0, _REPO)
-from driver.core.prepared_fact_v2 import (ITEM_FIELDS,                  # noqa: E402
+from driver_reference.core.prepared_fact_v2 import (ITEM_FIELDS,                  # noqa: E402
                                           verify_occurrence,
                                           PreparedFactV2, SchemaError)
-from driver.core.driver_write_cli import (V2_ABSTENTION_KEYS,           # noqa: E402
+from driver_reference.core.driver_write_cli import (V2_ABSTENTION_KEYS,           # noqa: E402
                                           V2_REPLY_KEYS)
 
 # THE ONE AUTHORITATIVE FIELD SOURCE (Step 2 §2). Every structural name is

@@ -32,7 +32,7 @@ _ROOT = os.path.abspath(os.path.join(_HERE, '..', '..', '..', '..'))
 sys.path.insert(0, _ROOT)
 sys.path.insert(0, _HERE)
 
-from driver.relocation import inline_html as IH
+from driver_reference.relocation import inline_html as IH
 import m1_structure_inventory as INV
 
 EX_CACHE = os.path.join(_HERE, '..', 'exhibit_html_cache')

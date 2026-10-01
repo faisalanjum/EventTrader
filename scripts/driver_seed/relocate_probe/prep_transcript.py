@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.dirname(__file__))
 import prep, link_lib as L
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
-from driver.channels.fiscal_ai import run_code_tier as RC
+from driver_reference.channels.fiscal_ai import run_code_tier as RC
 
 HERE = os.path.dirname(__file__)
 

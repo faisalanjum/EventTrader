@@ -6,7 +6,7 @@
 import os, sys
 _ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, _ROOT)
-from driver.channels.fiscal_ai import build_packets as BP
+from driver_reference.channels.fiscal_ai import build_packets as BP
 
 
 def rec(sid, stype, tk, label, val, **extra):

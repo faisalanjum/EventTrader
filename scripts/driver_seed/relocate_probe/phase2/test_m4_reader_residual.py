@@ -13,7 +13,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.abspath(os.path.join(_HERE, '..', '..', '..', '..')))
 
-from driver.relocation import inline_html as IH
+from driver_reference.relocation import inline_html as IH
 from m4_reader_residual import scan, MAX_CHARS, MAX_CASES
 
 OUT = os.path.join(_HERE, 'm4_reader_residual.json')

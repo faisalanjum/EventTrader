@@ -292,9 +292,9 @@ def build_reader_plan(events=None):
         "step2_checker": _hid("kf_lint.py"),
         # the execution owners this plan will drive
         "reply_transport": _hid("raw_transport.py"),
-        "matcher": _id("driver/core/fact_match.py"),
+        "matcher": _id("driver_reference/core/fact_match.py"),
         "scorer": _hid(os.path.join("scorers", "score_exp5.py")),
-        "core_route": _id("driver/core/driver_write_cli.py"),
+        "core_route": _id("driver_reference/core/driver_write_cli.py"),
         # THE READER'S OWN launcher, template AND generated. The K-fields
         # template hardcodes 36 x (sonnet+opus) = 72 gold drafts and cannot
         # express P1-P5, so pinning it was pinning the wrong launcher entirely

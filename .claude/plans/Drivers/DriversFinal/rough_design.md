@@ -66,4 +66,4 @@
 
 **Known costs so far:** JEV tags ≈ $1.2K and identity checks ≈ $1.1–1.9K for the corpus (extrapolated); JEV time 2–7 days at the observed rate (19 at the documented limit); Docling ≈ 25–30 days on one CPU. Reader cost: unmeasured.
 
-**Sources:** [fact_types.md](fact_types.md) · [JEV.md](JEV.md) · [Dockling/docling.md](Dockling/docling.md) · [rules](DRIVER_RULES_Categorized.md) · Phase 6 and Route D in `../WIP/UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md` · `driver/core/driver_writer.py`, `driver_write_cli.py`, `driver_neo4j_adapter.py`, `prepared_fact_v2.py` · discussion log: `Archive/WORKFLOW_SCRATCHPAD.md` (2026-09-30).
+**Sources:** [fact_types.md](fact_types.md) · [JEV.md](JEV.md) · [Dockling/docling.md](Dockling/docling.md) · [rules](DRIVER_RULES_Categorized.md) · Phase 6 and Route D in `../WIP/UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md` · `driver_reference/core/driver_writer.py`, `driver_write_cli.py`, `driver_neo4j_adapter.py`, `prepared_fact_v2.py` · discussion log: `Archive/WORKFLOW_SCRATCHPAD.md` (2026-09-30).

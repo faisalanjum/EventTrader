@@ -107,8 +107,8 @@ DECLARATIONS = (
 
 #: MODULE SCOPE, because `tally` and `_emit` use them and `main` no longer
 #: does. They were local to `main` while everything lived there.
-from driver.core.xbrl_attach import candidate_units_for          # noqa: E402
-from driver.relocation.inline_html import prepare, refused        # noqa: E402
+from driver_reference.core.xbrl_attach import candidate_units_for          # noqa: E402
+from driver_reference.relocation.inline_html import prepare, refused        # noqa: E402
 
 
 def main():
@@ -395,7 +395,7 @@ def _emit(t, tx_before, tx_after, verified_filings, cached):
         "method": "each DECLARATION is read from its own filing's "
                   "<xbrli:unitNumerator>/<xbrli:unitDenominator> via "
                   "inline_html.prepare; the concatenated graph name is NEVER "
-                  "split; classification is driver.core.xbrl_attach."
+                  "split; classification is driver_reference.core.xbrl_attach."
                   "candidate_units_for",
         "graph_read": {"lastCommittedTxn_before": tx_before["lastCommittedTxn"],
                        "lastCommittedTxn_after": tx_after["lastCommittedTxn"],

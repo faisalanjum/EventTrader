@@ -19,7 +19,7 @@ from collections import Counter
 from multiprocessing import Pool
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(_HERE, '..', '..', '..', 'driver', 'relocation'))
+sys.path.insert(0, os.path.join(_HERE, '..', '..', '..', 'driver_reference', 'relocation'))
 CACHE = os.path.join(_HERE, 'inline_html_cache')
 OUT = os.path.join(_HERE, 'route_a_component_census_result.json')
 _drv = None

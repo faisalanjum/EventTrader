@@ -99,7 +99,7 @@ def test_asof_excludes_future_8k_real_data():
     """PIT cutoff on the EXISTING selector: replaying AA's Feb-2026 10-K arrival must
     not see the April-2026 8-K; without as_of the April 8-K IS enumerated (the gap)."""
     sys.path.insert(0, os.path.abspath(os.path.join(_HERE, '..', '..', '..', '..')))
-    from driver.channels.fiscal_ai import run_code_tier as RC
+    from driver_reference.channels.fiscal_ai import run_code_tier as RC
     from m1_canonical_selector import _driver
     drv = _driver()
     APRIL, FEB_10K = '0001193125-26-159018', '0001193125-26-077167'
@@ -178,7 +178,7 @@ def test_candidate_forms_exclude_padded_percent():
     ahead of the true 'Digital Sales increased 21%' passage). Items: a2d445ea7168,
     ef477ec33ea3, ff1b97121b05 (ACI, values 21 and 2)."""
     sys.path.insert(0, os.path.abspath(
-        os.path.join(_HERE, '..', '..', '..', '..', 'driver', 'relocation')))
+        os.path.join(_HERE, '..', '..', '..', '..', 'driver_reference', 'relocation')))
     import locator as L
     assert L._tableforms(21, '%', padded=False) == {'21'}
     assert L._tableforms(2, '%', padded=False) == {'2'}

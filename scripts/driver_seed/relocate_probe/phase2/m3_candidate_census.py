@@ -30,7 +30,7 @@ _ROOT = os.path.abspath(os.path.join(_HERE, '..', '..', '..', '..'))
 sys.path.insert(0, _ROOT)
 sys.path.insert(0, _HERE)
 
-from driver.relocation import inline_html as IH
+from driver_reference.relocation import inline_html as IH
 from m1_canonical_selector import _driver
 
 WP1 = os.path.join(_ROOT, 'data', 'driver_catalog_seed', 'wp1', 'code_resolved.jsonl')
