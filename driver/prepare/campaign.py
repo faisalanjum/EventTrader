@@ -16,7 +16,8 @@ class Campaign:
     """Transactional receipts select exact response versions; replay is offline.
 
     One process owns a campaign directory. New observations belong in a new
-    campaign, not an implicit refresh of already-selected evidence.
+    campaign, not an implicit refresh of already-selected evidence. Failed
+    attempts are kept in `failures` and never select a URL, so live mode retries it.
     """
     def __init__(self, directory, *, live=False, sender=http_request,
                  now=time.monotonic, sleep=time.sleep, requests_per_second=5,
@@ -155,7 +156,10 @@ class Campaign:
             data, receipt = download(url, sender=self._request, now=self.now, sleep=self.sleep,
                                      before_send=self._pace)
         except DownloadError as exc:
-            self._record(url, dict(exc.receipt, error=str(exc), elapsed_seconds=self.now() - started))
+            with self.db:  # created on first failure, so replays never alter older evidence
+                self.db.execute('CREATE TABLE IF NOT EXISTS failures (url TEXT NOT NULL, receipt TEXT NOT NULL)')
+                self.db.execute('INSERT INTO failures VALUES (?, ?)', (url, json.dumps(
+                    dict(exc.receipt, error=str(exc), elapsed_seconds=self.now() - started))))
             raise
         # Cookies do not establish filing provenance and are not needed for replay.
         for attempt in receipt['attempts']:

@@ -1,88 +1,130 @@
-"""Acquire every listed SEC filing overnight: package + SEC file list, resumable, safe stops.
+"""Acquire every listed SEC filing: package + SEC file list, resumable, with safe stops.
 
-No conversion, AI or database writes. One line per finished filing in results.jsonl;
-progress.json is rewritten after each filing for monitoring. Re-running the same
-command resumes: finished filings are skipped and saved responses make no requests.
+No conversion, AI or database writes. results.sqlite3 keeps one row per attempt; a
+filing's latest row is its status. Only OK is final: re-running the same command
+skips OK filings whose saved files still exist and retries every other filing
+(FAILED, INVENTORY_GAP, PENDING); saved responses make no requests. complete=true
+means every listed filing is OK. Stops: any HTTP 403, free disk below the reserve,
+or 20 filings in a row not OK; the filing in progress at a 403/disk stop stays PENDING.
 """
 import argparse
 from collections import Counter
+from contextlib import closing
 from datetime import datetime, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
+import sqlite3
+import sys
 import time
 
-from driver.prepare.acquire import AcquisitionError, StorageError, acquire, read_package, _identity, _url
+import driver.prepare
+from driver.prepare.acquire import StorageError, acquire, read_package, _identity, _url
 from driver.prepare.campaign import Campaign
 from driver.prepare.inventory import compare_inventory, parse_index
-from driver.prepare.transport import DownloadError
+
+SOURCES = [Path(__file__), *sorted(Path(driver.prepare.__file__).parent.glob('*.py'))]
 
 
-def _progress(output, value):
-    temporary = output / 'progress.json.pending'
-    temporary.write_text(json.dumps(value, indent=2) + '\n')
-    os.replace(temporary, output / 'progress.json')
+def _write(path, value):
+    pending = path.with_name(path.name + '.pending')
+    pending.write_text(json.dumps(value, indent=2) + '\n')
+    os.replace(pending, path)
 
 
-# This disk also serves the Kubernetes control plane: kubelet evicts pods below 15% free
-# (150.6 GB of 1,004 GB). 162 GB keeps ~11 GB clear of that line.
-def run(inputs, output, *, live=False, every=1, limit=None, min_free_gb=162,
+def _saved(output, row):
+    version = output / 'versions' / row['acc'] / row['sha256']
+    return all((version / name).is_file() for name in ('submission.txt.gz', 'manifest.json', 'receipt.json'))
+
+
+def _filing(campaign, output, reserve, accession, cik, form):
+    """Package → one saved copy → verified readback → SEC file list → comparison."""
+    package_url = _url(_identity(accession, cik, form))
+    _, receipt = campaign.fetch(package_url)
+    blob = campaign.root / 'blobs' / (receipt['sha256'] + '.gz')
+    version = acquire(accession, cik, form, output / 'versions', package=str(blob),
+                      sha256=receipt['sha256'], minimum_free_bytes=reserve)
+    manifest, _ = read_package(version)
+    index_url = package_url.rsplit('/', 1)[0] + '/' + accession + '-index.html'
+    index, _ = campaign.fetch(index_url)
+    gaps = compare_inventory(manifest, parse_index(index, index_url))
+    return dict(status='INVENTORY_GAP' if gaps['missing'] or gaps['metadata_mismatch'] else 'OK',
+                sha256=receipt['sha256'], members=len(manifest['members']),
+                package_bytes=manifest['package']['bytes'], missing=gaps['missing'],
+                metadata_mismatch=gaps['metadata_mismatch'], package_only=len(gaps['package_only']))
+
+
+# Kubernetes nodes keep container images on this disk and evict pods below 15% free;
+# stopping at 16% stays clear of that line on any node and disk size.
+def run(inputs, output, *, live=False, every=1, limit=None, min_free_percent=16,
         max_consecutive_failures=20, requests_per_second=5, campaign_class=Campaign):
+    frozen = json.loads(Path(inputs).read_text())
+    listed = frozen['filings']
+    if (len(listed) != frozen.get('count') or frozen.get('sha256_of_filings') !=
+            hashlib.sha256(json.dumps(listed, separators=(',', ':')).encode()).hexdigest()):
+        raise ValueError('Filing list differs from its declared count or SHA-256')
+    keys = [(filing['acc'], filing['cik'], filing['form']) for filing in listed[::every][:limit]]
     output = Path(output).absolute()
     output.mkdir(parents=True, exist_ok=True)
-    filings = json.loads(Path(inputs).read_text())['filings'][::every][:limit]
-    results = output / 'results.jsonl'
-    finished = [json.loads(line) for line in results.read_text().splitlines()] if results.exists() else []
-    done, counts = {row['acc'] for row in finished}, Counter(row['status'] for row in finished)
-    streak, stop, started = 0, None, time.monotonic()
-    reserve = int(min_free_gb * 1e9)
+    reserve = int(shutil.disk_usage(output).total * min_free_percent / 100)
+    launch = dict(started_at=datetime.now(timezone.utc).isoformat(), argv=sys.argv,
+                  inputs_sha256=frozen['sha256_of_filings'],
+                  code={path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in SOURCES})
     with campaign_class(output / 'campaign', live=live, requests_per_second=requests_per_second,
-                        minimum_free_bytes=reserve) as campaign, results.open('a') as log:
-        for position, filing in enumerate(filings, 1):
-            if filing['acc'] in done:
-                continue
-            accession, cik, form = filing['acc'], filing['cik'], filing['form']
-            row, began = dict(acc=accession, form=form, cik=cik), time.monotonic()
-            try:
-                package_url = _url(_identity(accession, cik, form))
-                _, receipt = campaign.fetch(package_url)
-                blob = campaign.root / 'blobs' / (receipt['sha256'] + '.gz')
-                version = acquire(accession, cik, form, output / 'versions', package=str(blob),
-                                  sha256=receipt['sha256'], minimum_free_bytes=reserve)
-                manifest, _ = read_package(version)  # verify the saved copy and decode it once
-                index_url = package_url.rsplit('/', 1)[0] + '/' + accession + '-index.html'
-                index, _ = campaign.fetch(index_url)
-                gaps = compare_inventory(manifest, parse_index(index, index_url))
-                row.update(status='OK' if not gaps['missing'] and not gaps['metadata_mismatch'] else 'INVENTORY_GAP',
-                           members=len(manifest['members']), package_bytes=manifest['package']['bytes'],
-                           missing=gaps['missing'], metadata_mismatch=gaps['metadata_mismatch'],
-                           package_only=len(gaps['package_only']))
-                streak = 0
-            except StorageError as exc:  # low disk or storage failure: stop; this filing is retried on resume
-                stop = 'storage: ' + str(exc)
-            except (AcquisitionError, DownloadError, OSError, ValueError, KeyError, TypeError, IndexError) as exc:
-                row.update(status='FAILED', reason=f'{type(exc).__name__}: {exc}'[:300])
-                streak += 1
-            if campaign.stopped or (campaign.root / 'STOP.json').exists():
-                stop = stop or 'HTTP 403 or campaign stop; see campaign/STOP.json'
-            if 'status' in row and not (stop and row['status'] == 'FAILED' and campaign.stopped):
-                row['seconds'] = round(time.monotonic() - began, 2)
-                log.write(json.dumps(row) + '\n')
-                log.flush()
-                done.add(accession)
-                counts[row['status']] += 1
-            if streak >= max_consecutive_failures:
-                stop = f'{streak} consecutive failures'
-            _progress(output, dict(
-                updated_at=datetime.now(timezone.utc).isoformat(), position=position, of=len(filings),
-                done=len(done), counts=dict(counts), last=accession, stop=stop,
+                        minimum_free_bytes=reserve) as campaign, \
+            closing(sqlite3.connect(output / 'results.sqlite3')) as db:
+        db.execute('PRAGMA synchronous=FULL')
+        with db:
+            db.execute('CREATE TABLE IF NOT EXISTS launches (row TEXT NOT NULL)')
+            db.execute('CREATE TABLE IF NOT EXISTS results (row TEXT NOT NULL)')
+            db.execute('INSERT INTO launches VALUES (?)', (json.dumps(launch),))
+        state = dict.fromkeys(keys, 'PENDING')
+        for (text,) in db.execute('SELECT row FROM results ORDER BY rowid'):
+            row = json.loads(text)
+            key = (row['acc'], row['cik'], row['form'])
+            if key in state:  # the latest row wins; an OK whose saved files are gone is redone
+                state[key] = row['status'] if row['status'] != 'OK' or _saved(output, row) else 'PENDING'
+        streak, stop, started = 0, None, time.monotonic()
+
+        def report(position):
+            _write(output / 'progress.json', dict(
+                updated_at=datetime.now(timezone.utc).isoformat(), position=position, of=len(state),
+                counts=Counter(state.values()), last=keys[position - 1][0] if position else None, stop=stop,
                 free_gb=round(shutil.disk_usage(output).free / 1e9, 1), requests_this_run=campaign.sent_attempts,
                 minutes_this_run=round((time.monotonic() - started) / 60, 1)))
+
+        report(0)
+        for position, key in enumerate(keys, 1):
+            if state[key] == 'OK':
+                streak = 0  # a saved OK filing breaks a run of failures, so scattered retries continue
+                continue
+            accession, cik, form = key
+            began = time.monotonic()
+            try:
+                row = _filing(campaign, output, reserve, accession, cik, form)
+            except Exception as exc:  # record any per-filing error and continue; run-wide ones stop
+                reason = f'{type(exc).__name__}: {exc}'[:300]
+                if isinstance(exc, StorageError) or campaign.stopped or (campaign.root / 'STOP.json').exists():
+                    stop = reason  # low disk, storage failure or HTTP 403: the filing stays PENDING
+                row = dict(status='FAILED', reason=reason)
+            if not stop:
+                row = dict(acc=accession, form=form, cik=cik, **row, seconds=round(time.monotonic() - began, 2))
+                with db:
+                    db.execute('INSERT INTO results VALUES (?)', (json.dumps(row),))
+                state[key] = row['status']
+                streak = 0 if row['status'] == 'OK' else streak + 1
+                if streak >= max_consecutive_failures:
+                    stop = f'{streak} filings in a row not OK; last: {row.get("reason", row["status"])}'
+            report(position)
             if stop:
                 break
-    summary = dict(stop=stop, finished=stop is None, done=len(done), of=len(filings), counts=dict(counts))
-    (output / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
+        counts = Counter(state.values())
+        summary = dict(stop=stop, complete=counts['OK'] == len(state), of=len(state), counts=counts,
+                       unresolved=sorted(key[0] for key, status in state.items()
+                                         if status in ('FAILED', 'INVENTORY_GAP')), launch=launch)
+        _write(output / 'summary.json', summary)
     return summary
 
 
@@ -93,7 +135,5 @@ if __name__ == '__main__':
     parser.add_argument('--live', action='store_true')
     parser.add_argument('--every', type=int, default=1, help='take every Nth filing (rehearsal sample)')
     parser.add_argument('--limit', type=int)
-    parser.add_argument('--min-free-gb', type=float, default=162)
-    args = parser.parse_args()
-    print(json.dumps(run(args.inputs, args.output, live=args.live, every=args.every,
-                         limit=args.limit, min_free_gb=args.min_free_gb), indent=2))
+    parser.add_argument('--min-free-percent', type=float, default=16)
+    print(json.dumps(run(**vars(parser.parse_args())), indent=2))

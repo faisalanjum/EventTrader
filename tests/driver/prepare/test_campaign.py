@@ -50,6 +50,24 @@ class CampaignTests(unittest.TestCase):
             self.assertEqual(len(calls), 1)
             self.assertTrue((Path(directory) / 'STOP.json').is_file())
 
+    def test_failed_attempt_is_kept_but_never_selected_so_live_mode_retries(self):
+        replies = iter([(503, {}, b'')] * 3 + [(200, {}, b'ok')])
+        clock, url = [0.0], 'https://www.sec.gov/Archives/one'
+        def sleep(delay):
+            clock[0] += delay
+        with tempfile.TemporaryDirectory() as directory:
+            settings = dict(sender=lambda *args: next(replies), now=lambda: clock[0], sleep=sleep)
+            with Campaign(directory, live=True, **settings) as run:
+                with self.assertRaises(DownloadError):
+                    run.fetch(url)
+            with Campaign(directory, **settings) as run:
+                with self.assertRaisesRegex(ValueError, 'Uncached'):  # offline never retries
+                    run.fetch(url)
+            with Campaign(directory, live=True, **settings) as run:
+                self.assertEqual(run.fetch(url)[0], b'ok')
+                failed = [json.loads(receipt) for _, receipt in run.db.execute('SELECT * FROM failures')]
+            self.assertEqual([a['status'] for a in failed[0]['attempts']], [503, 503, 503])
+
     def test_corrupt_cache_wrong_url_and_second_writer_fail(self):
         with tempfile.TemporaryDirectory() as directory:
             with Campaign(directory, live=True, sender=lambda *a: (200, {}, b'original')) as run:

@@ -19,6 +19,7 @@ driver/prepare/campaign.py          tests/driver/prepare/test_campaign.py
                                    tests/driver/prepare/test_crash.py
 driver/prepare/inventory.py         tests/driver/prepare/test_inventory.py
 scripts/driver/prepare/             tests/driver/prepare/test_acquisition_check.py
+                                   tests/driver/prepare/test_full_run.py
                                    tests/driver/prepare/fixtures/
 ```
 

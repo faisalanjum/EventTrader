@@ -72,7 +72,9 @@ built-in SQLite. Fetching reads one receipt; history is loaded only for an expli
 `campaign.records` audit. Existing `responses.json` imports once without alteration.
 Default replay is offline; `live=True`
 fetches only unselected URLs. Corrupt selections stop without repair. Refreshes
-use a separate campaign directory, preserving previous versions.
+use a separate campaign directory, preserving previous versions. Failed attempts
+are kept in a separate `failures` table and never select a URL, so a later live
+fetch retries it.
 
 New downloads/saves require a configurable free-space reserve (default **5 GiB**).
 Storage failures stop the batch; callers must stop on `StorageError` or
@@ -97,7 +99,9 @@ Existing news/transcript ingestion has not been connected to it yet.
 The bounded comparison job lives in `scripts/driver/prepare/acquisition_check.py`;
 tests live in `tests/driver/prepare/`. It consumes a frozen filing list and local
 originals, writes the final outcome report once, and separates this-run requests
-from cached history. It is a comparison job, not the overnight runner. Its HTML
+from cached history. It is a comparison job, not the overnight runner
+(`scripts/driver/prepare/full_run.py`: frozen list → package + SEC file list per
+filing; only OK is final, so a rerun retries everything else). Its HTML
 links are observations, not a claim of complete reference
 resolution. Conversion, reference interpretation and ingestion activation are
 separate steps.
