@@ -1246,7 +1246,22 @@ Claude (verified: the same 69 rules, no overlaps: 1 = 7 · 2a 17 · 2b 16 · 2c 
   - deleted the separate file (backups: session scratchpad `premerge_*`).
 
 
-**2026-09-29, owner:** "Are you ready to be compacted?" → Claude saved the resume point and open items to memory. From now on, new log entries go ABOVE the "# Archived: approved no-stages proposal" heading, so the archive stays one clean block at the end.
+**2026-09-29, owner:** "Are you ready to be compacted?" → Claude saved the resume point and open items to memory. From now on, new log entries go ABOVE the "**2026-10-01, owner:** "What step does docling start?" → Step 4 (tool test); if it wins, Steps 5/7/9, with its splitter tried in 6.
+
+**2026-10-01, owner:** "Okay, can you check if step 2 is done and if we can update both Notion and commit?" + "& push"
+- Claude checked StepsPlans/Prepare-Step2.md (21:56):
+  - 50-filing comparison: every SEC-listed file present; packages 50 req / 305.9 MB / 50.5 s vs index + files 591 req / 182.4 MB / 564.8 s;
+  - 502-filing scale review byte-exact;
+  - 5 scale fixes;
+  - checker final_acceptance.md: PASS.
+- full_run_20261001 = the 1,016-filing rehearsal: finished 02:33Z, 1,016 OK, 2,032 requests, 17.1 min.
+- Nothing is running; no files changed in the last 15 min.
+- 73 tests pass; secret scan clean.
+- Notion Prepare updated: status steps 0–2, A row results, "2 fifty filings ✅", Step 2 link, change log.
+- Committed and pushed driver/, tests/driver/, scripts/driver/prepare/ and DriversFinal.
+- Note: Prepare-Step2.md asks for the owner's acceptance before Step 3 is released.
+
+# Archived: approved no-stages proposal" heading, so the archive stays one clean block at the end.
 
 **2026-09-29, owner (new task: audit levels 1→4):** "Here's the next task. Understand it first in depth. This was my base, and these aren't just one file. These are a set of files. Inside this vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign As background context, these files were created with an even looser, rougher base from some of these files inside this. vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers. Now, let's assume what I told you above is the first step. The second step was: we based it on those FinalDesign. We created this file. vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_RULES.md And then, based on that, we made some assumptions (based on say roughly vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/WORKFLOW_SCRATCHPAD.md). Let's call this step 2. Then, for step 3 We created vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Simplified.md. Then finally, for step 4 We created vscode-remote://ssh-remote%2Bk8s-master/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Categorized.md. What I want to do in the smartest way possible, as well as having a full understanding of what got missed, what got added, and what got modified The task is to ensure one thing: that nothing was deleted from the top stage or level all the way to the bottom without me having an understanding. Especially if you look at level 1 to level 4, I want to know: if something got deleted, modified, or added, what was the reason? That way, I can have a final look and be 100% satisfied that everything in the final has been included in the fourth stage or fourth level, unless, of course, it has been thought through and validated by me.
 
@@ -2614,6 +2629,12 @@ plus "If it's required, then yes, approved. 'Including contracts, images and 13D
 
 **2026-10-01, owner:** "sure for now lets keep it but we will need to verify each part of the codebase when we start using it - put that as a note"
 - Claude added a "Reused code" note under "Code home" in runningIdeas.md (any reused code is verified part by part before we rely on it; the later-10-Q cross-check is kept for now, script `scripts/driver_seed/relocate_probe/phase2/m3_candidate_census.py`). Also saved as memory `feedback_verify_reused_code_before_use`.
+
+**2026-10-01 evening, owner + Claude (Prepare Steps 1–2 review cycle, summarized before compaction):**
+- Owner rules: no over-engineering; minimal yet 100% reliable on every filing; Claude checks every detail; old files cleaned up; Claude's reviews go to `/tmp/Prepare-A_Get_Claude_review.md` (overwritten each time; not while Codex is working from it).
+- Step 1 (Get) went from 1,146 lines/18 packages/20 requests per filing to 397 lines, stdlib, 1 request; fixes for multi-company headers and SEC's unreliable document count; compressed package only (whole DB ≈ 49 GB). Verified on 111 real filings, byte-exact. Codex kept the overall timer, folder-safe names and symlink checks (Claude agreed). Cleanup done.
+- Step 2: Claude's own 502-filing run (all 12 kinds, 277 filing agents, 5 huge 10-Ks): 502/502 byte-exact; 5,769/5,769 SEC-listed files present; crash/restart clean. Five fixes requested: multi-company file-list false rejections (11), response log rewritten per download, double storage, low-disk stop, real send times.
+- Owner decisions: full run at 5 requests/second; SEC file-list check on every filing; all 5 fixes; leave unrelated old tests. Overnight runner + 1,000-filing rehearsal required before the full run; the owner will say when to launch the full 42,633 run.
 
 # Archived: approved no-stages proposal — 2026-09-28
 

@@ -2,6 +2,7 @@
 import argparse
 import binascii
 from datetime import datetime
+import errno
 import hashlib
 import gzip
 import io
@@ -19,6 +20,19 @@ from .transport import download
 
 class AcquisitionError(ValueError):
     """Invalid input, package or immutable cache; no successful version published."""
+
+
+class StorageError(AcquisitionError):
+    """Stop the entire run; more filings cannot resolve a storage failure."""
+
+
+def check_space(path, minimum_free_bytes=5 * 1024**3):
+    path = Path(path).absolute()
+    while not path.exists():
+        path = path.parent
+    free = shutil.disk_usage(path).free
+    if free < minimum_free_bytes:
+        raise StorageError(f'Low disk space: {free} bytes free; reserve is {minimum_free_bytes}')
 
 
 def _identity(accession, cik, form):
@@ -219,8 +233,9 @@ def read_package(path):
         raise AcquisitionError('Invalid cache: ' + str(exc)) from exc
 
 
-def acquire(accession, cik, form, output, *, package=None, sha256=None, live=False):
-    """Publish or verify one immutable package version; return its directory."""
+def acquire(accession, cik, form, output, *, package=None, sha256=None, live=False,
+            minimum_free_bytes=5 * 1024**3):
+    """Publish/verify one version; supplied gzip is immutable and hard-linked."""
     identity = _identity(accession, cik, form)
     if (package is None) == (not live) or (package is not None and not sha256) or (live and sha256 is not None):
         raise AcquisitionError('Use --package with --sha256, or --live')
@@ -229,12 +244,16 @@ def acquire(accession, cik, form, output, *, package=None, sha256=None, live=Fal
     output = Path(output).absolute()
     _no_symlinks(output)
     receipt = None
+    compressed_source = None
     try:
         if live:
+            check_space(output, minimum_free_bytes)
             data, receipt = download(_url(identity))
         else:
+            _no_symlinks(Path(package).absolute())
             data = Path(package).read_bytes()
             if data.startswith(b'\x1f\x8b'):
+                compressed_source = Path(package)
                 data = _uncompress(data)
             if _hash(data) != sha256.lower():
                 raise AcquisitionError('Supplied package SHA-256 mismatch; cache is not repaired')
@@ -248,11 +267,15 @@ def acquire(accession, cik, form, output, *, package=None, sha256=None, live=Fal
             if cached_data != data or cached_manifest != manifest:
                 raise AcquisitionError('Immutable cache differs')
             return target
+        check_space(output, minimum_free_bytes)
         parent.mkdir(parents=True, exist_ok=True)
         staged = Path(tempfile.mkdtemp(prefix='.pending-', dir=parent))
         try:
-            contents = {'submission.txt.gz': _compress(data),
-                        'manifest.json': _json(manifest), 'receipt.json': _json(receipt)}
+            contents = {'manifest.json': _json(manifest), 'receipt.json': _json(receipt)}
+            if compressed_source is not None:
+                os.link(compressed_source, staged / 'submission.txt.gz', follow_symlinks=False)
+            else:
+                contents['submission.txt.gz'] = _compress(data)
             for name, body in contents.items():
                 path = staged / name
                 with path.open('xb') as handle:
@@ -265,7 +288,8 @@ def acquire(accession, cik, form, output, *, package=None, sha256=None, live=Fal
                 shutil.rmtree(staged)
         return target
     except (OSError, AcquisitionError) as exc:
-        error = AcquisitionError(str(exc))
+        fatal = isinstance(exc, StorageError) or getattr(exc, 'errno', None) in (errno.ENOSPC, errno.EDQUOT, errno.EXDEV)
+        error = (StorageError if fatal else AcquisitionError)(str(exc))
         error.receipt = getattr(exc, 'receipt', receipt)
         raise error from exc
 

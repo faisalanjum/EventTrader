@@ -1,0 +1,48 @@
+"""Immutable raw-byte blobs. Source/version/timing receipts belong to the caller."""
+import os
+from pathlib import Path
+import re
+import tempfile
+
+from .acquire import AcquisitionError, _compress, _hash, _no_symlinks, _uncompress
+
+
+def _path(root, sha256):
+    if not isinstance(sha256, str) or not re.fullmatch(r'[0-9a-f]{64}', sha256):
+        raise ValueError('Invalid blob SHA-256')
+    path = Path(root).absolute() / (sha256 + '.gz')
+    _no_symlinks(path)
+    return path
+
+
+def load_blob(root, sha256):
+    """Read and verify exact bytes; missing or damaged blobs fail explicitly."""
+    data = _uncompress(_path(root, sha256).read_bytes())
+    if _hash(data) != sha256:
+        raise AcquisitionError('Blob SHA-256 mismatch; cache is not repaired')
+    return data
+
+
+def store_blob(root, data: bytes):
+    """Lossless deterministic gzip, verified reuse, atomic no-overwrite publication."""
+    if not isinstance(data, bytes):
+        raise TypeError('Archive requires bytes before parsing or cleanup')
+    sha256 = _hash(data)
+    target = _path(root, sha256)
+    if target.exists():
+        load_blob(root, sha256)
+        return sha256
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=target.parent, prefix='.pending-', delete=False) as handle:
+        staged = Path(handle.name)
+        try:
+            handle.write(_compress(data))
+            handle.flush()
+            os.fsync(handle.fileno())
+            try:
+                os.link(staged, target)
+            except FileExistsError:
+                load_blob(root, sha256)
+        finally:
+            staged.unlink()
+    return sha256

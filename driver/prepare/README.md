@@ -14,7 +14,10 @@ python3 -m driver.prepare.acquire \
 ```
 
 `--package` accepts raw or gzip input; SHA-256 always identifies the uncompressed
-original. Verified reuse makes zero requests. Replace both source arguments with
+original. Supplied gzip is immutable and hard-linked into the version, so the
+download cache and version share one physical copy. Keep both on the same filesystem;
+cross-filesystem sharing fails explicitly. Raw input and live downloads are compressed once.
+Verified reuse makes zero requests. Replace both source arguments with
 `--live` for a fresh SEC download; live mode never guesses which saved version to use.
 Success prints the version directory; failure exits nonzero, with HTTP details
 on stderr when available.
@@ -53,3 +56,48 @@ one package and its decoded files fit in memory. Framing/hash checks cannot dete
 an entire omitted member without an independent inventory. Readability, external
 references and broader coverage remain later checks. See [tests](../../tests/driver/README.md)
 and the [work order](../../.claude/plans/Drivers/DriversFinal/StepsPlans/Prepare-A_Get.md).
+
+## Batch acquisition and raw payloads
+
+`inventory.py` compares the package with a preserved SEC index. Every listed file
+is required, including XML and images; package-only files are reported separately.
+
+`Campaign` adds one download owner, a shared **5 requests/second** gate (including
+retries), and a persistent campaign-wide stop after any 403. Receipt times are
+recorded after pacing. All campaign calls go through this owner; separate folders
+are not separate request allowances. SEC's overall cap remains 10/second.
+
+`responses.sqlite3` saves each receipt in one durable transaction, using Python's
+built-in SQLite. Fetching reads one receipt; history is loaded only for an explicit
+`campaign.records` audit. Existing `responses.json` imports once without alteration.
+Default replay is offline; `live=True`
+fetches only unselected URLs. Corrupt selections stop without repair. Refreshes
+use a separate campaign directory, preserving previous versions.
+
+New downloads/saves require a configurable free-space reserve (default **5 GiB**).
+Storage failures stop the batch; callers must stop on `StorageError` or
+`campaign.stopped`. Cached bytes remain readable when space is low. Every filing
+in the planned full run requires its SEC inventory comparison, not a sample.
+
+```python
+from driver.prepare.campaign import Campaign
+with Campaign(cache_directory) as campaign:  # offline by default
+    original_bytes, receipt = campaign.fetch(exact_sec_archive_url)
+
+from driver.prepare.archive import store_blob, load_blob
+source_hash = store_blob(raw_directory, payload_bytes)
+assert load_blob(raw_directory, source_hash) == payload_bytes
+```
+
+The raw archive stores lossless compressed bytes without interpreting them.
+Call it before JSON/schema parsing or transcript SDK transformations; keep source,
+event, publication/version and actual retrieval metadata in caller-owned receipts.
+Existing news/transcript ingestion has not been connected to it yet.
+
+The bounded comparison job lives in `scripts/driver/prepare/acquisition_check.py`;
+tests live in `tests/driver/prepare/`. It consumes a frozen filing list and local
+originals, writes the final outcome report once, and separates this-run requests
+from cached history. It is a comparison job, not the overnight runner. Its HTML
+links are observations, not a claim of complete reference
+resolution. Conversion, reference interpretation and ingestion activation are
+separate steps.

@@ -2,7 +2,7 @@
 
 **Goal:** preserve an SEC submission and every packaged file, unchanged and traceable.
 **Status:** implementation and confirmed review fixes complete. The saved 60-filing
-sample passes; Step 2's inventory/coverage validation remains a separate checkpoint.
+sample passes; [Step 2's inventory/coverage check](Prepare-Step2.md) also passed.
 
 ```text
 SEC package → verify identity/framing → inventory files → save compressed original
@@ -62,7 +62,7 @@ decoded bytes are held in memory; large-file resource limits need Step 2 validat
   This revision used saved inputs and simulated HTTP; it made no new SEC requests.
 
 **Remaining limit:** well-formed framing alone cannot reveal a whole missing member.
-Compare independent SEC inventories in Step 2; neither count equality nor hashes
+Step 2 now compares independent SEC inventories; neither count equality nor hashes
 replace that check. Deep file validity, readability and external references also
 remain later work. Acquisition success does not mean all evidence is ready to read.
 

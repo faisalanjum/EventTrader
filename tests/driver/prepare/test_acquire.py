@@ -5,6 +5,7 @@ import gzip
 import io
 import json
 from contextlib import redirect_stderr
+import errno
 from pathlib import Path
 import subprocess
 import sys
@@ -269,6 +270,43 @@ class PublicationTests(unittest.TestCase):
                 acquisition.read_package(target)
         (target / 'manifest.json').write_bytes(saved)
         self.assertEqual(acquisition.read_package(target)[1], files)
+
+    def test_immutable_compressed_input_is_shared_without_recompression(self):
+        self.source.write_bytes(gzip.compress(self.data, compresslevel=1, mtime=123))
+        original = self.source.read_bytes()
+        with patch('driver.prepare.acquire._compress', side_effect=AssertionError('compressed twice')):
+            target = self.acquire()
+        saved = target / 'submission.txt.gz'
+        self.assertTrue(saved.samefile(self.source), 'the two paths must use one physical copy')
+        self.assertEqual(saved.read_bytes(), original)
+        self.assertEqual(acquisition.read_package(target)[1]['dir/main.htm'], b'<html>hello</html>\n')
+        self.source.unlink()
+        self.assertEqual(gzip.decompress(saved.read_bytes()), self.data)
+
+    def test_compressed_source_symlinks_fail_without_publication(self):
+        source = self.root / 'original.gz'
+        source.write_bytes(gzip.compress(self.data))
+        self.source.unlink()
+        self.source.symlink_to(source)
+        with self.assertRaises(AcquisitionError):
+            self.acquire()
+        self.assertFalse(self.output.exists())
+
+    def test_storage_shortage_stops_before_download_and_during_publication(self):
+        from driver.prepare.acquire import StorageError
+        with patch('driver.prepare.acquire.shutil.disk_usage') as usage, \
+                patch('driver.prepare.acquire.download', side_effect=AssertionError('network forbidden')):
+            usage.return_value.free = 0
+            with self.assertRaises(StorageError):
+                acquire(ACCESSION, CIK, FORM, self.output, live=True)
+        self.source.write_bytes(gzip.compress(self.data))
+        for number in (errno.ENOSPC, errno.EDQUOT, errno.EXDEV):
+            with self.subTest(errno=number), \
+                    patch('driver.prepare.acquire.os.link', side_effect=OSError(number, 'storage unavailable')):
+                with self.assertRaises(StorageError):
+                    self.acquire()
+            self.assertFalse((self.output / ACCESSION / digest(self.data)).exists())
+            self.assertEqual(gzip.decompress(self.source.read_bytes()), self.data)
 
     def test_same_package_reuses_version_for_each_listed_company(self):
         self.data = self.data.replace(b'\tCENTRAL INDEX KEY: ' + CIK.encode(),

@@ -110,8 +110,8 @@
   - plain code only, unattended, no AI;
   - **package first (owner approved, 2026-10-01):** acquire the complete-submission `.txt` and inventory every member. The index and bundle links already exist (`linkToHtml`, `linkToTxt`); compare routes in T5, not through routine double downloads;
   - identify files by accession + filename; keep sequence and exhibit type as metadata. Never collapse files sharing an exhibit label (F12);
-  - use local copies or SEC with the approved User-Agent (D12). This campaign shares **1 request/second** across workers, including file lists and retries, within SEC's shared limit. Any HTTP 403 stops the whole campaign; a second email adds no capacity;
-  - preserve each original as lossless gzip plus manifest/receipt; decode files once when needed (D15). Verify accession/form and membership among header company IDs, framing and safe decoding. Record stated/actual counts without requiring equality; framing alone cannot detect a whole omitted member. Independent inventory checks, deep file validation and references remain later checks;
+  - use local copies or SEC with the approved User-Agent (D12). This campaign shares **5 requests/second** across workers, including file lists and retries, within SEC's overall 10/second cap (owner approved, 2026-10-01). Any HTTP 403 stops the whole campaign; a second email adds no capacity;
+  - preserve each original as lossless gzip plus manifest/receipt; decode files once when needed (D15). Verify accession/form and membership among header company IDs, framing and safe decoding. Record stated/actual counts without requiring equality; framing alone cannot detect a whole omitted member. Compare **every filing** with SEC's own file list, including all 42,633 in the planned full run. Deep file validation and reference interpretation remain later checks;
   - cache packages and SEC file lists; reuse selected, hash-verified versions before downloading. Fully cached replays make zero requests; refresh is explicit. Preserve separate versions; corrupt caches stop without silent repair. Preserve original news/transcript payloads before cleaning, truncation or speaker filtering;
   - record source/version, publication and retrieval times, readiness and every gap. Later versions must not become earlier prediction evidence.
 - **P4** ✏️ EX-10 contracts and images are included; samples (T6, T7) set their method and priority.
@@ -357,12 +357,18 @@ All steps use the common records (§4), sampling rules (§5), execution rules (�
 
 #### Step 2 — Extend acquisition
 
+**Checked 2026-10-02 UTC:** [implementation and evidence](StepsPlans/Prepare-Step2.md).
+50 filings across 12 forms passed inventory checks; compressed-only replay made zero requests.
+Scale follow-up: all 502 filings/23,958 files match the independent extractor;
+all five reviewed fixes pass. The planned full run checks every SEC file list.
+External reference resolution and unavailable news/call originals remain explicit limits.
+
 **Entry:** accepted Step 1 and frozen expansion manifest.
 
 **Assignments:** SEC worker runs T5's **50-filing** retrieval comparison; news/transcript worker checks local ingestion boundaries and available copies (T3); checker audits coverage/cache/retries/versions; coordinator owns shared downloads/records.
 
 - Cover earnings 8-K bodies/exhibits, 10-Q/K, amendments, XML prose, contracts, EX-13, native PDFs and embedded/supporting images.
-- Reuse selected, verified packages and SEC file lists before downloading; cached replays make zero requests. Share **1 SEC request/second** across the whole campaign, including retries; **any 403 stops the whole run**.
+- Reuse selected, verified packages and SEC file lists before downloading; cached replays make zero requests. Share **5 SEC requests/second** across the whole campaign, including retries; **any 403 stops the whole run**.
 - Compare every package with SEC's own file list to detect missing company documents. Account separately for generated viewer/support files. Compare routes on the **same originals**: requests, bytes, gaps, failures and retrieval time. Full preparation timing is Step 7.
 - Follow explicit relevant references only; preserve target file/date and referring location. Record ambiguity/unavailability; avoid unbounded crawling and later evidence.
 - Preserve raw news/call payloads before cleaning, truncation, segmentation or speaker filtering. Audit every transcript loss path; compare available originals.
@@ -584,7 +590,7 @@ Zero errors in 300 cells supports only a bound for that sampled population under
 
 **Downloads and spending**
 
-- One acquisition queue owns all campaign SEC calls, including library calls. Converters use its immutable cache. Share **10 requests/second** across machines/clients, including existing clients, redirects and retries; allow headroom, never a per-agent quota.
+- One acquisition queue owns all campaign SEC calls, including library calls. Converters use its immutable cache. SEC's overall cap is **10 requests/second** across machines/clients; **this campaign uses 5/second**, including file lists and retries. Existing clients share the overall cap; never a per-agent quota.
 - Freeze connect/read timeouts, retryable faults, attempts, delays and `Retry-After` handling. Respect throttling; bounded network retries only, not repeated semantic attempts until success.
 - Verify cache identity/hash. Partial/failed/changed sources get recorded attempts/versions.
 - Use approved access, verify active authentication/account limits; provider names/flags do not prove billing. Checks are offline by default; live tests name authorization/access and cannot hide paid calls.

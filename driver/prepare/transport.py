@@ -46,7 +46,8 @@ def http_request(url, headers, connect_timeout, read_timeout, wall_timeout):
         signal.signal(signal.SIGALRM, previous)
 
 
-def download(url, *, sender=http_request, now=time.monotonic, sleep=time.sleep, budget=None):
+def download(url, *, sender=http_request, now=time.monotonic, sleep=time.sleep, budget=None,
+             before_send=None):
     """Return package bytes and receipt; errors carry the receipt too.
 
     Only retries create additional requests. Backoffs are at least two seconds,
@@ -59,6 +60,8 @@ def download(url, *, sender=http_request, now=time.monotonic, sleep=time.sleep, 
         raise DownloadError(message, receipt)
 
     for attempt in range(LIMITS['attempts']):
+        if before_send:
+            before_send()
         remaining = deadline - now()
         if remaining <= 0:
             fail('HTTP job budget exhausted')
