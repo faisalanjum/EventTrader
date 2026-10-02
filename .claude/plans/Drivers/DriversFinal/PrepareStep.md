@@ -1,4 +1,4 @@
-# Running ideas: Step 1 · Prepare (reviewed proposal, v5)
+# Prepare Step: Step 1 · Prepare (reviewed proposal, v5)
 
 *Claude + Codex · 2026-10-01 · v5, consolidating the independently checked reviews, including subsequent Bot 1–2 findings.*
 
@@ -221,6 +221,7 @@
 | D13 | Adopt the upkeep rule (P24)? | ✅ Settled: adopt P24 | The owner's requirement |
 | D14 | Repair PDF data and deleted release text (F6/F12)? | ✅ Approved: separate cleanup after preparation is validated, while Driver development continues | Reuse tested rules (P19); the existing predictor's revamp does not set the priority |
 | D15 | 🆕 Where and how to store originals and their records? | Approved SEC representation: lossless compressed package plus manifest/receipt; unpack on demand. Production location and any shared index (e.g. SQLite) remain open after T5 | Avoid permanent duplicate bytes; current implementation has one writer per output directory |
+| D16 | 🆕 Open (owner 2026-10-02): after the swap, does the new prepared text **replace** the old flattened section/exhibit text under each existing Report node, or sit **beside** it? | Decide at Step 5 with D15; applies to live ingestion and historical cleanup alike (Step 9). Report nodes and their links stay either way; the old text stays restorable | Avoids an unplanned overwrite of existing Neo4j content (Step 9 repair rule 3) |
 
 ## Sources and review trail
 
@@ -280,7 +281,7 @@ Follow the owner's latest instructions, repository instructions and the [proposa
 | News/call history | Provider-access checks and recovery are deferred until needed (F19); gaps remain explicit. |
 | Tools/tests | Maintained tools, portable output, verified reuse; no MIT-only, free-only or mandatory-fork rule. T1 uses code and checked originals; AI fact/cause extraction belongs to T4. |
 
-**Unsettled:** D15's production location and shared index remain open after T5. Compressed originals plus manifest/receipt are approved; the experimental directory does not choose the production location.
+**Unsettled:** D15's production location and shared index remain open after T5; D16 (replace old Neo4j text in place, or keep beside) is decided at Step 5. Compressed originals plus manifest/receipt are approved; the experimental directory does not choose the production location.
 
 Before dependent implementation, reconcile approved evidence changes with rule 1.17, smaller reads with 8.10, and the DriverUpdate location-reference contract. Do not reopen those owner decisions. Other unresolved rules stay open; this plan neither activates sources nor changes Fiscal/Core ownership. Applicable Phase 6 conditions include AI labelling, not just reader tests.
 
@@ -416,7 +417,7 @@ External reference resolution and unavailable news/call originals remain explici
 
 #### Step 5 — C · Save structured blocks
 
-**Entry:** accepted routes and preservation requirements. Choose the compact block format here; the test contract does not prescribe a bulky production schema. D15 still governs production storage.
+**Entry:** accepted routes and preservation requirements. Choose the compact block format here; the test contract does not prescribe a bulky production schema. D15 still governs production storage. Settle D16 here (replace the old Neo4j section/exhibit text in place, or keep the new text beside it).
 
 **Assignments:** builders separately integrate one preparation function/versioned storage and structure/references; checker tests source reconstruction, repetition, versions and failures; coordinator owns shared records and merges.
 

@@ -1,6 +1,6 @@
 # Rough design: reading sources into Drivers
 
-> **Partly superseded (2026-10-01):** for Step 1 · Prepare, [runningIdeas.md](runningIdeas.md) v5 and the updated rules win. The original files are the evidence record, not the stored text. The converter is chosen by test T1 (out of the box, no custom table code), not "printed PDF for the section map". Reads are smaller and shaped per task (rule 8.10). The decisions here are replaced by runningIdeas D1–D15.
+> **Partly superseded (2026-10-01):** for Step 1 · Prepare, [PrepareStep.md](PrepareStep.md) v5 and the updated rules win. The original files are the evidence record, not the stored text. The converter is chosen by test T1 (out of the box, no custom table code), not "printed PDF for the section map". Reads are smaller and shaped per task (rule 8.10). The decisions here are replaced by PrepareStep D1–D15.
 
 *2026-09-30 · starting design from the owner, Claude and Codex; every claim checked against its source; revised after Codex's review · **nothing here is proven** · no rules, code or Neo4j changed; [fact_types.md](fact_types.md) and the [rules](DRIVER_RULES_Categorized.md) stay the authority.*
 

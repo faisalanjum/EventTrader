@@ -2,7 +2,7 @@
 
 Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories. Nothing is reworded: every original line appears here exactly once, and rule numbers are unchanged (3.2 here is 3.2 there). The only new lines are headings, this introduction, the study order and index, table headers where a table was split (the Word list and the Parking list), fold markers around switched-off features, and a few short notes and pointers. The original's summaries, navigation and layout are kept in the Overview at the end.
 
-**Edited 2026-10-01 (owner-approved):** 8.10 (smaller reads), 1.17 (original files as evidence), 3.3 table (new `source_location` field: 25 fields) and the §6 XBRL warning (withdrawn 8-K figure). Reasons: [runningIdeas.md](runningIdeas.md) D10, D9, P20, F18.
+**Edited 2026-10-01 (owner-approved):** 8.10 (smaller reads), 1.17 (original files as evidence), 3.3 table (new `source_location` field: 25 fields) and the §6 XBRL warning (withdrawn 8-K figure). Reasons: [PrepareStep.md](PrepareStep.md) D10, D9, P20, F18.
 
 **Study order:** S1 (read briefly first) → Driver 1 → 2a → 2b → 2c → 3 → DriverUpdate U1a → U1b → U1c → U1d → U2a → U2b → U2c → U3a → U3b → System S2 → S3 → S4 → S5.
 

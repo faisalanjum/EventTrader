@@ -1,7 +1,8 @@
 # Prepare · Step 2 — Extend acquisition
 
-**Status:** five scale fixes applied and checked (2026-10-02 UTC). No full backfill,
-conversion, ingestion deployment, historical repair or database writes were performed.
+**Status: Step 2 accepted by the owner (2026-10-02).** Acquisition and validation
+passed. Historical download continues separately; two SEC 404 filings remain
+tracked for investigation. Ready for Step 3.
 
 **Goal:** preserve complete originals, prove which files were acquired, and reuse
 saved copies cheaply. Standing requirements remain minimal, generic code and
@@ -81,8 +82,8 @@ transformed. The archive must run **before JSON/schema/SDK transformations**.
 All 187 available Redis copies were preserved as **processed-only** evidence.
 Original-history recovery remains deferred; ingestion wiring is a later step.
 
-**Next review:** accept this acquisition evidence, then release Step 3: freeze
-preservation checks and independent answers before comparing converters.
+**Next:** Step 3 — freeze preservation checks and independent answers before
+comparing converters.
 
 ## Evidence and use
 
