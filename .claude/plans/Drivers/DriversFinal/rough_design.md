@@ -25,6 +25,11 @@
 
 **Timing:** pieces and filings run in parallel through steps 1–5. An event is written only when all its pieces are done, one event at a time, in public-time order (1.14); today's lock turns a second writer away (`WRITER_BUSY`) rather than queueing it. Answers are cached by exact input, so a re-run changes nothing (2.46, 5.4).
 
+**Units, required before switching on the new flow** (3.28, 3.54, 5.9, 9.1):
+- Use the pinned lists in [driver/reference_data](../../../../driver/reference_data/README.md); derive the menus and review one recorded disposition for every entry.
+- Complete the [unit checks](Archive/UNITS_PLAN_2026-10-02.md#7-pending-build-checks), including the final dollar/cents cases: independent expected answers, positive controls, failing tests for changed behaviour, and focused plus applicable full regression tests at the owning boundaries.
+- The complete JEV unit-routing evaluation is a separate Core test that needs owner-approved model calls: fresh source-grounded cases, wrong first routes and option-order changes, before any accuracy claim.
+
 ## Causes
 - **The reader proposes, JEV checks.** JEV re-checking its own answers caught few of its own mistakes (2 of 32 by claim check, 0 of 10 by re-asking; JEV.md §6.5), so it checks someone else's proposals (8.2).
 - **JEV verifies the exact claim:** one yes/no per proposed relation, with direction and role in the text: *"Does this passage state that [A] offsets [B]?"* A plain "caused?" question would reject valid offsets and part-of links. Several causes → several claims ("prices **and** volumes"). Three tiny pilots found 46 of 46 real cause links with 0 false among 23 non-links, against one labeller's (Claude's) labels (36 items, 6 synthetic; JEV.md §6.11; Codex reproduced the first 31 pairs). Asked as "caused?", offsets scored 0.03–0.53, never clearly yes; asked as "offsets?" they are untested, as is part-of. JEV also counted an indirect cause (a cause of the cause) as a cause (0.94), so a direct-vs-indirect rule is needed. A pick-one question finds only one cause.

@@ -1,10 +1,12 @@
 # Units plan (#3): final proposal for approval · v5 · 2026-10-02
 
+> **Archived 2026-10-02: applied design and review history.** The pending build checks in [section 7](#7-pending-build-checks) still apply and are required through [rough_design.md](../rough_design.md); the current [rules](../DRIVER_RULES_Categorized.md) govern behaviour. Line numbers and before/after text refer to the files before the 2026-10-02 edits. Earlier review positions (a stricter bare-dollar rule, no cents default) were superseded by rules 3.54 and 9.1.
+
 **Status:** applied. v4 is in commit 65f8d7da9 and v5 (cents) in commit d7824830d. Codex approved both. This file stays as the record of why each rule reads as it does.
-- v1 (sha256 `eb31f321…`) was reviewed by Codex in `/tmp/driver_units_review_20261002/full_plan_review/REVIEW.txt`.
+- v1 (sha256 `eb31f321…`) was reviewed by Codex ([full-plan review](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/codex_units_review_20261002/full_plan_review_REVIEW.txt), recovered copy).
 - v2 took in all of that review except the bare "$" sentence.
 - v3 added the "$" wording that Codex accepted as a deliberate project convention (§6).
-- v4 took in Codex's final wording review (`/tmp/driver_units_review_20261002/v3_review/REVIEW.txt`). It was applied in commit 65f8d7da9.
+- v4 took in Codex's final wording review ([v3 review](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/codex_units_review_20261002/v3_review_REVIEW.txt), recovered copy; [archive review](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/codex_units_review_20261002/REVIEW.txt)). It was applied in commit 65f8d7da9.
 - v5 (owner decision, 2026-10-02): the bare-"$" convention also covers a bare "¢" or "cents" (25 cents → 0.25 `usd`), because US filings write cents without "U.S." just as they write "$".
 
 **Goal:** assign units from source evidence, with the explicit bare-dollar USD convention in 9.1. Supported units form comparable histories. Remaining unresolved units stay readable individually as `unknown` and are counted. Exact rescaling is allowed; currency exchange and conversion between different physical-unit IDs are not. The change stays small and contradicts no other rule.
@@ -59,10 +61,10 @@
 **E1 · line 7 · change note**
 
 Before:
-> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53 and 9.11: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, and no outcome in prediction inputs. Reasons: [fact_types.md](Archive/fact_types_2026-10-02.md) (owner decisions).
+> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53 and 9.11: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, and no outcome in prediction inputs. Reasons: [fact_types.md](fact_types_2026-10-02.md) (owner decisions).
 
 After:
-> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53, 3.54, 5.9 and 9.11; changed 3.28, 3.31, 5.2's example and 9.1: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), and protection for `unknown` units. Reasons: [fact_types.md](Archive/fact_types_2026-10-02.md) (owner decisions).
+> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53, 3.54, 5.9 and 9.11; changed 3.28, 3.31, 5.2's example and 9.1: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), and protection for `unknown` units. Reasons: [fact_types.md](fact_types_2026-10-02.md) (owner decisions).
 
 **E2 · line 625 · rule 3.28**
 
@@ -278,20 +280,37 @@ An unrelated euro amount elsewhere isn't a reason to reject a clear dollar amoun
 
 **Building it:** reuse the existing source reading and its currency context (8.10). AI judges currency meaning and which amounts a statement covers; code verifies the cited text and locations. **No separate word scanner.**
 
-## 7. Follow-ups after approval (not part of this change)
+## 7. Pending build checks
 
-1. **Saved copies:** ✅ done 2026-10-02 in [`driver/reference_data/`](../../../../driver/reference_data/README.md): the full registry (`utr-2024-10-22.xml`, the exact reviewed version, sha256 `0236426f…`) and ISO 4217 lists one (published 2026-09-17, 178 codes) and three (published 2026-01-01, 137 codes), with checksums.
-   - **At build time:** derive the 122-measure menu from the registry's structured fields and give each list entry one recorded disposition, reviewed once (P24).
-2. **JEV unit-selection test:** a separate Core/JEV test with its own approval and authorised model calls. FinalPlan Phase 6 is read first, as CLAUDE.md requires, but this isn't a Fiscal Phase 6 run. It covers the full routing flow, including a wrong first route and menu-order permutations, on fresh source-grounded cases. JEV's confidence never grants a write. No accuracy claim before it.
-3. **Tests:** Codex's required list (full_plan_review/REVIEW.txt §7), plus the three "$" cases in §6 run through the full reading flow:
-   - no statement → `usd`;
-   - a clear CAD statement → `cad`, with the statement in evidence;
-   - a euro segment elsewhere → only those amounts in `eur`;
-   - an unresolvable scope → `unknown`.
-   - Neither a code scan nor model confidence guarantees the default is correct.
-4. **Decided (owner, v5):** the convention also covers a bare "¢" or "cents"; a stated other currency still wins.
-5. **Notion:** update the Workflow section pages' rule ranges for all of today's new and changed rules in one pass.
-6. **Commit and push** (owner pre-approved, whole DriversFinal folder).
+Required before switching on the new unit flow; [rough_design.md](../rough_design.md) points here.
+
+1. **Saved copies:** ✅ done 2026-10-02 in [`driver/reference_data/`](../../../../../driver/reference_data/README.md): the full registry (`utr-2024-10-22.xml`, the exact reviewed version, sha256 `0236426f…`) and ISO 4217 lists one (published 2026-09-17, 178 codes) and three (published 2026-01-01, 137 codes), with checksums.
+   - **Pending, at build time:** derive the 122-measure menu from the registry's structured fields and give each list entry one recorded disposition, reviewed once (P24).
+2. **Pending: JEV unit-routing evaluation.** A separate Core/JEV test with its own owner approval and authorised model calls. FinalPlan Phase 6 is read first, as CLAUDE.md requires, but this isn't a Fiscal Phase 6 run. It covers the full routing flow, including a wrong first route and menu-order permutations, on fresh source-grounded cases. JEV's confidence never grants a write. No accuracy claim before it.
+3. **Pending: required tests**, from the [full-plan review](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/codex_units_review_20261002/full_plan_review_REVIEW.txt) (its section 7), with independent expected answers and a positive control for each rejection/separation case:
+   - every registry entry has exactly one recorded disposition;
+   - currencies, legitimate fund/accounting denominations, historical codes, bullion quantity/value, and reserved no-currency/testing codes;
+   - named physical units versus separately stated per-X denominators;
+   - case-sensitive units, ambiguous symbols, and unsupported custom names;
+   - one scale word versus a scaled unit, exact money normalization and minor currency units, no physical conversion, no double scaling;
+   - source headers included in evidence, and contradictory tag/text units;
+   - the value/comparison shared-unit requirement, including differing currencies;
+   - unsupported but sound numbers retained, invalid/unclear quantities not rescued by assigning unknown, and numeric versus numberless facts;
+   - unresolved growth basis versus proven equal and different growth bases;
+   - all numeric positions: level, change, comparison and both range bounds;
+   - exact replay, overlapping windows, two numbers in one passage, different original occurrences, reversed order and separate arrival batches;
+   - filling blanks in both directions, introducing another unknown quantity, and preserving existing identity, source_location and series_unit;
+   - same-location conflicting readings follow ordinary conflict handling;
+   - known level plus unknown change stays protected in every applicable read view; normal cutoff and source-ranking rules still apply;
+   - the complete proposed JEV routing flow, including a wrong first route and menu-order permutations, on fresh source-grounded cases.
+
+   **Final-policy additions** (Codex's [archive review](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/codex_units_review_20261002/REVIEW.txt), 2026-10-02):
+   1. Currency defaults must exercise the actual reading flow, not a stand-alone symbol matcher: bare $, bare cents and the cent sign follow current 9.1; a CAD declaration that applies to the amount wins and stays in its evidence; an unrelated euro segment does not change the dollar amount; potentially applicable but conflicting/unclear declarations give unknown. Euro is an unambiguous symbol; shared symbols such as yen/yuan or kr have no USD-style default. Neither the company nor its country nor the number's size supplies a missing currency. JEV reasons about scope; code checks quoted evidence.
+   2. Give examples complete numeric expectations, with the correct money mode: bare "$70 per barrel" → 70 `usd`; "25 cents per share" → 0.25 `usd`; CAD context plus the same 25 cents → 0.25 `cad`; "Revenue CAD 1.2 billion" → 1200 `m_cad`, not `cad`; "1.2 million barrels" → 1200000 `bbl`, same as "1,200,000 barrels"; "1,200 MBbls" → 1200 `MBbls`, a different physical-unit series; "FICO score 700" → 700 `unknown`, not a discarded number or count. Exact rescaling is permitted; currency exchange/physical-ID conversion is not. Minor currency units on company-wide totals remain invalid (3.31).
+   3. Numberless facts normally have no unit, but 3.30/3.33 expressly allow an evidenced growth basis in `level_unit` without a number. Test that exception. Rule 5.9 protects facts containing actual numbers in unknown units; it does not introduce source-occurrence protection for every numberless statement. There is no exemption for numeric growth with an unresolved basis.
+   4. The full list inventories must include supported, excluded, and unresolved categories, with counts and reasons. Every menu entry, branch and fallback is covered; the currency list cannot be cut to the first 255 entries. Unknown is available without bypassing supported units or percentage rules. Preserve existing evidence checks, including the exact tagged number's genuine namespace/unit meaning rather than trusting a chosen prefix/code.
+   5. Build tests at the current owning boundaries, not only at a new unit helper. The present reference path includes `driver_units.resolve_driver_units`, `unit_resolver.resolve_unit`, `driver_validators`, `prepared_fact_v2`, `driver_fusion.fuse_event`, `driver_writer.plan_event_write` and `_merge_or_fill`, `driver_ids.build_id`/`signature_hash`, and all applicable reads when built. The existing reference resolver still exposes the old unit vocabulary. Preserving the checklist does not require building these changes now. At implementation, derive the final inventory from the then-live code and its failure outcomes, test the actual end-to-end scenarios, freeze the reviewed snapshot, and reconcile every case to a test or explicit open item. Confidence scores never grant a write. Keep genuine unresolved meaning separate from extraction/code errors; a small pilot does not prove zero errors or production readiness.
+4. **History, not new instructions:** the cents decision (v5) is applied in 9.1; Notion was updated and the plan's edits were committed on 2026-10-02.
 
 ## 8. Review trail
 
