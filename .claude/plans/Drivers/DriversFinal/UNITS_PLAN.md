@@ -1,6 +1,6 @@
 # Units plan (#3): final proposal for approval · v5 · 2026-10-02
 
-**Status:** proposal only; nothing in it is applied yet.
+**Status:** applied. v4 is in commit 65f8d7da9 and v5 (cents) in commit d7824830d. Codex approved both. This file stays as the record of why each rule reads as it does.
 - v1 (sha256 `eb31f321…`) was reviewed by Codex in `/tmp/driver_units_review_20261002/full_plan_review/REVIEW.txt`.
 - v2 took in all of that review except the bare "$" sentence.
 - v3 added the "$" wording that Codex accepted as a deliberate project convention (§6).
@@ -41,7 +41,7 @@
    - never a tag that contradicts the visible source;
    - the currency is never inferred from the company, its country or the number's size;
    - an unambiguous currency symbol settles it (€ → EUR);
-   - **one deliberate exception (9.1):** a bare "$" defaults to US dollars unless applicable source evidence indicates another currency;
+   - **one deliberate exception (9.1):** a bare "$", "¢" or "cents" defaults to US dollars unless applicable source evidence indicates another currency;
    - conflicting statements, or statements whose scope is unclear → `unknown`; statements clearly about other amounts don't change this amount's currency.
 5. **Counts:** a real count of things is `count`, with the thing in the Driver name.
 6. **`unknown` is the last resort:** a sound number whose unit stays unproven keeps its value as `unknown`, and is counted. An unclear quantity isn't rescued by `unknown`.
@@ -216,7 +216,7 @@ Before:
 > | 3 | Units and currencies | ⏳ Owner to decide | — |
 
 After:
-> | 3 | Units and currencies | ✅ Our own units first; other monetary denominations under their official ISO code (`eur`/`m_eur`), never exchanged; physical and time units from the registry's concrete measures; real counts = `count`; sound numbers with an unproven unit = `unknown`, counted; evidence decides (an unambiguous currency symbol settles it; a contradicting tag never wins; by project convention a bare "$" defaults to US dollars unless the source indicates another currency; unclear scope → `unknown`); exact rescaling once, no currency exchange or physical-unit conversion; "per X" stays in the name; numbers in an `unknown` unit are protected by their source location | 3.28, 3.31, 3.54, 5.9, 9.1 |
+> | 3 | Units and currencies | ✅ Our own units first; other monetary denominations under their official ISO code (`eur`/`m_eur`), never exchanged; physical and time units from the registry's concrete measures; real counts = `count`; sound numbers with an unproven unit = `unknown`, counted; evidence decides (an unambiguous currency symbol settles it; a contradicting tag never wins; by project convention a bare "$", "¢" or "cents" defaults to US dollars unless the source indicates another currency; unclear scope → `unknown`); exact rescaling once, no currency exchange or physical-unit conversion; "per X" stays in the name; numbers in an `unknown` unit are protected by their source location | 3.28, 3.31, 3.54, 5.9, 9.1 |
 
 ### C. `rough_design.md` (build note, not a rule)
 
