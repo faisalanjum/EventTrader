@@ -13,7 +13,7 @@ import tempfile
 import unittest
 
 from driver.prepare.campaign import Campaign
-from scripts.driver.prepare import full_run
+from driver.prepare import full_run
 
 FIXTURES = Path(__file__).with_name('fixtures')
 AMG = dict(acc='0001004434-23-000015', form='8-K', cik='1004434')
@@ -23,7 +23,7 @@ MISSING = [dict(acc=f'0000000001-23-00000{i}', form='8-K', cik='1') for i in ran
 # Offline restart of the real runner whose result insert pauses until it is killed.
 CHILD = r'''
 import sqlite3, sys, time
-from scripts.driver.prepare import full_run
+from driver.prepare import full_run
 connect = sqlite3.connect
 def hooked(*args, **kwargs):
     db = connect(*args, **kwargs)

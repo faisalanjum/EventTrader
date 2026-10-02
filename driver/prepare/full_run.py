@@ -25,7 +25,7 @@ from driver.prepare.acquire import StorageError, acquire, read_package, _identit
 from driver.prepare.campaign import Campaign
 from driver.prepare.inventory import compare_inventory, parse_index
 
-SOURCES = [Path(__file__), *sorted(Path(driver.prepare.__file__).parent.glob('*.py'))]
+SOURCES = sorted(Path(driver.prepare.__file__).parent.glob('*.py'))  # includes this runner
 
 
 def _write(path, value):
