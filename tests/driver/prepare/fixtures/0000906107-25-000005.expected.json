@@ -1,0 +1,164 @@
+{
+  "request": {
+    "accession": "0000906107-25-000005",
+    "cik": "0000906107",
+    "form": "8-K"
+  },
+  "identity": {
+    "accession": "0000906107-25-000005",
+    "ciks": [
+      "0000906107"
+    ],
+    "form": "8-K"
+  },
+  "acceptance": {
+    "printed": "20250902161932",
+    "timezone": "America/New_York"
+  },
+  "package": {
+    "bytes": 180255,
+    "sha256": "b2f4b0fc91b79ef948f9009264de3d555b5c32f614d120cad7bd52e5fb75dc20"
+  },
+  "document_count": {
+    "stated": 12,
+    "actual": 11
+  },
+  "header_range": [
+    50,
+    1290
+  ],
+  "members": [
+    {
+      "filename": "eqr-20250902.htm",
+      "sequence": "1",
+      "type": "8-K",
+      "description": "8-K",
+      "bytes": 45212,
+      "sha256": "0d53b46b1b77afaaf5f61ea760ac857d7252e042b1a4b180b11788c15402dcb4",
+      "package_range": [
+        1291,
+        46622
+      ]
+    },
+    {
+      "filename": "eqr-ex99_1.htm",
+      "sequence": "2",
+      "type": "EX-99.1",
+      "description": "EX-99.1",
+      "bytes": 17047,
+      "sha256": "ef176c4d506812bdcb3f7d8db96b82c3276eff6206e27f9701365469ca75dda2",
+      "package_range": [
+        46622,
+        63779
+      ]
+    },
+    {
+      "filename": "img201241695_0.jpg",
+      "sequence": "3",
+      "type": "GRAPHIC",
+      "description": "GRAPHIC",
+      "bytes": 5827,
+      "sha256": "887c1cb5d865762336ba4cdc8ab405d7f1fd72124ffd97dc3d7ed7d5666fd13f",
+      "package_range": [
+        63779,
+        71958
+      ]
+    },
+    {
+      "filename": "eqr-20250902.xsd",
+      "sequence": "4",
+      "type": "EX-101.SCH",
+      "description": "XBRL TAXONOMY EXTENSION SCHEMA WITH EMBEDDED LINKBASES DOCUMENT",
+      "bytes": 25071,
+      "sha256": "25c7e3523cd56584dc2bc0b814ff00d44559f51afae6dcec414c929b16d5f02b",
+      "package_range": [
+        71958,
+        97215
+      ]
+    },
+    {
+      "filename": "R1.htm",
+      "sequence": "6",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 39598,
+      "sha256": "169bebd92ac9676401f93575e060e2b8580233350ad36e59703c79d1ce73f72c",
+      "package_range": [
+        97215,
+        136923
+      ]
+    },
+    {
+      "filename": "Show.js",
+      "sequence": "7",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 973,
+      "sha256": "37b4bcd336d85afa83ee0d5af7fd0c4ca43b0f4388eda9f2ed7e7c9be40999c8",
+      "package_range": [
+        136923,
+        138007
+      ]
+    },
+    {
+      "filename": "report.css",
+      "sequence": "8",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 2652,
+      "sha256": "c564d6d00dc81a734bd958995c968a220c4e3de896cd48ac52b82a641a40e26f",
+      "package_range": [
+        138007,
+        140773
+      ]
+    },
+    {
+      "filename": "FilingSummary.xml",
+      "sequence": "10",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 1665,
+      "sha256": "5e05e0dcd215ce396c4f2240fc79889e6c1d4c6bcbecb19de34c8554235a8f6c",
+      "package_range": [
+        140773,
+        142573
+      ]
+    },
+    {
+      "filename": "MetaLinks.json",
+      "sequence": "12",
+      "type": "JSON",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 18238,
+      "sha256": "88f4c9c5a03913986d61187515f0c368d71534da07ae2fd265f21eb6944ea4bc",
+      "package_range": [
+        142573,
+        160931
+      ]
+    },
+    {
+      "filename": "0000906107-25-000005-xbrl.zip",
+      "sequence": "13",
+      "type": "ZIP",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 10339,
+      "sha256": "1a3bbe379c0d80cedfc5936d207c9704d4d1ca8ba5140bd8384782a203cc3964",
+      "package_range": [
+        160931,
+        175343
+      ]
+    },
+    {
+      "filename": "eqr-20250902_htm.xml",
+      "sequence": "14",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 4758,
+      "sha256": "2b6c660daa6ef8bc2779431ec049fb39b7e143bc8b1ce16950448fce19b2acc2",
+      "package_range": [
+        175343,
+        180239
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "request": {
+    "accession": "0000950170-25-021181",
+    "cik": "0000920760",
+    "form": "SCHEDULE 13D"
+  },
+  "identity": {
+    "accession": "0000950170-25-021181",
+    "ciks": [
+      "0000920760",
+      "0002017206"
+    ],
+    "form": "SCHEDULE 13D"
+  },
+  "acceptance": {
+    "printed": "20250214161032",
+    "timezone": "America/New_York"
+  },
+  "package": {
+    "bytes": 10568,
+    "sha256": "8ef55f3f2c3d53a9a8eee324272648a0e6522d72ff755230c76843210e77e6be"
+  },
+  "document_count": {
+    "stated": 1,
+    "actual": 1
+  },
+  "header_range": [
+    50,
+    1940
+  ],
+  "members": [
+    {
+      "filename": "primary_doc.xml",
+      "sequence": "1",
+      "type": "SCHEDULE 13D",
+      "description": null,
+      "bytes": 8503,
+      "sha256": "5289aa9afa266c40204687d7513c16d424f2b983fdb96399e70d2e0edf2f032f",
+      "package_range": [
+        1941,
+        10552
+      ]
+    }
+  ]
+}

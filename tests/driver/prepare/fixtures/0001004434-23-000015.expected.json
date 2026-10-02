@@ -1,0 +1,236 @@
+{
+  "identity": {
+    "accession": "0001004434-23-000015",
+    "form": "8-K",
+    "ciks": [
+      "0001004434"
+    ]
+  },
+  "acceptance": {
+    "printed": "20230501071224",
+    "timezone": "America/New_York"
+  },
+  "package": {
+    "bytes": 958519,
+    "sha256": "7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb"
+  },
+  "header_range": [
+    50,
+    1302
+  ],
+  "members": [
+    {
+      "filename": "amg-20230501.htm",
+      "sequence": "1",
+      "type": "8-K",
+      "description": "8-K",
+      "bytes": 52628,
+      "sha256": "4c13d94bfa9666130403bd80c12fef9d4852788fd243497b10c4631ee53866f4",
+      "package_range": [
+        1303,
+        54050
+      ]
+    },
+    {
+      "filename": "amgq12023ex991.htm",
+      "sequence": "2",
+      "type": "EX-99.1",
+      "description": "EX-99.1",
+      "bytes": 249079,
+      "sha256": "29d91f8e1ee2c61c95cc03f6a2bce509bfabc774d760ca02e41d5526400bd87a",
+      "package_range": [
+        54050,
+        303243
+      ]
+    },
+    {
+      "filename": "amg-20230501.xsd",
+      "sequence": "3",
+      "type": "EX-101.SCH",
+      "description": "XBRL TAXONOMY EXTENSION SCHEMA DOCUMENT",
+      "bytes": 3334,
+      "sha256": "f6d33d267a3ca0d30dcfd3b01f7de6634ac4c49d352c07276c860d260b956fad",
+      "package_range": [
+        303243,
+        306739
+      ]
+    },
+    {
+      "filename": "amg-20230501_def.xml",
+      "sequence": "4",
+      "type": "EX-101.DEF",
+      "description": "XBRL TAXONOMY EXTENSION DEFINITION LINKBASE DOCUMENT",
+      "bytes": 16621,
+      "sha256": "3111b376f8972f694d832d88ef06d4294688c24e1bcb4aecba412e21ae4d3d06",
+      "package_range": [
+        306739,
+        323539
+      ]
+    },
+    {
+      "filename": "amg-20230501_lab.xml",
+      "sequence": "5",
+      "type": "EX-101.LAB",
+      "description": "XBRL TAXONOMY EXTENSION LABEL LINKBASE DOCUMENT",
+      "bytes": 34127,
+      "sha256": "87ab59dad259412e622be372f8db358e6cb1867c0700b2c023e6b5e8de362486",
+      "package_range": [
+        323539,
+        357840
+      ]
+    },
+    {
+      "filename": "amg-20230501_pre.xml",
+      "sequence": "6",
+      "type": "EX-101.PRE",
+      "description": "XBRL TAXONOMY EXTENSION PRESENTATION LINKBASE DOCUMENT",
+      "bytes": 17353,
+      "sha256": "706ee9621083adfa7d57d8da27b2484fb22ee2896ce4b94e34170d8798122d8f",
+      "package_range": [
+        357840,
+        375374
+      ]
+    },
+    {
+      "filename": "amglogoa78a.jpg",
+      "sequence": "7",
+      "type": "GRAPHIC",
+      "description": null,
+      "bytes": 114950,
+      "sha256": "d2f170393d3ae90aca6757a9e727caa19e5e4ef9cbf80fcf7daa0bbdeaccabf5",
+      "package_range": [
+        375374,
+        525888
+      ]
+    },
+    {
+      "filename": "image5.jpg",
+      "sequence": "8",
+      "type": "GRAPHIC",
+      "description": null,
+      "bytes": 7976,
+      "sha256": "2f0fbc8a03b8f6e207e1f1e5c3ea4df427b404ced81d970f8518bb11fce6a8eb",
+      "package_range": [
+        525888,
+        531586
+      ]
+    },
+    {
+      "filename": "courtesy.pdf",
+      "sequence": "9",
+      "type": "EX-99.1",
+      "description": "COURTESY PDF",
+      "bytes": 209919,
+      "sha256": "f9ac83d13ca1ec9c99e4bed2924e24dbfc10ba46a43cb5378e67c0738c294f7a",
+      "package_range": [
+        531586,
+        813692
+      ]
+    },
+    {
+      "filename": "R1.htm",
+      "sequence": "10",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 47237,
+      "sha256": "a838aa1f302dae9bff95c5db248627c8023a7185566ca5c1992fa10e12efffbf",
+      "package_range": [
+        813692,
+        861040
+      ]
+    },
+    {
+      "filename": "amg-20230501_htm.xml",
+      "sequence": "11",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 17466,
+      "sha256": "d3c8ab321ee359230dfcb03710badcb463a8246e4f19d21cf776dc6c8fb3714c",
+      "package_range": [
+        861040,
+        878644
+      ]
+    },
+    {
+      "filename": "Financial_Report.xlsx",
+      "sequence": "12",
+      "type": "EXCEL",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 5999,
+      "sha256": "e090ea2609c10ea235ad8ac8831118874e3e7b15cf738dc9a17ec19c3cf0fe09",
+      "package_range": [
+        878644,
+        887045
+      ]
+    },
+    {
+      "filename": "Show.js",
+      "sequence": "13",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 973,
+      "sha256": "37b4bcd336d85afa83ee0d5af7fd0c4ca43b0f4388eda9f2ed7e7c9be40999c8",
+      "package_range": [
+        887045,
+        888130
+      ]
+    },
+    {
+      "filename": "report.css",
+      "sequence": "14",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 2652,
+      "sha256": "c564d6d00dc81a734bd958995c968a220c4e3de896cd48ac52b82a641a40e26f",
+      "package_range": [
+        888130,
+        890931
+      ]
+    },
+    {
+      "filename": "FilingSummary.xml",
+      "sequence": "15",
+      "type": "XML",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 1682,
+      "sha256": "ec3581180947c52198c4d246dc9228ca73d4aa5da68bb89e0ec7cdf79b69ced5",
+      "package_range": [
+        890931,
+        892748
+      ]
+    },
+    {
+      "filename": "MetaLinks.json",
+      "sequence": "17",
+      "type": "JSON",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 22145,
+      "sha256": "20e95fc5975dc375af3f9a89059760e5d43afc37ee54acae4137e1d1c5e569c0",
+      "package_range": [
+        892748,
+        915013
+      ]
+    },
+    {
+      "filename": "0001004434-23-000015-xbrl.zip",
+      "sequence": "18",
+      "type": "ZIP",
+      "description": "IDEA: XBRL DOCUMENT",
+      "bytes": 31463,
+      "sha256": "a9bfd579b501493e324d082b24851cbc662980b9ecfb9c9f74212a5826d8b752",
+      "package_range": [
+        915013,
+        958503
+      ]
+    }
+  ],
+  "request": {
+    "accession": "0001004434-23-000015",
+    "cik": "0001004434",
+    "form": "8-K"
+  },
+  "document_count": {
+    "stated": 17,
+    "actual": 17
+  }
+}
