@@ -1,10 +1,11 @@
-# Units plan (#3): final proposal for approval · v4 · 2026-10-02
+# Units plan (#3): final proposal for approval · v5 · 2026-10-02
 
 **Status:** proposal only; nothing in it is applied yet.
 - v1 (sha256 `eb31f321…`) was reviewed by Codex in `/tmp/driver_units_review_20261002/full_plan_review/REVIEW.txt`.
 - v2 took in all of that review except the bare "$" sentence.
 - v3 added the "$" wording that Codex accepted as a deliberate project convention (§6).
-- v4 takes in Codex's final wording review (`/tmp/driver_units_review_20261002/v3_review/REVIEW.txt`). Codex gave the design go-ahead; the owner pre-approved applying it.
+- v4 took in Codex's final wording review (`/tmp/driver_units_review_20261002/v3_review/REVIEW.txt`). It was applied in commit 65f8d7da9.
+- v5 (owner decision, 2026-10-02): the bare-"$" convention also covers a bare "¢" or "cents" (25 cents → 0.25 `usd`), because US filings write cents without "U.S." just as they write "$".
 
 **Goal:** assign units from source evidence, with the explicit bare-dollar USD convention in 9.1. Supported units form comparable histories. Remaining unresolved units stay readable individually as `unknown` and are counted. Exact rescaling is allowed; currency exchange and conversion between different physical-unit IDs are not. The change stays small and contradicts no other rule.
 
@@ -118,7 +119,7 @@ Before:
 After:
 > - 3.31 Validity: percent units and `x` need a scale of 1; cents, or another currency's minor unit, on a company-wide total is invalid; a currency needs its own evidence (9.1).
 
-Why: the old last clause contradicts E2, and the cents check must also cover pence and other minor units. Minor units on per-unit amounts ("25 U.S. cents per share" → 0.25 `usd`) stay allowed. The bare-"$" convention doesn't settle the word "cents" on its own.
+Why: the old last clause contradicts E2, and the cents check must also cover pence and other minor units. Minor units on per-unit amounts ("25 cents per share" → 0.25 `usd`) stay allowed. Since v5, a bare "cents" or "¢" follows the same USD convention as "$" (9.1).
 
 **E5 · line 714 · rule 9.1**
 
@@ -126,7 +127,7 @@ Before:
 > - 9.1 **US dollars only.** Never convert another currency, infer an exchange rate, or treat an unknown or foreign currency as dollars. A text fact in another currency gets the `unknown` unit and is counted; a tagged-filing fact in another currency is skipped and counted. No such fact enters a dollar series. Full currency support later needs its own design, based on an official currency standard, with values kept as stated, currency-safe identities and reads, complete coverage evidence, and no hand-written currency list or conversion rule.
 
 After:
-> - 9.1 **Money is kept in its stated currency.** Use the pair in 3.28 for an evidenced denomination in the saved ISO 4217 current or historical lists, official fund and accounting units included; bullion, testing and no-currency codes are never money (a commodity quantity keeps its evidenced physical unit; a monetary value keeps its currency). Never exchange currencies or infer an exchange rate. Use applicable source evidence to identify the currency, including an unambiguous currency symbol (€ → EUR). Never infer it from the company, its country or the number's size. By project convention, a bare "$" defaults to US dollars unless applicable source evidence indicates another currency. If potentially relevant currency statements conflict or it is unclear which amounts they cover, use `unknown` and count it. Statements clearly about other amounts do not change this amount's currency. Otherwise, a currency unresolved after applying these rules is `unknown` and counted. Keep applicable currency statements in the evidence (3.29). Different currencies never share a series (3.35).
+> - 9.1 **Money is kept in its stated currency.** Use the pair in 3.28 for an evidenced denomination in the saved ISO 4217 current or historical lists, official fund and accounting units included; bullion, testing and no-currency codes are never money (a commodity quantity keeps its evidenced physical unit; a monetary value keeps its currency). Never exchange currencies or infer an exchange rate. Use applicable source evidence to identify the currency, including an unambiguous currency symbol (€ → EUR). Never infer it from the company, its country or the number's size. By project convention, a bare "$", "¢" or "cents" defaults to US dollars (cents as hundredths of a dollar) unless applicable source evidence indicates another currency. If potentially relevant currency statements conflict or it is unclear which amounts they cover, use `unknown` and count it. Statements clearly about other amounts do not change this amount's currency. Otherwise, a currency unresolved after applying these rules is `unknown` and counted. Keep applicable currency statements in the evidence (3.29). Different currencies never share a series (3.35).
 
 Why:
 
@@ -291,7 +292,7 @@ An unrelated euro amount elsewhere isn't a reason to reject a clear dollar amoun
    - a euro segment elsewhere → only those amounts in `eur`;
    - an unresolvable scope → `unknown`.
    - Neither a code scan nor model confidence guarantees the default is correct.
-4. **Open question for the owner, not in this change:** should the "$" convention also cover the word "cents" or "¢"? Today only a bare "$" defaults.
+4. **Decided (owner, v5):** the convention also covers a bare "¢" or "cents"; a stated other currency still wins.
 5. **Notion:** update the Workflow section pages' rule ranges for all of today's new and changed rules in one pass.
 6. **Commit and push** (owner pre-approved, whole DriversFinal folder).
 
@@ -321,3 +322,4 @@ An unrelated euro amount elsewhere isn't a reason to reject a clear dollar amoun
 | Money rescaling within a currency kept explicit | Codex (v3 review) | ✅ v4 |
 | Gold keeps its stated physical unit | Codex (v3 review) | ✅ v4 |
 | 91% claim labelled as an unverified spelling sample | Codex (v3 review) | ✅ v4 |
+| Bare "¢"/"cents" follows the "$" convention | Owner + Claude | ✅ v5 |
