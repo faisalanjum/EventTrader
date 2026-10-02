@@ -280,11 +280,8 @@ An unrelated euro amount elsewhere isn't a reason to reject a clear dollar amoun
 
 ## 7. Follow-ups after approval (not part of this change)
 
-1. **Saved copies at build:**
-   - the full registry (`utr.xml` 1.0, 2024-10-22);
-   - the 122-measure menu derived from its structured fields;
-   - ISO 4217 lists one and three;
-   - full hashes kept, each list entry given one recorded disposition, reviewed once (P24).
+1. **Saved copies:** ✅ done 2026-10-02 in [`driver/reference_data/`](../../../../driver/reference_data/README.md): the full registry (`utr-2024-10-22.xml`, the exact reviewed version, sha256 `0236426f…`) and ISO 4217 lists one (published 2026-09-17, 178 codes) and three (published 2026-01-01, 137 codes), with checksums.
+   - **At build time:** derive the 122-measure menu from the registry's structured fields and give each list entry one recorded disposition, reviewed once (P24).
 2. **JEV unit-selection test:** a separate Core/JEV test with its own approval and authorised model calls. FinalPlan Phase 6 is read first, as CLAUDE.md requires, but this isn't a Fiscal Phase 6 run. It covers the full routing flow, including a wrong first route and menu-order permutations, on fresh source-grounded cases. JEV's confidence never grants a write. No accuracy claim before it.
 3. **Tests:** Codex's required list (full_plan_review/REVIEW.txt §7), plus the three "$" cases in §6 run through the full reading flow:
    - no statement → `usd`;

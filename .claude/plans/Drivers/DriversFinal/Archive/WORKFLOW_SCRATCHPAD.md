@@ -2816,6 +2816,12 @@ plus "If it's required, then yes, approved. 'Including contracts, images and 13D
 
 **2026-10-02, owner (branch driver-explainer):** "Apply these. Now." → APPLIED Codex's 4 fixes (backups *.before-codex4-20261002.md): rules P3 action ("Add the significant-move condition; economy-wide fact reuse awaits the owner's rethink …") + P3 draft (second sentence deferred); PrepareStep T3 (A165 premise only; qa__4 "apparent answer … check speaker and pairing"); UNITS_PLAN lines 62/65 → Archive/fact_types_2026-10-02.md; Notion U1a caption "tie-breaker for conflicts and protected unknown-unit facts (5.9)". Verified: 231 rules; no broken links; Notion re-fetched. Committed by explicit pathspec.
 
+**2026-10-02, owner (branch driver-explainer):** "But his units plan already applied. Meaning to all other files?" → Claude re-checked: every units edit is in the rules, rough_design and the fact_types archive, and Notion; not applied (by design) = 3 future build tasks in UNITS_PLAN §7; the archive question is only about moving the file and saving Codex's test list first.
+
+**2026-10-02, owner (branch driver-explainer):** "why is this not done? save copies of the official unit and currency lists; run the unit tests" → Claude: tests check code that doesn't exist yet (unit picking/saving = Code Flow step 4), so they can't run now; saving the lists could be done now and pins the exact version reviewed (utr.xml 2024-10-22, sha 0236426f…; the only copy is in Claude's /tmp scratchpad). Offered to save registry + ISO lists with checksums into the repo now.
+
+**2026-10-02, owner (branch driver-explainer):** "yes" (save the official lists) → Claude downloaded and saved driver/reference_data/: utr-2024-10-22.xml (sha256 0236426f… = the exact reviewed version; 324 entries = 191 currency + 8 templates + pure/Rate/shares + 122 measures), iso4217-list-one-2026-09-17.xml (178 codes), iso4217-list-three-2026-01-01.xml (137 codes), README.md (sources, versions, full checksums, how to replace). UNITS_PLAN §7 item 1 marked done. Checksums verified; no broken links.
+
 # Archived: approved no-stages proposal — 2026-09-28
 
 *Historical record: the approved 2026-09-28 proposal, appended here unchanged on 2026-09-29 (formerly the separate file `Driver_NoStages_Proposal_2026-09-28.md`). The current rules (`DRIVER_RULES_Simplified.md`, `DRIVER_RULES_Categorized.md`) take precedence over anything below.*
