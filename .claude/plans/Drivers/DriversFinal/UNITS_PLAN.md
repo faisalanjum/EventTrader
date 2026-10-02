@@ -59,10 +59,10 @@
 **E1 · line 7 · change note**
 
 Before:
-> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53 and 9.11: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, and no outcome in prediction inputs. Reasons: [fact_types.md](fact_types.md) (owner decisions).
+> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53 and 9.11: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, and no outcome in prediction inputs. Reasons: [fact_types.md](Archive/fact_types_2026-10-02.md) (owner decisions).
 
 After:
-> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53, 3.54, 5.9 and 9.11; changed 3.28, 3.31, 5.2's example and 9.1: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), and protection for `unknown` units. Reasons: [fact_types.md](fact_types.md) (owner decisions).
+> **Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53, 3.54, 5.9 and 9.11; changed 3.28, 3.31, 5.2's example and 9.1: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), and protection for `unknown` units. Reasons: [fact_types.md](Archive/fact_types_2026-10-02.md) (owner decisions).
 
 **E2 · line 625 · rule 3.28**
 
