@@ -1,5 +1,7 @@
 # Rough design: reading sources into Drivers
 
+> **Partly superseded (2026-10-01):** for Step 1 · Prepare, [runningIdeas.md](runningIdeas.md) v5 and the updated rules win. The original files are the evidence record, not the stored text. The converter is chosen by test T1 (out of the box, no custom table code), not "printed PDF for the section map". Reads are smaller and shaped per task (rule 8.10). The decisions here are replaced by runningIdeas D1–D15.
+
 *2026-09-30 · starting design from the owner, Claude and Codex; every claim checked against its source; revised after Codex's review · **nothing here is proven** · no rules, code or Neo4j changed; [fact_types.md](fact_types.md) and the [rules](DRIVER_RULES_Categorized.md) stay the authority.*
 
 **In one line:** code cuts each source into pieces → a cheaper AI (to be tested) finds the facts → one smart AI proposes Driver names (order to be tested) → JEV fills most fields and verifies each stated relation → a separate check matches names to the catalog → code saves one source event at a time.

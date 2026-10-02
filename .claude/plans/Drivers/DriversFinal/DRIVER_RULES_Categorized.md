@@ -2,6 +2,8 @@
 
 Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories. Nothing is reworded: every original line appears here exactly once, and rule numbers are unchanged (3.2 here is 3.2 there). The only new lines are headings, this introduction, the study order and index, table headers where a table was split (the Word list and the Parking list), fold markers around switched-off features, and a few short notes and pointers. The original's summaries, navigation and layout are kept in the Overview at the end.
 
+**Edited 2026-10-01 (owner-approved):** 8.10 (smaller reads), 1.17 (original files as evidence), 3.3 table (new `source_location` field: 25 fields) and the §6 XBRL warning (withdrawn 8-K figure). Reasons: [runningIdeas.md](runningIdeas.md) D10, D9, P20, F18.
+
 **Study order:** S1 (read briefly first) → Driver 1 → 2a → 2b → 2c → 3 → DriverUpdate U1a → U1b → U1c → U1d → U2a → U2b → U2c → U3a → U3b → System S2 → S3 → S4 → S5.
 
 **Index:** [Driver](#driver): [1](#1--driver-record--relationships) · [2a](#2a--fact-type) · [2b](#2b--name) · [2c](#2c--which-name--family) · [3](#3--creating-a-driver) — [DriverUpdate](#driverupdate): [U1a](#u1a--record--evidence) · [U1b](#u1b--period) · [U1c](#u1c--slices--measurement-tags) · [U1d](#u1d--states--amounts) · [U2a](#u2a--saving) · [U2b](#u2b--links-to-filing-data) · [U2c](#u2c--reading--comparing) · [U3a](#u3a--forecasts) · [U3b](#u3b--surprises) — [System](#system): [S1](#s1--ground-rules-read-first) · [S2](#s2--purpose-sources--companies) · [S3](#s3--processing-timing--retries) · [S4](#s4--ai-use--testing) · [S5](#s5--price-move-explanations-active-in-release-1) — [Overview](#overview)
@@ -24,7 +26,7 @@ Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories
 ```mermaid
 %%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 12, "rankSpacing": 30, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "13px", "lineColor": "#8a919c"}}}%%
 flowchart LR
-    DU["<b>(:DriverUpdate)</b> = one fact<br/>id = source event + Driver + scope (3.1)<br/>24 properties (3.3)"]
+    DU["<b>(:DriverUpdate)</b> = one fact<br/>id = source event + Driver + scope (3.1)<br/>25 properties (3.3)"]
     HF["<b>(:DriverUpdate)</b> = one fact<br/>its home fact (4.14)"]
     DP["<b>(:DriverPeriod)</b><br/>id · start_date · end_date (3.36)"]
     DR["<b>(:Driver)</b><br/>name · fact_type (2.38)<br/>birth evidence as properties (2.1)"]
@@ -139,7 +141,7 @@ flowchart LR
     class RP,CO,XN,XF,CN,MB,DM,XP,CX,UN old
 ```
 
-**Stored relationships** (the 24 properties of a fact are the table in 3.3)
+**Stored relationships** (the 25 properties of a fact are the table in 3.3)
 
 | Relationship | From → to | How many | Status | Rules |
 |---|---|---|---|---|
@@ -414,7 +416,7 @@ flowchart LR
   - An earlier source never uses a later one as evidence: a later 10-Q may help *find* things during backfill, but the older source must prove its own quote, value, unit, label, period, slice, measurement and meaning; nothing is borrowed from the later source.
   - Every stored number must appear, as printed, in its own quote.
   - An 8-K source event is the whole filing (all sections and exhibits, without duplicates), never just the press-release exhibit.
-  - For a table in an 8-K, only the original table counts as evidence; a flattened text, PDF or converted copy doesn't, and unsupported formats fail closed.
+  - Evidence is the original filed file: the HTML itself, or a filed PDF or image, its extracted text checked against it. A flattened text or our own converted copy never counts; unsupported formats fail closed.
 
 - 3.1 A fact's identity = source event + Driver + scope. The extractor (a person or a model) is never part of it. Once written, the identity and the stored scope never change. *Why:* two readers of the same fact then reach the same record.
 - 3.2 The scope parts, each only when present: period · slices · measurement tags · surprise comparison kind (surprise facts only; required there) · a tie-breaker used only for true conflicts (5.3). A whole-company fact has no slice; "total" is never stored as a slice. Formatting may be tidied (e.g. lowercase), but different words are never treated as the same value. *Why a surprise kind:* two different expectation gaps on one Driver and period can both be true, so identity must keep them apart.
@@ -428,6 +430,7 @@ flowchart LR
 | **Evidence:** where it came from, and when | | |
 | `source_type` | The kind of document the quote truly came from (a press-release quote belongs to the 8-K, never a later 10-Q) | `8k` · `transcript` · `10q` · `10k` · `news`; anything else fails closed |
 | `quote` | The exact source words | Always required |
+| `source_location` | Where the proof sits in the original: file, version (fingerprint), exact passage or table cells | Always required; never changes (1.17) |
 | `date` | The source's full public timestamp | |
 | `created` | When the fact was written | Set only at creation |
 | **Meaning:** what happened | | |
@@ -451,7 +454,7 @@ flowchart LR
 
 | | metric | guidance | surprise | action_event |
 |---|---|---|---|---|
-| Identity, state, quote, source, Driver | required | required | required | required |
+| Identity, state, quote, source location, source, Driver | required | required | required | required |
 | Period | when real | required | when real; required for `guidance_vs_consensus` | rare; only when real |
 | Value and change | only when stated | only when stated | only when stated | only when stated |
 | Comparison values | when stated | the earlier forecast, when stated | the expectation, when stated | when stated |
@@ -772,7 +775,7 @@ flowchart LR
 | # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
 |---|---|---|---|---|---|
 | P1 | 3.4, 5.3 | They say a conflict flag is stored → no such field exists, so a builder could add one | Only the tie-breaker in the extra fact's ID (3.2) marks a conflict; design and code agree | New wording (draft: note P1) | `archive/66_IssuesToBeHandled.md:343` "zero new stored artifacts" · `driver_reference/core/driver_writer.py:365` "zero new stored artifacts" |
-| P2 | 5.3 | Names a fact's producer, but none of the 24 fields (§3) stores it → which channel and reader version made a fact is lost for good | Verdicts store theirs (A2.2); never part of a fact's identity; not a list (note P2) | Store it? In what form? (options: note P2) | `FinalDesign/FINAL_DESIGN.md:146` "Producer/model identity is never in the fact key" · `FinalDesign/ChannelContract.md:634` "Two channels may hit the SAME source event" · `driver_reference/core/driver_writer.py:40` "assert len(STORED_FACT_FIELDS) == 24" |
+| P2 | 5.3 | Names a fact's producer, but none of the 25 fields (§3) stores it → which channel and reader version made a fact is lost for good | Verdicts store theirs (A2.2); never part of a fact's identity; not a list (note P2) | Store it? In what form? (options: note P2) | `FinalDesign/FINAL_DESIGN.md:146` "Producer/model identity is never in the fact key" · `FinalDesign/ChannelContract.md:634` "Two channels may hit the SAME source event" · `driver_reference/core/driver_writer.py:40` "assert len(STORED_FACT_FIELDS) == 24" |
 
 - **P1 draft:** 3.4 → "No other field is stored on a fact. A conflict (5.3) adds no field: the tie-breaker in the extra fact's ID marks it." · 5.3 table row → "add an extra fact, marked as a conflict (3.4); it stays readable (7.11)".
 - **P1 audit note (2026-09-29):** in `DRIVER_RULES_Categorized.md`, 3.4's "the 24" now sits in U2a, far from the 24-field table in U1a; when rewording 3.4, point to that table.
@@ -802,7 +805,7 @@ flowchart LR
 - 6.10 When a source supplies XBRL data, it always includes the exact reporting context (the dates, and whether the value covers a span or a single moment); every breakdown carries both axis and member; and "no breakdowns" is sent only as an explicit, checked statement. A missed extraction must never pass as the consolidated whole.
 - 6.11 Only text can create Drivers or non-metric facts. Tagged filing data never decides meaning or identity; it may add numeric metric facts only after the Driver and the company's link to that line item are already admitted, and that route is switched off for now (6.12).
 - 6.12 **Facts from tagged filing data:** an approved design, switched off until its proofs pass; its full rules are in folded Part A1.
-- ⚠ **XBRL can't back up text facts:** only about 35–60% of 8-K money figures later get a matching tagged figure, so a later match is a grading aid only, never evidence. And percentages spoken on calls often can't be safely recomputed from tagged figures: organic, adjusted, constant-currency or rounded figures may use a different definition.
+- ⚠ **XBRL can't back up text facts:** a later tagged figure is a grading aid only, never evidence. How often 8-K money figures later find a tagged match is unmeasured (the old "35–60%" came from transcripts and news). And percentages spoken on calls often can't be safely recomputed from tagged figures: organic, adjusted, constant-currency or rounded figures may use a different definition.
 - ⚠ **XBRL links:** precision is high but not perfect, and in a 274-company test the matcher found only about 70% of the true links. The structural check catches only structural slips (e.g. a share count mapped to a period total), not same-type scope mistakes. An extra check using the filing's own subtotal structure is recommended before full-scale linking (timing open) and is required before tagged-data facts are switched on (6.12).
 
 - *See also:* Facts from tagged filing data are an approved design, switched off until proven: 6.12 and folded Part A1.
@@ -964,7 +967,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 
 - 8.8 Quotes are exact source text, found in the source. AI never rewrites, repairs or swaps a quote.
 - 8.9 **What a source may send.** A source sends only evidence, as stated. It must never send what the core decides: Driver names, fact IDs or scope, a fiscal year or quarter it worked out, measurement tags, final units, or any number it calculated. The approved rule is to reject the whole item if it does; it replaces an older rule (ignore such fields and recompute them) once proven.
-- 8.10 **The AI reader sees the whole source event**, in order: the context is never shortened, and long events are never left out.
+- 8.10 **The AI reader covers the whole source event**, in order, across as many reads as needed; each read fits its limit and carries the context its text refers to. Nothing is shortened, skipped or counted as read without being read.
 - 8.11 Old Guidance data is evidence only: it is never converted, replayed or bridged into Driver facts, and never used to fill a history gap. Whether to accept a measured temporary history gap or wait for fresh Driver history is decided only when the old data is retired. A read with no Driver facts returns an empty result, never old Guidance data. Retiring the old Guidance system keeps a complete, restorable copy; only explicitly approved parts are removed.
 
 - 9.4 **No 8-K item-number categories.** An 8-K's item number is information only. It may not create, merge, type, rank or route a Driver or fact. Reopen only for a named user with a testable need, and never with a hand-written item map, a meaning shortcut or a second reader.
@@ -1175,7 +1178,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 |---|---|---|---|
 | 1 | What am I recording? | Drivers and facts; four fixed types; the evidence and history laws | — |
 | 2 | What goes in a name, and when is a Driver new? | Name the reusable cause; a Driver is born with its first real fact, with no exceptions, and has no status; a guidance or surprise Driver belongs to its metric's family by name, checked before saving (2.26); every fact is matched against the whole current catalog after the reader proposes (1.14); sameness is judged by object, scope and mechanism, never by counts, and approved by an independent check; unsure → keep separate | how candidate Drivers are found and shown; which AI does the checking |
-| 3 | What is on each fact? | 24 fields in six groups; allowed states per type; slices, tags, units, signs, periods and number shapes | how facts are stored |
+| 3 | What is on each fact? | 25 fields in six groups; allowed states per type; slices, tags, units, signs, periods and number shapes | how facts are stored |
 | 4 | How do forecasts and surprises work? | A stated movement is stored, otherwise it is worked out when read; a surprise is written only with its accepted home fact; a withdrawal spreads only when its scope is exact | — |
 | 5 | What happens when facts repeat, conflict or change? | Combine only when unambiguous; keep conflicting values; identity never changes; a stored value never changes after saving; a blank never erases | how batches run |
 | 6 | How are facts linked, and what happens after saving? | The exact official line item or nothing; renames only when declared (from release 2); no audit or repair process runs after saving | — |
@@ -1260,7 +1263,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 ### Identity
 
-### The 24 fields, grouped by meaning
+### The 25 fields, grouped by meaning
 
 ### What each fact type needs
 

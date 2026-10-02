@@ -2134,6 +2134,486 @@ Codex confirmed 0 Drivers, no constraints and the 24-field writer."
   - an indirect cause was counted as a cause (0.94), so a direct-vs-indirect rule is needed;
   - a cause 3 sentences away was found only after expansion.
 - Secret scan clean. Committing and pushing DriversFinal only: rough_design.md, the scratchpad, plus the other session's JEV.md §6.11 edit and 12 cause-pilot files.
+- Done: pushed cff88cbb1.
+
+**2026-10-01, owner:** "No, I don't understand what You are talking about, as far as JEV results are concerned, on causes. Make it super easy for me to understand." → Claude re-explained JEV.md §6.11 with one worked example and a plain results table (no file changes).
+
+**2026-10-01, owner:** "The primary problem is If we were to do this That just means we will require another AI to first read and create these kinds of questions. Which means the AI could have done it on its own rather than relying on JEV, and plus, that wastes tokens." + "where there are more than one cause, we may have to first send another option to JEV saying, 'Are there more than one cause?'… thinking aloud"
+- Claude: no AI writes the questions. Code fills a fixed template from the facts the reader extracts anyway. Verified in run_cause_pilot.py: "Does the passage state that `cause_fact` caused, drove or contributed to `effect_fact`?", with cause_fact = name + quote.
+- The owner's point 2 isn't needed: one yes/no per pair already finds several causes (46/46), and counting is a documented JEV weak spot.
+- Trade-off for the owner:
+  - A. JEV alone decides, with a sample check at launch. Cheapest; needs an 8.1/8.2 exception.
+  - B. The reader also marks causes and a link is saved only when both agree. Fits the rules.
+- Claude recommends A, if the bigger pilot shows few wrong links. Asked before changing rough_design.md, whose current main path is "reader proposes, JEV checks".
+
+**2026-10-01, owner:** "tldr" → Claude: code writes the questions, JEV answers, no extra AI; one yes/no per pair covers several causes; pick A (JEV alone + sample check) vs B; asked whether to update rough_design.md.
+
+**2026-10-01, owner:** "Yes, you can update the rough design, but only after explaining to me. I think I haven't understood the rough design, so can we step back?… you're not starting from the start, and you are making some assumptions in terms of what you think I know." + "Can you explain it to me right from the beginning? Code builds the questions from facts… I'm just scared that code may not be able to do it at scale across every item, because whatever I'm building is for production… one thing at a time… concise… visuals… examples… Let's start at the rough design, and then we will come back to this."
+- Claude: explaining from the start, one step at a time, with one running example. Part 1 = what the rough design is: purpose, terms, 6 steps on one sentence, what gets stored, why the work is split.
+- The scale question about code-built questions is parked until step 4.
+- rough_design.md is not to be updated until the explanation is done.
+
+**2026-10-01, owner:** "Okay, while we are proposing this, here's my suggestion inside Notion. https://app.notion.com/p/Workflow-3e8a0a3f310681a3842cca0225182c00" + "Under the workflow page where you see System, let's create another separated, isolated box. Let's call it Code Flow. While we continue to finalize it, I want you to keep updating that Notion page. That component will link to its own page… one action and, on the side, who does it. For example… Code + Doc Link does it, and the trigger could be as soon as something gets ingested. Let's take one step at a time… completely understand one component if it's capable of doing it, and then we move to the next step." + "For the fourth step, just provide your suggestions. Also note that both Codex and Claude are getting the same instructions… If you have a way of communicating to the other one using a session ID or what, let me know that also. For now, I want your proposal… super clear and super concise… visuals and examples… heavily."
+- Claude read the Workflow page (read-only). Its "Rules for every step" subgraph holds "System ▸".
+- Proposal only, no Notion change:
+  - a new isolated subgraph "Code Flow ▸" linking to a new child page;
+  - the page has a 6-box chart plus a table: action · who · trigger · in → out · example · status (red/green);
+  - step 4 is marked "suggestion only";
+  - one writer for the page (owner to pick Claude or Codex).
+- Codex link options:
+  1. the owner relays;
+  2. the old mailbox at ~/.core827-orchestrator (watchers still running, protocol stale);
+  3. `codex exec resume/fork <session-id>` (codex-cli 0.159.3 has both; untested here).
+
+**2026-10-01, owner:** "Didn't you promise me concise?" → Claude: apologized; resent the proposal in about 6 lines.
+
+**2026-10-01, owner:** "Okay, let's do one thing: put a code flow box below the system in the workflow on Notion. And provided a link to open a new page"
+- Done in Notion:
+  - New page "Code Flow" (3eca0a3f310681678852e706a704604e), moved into the Box pages toggle. It has the 6-step chart, the steps table (all 🔴; step 4 💡 suggestion) and a change log.
+  - The Workflow chart now has the subgraph "How it's built" → "Code Flow ▸", placed under System by an invisible link (SYS ~~~ CF), plus a legend entry and a click link.
+  - Verified by re-fetching. Backup note: backups/notion_codeflow_20261001/README.md.
+
+**2026-10-01, owner (mid-turn):** "Next, we need to have another mermaid diagram inside the code flow page. The first box should be… three kinds of financial text: news, transcript, financial SEC reports… 10-K, 10-Q, 8-K, and, I think, another type of report. I think the trigger should be ingestion… two use cases: 1. creating these drivers from all the financial text 2. updating those drivers… we should be able to do both. What is your take on this?"
+- Neo4j counts (read-only):
+  - News 348,670; Transcripts 9,608.
+  - Reports 42,633: 8-K 29,672 · 10-Q 7,301 · 10-K 2,993. The other 2,667: 425 1,206 · 8-K/A 631 · SCHEDULE 13D/A 531 · 10-K/A 137 · SCHEDULE 13D 70 · 10-Q/A 41 · 6-K 31 · SC TO-I 13 · SC 14D9 7.
+- Added a "What comes in" chart to Code Flow: 3 sources → "ingested" → 1 Cut. Plus a note "one flow, two uses; step 5 decides", and a ⚠️ callout.
+- Claude's take: one flow does both uses.
+  - Backfill must run oldest first.
+  - Conflict: the Filings & Transcripts box page says "filings never create Drivers; only channels do". Building Drivers from all text changes that; the owner decides.
+
+**2026-10-01, owner:** "This is good. Can you make that code flow page?… make it like a horizontal flow, so everything is on the top, and then we have it below? All of them go to ingested, and then we have the cut box below." → Claude redrew "What comes in" top-down: News · Transcripts · SEC reports in one row → an "Ingested" trigger box → "1 · Cut". Verified by re-fetching; change-log line added.
+
+**2026-10-01, owner:** "Rest looks fine. Just the SEC reports box doesn't seem as similar in size as transcripts and news… make them the same size and somehow fit all the text inside." → Claude made all 3 boxes 280px wide with 3 lines each. Added a second detail line to News ("one story = one piece") and Transcripts ("prepared remarks + Q&A").
+
+**2026-10-01, owner:** "Okay, now, somewhere at the top so that we don't forget, but in a concise manner, I want you to write down my five priorities for this whole project. The first priority is that we always have to think about the usefulness of what we are doing in relation to the prediction task…" + "…the end goal is to explain price moves, learn which drivers matter, and predict… give it a short, more representative name. 1. 100% accuracy… close to 100%… both recall and precision. 2. Lowest cost possible… subscription [limits]… JEV… local models… lowest-intelligence OpenAI or Claude models… the design [no repeated reading]… 3. …lowest implementation time… running that whole loop of extraction using docling… 4. Perfectly organized, highly optimized, and minimalistic code. Now, for this, give me those five priorities in a nicely written way."
+- Claude added a 🎯 callout at the top of the Notion Code Flow page with the 5 priorities in order: Prediction first · Near-100% accuracy · Lowest cost · Fastest run · Minimal code. Verified by re-fetching.
+- Also saved as memory (project_owner_five_priorities).
+- Not yet changed: rough_design.md's "Goals" line, which still lists 4 goals without prediction. Asked the owner.
+
+**2026-10-01, owner:** "Again, can be shortened wherever possible. Keeping the same content but shortening the text because I told you I like the shortest text possible so I can comprehend it easily" → Claude shortened the Notion priorities callout to one short line each, same content.
+
+**2026-10-01, owner:** "Make that priorities box collapsible." → Claude replaced the callout with a blue toggle ("🎯 Priorities, in order"), same 5 lines inside.
+
+**2026-10-01, owner:** "Okay, now we need to understand the first part: how exactly will this cut or Docling part happen?… promise me that we can start with the overall quick high-level design and only focus on [Cut] and Docling for now… once we've looked at the references [DriversFinal/Dockling]… build it one thing at a time… perfecting what we are doing after the high-level steps… We may use some other agents to check scalability: does it work on every kind of document across the whole database or not? We can worry about the ingestion part, like the trigger part, later. What do you suggest?"
+- Claude checked:
+  - the local cache of originals: 1,769 files, 4.3 GB, which is what the 20-filing test used;
+  - each Report node stores SEC links (primaryDocumentUrl, linkToHtml, linkToTxt, exhibits).
+- Proposed Cut in 5 sub-steps: A Get original → B Convert (Docling: HTML for text and tables, printed PDF for headings) → C Label (Part → Item → subheads; drop banners and cover) → D Cut (piece per section + neighbours) → E Check (nothing lost).
+- Process: start with A. For each sub-step: build → test on the 20 filings → helper agents check every form type → next.
+- One decision before B: is the stored text or Docling's text the record?
+- Asked before adding this to Notion.
+
+**2026-10-01, owner:** "Yes, I like it… 1. Let's call this the high-level cut, or something more appropriate. Give suggestions for that. prepare? 2. That component in the code flow called cut: we will click on it, and then we should be able to see something like this. filing ─► A Get ─► B Convert ─► C Label ─► D Cut ─► E Check ─► pieces. Each of these… having their own pages, or maybe not… first give a proposal. Inside each box, you can have this. [sub-step table] Just let's start at the very high level, just the boxes, I guess, for now. Just suggest a final suggestion: how should we change Notion?"
+- Claude proposed (no change yet):
+  - rename step 1 to "Prepare" everywhere on Code Flow, and make its box open a new page "1 · Prepare";
+  - that page holds the chart filing → A–E boxes (name + who) → pieces, plus the sub-step table under it;
+  - no sub-step pages until we start building that sub-step.
+
+**2026-10-01, owner:** "yes lets do"
+- Done in Notion:
+  - New page "1 · Prepare" (3eca0a3f310681ffb36de687666c09f0) under Code Flow. It holds the chart filing → A Get → B Convert → C Label → D Cut → E Check → pieces (all 🔴), the sub-step table, "how we build it", "decide before B" and a change log.
+  - Code Flow: "1 · Cut" → "1 · Prepare ▸" in both charts, with click links; table row 1 renamed; legend adds "▸"; the page moved into a new "Step pages" toggle. Verified by re-fetching.
+- Seen, not touched: someone else added a "**Code:** driver/" link line at the top of Code Flow (14:54).
+
+**2026-10-01, owner:** "Let's discuss and get" (= sub-step A · Get).
+- Neo4j facts (read-only):
+  - `linkToFilingDetails` is the real main document: 42,023 HTML, 601 XML (13D-type forms), 9 missing.
+  - `primaryDocumentUrl` is the XBRL instance (_htm.xml) or the full .txt.
+  - `linkToHtml` is the index page.
+  - `exhibits` holds 39,051 URLs: EX-99 23,286 + EX-10 15,765, the only two types stored; 25,299 reports have any.
+- Claude proposed Get: list each report's files → use the local cache (1,769) or download from SEC at 10 per second or less (about 80k files, roughly 2–3 hours) → save + fingerprint.
+- Checks: every file arrives or its failure is logged; the right report; never downloaded twice.
+- Owner decisions:
+  1. Exhibits: EX-99 only or EX-10 too (Claude: EX-99 first).
+  2. Images: now or later (Claude: later).
+
+**2026-10-01, owner:** "…think hard… inside the `prepare` method, A. GET…" + 3 questions:
+1. "is [Docling] really the best option for our task? Any better, free, faster alternatives?"
+2. "I'm assuming the transcript and news do not require that and they are fine as is… whatever we decide… should be applied across every exhibit, every document, every image… for images… limited only to specific models that can read images"
+3. "since this seems like a structural problem… our original pipeline itself should do it… maybe… a to-do in a Codeflow Notion page as one of the steps to do at the end."
+Plus two other bots' findings (pasted). "Don't rubber stamp anything, and tell me the best way forward."
+- Claude's checks (read-only):
+  - The DB splits filings into Items: 10-K 2,988/2,993 (about 20.5 sections each), 10-Q 7,297/7,301 (9.7), 8-K 29,591/29,672 (2.2). Confirms bot 2.
+  - Cached files: inline_html_cache has 1,769 main documents (4.3 GB) and exhibit_html_cache has 13,181 exhibits (5.9 GB). Claude's earlier "1,769" left out the exhibits.
+  - Docling 2.131 HTML route: ADSK 10-K 1.9 s, PGR 10-Q 1.5 s, TEX EX-99.1 0.2 s. The 85 + 79 + 14 tables it found had 0 header rows, and it found 1 heading per file. Confirms bot 2.
+  - Share of table numbers with SEC machine tags, on 13 10-K/10-Q filings, rough, excluding years and footnote marks: 51–81%, median about 67%. Disputes bot 2's "~90%".
+  - News sample of 50k: 0 bodies contain `<table` (plain text); 4,603 (9%) have an empty body.
+  - EdgarTools is not installed.
+  - Web search found free SEC-specific alternatives, untested: sec-parser, doc2dict (claims ~500 pages/s), edgartools, sec2md.
+- Claude's recommendations:
+  - Keep Docling only for HTML → paragraphs and tables, plus images and PDFs later. Run a bake-off on the 20 filings against sec-parser, doc2dict and edgartools before building B.
+  - Transcripts and news stay as they are. The same Prepare applies to every SEC file. Images come later and need image-reading models.
+  - The end state is Prepare at ingestion: build it standalone, run it over the stored filings, then a to-do to move it into ingestion.
+  - Revised chain:
+    - A: DB Items + cache + download.
+    - B: HTML only; PDF/OCR only for picture-only files.
+    - C: keep the cover; drop only repeated banners.
+    - D: whole Items; split only oversized ones; tables as labelled grids.
+    - E: nothing lost + every number keeps its labels.
+  - Asked the owner 3 decisions.
+
+**2026-10-01, owner:** "also other bot said: [bot 1's findings, pasted again]" ultrathink
+- Claude checked bot 1's #1 on the 20 cached filings: working contents links to Items in 11 of 13 periodic filings.
+  - All 5 10-Ks link 23 Items each; 6 of 8 10-Qs link 6–7.
+  - PGR has no internal links; GDDY has 168 links but none whose row names an Item.
+  - The 7 press releases have none, as expected, since they have no Items.
+- Verdicts:
+  - #1 is useful for placing each database Item inside the HTML, not as the main source (the DB has Items for 99.8%).
+  - #2 is mostly moot with HTML-only conversion.
+  - #3 is useful for D (budget, repeated headers, expand), but quotes still come from the stored text.
+  - #4 agreed: E must count picture text.
+  - #5 agreed.
+  - #6 works only for PDF-converted files.
+  - Cover and relationships were already adopted.
+  - The 2.132 release and the Mac GPU matter only for the PDF route.
+  - PowerPoint doesn't apply: EDGAR doesn't take .pptx files.
+- The plan is unchanged apart from 3 additions to A/C, D and E. The same 3 decisions are pending.
+
+**2026-10-01, owner:** "TLDR: Just tell me what I need to know in a very concise way, and any decisions I need to make and why." → Claude: 3 facts + 5 decisions with reasons (bake-off, EX-10, images later, ingestion to-do, update the Prepare page).
+
+**2026-10-01, owner:** "Okay, put your ideas here so I can get validated by other bots in a super simple way. Again, I want actionable one-liner types. …/DriversFinal/runningIdeas.md Also, put any relevant web pages that we may need to test here… this is your proposal, and the other bots need to agree to this, add to this, or modify this. Think hard and come up with your best proposal… never losing sight of what we are trying to do, in as concise a way as possible…"
+- Claude wrote runningIdeas.md, which the owner had created empty at 11:39. Contents:
+  - 8 facts (F1–F8; F8 marked as unverified other-bot claims);
+  - 19 one-line proposals (P1–P19);
+  - 3 tests (T1 bake-off, T2 scale check, T3 the 9% mismatch);
+  - 5 decisions;
+  - 10 links (SEC fair-access URL confirmed by search).
+  - Review format: per ID ✅ / ✏️ / ❌, new ideas as NEW-n.
+- New finding: commit 722a93166 (owner, 10:54) moved the old code to driver_reference/ and made driver/ the new home ("Start with document preparation"). The Route A tag code is now under driver_reference/relocation. P9 says to review it before reuse.
+
+**2026-10-01, owner:** "TLDR: What is your final suggestion in as few words as possible?" → Claude gave the one-paragraph version of the Prepare proposal.
+
+**2026-10-01, owner:** "Okay, I'm going to pass you every review, consolidated. Your task is not to rubber-stamp, but also not to throw away anything without independently verifying every single detail in as much depth as possible, and then tell me. Based on that, update running ideas.md. Agreed? You will not rush in, and unless you're absolutely certain about a point, you will not take a decision. You have to continue until you have decisions for all of them. First, you promise." → Claude promised and stated the method; waiting for the reviews.
+
+**2026-10-01, owner:** pasted 3 consolidated reviews, then (mid-turn) "…/DriversFinal/rough.md all ideas consolidate din one place incase anything got missed while pasting". ULTRATHINK.
+- Claude read rough.md in full (132 lines; same 3 reviews, nothing extra) and checked every point, read-only.
+  - Code and rules:
+    - ReportProcessor.py uses sec_api ExtractorApi, and SEC_API_KEY is active.
+    - NewsProcessor caps news at 3,000 words; 2 of 60k stories hit it.
+    - eight_k_packet.py reads stored sections and EX-99 text.
+    - Rule 1.17 bars flattened text and converted copies of 8-K tables.
+    - Part A1 (v1.1 archive) keeps the full text as the baseline; tagged data never creates Drivers.
+    - This machine is minisforum (control plane); minisforum2 is the worker.
+  - Re-ran the other bot's scripts:
+    - strict table score 134/148, 95.1% (reproduced);
+    - the earlier 91% allowed 20% unlabelled;
+    - its "fully tagged" test means "any tag";
+    - tagged tables are 98–100% tagged, all tables 67% (52–81%).
+  - New checks:
+    - Darden EX-99.1: the original prints "$10.67" plus a superscript "4"; the stored text reads "$10.674". Docling keeps "4" as a separate item but splits the sentence.
+    - Stored 10-K sections have no cover page.
+    - 32 10-Ks keep their MD&A in Exhibit 13, which is not stored (Carnival).
+    - The EDGAR index lists every document with its type; one complete-submission .txt holds them all.
+    - Tagged notes: 28–134 per filing. Tagged prose numbers: 26–649.
+    - 7.7% of paragraphs appear in 2 or more documents (300 filings).
+    - Earnings 8-K moves average 7.0% vs 10-Q 4.8% and 10-K 3.7%.
+    - A7 used a Best Buy 10-Q table, so "where A7 failed" is wrong.
+    - sec2md docs exist.
+- Updated runningIdeas.md to v2 (v1 backed up):
+  - F1–F11; P1–P23 with ✅/✏️/❌/🆕 marks; T1–T6; D1–D12 with picks;
+  - a review log covering every point.
+  - Main changes: originals are the record (D4 flipped); complete inventory; fully tagged tables still get read (D7 ❌); repeats kept; ingestion connected early.
+
+**2026-10-01, owner:** "tldr Can you simply, in a couple of lines, explain to me what the plan is?" → Claude: 3-line plan.
+
+**2026-10-01, owner:** "When you say 'plain code,' but then you're saying 'converter tool,' I'm not sure what 'plain code' means. If we build it from the ground up, wouldn't that take a lot of time? Plus, aren't there free alternatives which are better…?" → Claude clarified: "plain code" = no AI (not built from scratch); the converter is an existing free tool; our code is only thin glue; the test picks the free tool needing the least glue; "our own small converter" is only a fallback contender.
+
+**2026-10-01, owner:** "Can you check if this is actually a free library, because I can see pricing on their app on their website?" + the other bot's answer (pasted: the edgartools library is MIT and free; app.edgar.tools is a separate paid hosted app) + the link https://app.edgar.tools/disclosures?utm_source=edgartools-docs… ultrathink
+- Claude verified independently:
+  - PyPI licences are MIT for edgartools 5.59.1, sec-parser 0.58.1, sec2md 0.1.23 and Docling 2.132.0; doc2dict 0.7.1 has no PyPI licence but its GitHub repository is MIT; the edgartools GitHub repository is also MIT.
+  - Downloaded the edgartools wheel (393 .py files): 0 code lines mention edgar.tools.
+  - The hosts it names are SEC, XBRL namespace addresses, GitHub raw, docs and examples.
+  - It needs only EDGAR_IDENTITY (the SEC name and email), no key.
+- Agrees with the other bot. The paid app's prices were not checked (not needed).
+- Added a licence line to runningIdeas.md.
+
+**2026-10-01, owner:** "What are we going to do? What is the next step for determining and getting the exact idea?"
+- Claude: the tests decide, one sub-step at a time.
+  1. The owner gives two decisions: D1 (run the converter test) and D12 (a real contact for SEC downloads).
+  2. T5 on 50 filings picks the Get route.
+  3. T1 round 1 compares the 6 free tools on cached press releases first: a key frozen by hand before any run, the gates, then label grading.
+  4. Pick the winner, then update runningIdeas, rough_design and Notion.
+  5. Later: the fresh-filing final round and T4 (the reader test, which needs Phase 6 approval).
+- No AI calls or paid services in steps 2–3.
+
+**2026-10-01, owner:** "rough.md all ideas consolidate din one place… check every single suggestion without rubberstamping… super throughly… before… updating runningIdeas.md - I need you to be absolutely certain. we need best of all worlds… also for any service - we should use something that we can continue to use for forceable future. ultrathink" + (mid-turn) "fyi: another bot found this… AMG's earnings release is stored as raw unreadable PDF binary… 204 stored exhibits across 129 filings are raw PDF bytes (181 are EX-99)…"
+- rough.md had been rewritten at 12:46: 3 new reviews of v2 (111 lines). Claude verified every claim, read-only:
+  - Timings:
+    - HTML 0.16–5.51 s, mean 1.61 (bot 1's 14 files);
+    - PDF 13.2–284.7 s (my 20); the old 22/62/158 were averages by type.
+  - Per table, 583 fully tagged, 316 untagged, 17 partly (lowest 50%, ABNB). "All-or-nothing" was too strong; 98–100% was a per-filing aggregate.
+  - The F9 query reproduces 32: 1 names Exhibit 13, 22 mention "Annual Report", 3 have no exhibit in the DB. Examples point to later pages or the annual report.
+  - Darden footnote 4 = "See the 'Non-GAAP Information' below".
+  - Live ingestion is off: event-trader 0/0 (report-enricher 1/1). The real-time feed is sec-api's stream (secReports/sec_websocket.py).
+  - Our exhibit code flattens text (inscriptis get_text).
+  - A 13D holds a "$7.22 per share" acquisition proposal (0000950170-25-004311).
+  - PDFs:
+    - 204 PDF links in 129 reports;
+    - the AMG and UDR indexes show official HTML twins, but the DB map, one URL per type, kept the PDF;
+    - PDF-only exhibits exist in 13D/A filings.
+  - 204 ExhibitContent nodes hold raw "%PDF" bytes: 181 EX-99 in 120 filings, 23 EX-10 in 10. Confirms the other bot.
+  - News at the 3,000-word cap: 188 of all 348,670.
+  - Upkeep:
+    - sec-parser README: "This repository is no longer maintained", 0 releases in 12 months;
+    - Docling 92 releases (organization); edgartools 158 (1 maintainer); doc2dict 13 (last Feb); sec2md 22 (last Mar).
+  - Docling JSON is 1.9–12.4× the HTML size.
+  - A7_PILOT_PLAN.md:62: Darden was the first pilot (bot 1 right).
+  - The 35–60% figure is sourced from UniversalLocator_Design_2026-07-18.md:340.
+  - Transcripts: OpenAI labels speakers, and form_qa_pairs skips OPERATOR segments.
+- Wrote runningIdeas.md v3 (v2 backed up):
+  - F1–F18, P1–P26 (new P24 upkeep rule, P25 official copy first, P26 services), T1–T7, D1–D14 (new D13 upkeep, D14 fix the PDF-bytes exhibits now), and a round-2 review log.
+  - Main shifts: complete coverage is mandatory (EX-10, images, 13D included; samples set method and order); per-call budget; minimum output before comparing; sec-parser dropped; tags are cross-checks only.
+
+**2026-10-01, owner:** "tldr" → Claude: 4-line summary (v3 done; biggest find = 181 unreadable press releases; plan = prepare every file with free maintained tools; needs D1, D12, D13, D14).
+
+**2026-10-01, owner:** "Now give this a final read: …/runningIdeas.md and tell me if it sounds good to you. and then explain me super simply and concisely." + (mid-turn) "make no changes - just let me know"
+- The file had become v5 (Claude + Codex), 225 lines at 13:35.
+- Claude verified its main new claims, read-only:
+  - the ReportProcessor `<...>` regex after inscriptis; Coty reproduced: 100,871 → 23,551 characters (−76.7%), caused by "<(100%)";
+  - 0 of 38,946 exhibits contain a line break;
+  - `_get_exhibits` keeps only EX-10./EX-99., so EX-13 is dropped;
+  - Airbnb has 20 duryear tags;
+  - 678 of 10,895 Item 2.02 8-Ks have no stored exhibit (v5 says 683/10,995).
+- Verdict: good. Loose ends: F17 needs the script saved; rough_design.md and the Notion Prepare page are stale; rules line 805; D1/D12/D13/D14 open.
+- No changes made, at the owner's request; this entry is logged afterwards.
+
+**2026-10-01, owner:** "now Super simply, explain to me the entire plan and everything here, one at a time. …runningIdeas.md Start with the high level, and then continue explaining to me, ensuring that you reread it and nothing is missed…"
+- Claude re-read the file (it changed again: 232 lines at 14:02, with owner approvals for D4, D6, D7, D9, D10, D11 conditional, D12 settled, D14, P11, P19, P20).
+- Claude started a 6-part explanation; this is Part 1, the big picture.
+
+**2026-10-01, owner:** "next" → Claude: Part 2 (what's broken today).
+
+**2026-10-01, owner:** "Okay, but without the subscription, do we have everything that we need, especially for the historicals already in the database, to recover all of this? Is that an open question? We still need to determine."
+- Claude checked, read-only:
+  - transcripts: 9,608 total, 68 with full text, 9,472 with Q&A pairs, 4 with both;
+  - TranscriptProcessor deletes raw Redis keys after processing (lines 301/307);
+  - .env: SEC_API_KEY, BENZINGANEWS_API_KEY and BENZINGACONFERENCE_API_KEY set; EARNINGS_CALL_API_KEY commented out.
+- Answer:
+  - SEC filings: fully recoverable for free, since EDGAR keeps every original; no subscription needed for history. sec-api is only the live feed today.
+  - News: open (Benzinga key set; history access untested).
+  - Transcripts: open and hardest (raw copies deleted, 68 full texts, EarningsCall lapsed; Benzinga conference key coverage untested).
+- Proposed 2 small checks, needing owner OK. Not yet in runningIdeas.md as an explicit open item; no file changed.
+
+**2026-10-01, owner:** "ok - we will check as required later on - for now. lets move to part 3" → Claude: Part 3 (A · Get: P1–P4, P25, F10, T5, D12; D2/D3/D8 inclusion still recommendations).
+
+**2026-10-01, owner:** Questions on Part 3:
+1. "the link for all of those files is already available in our database";
+2. did the current code download each file from SEC or use the SEC API?
+3. "Why do we need a fingerprint? Are we overcomplicating anything?"
+4. "how can we make this step kind of automated? … I don't want any AI to be doing that [identical check] … I'm assuming that's already in place";
+5. "are we storing it in a CSV… We need to be sure where we are saving all of this";
+plus "If it's required, then yes, approved. 'Including contracts, images and 13D forms (D2, D3, D8)…'"
+- Claude checked:
+  - exhibits and secondary filings are downloaded straight from sec.gov (`_download_exhibit`, `_extract_secondary_filing_content`, requests.get + UA);
+  - Item sections come from sec-api ExtractorApi; financial statements from sec-api XbrlApi.xbrl_to_json (cached); new filings from the sec-api stream;
+  - disk on this machine: 936 GB, 177 GB free; the cache is 10.2 GB.
+- Answers:
+  1. Partly: the DB has links for the main document, EX-99/EX-10 and the index page and bundle file; the index gives the rest.
+  2. Mixed (table above).
+  3. A fingerprint is 1 line (sha256); it proves the file is unchanged and avoids re-downloads. Not overcomplicated.
+  4. Everything in Get is code; the duplicate check compares numbers and words by code; nothing is built yet.
+  5. Proposal: originals as files plus one manifest table (SQLite, with CSV export any time). Location open, after T5 measures size.
+- The owner approved D2, D3 and D8. Claude asked before recording that in runningIdeas.md.
+
+**2026-10-01, owner:** "Okay, but can you record it in a super concise way, not just any other question I asked that you approved and that is not in that file already? Only record anything that is not there…" → The file had changed (14:08; D1, D12, D13 now settled; F17 script archived; doc follow-up line added). Claude re-read it and added only the missing items: D2/D3/D8 ✅; D15 storage proposal; P3 code-only + index/bundle links + fingerprint purpose; P25 duplicate check by code; F13 current fetch sources; F19 history recovery.
+
+**2026-10-01, owner:** "next" → Claude: Part 4 (blocks and pieces: P5–P12, P17, P21, P22). The file had changed at 14:51 (no new IDs; P5–P12 unchanged).
+
+**2026-10-01, owner:** "This is the most important step, so let's go one step at a time. Substep" → Claude splits Part 4 into 5 sub-steps (4.1 Convert · 4.2 Structure · 4.3 Tables & tags · 4.4 Pieces · 4.5 Saving) and explains 4.1 Convert (P5, F3, F10, T1) before pausing.
+
+**2026-10-01, owner:** "let's say for a 10k, 10q, 8k, how big can each block be, the maximum? And similarly, what was the minimum size?"
+- Claude measured Docling 2.131 blocks: the other bot's saved JSONs (5 10-K, 3 10-Q, 6 EX-99.1) plus 6 earnings 8-K main bodies downloaded from SEC with the approved User-Agent (CVS, Southwest, AMG, Darden, Mosaic ×2).
+  - 10-K: text max 3,193 chars; table max 6,635 chars / 142 cells; 36% of text blocks under 20 chars.
+  - 10-Q: text max 6,117; table max 4,438 chars / 2,222 cells, mostly empty padding; 43% tiny.
+  - EX-99.1: text max 4,135; table max 3,258 / 704 cells; 55% tiny.
+  - 8-K body: text max 2,536; table max 1,076 / 38 cells; 28% tiny.
+  - Minimum is 1 character everywhere: fragments such as footnote marks, "$" and ")".
+- Main-doc cache check: 1,564 10-Q, 49 10-K, no 8-K bodies.
+
+**2026-10-01, owner:** "For a step like this, is it a very straightforward, easy process? I don't want this to be a project in itself… Re-joining them in sub-step 4.3…"
+- Claude tested on Darden: the original HTML holds the sentence in one <div> with 4 inline runs. Joining the runs and marking the raised run as a footnote gives "…$10.57 to $10.67[fn:4], including:" in about 10 lines of code.
+- Answer: small, not a project. Use the HTML's own paragraph boxes (Docling's output doesn't group the fragments); footnote marks are found by styling; T2 checks the variety; PDFs are already grouped by layout; possibly zero code if the T1 winner keeps paragraphs whole.
+
+**2026-10-01, owner:** "next" → Claude: sub-step 4.2 Structure (P6, P7, P10; F1, F4, F9; docling.md heading findings).
+
+**2026-10-01, owner:** "Doesn't Docling provide us with something very useful to test to understand the structure of a document already in place? Why are we not using it? … …/Dockling/docling.md ultrathink"
+- Claude checked docling.md: SEC HTML gives 0 headings (styled text); an h1–h6 control does produce hierarchy; the PDF route finds 271/273 Items but is slow and noisy; render_page adds no headings; chunkers and MCP outline depend on detected headings; the SEC GraphRAG project adds its own SEC parser around Docling.
+- Test on the OKE 10-Q (0001039684-23-000061): a small pre-step tagging PART lines as h1, "Item N." as h2 and bold leaf lines as h3.
+  - Docling headings went from 1 to 42.
+  - HierarchicalChunker gave all 457 chunks a heading path (e.g. "PART I - FINANCIAL INFORMATION › ITEM 1. FINANCIAL STATEMENTS").
+  - Only 1 Item line was caught; others probably sit in one-row tables.
+  - Table text is still broken (", 1 = . , 2 = .").
+- Answer: use Docling's structure tools behind a small heading-tag pre-step; T1 tests it. Asked before adding it to runningIdeas.md.
+
+**2026-10-01, owner:** "yes add it" → Claude added one sub-line under P7 in runningIdeas.md (the heading-tag pre-step, OKE 1 → 42, T1 tests it).
+
+**2026-10-01, owner:** "Next." → Claude: sub-step 4.3 Tables & tags (P8, P9, P22; F3, F5, F6, F8; D6, D7; P15/T1 grading).
+
+**2026-10-01, owner:** "No, this seems like a big thing… I'm sure, Docling is very good for tables, so maybe we need to re-explore Docling or other open source which does it 100% reliably without creating code. What do you say? Other than building the code itself, I'm not for that kind of stuff."
+- Claude checked the saved 2026-09-30 PDF-route outputs (20 files, Docling 2.131, TableFormer FAST). Tables with ≥4 numeric cells that have header rows detected:
+  - 10-K 465/484 (96%);
+  - 10-Q 438/452 (97%);
+  - EX-99.1 103/104 (99%).
+  - The HTML route gave 0 of 178.
+- View: agree, no custom table code. Docling's table model works through the PDF route, which also gives Items (271/273).
+  - Trade-offs: speed (13–285 s per file on CPU; parallel and GPU untested) and evidence links that must point back to the original HTML.
+  - "Detected" ≠ correct labels; T1 grades that.
+  - T1 should compare out-of-the-box routes: Docling PDF route vs edgartools, sec2md and doc2dict. Our own rules are a last resort. Nothing is 100% guaranteed; measure.
+- Offered to record this.
+
+**2026-10-01, owner:** "Tell me, what do you plan to add exactly?" → Claude showed the exact text of 2 lines (new F20 fact; new T1 first sub-bullet "out of the box first"). Nothing written yet.
+
+**2026-10-01, owner:** "And does this contradict anything that's already in the file?"
+- The file had grown to 696 lines: a new "Parallel-agent execution plan" (§1–10, Steps 0–9, lines 248–696). Claude read all of it.
+- F20 is fact-only, no conflict. The T1 line had 3 tensions:
+  1. Step 4 and T1 put HTML first, with printed PDF as a "measured fallback"; the draft made the PDF route a main contender.
+  2. T1 and Step 4 allow routes "with small additions" and "custom code only for demonstrated gaps"; the draft banned custom table code outright.
+  3. Step 4 puts sec2md/doc2dict "only for a named gap"; the draft listed them as equals.
+- Claude proposed a revised T1 line fitting both the owner's no-table-code wish and the plan's order. Nothing written yet.
+
+**2026-10-01, owner:** "add it - Also, as a side note, we do have a GPU on another local machine that has a Gwen local model. That's the same machine that I have a GPU on, if we ever wanted to run docling faster.?"
+- Claude added F20 (after F18) and the revised T1 sub-line (no custom table code unless all routes fail; HTML first; printed-PDF fallback; small non-table adapters allowed).
+- GPU check in the Docling 2.131 source: table_structure_model.py:85 reads "Disable MPS here, until we know why it makes things slower" and forces CPU (v2 does the same). The layout/object-detection engine can use MPS.
+- Answer: the Mac (M4 Pro, 48 GB, shared with Qwen and another program) would speed only the layout part; tables stay on its CPU. Unmeasured: a Step 7 timing comparison. Offered to record a one-line note.
+
+**2026-10-01, owner:** "What's the one-liner that you want to add?" → Claude showed the exact P18 sub-line (Mac GPU option; layout only; tables forced to CPU; shared with Qwen; time 3 filings in Step 7). Not written yet.
+
+**2026-10-01, owner:** "Okay." → Claude added the P18 sub-line to runningIdeas.md.
+
+**2026-10-01, owner:** "next" → Claude: sub-step 4.4 Pieces (P11 ✅, P12, D10 ✅, plan Step 6; Docling HybridChunker as an out-of-the-box candidate).
+
+**2026-10-01, owner:** "Yeah, there are a few things. For example, it varies depending on what task we are doing, because for JEV, we will be asking it for one task only. I understand what you're saying, but we will consider it when the time comes. Nothing is finalized, especially this part." → Claude agreed. Blocks are task-independent and pieces are built per task at read time (P17), e.g. JEV gets one question on a small passage. Offered a one-line "not final, per task" note under P11.
+
+**2026-10-01, owner:** "Yes, added." → The note wasn't in the file yet (the file had changed at 15:20 elsewhere); Claude added it under P11.
+
+**2026-10-01, owner:** "next" → Claude: sub-step 4.5 Saving (P17, P21, P20/D4, D6, D15, plan Step 5 and §4 records).
+
+**2026-10-01, owner:** "Not clear. Can you make it concise and TLDR? … super simply: the main parts, the important parts… it's a wall of text that I can't read." → Claude resent 4.5 in 5 plain lines.
+
+**2026-10-01, owner:** "And do we save it locally, or do we save it on the Neo4j database?" → Claude: per the plan, originals, blocks and the record table go on disk (D15, location open); Neo4j holds only the facts (DriverUpdates) with a pointer to the exact spot (P20). Optional later: a small per-file status record in Neo4j. Still the owner's D15 decision.
+
+**2026-10-01, owner:** "next" → Claude: Part 5 (checks and tests: P14, P15, T1–T7, Stats, plan Steps 3/4/7/8, §5 sample sizes) in short lines.
+
+**2026-10-01, owner:** "Now, this entire plan, does this only include preparing the first step of 'Prepare a Get' or everything? …runningIdeas.md?" → Claude: all of Code Flow step 1 (Prepare: Get → Convert → Structure → Tables → Pieces → Save → Checks), plus reuse in ingestion and the old-data cleanup. Not steps 2–6 (Read, Name, Details/JEV, Match, Save). Scope line at runningIdeas.md:258; title "Step 1 · Prepare".
+
+**2026-10-01, owner:** "So, difference between this and that …/StepsPlans/Prepare.md?"
+- Claude read Prepare.md (155 lines, 16:31, by the Codex coordinator).
+- It is the first work order for plan Step 1, A · Get on one filing (AMG 0001004434-23-000015): a frozen package in /home/faisal/prepare_work/prepare_get_step0_20261001T201534Z/, reuse decisions, 8 behavior steps, output contract, access limits (1 req/s, retries, worker pod route), checks and the stop point.
+- Status: Step 0 done; Step 1 (build + run) waits for owner review.
+- Difference: runningIdeas = the design and plan for all of Prepare; Prepare.md = the job ticket for the first small job. It names runningIdeas as authoritative. No conflicts found.
+
+**2026-10-01, owner:** "Part 6?" → Claude: Part 6 (running, cleanup, services, decisions) in short lines.
+
+**2026-10-01, owner:** "So this is essentially just ensuring that only one filing works end-to-end before we do the rest, or did I not understand?" → Claude: nearly. Step 1 is one filing, but only the download part (A · Get), not all of Prepare. AMG was chosen for its same-label HTML/PDF trap. Showed the Step 1–9 sequence.
+
+**2026-10-01, owner:** "And all these steps you are mentioning, are they related to Prepare?" → Claude: yes, all 9 are Prepare. Mapped them to A Get / B Convert / C Label / D Cut / E Check; Step 8 only tests the reader; Step 9 reuses Prepare. None build Code Flow steps 2–6.
+
+**2026-10-01, owner:** "Explain what you mean by 'answer key.'" → Claude: the correct answers written down from the originals by independent checkers, locked before tools run, then used by code to grade each tool. Gave a one-number example, size (≥300 untagged table numbers + structure) and why it is locked first.
+
+**2026-10-01, owner:** "So, in one line, we are just downloading all the content. From SEC, is that step 1, or is that step 123?" → Claude: downloading = Steps 1–2 (1 filing, then 50); Step 3 = answer key; the full ~42,600 comes later.
+
+**2026-10-01, owner:** (session renamed "driver-helper") "What is step two?" → Claude re-read Step 2 (file changed at 19:45; Step 2 unchanged) and explained it simply.
+
+**2026-10-01, owner:** "So, prepare has how many total steps?" / "Which is the biggest? … complexity and effort … out of 10" / "Which of these steps are we going to use Docling or any other package for?" → Claude: 5 parts (A–E) vs 10 build steps (0–9); my complexity/effort estimates (biggest: Step 4); converters only from Step 4 on (Steps 0–3 use none, on purpose).
+
+**2026-10-01, owner:** "Can you check which all steps have been completed by Codex? I think step 2 is done, but not sure about 3." + (mid-turn) "Maybe only step one is done."
+- Claude checked:
+  - /home/faisal/prepare_work/ has step0, step1, package_first, layout, review, review2, revision and amg_stylesheet_check folders; none for Step 2 or 3.
+  - StepsPlans/Prepare-A_Get.md (19:46) reads "implementation and confirmed review fixes complete … Step 2's inventory/coverage validation remains a separate checkpoint".
+  - Code: driver/prepare/acquire.py + transport.py, standard library only, uncommitted (?? driver/prepare/, ?? tests/driver/).
+  - 28 offline tests pass; the independent review reports PASS; one live AMG request took 0.334 s.
+  - 60 saved filings / 11 form types / 3,223 members all match the independent extractor; 517 MB → 103 MB with gzip.
+  - Design: package-first, saving submission.txt.gz + manifest + receipt.
+- Answer: Steps 0–1 done (Step 1 went beyond one filing, offline). Step 2 not done (independent SEC inventory comparison, live 50-filing retrieval, news/call audit, large-file limits). Step 3 not started. The code is not committed yet.
+
+**2026-10-01, owner:** "Yeah, step 0 and step 1. I think that folder driver should be committed and pushed on the main branch. But Codex is doing something, so wait 1 minute or so, and then see. Once he's done, then go ahead."
+- Claude waited for 2 quiet minutes (Codex's last change was Prepare-A_Get.md at 20:24:42).
+- Checks:
+  - 28 tests pass (python3 -B -S unittest);
+  - secret scan clean;
+  - the owner's SEC contact email sits in transport.py and the README; the repo is public, but the email was already in 2 pushed files.
+- Committed only driver/ + tests/driver/ (16 files) as 18bb183dc and pushed to origin/main.
+
+**2026-10-01, owner:** "In Notion, we have prepare https://app.notion.com/p/1-Prepare-… So our steps follow it exactly." → Claude: yes, A–E map to build steps 0–9. The page is outdated in 6 points; offered to update it.
+
+**2026-10-01, owner:** "…DRIVER_RULES_Categorized.md Yes, shouldn't they be in line with this? …rough_design.md"
+- Claude: yes.
+  - 4 rules clash with approvals: 8.10 vs D10; 1.17 vs D9; the 3.3 property table (24 fields) vs P20's location pointer; line 805 vs F18.
+  - rough_design.md is outdated (printed PDF for the section map; stored-text quotes; old decisions).
+- Proposed order: rules wording first (owner approves), then rough_design, then Notion.
+
+**2026-10-01, owner:** "…/StepsPlans/Prepare-A_Get.md" → Claude read it (81 lines, 20:24). New: fresh 47/47 filings, 12 types, 1,793 members match; the missing SEC-view stylesheet is closed as a blocker (491 company HTML files have no outside stylesheets; 1,057 image refs resolve); AMG browser check. Consistent with runningIdeas.
+
+**2026-10-01, owner:** "exact wording for the 4 rule changes… What was this? Can you explain to me again?" → Claude re-explained the 4 changes simply.
+
+**2026-10-01, owner:** "yes update But be sure to be super concise and include everything that's required… and then also update the required Notion."
+- Rules file (backed up first) edited:
+  - 8.10: smaller reads covering the whole event;
+  - 1.17: evidence is the original filed file, i.e. HTML, or a filed PDF/image checked against its text;
+  - 3.3 table: new `source_location` row, and "source location" added to the required row; "24" → "25" in 5 places;
+  - §6 XBRL warning: 35–60% withdrawn;
+  - a one-line change note at the top.
+- runningIdeas.md: 4 "update rule before implementation" lines now read "updated 2026-10-01".
+- rough_design.md: "partly superseded" note at the top.
+- Notion (only 2 pages carried the content; the section pages just link to GitHub):
+  - Graph in Neo4j: 25 properties;
+  - 1 · Prepare: status, A green, B tool to test, the 4 rows rewritten, 10 build steps, "Decided" line, sources, change log. Verified by re-fetching.
+- Not pushed: the DriversFinal edits, so the Notion GitHub links still show the old versions. Asked the owner.
+
+**2026-10-01, owner:** "sure" (commit and push DriversFinal) → 8 files (rules, runningIdeas v5, StepsPlans/Prepare-A_Get.md, rough_design, scratchpads, Docling notebook + source_reader.py); secret scan clean (source_reader reads credentials from the environment). Committed and pushed.
+
+**2026-10-01, owner (separate session):** "I want you to quickly understand this file. Anything related to what you see. …DRIVER_RULES_Categorized.md Let us have a brief, high-level look at all the files in here. …/DriversFinal The idea is that I have to redesign a lot of it, so I will need your help. For that, you need to have a super in-depth understanding. Create a scratch pad, write mental notes, and make sure you understand how things connect. Like I said, nothing is finalized, so I will be needing your reasoning and thought process. Across this, for now, I just want you to understand and make mental notes in your scratch pad so everything is clear, and then you can go back and keep referring to those and keep updating that as we talk. Also, there is a Notion MCP, and I have a Drivers folder there. Get to understand that as well."
+- Claude read everything in DriversFinal (top level in full; Archive by outline + key parts), all 33 Notion pages under Drivers (incl. the new Code Flow page), Phase 6 + Route D, and checked Neo4j read-only (0 Drivers / 0 facts / 0 periods, no constraints).
+- New file: `DriversFinal/REDESIGN_SCRATCHPAD.md` = Claude's mental notes (map, 19 homes, chains, tensions T1–T24, ~50-item decision register, hypotheses H1–H14). No rules, Notion or database changed.
+
+**2026-10-01, owner (separate session):** "Can you read the code flow on my Notion page? https://app.notion.com/p/Code-Flow-3eca0a3f310681678852e706a704604e"
+- Claude re-read it (last edit 14:48 UTC; no comments) and summarized it. Read only; nothing changed in Notion.
+- Added to REDESIGN_SCRATCHPAD.md: H15 (the flow stops at Save; the prediction loop isn't drawn), H16 (step 3, a smart AI naming every fact, is likely the biggest cost), M4. Codex had added its own reading note to the same scratchpad; it matches.
+
+**2026-10-01, owner (separate session):** "Now I want you to understand the capabilities of Docling as well as its use cases for our purposes. …/DriversFinal/Dockling Note: we are still inside this Notion page and understanding https://app.notion.com/p/1-Prepare-3eca0a3f310681ffb36de687666c09f0 Make no changes without asking me, but understand Docling's capabilities in depth, even if you have to refer to their own documentation. I'll leave no stones unturned. I want you to surprise me with things that I wasn't aware of… which could apply directly and can actually make my task much easier, much faster, and in line with the priorities."
+- Claude read the Prepare page, the Dockling folder, Codex's audit, the installed Docling 2.131 API; ran read-only tests on cached filings and Neo4j (scripts and outputs in the session scratchpad); a Sonnet helper surveyed Docling's own docs.
+- Findings recorded as D1–D17 in REDESIGN_SCRATCHPAD.md §9b (Items already split in Neo4j; HTML route ≈ 1.6 s per filing; SEC tables need 5 structural rules; ~90% of 10-K/10-Q table numbers already iXBRL-tagged; 91% paragraph match with stored text via `orig`; most Items fit whole; bold-line sub-headings). No Notion page, rule or database changed.
+
+**2026-10-01, owner (separate session):** the same 3 questions as above (Docling best? transcripts/news fine? every document/exhibit/image? fix in the ingestion pipeline + Code Flow to-do?) + bot 1's findings pasted; "think hard… don't rubber stamp… best way forward". The owner interrupted one code search (ingestion code) mid-run.
+- Correction accepted: the other session's dispute of "~90% tagged" was right. Raw-HTML recount on all 13 periodic filings: median 67% (52–81%) of numeric table cells are tagged; tables are all-or-nothing (tables with any tag: 98–100% tagged); the untagged third is in fully untagged tables (MD&A/KPI tables, page numbers). Scratchpad D6 corrected.
+- Answers recorded in REDESIGN_SCRATCHPAD.md §9c. Difference from the other session: the bake-off should also include a thin converter of our own (exact characters, tags kept, link to source), graded automatically with the tagged tables; new owner ruling flagged: may text read from images count as evidence (rule 1.17)?
+
+**2026-10-01, owner (separate session):** "…thoroughly, without rubber-stamping, understand if this is the perfect plan… …/DriversFinal/runningIdeas.md Any suggestions or modifications… Don't make changes to the file yet… as concise and as actionable… as few words as possible" + mid-turn: "Do not rush in… continue researching… unless you are 100% confident…"
+- Claude reviewed runningIdeas.md read-only; verified new facts: `driver/` is empty (no writer yet); stored DRI EX-99.1 has "closures3" and "10.674" (footnote digits glued into words and numbers); the earnings predictor reads the flattened EX-99 text (`eight_k_packet.py`); tagged tables = 4–18% of 10-K/10-Q text but 523–2,380 cells per filing; 7.1% of paragraphs repeat across a filing's exhibits; Docling JSON = 2–12× the HTML; this machine is the control-plane node.
+- Verdict and suggestions in REDESIGN_SCRATCHPAD.md §9d. runningIdeas.md not changed.
+
+**2026-10-01, owner (separate session):** "If I were to pass you all three bots' reviews, would you be able to provide me with the best of all?" → Claude: yes, with each point checked at source. Then the owner pasted the three reviews (bot 1 = this session's review; bots 2 and 3 = others). "ULTRATHINK"
+- Claude verified the disputed points read-only: news 3,000-word cap real but hit by 2 of 60,000 bodies; DB exhibit lists hold only EX-99 and EX-10; stored Items come from the paid sec-api extractor (`redisDB/ReportProcessor.py`); Claude's own table score re-scored strictly (134/148 tables fully labeled, 95.1% of values; correctness untested); Claude's own "match Item openings" withdrawn in favour of bots 2–3.
+- Merged list (6 Must, 5 Should, Small, decisions D6–D11) in REDESIGN_SCRATCHPAD.md §9e. runningIdeas.md not changed.
+
+**2026-10-01, owner:** "tldr" → Claude: 6 must-fixes in one line each + decisions.
+
+**2026-10-01, owner:** "drop sec-api later? That's the one that has a WebSocket and gives us code whenever. It's not running right now, but how else will we do it?"
+- Claude checked the code: 4 sec-api parts are used — Stream/WebSocket (`secReports/sec_websocket.py`), QueryApi (`secReports/sec_restAPI.py`), ExtractorApi and XbrlApi (`redisDB/ReportProcessor.py`). D11 meant only the ExtractorApi (Items as text); keep the stream. Free fallback for the stream if ever needed: poll SEC's own feeds (≈ a minute's delay). Scratchpad §9e updated.
+
+**2026-10-01, owner:** "Okay, so are we suggesting Docling or not?" → Claude: pictures/PDFs yes; HTML (nearly all SEC text) not by default — it is one contender in the 1-day test; Claude's bet is our own small converter (keeps tags, exact text and a pointer by design), to be proven by the test.
+
+**2026-10-01, owner:** "And those three links, are they any good for our use case? Yes or no? [sec-parser 0.42.0 · eventual.ai SEC EDGAR case study · edgartools data objects]" → Claude (docs + READMEs read, no installs): sec-parser NO (no longer maintained); eventual.ai blog NO as a tool (plain-text dataset), but its parser doc2dict is worth a test slot (very fast); edgartools PARTLY YES (maintained, free, gives Items; could replace the paid sec-api Extractor; exact text/tags/pointers unknown → test). Details in scratchpad §9e.
+
+**2026-10-01, owner:** "But I think edgartools, isn't that also paid? https://app.edgar.tools/pricing" → Claude: two products from one maintainer — the `edgartools` Python library is MIT, free, no key (only SEC's required email); `edgar.tools` (app.edgar.tools) is a separate hosted app/API: Free (100 API calls/day), Professional $24.99/mo, Analyst $79.99/mo, Enterprise. We'd use only the free library. (Pricing page returned HTTP 403 to automated reading; plans from a web search.)
+
+**2026-10-01, owner:** "Is this perfect? Ensure you validate every single thing. Do not change the file… if you completely, independently, and thoroughly agree with every point, primarily the big direction… Tell me what you would change in this. …/DriversFinal/runningIdeas.md" ultrathink
+- Claude validated runningIdeas.md v2 read-only (database, code, cached files, kubectl, official pages). Exact: F1, F2, F3 Darden split, F5, F6, F8, F11, node roles, D12, D7's A1 quote, sec2md's claims. Off: F3's time range (0.2–5.5 s, not 0.2–1.9 s), F9's wording (32 MD&As point elsewhere; only 1 names Exhibit 13), P21's numbers, the A7 review-log row. New fact: event-trader is scaled to 0/0 (live ingestion off).
+- Verdict: agree with the big direction; suggested changes in REDESIGN_SCRATCHPAD.md §9f. runningIdeas.md not changed.
+
+**2026-10-01, owner:** "…/DriversFinal/rough.md all ideas consolidate din one place incase anything got missed while pasting - can you check every single suggestion without rubberstamping or not paying enough attention. make sure you super throughly check every thing in detail before taking any final step and updating runningIdeas.md - I need you to be absolutely certain. we need best of all worlds since you are the only one who has acess to all of these. do not change but provide suggestions in concise." + "ultrathink also for any service - we should use something that we can continue to use for forceable future."
+- Another session had already turned rough.md into runningIdeas.md v3 (12:54). Claude checked every rough.md point against v3 and the sources (code, Neo4j read-only, cached originals, SEC index pages, PyPI): all three reviews are in v3, and v3's new numbers reproduce.
+- New, verified: our exhibit cleaner deletes text between a decoded "<" and the next ">" (Coty's earnings release ≈77% missing in the live DB; 74 earnings 8-Ks lose >10% in the cached third); every stored exhibit is one line; one root cause for F2/F9/F12 (`_get_exhibits` keyed by type, EX-10./EX-99. only); "35–60%" was measured on news and transcripts, not 8-Ks. Details in REDESIGN_SCRATCHPAD.md §9g. runningIdeas.md not changed.
+
+**2026-10-01, owner:** "tldr" → "35–60%" figure ?" → "still not clear - in couple of sentences only please" → "but why we even need that - are we over complicating anything? also what part of the process is this required since you recall we are on prepare - a cut?"
+- Claude: the later-report check sits only in T1 (the one-time converter test, step B · Convert), not in Cut or any running step. It is over-complicated for Prepare: Prepare only copies numbers exactly with their printed row, column, headers, units and footnotes, and the original file is the answer key for that; checking meaning against later reports belongs to a later step. Proposed: drop it from T1 (owner to decide). Nothing changed.
+
+**2026-10-01, owner:** "not clear - super simply" → "oh ok - as long as its definetly needed then may be we should keep it?" → "is it lot of effort?" → "may be thats in …/driver_reference - check?" + "or …/drivers_harness"
+- Claude: not in driver_reference (it only attaches tags from the same filing) or drivers_harness (its "census" checks quotes, a different thing). Found it in `scripts/driver_seed/relocate_probe/phase2/m3_candidate_census.py` (143 lines + 91-line test + saved result: "28/28 money items had later possible matches; none is yet confirmed"). Inputs still exist. Adapting it to the converter test ≈ 1–2 hours; limits: exact values only (rounding check was deleted), matches unconfirmed, dollar amounts only. Suggested: keep as an optional extra check for press-release dollar amounts; the original file stays the main answer key. Nothing changed.
+
+**2026-10-01, owner:** "sure for now lets keep it but we will need to verify each part of the codebase when we start using it - put that as a note"
+- Claude added a "Reused code" note under "Code home" in runningIdeas.md (any reused code is verified part by part before we rely on it; the later-10-Q cross-check is kept for now, script `scripts/driver_seed/relocate_probe/phase2/m3_candidate_census.py`). Also saved as memory `feedback_verify_reused_code_before_use`.
 
 # Archived: approved no-stages proposal — 2026-09-28
 
