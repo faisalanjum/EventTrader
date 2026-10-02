@@ -4,7 +4,7 @@ Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories
 
 **Edited 2026-10-01 (owner-approved):** 8.10 (smaller reads), 1.17 (original files as evidence), 3.3 table (new `source_location` field: 25 fields) and the §6 XBRL warning (withdrawn 8-K figure). Reasons: [PrepareStep.md](PrepareStep.md) D10, D9, P20, F18.
 
-**Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53, 3.54, 5.9 and 9.11; changed 3.28, 3.31, 5.2's example and 9.1: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), and protection for `unknown` units. Reasons: [fact_types.md](fact_types.md) (owner decisions).
+**Edited 2026-10-02 (owner-approved):** new 1.22–1.26, 3.53, 3.54, 5.9, 9.11 and 10.5; changed 2.33, 3.28, 3.31, 4.8, 5.2's example, 9.1 and parking note P3: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), protection for `unknown` units, analyst questions in transcripts (1.26), and a parked question on forecasts of outside decisions (10.5). Reasons: [fact_types.md](Archive/fact_types_2026-10-02.md) (owner decisions; archived).
 
 **Study order:** S1 (read briefly first) → Driver 1 → 2a → 2b → 2c → 3 → DriverUpdate U1a → U1b → U1c → U1d → U2a → U2b → U2c → U3a → U3b → System S2 → S3 → S4 → S5.
 
@@ -249,6 +249,7 @@ flowchart LR
 - 1.10 *Why these four:* they were checked against all 1,282 names from the catalog work, and none fit no type.
 - 1.22 **`expectation`, a fifth type, is defined but switched off (9.11):** someone else's forecast, such as an analyst's price target or estimate, or the consensus. Until it is on, only the four types above are used. A stated surprise against the consensus stays a `surprise` fact (4.1).
 - 1.23 **Keep apart:** a one-time event vs a standing level (a period total, an ongoing exposure or a policy in force is a metric; a lawsuit step or a policy change is an action, 7.7) · a planned act vs a forecast level · a predicted miss vs an actual one (4.3). An unclear type follows 2.30: in live use the fact is skipped and counted.
+- 10.5 **How to store a company's forecast of a decision someone else makes** (e.g. "we expect FDA approval in Q3"). It needs an agreed representation under 1.6, 2.23 and 3.8: company guidance or an action state, with timing and conditions resolved together. Until decided, a prediction with no permitted representation is skipped and counted (1.23, 2.30); independently supported facts in the same passage (an application already submitted, a review under way) still follow the existing rules. The outside decision-maker is not an outside forecaster (1.22). *Affects:* forecasts of outside decisions. *Decide when:* before such predictions are stored.
 
 - 2.19 A final `_guidance` or `_surprise` stays in the name and fixes the permanent fact type. One surprise Driver holds all three kinds of surprise comparison (4.2). Guidance and surprise Drivers belong to their base metric's family by name (1.18), never by a synonym link. Only a final suffix counts, and it is stripped only once. *Why:* a forecast or a surprise is a genuinely different fact, so it gets its own Driver, in the base's family rather than merged.
 
@@ -396,7 +397,7 @@ flowchart LR
 
   Vague evidence is skipped. *Why:* this keeps junk, one-off and made-up names out.
 
-- 2.33 One real fact in one event is enough; there is no "seen in several events" rule. Boilerplate, bare mentions and non-facts are dropped before storage. Whether a fact is stored never depends on whether it moved the stock.
+- 2.33 One real fact in one event is enough; there is no "seen in several events" rule. Boilerplate, bare mentions and non-facts are dropped before storage. Boilerplate means generic definitions and unsupported promotion; a specific fact is never dropped just because it is common. Keep definitions or other context needed to understand a fact (1.24, 8.10). Whether a fact is stored never depends on whether it moved the stock.
 - 2.34 **Any authorized source may submit raw evidence.**
   - Only the shared core breaks it down, reuses or creates the Driver, builds identity, checks and writes.
   - A source never names or creates a Driver.
@@ -418,6 +419,7 @@ flowchart LR
 
 - 1.11 Every fact needs a source quote. A mention without a fact is dropped.
 - 1.24 **The quote keeps every word that changes the fact's meaning:** a negation, a condition ("if", "subject to", "assuming") or who acted. If one quote can't hold them, the fact is skipped and counted.
+- 1.26 **In transcripts, an analyst's question or assumption alone does not establish a fact.** Keep only claims supported by statements or clear confirmations in that source; a polite acknowledgment or silence is not confirmation. Keep the question with the answer where needed to prove the claim (1.24), and attribute the claim to whoever actually stated or confirmed it, not merely the stored question/answer label. Outside forecasts stay off (9.11); guidance still needs company confirmation (4.9).
 
 - 1.13 Store only what the source states. Exact rescaling (e.g. "$2.1 billion" to a stored number) is allowed. Logic may add labels, states, IDs or facts, but never an invented number. Vendor-calculated ratios, percentage changes and "common-size" rows (figures restated as a percentage of a total) are never stored as facts (in one vendor's data they were about 62% of rows; that's evidence, not a threshold).
 
@@ -881,7 +883,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - *See also:* The general value-or-change rule: 3.50.
 - ⚠ **What an amount measures is easy to misread.** For example, a forecast expense *increase* of more than $4B tied to higher jet-fuel prices is not the total fuel bill, not a price-only share, and has no baseline.
 - 4.7 `value_text`: a forecast in words, for guidance facts with no numbers only. Tidied, at most 200 characters, with no stored numbers (the number fields stay empty); date and period anchors are allowed.
-- 4.8 `conditions`: guidance only; the condition's wording must remain in the quote.
+- 4.8 `conditions`: guidance only, and assumptions only, never causes (3.53); the condition's wording must remain in the quote.
 - 4.9 `company_confirmed`: `true` means the company or its management stated or confirmed it. It's required on every stored guidance fact and decided from who-said-it evidence; sources supply only the evidence. Unclear who said it → the fact is skipped. For now, third-party or rumored guidance is never stored as company guidance, so `false` is never used (9.2). A later company confirmation is a new fact at its own public time; history is never rewritten. *Why only on guidance:* it is the only type whose states can't say "rumored".
 - *See also:* A forecast always needs its target period: 3.37.
 
@@ -1135,7 +1137,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 
 | # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
 |---|---|---|---|---|---|
-| P3 | A2.7 | Misses two locked points → can read as "every company, every day", and hides that one macro (economy-wide) fact can explain many companies' moves | Locked 2026-07-02/03: only significant moves; several companies' moves may point at one fact | Add both (draft: note P3); the rest stays in 10.1 | `archive/99_Codex_Decision_Audit.md:1237` "may point to the same DriverUpdate" · `archive/11_TrackB_DriverUpdate_Census.md:82` "a DCM is created only for a significant company/date move" |
+| P3 | A2.7 | Misses two locked points → can read as "every company, every day", and hides that one macro (economy-wide) fact can explain many companies' moves | Locked 2026-07-02/03: only significant moves; several companies' moves may point at one fact · 2026-10-02 owner decision: reusing one economy-wide fact across several companies awaits the owner's rethink; the older sharing proposal is not current implementation approval | Add both (draft: note P3); the rest stays in 10.1 | `archive/99_Codex_Decision_Audit.md:1237` "may point to the same DriverUpdate" · `archive/11_TrackB_DriverUpdate_Census.md:82` "a DCM is created only for a significant company/date move" |
 | P7 | 1.14, A2.1, A2.5 | The Learner is the planned verdict producer, but its prompt already receives the actual stock return (ACTUAL_RETURN), which 1.14 and A2.5 forbid for whatever produces a verdict → as built, its explanations cannot be stored as verdicts; grading against a return the producer already saw is not an independent test (A2.6) | Nothing yet | Decide before the Learner is connected to EXPLAINED_BY: keep verdict production blind to the return (the Learner's after-the-event learning stays a separate role), or allow after-the-event explanations as verdicts and change 1.14 and A2.5 | `scripts/earnings/earnings_orchestrator.py:3151` "ACTUAL_RETURN:" · `FinalDesign/FINAL_DESIGN.md:273` "EXPLAINED_BY verdict = an edge" |
 
 - **P3 draft**, after A2.7's first sentence: "It is made only for a significant move on a day with no filing event. Several companies' daily move events may point at the same fact (e.g. one Fed decision moving AAPL, MSFT and NVDA)."
@@ -1207,7 +1209,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 | 7 | How are facts read back? | Exact series match; a same-day source rank; point-in-time views; reconciled views only on request | query and storage design |
 | 8 | What must every build respect? | AI judges meaning and code checks structure; fail closed; fewer than 1% wrong, measured at launch; five outcomes; retry only on an exact trigger | components, models, schedules |
 | 9 | What is off for now? | The list above, each with its reopen condition | when to reopen one |
-| 10 | What is still open? | Four questions; only one (price moves) waits on a switched-off feature, and none blocks designing basic facts | the answers |
+| 10 | What is still open? | Five questions; only one (price moves) waits on a switched-off feature, and none blocks designing basic facts | the answers |
 
 ### Section intros
 

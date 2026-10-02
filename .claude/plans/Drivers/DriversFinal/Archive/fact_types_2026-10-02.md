@@ -1,6 +1,8 @@
+> **Archived research and decision history, 2026-10-02.** Current [DRIVER_RULES_Categorized.md](../DRIVER_RULES_Categorized.md) and the active build plans control. Precedence and "nothing applied" statements below describe the historical document; they are not current instructions. Approved decisions, remaining questions and build reminders were reconciled before archiving. Older proposals are retained as history, not implementation requirements.
+
 # Owner decisions · 2026-10-02
 
-Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_RULES_Categorized.md](DRIVER_RULES_Categorized.md). Where the text below differs, these decisions win.
+Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_RULES_Categorized.md](../DRIVER_RULES_Categorized.md). Where the text below differs, these decisions win.
 
 | # | Recommendation | Decision | Rules |
 |---|---|---|---|
@@ -10,8 +12,10 @@ Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_R
 | 4 | Essential qualifiers | ✅ No new field: the quote keeps every word that changes the meaning | 1.24 |
 | 5 | Type boundaries | ✅ | 1.23 |
 | 6 | Shared macro facts | ⏸️ Needs the owner's rethink (one story → several companies), later | — |
-| 7 | Inputs and cutoffs | ✅ No outcome in prediction inputs; input checks live in [PrepareStep.md](PrepareStep.md) | 1.25 |
+| 7 | Inputs and cutoffs | ✅ No outcome in prediction inputs; input checks live in [PrepareStep.md](../PrepareStep.md) | 1.25 |
 | 8 | Validation | No rule: already in the plan | — |
+
+**Also decided (2026-10-02), from "Boundaries and next work":** 2.33 clarified (boilerplate; needed context kept) · a company's forecast of an outside decision parked as 10.5 · analyst questions in transcripts → 1.26 · the macro deferral recorded in parking note P3 · pilot reminders moved to rough_design.md · input examples moved to PrepareStep.md T3.
 
 ---
 
@@ -23,7 +27,7 @@ Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_R
 - **Preserve essential qualifiers.** Store text values, conditions, denials, participants and distinct dates when they affect meaning.
 - **Clarify fact boundaries.** Separate one-off events from standing levels/conditions, planned actions from forecast levels, and predicted misses from observed misses. Count unclear facts; never force them into a type.
 - **Share macro facts.** Reuse each source-backed macro release/comparison across affected companies, preserving its period and expectation source.
-- **Fix inputs and enforce information cutoffs.** Check unreadable text, company attribution and source versions. Exclude the outcome being predicted from prediction inputs. Document structure, tables and source locations: see [Dockling/docling.md](Dockling/docling.md).
+- **Fix inputs and enforce information cutoffs.** Check unreadable text, company attribution and source versions. Exclude the outcome being predicted from prediction inputs. Document structure, tables and source locations: see [Dockling/docling.md](../Dockling/docling.md).
 - **Validate coverage and usefulness.** Use fresh, independently labeled text to measure misses, errors and facts that fit nowhere. Then test predictive improvement on unseen events.
 
 ---
@@ -32,7 +36,7 @@ Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_R
 
 **Goal:** “turn financial text into consistent, source-backed facts about reusable Drivers—so we can track changes, explain stock moves, learn what matters, and improve predictions.” Driver = one reusable cause or standing thing; DriverUpdate = source-backed occurrence.
 
-**Scope:** whole design; releases decide activation. These are recommendations. [Canonical rules](DRIVER_RULES_Categorized.md), production code, Neo4j and Notion remain unchanged; current owner decisions take precedence.
+**Scope:** whole design; releases decide activation. These are recommendations. [Canonical rules](../DRIVER_RULES_Categorized.md), production code, Neo4j and Notion remain unchanged; current owner decisions take precedence.
 
 ## Evidence — reuse, do not restart discovery
 
@@ -54,7 +58,7 @@ Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_R
 | Values/time | Source-quoted metric text values; conditional payments/sensitivities; actor roles; allegations/negation. Separate publication, as-of, expected-event and maturity dates; preserve pro forma/KPI-definition differences. Reconcile current restrictions, including **9.8**. `conditions` holds assumptions and limits only (assumes / excludes / subject to); causes go to `caused_by`. Today’s GuidanceUpdate `conditions` mixes both (4,413 of 8,432 filled). |
 | Macro | One source-backed macro actual/comparison shared across companies’ verdicts. Extend company-only surprise wording; preserve consensus provenance and public-time cutoffs. |
 
-**Filling `caused_by` with small inputs — pilot proposal:** Keep source/version/locations; reuse nearby extracted facts as a menu. Start with **3 consecutive sentences, advancing by 1**; retain list lead-ins/context. This includes the PVH example’s earlier target. If context is insufficient, expand once to **5 sentences** (one before/after), within the existing reader cap; still unclear/missing → skip/count. Change sizes only on measured misses and cost. **Close to 100% link coverage is the owner’s target; the pilot measures what the window achieves.** A passage-level yes/no gate remains optional; a per-fact “why did this change?” gate can miss links. Admit Drivers sequentially; write each `caused_by` entry with the exact accepted cause fact ID, without duplicates from overlapping windows, and save it with the facts in the event transaction. The quote is evidence: check that it supports the link, reusing existing fact checks when they already hold both facts and the quote. Rereads and combined repeats add entries, never overwrite them. Separate runs without retained bindings stay unlinked. Valid IDs do not guarantee correct relationships. [Live counterexample](../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/cause_gate_followup.json); [design](../../../../../driver_typology_audit_20260930/causal_links_chunked_design/design_review.json); [comparison review](../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/concurrent_cause_review.json). [93 Claude labels](../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/cause_link_locality/cause_link_item_labels.json) now reproduce exactly; they remain cue-selected author judgments. [Five-edit review](../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/locality_labels/review.json).
+**Filling `caused_by` with small inputs — pilot proposal:** Keep source/version/locations; reuse nearby extracted facts as a menu. Start with **3 consecutive sentences, advancing by 1**; retain list lead-ins/context. This includes the PVH example’s earlier target. If context is insufficient, expand once to **5 sentences** (one before/after), within the existing reader cap; still unclear/missing → skip/count. Change sizes only on measured misses and cost. **Close to 100% link coverage is the owner’s target; the pilot measures what the window achieves.** A passage-level yes/no gate remains optional; a per-fact “why did this change?” gate can miss links. Admit Drivers sequentially; write each `caused_by` entry with the exact accepted cause fact ID, without duplicates from overlapping windows, and save it with the facts in the event transaction. The quote is evidence: check that it supports the link, reusing existing fact checks when they already hold both facts and the quote. Rereads and combined repeats add entries, never overwrite them. Separate runs without retained bindings stay unlinked. Valid IDs do not guarantee correct relationships. [Live counterexample](../../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/cause_gate_followup.json); [design](../../../../../../driver_typology_audit_20260930/causal_links_chunked_design/design_review.json); [comparison review](../../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/concurrent_cause_review.json). [93 Claude labels](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/cause_link_locality/cause_link_item_labels.json) now reproduce exactly; they remain cue-selected author judgments. [Five-edit review](../../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/locality_labels/review.json).
 
 ## Boundaries and next work
 
@@ -71,7 +75,7 @@ Next: fresh neutral independent gold/adjudication; measure capture, meaning, ide
 
 ## Evidence map
 
-- [Codex report](../../../../../driver_typology_audit_20260930/report.html), [casebook](../../../../../driver_typology_audit_20260930/casebook.html): A/T IDs; adjacent sources, protocol, coverage and archived Notion pages.
-- [Claude study](../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/FACT_TYPES_STUDY_2026-09-30.md), [full review](../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/CLAUDE_REVIEW_OF_fact_types.md), [errata](../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/CLAUDE_ERRATA_2026-09-30.md): S IDs; adjacent labels, helper guide and scans.
-- [Independent 35-item review](../../../../../driver_typology_audit_20260930/claude_review_20260930/review_findings.json): corrections, evidence, alternatives and statistical limits.
-- **[Latest independent revision review](../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/review_findings.json):** point-by-point decisions, reproduced scripts, 28 live source checks, unit census and official registries. Supersedes conflicting earlier claims; records the errata’s subsequent correction of 110/112 and preserves original audits.
+- [Codex report](../../../../../../driver_typology_audit_20260930/report.html), [casebook](../../../../../../driver_typology_audit_20260930/casebook.html): A/T IDs; adjacent sources, protocol, coverage and archived Notion pages.
+- [Claude study](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/FACT_TYPES_STUDY_2026-09-30.md), [full review](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/CLAUDE_REVIEW_OF_fact_types.md), [errata](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/fact_types_study_2026-09-30/CLAUDE_ERRATA_2026-09-30.md): S IDs; adjacent labels, helper guide and scans.
+- [Independent 35-item review](../../../../../../driver_typology_audit_20260930/claude_review_20260930/review_findings.json): corrections, evidence, alternatives and statistical limits.
+- **[Latest independent revision review](../../../../../../driver_typology_audit_20260930/claude_revision_2_20260930/review_findings.json):** point-by-point decisions, reproduced scripts, 28 live source checks, unit census and official registries. Supersedes conflicting earlier claims; records the errata’s subsequent correction of 110/112 and preserves original audits.

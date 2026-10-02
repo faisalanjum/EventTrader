@@ -710,7 +710,7 @@ The interval is sampling error only; the unit definition adds −4% to +21% call
   - **Offsets** ("partially offset by…"): pair P(yes) 0.03–0.42, none at 0.5 or more (0.39, 0.17, 0.24, 0.42, 0.35, 0.03, 0.09–0.13); a rule is still needed on whether an offset is a link.
   - **Indirect cause** (a cause of the cause, "low natural gas prices" behind "reduced use of coal"): pair P(yes) 0.94, so Jev counts indirect causes as causes; a rule on direct vs indirect is needed.
 - **Totals over the three pilots (36 items):** pairs found 46/46 scored real links with 0 false links among 23 non-links; Choice 35/35 (any valid cause counts) but returns one cause.
-- **Limits:** tiny, one labeler (Claude), 6 of the first 20 items synthetic, causes always inside the full window. Not tested: a cause outside the window (the PVH case in `fact_types.md`), negation or hedging, offsets as links, several effects per window. The menus came from earlier-model extractions and had repeated facts.
+- **Limits:** tiny, one labeler (Claude), 6 of the first 20 items synthetic, causes always inside the full window. Not tested: a cause outside the window (the PVH case in the archived `fact_types_2026-10-02.md`), negation or hedging, offsets as links, several effects per window. The menus came from earlier-model extractions and had repeated facts.
 
 ## 7. Fact-type prompt versions
 

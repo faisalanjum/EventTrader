@@ -191,6 +191,7 @@
 - **T3** ✏️ Completeness of news and transcripts:
   - news: 3,000-word cuts, empty bodies and a check of historical retrieval access; compare recovered originals for tables and other cleaning losses, keeping later edits separate;
   - transcripts: compare all original segments with stored output across speaker filtering, Q&A boundaries/pairing, malformed segments and fallback paths—not only OPERATOR removal.
+  - regression examples (archived fact-type study): A154 (an SBGI transcript ID carrying another company's content), A165 (OXY …_qa__3, a question stored without its answer, which appears elsewhere in the call) and OXY …_qa__4 (company remarks stored with the question role). General attribution and pairing checks, never company-specific branches.
 - **T4** ✏️ Reader comparison with one fixed reader: stored text vs prepared blocks.
   - Count correct facts, stated causes, misses, errors, tokens and time; also report tokens spent on fully tagged tables, to reconsider rule A1 if large.
   - During final design, test references and stated causes spanning distant sections (P11).

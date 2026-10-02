@@ -208,7 +208,7 @@ Why: someone reading 3.29 alone can see where the "$" convention lives.
 
 **Result:** 227 → **229 rules**. Facts keep 25 fields; there are no new fields or relationships.
 
-### B. `fact_types.md`
+### B. `fact_types.md` (archived 2026-10-02 as `Archive/fact_types_2026-10-02.md`)
 
 **E14 · line 9 · decisions table, row 3**
 

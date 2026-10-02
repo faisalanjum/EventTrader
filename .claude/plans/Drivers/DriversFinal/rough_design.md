@@ -2,7 +2,7 @@
 
 > **Partly superseded (2026-10-01):** for Step 1 · Prepare, [PrepareStep.md](PrepareStep.md) v5 and the updated rules win. The original files are the evidence record, not the stored text. The converter is chosen by test T1 (out of the box, no custom table code), not "printed PDF for the section map". Reads are smaller and shaped per task (rule 8.10). The decisions here are replaced by PrepareStep D1–D15.
 
-*2026-09-30 · starting design from the owner, Claude and Codex; every claim checked against its source; revised after Codex's review · **nothing here is proven** · no rules, code or Neo4j changed; [fact_types.md](fact_types.md) and the [rules](DRIVER_RULES_Categorized.md) stay the authority.*
+*2026-09-30 · starting design from the owner, Claude and Codex; every claim checked against its source; revised after Codex's review · **nothing here is proven** · no rules, code or Neo4j changed; the [rules](DRIVER_RULES_Categorized.md) stay the authority; the [fact-type study](Archive/fact_types_2026-10-02.md) is archived research.*
 
 **In one line:** code cuts each source into pieces → a cheaper AI (to be tested) finds the facts → one smart AI proposes Driver names (order to be tested) → JEV fills most fields and verifies each stated relation → a separate check matches names to the catalog → code saves one source event at a time.
 
@@ -28,7 +28,7 @@
 ## Causes
 - **The reader proposes, JEV checks.** JEV re-checking its own answers caught few of its own mistakes (2 of 32 by claim check, 0 of 10 by re-asking; JEV.md §6.5), so it checks someone else's proposals (8.2).
 - **JEV verifies the exact claim:** one yes/no per proposed relation, with direction and role in the text: *"Does this passage state that [A] offsets [B]?"* A plain "caused?" question would reject valid offsets and part-of links. Several causes → several claims ("prices **and** volumes"). Three tiny pilots found 46 of 46 real cause links with 0 false among 23 non-links, against one labeller's (Claude's) labels (36 items, 6 synthetic; JEV.md §6.11; Codex reproduced the first 31 pairs). Asked as "caused?", offsets scored 0.03–0.53, never clearly yes; asked as "offsets?" they are untested, as is part-of. JEV also counted an indirect cause (a cause of the cause) as a cause (0.94), so a direct-vs-indirect rule is needed. A pick-one question finds only one cause.
-- **What JEV sees:** the smallest passage holding both facts and the link: 3 sentences, expanded once to 5 (fact_types.md); for a resolved reference, the referring sentences plus the target. A starting window, not a proven one; in pilot 3 a cause 3 sentences away was found only after the expansion. Still unclear, or the facts are farther apart with no reference → skip and count.
+- **What JEV sees:** the smallest passage holding both facts and the link: 3 sentences, expanded once to 5 ([fact-type study](Archive/fact_types_2026-10-02.md)); for a resolved reference, the referring sentences plus the target. A starting window, not a proven one; in pilot 3 a cause 3 sentences away was found only after the expansion. Still unclear, or the facts are farther apart with no reference → skip and count.
 - **References:** "Item 7" → code fetches it from the section map ("Note 5": untested). A vague "above" outside the piece → one extra reader call gets the referring passage plus the relevant earlier text (its own section first; the outline may only suggest where else to look, since only actual text settles what "above" means), then proposes the relation for JEV to verify. Unresolved → skip and count.
 - **Scope:** links stay inside one source event. `conditions` hold assumptions only. The Learner's guessed causes are stored separately, marked as guesses.
 
@@ -58,6 +58,8 @@
 - Count: missed facts · wrong names · complete facts with every field right (measured directly) · relations never proposed · causes outside the window · wrong direction · wrong role (offsets and part-of included) · unsupported relations.
 - Measure the share of filings over the local model's limit with its own tokenizer.
 - Compare a cheap and a strong reader ("a cheap reader loses nothing" is unproven). Report tokens, calls and time separately from quality.
+- Cause links: advance the three-sentence window one sentence at a time and preserve needed headings/list lead-ins. Check that overlapping and repeated reads neither duplicate nor lose accepted links, and that identical input changes nothing (5.4). Measure misses before treating the window choice as final.
+- Before claiming better predictions, compare raw text, current facts and the proposed additional facts on unseen events with the same information cutoffs.
 
 ## Known risks
 - **Whole-fact accuracy is unmeasured.** Per-field scores (about 80–99.6% raw, JEV.md §2) come from different test sets, so they can't be combined into a whole-fact figure; the pilot measures complete facts directly. Low-confidence flags caught 64–100% of misses by field; fact type's 11 of 11 was on tuned items, and a fresh fact-type error sat at 0.99. So confidence routing alone is not shown to reach the under-1% bar (8.17).
@@ -68,4 +70,4 @@
 
 **Known costs so far:** JEV tags ≈ $1.2K and identity checks ≈ $1.1–1.9K for the corpus (extrapolated); JEV time 2–7 days at the observed rate (19 at the documented limit); Docling ≈ 25–30 days on one CPU. Reader cost: unmeasured.
 
-**Sources:** [fact_types.md](fact_types.md) · [JEV.md](JEV.md) · [Dockling/docling.md](Dockling/docling.md) · [rules](DRIVER_RULES_Categorized.md) · Phase 6 and Route D in `../WIP/UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md` · `driver_reference/core/driver_writer.py`, `driver_write_cli.py`, `driver_neo4j_adapter.py`, `prepared_fact_v2.py` · discussion log: `Archive/WORKFLOW_SCRATCHPAD.md` (2026-09-30).
+**Sources:** [fact-type study (archived)](Archive/fact_types_2026-10-02.md) · [JEV.md](JEV.md) · [Dockling/docling.md](Dockling/docling.md) · [rules](DRIVER_RULES_Categorized.md) · Phase 6 and Route D in `../WIP/UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md` · `driver_reference/core/driver_writer.py`, `driver_write_cli.py`, `driver_neo4j_adapter.py`, `prepared_fact_v2.py` · discussion log: `Archive/WORKFLOW_SCRATCHPAD.md` (2026-09-30).

@@ -8,8 +8,8 @@ filing validation and later preparation stages remain separate checkpoints.
 
 - [Prepare: usage and limits](prepare/README.md)
 - [Tests: layout, fixtures and command](../tests/driver/README.md)
-- [Current design](../.claude/plans/Drivers/DriversFinal/runningIdeas.md)
-- [Fact-type findings](../.claude/plans/Drivers/DriversFinal/fact_types.md)
+- [Current design](../.claude/plans/Drivers/DriversFinal/PrepareStep.md)
+- [Fact-type findings (archived)](../.claude/plans/Drivers/DriversFinal/Archive/fact_types_2026-10-02.md)
 - [Previous implementation](../driver_reference/README.md): reference material; review before reusing.
 
 Keep reusable code in `driver/<stage>/` and tests in `tests/driver/<stage>/`.

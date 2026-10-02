@@ -1,16 +1,16 @@
 # Prepare · Step 3 — Freeze checks and independent answers
 
 **Status (2026-10-02, latest):** First bulk batch finished: six blind jobs, 17 targets
-per model, 78 charged turns. Answers await Claude's original-backed check; no further
-jobs launched. [Results and guide corrections](/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/HANDOFF.md).
+per model, 78 charged turns. Claude supplied PASS and an updated guide; all remaining
+packets were refreshed before launch. Bulk progress: [RUN_STATUS.md](/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/RUN_STATUS.md). [Results and guide corrections](/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/HANDOFF.md).
 
-**Latest owner decisions supersede earlier budgets below:** ceiling **1,500 turns**;
+**Latest owner decisions supersede earlier budgets below:** ceiling **2,000 turns**;
 keep all 457 targets, including XML. Bundle whole small filings by format, at most
 15 targets; isolate held-out filings. The two HTML+PDF filings each stay whole and
 alone. Both models remain xhigh; 10–15 targets allow 25 turns, smaller jobs 20, one
 attempt. [Bundle plan](/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/bundled/PLAN.md):
-74 model jobs total (six finished, 68 waiting); the present estimate does **not** show
-that all work fits 1,500 turns. Report costs before further launch; Claude's check
+74 model jobs total; remaining jobs run in bounded waves. The owner permits one
+OpenAI retry for bundle-007 after diagnosis if needed; preserve and charge both attempts. Report costs before further launch; Claude's check
 must begin with `PASS` in `bulk_20261002/CLAUDE_FIRST_BATCH_CHECK.md`; `FIX` waits for correction and next `PASS`. Write `bulk_20261002/RUN_STATUS.md` at start and finish. The approved typical-day sample is built afterwards. XML participates
 in the chosen converter tools, with no separate custom production XML parser.
 
