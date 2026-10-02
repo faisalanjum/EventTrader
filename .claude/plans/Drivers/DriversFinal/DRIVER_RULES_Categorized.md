@@ -632,6 +632,7 @@ flowchart LR
   - A separately stated "per X" stays in the name (2.16) with its meaning and scale; a named unit (`MW`, `Hz`, `psi`) is never split into a formula. The remaining unit goes on the fact.
   - Exact rescaling is allowed (1.13): each stated scale is applied once, never again when the unit already includes it ("1.2 million barrels" and "1,200,000 barrels" → 1,200,000 `bbl`; "1,200 MBbls" stays 1,200 `MBbls`). Never exchange currencies or convert between different physical-unit IDs. Exact money rescaling and grouping within one currency still follow 3.28 and 3.35. Different physical-unit IDs stay in separate series.
   - A time unit is an amount, never the fact's period (3.36).
+- *See also:* the saved official lists in [driver/reference_data](../../../../driver/reference_data/README.md) · the required unit checks in the archived units plan, [section 7](Archive/UNITS_PLAN_2026-10-02.md#7-pending-build-checks) · the planned unit menu in [rough_design.md](rough_design.md).
 - 3.29 **The unit and scale of every number must be backed by evidence** (currency evidence and the sole bare-dollar default: 9.1).
   - For text facts, that's the smallest span inside the quote that supports the scale ("billion" for billions; a "$" alone is enough only at a scale of 1).
   - Evidence may be missing only when the scale is 1 and there's no unit or scale marker.
