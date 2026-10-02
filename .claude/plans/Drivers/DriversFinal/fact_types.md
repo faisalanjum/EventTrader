@@ -1,3 +1,20 @@
+# Owner decisions · 2026-10-02
+
+Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_RULES_Categorized.md](DRIVER_RULES_Categorized.md). Where the text below differs, these decisions win.
+
+| # | Recommendation | Decision | Rules |
+|---|---|---|---|
+| 1 | `expectation` type | ✅ Defined but switched off; switch on and backfill later. Draft fields: firm, analyst, date set, period it's for | 1.22, 9.11 |
+| 2 | Stated causes | ✅ Links between two facts from the same source event: `CAUSED_BY` (what drove it, or a stated share of it) and `OFFSET_BY` (what pushed against it), each with its own quote of the words stating the link; `conditions` = assumptions only; Learner guesses kept separate | 3.53 |
+| 3 | Units and currencies | ✅ Our own units first; other monetary denominations under their official ISO code (`eur`/`m_eur`), never exchanged; physical and time units from the registry's concrete measures; real counts = `count`; sound numbers with an unproven unit = `unknown`, counted; evidence decides (an unambiguous currency symbol settles it; a contradicting tag never wins; by project convention a bare "$" defaults to US dollars unless the source indicates another currency; unclear scope → `unknown`); exact rescaling once, no currency exchange or physical-unit conversion; "per X" stays in the name; numbers in an `unknown` unit are protected by their source location | 3.28, 3.31, 3.54, 5.9, 9.1 |
+| 4 | Essential qualifiers | ✅ No new field: the quote keeps every word that changes the meaning | 1.24 |
+| 5 | Type boundaries | ✅ | 1.23 |
+| 6 | Shared macro facts | ⏸️ Needs the owner's rethink (one story → several companies), later | — |
+| 7 | Inputs and cutoffs | ✅ No outcome in prediction inputs; input checks live in [PrepareStep.md](PrepareStep.md) | 1.25 |
+| 8 | Validation | No rule: already in the plan | — |
+
+---
+
 # Actionable recommendations — proposed design
 
 - **Recommended: keep the four existing types and add `expectation` as a fifth for outside forecasts.** Record whose forecast it is; keep it separate from company guidance.

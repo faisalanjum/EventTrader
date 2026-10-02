@@ -4,6 +4,8 @@ Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories
 
 **Edited 2026-10-01 (owner-approved):** 8.10 (smaller reads), 1.17 (original files as evidence), 3.3 table (new `source_location` field: 25 fields) and the §6 XBRL warning (withdrawn 8-K figure). Reasons: [PrepareStep.md](PrepareStep.md) D10, D9, P20, F18.
 
+**Edited 2026-10-02 (owner-approved):** new 1.22–1.25, 3.53, 3.54, 5.9 and 9.11; changed 3.28, 3.31, 5.2's example and 9.1: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), and protection for `unknown` units. Reasons: [fact_types.md](fact_types.md) (owner decisions).
+
 **Study order:** S1 (read briefly first) → Driver 1 → 2a → 2b → 2c → 3 → DriverUpdate U1a → U1b → U1c → U1d → U2a → U2b → U2c → U3a → U3b → System S2 → S3 → S4 → S5.
 
 **Index:** [Driver](#driver): [1](#1--driver-record--relationships) · [2a](#2a--fact-type) · [2b](#2b--name) · [2c](#2c--which-name--family) · [3](#3--creating-a-driver) — [DriverUpdate](#driverupdate): [U1a](#u1a--record--evidence) · [U1b](#u1b--period) · [U1c](#u1c--slices--measurement-tags) · [U1d](#u1d--states--amounts) · [U2a](#u2a--saving) · [U2b](#u2b--links-to-filing-data) · [U2c](#u2c--reading--comparing) · [U3a](#u3a--forecasts) · [U3b](#u3b--surprises) — [System](#system): [S1](#s1--ground-rules-read-first) · [S2](#s2--purpose-sources--companies) · [S3](#s3--processing-timing--retries) · [S4](#s4--ai-use--testing) · [S5](#s5--price-move-explanations-active-in-release-1) — [Overview](#overview)
@@ -28,6 +30,7 @@ Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories
 flowchart LR
     DU["<b>(:DriverUpdate)</b> = one fact<br/>id = source event + Driver + scope (3.1)<br/>25 properties (3.3)"]
     HF["<b>(:DriverUpdate)</b> = one fact<br/>its home fact (4.14)"]
+    CF["<b>(:DriverUpdate)</b> = another fact<br/>same source event (3.53)"]
     DP["<b>(:DriverPeriod)</b><br/>id · start_date · end_date (3.36)"]
     DR["<b>(:Driver)</b><br/>name · fact_type (2.38)<br/>birth evidence as properties (2.1)"]
     DR2["<b>(:Driver)</b><br/>another Driver"]
@@ -46,6 +49,7 @@ flowchart LR
     DU -->|"HAS_PERIOD · 0..1 (3.10)"| DP
     DU -->|"MAPS_TO_CONCEPT † · 0..1 (3.11)"| CN
     DU -->|"MAPS_TO_MEMBER † · 0..n (3.11)"| MB
+    DU -->|"CAUSED_BY · OFFSET_BY (quote) · 0..n (3.53)"| CF
     DR -->|"SAME_AS · off: none for now (1.19, 6.20)"| DR2
     DR -->|"CONTINUES_AS · per company, release 2 (6.13–6.19, 9.10)"| DR2
     DR -.->|"family: by name, no edge (1.18)"| DR2
@@ -57,7 +61,7 @@ flowchart LR
     classDef fact fill:#ffffff,stroke:#3c4043,stroke-width:2px,color:#3c4043
     classDef driver fill:#fff6d6,stroke:#3c4043,stroke-width:2px,color:#3c4043
     classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
-    class DU,HF,DP,CC fact
+    class DU,HF,CF,DP,CC fact
     class DR,DR2 driver
     class RP,TR,NW,OG,CN,MB old
 ```
@@ -150,6 +154,7 @@ flowchart LR
 | `HAS_PERIOD` | (:DriverUpdate) → (:DriverPeriod) | 0 or 1; the same period id also sits in `fact_scope` | new | 3.10, 3.36, 3.45, 3.46 |
 | `MAPS_TO_MEMBER` (slice_part, axis) | (:DriverUpdate) → (:Member) | 0 to many, any fact type | new | 3.11, 6.9, 6.10 |
 | `MAPS_TO_CONCEPT` † | (:DriverUpdate) → (:Concept) | 0 or 1, metric facts only, = `xbrl_qname` | new, not built yet | 3.11, 6.1–6.8 |
+| `CAUSED_BY` · `OFFSET_BY` (quote) | (:DriverUpdate) → (:DriverUpdate): result → what drove it (or a stated share of it) · what pushed against it | 0 to many; both facts from the same source event | new | 3.53 |
 | `SAME_AS` | (:Driver) → (:Driver) | none for now | off | 1.19, 6.20, 9.9 |
 | `CONTINUES_AS` (company_cik, source_event_id, evidence_quote, declared_at, created) | (:Driver) → (:Driver), old → new | at most 1 active per old label, per company | release 2 | 6.13–6.19, 9.10 |
 | `(:ContinuationClaim)` † (kind, old, new …), a node | a renamed slice label or measurement tag | one per declared rename | release 2 | 6.13 |
@@ -225,6 +230,7 @@ flowchart LR
 | `guidance` | The company's own forecast, target or outlook | `revenue_guidance`, `bookings_guidance` |
 | `surprise` | A company result compared with the consensus or the company's own earlier forecast; or a company forecast compared with the consensus | `earnings_per_share_surprise` |
 | `action_event` | A one-time happening: a decision, transaction, incident, approval or one-off charge | `asset_impairment`, `buyback`, `dividend` |
+| `expectation` *(off, 1.22)* | Someone else's forecast: an analyst's target or estimate, or the consensus | — |
 
 - 1.5 **The persistence test and the locked definitions.** The persistence test decides metric versus action: between two events, is there a standing level you could read again? Yes → `metric`; no → `action_event`. A `_guidance` or `_surprise` name overrides it. The plain version of the definitions is the table above and 1.6–1.8; the exact locked wording is just below (1.9; `fact_scope` is the fact's scope, 3.2).
 
@@ -241,6 +247,8 @@ flowchart LR
 - 1.8 Fixed defaults for bare names: `litigation`, `convertible_notes`, `dividend_policy`, `restructuring_costs` → metric; `corporate_restructuring`, `asset_impairment` → action_event.
 - 1.9 The quoted text is the meaning authority. A restatement (like the plain version above) may change only labels and typography, never meaning, and adds no clause or example. *Why:* an added clause was tested and made results worse.
 - 1.10 *Why these four:* they were checked against all 1,282 names from the catalog work, and none fit no type.
+- 1.22 **`expectation`, a fifth type, is defined but switched off (9.11):** someone else's forecast, such as an analyst's price target or estimate, or the consensus. Until it is on, only the four types above are used. A stated surprise against the consensus stays a `surprise` fact (4.1).
+- 1.23 **Keep apart:** a one-time event vs a standing level (a period total, an ongoing exposure or a policy in force is a metric; a lawsuit step or a policy change is an action, 7.7) · a planned act vs a forecast level · a predicted miss vs an actual one (4.3). An unclear type follows 2.30: in live use the fact is skipped and counted.
 
 - 2.19 A final `_guidance` or `_surprise` stays in the name and fixes the permanent fact type. One surprise Driver holds all three kinds of surprise comparison (4.2). Guidance and surprise Drivers belong to their base metric's family by name (1.18), never by a synonym link. Only a final suffix counts, and it is stripped only once. *Why:* a forecast or a surprise is a genuinely different fact, so it gets its own Driver, in the base's family rather than merged.
 
@@ -409,6 +417,7 @@ flowchart LR
 #### U1a · Record & evidence
 
 - 1.11 Every fact needs a source quote. A mention without a fact is dropped.
+- 1.24 **The quote keeps every word that changes the fact's meaning:** a negation, a condition ("if", "subject to", "assuming") or who acted. If one quote can't hold them, the fact is skipped and counted.
 
 - 1.13 Store only what the source states. Exact rescaling (e.g. "$2.1 billion" to a stored number) is allowed. Logic may add labels, states, IDs or facts, but never an invented number. Vendor-calculated ratios, percentage changes and "common-size" rows (figures restated as a percentage of a total) are never stored as facts (in one vendor's data they were about 62% of rows; that's evidence, not a threshold).
 
@@ -419,7 +428,7 @@ flowchart LR
   - Evidence is the original filed file: the HTML itself, or a filed PDF or image, its extracted text checked against it. A flattened text or our own converted copy never counts; unsupported formats fail closed.
 
 - 3.1 A fact's identity = source event + Driver + scope. The extractor (a person or a model) is never part of it. Once written, the identity and the stored scope never change. *Why:* two readers of the same fact then reach the same record.
-- 3.2 The scope parts, each only when present: period · slices · measurement tags · surprise comparison kind (surprise facts only; required there) · a tie-breaker used only for true conflicts (5.3). A whole-company fact has no slice; "total" is never stored as a slice. Formatting may be tidied (e.g. lowercase), but different words are never treated as the same value. *Why a surprise kind:* two different expectation gaps on one Driver and period can both be true, so identity must keep them apart.
+- 3.2 The scope parts, each only when present: period · slices · measurement tags · surprise comparison kind (surprise facts only; required there) · a tie-breaker used only for true conflicts (5.3) and for facts protected by 5.9. A whole-company fact has no slice; "total" is never stored as a slice. Formatting may be tidied (e.g. lowercase), but different words are never treated as the same value. *Why a surprise kind:* two different expectation gaps on one Driver and period can both be true, so identity must keep them apart.
 - 3.3 A new scope part may be added only if it defines identity for that fact type, can't be worked out from the existing parts, and is never compared across fact types.
 
 | Field | Meaning | Values and notes |
@@ -470,6 +479,7 @@ flowchart LR
 - 3.10 One link to its period (3.36), when it has one.
 
 - 3.12 Optional verdict links from a source event or daily move event that the fact helps explain (folded Part A2).
+- 3.53 **Stated causes link two facts from the same source event:** `CAUSED_BY` (result → what drove it, including a stated share of it) and `OFFSET_BY` (result → what pushed against it); zero to many per fact. Each link carries its own `quote`: the smallest exact passage that states the link, under the same quote rules (8.8, 1.24); a link without one is skipped and counted. It is saved together with both facts. "Includes" alone is not a cause. Links are not part of identity (3.1) and are not `EXPLAINED_BY` (why the stock moved). `conditions` (4.8) holds assumptions only, never causes. Causes the Learner guesses are kept elsewhere, marked as guesses.
 
 **Words used here** (from the original Word list)
 
@@ -612,8 +622,15 @@ flowchart LR
   - **Not final:** `rumored` = unconfirmed third-party reports (a denial stays rumored) · `at_risk` = a specific, current threat the source flags, not the company's own plan (generic risk boilerplate is dropped) · `suspended` = paused and resumable (shelved, postponed) · `announced` = the company's stated own action before completion · `continued` = still ongoing.
   - Scrap, abandon or withdraw → `canceled`. A threat stays `at_risk` until it happens, then `failed`.
 
-- 3.28 Units: `usd` (money per unit: prices, per-share and per-barrel amounts) · `m_usd` (money totals, stored in millions: "$1.5 billion" → 1,500) · `percent` (a percentage level, e.g. a 17.6% margin) · `percent_yoy` (growth vs a year earlier) · `percent_sequential` (growth vs the previous comparable period) · `percent_points` · `basis_points` · `count` (e.g. a share count) · `x` (a multiple, e.g. 2.5x) · `unknown`.
-- 3.29 **The unit and scale of every number must be backed by evidence.**
+- 3.28 Units: `usd` (money per unit: prices, per-share and per-barrel amounts) · `m_usd` (money totals, stored in millions: "$1.5 billion" → 1,500) · `percent` (a percentage level, e.g. a 17.6% margin) · `percent_yoy` (growth vs a year earlier) · `percent_sequential` (growth vs the previous comparable period) · `percent_points` · `basis_points` · `count` (e.g. a share count) · `x` (a multiple, e.g. 2.5x) · another monetary denomination: the same pair under its official ISO 4217 code in lowercase (`eur` / `m_eur`; 9.1) · another unit: the ID of a concrete measure in a saved copy of the official XBRL Unit Type Registry, case kept (`bbl`, `MWh`, `sqft`, `t`, `D`; 3.54) · `unknown`.
+- 3.54 **Choosing a unit.**
+  - Our money, percentage, count and multiple units (3.28) come first. Other physical and time units come from the concrete measure entries of the saved registry, selected by its structured fields; its generic dimensionless entries (`pure`, `Rate`) and its "X per Y" templates are never choices, and shares use `count`. `unknown` is the last resort, never a shortcut around a supported unit.
+  - The unit is the one the evidence proves (3.29): the quote's words, or the filing's own standard tag on that exact number. Never an ambiguous symbol or its case alone (registry `MT` = million US tons, `MM` = minute; a filing's "MT" may mean tonnes, its "MM" million), never a company's own unit code name, and never a tag that contradicts the visible source; a disputed tag settles nothing (8.5). The sole currency-default exception is 9.1.
+  - A real count of things is `count`, with the thing in the Driver name. A sound number whose unit stays unproven keeps its value with `unknown`, counted ("FICO score 700" → 700 `unknown`); an unclear quantity is not rescued by `unknown`.
+  - A separately stated "per X" stays in the name (2.16) with its meaning and scale; a named unit (`MW`, `Hz`, `psi`) is never split into a formula. The remaining unit goes on the fact.
+  - Exact rescaling is allowed (1.13): each stated scale is applied once, never again when the unit already includes it ("1.2 million barrels" and "1,200,000 barrels" → 1,200,000 `bbl`; "1,200 MBbls" stays 1,200 `MBbls`). Never exchange currencies or convert between different physical-unit IDs. Exact money rescaling and grouping within one currency still follow 3.28 and 3.35. Different physical-unit IDs stay in separate series.
+  - A time unit is an amount, never the fact's period (3.36).
+- 3.29 **The unit and scale of every number must be backed by evidence** (currency evidence and the sole bare-dollar default: 9.1).
   - For text facts, that's the smallest span inside the quote that supports the scale ("billion" for billions; a "$" alone is enough only at a scale of 1).
   - Evidence may be missing only when the scale is 1 and there's no unit or scale marker.
   - For XBRL-backed facts, the filing's own unit and scale data replaces quote evidence.
@@ -627,7 +644,7 @@ flowchart LR
   - `unknown` is allowed when the source doesn't settle it safely.
   - No number → no unit, with one exception: a growth basis the source supports goes in `level_unit` even with no number (3.33).
   - *Why:* a value and its change often have different units; comparisons are almost always in the value's unit; and forcing a unit onto a number-free fact would invent data.
-- 3.31 Validity: percent units and `x` need a scale of 1; cents on a company-wide total is invalid; money in a currency other than US dollars is `unknown` and counted (9.1).
+- 3.31 Validity: percent units and `x` need a scale of 1; cents, or another currency's minor unit, on a company-wide total is invalid; a currency needs its own evidence (9.1).
 - 3.32 Units live on facts, not Drivers; per-unit names: 2.16. *Why:* one Driver can have facts in different units over time.
 - 3.33 **Growth basis** (which unit a growth number gets). Use `percent_yoy` or `percent_sequential` only when the quote establishes the comparison basis (widened as in 3.29); otherwise use `unknown`. Never a default, never the company's history.
 
@@ -701,8 +718,8 @@ flowchart LR
   - `consensus` = analysts, the Street, the market. `previous_guidance` = clearly the company's own guidance. There is no "internal target" value: the company's own target wording → `previous_guidance`, otherwise none.
   - A beat size that can be worked out is never stored; it's worked out when read as value − comparison, only for point comparisons.
 
-- 9.1 **US dollars only.** Never convert another currency, infer an exchange rate, or treat an unknown or foreign currency as dollars. A text fact in another currency gets the `unknown` unit and is counted; a tagged-filing fact in another currency is skipped and counted. No such fact enters a dollar series. Full currency support later needs its own design, based on an official currency standard, with values kept as stated, currency-safe identities and reads, complete coverage evidence, and no hand-written currency list or conversion rule.
-- ⚠ **Other currencies:** the only unit gap found in testing was euros becoming `unknown` (a safe under-merge); non-dollar data is thinly covered.
+- 9.1 **Money is kept in its stated currency.** Use the pair in 3.28 for an evidenced denomination in the saved ISO 4217 current or historical lists, official fund and accounting units included; bullion, testing and no-currency codes are never money (a commodity quantity keeps its evidenced physical unit; a monetary value keeps its currency). Never exchange currencies or infer an exchange rate. Use applicable source evidence to identify the currency, including an unambiguous currency symbol (€ → EUR). Never infer it from the company, its country or the number's size. By project convention, a bare "$" defaults to US dollars unless applicable source evidence indicates another currency. If potentially relevant currency statements conflict or it is unclear which amounts they cover, use `unknown` and count it. Statements clearly about other amounts do not change this amount's currency. Otherwise, a currency unresolved after applying these rules is `unknown` and counted. Keep applicable currency statements in the evidence (3.29). Different currencies never share a series (3.35).
+- ⚠ **Other currencies:** support is new and not yet validated in this pipeline. A small share of all tagged facts can still dominate one company's reporting.
 
 - 10.4 **Is a dash (—) in a table a zero?** Test runs read a prior-year dash as zero, but no rule decides it. *Affects:* reading table values. *Decide when:* you design the reader.
 
@@ -741,10 +758,10 @@ flowchart LR
 | A saved fact | Never hidden or deleted; no audit or repair runs after saving | 6.20 |
 | A guidance movement worked out when read | Never written back | 4.4 |
 
-- 5.2 Pieces of the same fact (same event, Driver and scope) are combined first, filling blanks only and never overwriting. Pieces that disagree on a value are not combined. If the pieces could be combined in more than one way, the whole group is held; the input order never decides. *Why:* repeats of the same fact (a press release and the filing's management discussion both saying "Q1 +3%") become one fact.
+- 5.2 Pieces of the same fact (same event, Driver and scope) are combined first, filling blanks only and never overwriting. Pieces that disagree on a value are not combined. If the pieces could be combined in more than one way, the whole group is held; the input order never decides. Facts containing numbers in an `unknown` unit follow 5.9. *Why:* two passages within the same source event, both stating "Q1 revenue rose 3% year over year" for the same Driver and scope, become one fact.
 - 5.3 **Two values for the same fact** (same event, Driver and scope). Decide using the database as it stood before the batch, so the input order can never decide the outcome.
   - Compare only the ten value fields: `level_low`, `level_high`, `level_unit`, `change_value`, `change_unit`, `comparison_low`, `comparison_high`, `comparison_baseline`, `value_text` and `conditions`. The quote, state, company confirmation, producer, source type, date and XBRL links are not compared.
-  - Two facts are **the same** when all ten match, blanks included; **compatible** when no field filled on both sides disagrees (blanks don't count); **conflicting** when at least one field filled on both sides disagrees.
+  - Two facts are **the same** when all ten match, blanks included (facts containing numbers in an `unknown` unit: 5.9); **compatible** when no field filled on both sides disagrees (blanks don't count); **conflicting** when at least one field filled on both sides disagrees.
 
 | Already stored | What arrives | Result |
 |---|---|---|
@@ -758,7 +775,9 @@ flowchart LR
 
 - 5.4 A fact is re-written only when a field really changes; re-running the same input changes nothing.
 
-- 5.5 A stored value is never corrected in place; a later source adds its own fact (5.3). Other fields: the last write wins, and it's logged. A blank never erases a stored value: a re-read with less detail is taken to have missed it; nothing clears a field. Late history is never re-keyed; two identical facts from a race read as one. Within one group, at most one fact has no tie-breaker, and every pair of facts must disagree on at least one filled value.
+- 5.5 A stored value is never corrected in place; a later source adds its own fact (5.3). Other fields: the last write wins, and it's logged. A blank never erases a stored value: a re-read with less detail is taken to have missed it; nothing clears a field. Late history is never re-keyed; two identical facts from a race read as one. Within one group, at most one fact has no tie-breaker, and every pair of facts must disagree on at least one filled value (exception: 5.9).
+
+- 5.9 **An `unknown` unit never proves two amounts equal.** A fact with a number in an `unknown` unit (value, comparison, change or range bound) carries, from its first save, a tie-breaker naming where each such number sits in the original (file, version, exact number occurrences; never quote wording or reading-window positions). Combining, filling blanks and removing duplicates involving such a fact need the same protected locations as well as the usual scope and value checks; a missing or different location never matches. If combining would add or change that protection on a saved fact, the incoming fact is kept separately; a saved fact is never re-keyed. Re-running unchanged input changes nothing (5.4); conflicting values still follow 5.3. This is the exception to 5.5, and reads must not collapse facts this rule keeps apart.
 
 - 5.7 An amendment is a new fact at its own public time; the "latest wins" read rule (7.5) makes it win naturally. An amended filing is a new report, never a silent rewrite.
 - *See also:* A correction with no business-change wording never reads as a raise or a cut: 4.5.
@@ -837,7 +856,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 7.1 Two facts belong to the same series (one continuous history line) only if all of these match exactly: company, Driver, fact type, slice, resolved period, period kind, measurement tags, series unit, time type and, for surprises, the surprise kind. Family is added only for cross-flavor views: joined by name (1.18) and across synonym links if any exist (1.19, 6.20), only between facts that match on everything else above, and using only facts public before the view's date (1.14). A guidance or surprise Driver's own facts are always readable on their own.
 - 7.2 Series units group by exact equality: no unit families, and `unknown` is never absorbed. Facts with an `unknown` series unit stay readable on their own; they are never grouped into a comparable series, not even with each other.
 - 7.3 Within one event: combine pieces before settling conflicts (5.2). Clean stated parts beat a vague `mixed` fact. A whole-company fact exists only when it is itself stated.
-- 7.4 Display order: value → signed change → comparison → guidance words → the trimmed quote (last resort). Duplicates are judged by the stated value or range and its unit, or by the tidied guidance words for qualitative facts; never by the quote. A citation is the Driver name, plus the scope when needed.
+- 7.4 Display order: value → signed change → comparison → guidance words → the trimmed quote (last resort). Duplicates are judged by the stated value or range and its unit, or by the tidied guidance words for qualitative facts; never by the quote; facts protected by 5.9 are never collapsed. A citation is the Driver name, plus the scope when needed.
 - 7.5 Same company, series and day: rank `8k` > `transcript` > `10q` > `10k` > `news`; then the later timestamp, then the source ID. Across days, the latest is the current view and earlier facts stay as history. "Day" means US Eastern time. The same number stated in different sources (e.g. an 8-K, then a 10-Q) is stored as separate facts on separate events; only reads pick one.
 - 7.6 History reads use strictly "before the as-of date"; live reads see the current data. Realized returns are never exposed (1.14).
 
@@ -879,6 +898,8 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - *See also:* A withdrawal or reaffirmation with no number copies the series unit of exactly one clear earlier forecast: 3.35.
 
 - 9.2 **Only company-confirmed guidance** is stored (4.9). Third-party or rumored guidance-like claims are never stored as company guidance. Allowing them later needs its own design (separate reads, ranking, comparison, later-confirmation history, source attribution and user-facing behavior), so they can never pass as company guidance. The action state `rumored` is a separate rule and unaffected.
+
+- 9.11 **No outside forecasts yet (`expectation`, 1.22).** They are skipped. Switching on needs its own design; draft fields: the forecasting firm (not the outlet reporting it), the analyst, the date it was set and the period it's for, plus the usual fact fields. Earlier text can then be backfilled from the saved originals (1.17).
 
 - 9.8 **No text values on metrics, no conditions on actions.** Text values on metrics are reconsidered only if a count of real metric facts shows both many numberless readings and real changes the stored states missed (and then only in the source's exact words); conditions on actions only if a count shows that real caveats are common.
 
@@ -1001,6 +1022,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
   - Never show the realized stock return to whatever produces a fact or a verdict.
   - Never assume which kind of source arrives first; process each at its real public time.
   - Names decide which facts are grouped, so matching with today's catalog puts some hindsight into historical series. Historical runs show today's reading of past documents, not what the system knew then; trading performance is judged only on decisions recorded as new documents arrive.
+- 1.25 **A prediction never sees the outcome it predicts, even inside a source's own text** (e.g. a story that reports the price move). Adds to 1.14.
 
 - 8.14 **Every item ends in one of five recorded outcomes.** Nothing disappears silently.
 
@@ -1170,7 +1192,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 | On | Off for now |
 |---|---|
-| fiscal.ai as the only channel · US dollars · company-confirmed guidance | news and other sources · other currencies · third-party guidance · comparing slices across companies · 8-K item categories · a financial-classification field · price-move verdicts · facts from tagged filing data · text values on metrics and conditions on actions · instant linking of new names · declared company renames (on in release 2) |
+| fiscal.ai as the only channel · US dollars and other currencies (kept as stated, never exchanged) · company-confirmed guidance | news and other sources · third-party guidance · outside forecasts (`expectation`, 9.11) · comparing slices across companies · 8-K item categories · a financial-classification field · price-move verdicts · facts from tagged filing data · text values on metrics and conditions on actions · instant linking of new names · declared company renames (on in release 2) |
 
 **Your design map** (the topics below, in order; "yours to decide" is where your design freedom is)
 

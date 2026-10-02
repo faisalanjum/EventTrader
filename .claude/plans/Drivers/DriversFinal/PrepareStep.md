@@ -381,6 +381,8 @@ External reference resolution and unavailable news/call originals remain explici
 
 #### Step 3 — Freeze checks and independent answers
 
+**Work order:** [Prepare-Step3.md](StepsPlans/Prepare-Step3.md).
+
 **Entry:** agreed records and verified originals. May start from fingerprinted cached files during Steps 1–2 if released together; extend as remaining originals are verified. Freeze the full key before converter scoring. AI-labelling approvals still apply.
 
 **Assignments:** one builder creates preservation checks/commands; independent labellers/checker work blind to each other's answers and candidate outputs; coordinator resolves differences from originals and gets its own contributions independently checked.

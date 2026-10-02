@@ -6,7 +6,7 @@ Reviewed **2026-09-30**: Docling **2.131.0**, Core **2.99.0**, CPU; live MCP; in
 
 1. **Use Docling to prepare evidence for our existing extractor:** ordered passages, table cells, images and source references. It does not automatically decide our fact types or causes.
 2. **Preserve each original filing/exhibit and cache its parsed JSON.** Use HTML for fast text/tables; test PDF layout for visual headings and OCR for scans/slides. Fetch linked exhibits/images separately. A blanket HTML→PDF switch is not yet justified.
-3. **Give the reader intact context:** neighboring blocks, table captions, headers, units and footnotes. Save each accepted fact's exact quote and source reference. Structure helps verify `caused_by`; adjacency alone does not establish a cause.
+3. **Give the reader intact context:** neighboring blocks, table captions, headers, units and footnotes. Save each accepted fact's exact quote and source reference. Structure helps verify cause links (`CAUSED_BY` / `OFFSET_BY`, rule 3.53); adjacency alone does not establish a cause.
 4. **Keep existing XBRL processing.** Docling's XBRL output lost dimensions and compound-unit details in our test.
 5. **Validate before deployment:** form + Part + Item, TOC versus body, ordering, boundaries, table signs/units and evidence accuracy. Compare missed facts, reader tokens and runtime against today's pipeline on held-out filings.
 
