@@ -13,10 +13,10 @@ import re
 import shutil
 import sys
 import tempfile
-import zipfile
+from urllib.parse import quote
 import zlib
 
-from .transport import download
+from .transport import DownloadError, download
 
 
 class AcquisitionError(ValueError):
@@ -73,9 +73,9 @@ def _uu_invalid(line):
     return count > 45 or len(line) > ((count + 2) // 3) * 4 + 1 or any(not 32 <= byte <= 96 for byte in line)
 
 
-def _decode_member(body, filename):
-    # SEC doubles leading dots inside TEXT. Preserve all other file whitespace.
-    body = re.sub(rb'^\.\.', b'.', body, flags=re.M)
+def _decode(body, filename, dash=False):
+    """Exact decoding of one TEXT (member wrapper, uudecode). dash: read the last uuencoded line as having lost a
+    leading '- ' (only a final 13-byte line can start with it: every other line holds 45 bytes)."""
     wrapper = re.match(rb'<(XBRL|XML|PDF|JSON)>\r?\n', body)
     if wrapper:
         close = re.search(rb'</' + wrapper[1] + rb'>\r?\n?\Z', body)
@@ -96,10 +96,7 @@ def _decode_member(body, filename):
     for i, line in enumerate(lines[1:-1], 1):
         if not line:
             continue  # A zero-length UU line may be entirely trimmed by SEC.
-        # SEC strips a leading "- " from submission lines. Only a final 13-byte line ("-" length)
-        # can start with it: restore it there when all 18 data characters remain (19-21 with "-").
-        if (_uu_invalid(line) and i == data_lines[-1] and 19 <= len(b'- ' + line) <= 21
-                and not _uu_invalid(b'- ' + line)):
+        if dash and i == data_lines[-1]:
             line = b'- ' + line
         if _uu_invalid(line):
             raise AcquisitionError('Invalid uuencode line')
@@ -107,10 +104,65 @@ def _decode_member(body, filename):
         # a2b_uu restores trimmed spaces. Exclude unused padding sextets, which
         # SEC can leave nonzero; the length prefix determines the original bytes.
         decoded.extend(binascii.a2b_uu(line[:1 + (count * 8 + 5) // 6]))
-    # A decoded zip's own checksums prove the decoding (SEC lists no size for its generated zips).
-    if decoded.startswith(b'PK\x03\x04') and _damaged_zip(bytes(decoded)):
-        raise AcquisitionError('Damaged zip after uudecode')
     return bytes(decoded)
+
+
+def _readings(text, filename):
+    """Every exact reading SEC's escaping allows, as [(text, bytes)], and whether proof is needed. Escaping undone: one
+    dot removed from each line starting with '..' (older packages doubled leading dots), and a '- ' put back on a last
+    uuencoded line that cannot be read without it (SEC dropped it once in 1,667 such lines; a line it can be read
+    without is taken as published). Such a reading has text None: no package TEXT holds it, so only its bytes can
+    prove it. Proof is needed whenever a reading undoes escaping."""
+    texts = [text] + ([re.sub(rb'(?m)^\.\.', b'.', text)] if re.search(rb'(?m)^\.\.', text) else [])
+    readings, guessed, failure = [], False, None
+    for variant in texts:
+        for dash in (False, True):
+            try:
+                readings.append((None if dash else variant, _decode(variant, filename, dash)))
+                guessed |= dash
+                break
+            except AcquisitionError as exc:
+                failure = exc
+    if not readings:
+        raise failure
+    return readings, guessed or len(texts) > 1
+
+
+def _one_run(expected, copy):
+    """[start, end] of the one run `copy` inserts into `expected`, [] if they are equal, None otherwise."""
+    extra = len(copy) - len(expected)
+    if extra <= 0:
+        return [] if copy == expected else None
+    low, high = 0, len(expected)  # longest common prefix, by halving; each compare runs in C
+    while low < high:
+        middle = (low + high + 1) // 2
+        if copy[:middle] == expected[:middle]:
+            low = middle
+        else:
+            high = middle - 1
+    return [low, low + extra] if copy[low + extra:] == expected[low:] else None
+
+
+def _prove(copy, readings, before, after):
+    """(bytes, how) of the one file SEC's own copy proves: the copy equals a reading's decoded bytes, or its <DOCUMENT>
+    block from the package (before + TEXT + after, the envelope exact). It may also hold one run inserted inside those
+    bytes or that TEXT, shorter than them (SEC's web server adds a script to some pages; most of the copy must still be
+    the file). Runs count only when no reading fits exactly, since a run could hide a dot. All fitting readings must
+    give the same bytes; otherwise None."""
+    found = {False: {}, True: {}}  # exact fits, fits with one inserted run
+    for form, head, tail in (('bytes', b'', b''), ('block', before, after)):
+        if len(copy) < len(head) + len(tail) or not (copy.startswith(head) and copy.endswith(tail)):
+            continue
+        inner = copy[len(head):len(copy) - len(tail)]
+        for text, data in readings:
+            body = data if form == 'bytes' else text
+            if body is None:
+                continue  # a '- ' put back: a block holding the package's own damaged line proves nothing
+            run = _one_run(body, inner)
+            if run == [] or (run and run[1] - run[0] < len(body)):
+                found[bool(run)][data] = dict(form=form, inserted=[len(head) + at for at in run])
+    fits = found[False] or found[True]
+    return fits.popitem() if len(fits) == 1 else None
 
 
 def _format_hint(data):
@@ -126,18 +178,10 @@ def _format_hint(data):
     return 'unknown'
 
 
-def _damaged_zip(data):
-    """A zip's own checksums verify its decoded bytes; encrypted/unsupported entries are not damage."""
-    try:
-        return zipfile.ZipFile(io.BytesIO(data)).testzip() is not None
-    except (RuntimeError, NotImplementedError):
-        return False
-    except (zipfile.BadZipFile, EOFError, OSError, ValueError, zlib.error):
-        return True
-
-
-def parse_package(data, accession, cik, form):
-    """Return deterministic manifest and filename-to-bytes map; ranges are half-open."""
+def parse_package(data, accession, cik, form, proofs=None, fetch=None):
+    """Return deterministic manifest and filename-to-bytes map; ranges are half-open. A file needing proof uses its
+    recorded member entry in `proofs` (package offset -> entry; replay, no network), else SEC's copy from `fetch(url)`
+    (bytes or None); without proof it is listed unresolved and left out of the files."""
     identity = _identity(accession, cik, form)
     header = re.match(rb'<SEC-DOCUMENT>([^\r\n]*)\r?\n(<SEC-HEADER>.*?</SEC-HEADER>)\r?\n', data, re.S)
     if not header:
@@ -185,12 +229,33 @@ def parse_package(data, accession, cik, form):
             if not re.fullmatch(r'[0-9]+', fields['sequence']):
                 raise AcquisitionError('Invalid member sequence')
             name = _filename(fields['filename'])
-            body = _decode_member(match[2], name)
-            if name in files and files[name] != body:
-                raise AcquisitionError('Duplicate member path conflict: ' + name)
-            files[name] = body
-            members.append(dict(fields, bytes=len(body), sha256=_hash(body),
-                                format_hint=_format_hint(body), package_range=list(match.span())))
+            readings, needs_proof = _readings(match[2], name)
+            body, proof = readings[0][1], None
+            if needs_proof:
+                body, recorded = None, (proofs or {}).get(match.start())
+                if recorded:
+                    proof = recorded['proof']
+                    body = next((read for _, read in readings if _hash(read) == recorded['sha256']), None)
+                    if body is None and 'unresolved' not in proof:
+                        raise AcquisitionError('Recorded proof matches no reading: ' + name)
+                elif fetch:
+                    url = _url(identity).rsplit('/', 1)[0] + '/' + quote(name)
+                    copy = fetch(url)
+                    fit = copy is not None and _prove(copy, readings, data[match.start():match.start(2)],
+                                                      data[match.end(2):match.end()])
+                    body, how = fit or (None, dict(unresolved='SEC copy unavailable' if copy is None
+                                                   else 'SEC copy fits no single reading'))
+                    proof = dict(how, url=url, copy_sha256=None if copy is None else _hash(copy))
+                else:
+                    proof = dict(unresolved='not checked against SEC copy')
+            if body is not None:
+                if name in files and files[name] != body:
+                    raise AcquisitionError('Duplicate member path conflict: ' + name)
+                files[name] = body
+            kept = body is not None
+            members.append(dict(fields, bytes=len(body) if kept else None, sha256=_hash(body) if kept else None,
+                                format_hint=_format_hint(body) if kept else None, package_range=list(match.span()),
+                                **({} if proof is None else dict(proof=proof))))
             cursor = blank_lines.match(data, match.end()).end()
         if not re.fullmatch(rb'</SEC-DOCUMENT>\r?\n?', data[cursor:]) or not members:
             raise AcquisitionError('Incomplete or empty SEC package')
@@ -201,7 +266,8 @@ def parse_package(data, accession, cik, form):
         if isinstance(exc, AcquisitionError):
             raise
         raise AcquisitionError('Invalid SEC metadata encoding or date: ' + str(exc)) from exc
-    manifest = dict(version=2, decoder='sec-framing-uu-v1',
+    proven = any('proof' in member for member in members)  # v1 = nothing needed proof: decoding unchanged
+    manifest = dict(version=2, decoder='sec-framing-uu-v2' if proven else 'sec-framing-uu-v1',
                     identity=dict(accession=accession, ciks=ciks, form=form),
                     acceptance=dict(printed=accepted, timezone='America/New_York'),
                     package=dict(path='submission.txt.gz', bytes=len(data), sha256=_hash(data)),
@@ -211,7 +277,11 @@ def parse_package(data, accession, cik, form):
 
 
 def _no_symlinks(path):
-    if any(parent.is_symlink() for parent in (path, *path.parents)):
+    try:
+        linked = any(parent.is_symlink() for parent in (path, *path.parents))
+    except OSError as exc:  # a path's metadata unreadable (a missing path is not an error here): the disk, not the filing
+        raise StorageError(f'Path check failed: {path}: {exc}') from exc
+    if linked:
         raise AcquisitionError('Symlink output/cache path is unsupported')
 
 
@@ -265,7 +335,8 @@ def _read_cache(target):
             raise AcquisitionError('Invalid immutable cache receipt')
         return data, manifest
     except (OSError, ValueError, KeyError, TypeError) as exc:
-        error = StorageError if isinstance(exc, OSError) and exc.errno != errno.ENOENT else AcquisitionError
+        error = (StorageError if isinstance(exc, StorageError) or isinstance(exc, OSError) and exc.errno != errno.ENOENT
+                 else AcquisitionError)
         raise error('Invalid cache: ' + str(exc)) from exc
 
 
@@ -274,7 +345,8 @@ def read_package(path):
     data, stored = _read_cache(Path(path).absolute())
     try:
         identity = stored['identity']
-        manifest, files = parse_package(data, identity['accession'], identity['ciks'][0], identity['form'])
+        manifest, files = parse_package(data, identity['accession'], identity['ciks'][0], identity['form'],
+                                        proofs={m['package_range'][0]: m for m in stored['members'] if 'proof' in m})
         if manifest != stored:
             raise AcquisitionError('Immutable cache manifest differs')
         return manifest, files
@@ -283,8 +355,12 @@ def read_package(path):
 
 
 def acquire(accession, cik, form, output, *, package=None, sha256=None, live=False,
-            minimum_free_bytes=5 * 1024**3):
-    """Publish/verify one version; supplied gzip is immutable and hard-linked."""
+            minimum_free_bytes=5 * 1024**3, fetch=None, repair=False):
+    """Publish/verify one version; supplied gzip is immutable and hard-linked. `fetch(url)` gives SEC's own copy of a
+    file needing proof — the caller's campaign, so cache, request limit and 403 stop are shared; without it such a file
+    stays unresolved. A saved version of the same package whose manifest differs is
+    moved to <output>_superseded/ (kept whole) when it has an unresolved file (never usable) or with `repair`;
+    otherwise it fails."""
     identity = _identity(accession, cik, form)
     if (package is None) == (not live) or (package is not None and not sha256) or (live and sha256 is not None):
         raise AcquisitionError('Use --package with --sha256, or --live')
@@ -307,16 +383,24 @@ def acquire(accession, cik, form, output, *, package=None, sha256=None, live=Fal
             if _hash(data) != sha256.lower():
                 raise AcquisitionError('Supplied package SHA-256 mismatch; cache is not repaired')
             receipt = dict(source='supplied-package', retrieved_at=None)
-        manifest = parse_package(data, accession, identity['cik'], form)[0]
+        manifest = parse_package(data, accession, identity['cik'], form, fetch=fetch)[0]
         parent = output / accession
         target = parent / manifest['package']['sha256']
         _no_symlinks(target)
         if target.exists():
             cached_data, cached_manifest = _read_cache(target)
-            if cached_data != data or cached_manifest != manifest:
+            unusable = any('unresolved' in member.get('proof', {}) for member in cached_manifest['members'])
+            if cached_data != data or (cached_manifest != manifest and not (repair or unusable)):
                 raise AcquisitionError('Immutable cache differs')
-            _sync_dir(parent)  # its name may come from a run that stopped before flushing it
-            return target
+            if cached_manifest == manifest:
+                _sync_dir(parent)  # its name may come from a run that stopped before flushing it
+                return target
+            kept = output.with_name(output.name + '_superseded') / accession / (
+                target.name + '.' + _hash(_json(cached_manifest))[:16])
+            _make_dirs(kept.parent)
+            os.rename(target, kept)  # the old version stays whole, only moved
+            _sync_dir(kept.parent)
+            _sync_dir(parent)
         check_space(output, minimum_free_bytes)
         _make_dirs(parent)
         staged = Path(tempfile.mkdtemp(prefix='.pending-', dir=parent))
@@ -340,8 +424,9 @@ def acquire(accession, cik, form, output, *, package=None, sha256=None, live=Fal
                 shutil.rmtree(staged)
         return target
     except (OSError, AcquisitionError) as exc:
-        fatal = isinstance(exc, StorageError) or getattr(exc, 'errno', None) in (
-            errno.ENOSPC, errno.EDQUOT, errno.EXDEV, errno.EIO, errno.EROFS)  # the disk itself is failing
+        # any filesystem error but a missing file is the disk, not the filing; DownloadError is transport
+        fatal = isinstance(exc, StorageError) or (isinstance(exc, OSError)
+                 and not isinstance(exc, DownloadError) and exc.errno != errno.ENOENT)
         error = (StorageError if fatal else AcquisitionError)(str(exc))
         error.receipt = getattr(exc, 'receipt', receipt)
         raise error from exc

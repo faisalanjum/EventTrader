@@ -3,7 +3,9 @@
 No conversion, AI or database writes. results.sqlite3 keeps one row per attempt; a
 filing's latest row is its status. Only OK is final: re-running the same command
 skips OK filings whose saved version still fully verifies and retries every other filing
-(FAILED, INVENTORY_GAP, PENDING); saved responses make no requests. complete=true
+(FAILED, INVENTORY_GAP, UNRESOLVED = a file lacks SEC proof, PENDING); saved responses make no
+requests. A retry may replace a saved version that has an unresolved file; any other saved version
+changes only with --repair (old versions are kept). complete=true
 means every listed filing is OK. Stops: any HTTP 403, free disk below the reserve,
 or 20 filings in a row not OK; the filing in progress at a 403/disk stop stays PENDING.
 """
@@ -23,6 +25,7 @@ import time
 from driver.prepare.get.acquire import AcquisitionError, StorageError, acquire, read_package, _identity, _make_dirs, _url
 from driver.prepare.get.campaign import Campaign
 from driver.prepare.get.inventory import compare_inventory, parse_index
+from driver.prepare.get.transport import DownloadError
 
 SOURCES = sorted(Path(__file__).resolve().parent.glob('*.py'))  # the get package, this runner included
 
@@ -45,18 +48,27 @@ def _saved(output, row):
         return False
 
 
-def _filing(campaign, output, reserve, accession, cik, form):
-    """Package → one saved copy → verified readback → SEC file list → comparison."""
+def _filing(campaign, output, reserve, accession, cik, form, repair=False):
+    """Package → one saved copy (files needing proof checked against SEC's own copies) → verified readback → SEC file
+    list → comparison. A file without proof makes the filing UNRESOLVED, never OK."""
+    def copy(url):  # SEC's copy of one file, through the same cache, request limit and stops
+        try:
+            return campaign.fetch(url)[0]
+        except DownloadError:
+            return None  # SEC does not serve it: that file stays unresolved
+
     package_url = _url(_identity(accession, cik, form))
     _, receipt = campaign.fetch(package_url)
     blob = campaign.root / 'blobs' / (receipt['sha256'] + '.gz')
     version = acquire(accession, cik, form, output / 'versions', package=str(blob),
-                      sha256=receipt['sha256'], minimum_free_bytes=reserve)
+                      sha256=receipt['sha256'], minimum_free_bytes=reserve, fetch=copy, repair=repair)
     manifest, _ = read_package(version)
+    unresolved = sorted({m['filename'] for m in manifest['members'] if 'unresolved' in m.get('proof', {})})
     index_url = package_url.rsplit('/', 1)[0] + '/' + accession + '-index.html'
     index, _ = campaign.fetch(index_url)
     gaps = compare_inventory(manifest, parse_index(index, index_url))
-    return dict(status='INVENTORY_GAP' if gaps['missing'] or gaps['metadata_mismatch'] else 'OK',
+    return dict(status='UNRESOLVED' if unresolved else 'INVENTORY_GAP' if gaps['missing'] or gaps['metadata_mismatch'] else 'OK',
+                unresolved=unresolved,
                 sha256=receipt['sha256'], members=len(manifest['members']),
                 package_bytes=manifest['package']['bytes'], missing=gaps['missing'],
                 metadata_mismatch=gaps['metadata_mismatch'], package_only=len(gaps['package_only']))
@@ -65,7 +77,7 @@ def _filing(campaign, output, reserve, accession, cik, form):
 # Kubernetes nodes keep container images on this disk and evict pods below 15% free;
 # stopping at 16% stays clear of that line on any node and disk size.
 def run(inputs, output, *, live=False, every=1, limit=None, min_free_percent=16,
-        max_consecutive_failures=20, requests_per_second=5, campaign_class=Campaign):
+        max_consecutive_failures=20, requests_per_second=5, campaign_class=Campaign, repair=False):
     frozen = json.loads(Path(inputs).read_text())
     listed = frozen['filings']
     if (len(listed) != frozen.get('count') or frozen.get('sha256_of_filings') !=
@@ -115,7 +127,7 @@ def run(inputs, output, *, live=False, every=1, limit=None, min_free_percent=16,
             accession, cik, form = key
             began = time.monotonic()
             try:
-                row = _filing(campaign, output, reserve, accession, cik, form)
+                row = _filing(campaign, output, reserve, accession, cik, form, repair)
             except Exception as exc:  # record any per-filing error and continue; run-wide ones stop
                 reason = f'{type(exc).__name__}: {exc}'[:300]
                 if isinstance(exc, StorageError) or campaign.stopped or (campaign.root / 'STOP.json').exists():
@@ -135,7 +147,7 @@ def run(inputs, output, *, live=False, every=1, limit=None, min_free_percent=16,
         counts = Counter(state.values())
         summary = dict(stop=stop, complete=counts['OK'] == len(state), of=len(state), counts=counts,
                        unresolved=sorted(key[0] for key, status in state.items()
-                                         if status in ('FAILED', 'INVENTORY_GAP')), launch=launch)
+                                         if status in ('FAILED', 'INVENTORY_GAP', 'UNRESOLVED')), launch=launch)
         _write(output / 'summary.json', summary)
     return summary
 
@@ -148,4 +160,5 @@ if __name__ == '__main__':
     parser.add_argument('--every', type=int, default=1, help='take every Nth filing (rehearsal sample)')
     parser.add_argument('--limit', type=int)
     parser.add_argument('--min-free-percent', type=float, default=16)
+    parser.add_argument('--repair', action='store_true', help='re-save versions whose manifest the decoder now makes differently')
     print(json.dumps(run(**vars(parser.parse_args())), indent=2))

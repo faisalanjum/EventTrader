@@ -47,6 +47,13 @@ archiving, malformed caches, shared pacing, terminal 403s, explicit failure ledg
 and zero-request replay. The real AMG index is an additional source fixture;
 it does not replace the independently checked package expectations.
 
+Decoder proof tests (`ProofTests`) take SEC's own served copies as the independent answers;
+`sec_copies.json` maps each SEC URL to its saved copy and SHA-256: AMG's `report.css` and
+`Financial_Report.xlsx` (doubled-dot readings), a 2025 page whose copy carries SEC's added
+123-byte script (with its package block), and Guidewire's `xbrl.zip`, whose copy lacks the
+line SEC dropped (it must stay unresolved). Synthetic controls: two checksum-valid ZIPs
+(`two_valid_zips_*`) and `dash_control.pdf` (a line damaged outside SEC's escaping).
+
 Scale regressions cover joint-company index paths (real Entergy fixture), one
 physical compressed copy, incremental receipts, old receipt import, actual send
 times, disk/quota failures and whole-batch stops. Subprocess tests use SIGKILL

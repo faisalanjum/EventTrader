@@ -139,16 +139,21 @@ class PackageTests(unittest.TestCase):
         for nl in (b'\n', b'\r\n'):
             payload = b' \n..selector\nlast \r\n'
             wire = b'<XML>' + nl + payload.replace(b'\n..', b'\n...') + b'</XML>' + nl
-            manifest, files = self.parse(package([('nested/test.xml', wire, 'XML', '1', None)], nl=nl))
-            self.assertEqual(files['nested/test.xml'], payload)
+            data = package([('nested/test.xml', wire, 'XML', '1', None)], nl=nl)
+            manifest, files = parse_package(data, ACCESSION, CIK, FORM, fetch=lambda url: payload)
+            self.assertEqual(files['nested/test.xml'], payload)  # SEC's copy chose "remove one dot"
             self.assertIsNone(manifest['members'][0]['description'])
+            literal = payload.replace(b'\n..', b'\n...')
+            self.assertEqual(parse_package(data, ACCESSION, CIK, FORM, fetch=lambda url: literal)[1]['nested/test.xml'], literal)
             # 45 zero bytes have an entirely trimmed UU line; 14 uses dot length prefix.
             raw = bytes(45) + bytes(range(14))
             wire = b'<PDF>' + nl + uu(raw, nl=nl) + b'</PDF>' + nl
-            _, files = self.parse(package([('file.bin', wire, 'EX-99.1', '2', None)], nl=nl))
+            sec_copy = lambda url: raw  # its last UU line starts with a doubled dot: SEC's copy decides
+            _, files = parse_package(package([('file.bin', wire, 'EX-99.1', '2', None)], nl=nl), ACCESSION, CIK, FORM, fetch=sec_copy)
             self.assertEqual(files['file.bin'], raw)
             # SEC can trim the zero-length UU line to an empty line too.
-            _, files = self.parse(package([('file.bin', wire.replace(b'`' + nl, nl), 'EX-99.1', '2', None)], nl=nl))
+            _, files = parse_package(package([('file.bin', wire.replace(b'`' + nl, nl), 'EX-99.1', '2', None)], nl=nl),
+                                     ACCESSION, CIK, FORM, fetch=sec_copy)
             self.assertEqual(files['file.bin'], raw)
 
     def test_uu_ignores_unused_padding_bits_but_rejects_invalid_lines(self):
@@ -156,33 +161,36 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(files['file.bin'], b'a')
         valid = uu(b'abc')
         for invalid in (valid.replace(b'file.bin', b'other.bin'), valid.replace(b'end', b'stop'),
-                        valid.replace(b'#86)C', b'#\xff6)C'), valid.replace(b'#86)C', b'N86)C'),
-                        valid.replace(b'644', b'xyz'), valid.replace(b'#86)C', b'#86)CEXTRA')):
+                        valid.replace(b'#86)C', b'#\xff6)C'), valid.replace(b'644', b'xyz')):
             with self.subTest(invalid=invalid), self.assertRaises(AcquisitionError):
                 self.parse(package([('file.bin', invalid, 'GRAPHIC', '1', None)]))
+        for unreadable in (valid.replace(b'#86)C', b'N86)C'), valid.replace(b'#86)C', b'#86)CEXTRA')):
+            with self.subTest(unreadable=unreadable):  # readable only with a '- ' put back: never decoded unproven
+                manifest, files = self.parse(package([('file.bin', unreadable, 'GRAPHIC', '1', None)]))
+                self.assertEqual((files, manifest['members'][0]['proof']), ({}, {'unresolved': 'not checked against SEC copy'}))
 
-    def test_uu_final_line_restores_the_dash_space_sec_strips(self):
-        # Real case: SEC removed "- " from the last line of its generated XBRL zip (Guidewire 8-K).
-        data = gzip.decompress((Path(__file__).with_name('fixtures') / '0001528396-23-000024.txt.gz').read_bytes())
-        _, files = parse_package(data, '0001528396-23-000024', '1528396', '8-K')
-        import zipfile
-        archive = zipfile.ZipFile(io.BytesIO(files['0001528396-23-000024-xbrl.zip']))
-        self.assertIsNone(archive.testzip())  # every member checksum matches: independent proof
-        for name in archive.namelist():  # same files; the package copy may carry SEC's final newline
-            self.assertIn(files[name], (archive.read(name), archive.read(name) + b'\n'))
-        # Synthetic: a final 13-byte line starting with a zero sextet encodes as "- ...".
+    def test_uu_last_line_readable_only_with_a_dash_needs_sec_proof(self):
+        # Real case: SEC dropped "- " from the last line of its XBRL zip (Guidewire 8-K; it kept it in 1,666 other such
+        # lines). Put back, it reads, but SEC's own copy was made from the damaged text and lacks those 13 bytes:
+        # nothing proves the restore, so the file stays unresolved, never guessed.
+        fixtures, name = Path(__file__).with_name('fixtures'), '0001528396-23-000024-xbrl.zip'
+        data = gzip.decompress((fixtures / '0001528396-23-000024.txt.gz').read_bytes())
+        copy = gzip.decompress((fixtures / 'sec_copy_0001528396-23-000024_xbrl.zip.gz').read_bytes())
+        manifest, files = parse_package(data, '0001528396-23-000024', '1528396', '8-K', fetch=lambda url: copy)
+        entry = next(m for m in manifest['members'] if m['filename'] == name)
+        self.assertEqual((entry['proof']['unresolved'], entry['sha256'], name in files), ('SEC copy fits no single reading', None, False))
+        # Synthetic: a final 13-byte line starting with a zero byte encodes as "- ...". Kept, it is read as published.
         raw = bytes(range(45)) + b'\x00\x05' + b'tail-bytes!'
         wire = uu(raw)
-        stripped = wire.replace(b'\n- ', b'\n', 1)
+        manifest, files = self.parse(package([('file.bin', wire, 'GRAPHIC', '1', None)]))
+        self.assertEqual((files['file.bin'], 'proof' in manifest['members'][0]), (raw, False))
+        stripped = wire.replace(b'\n- ', b'\n', 1)  # dropped: readable only with "- " put back, so SEC's copy decides
         self.assertNotEqual(stripped, wire)
-        _, files = self.parse(package([('file.bin', stripped, 'GRAPHIC', '1', None)]))
+        _, files = parse_package(package([('file.bin', stripped, 'GRAPHIC', '1', None)]), ACCESSION, CIK, FORM,
+                                 fetch=lambda url: raw)
         self.assertEqual(files['file.bin'], raw)
-        # A final line missing data characters is not restored: it still fails explicitly.
-        final = stripped.split(b'\n')[2]
-        with self.assertRaises(AcquisitionError):
-            self.parse(package([('file.bin', stripped.replace(final, final[:10]), 'GRAPHIC', '1', None)]))
 
-    def test_zip_member_checksums_must_hold(self):
+    def test_zip_bytes_are_decoded_exactly_not_judged(self):
         import zipfile
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as archive:
@@ -191,9 +199,8 @@ class PackageTests(unittest.TestCase):
         _, files = self.parse(package([('data.zip', uu(good, 'data.zip'), 'ZIP', '1', None)]))
         self.assertEqual(files['data.zip'], good)
         bad = bytearray(good)
-        bad[40] ^= 0xFF  # inside the compressed data: valid uuencode, wrong bytes
-        with self.assertRaisesRegex(AcquisitionError, "Damaged zip"):
-            self.parse(package([('data.zip', uu(bytes(bad), 'data.zip'), 'ZIP', '1', None)]))
+        bad[40] ^= 0xFF  # inside the compressed data: valid uuencode, other bytes, no guess involved
+        self.assertEqual(self.parse(package([('data.zip', uu(bytes(bad), 'data.zip'), 'ZIP', '1', None)]))[1]['data.zip'], bytes(bad))
 
     def test_subdirectories_and_identical_occurrences_survive(self):
         docs = [('a/file.txt', b'first\n', 'EX-99.1', '2', None),
@@ -459,6 +466,56 @@ class PublicationTests(unittest.TestCase):
             self.assertEqual(caught.exception.receipt, receipt)
         self.assertEqual(len(list((self.output / ACCESSION).iterdir())), 1)
 
+    def test_a_package_read_error_other_than_missing_stops_everything(self):
+        # Codex review 2026-10-03: EACCES/EMFILE on the supplied package became a per-filing error and the run went on
+        real = Path.read_bytes
+        for injected, error in ((OSError(errno.ENOENT, 'missing'), AcquisitionError),
+                                (OSError(errno.EACCES, 'denied'), acquisition.StorageError),
+                                (OSError(errno.EMFILE, 'file handles'), acquisition.StorageError),
+                                (OSError(errno.EIO, 'I/O error'), acquisition.StorageError),
+                                (OSError('unspecified read error'), acquisition.StorageError)):  # Codex round 3: no errno
+            def failing(path, injected=injected):
+                if path == self.source:
+                    raise injected
+                return real(path)
+            with self.subTest(error=str(injected)), patch.object(Path, 'read_bytes', failing), \
+                    self.assertRaises(AcquisitionError) as caught:
+                self.acquire()
+            self.assertIs(type(caught.exception), error)
+        self.assertFalse(self.output.exists())
+        # Codex review round 2: checking a path's metadata (before reading) follows the same rule; a symlink stays per-filing
+        real_link = Path.is_symlink
+        for target in (self.source, self.output):  # the supplied package, and the output checked before the error handler
+            for code in (errno.EACCES, errno.EMFILE):
+                def unreadable(path, target=target, code=code):
+                    if path == target:
+                        raise OSError(code, 'injected metadata failure')
+                    return real_link(path)
+                with self.subTest(path=target.name, errno=code), patch.object(Path, 'is_symlink', unreadable), \
+                        self.assertRaises(acquisition.StorageError):
+                    self.acquire()
+        with patch.object(Path, 'is_symlink', lambda path: path == self.source), self.assertRaises(AcquisitionError) as caught:
+            self.acquire()
+        self.assertIs(type(caught.exception), AcquisitionError)
+
+    def test_transport_errors_stay_per_filing_with_their_receipts(self):
+        # Codex review round 3: only DownloadError is exempt from the storage rule, so HTTP failures never stop the run
+        for reason in ('HTTP 403', 'HTTP 404', 'HTTP retries exhausted'):
+            receipt = {'attempts': [{'error': reason}]}
+            with self.subTest(reason=reason), patch('driver.prepare.get.acquire.download', side_effect=DownloadError(reason, receipt)), \
+                    self.assertRaises(AcquisitionError) as caught:
+                acquire(ACCESSION, CIK, FORM, self.output, live=True, minimum_free_bytes=0)
+            self.assertEqual((type(caught.exception), caught.exception.receipt), (AcquisitionError, receipt))
+
+    def test_live_mode_never_fetches_proof_copies_itself(self):
+        # Codex review 2026-10-03: a direct fetch kept going after a 403; proofs go only through the caller's campaign
+        data = package([('a.css', b'..x {}\n', 'EX-99.1', '1', None)])
+        receipt = {'retrieved_at': '2026-10-01T00:00:00+00:00', 'attempts': [{'status': 200}]}
+        with patch('driver.prepare.get.acquire.download', return_value=(data, receipt)) as request:
+            target = acquire(ACCESSION, CIK, FORM, self.output, live=True)
+        member, = json.loads((target / 'manifest.json').read_text())['members']
+        self.assertEqual((request.call_count, member['proof']), (1, {'unresolved': 'not checked against SEC copy'}))
+
     def test_cli_failures_keep_http_receipt_without_publishing(self):
         receipt = {'url': 'https://www.sec.gov/package', 'retrieved_at': '2026-10-01T00:00:00+00:00',
                    'attempts': [{'status': 200}]}
@@ -482,6 +539,160 @@ class PublicationTests(unittest.TestCase):
         self.assertTrue(Path(ok.stdout.strip()).is_dir())
 
 
+class ProofTests(unittest.TestCase):
+    """A file SEC's escaping makes ambiguous is kept only when SEC's own copy proves exactly one reading."""
+    fixtures = Path(__file__).with_name('fixtures')
+
+    def test_one_inserted_run(self):
+        cases = {(b'abc', b'abc'): [], (b'abcdef', b'abcXYdef'): [3, 5], (b'abc', b'XYabc'): [0, 2], (b'abc', b'abcXY'): [3, 5],
+                 (b'</body>', b'<s></body>'): [1, 4], (b'abc', b'aXbYc'): None, (b'abc', b'ab'): None, (b'abc', b'abd'): None}
+        for (expected, copy), want in cases.items():
+            run = acquisition._one_run(expected, copy)
+            self.assertEqual(run, want, (expected, copy))
+            if run:  # removing exactly that run gives back the expected bytes
+                self.assertEqual(copy[:run[0]] + copy[run[1]:], expected)
+
+    def test_real_2025_page_keeps_its_dot_despite_the_script_sec_adds(self):
+        block = gzip.decompress((self.fixtures / 'block_0001193125-25-020426_d905299dex993.htm.gz').read_bytes())
+        copy = gzip.decompress((self.fixtures / 'sec_copy_0001193125-25-020426_d905299dex993.htm.gz').read_bytes())
+        start, end = block.index(b'<TEXT>\n') + len(b'<TEXT>\n'), block.rindex(b'</TEXT>\n')
+        readings, needs_proof = acquisition._readings(block[start:end], 'd905299dex993.htm')
+        data, how = acquisition._prove(copy, readings, block[:start], block[end:])
+        self.assertEqual((needs_proof, data, how['form']), (True, block[start:end], 'block'))  # the literal text: keep
+        first, last = how['inserted']
+        self.assertEqual((last - first, copy[:first] + copy[last:]), (123, block))
+
+    def test_two_checksum_valid_zips_only_sec_copy_decides(self):
+        import zipfile
+        readings, needs_proof = acquisition._readings((self.fixtures / 'two_valid_zips_original.uu').read_bytes(), 'fixture.zip')
+        self.assertTrue(needs_proof and all(zipfile.ZipFile(io.BytesIO(data)).testzip() is None for _, data in readings))
+        for name in ('two_valid_zips_original.zip', 'two_valid_zips_other.zip'):
+            copy = (self.fixtures / name).read_bytes()
+            self.assertEqual(acquisition._prove(copy, readings, b'', b'')[0], copy)
+
+    def test_a_wrong_dash_guess_is_left_unresolved(self):
+        original = (self.fixtures / 'dash_control.pdf').read_bytes()  # a valid 463-byte PDF (Codex)
+        lines = uu(original, 'proof.pdf').splitlines(keepends=True)
+        damaged = b''.join(lines[:-3] + [lines[-3][1:]] + lines[-2:])  # one length byte lost: the '- ' rule fires
+        readings, needs_proof = acquisition._readings(damaged, 'proof.pdf')
+        self.assertTrue(needs_proof and all(data != original and len(data) == len(original) for _, data in readings))
+        self.assertIsNone(acquisition._prove(original, readings, b'', b''))
+
+    def test_same_size_same_signature_readings_need_sec_copy(self):
+        prefix = b'%PDF-1.4\n%evidence\n'
+        data = prefix + b' ' * (-len(prefix) % 45) + b'8000000\n%%EOF\n'  # last UU line: 14 bytes from '8' -> starts '..'
+        literal = (b'begin 644 x.pdf\n' + b''.join(binascii.b2a_uu(data[i:i + 45]).rstrip(b' \n') + b'\n'
+                                                  for i in range(0, len(data), 45)) + b'`\nend\n')
+        self.assertTrue(b'\n..' in literal and b'\n.' not in literal.replace(b'\n..', b''))
+        readings, needs_proof = acquisition._readings(literal, 'x.pdf')
+        self.assertTrue(needs_proof and len(readings) == 2)
+        self.assertTrue(all(len(read) == len(data) and read.startswith(b'%PDF-') for _, read in readings))
+        for wire in (literal, uu(data, 'x.pdf')):  # an unstuffed and a stuffed package of the same PDF
+            self.assertEqual(acquisition._prove(data, acquisition._readings(wire, 'x.pdf')[0], b'', b'')[0], data)
+
+    def test_a_run_counts_only_inside_an_exact_envelope_even_at_the_text_end(self):
+        before, text, after = b'<DOCUMENT>\n<TEXT>\n', b'<p>x</p>\n..a\n', b'</TEXT>\n</DOCUMENT>\n'
+        readings = [(text, text), (b'<p>x</p>\n.a\n', b'<p>x</p>\n.a\n')]
+        end = len(before) + len(text)  # a run starting like the envelope after it ('<') is still inside the TEXT
+        self.assertEqual(acquisition._prove(before + text + b'<s/>' + after, readings, before, after),
+                         (text, dict(form='block', inserted=[end, end + 4])))
+        for copy in (b'X' + before[1:] + text + b'<s/>' + after, before + text + b'<s/>' + after[:-1] + b'X'):
+            self.assertIsNone(acquisition._prove(copy, readings, before, after))  # envelope changed: no proof
+
+    def test_a_page_served_as_bytes_may_hold_one_run_but_must_be_mostly_the_file(self):
+        # Real case: SEC served a 2024 10-K page (0001178913-24-000717 zk2431010.htm) unwrapped, with a 123-byte script
+        # before </body>; only the reading with one dot removed fits (evidence/probe_zk2431010.log).
+        page = b'<html><body>\n..note\n<p>text</p>\n</body></html>\n'
+        readings = [(b'<XBRL>\n' + page + b'</XBRL>\n', page), (b'<XBRL>\n' + page.replace(b'\n..', b'\n.') + b'</XBRL>\n', page.replace(b'\n..', b'\n.'))]
+        script = b'<script src="/x"></script>'
+        served = readings[1][1].replace(b'</body>', script + b'</body>')
+        data, how = acquisition._prove(served, readings, b'<DOCUMENT>\n<TEXT>\n', b'</TEXT>\n</DOCUMENT>\n')
+        first, last = how['inserted']
+        self.assertEqual((data, how['form'], last - first, served[:first] + served[last:]), (readings[1][1], 'bytes', len(script), data))
+        tiny = [(b'..\n', b'..\n'), (b'.\n', b'.\n')]  # a copy that is mostly something else proves nothing
+        for unrelated in (b'some other page ending in a dot.\n', b'.' + b'x' * 40 + b'\n'):
+            self.assertIsNone(acquisition._prove(unrelated, tiny, b'', b''))
+
+    def test_two_members_with_one_name_keep_their_own_proofs(self):
+        data = package([('a.css', b'..x\n', 'EX-99.1', '1', None), ('a.css', b'..y\n', 'EX-99.2', '2', None)])
+        manifest, files = parse_package(data, ACCESSION, CIK, FORM, fetch=lambda url: b'.x\n')
+        self.assertEqual(([m['proof'].get('unresolved') for m in manifest['members']], files),
+                         ([None, 'SEC copy fits no single reading'], {'a.css': b'.x\n'}))
+        with tempfile.TemporaryDirectory() as out:
+            source = Path(out) / 'in.txt'
+            source.write_bytes(data)
+            target = acquire(ACCESSION, CIK, FORM, Path(out) / 'v', package=source, sha256=digest(data), fetch=lambda url: b'.x\n')
+            self.assertEqual(acquisition.read_package(target), (manifest, files))
+
+    def test_a_copy_repeating_the_damaged_text_cannot_prove_a_dash_restore(self):
+        # Codex review 2026-10-03: served as its package block, a file whose '- ' was dropped repeats the damaged line;
+        # that proves nothing. Only SEC's bytes of the restored file could.
+        raw = bytes(range(45)) + b'\x00\x05' + b'tail-bytes!'
+        stripped = uu(raw).replace(b'\n- ', b'\n', 1)
+        for wire in (stripped, b'<PDF>\n' + stripped + b'</PDF>\n'):
+            data = package([('file.bin', wire, 'GRAPHIC', '1', None)])
+            block = data[data.index(b'<DOCUMENT>'):data.index(b'</DOCUMENT>\n') + len(b'</DOCUMENT>\n')]
+            manifest, files = parse_package(data, ACCESSION, CIK, FORM, fetch=lambda url: block)
+            self.assertEqual((files, manifest['members'][0]['proof'].get('unresolved')), ({}, 'SEC copy fits no single reading'))
+            self.assertEqual(parse_package(data, ACCESSION, CIK, FORM, fetch=lambda url: raw)[1], {'file.bin': raw})
+
+    def test_a_copy_fitting_both_readings_proves_nothing(self):
+        readings = [(b'..a\n', b'..a\n'), (b'.a\n', b'.a\n')]
+        self.assertEqual(acquisition._prove(b'..a\n', readings, b'', b'')[0], b'..a\n')  # an exact fit wins
+        self.assertIsNone(acquisition._prove(b'...a\n', readings, b'', b''))  # each fits only with a run
+
+    def test_proofs_are_recorded_replayed_offline_and_checked(self):
+        data = package([('a.css', b'..x {}\n', 'EX-99.1', '1', None), ('b.txt', b'plain\n', 'EX-99.2', '2', None)])
+        copy = lambda url: b'.x {}\n'
+        manifest, files = parse_package(data, ACCESSION, CIK, FORM, fetch=copy)
+        entry = manifest['members'][0]
+        self.assertEqual((manifest['decoder'], files['a.css'], entry['proof']['form'], entry['proof']['url']),
+                         ('sec-framing-uu-v2', b'.x {}\n', 'bytes',
+                          'https://www.sec.gov/Archives/edgar/data/1004434/000100443423000015/a.css'))
+        self.assertNotIn('proof', manifest['members'][1])
+        with tempfile.TemporaryDirectory() as out:
+            source = Path(out) / 'in.txt'
+            source.write_bytes(data)
+            target = acquire(ACCESSION, CIK, FORM, Path(out) / 'versions', package=source, sha256=digest(data), fetch=copy)
+            with patch.object(acquisition, '_prove', side_effect=AssertionError('replay must not re-prove')):
+                self.assertEqual(acquisition.read_package(target), (manifest, files))
+            stored = json.loads((target / 'manifest.json').read_text())
+            stored['members'][0]['sha256'] = '0' * 64
+            (target / 'manifest.json').write_text(json.dumps(stored))
+            with self.assertRaisesRegex(AcquisitionError, 'matches no reading'):
+                acquisition.read_package(target)
+
+    def test_unproven_files_are_listed_never_guessed(self):
+        data = package([('a.css', b'..x {}\n', 'EX-99.1', '1', None)])
+        for fetch, why in ((None, 'not checked against SEC copy'), (lambda url: None, 'SEC copy unavailable'),
+                           (lambda url: b'other\n', 'SEC copy fits no single reading')):
+            with self.subTest(why=why):
+                manifest, files = parse_package(data, ACCESSION, CIK, FORM, fetch=fetch)
+                member = manifest['members'][0]
+                self.assertEqual((files, member['sha256'], member['bytes'], member['proof']['unresolved']), ({}, None, None, why))
+
+    def test_an_unresolved_version_is_replaced_and_a_usable_one_only_by_repair(self):
+        data = package([('a.css', b'..x {}\n', 'EX-99.1', '1', None)])
+        with tempfile.TemporaryDirectory() as out:
+            source, versions = Path(out) / 'in.txt', Path(out) / 'versions'
+            source.write_bytes(data)
+            first = acquire(ACCESSION, CIK, FORM, versions, package=source, sha256=digest(data))  # no copy: unresolved
+            saved = lambda: {path.name: path.read_bytes() for path in first.iterdir()}
+            old = saved()
+            proven = dict(package=source, sha256=digest(data), fetch=lambda url: b'.x {}\n')
+            self.assertEqual(acquire(ACCESSION, CIK, FORM, versions, **proven), first)  # never usable: replaced
+            kept, = (Path(out) / 'versions_superseded' / ACCESSION).iterdir()
+            self.assertEqual(({path.name: path.read_bytes() for path in kept.iterdir()}, kept.name.split('.')[0]), (old, first.name))
+            self.assertEqual(acquisition.read_package(first)[1], {'a.css': b'.x {}\n'})
+            usable, other = saved(), dict(proven, fetch=lambda url: b'..x {}\n')  # a copy proving the other reading
+            with self.assertRaisesRegex(AcquisitionError, 'Immutable cache differs'):
+                acquire(ACCESSION, CIK, FORM, versions, **other)
+            self.assertEqual(saved(), usable)
+            self.assertEqual(acquire(ACCESSION, CIK, FORM, versions, **other, repair=True), first)
+            self.assertEqual(len(list((Path(out) / 'versions_superseded' / ACCESSION).iterdir())), 2)
+            self.assertEqual(acquisition.read_package(first)[1], {'a.css': b'..x {}\n'})
+
+
 class RealPackageTests(unittest.TestCase):
     def test_originals_and_exact_ranges(self):
         for accession in (ACCESSION, '0000950170-25-021181', '0000906107-25-000005'):
@@ -492,7 +703,12 @@ class RealPackageTests(unittest.TestCase):
                     fixture.name.replace('.expected.json', '.txt.gz')).read_bytes())
                 self.assertEqual((len(raw), digest(raw)),
                                  (expected['package']['bytes'], expected['package']['sha256']))
-                manifest, files = parse_package(raw, **expected['request'])
+                copies = json.loads(fixture.with_name('sec_copies.json').read_text())
+                fetch = lambda url: gzip.decompress((fixture.with_name(copies[url]['file'])).read_bytes())
+                manifest, files = parse_package(raw, **expected['request'], fetch=fetch)
+                proven = {m['filename']: m['proof']['form'] for m in manifest['members'] if 'proof' in m}
+                self.assertEqual((proven, manifest['decoder']), ({'report.css': 'block', 'Financial_Report.xlsx': 'bytes'}, 'sec-framing-uu-v2')
+                                 if accession == ACCESSION else ({}, 'sec-framing-uu-v1'))
                 for key in ('identity', 'acceptance', 'document_count', 'header_range'):
                     self.assertEqual(manifest[key], expected[key])
                 actual = [{key: member[key] for key in expected['members'][0]}
@@ -505,7 +721,7 @@ class RealPackageTests(unittest.TestCase):
                 with tempfile.TemporaryDirectory() as output:
                     source = Path(output) / 'input.txt'
                     source.write_bytes(raw)
-                    target = acquire(**expected['request'], output=Path(output) / 'saved',
+                    target = acquire(**expected['request'], output=Path(output) / 'saved', fetch=fetch,
                                      package=source, sha256=expected['package']['sha256'])
                     recovered_manifest, recovered_files = acquisition.read_package(target)
                     self.assertEqual(recovered_manifest, manifest)

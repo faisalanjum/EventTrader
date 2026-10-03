@@ -1,0 +1,17 @@
+{
+ "https://www.sec.gov/Archives/edgar/data/1004434/000100443423000015/report.css": {
+  "file": "sec_copy_0001004434-23-000015_report.css.gz",
+  "sha256": "90929555d10f3b76f1453fc6324fb1307df16b3062dfa33a9ceb223d5b0f5641",
+  "bytes": 2767
+ },
+ "https://www.sec.gov/Archives/edgar/data/1004434/000100443423000015/Financial_Report.xlsx": {
+  "file": "sec_copy_0001004434-23-000015_Financial_Report.xlsx.gz",
+  "sha256": "e090ea2609c10ea235ad8ac8831118874e3e7b15cf738dc9a17ec19c3cf0fe09",
+  "bytes": 5999
+ },
+ "https://www.sec.gov/Archives/edgar/data/1528396/000152839623000024/0001528396-23-000024-xbrl.zip": {
+  "file": "sec_copy_0001528396-23-000024_xbrl.zip.gz",
+  "sha256": "17a21b534f1600d92842f8e3ea31c6abf71f1a3dc365ffdcf7daa7df20590f7b",
+  "bytes": 35190
+ }
+}

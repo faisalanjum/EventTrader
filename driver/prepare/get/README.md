@@ -59,6 +59,31 @@ an entire omitted member without an independent inventory. Readability, external
 references and broader coverage remain later checks. See [tests](../../../tests/driver/README.md)
 and the [work order](../../../.claude/plans/Drivers/DriversFinal/StepsPlans/Prepare-A_Get.md).
 
+Proof instead of guesses. SEC's transmission escaping leaves two things a package alone cannot
+settle: a line starting with `..` (a doubled dot in older packages, a real one in newer ones) and
+a uuencoded file's last line that cannot be read unless the `- ` it began with is put back (SEC
+dropped it once and kept it 1,666 times in 42,629 filings). Such a file is kept only with proof:
+SEC's own copy of that file, fetched only through the caller's `fetch` (the campaign: shared cache,
+request limit and 403 stop; without it the file stays unresolved), must equal exactly one reading's
+expected form — its decoded bytes, or its own `<DOCUMENT>` block from the package — exactly or apart
+from one run inserted inside those bytes or that TEXT and shorter than them (the documented
+comparison rule for the script SEC's web server adds to some pages, not proof that any future
+insertion is harmless; runs count only when no reading fits exactly). A reading with `- ` put back
+is proven only by SEC's bytes: a block repeating the package's damaged line proves nothing.
+Otherwise the file is listed unresolved, its bytes left out, and the filing is not OK. Proofs are
+recorded in the manifest and replayed offline by `read_package`. Files needing neither (nearly
+all) decode exactly, as before, and keep manifest label `sec-framing-uu-v1`; a package with a file
+needing proof is `sec-framing-uu-v2`. History and new ingestion use this same path.
+
+Known limit: a dropped `- ` whose leftover line still reads is taken as published. Nothing can show
+it: SEC trims trailing spaces, so line lengths prove nothing, and SEC's copy can share the package's
+damage (Guidewire's lacks the line's 13 bytes). Of 1,666 kept `- ` lines deliberately damaged, 41
+(all JPEG) still read; how often SEC really drops one undetectably is unknown.
+
+A saved version whose manifest the decoder now makes differently fails as "cache differs", unless
+it has an unresolved file (never usable) or `acquire(..., repair=True)` is used; then the old one
+moves whole to `<output>_superseded/`.
+
 ## Batch acquisition and raw payloads
 
 `inventory.py` compares the package with a preserved SEC index. Every listed file
@@ -81,7 +106,9 @@ fetch retries it.
 
 Saved blobs, versions and the stop marker are flushed with their directory entries
 (and any newly created directory) before success is recorded, so a power cut cannot
-leave a recorded success pointing at a missing name.
+leave a recorded success pointing at a missing name. A failed flush, or any read error
+other than a missing file (of a saved version or a supplied package), stops the whole run: the
+disk, not one filing, is failing.
 
 New downloads/saves require a configurable free-space reserve (default **5 GiB**).
 Storage failures stop the batch; callers must stop on `StorageError` or
@@ -109,7 +136,9 @@ originals, writes the final outcome report once, and separates this-run requests
 from cached history. It is a comparison job, not the overnight runner
 (`driver/prepare/get/full_run.py`: frozen list → package + SEC file list per
 filing; only OK is final, so a rerun retries everything else, and an earlier OK
-counts only if its saved version still fully verifies as that filing). Its HTML
+counts only if its saved version still fully verifies as that filing; UNRESOLVED marks a
+filing with a file lacking SEC proof, and its retry may replace that unusable version; `--repair`
+re-saves versions the decoder now makes differently). Its HTML
 links are observations, not a claim of complete reference
 resolution. Conversion, reference interpretation and ingestion activation are
 separate steps.
