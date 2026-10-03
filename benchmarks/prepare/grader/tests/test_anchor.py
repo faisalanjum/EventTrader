@@ -1,4 +1,5 @@
 """Visible text of an original with byte spans, and the linker that places tool output back in it (anchor.py)."""
+import time
 import unittest
 
 from benchmarks.prepare.grader import anchor
@@ -144,6 +145,28 @@ class InvisibleStyleTests(unittest.TestCase):
         out = anchor.link(raw, [u]); u = out['units'][0]
         self.assertEqual((u['link_flag'], len(u['anchor']), u['inserted_chars']), ('pieced', 3, 4))
         self.assertEqual([x['text'] for x in out['uncovered']], ['25'])  # what the tool dropped stays uncovered; what it added is counted
+
+    def test_inline_css_decides_visibility_the_way_chrome_renders_it(self):
+        # expectations observed in headless Chrome (innerText), Codex round-4 browser probe: the cascade inside one attribute,
+        # entities and comments in the attribute, invalid values ignored; a value this scanner does not evaluate makes the file uncertain
+        cases = [('<p style="display:none!important;display:block">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 ('<p style="display:none; display:block">Revenue rose.</p>', 'Revenue rose.', True),
+                 ('<p style="display&#58;none">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 ('<p style="display/*comment*/:none">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 ('<p style="visibility:nonsense">Visible.</p>', 'Visible.', True),
+                 ('<p style="visibility:hidden">Secret <span style="visibility:visible">Shown</span></p>', 'Shown', True),
+                 ('<p style="--mode:none;display:var(--mode)">Secret.</p><p>Visible.</p>', None, False)]
+        for src, text, certain in cases:
+            v = anchor.Visible(src.encode())
+            self.assertEqual((anchor.norm(v.text) if text is not None else None, v.certain), (text, certain), src)
+
+    def test_alignment_stays_linear_on_repetitive_text(self):
+        # Codex R4-4: a 20k-character repetitive paragraph with one inserted character made the character diff quadratic (killed at 2 s CPU)
+        s = 'Revenue ' + 'abcde' * 4000 + ' end.'; raw = ('<p>' + s + '</p>').encode()
+        u = {'id': 'u', 'kind': 'text', 'text': s[:10000] + 'X' + s[10000:]}
+        t0 = time.monotonic(); anchor.link(raw, [u]); seconds = time.monotonic() - t0
+        self.assertEqual((u['link_flag'], len(u['anchor']), u['inserted_chars']), ('pieced', 2, 1)); self.assertLess(seconds, 2.0)
+        u = {'id': 'u', 'kind': 'text', 'text': s}; anchor.link(raw, [u]); self.assertNotIn('link_flag', u)  # unchanged text: exact, not pieced
 
     def test_tiny_or_white_text_is_still_visible_text_and_a_font_size_0_wrapper_hides_nothing(self):
         # font size is inherited and reset by children: a font-size:0 wrapper around real paragraphs hides none of them,

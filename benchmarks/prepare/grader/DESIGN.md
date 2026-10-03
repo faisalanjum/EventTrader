@@ -324,14 +324,14 @@ Each point was reproduced here first, then fixed with a test; their probe script
 | R3 text map vs browser | tags are lexed with quoted attributes (`title="a > b"`), only the `style` attribute is read for hiding and for `display`, a `display:block` span separates and a `display:inline` div does not; a document whose stylesheet rules can hide (`display:none`, `visibility:hidden`, `opacity:0` in `<style>`, or an external sheet) is **uncertain**: its coverage and anchor honesty are reported, not certified (0 of 69 development files) | `anchor._TOKEN/_STYLE/_DISPLAY/_SHEET`, `Visible.certain` |
 | R4 contradictions passed | a note unit whose declared mark is not the key's mark fails (`wrong_note_link`); every explicit link for a phrase must point at the destination; E15 time scope now comes from the source mapping: the rows the route puts between the time heading and the value must lie between them in the source, and the heading must precede the value (`order`/`scope`) — no key date list, no hard-coded words; Codex's "unknown competing group" probe fails as it should | `footnotes`, `references`, `periods` |
 | R5 XML namespace | the leaf's expanded name must be one the source prints for that path and local name (`namespace`); prefixes may differ, URIs may not | `grade_xml`, `xml_names` |
-| R6 erased information | values compare with cell boundaries as the only joinable places (`fused`): "1,9 70" fails with `spacing`; a trailing bracket is set aside only when it, or the whole line, is one of the record's own pieces (E13); range partners likewise | `value`, `same`, `own_bracket_off`, `range_` |
+| R6 erased information | values compare piece by piece like every other field (`spell` → `pieces_match`): "1,9 70" across two cells fails with `spacing`, pieces at one grid position proven adjacent in the source pass (§23); a trailing bracket is set aside only when it, or the whole line, is one of the record's own pieces (E13); range partners likewise | `value`, `spell`, `same`, `own_bracket_off`, `range_` |
 | R7 correct forms rejected | `kind` is a recognition count like `heading_recognised`, never a target failure; a within-word split whose pieces have only page regions is **unresolved** (`adjacency`), not a fault | `STRUCTURE`, `pieces_match`, `grade_structure` |
 | R8 adapters measured different things | neither adapter re-sorts units: the gate measures the tool's reading order for both; Docling's furniture is a `layer`, excluded from the order count; a footnote or caption body the tool attached only to its table is emitted once, right after the table | `adapters/docling_html.py`, `adapters/docling_pdf.py` |
 | R9 inputs and results | a source without a split assignment stops the run; gate details of any file holding a held-out target are counts only and `unresolved` ids are filtered; `run_facts` records key, manifest and catalog hashes and checks the key files against the frozen manifest; sources resolve through the manifest's `evidence_root`; converters read `load_sources` (files, hashes, splits — no answers) | `load_key`, `load_sources`, `evidence_root`, `run_facts`, adapters, `screen_grid` |
 
-**E13 refinement after the run (13:51):** a title or header cell may also carry the unit/basis/corner lines that *sibling records of
-the same table* declare (`Grader(..., peers)`); the SL Green ratio records still fail because no record of that table declares the
-table's unit line — raised as a wording question for the key thread in `REVIEW_HANDOVER.md`, not weakened here.
+**E13 refinement after the run (13:51) — superseded by C8 (§22) and validated in §23:** the sibling-record borrowing introduced here
+was removed in round 3; a title, header or corner cell may set aside only a line the key declares as this table's context, at an anchor
+that reads the phrase inside the table. The SL Green ratio records keep failing until a package declares that context.
 
 **Where I disagree, and why (stated for the next review):**
 - *Whitespace in the honesty gate (R6, last point).* The gate certifies **position**: the source bytes at the anchor spell the claimed
@@ -374,10 +374,41 @@ behave as expected (`FABLE_RESPONSE_R3.md`).
   the value join and the text comparisons: `boundary_equal(a, b)` = same characters once whitespace is removed **and** the same
   sequence of words and numbers (`\d(?:[\d.,]*\d)?|\w+`, Unicode categories, no word lists). So "Ma nagement", "6 50", "1,9 70" and
   "1 ,970" fail; "3.7 %" and "December 31 , 2025" pass. Consequences stated for the reviewer: Codex's development mutation on a percent
-  value ("3.7%" → "3.7 %") now passes by this rule; digits split across 22 cells now return False (a number may not span cells).
+  value ("3.7%" → "3.7 %") now passes by this rule; 22 bare numeric fragments return False from `fused` (nothing proves they form one
+  number). Pieces of one value cell that share a grid position and whose anchors prove source adjacency do spell the value (E12; §23 R4-5).
 - **Linker: unambiguous texts first, repeated copies claimed once.** Run 9 left 298k characters uncovered on one contract exhibit whose
   identical signature pages a tool listed out of order; the old cursor walked onto the wrong copies. Now pass 1 anchors long texts that
   occur exactly once in the source (order-independent), pass 2 places the other long texts inside the window their anchored neighbours
   leave — an exact copy no other unit holds beats an approximate alignment, which beats the nearest earlier copy — and pass 3 places
   short texts in their window only (never far ahead by elimination). A unit placed before one the tool listed ahead of it is flagged
   `out_of_order` by position. Tests: three identical signature pages with the second heading emitted early are all covered once.
+
+### 22b. Codex's round-4 preview (2026-10-03, relayed by the owner) — reproduced and closed before the formal note
+- **Added text passed through the pieced linker.** "do not" inserted into a long paragraph no target covers was anchored piecewise with
+  `inserted_chars` 5 and every gate still passed: the count was reported but not judged. Now any inserted character fails the anchor gate
+  (`clean` requires `inserted_chars == 0`); the per-file counts stay. Text the tool adds is text the source cannot certify, whatever the
+  size; rule lines and flattened table rows therefore cost EdgarTools the gate on the files where it adds them — correctly.
+- **"Verified" overstated.** A run was verified when the key files and the pinned packets matched, although the split list
+  (`case_catalog.csv`, which decides what is public) was only hashed, not pinned, and a packet pinned by its manifest alone left its
+  target file unverified. Now: a packet pinned without `targets_sha256` stops the run; without a `catalog_sha256` in the frozen
+  manifest the run proceeds but is reported **unverified: catalog not pinned** (`run_facts`). Package 1134 does not pin the catalog, so
+  runs against it say so until the next package carries the hash — a key-side item alongside the table-context declaration.
+
+## 23. Round 4 (2026-10-03, Codex's `ROUND4_CODEX.md`) — six findings, all reproduced, all closed
+
+| Finding | Reproduced problem | Change | Proof |
+|---|---|---|---|
+| R4-1 pieced text passed | the insertion was counted but not judged (closed in §22b); the gate also trusted the unit's own `inserted_chars` (a tool reporting 0 passed) and skipped the boundary check inside blocks | the gate derives the insertion from the blocks (text length − block lengths), refuses malformed or overlapping `pieces` (`dishonest`) and checks each block's word/number boundaries (`boundary`) | tests: under-reported count, overlapping blocks, split word inside a block, deletion (0 inserted, source text uncovered), unchanged control; Codex `linker/*`: the three mutations fail `honest_anchors`, the control passes |
+| R4-2 freeze check incomplete | pins of unconsumed packets counted; a packet name in two folders resolved to the unpinned copy; a pinned key file that was missing was skipped; an empty pin entry passed | one resolver, `packet_dir`, for loading and verification: the manifest's pinned path, else the one folder that exists, never a choice between two (two folders = refusal). `verify_inputs` resolves the packets the answer key names and requires `targets_sha256` for each at that path; a key file pinned and missing, or present and unpinned, stops the run | tests (four refusals + control); Codex `freeze/*`: four refusals with named reasons, control accepted |
+| R4-3 visibility certified wrongly | five inline-CSS cases disagreed with Chrome while `certain` was true | attribute entities decoded; CSS comments stripped; `!important` beats a later plain declaration; `visibility` by the spec (hidden/collapse hide, visible shows; inherit, unset, absent or invalid keep the parent's); a hiding property given `var()`, `calc()` or an escape makes the file **unmeasured** — no CSS engine | test with Chrome-observed expectations; Codex browser probe 11/11 agree or unmeasured |
+| R4-4 unbounded alignment | a 20k-character repetitive paragraph with one inserted character drove difflib past 2 s CPU (killed); on real output difflib was already slow: 188 s for the 24 pieced units of one EdgarTools file | anchor chaining in `piece`: the 20-grams unique in the text and unique in the source segment are anchors, the longest order-consistent chain of them is kept (longest increasing subsequence), each anchor is extended to its maximal run of equal characters. Measured on that file (346,487 characters): difflib 332,275 matched in 187.6 s; a left-to-right greedy re-sync 299,746 in 0.17 s (under-matches reordered notes); the chain 330,417 in 0.35 s. Over every pieced unit of the three linker routes (108 units, 463k characters) the chain matches more than the greedy pass on all three routes; 2 small units (705 and 662 characters of repeated phrases, one file) have no unique anchor and stay unanchored — stated. It never claims text the source lacks; what it misses is counted as insertion, never hidden | test: 20k repetitive text + 1 character → pieced, 2 blocks, 1 inserted (19 ms); earlier piecewise tests unchanged; Codex's probe 0.019 s |
+| R4-5 faithful fragments rejected | `<span>12</span><span>34</span>` kept as two anchored pieces at one grid position failed `spacing` | values use `pieces_match` like every field, with one rule added for cells: pieces may join inside a word only when they share a grid position (two cells show two numbers whatever the bytes say) **and** their anchors prove source adjacency; page boxes only → `unresolved: adjacency`; range partners likewise | tests: same cell, adjacent → pass; two columns → `spacing`; anchors apart → `spacing`; PDF boxes → unresolved; split partner → pass; Codex `numeric_fragments/*` both pass |
+| R4-6 context guard too loose | a `governing` span or any overlapping range admitted a phrase | admission needs `byte_ranges` that each lie inside the table anchor **and** read the phrase; `governing` is not evidence; anything else raises `ValueError` naming the record — a key defect stops the run instead of being guessed around | tests: literal anchor → admitted, the joined title passes; container cell, whole table, outside phrase, whole document → refused; Codex `table_context/*`: three refused, the valid one admitted |
+
+Where this differs from the note's wording, stated: (1) a packet pinned at one path while a same-named folder exists at the other is
+**refused** as ambiguous, not resolved to the pinned copy — a stray copy beside a frozen input is a defect to remove; (2) an invalid
+context declaration **stops the run** rather than being quietly not admitted; (3) Codex's probe control shows `verified: false` under the
+live grader because its synthetic manifest pins no catalog (§22b), not because a check failed. Stated limits: an invalid `display` value
+(`display: nonsense`) is treated as a block for spacing where the browser ignores it; `<noscript>` content is read as visible;
+colour-on-colour text is visible to this scanner (key-side question, Arrowhead). Documentation: README paths and test count corrected;
+the superseded sibling-context and number-joining statements are rewritten in place (§21, §22a, R6) rather than contradicted below.

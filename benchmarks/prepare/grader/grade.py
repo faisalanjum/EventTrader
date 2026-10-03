@@ -13,7 +13,7 @@ import csv
 import difflib
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import unicodedata
 import xml.etree.ElementTree as ET
@@ -34,16 +34,30 @@ local = lambda name: name.rsplit('}', 1)[-1]
 
 
 # ----------------------------------------------------------------------------------------------------- key loading
-def _packet(bulk, p):
-    d = next((x for x in (bulk / 'packets' / p, bulk / 'bundled' / 'packets' / p) if x.exists()), None)
-    if d is None: raise FileNotFoundError(f'no packet folder for {p} under {bulk}')
+KEY_FILES = ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json')  # what grading reads from a key package
+
+
+def manifest(key_dir):
+    m = Path(key_dir) / 'FINAL_MANIFEST.json'
+    return json.loads(m.read_text()) if m.exists() else {}
+
+
+def packet_dir(bulk, name, pinned=()):
+    """The folder of packet `name`: the one the frozen manifest pins, else the one that exists — never a choice between two."""
+    hits = sorted({bulk / rel for rel in pinned if PurePosixPath(rel).name == name} | {d for d in (bulk / 'packets' / name, bulk / 'bundled' / 'packets' / name) if d.exists()})
+    if len(hits) != 1: raise FileNotFoundError(f'{len(hits)} packet folders for {name} under {bulk}: ' + ', '.join(str(h.relative_to(bulk)) for h in hits))
+    return hits[0]
+
+
+def _packet(bulk, p, pinned=()):
+    d = packet_dir(bulk, p, pinned)
     tj = json.loads((d / 'targets.json').read_text())
     return {'sources': {s['file_id']: (d / s['path'], s['source']['sha256']) for s in tj['sources']}, 'targets': {t['id']: t for t in tj['targets']}}
 
 
 def load_key(key_dir, catalog=None):
     """Targets of the key package plus the development supplement, each with its anchors, support map and split."""
-    key_dir = Path(key_dir); bulk = evidence_root(key_dir)
+    key_dir = Path(key_dir); bulk = evidence_root(key_dir); pins = manifest(key_dir).get('packets_sha256') or {}
     records = json.loads((key_dir / 'CLAUDE_ANSWER_KEY.json').read_text())
     flags = json.loads((key_dir / 'CLAUDE_KEY_FLAGS.json').read_text())
     support = json.loads((key_dir / 'KEY_SUPPORT_MAP.json').read_text())
@@ -53,7 +67,7 @@ def load_key(key_dir, catalog=None):
     packets, targets = {}, []
     for r in records:
         p = r['key_id'].split('/')[0]
-        if p not in packets: packets[p] = _packet(bulk, p)
+        if p not in packets: packets[p] = _packet(bulk, p, pins)
         t = packets[p]['targets'][r['id']]; path, sha = packets[p]['sources'][r['file_id']]
         targets.append({'key_id': r['key_id'], 'file_id': r['file_id'], 'type': r['type'], 'path': path, 'sha256': sha,
                         'split': splits.get(r['file_id'], 'unknown'), 'fields': r['fields'], 'alternatives': r['alternatives'],
@@ -99,30 +113,35 @@ def load_sources(key_dir, catalog=None):
 
 def evidence_root(key_dir):
     """Where the originals live: the frozen manifest's declared root, else the key folder's parent."""
-    m = key_dir / 'FINAL_MANIFEST.json'
-    root = json.loads(m.read_text()).get('evidence_root') if m.exists() else None
+    root = manifest(key_dir).get('evidence_root')
     return (key_dir / root).resolve() if root else key_dir.parent
 
 
 def verify_inputs(key_dir, catalog, route_dir):
-    """Checks the inputs grading will consume against the frozen manifest before they are read: the key files, and every packet's
-    targets file (source hashes are then checked per file as it is read). Records the identities. Without a manifest the run is
-    marked unverified; a manifest that does not pin a consumed input, or disagrees with it, stops the run."""
+    """Checks the inputs grading will consume against the frozen manifest before they are read: the key files, and the targets file of
+    every packet the key's records use, at the folder `load_key` reads it from (source hashes are then checked per file as it is read).
+    Records the identities. Without a manifest the run is marked unverified; a manifest that does not pin a consumed input, pins one
+    that is missing, or disagrees with one, stops the run; `verified` also needs the split catalog pinned."""
     key_dir = Path(key_dir); m = key_dir / 'FINAL_MANIFEST.json'
     facts = {'key_package': str(key_dir), 'route_dir': str(route_dir), 'key_sha256': sha256((key_dir / 'CLAUDE_ANSWER_KEY.json').read_bytes()),
              'catalog_sha256': sha256(Path(catalog or evidence_root(key_dir).parent / 'case_catalog.csv').read_bytes()), 'manifest_sha256': None, 'verified': False, 'packets_verified': 0}
     if not m.exists(): facts['unverified_because'] = 'no frozen manifest'; return facts
-    man = json.loads(m.read_text()); listed = man.get('files_sha256') or {}; facts['manifest_sha256'] = sha256(m.read_bytes())
-    for rel in ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json'):
-        if not (key_dir / rel).exists(): continue
-        if rel not in listed: raise ValueError(f'frozen manifest of {key_dir.name} does not pin {rel}')
-        if sha256((key_dir / rel).read_bytes()) != listed[rel]: raise ValueError(f'{rel} differs from the frozen manifest of {key_dir.name}')
-    root = evidence_root(key_dir)
-    for rel, pin in (man.get('packets_sha256') or {}).items():
-        for name, key in (('targets.json', 'targets_sha256'), ('manifest.json', 'manifest_sha256')):
-            if key in pin and sha256((root / rel / name).read_bytes()) != pin[key]: raise ValueError(f'{rel}/{name} differs from the frozen manifest')
-        if 'targets_sha256' in pin: facts['packets_verified'] += 1
-    if not man.get('packets_sha256'): raise ValueError(f'frozen manifest of {key_dir.name} pins no packets')
+    man = manifest(key_dir); listed = man.get('files_sha256') or {}; facts['manifest_sha256'] = sha256(m.read_bytes())
+    for rel in KEY_FILES:  # pinned and present, or neither: a pinned file that is missing is a declared input lost
+        if (rel in listed) != (key_dir / rel).exists(): raise ValueError(f'{rel} is ' + (f'pinned by the frozen manifest of {key_dir.name} but missing' if rel in listed else f'not pinned by the frozen manifest of {key_dir.name}'))
+        if rel in listed and sha256((key_dir / rel).read_bytes()) != listed[rel]: raise ValueError(f'{rel} differs from the frozen manifest of {key_dir.name}')
+    root, pins = evidence_root(key_dir), man.get('packets_sha256') or {}
+    used = sorted({r['key_id'].split('/')[0] for r in json.loads((key_dir / 'CLAUDE_ANSWER_KEY.json').read_text())})
+    if not used: raise ValueError(f'{key_dir.name}: the answer key names no packet')
+    for name in used:  # the packets grading consumes, at the folders it will read them from
+        rel = packet_dir(root, name, pins).relative_to(root).as_posix()
+        if 'targets_sha256' not in (pins.get(rel) or {}): raise ValueError(f'frozen manifest of {key_dir.name} does not pin {rel}/targets.json')
+    for rel, pin in pins.items():  # and every pinned packet file must be the pinned bytes
+        for fname, key in (('targets.json', 'targets_sha256'), ('manifest.json', 'manifest_sha256')):
+            if key in pin and sha256((root / rel / fname).read_bytes()) != pin[key]: raise ValueError(f'{rel}/{fname} differs from the frozen manifest')
+    facts['packets_verified'] = len(used)
+    if man.get('catalog_sha256') != facts['catalog_sha256']:  # the split list decides what is public: unpinned, the run is not verified
+        facts['unverified_because'] = 'catalog (split assignments) not pinned by the frozen manifest'; return facts
     facts['verified'] = True
     return facts
 
@@ -385,11 +404,15 @@ class Grader:
         self.markers = [m['marker_text'] for _, v in alternatives(t, 'footnote_markers') for m in (v or [])]
         self.own = [p for f in ('unit_printed', 'segment_or_basis', 'corner_text', 'table_title', 'row_label') for _, v in alternatives(t, f) for p in pieces_of(v)]
         self.own += [part['text'] for _, v in alternatives(t, 'periods') for g in (v or []) for part in g.get('parts') or []]
-        # table context the key declares with a source anchor inside this table (E13 ruling): admitted only for the table's heading
-        # block — title, header path, corner — never for values, labels or rows of another table
-        tc = t['support'].get('table_context') or {}
-        self.table_context = [pc['text'] for pc in tc.get('pieces') or [] if pc.get('text') and t.get('table_anchor') and
-                              any(overlap({'byte_start': a, 'byte_end_exclusive': b}, t['table_anchor']) for a, b in (pc.get('byte_ranges') or []) + (pc.get('governing') or []))]
+        # table context the key declares for this table (E13 ruling): admitted only for the table's heading block — title, header path,
+        # corner — and only when every declared anchor reads the phrase inside this table; anything else is a key defect, stated loudly
+        ta = t.get('table_anchor') or {}; self.table_context = []
+        for pc in (t['support'].get('table_context') or {}).get('pieces') or []:
+            at = pc.get('byte_ranges') or []
+            if not (pc.get('text') and at and rf.vis is not None and 'byte_start' in ta and
+                    all(ta['byte_start'] <= a < b <= ta['byte_end_exclusive'] and squash(rf.vis.at(a, b)) == squash(pc['text']) for a, b in at)):
+                raise ValueError(f"{t['key_id']}: table_context {pc.get('text')!r} is not the text at an anchor inside this table (fix the key package)")
+            self.table_context.append(pc['text'])
 
     def same(self, got, want):
         return same(got, want, self.markers, self.own)
@@ -466,18 +489,20 @@ class Grader:
         end, start = max(x['byte_end_exclusive'] for x in sa), min(x['byte_start'] for x in sb)
         return end <= start and self.rf.vis.at(end, start) == ''
 
-    def pieces_match(self, texts, want, anchors=None):
+    def pieces_match(self, texts, want, anchors=None, cells=None):
         """Do these route pieces, in order, spell the key text `want`? Spacing inside a piece must match the key's. A piece boundary
         inside a word of the key is a fault, unless the pieces' own anchors prove they are adjacent in the source with no inserted
-        separator (E12: span-level output; counted as `fragmented`). Returns (ok, reason, fragments)."""
+        separator (E12: span-level output; counted as `fragmented`) — and, for table cells, unless both pieces sit at one grid position:
+        two cells show two words whatever the bytes say. Returns (ok, reason, fragments)."""
         nw = norm(want); idx = [i for i, c in enumerate(nw) if not c.isspace()]; sq = ''.join(nw[i] for i in idx); pos = frag = 0; prev = None
         for n_, tx in enumerate(texts):
             n = len(squash(tx)); end = pos + n
             if not n: continue
             if not sq.startswith(squash(tx), pos): return False, 'text', frag
             if pos and idx[pos] == idx[pos - 1] + 1 and nw[idx[pos]].isalnum() and nw[idx[pos - 1]].isalnum():
-                if not (anchors and self.adjacent(anchors[prev], anchors[n_])):
-                    regions = anchors and all(any('region' in x for x in spans(anchors[i])) for i in (prev, n_))
+                apart = bool(cells) and (cells[prev]['r'], cells[prev]['c']) != (cells[n_]['r'], cells[n_]['c'])
+                if apart or not (anchors and self.adjacent(anchors[prev], anchors[n_])):
+                    regions = not apart and anchors and all(any('region' in x for x in spans(anchors[i])) for i in (prev, n_))
                     return (None, 'adjacency', frag) if regions else (False, 'word_split', frag)  # boxes cannot prove adjacency: unresolved, not a fault
                 frag += 1
             if not boundary_equal(tx, nw[idx[pos]:idx[end - 1] + 1]): return False, 'spacing', frag
@@ -491,16 +516,22 @@ class Grader:
 
     def value(self, tb, V, vr):
         t = self.t; printed, display = t['fields'].get('printed_value'), t['fields'].get('display_value') or t['fields'].get('printed_value')
-        texts = [c.get('text', '') for c in sorted(V, key=lambda c: c['c'])]
-        if not fused(texts, printed) and any(fused(texts, printed + m) or fused(texts, m + printed) for m in self.markers): return self.row('value', 'fail', 'marker_glued')
+        cells = sorted(V, key=lambda c: c['c']); texts = [c.get('text', '') for c in cells]
+        if self.spell(cells, printed) is not True and any(fused(texts, printed + m) or fused(texts, m + printed) for m in self.markers): return self.row('value', 'fail', 'marker_glued')
         danch = anchors_of(t, 'display_value')
         D = list({id(c): c for a in danch for c in self.rf.cells_at(a, tb)}.values()) or V
         if any(not row_hit(c, vr) for c in D): return self.row('value', 'fail', 'symbol_detached')
-        shown = [c.get('text', '') for c in sorted(D, key=lambda c: c['c'])]
-        if fused(shown, display) or fused(texts, display): return self.row('value', 'pass')
-        if fused(texts, printed): return self.row('value', 'fail', 'symbol_missing', norm(' '.join(shown)))
-        if squash(''.join(texts)) in (squash(printed), squash(display)) or squash(''.join(shown)) == squash(display): return self.row('value', 'fail', 'spacing', norm(' '.join(texts)))
+        shown = sorted(D, key=lambda c: c['c']); said = (self.spell(shown, display), self.spell(cells, display), self.spell(cells, printed))
+        if True in said[:2]: return self.row('value', 'pass')
+        if said[2] is True: return self.row('value', 'fail', 'symbol_missing', joined(shown))
+        if None in said: return self.row('value', 'unresolved', 'adjacency')  # pieces of the value whose page boxes cannot prove adjacency
+        if squash(''.join(texts)) in (squash(printed), squash(display)) or squash(joined(shown)) == squash(display): return self.row('value', 'fail', 'spacing', norm(' '.join(texts)))
         self.row('value', 'fail', 'text', norm(' '.join(texts)))
+
+    def spell(self, cells, want):
+        """Do these cells, in column order, spell `want`? Pieces at one grid position may join inside a word when their anchors prove
+        source adjacency (E12); pieces in different cells never do. True, False, or None when only page boxes could prove the join."""
+        return self.pieces_match([c.get('text', '') for c in cells], want, [c.get('anchor') for c in cells], cells)[0]
 
     def row_label(self, value, alt, tb, vr):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'row_label', alt)
@@ -667,7 +698,8 @@ class Grader:
     def range_(self, value, alt, tb, V, vr, vcols):
         partner = value.get('partner')
         if partner:
-            cells = [c for c in self.rf.cells_at(partner['anchor'], tb) if fused([c.get('text', '')], partner['printed_value'])]
+            at = sorted(self.rf.cells_at(partner['anchor'], tb), key=lambda c: c['c'])
+            cells = [c for c in at if boundary_equal(c.get('text', ''), partner['printed_value'])] or (at if self.spell(at, partner['printed_value']) is True else [])
             if not cells: return 'fail', 'partner', None
             if not any(row_hit(c, vr) for c in cells): return 'fail', 'row', None
             if source_before(partner['anchor'], self.t['anchor']) != (cells[0]['c'] < vcols[0]): return 'fail', 'order', None
@@ -777,10 +809,13 @@ def gates_for_file(rf, status):
                 if byte and rf.vis is not None:
                     ranges.extend((a['byte_start'], a['byte_end_exclusive']) for a in byte)
                     seen = squash(rf.vis.at_any(byte))
-                    if x.get('link_flag') == 'pieced':  # the anchors cover the matched blocks; the rest of the text is the tool's insertion
-                        sq = squash(x.get('text', '')); want = ''.join(sq[a:b] for a, b in x.get('pieces') or [])
-                        g['inserted_chars'] += x.get('inserted_chars') or 0
-                        if seen != want: g['dishonest'] += 1
+                    if x.get('link_flag') == 'pieced':  # each anchor must read its block of the text; the characters outside the blocks are the tool's insertion
+                        nt = norm(x.get('text', '')); idx = [i for i, c in enumerate(nt) if c != ' ']; sq = nt.replace(' ', '')
+                        pieces = [tuple(pc) for pc in x.get('pieces') or []]
+                        if len(pieces) != len(byte) or not all(0 <= a < b <= len(sq) and (k == 0 or a >= pieces[k - 1][1]) for k, (a, b) in enumerate(pieces)) \
+                                or any(squash(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive'])) != sq[a:b] for sp, (a, b) in zip(byte, pieces)): g['dishonest'] += 1; continue
+                        g['inserted_chars'] += len(sq) - sum(b - a for a, b in pieces)  # derived from the blocks, never from the tool's own count
+                        if any(not boundary_equal(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive']), nt[idx[a]:idx[b - 1] + 1]) for sp, (a, b) in zip(byte, pieces)): g['boundary'] += 1
                         continue
                     for mm in (squash(m) for m in x.get('markers') or []):  # each reported mark sits right before or right after the text
                         if mm and seen.startswith(mm): seen = seen[len(mm):]
@@ -838,7 +873,7 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
     ungraded = sorted(f for f, x in files.items() if x['status'] != 'OK')  # a file that was not graded has no measured gate
     cov_unmeasured = sorted(set(f for f, g in per_file.items() if g['uncovered'] is None) | set(ungraded))
     anc_unmeasured = sorted(set(f for f, g in per_file.items() if not g['anchors_measured']) | set(ungraded))
-    clean = all(g['dishonest'] == 0 and g['unanchored'] == 0 and g['boundary'] == 0 for g in per_file.values())
+    clean = all(g['dishonest'] == 0 and g['unanchored'] == 0 and g['boundary'] == 0 and g['inserted_chars'] == 0 for g in per_file.values())  # text the tool added is text the source cannot certify
     gates = {
         'honest_anchors': {'pass': not anc_unmeasured and clean, 'measured_pass': clean,
                            'dishonest': {f: g['dishonest'] for f, g in per_file.items() if g['dishonest']},

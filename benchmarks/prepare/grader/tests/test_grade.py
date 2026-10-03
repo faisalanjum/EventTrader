@@ -4,6 +4,7 @@ import copy
 import csv
 import hashlib
 import json
+import shutil
 from pathlib import Path
 import re
 import tempfile
@@ -153,8 +154,8 @@ def route_html():
                 {'id': 'u5', 'kind': 'footnote', 'marker': '4', 'text': '4 Non-GAAP measure; see the reconciliation.', 'anchor': elem('n4')},
                 {'id': 'u10', 'kind': 'text', 'text': 'Outlook figures are approximate(5).', 'anchor': elem('t2lead')},
                 {'id': 'u6', 'kind': 'table', 'anchor': elem('tb2'), 'caption': [], 'cells': [
-                    C(0, 0, 'Fiscal 2026 Outlook', 't2t', cs=5), C(1, 1, 'Adjusted diluted EPS', 'rl'), C(1, 2, '$10.57', 'lo'), C(1, 3, 'to', 'to'),
-                    C(1, 4, '$10.67', 'hi'), C(2, 0, '2024', 'o1'), C(2, 1, 'Q1', 'i1'), C(2, 2, '5', 'q1')]},
+                    C(0, 0, 'Fiscal 2026 Outlook', 't2t', cs=5), C(1, 0, '(unaudited)', 't2c', cs=5), C(2, 1, 'Adjusted diluted EPS', 'rl'), C(2, 2, '$10.57', 'lo'),
+                    C(2, 3, 'to', 'to'), C(2, 4, '$10.67', 'hi'), C(3, 0, '2024', 'o1'), C(3, 1, 'Q1', 'i1'), C(3, 2, '5', 'q1')]},
                 {'id': 'u11', 'kind': 'footnote', 'marker': '(5)', 'text': '(5) Guidance as of the release date.', 'anchor': elem('n5')},
                 {'id': 'u12', 'kind': 'list_item', 'text': '•The first point.', 'anchor': elem('li')},
                 {'id': 'u9', 'kind': 'text', 'text': 'Amounts exclude discontinued operations.', 'anchor': elem('after')},
@@ -300,6 +301,79 @@ class PlantedFaultTests(GraderFixture):
         u = {'id': 'u', 'kind': 'text', 'text': 'First sentence of a long paragraph that the tool kept. ---- Second sentence of the same long paragraph that the tool kept as well.'}
         rf = grade.RouteFile({'file_id': 'x/p.htm', 'units': anchor.link(raw, [u])['units']}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
         self.assertEqual((g['dishonest'], g['boundary'], g['inserted_chars'], [x['text'] for x in g['uncovered']]), (0, 0, 4, ['7']))
+
+    def test_text_a_tool_adds_inside_an_untargeted_paragraph_fails_the_anchor_gate(self):
+        # Codex round-4 preview: "do not" slipped into a long paragraph no target covers; the pieced anchor must not let it pass
+        raw = b'<p>The Companies make certain estimates and assumptions that affect reported amounts of assets and liabilities in the statements.</p>'
+        u = {'id': 'u', 'kind': 'text', 'text': 'The Companies make certain estimates and assumptions that do not affect reported amounts of assets and liabilities in the statements.'}
+        rf = grade.RouteFile({'file_id': 'x/p.htm', 'units': anchor.link(raw, [u])['units']}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
+        self.assertEqual((g['inserted_chars'], g['uncovered']), (5, []))
+        # at run level the gate fails and names the file (the fixture is hand-anchored, so the pieced anchor comes from the linker here)
+        def pieced(r):
+            x = next(x for x in r[HTM_ID]['units'] if x['id'] == 'u2'); x['text'] = 'Free cash flow is not a GAAP measure that we report. See the table below.'
+            for k in ('anchor', 'pieces', 'inserted_chars', 'link_flag'): x.pop(k, None)
+            x.update({k: v for k, v in anchor.link(HTML, [dict(x)])['units'][0].items() if k in ('anchor', 'pieces', 'inserted_chars', 'link_flag')})
+        res = self.run_grader(pieced)
+        self.assertFalse(res['gates']['honest_anchors']['pass']); self.assertEqual(list(res['gates']['honest_anchors']['inserted_chars']), [HTM_ID])
+
+    def test_a_pieced_unit_is_judged_from_its_blocks_never_from_its_own_counts(self):
+        # Codex R4-1: the gate derives the insertion from the blocks, checks each block's boundaries and refuses malformed pieces
+        raw = b'<p>First sentence of a long paragraph that the tool kept.</p><p>7</p><p>Second sentence of the same long paragraph that the tool kept as well.</p>'
+        def gate(text, **override):
+            u = anchor.link(raw, [{'id': 'u', 'kind': 'text', 'text': text}])['units'][0]; u.update(override)
+            g = grade.gates_for_file(grade.RouteFile({'file_id': 'x/p.htm', 'units': [u]}, raw, 'htm'), 'OK')
+            return g['dishonest'], g['boundary'], g['inserted_chars'], [x['text'] for x in g['uncovered']]
+        kept = 'First sentence of a long paragraph that the tool kept. ---- Second sentence of the same long paragraph that the tool kept as well.'
+        self.assertEqual(gate(kept, inserted_chars=0), (0, 0, 4, ['7']))                                  # an under-reported count changes nothing
+        self.assertEqual(gate(kept.replace('tool kept as', 'to ol kept as')), (0, 1, 4, ['7']))           # a word split inside a block is a boundary fault
+        self.assertEqual(gate(kept, pieces=[[0, 60], [50, 170]])[0], 1)                                   # overlapping blocks: the mapping is not honest
+        dropped = 'First sentence of a long paragraph that the tool kept. Second sentence of the same long paragraph that the tool kept as well.'
+        self.assertEqual(gate(dropped), (0, 0, 0, ['7']))                                                 # a deletion inserts nothing; the source text stays uncovered
+
+    def test_pieces_of_one_value_cell_pass_only_when_they_share_the_cell_and_the_source_proves_adjacency(self):
+        # Codex R4-5: <span>76</span><span>9</span> kept as two anchored pieces at one grid position is faithful output (E12)
+        def fragments(c2=2):
+            def go(r):
+                v = self.cell(r, 'v1'); cells = self.cells(r); i = cells.index(v)
+                cells[i:i + 1] = [dict(v, text='76', anchor=self.sub('v1', '76')), dict(v, text='9', c=c2, anchor=self.sub('v1', '9'))]
+            return go
+        self.assertEqual(self.check(self.run_grader(fragments()), 'pkt/T01', 'value')['verdict'], 'pass')
+        self.assertEqual(self.check(self.run_grader(fragments(c2=3)), 'pkt/T01', 'value')['reason'], 'spacing')  # two cells show two numbers
+        def apart(r):  # the same two pieces whose own anchors do not touch in the source: a boundary the tool made
+            v = self.cell(r, 'v1'); cells = self.cells(r); i = cells.index(v)
+            cells[i:i + 1] = [dict(v, text='76', anchor=self.sub('v1', '76')), dict(v, text='9', anchor=dict(self.sub('v1', '9'), byte_start=self.sub('v1', '9')['byte_start'] + 1))]
+        self.assertEqual(self.check(self.run_grader(apart), 'pkt/T01', 'value')['reason'], 'spacing')
+        t = {'key_id': 'syn/P', 'file_id': 'x/deck.pdf', 'format': 'cell/pdf', 'type': 'cell', 'split': 'development', 'anchor': {'page': 1, 'region': [100, 100, 200, 120]},
+             'table_anchor': {'page': 1, 'region': [0, 0, 600, 400]}, 'fields': {'printed_value': '1234', 'row_label': 'Revenue'}, 'alternatives': {}, 'excluded': set(), 'support': {}}
+        cells = [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': {'page': 1, 'region': [0, 100, 90, 120]}}, {'r': 0, 'c': 1, 'text': '12', 'anchor': {'page': 1, 'region': [100, 100, 150, 120]}},
+                 {'r': 0, 'c': 1, 'text': '34', 'anchor': {'page': 1, 'region': [150, 100, 200, 120]}}]
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'x/deck.pdf', 'units': [{'id': 't', 'kind': 'table', 'anchor': t['table_anchor'], 'cells': cells}]}, None, 'pdf')); g.grade_cell()
+        self.assertEqual(next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'value'), ('unresolved', 'adjacency'))  # boxes cannot prove the join
+
+    def test_a_range_partner_kept_as_adjacent_pieces_is_still_the_partner(self):
+        def split_partner(r):
+            lo = self.cell(r, 'lo', 'u6'); cells = self.cells(r, 'u6'); i = cells.index(lo)
+            cells[i:i + 1] = [dict(lo, text='$10.', anchor=self.sub('lo', '$10.')), dict(lo, text='57', anchor=self.sub('lo', '57'))]
+        self.assertEqual(self.check(self.run_grader(split_partner), 'fx/R01', 'range')['verdict'], 'pass')
+
+    def test_verified_means_every_consumed_input_is_pinned(self):
+        names = ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json')
+        base = {'evidence_root': '..', 'files_sha256': {n: grade.sha256((self.pkg / n).read_bytes()) for n in names},
+                'packets_sha256': {'packets/pkt': {'targets_sha256': grade.sha256((self.pkt / 'targets.json').read_bytes())}}}
+        (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(base))
+        res = self.run_grader(); self.assertFalse(res['run_facts']['verified']); self.assertIn('catalog', res['run_facts']['unverified_because'])  # the split list is not pinned
+        pinned = dict(base, catalog_sha256=grade.sha256((self.root / 'case_catalog.csv').read_bytes())); (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(pinned))
+        res = self.run_grader(); self.assertTrue(res['run_facts']['verified'])
+        loose = dict(pinned, packets_sha256={'packets/pkt': {'manifest_sha256': 'x'}}); (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(loose))
+        with self.assertRaises(ValueError): self.run_grader()  # a packet pinned without its target file is not pinned
+        # Codex R4-2: the pins must cover what grading reads, where it reads it
+        for pins in ({'packets/pkt': {}}, {'packets/other': base['packets_sha256']['packets/pkt']}):  # empty pins; only an unconsumed packet pinned
+            (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(dict(pinned, packets_sha256=pins)))
+            with self.assertRaises(ValueError): self.run_grader()
+        (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(pinned)); (self.pkg / 'converter_checks' / 'REGRESSION_CASES.json').unlink()
+        with self.assertRaises(ValueError): self.run_grader()                                             # a pinned input that is missing
+        shutil.copytree(self.pkt, self.root / 'bulk' / 'bundled' / 'packets' / 'pkt')                      # the same packet name in both folders
+        with self.assertRaises(FileNotFoundError): grade.packet_dir(self.root / 'bulk', 'pkt', ('bundled/packets/pkt',))  # is never a silent choice
 
     def test_partial_route_status_leaves_coverage_unmeasured_never_passed(self):
         def partial(r): self.cells(r).remove(self.cell(r, 'p1')); r[HTM_ID]['status'] = 'PARTIAL'
@@ -614,13 +688,17 @@ class PlantedFaultTests(GraderFixture):
         # T05's table (tb2) has no declared context: a sibling's basis words may not be borrowed, an invented qualifier fails
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook (unaudited)'))
         self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'fail')
-        # declared table context: support entry anchored inside tb2 -> the title cell may carry it
-        def declare(fx):
-            sup = json.loads((fx.pkg / 'KEY_SUPPORT_MAP.json').read_text()); sup.setdefault('pkt/T05', {})['table_context'] = {'how': 'reviewed', 'pieces': [{'text': '(unaudited)', 'byte_ranges': [[elem('t2t')['byte_start'], elem('t2t')['byte_end_exclusive']]]}]}
-            (fx.pkg / 'KEY_SUPPORT_MAP.json').write_text(json.dumps(sup))
-        declare(self)
+        # declared table context: a support entry whose anchor reads the phrase inside tb2 -> the title cell may carry it
+        def declare(span):
+            sup = json.loads((self.pkg / 'KEY_SUPPORT_MAP.json').read_text())
+            sup.setdefault('pkt/T05', {})['table_context'] = {'how': 'reviewed', 'pieces': [{'text': '(unaudited)', 'byte_ranges': [[span['byte_start'], span['byte_end_exclusive']]]}]}
+            (self.pkg / 'KEY_SUPPORT_MAP.json').write_text(json.dumps(sup))
+        declare(elem('t2c'))
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook (unaudited)'))
         self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'pass')
+        for bad in (elem('tb2'), elem('t2t'), elem('after'), {'byte_start': 0, 'byte_end_exclusive': len(HTML)}):  # Codex R4-6: a container, another cell's text,
+            declare(bad)                                                                                              # a phrase outside the table, the whole document
+            with self.assertRaises(ValueError): self.run_grader()                                                     # are key defects, refused — never admitted
         self.assertFalse(grade.Grader({'key_id': 'x', 'fields': {}, 'alternatives': {}, 'support': {}, 'excluded': set(), 'file_id': HTM_ID, 'split': 'development', 'format': 'cell/htm'}, None).same('Revenue (Unaudited)', 'Revenue')[0])
 
     def test_note_whose_mark_is_glued_in_the_key_but_spaced_by_the_tool_still_matches(self):
@@ -785,7 +863,8 @@ class PlantedFaultTests(GraderFixture):
     def test_frozen_inputs_are_verified_before_grading(self):
         names = ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json')
         manifest = {'evidence_root': '..', 'files_sha256': {n: grade.sha256((self.pkg / n).read_bytes()) for n in names},
-                    'packets_sha256': {'packets/pkt': {'targets_sha256': grade.sha256((self.pkt / 'targets.json').read_bytes())}}}
+                    'packets_sha256': {'packets/pkt': {'targets_sha256': grade.sha256((self.pkt / 'targets.json').read_bytes())}},
+                    'catalog_sha256': grade.sha256((self.root / 'case_catalog.csv').read_bytes())}
         (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(manifest))
         res = self.run_grader(); self.assertTrue(res['run_facts']['verified']); self.assertEqual(res['run_facts']['packets_verified'], 1)
         tj = json.loads((self.pkt / 'targets.json').read_text()); tj['targets'][0]['cell_anchor']['byte_start'] += 1; (self.pkt / 'targets.json').write_text(json.dumps(tj))

@@ -6,7 +6,6 @@ in several source places (a merged stacked header) must come from the adapter wi
 never guesses such a split."""
 from array import array
 from bisect import bisect_left
-import difflib
 import html
 import re
 import unicodedata
@@ -22,6 +21,8 @@ _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), 
 _TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
 _ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
 _DECL = re.compile(r'([A-Za-z-]+)\s*:\s*([^;]+)')  # one CSS declaration inside a style attribute
+_COMMENT = re.compile(r'/\*.*?\*/', re.S)  # a CSS comment is not part of a declaration
+_IMPORTANT = re.compile(r'\s*!\s*important\s*$')
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
 _SHEET = re.compile(r'<style\b[^>]*>(?:(?!</style).)*?\b(?:display|visibility|opacity)\s*:|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheet rules that hide or re-flow text; this scanner does not apply them
 _NAME = re.compile(r'</?\s*([\w:.-]+)')
@@ -52,6 +53,19 @@ def _zero(value):
     except ValueError: return False
 
 
+def declarations(style):
+    """The declarations of a style attribute, names and values lower-cased: the last one wins, except that a plain declaration
+    does not override an earlier `!important` one (the cascade inside one attribute)."""
+    out, strong = {}, set()
+    for dm in _DECL.finditer(_COMMENT.sub('', style)):
+        name, value = dm.group(1).lower(), dm.group(2).strip().lower()
+        important = _IMPORTANT.search(value) is not None
+        if name in strong and not important: continue
+        out[name] = _IMPORTANT.sub('', value) if important else value
+        if important: strong.add(name)
+    return out
+
+
 class Visible:
     """Characters a reader sees (hidden subtrees, head, scripts, styles and comments removed), each with its byte span."""
 
@@ -62,6 +76,7 @@ class Visible:
             s, blen = raw.decode('cp1252', 'replace'), len
         chars, starts, ends, stack, hidden, pos = [], array('Q'), array('Q'), [], False, 0  # byte offsets tracked per token, not per source byte
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
+        computed = False  # a hiding property was given a value this scanner does not evaluate (var(), calc(), escapes)
         for m in _TOKEN.finditer(s):
             t = m.group(); start = pos; pos += blen(t)
             if t.startswith('<'):
@@ -70,9 +85,10 @@ class Visible:
                 if not name or t.startswith('<!') or t.startswith('<?') or m.group(1): continue
                 name, was_hidden = name.group(1).lower(), hidden
                 attrs = {}
-                for am in _ATTR.finditer(t[len(name) + 2 if t.startswith('</') else len(name) + 1:]):  # the tag's attributes, first occurrence wins
-                    attrs.setdefault(am.group(1).lower(), am.group(2) or am.group(3) or am.group(4) or '')
-                decl = {dm.group(1).lower(): dm.group(2).strip().lower().removesuffix('!important').strip() for dm in _DECL.finditer(attrs.get('style', ''))}  # last declaration wins
+                for am in _ATTR.finditer(t[len(name) + 2 if t.startswith('</') else len(name) + 1:]):  # the tag's attributes, first occurrence wins, entities decoded
+                    attrs.setdefault(am.group(1).lower(), html.unescape(am.group(2) or am.group(3) or am.group(4) or ''))
+                decl = declarations(attrs.get('style', ''))
+                if any(c in decl.get(k, '') for k in ('display', 'visibility', 'opacity') for c in '(\\'): computed = True
                 disp = decl.get('display'); block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or name in STRUCK or 'line-through' in decl.get('text-decoration', '') + decl.get('text-decoration-line', '')
                 if t.startswith('</'):
                     if any(fr[0] == name for fr in reversed(stack)):
@@ -83,8 +99,8 @@ class Visible:
                     blocked, vis = stack[-1][1:3] if stack else (False, False)
                     opacity = decl.get('opacity', '').split()[0] if decl.get('opacity') else None
                     gone = disp == 'none' or (opacity is not None and _zero(opacity)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
-                    v = decl.get('visibility')
-                    stack.append((name, blocked or gone, vis if not v or v in ('inherit', 'unset') else v not in ('visible', 'initial'), block))  # visibility inherits; a child may set it again
+                    v = decl.get('visibility')  # CSS: hidden/collapse hide, visible shows; inherit, unset, absent or invalid keep the parent's
+                    stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial', 'revert', 'revert-layer') else vis, block))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
                 if not (hidden or was_hidden) and (xml or block): chars.append(' '); starts.append(start); ends.append(pos)
                 continue
@@ -100,7 +116,7 @@ class Visible:
                 off = start
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); off += n
         self.text, self.starts, self.ends = ''.join(chars), starts, ends
-        self.certain = not _SHEET.search(s)  # with stylesheet rules present, visibility is reported as uncertain, never certified
+        self.certain = not computed and not _SHEET.search(s)  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))
@@ -140,6 +156,26 @@ class Visible:
 SHORT = 20  # search-form characters; shorter texts are ambiguous (a word can occur anywhere) and are placed between neighbours
 
 
+def grams(s):
+    """Every SHORT-gram of a string with its positions, in order."""
+    d = {}
+    for p in range(len(s) - SHORT + 1): d.setdefault(s[p:p + SHORT], []).append(p)
+    return d
+
+
+def chain(pairs):
+    """The longest subsequence of (a, b) pairs, sorted by a, whose b values also increase: the anchors consistent with one reading order."""
+    tails, idx, prev = [], [], [None] * len(pairs)
+    for i, (a, b) in enumerate(pairs):
+        k = bisect_left(tails, b)
+        if k == len(tails): tails.append(b); idx.append(i)
+        else: tails[k] = b; idx[k] = i
+        prev[i] = idx[k - 1] if k else None
+    out, i = [], (idx[-1] if idx else None)
+    while i is not None: out.append(pairs[i]); i = prev[i]
+    return out[::-1]
+
+
 def link(raw, units, xml=False):
     """Give every unit and cell a byte anchor from the visible stream. Long texts are placed in order first; short ones
     only between their anchored neighbours; pictures and empty units take the gap between neighbours.
@@ -177,21 +213,34 @@ def link(raw, units, xml=False):
         return (j + (len(key) - len(n) if key == allm + n and allm else 0), end)  # the text's own start: one copy, one unit
 
     def piece(i, lo, hi):
-        """A long text the exact search cannot place: align it to the source and anchor its matching blocks (each at least SHORT
-        characters), in order, as a list anchor. The unit's characters outside the blocks are the tool's insertions, reported
-        as `inserted_chars`; the source characters between the blocks stay uncovered (the tool dropped them)."""
+        """A long text the exact search cannot place: its first SHORT characters must be found exactly; from there the text is aligned
+        to the source by anchor chaining — the SHORT-grams that occur exactly once in the text and exactly once in the source segment
+        are anchors, the longest chain of anchors in the same order on both sides is kept (longest increasing subsequence), and each
+        anchor is extended to its maximal run of equal characters. Linear-logarithmic, never a full character diff (difflib took three
+        minutes on one filing and is quadratic on repetitive text); within 1 % of difflib's matched characters on the worst file.
+        The blocks become a list anchor; the text's characters outside them are the tool's insertions (`inserted_chars`); the source's
+        characters between them stay uncovered."""
         obj, n = items[i][1], keys[i]
         taken = {pos[k][0] for k in range(len(items)) if pos[k] and keys[k] == n and k != i}
         j = vis.flat.find(n[:SHORT], lo, hi)
         while j >= 0 and j in taken: j = vis.flat.find(n[:SHORT], j + 1, hi)
         if j < 0: return None
         seg = vis.flat[j:min(hi, j + 2 * len(n))]
-        blocks = [b for b in difflib.SequenceMatcher(None, n, seg, autojunk=False).get_matching_blocks() if b.size >= SHORT]
-        if not blocks or blocks[0].a > 0 and n[:SHORT] != seg[blocks[0].b:blocks[0].b + SHORT]: return None
-        obj['anchor'] = [{'byte_start': vis.s[j + b.b], 'byte_end_exclusive': vis.e[j + b.b + b.size - 1]} for b in blocks]
-        obj['pieces'] = [[b.a, b.a + b.size] for b in blocks]; obj['inserted_chars'] = len(n) - sum(b.size for b in blocks); obj['link_flag'] = 'pieced'
-        obj.pop('link_error', None); ranges.extend((a['byte_start'], a['byte_end_exclusive']) for a in obj['anchor'])
-        return (j + blocks[0].b, j + blocks[-1].b + blocks[-1].size)
+        gn, gs = grams(n), grams(seg)
+        pairs = sorted((pa[0], gs[g][0]) for g, pa in gn.items() if len(pa) == 1 and len(gs.get(g, ())) == 1)
+        blocks, ea, eb = [], 0, 0  # (text start, segment start, size); ends of the previous block on both sides
+        for a, b in chain(pairs):
+            if a < ea or b < eb: continue  # inside the previous block's extension
+            la, lb = a, b
+            while la > ea and lb > eb and n[la - 1] == seg[lb - 1]: la -= 1; lb -= 1
+            size = a + SHORT - la
+            while la + size < len(n) and lb + size < len(seg) and n[la + size] == seg[lb + size]: size += 1
+            blocks.append((la, lb, size)); ea, eb = la + size, lb + size
+        if not blocks: return None
+        obj['anchor'] = [{'byte_start': vis.s[j + b], 'byte_end_exclusive': vis.e[j + b + size - 1]} for a, b, size in blocks]
+        obj['pieces'] = [[a, a + size] for a, b, size in blocks]; obj['inserted_chars'] = len(n) - sum(size for _, _, size in blocks); obj['link_flag'] = 'pieced'
+        obj.pop('link_error', None); ranges.extend((x['byte_start'], x['byte_end_exclusive']) for x in obj['anchor'])
+        return (j + blocks[0][1], j + blocks[-1][1] + blocks[-1][2])
 
     pos = [None] * len(items)
     def window(i):
