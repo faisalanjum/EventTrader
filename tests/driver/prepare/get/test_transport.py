@@ -3,10 +3,11 @@ from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime
 import gzip
 import http.client
+import io
 import unittest
 from unittest.mock import MagicMock, patch
 
-from driver.prepare.transport import DownloadError, HEADERS, LIMITS, download, http_request
+from driver.prepare.get.transport import DownloadError, HEADERS, LIMITS, download, http_request
 
 
 URL = 'https://www.sec.gov/Archives/edgar/data/1/000000000123000001/0000000001-23-000001.txt'
@@ -65,6 +66,8 @@ class DownloadTests(unittest.TestCase):
                 self.assertEqual(self.clock.sleeps, [2])
                 self.assertEqual(len(receipt['attempts']), 2)
                 self.assertGreaterEqual(self.calls[1][0] - self.calls[0][0], 1)
+                if isinstance(reply, tuple) and reply[1].get('content-encoding') == 'gzip':
+                    self.assertIn(receipt['attempts'][0]['error'], ('BadGzipFile', 'error'))  # gzip or zlib decoding
 
     def test_exhaustion_budget_and_retry_after(self):
         with self.assertRaisesRegex(DownloadError, 'exhausted') as caught:
@@ -100,10 +103,12 @@ class DownloadTests(unittest.TestCase):
         response = connection.getresponse.return_value
         response.status = 200
         response.getheaders.return_value = [('Content-Length', '3')]
+        response.chunked, response.length = False, 3
+        response.headers.get_all.side_effect = lambda name: ['3'] if name == 'content-length' else None
         response.read.return_value = b'abc'
-        with patch('driver.prepare.transport.http.client.HTTPSConnection', return_value=connection) as create, \
-             patch('driver.prepare.transport.signal.signal') as handler, \
-             patch('driver.prepare.transport.signal.setitimer') as timer:
+        with patch('driver.prepare.get.transport.http.client.HTTPSConnection', return_value=connection) as create, \
+             patch('driver.prepare.get.transport.signal.signal') as handler, \
+             patch('driver.prepare.get.transport.signal.setitimer') as timer:
             result = http_request(URL, HEADERS, 10, 60, 120)
         self.assertEqual(result, (200, {'content-length': '3'}, b'abc'))
         create.assert_called_once_with('www.sec.gov', timeout=10)
@@ -116,10 +121,58 @@ class DownloadTests(unittest.TestCase):
         response.status = 403
         response.read.side_effect = http.client.IncompleteRead(b'part')
         response.read.reset_mock()
-        with patch('driver.prepare.transport.http.client.HTTPSConnection', return_value=connection), \
-             patch('driver.prepare.transport.signal.signal'), patch('driver.prepare.transport.signal.setitimer'):
+        with patch('driver.prepare.get.transport.http.client.HTTPSConnection', return_value=connection), \
+             patch('driver.prepare.get.transport.signal.signal'), patch('driver.prepare.get.transport.signal.setitimer'):
             self.assertEqual(http_request(URL, HEADERS, 10, 60, 120)[0], 403)
         response.read.assert_not_called()
+
+
+class WireConnection:
+    """One in-memory server reply, read by Python's own HTTP parser; no network."""
+    def __init__(self, wire):
+        self.wire, self.sock = wire, MagicMock()
+
+    def connect(self):
+        pass
+
+    def request(self, *args, **kwargs):
+        pass
+
+    def getresponse(self):
+        socket = MagicMock()
+        socket.makefile.return_value = io.BytesIO(self.wire)
+        response = http.client.HTTPResponse(socket)
+        response.begin()
+        return response
+
+    def close(self):
+        pass
+
+
+class FramingTests(unittest.TestCase):
+    def test_a_body_counts_only_with_one_framing_pythons_reader_accepted(self):
+        # Codex recheck 2026-10-03: a body without a proven end could be a cut-short page that lists only some files.
+        replies = {'length': (b'Content-Length: 4\r\n', b'part', b'part'),
+                   'chunked': (b'Transfer-Encoding: chunked\r\n', b'4\r\npart\r\n0\r\n\r\n', b'part'),
+                   'cut chunked': (b'Transfer-Encoding: chunked\r\n', b'4\r\npart', None),
+                   'no framing': (b'', b'part', None),
+                   'unknown coding': (b'Transfer-Encoding: xchunked\r\n', b'part', None),
+                   'coding chain': (b'Transfer-Encoding: chunked, gzip\r\n', b'part', None),
+                   'trailing space': (b'Transfer-Encoding: chunked \r\n', b'part', None),
+                   'two codings': (b'Transfer-Encoding: xchunked\r\nTransfer-Encoding: chunked\r\n', b'part', None),
+                   'length and chunked': (b'Content-Length: 4\r\nTransfer-Encoding: chunked\r\n', b'4\r\npart\r\n0\r\n\r\n', None),
+                   'two lengths': (b'Content-Length: 4\r\nContent-Length: 5\r\n', b'part', None),
+                   'bad length': (b'Content-Length: four\r\n', b'part', None)}
+        for label, (headers, body, expected) in replies.items():
+            wire = b'HTTP/1.1 200 OK\r\n' + headers + b'Connection: close\r\n\r\n' + body
+            with self.subTest(label), patch('driver.prepare.get.transport.http.client.HTTPSConnection',
+                                            return_value=WireConnection(wire)), \
+                    patch('driver.prepare.get.transport.signal.signal'), patch('driver.prepare.get.transport.signal.setitimer'):
+                if expected is None:
+                    with self.assertRaises(http.client.HTTPException):
+                        http_request(URL, HEADERS, 10, 60, 120)
+                else:
+                    self.assertEqual(http_request(URL, HEADERS, 10, 60, 120)[::2], (200, expected))
 
 
 if __name__ == '__main__':

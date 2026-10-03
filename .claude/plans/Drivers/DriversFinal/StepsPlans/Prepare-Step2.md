@@ -66,7 +66,7 @@ was tested through controlled failures. Routine acquisition uses packages plus S
   exhibit labels and distinguish a supported viewing-page relationship from a
   physical source. No company-specific rules or new parsing framework.
 - One bounded experiment script in `scripts/driver/prepare/`; tests mirror the
-  runtime under `tests/driver/prepare/`. The package parser remains unchanged;
+  runtime under `tests/driver/prepare/get/`. The package parser remains unchanged;
   saving now reuses compressed inputs and stops on storage failures.
 
 ## Explicit limits and next step
@@ -93,7 +93,7 @@ comparing converters.
 - [Final independent acceptance](/home/faisal/prepare_work/prepare_step2_20261002/checker/final_acceptance.md)
   · [source readback](/home/faisal/prepare_work/prepare_step2_20261002/checker/source_readback.md)
   · [news/transcript audit](/home/faisal/prepare_work/prepare_step2_20261002/audit/README.md).
-- [Runtime/API notes](/home/faisal/EventMarketDB/driver/prepare/README.md)
+- [Runtime/API notes](/home/faisal/EventMarketDB/driver/prepare/get/README.md)
   · [tests](/home/faisal/EventMarketDB/tests/driver/README.md).
 
 The retained `final_run` contains compressed originals, exact response versions,

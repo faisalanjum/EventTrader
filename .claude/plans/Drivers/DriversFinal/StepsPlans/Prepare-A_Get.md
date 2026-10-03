@@ -29,7 +29,7 @@ SEC package → verify identity/framing → inventory files → save compressed 
   reuse makes no requests; `read_package()` verifies and returns all decoded files
   in one pass. Older experimental cache layouts remain separate.
 - Keep bounded HTTP retries/timeouts, 403 stop and explicit redirect rejection.
-  Caller coordinates the shared SEC budget. See [usage](../../../../../driver/prepare/README.md).
+  Caller coordinates the shared SEC budget. See [usage](../../../../../driver/prepare/get/README.md).
 
 No routine index/download duplication, reference crawler, schema framework or
 permanently unpacked second copy. Safe paths and timeout protections remain.
@@ -74,7 +74,7 @@ remain later work. Acquisition success does not mean all evidence is ready to re
 - [Received Claude review](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/review_received.md)
   · [prior live verification](/home/faisal/prepare_work/prepare_get_package_first_20261001T222443Z/evidence/live_verification.json).
 - [Permanent tests and fixtures](../../../../../tests/driver/README.md). Runtime stays
-  in `driver/prepare/`; tests mirror it. Historical evidence stays outside the repo.
+  in `driver/prepare/get/`; tests mirror it. Historical evidence stays outside the repo.
 - Removed three obsolete working copies after verifying their archived files; removed
   the stale `temp_delete.md` redirect. [Cleanup record](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/cleanup_result.json).
 - Owner-approved historical cleanup removed the listed old Step 0/1 runs, retaining

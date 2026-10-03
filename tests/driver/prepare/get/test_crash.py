@@ -9,17 +9,17 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from driver.prepare.acquire import acquire, read_package
-from driver.prepare.campaign import Campaign
-from tests.driver.prepare.test_acquire import ACCESSION, CIK, FORM, package
+from driver.prepare.get.acquire import acquire, read_package
+from driver.prepare.get.campaign import Campaign
+from tests.driver.prepare.get.test_acquire import ACCESSION, CIK, FORM, package
 
 
 CHILD = r'''
 import sys, time
 from pathlib import Path
 from unittest.mock import patch
-from driver.prepare.campaign import Campaign
-from driver.prepare.acquire import acquire
+from driver.prepare.get.campaign import Campaign
+from driver.prepare.get.acquire import acquire
 root, phase, accession, cik, form, sha = sys.argv[1:]
 root = Path(root)
 def pause(*args):
@@ -36,7 +36,7 @@ with Campaign(root / 'http', live=True, sender=lambda *a: (200, {}, b'exact'),
         run.fetch('https://www.sec.gov/Archives/new')
         pause()
     else:
-        with patch('driver.prepare.acquire.os.rename', side_effect=pause):
+        with patch('driver.prepare.get.acquire.os.rename', side_effect=pause):
             acquire(accession, cik, form, root / 'versions', package=root / 'original.gz', sha256=sha)
 '''
 

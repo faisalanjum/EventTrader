@@ -13,6 +13,7 @@ import re
 import shutil
 import sys
 import tempfile
+import zipfile
 import zlib
 
 from .transport import download
@@ -67,6 +68,11 @@ def _filename(value):
     return value
 
 
+def _uu_invalid(line):
+    count = (line[0] - 32) & 63
+    return count > 45 or len(line) > ((count + 2) // 3) * 4 + 1 or any(not 32 <= byte <= 96 for byte in line)
+
+
 def _decode_member(body, filename):
     # SEC doubles leading dots inside TEXT. Preserve all other file whitespace.
     body = re.sub(rb'^\.\.', b'.', body, flags=re.M)
@@ -85,17 +91,25 @@ def _decode_member(body, filename):
     header = re.fullmatch(rb'begin [0-7]{3} (.+)', lines[0])
     if not header or header[1].decode('utf-8') != filename or lines[-1] != b'end':
         raise AcquisitionError('Invalid uuencode filename or framing')
+    data_lines = [i for i, line in enumerate(lines[1:-1], 1) if line not in (b'', b'`', b' ')]
     decoded = bytearray()
-    for line in lines[1:-1]:
+    for i, line in enumerate(lines[1:-1], 1):
         if not line:
             continue  # A zero-length UU line may be entirely trimmed by SEC.
-        count = (line[0] - 32) & 63
-        width = ((count + 2) // 3) * 4
-        if count > 45 or len(line) > width + 1 or any(not 32 <= byte <= 96 for byte in line):
+        # SEC strips a leading "- " from submission lines. Only a final 13-byte line ("-" length)
+        # can start with it: restore it there when all 18 data characters remain (19-21 with "-").
+        if (_uu_invalid(line) and i == data_lines[-1] and 19 <= len(b'- ' + line) <= 21
+                and not _uu_invalid(b'- ' + line)):
+            line = b'- ' + line
+        if _uu_invalid(line):
             raise AcquisitionError('Invalid uuencode line')
+        count = (line[0] - 32) & 63
         # a2b_uu restores trimmed spaces. Exclude unused padding sextets, which
         # SEC can leave nonzero; the length prefix determines the original bytes.
         decoded.extend(binascii.a2b_uu(line[:1 + (count * 8 + 5) // 6]))
+    # A decoded zip's own checksums prove the decoding (SEC lists no size for its generated zips).
+    if decoded.startswith(b'PK\x03\x04') and _damaged_zip(bytes(decoded)):
+        raise AcquisitionError('Damaged zip after uudecode')
     return bytes(decoded)
 
 
@@ -110,6 +124,16 @@ def _format_hint(data):
     if re.match(rb'(?:<!doctype\s+html\b|<html(?:\s|>))', prefix):
         return 'html'
     return 'unknown'
+
+
+def _damaged_zip(data):
+    """A zip's own checksums verify its decoded bytes; encrypted/unsupported entries are not damage."""
+    try:
+        return zipfile.ZipFile(io.BytesIO(data)).testzip() is not None
+    except (RuntimeError, NotImplementedError):
+        return False
+    except (zipfile.BadZipFile, EOFError, OSError, ValueError, zlib.error):
+        return True
 
 
 def parse_package(data, accession, cik, form):
@@ -141,7 +165,10 @@ def parse_package(data, accession, cik, form):
         if not re.fullmatch(r'[0-9]+', count):
             raise AcquisitionError('Invalid document count')
         members, files = [], {}
-        cursor = header.end()
+        # SEC can leave empty lines between framing tags (seen once: Landstar 0001193125-23-048874). Only empty
+        # LF/CRLF lines outside every TEXT block are skipped; spaces or any other byte there still fail.
+        blank_lines = re.compile(rb'(?:\r?\n)*')
+        cursor = blank_lines.match(data, header.end()).end()
         document = re.compile(rb'<DOCUMENT>\r?\n(.*?)<TEXT>\r?\n(.*?)</TEXT>\r?\n</DOCUMENT>\r?\n', re.S)
         while data.startswith(b'<DOCUMENT>', cursor):
             match = document.match(data, cursor)
@@ -164,7 +191,7 @@ def parse_package(data, accession, cik, form):
             files[name] = body
             members.append(dict(fields, bytes=len(body), sha256=_hash(body),
                                 format_hint=_format_hint(body), package_range=list(match.span())))
-            cursor = match.end()
+            cursor = blank_lines.match(data, match.end()).end()
         if not re.fullmatch(rb'</SEC-DOCUMENT>\r?\n?', data[cursor:]) or not members:
             raise AcquisitionError('Incomplete or empty SEC package')
         for name in files:
@@ -186,6 +213,27 @@ def parse_package(data, accession, cik, form):
 def _no_symlinks(path):
     if any(parent.is_symlink() for parent in (path, *path.parents)):
         raise AcquisitionError('Symlink output/cache path is unsupported')
+
+
+def _sync_dir(path):
+    """Make new or renamed names in a directory survive power loss; a file's own fsync does not."""
+    try:
+        descriptor = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+    except OSError as exc:  # the disk no longer promises what was written: stop the whole run
+        raise StorageError(f'Directory flush failed: {path}: {exc}') from exc
+
+
+def _make_dirs(path):
+    """mkdir -p whose newly created directories are durable too."""
+    path = Path(path)
+    if not path.is_dir():
+        _make_dirs(path.parent)
+        path.mkdir(exist_ok=True)
+        _sync_dir(path.parent)
 
 
 def _compress(data):
@@ -217,7 +265,8 @@ def _read_cache(target):
             raise AcquisitionError('Invalid immutable cache receipt')
         return data, manifest
     except (OSError, ValueError, KeyError, TypeError) as exc:
-        raise AcquisitionError('Invalid cache: ' + str(exc)) from exc
+        error = StorageError if isinstance(exc, OSError) and exc.errno != errno.ENOENT else AcquisitionError
+        raise error('Invalid cache: ' + str(exc)) from exc
 
 
 def read_package(path):
@@ -266,9 +315,10 @@ def acquire(accession, cik, form, output, *, package=None, sha256=None, live=Fal
             cached_data, cached_manifest = _read_cache(target)
             if cached_data != data or cached_manifest != manifest:
                 raise AcquisitionError('Immutable cache differs')
+            _sync_dir(parent)  # its name may come from a run that stopped before flushing it
             return target
         check_space(output, minimum_free_bytes)
-        parent.mkdir(parents=True, exist_ok=True)
+        _make_dirs(parent)
         staged = Path(tempfile.mkdtemp(prefix='.pending-', dir=parent))
         try:
             contents = {'manifest.json': _json(manifest), 'receipt.json': _json(receipt)}
@@ -282,13 +332,16 @@ def acquire(accession, cik, form, output, *, package=None, sha256=None, live=Fal
                     handle.write(body)
                     handle.flush()
                     os.fsync(handle.fileno())
+            _sync_dir(staged)  # the three names inside the version
             os.rename(staged, target)
+            _sync_dir(parent)  # the version's own name, before any caller records success
         finally:
             if staged.exists():
                 shutil.rmtree(staged)
         return target
     except (OSError, AcquisitionError) as exc:
-        fatal = isinstance(exc, StorageError) or getattr(exc, 'errno', None) in (errno.ENOSPC, errno.EDQUOT, errno.EXDEV)
+        fatal = isinstance(exc, StorageError) or getattr(exc, 'errno', None) in (
+            errno.ENOSPC, errno.EDQUOT, errno.EXDEV, errno.EIO, errno.EROFS)  # the disk itself is failing
         error = (StorageError if fatal else AcquisitionError)(str(exc))
         error.receipt = getattr(exc, 'receipt', receipt)
         raise error from exc

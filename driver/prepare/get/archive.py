@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import tempfile
 
-from .acquire import AcquisitionError, _compress, _hash, _no_symlinks, _uncompress
+from .acquire import AcquisitionError, _compress, _hash, _make_dirs, _no_symlinks, _sync_dir, _uncompress
 
 
 def _path(root, sha256):
@@ -31,8 +31,9 @@ def store_blob(root, data: bytes):
     target = _path(root, sha256)
     if target.exists():
         load_blob(root, sha256)
+        _sync_dir(target.parent)  # its name may come from a run that stopped before flushing it
         return sha256
-    target.parent.mkdir(parents=True, exist_ok=True)
+    _make_dirs(target.parent)
     with tempfile.NamedTemporaryFile(dir=target.parent, prefix='.pending-', delete=False) as handle:
         staged = Path(handle.name)
         try:
@@ -45,4 +46,5 @@ def store_blob(root, data: bytes):
                 load_blob(root, sha256)
         finally:
             staged.unlink()
+    _sync_dir(target.parent)  # the blob's name survives power loss before any receipt points at it
     return sha256

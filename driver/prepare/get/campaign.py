@@ -7,7 +7,7 @@ import sqlite3
 import time
 from urllib.parse import urlsplit
 
-from .acquire import AcquisitionError, StorageError, check_space, _json, _no_symlinks
+from .acquire import AcquisitionError, StorageError, check_space, _json, _make_dirs, _no_symlinks, _sync_dir
 from .archive import load_blob, store_blob
 from .transport import download, DownloadError, http_request
 
@@ -26,7 +26,7 @@ class Campaign:
             raise ValueError('Expected 0 < requests/second <= 10 and a nonnegative disk reserve')
         self.root = Path(directory).absolute()
         _no_symlinks(self.root)
-        self.root.mkdir(parents=True, exist_ok=True)
+        _make_dirs(self.root)
         self.live, self.sender, self.now, self.sleep = live, sender, now, sleep
         self.interval, self.minimum_free_bytes = 1 / requests_per_second, minimum_free_bytes
         # Also separates consecutive processes reusing this campaign.
@@ -95,6 +95,7 @@ class Campaign:
             handle.flush()
             os.fsync(handle.fileno())
         temporary.replace(path)
+        _sync_dir(self.root)
 
     def _pace(self):
         if self.stopped or (self.root / 'STOP.json').exists():

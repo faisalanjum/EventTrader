@@ -13,9 +13,9 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-import driver.prepare.acquire as acquisition
-from driver.prepare.acquire import AcquisitionError, acquire, main, parse_package
-from driver.prepare.transport import DownloadError
+import driver.prepare.get.acquire as acquisition
+from driver.prepare.get.acquire import AcquisitionError, acquire, main, parse_package
+from driver.prepare.get.transport import DownloadError
 
 
 ACCESSION = '0001004434-23-000015'
@@ -161,6 +161,40 @@ class PackageTests(unittest.TestCase):
             with self.subTest(invalid=invalid), self.assertRaises(AcquisitionError):
                 self.parse(package([('file.bin', invalid, 'GRAPHIC', '1', None)]))
 
+    def test_uu_final_line_restores_the_dash_space_sec_strips(self):
+        # Real case: SEC removed "- " from the last line of its generated XBRL zip (Guidewire 8-K).
+        data = gzip.decompress((Path(__file__).with_name('fixtures') / '0001528396-23-000024.txt.gz').read_bytes())
+        _, files = parse_package(data, '0001528396-23-000024', '1528396', '8-K')
+        import zipfile
+        archive = zipfile.ZipFile(io.BytesIO(files['0001528396-23-000024-xbrl.zip']))
+        self.assertIsNone(archive.testzip())  # every member checksum matches: independent proof
+        for name in archive.namelist():  # same files; the package copy may carry SEC's final newline
+            self.assertIn(files[name], (archive.read(name), archive.read(name) + b'\n'))
+        # Synthetic: a final 13-byte line starting with a zero sextet encodes as "- ...".
+        raw = bytes(range(45)) + b'\x00\x05' + b'tail-bytes!'
+        wire = uu(raw)
+        stripped = wire.replace(b'\n- ', b'\n', 1)
+        self.assertNotEqual(stripped, wire)
+        _, files = self.parse(package([('file.bin', stripped, 'GRAPHIC', '1', None)]))
+        self.assertEqual(files['file.bin'], raw)
+        # A final line missing data characters is not restored: it still fails explicitly.
+        final = stripped.split(b'\n')[2]
+        with self.assertRaises(AcquisitionError):
+            self.parse(package([('file.bin', stripped.replace(final, final[:10]), 'GRAPHIC', '1', None)]))
+
+    def test_zip_member_checksums_must_hold(self):
+        import zipfile
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr('a.txt', b'evidence ' * 50)
+        good = buffer.getvalue()
+        _, files = self.parse(package([('data.zip', uu(good, 'data.zip'), 'ZIP', '1', None)]))
+        self.assertEqual(files['data.zip'], good)
+        bad = bytearray(good)
+        bad[40] ^= 0xFF  # inside the compressed data: valid uuencode, wrong bytes
+        with self.assertRaisesRegex(AcquisitionError, "Damaged zip"):
+            self.parse(package([('data.zip', uu(bytes(bad), 'data.zip'), 'ZIP', '1', None)]))
+
     def test_subdirectories_and_identical_occurrences_survive(self):
         docs = [('a/file.txt', b'first\n', 'EX-99.1', '2', None),
                 ('b/file.txt', b'second\n', 'EX-99.1', '7', None),
@@ -200,6 +234,32 @@ class PackageTests(unittest.TestCase):
             with self.subTest(mutated=mutated[:120]), self.assertRaises(AcquisitionError):
                 self.parse(mutated)
 
+    def test_empty_lines_between_framing_tags_are_skipped_and_nothing_else(self):
+        # Landstar 0001193125-23-048874: SEC left one empty line after </SEC-HEADER>.
+        documents = [('a.htm', b'<p>one</p>\n\n\n', '10-K', '1', None), ('b.txt', b'\n\ntwo\r\n', 'EX-1', '2', 'x')]
+        for nl in (b'\n', b'\r\n'):
+            plain = package(documents, nl=nl)
+            expected_manifest, expected_files = self.parse(plain)
+            for count in (1, 4):
+                gap = nl * count
+                spaced = {'header': plain.replace(b'</SEC-HEADER>' + nl, b'</SEC-HEADER>' + nl + gap),
+                          'members': plain.replace(b'</DOCUMENT>' + nl, b'</DOCUMENT>' + nl + gap)}
+                spaced['both'] = spaced['header'].replace(b'</DOCUMENT>' + nl, b'</DOCUMENT>' + nl + gap)
+                for where, data in spaced.items():
+                    with self.subTest(nl=nl, count=count, where=where):
+                        manifest, files = self.parse(data)
+                        self.assertEqual(files, expected_files)  # TEXT bytes, inner blank lines included
+                        self.assertEqual([{k: v for k, v in m.items() if k != 'package_range'} for m in manifest['members']],
+                                         [{k: v for k, v in m.items() if k != 'package_range'} for m in expected_manifest['members']])
+                        for member in manifest['members']:
+                            start, end = member['package_range']
+                            self.assertTrue(data[start:end].startswith(b'<DOCUMENT>' + nl))
+                            self.assertTrue(data[start:end].endswith(b'</DOCUMENT>' + nl))
+            for junk in (b' ' + nl, b'\t' + nl, b'x' + nl, b'\r', nl + b' ' + nl):
+                for marker in (b'</SEC-HEADER>' + nl, b'</DOCUMENT>' + nl):
+                    with self.subTest(nl=nl, junk=junk, marker=marker), self.assertRaises(AcquisitionError):
+                        self.parse(plain.replace(marker, marker + junk))
+
     def test_unknown_is_not_text_and_known_magic_is_only_a_hint(self):
         samples = [(b'\x00\xffopaque', 'unknown'), (b'ordinary prose', 'unknown'),
                    (b'%PDF-incomplete', 'pdf'), (b'PK\x03\x04opaque', 'zip'),
@@ -229,7 +289,7 @@ class PublicationTests(unittest.TestCase):
         return acquire(ACCESSION, CIK, FORM, self.output, **options)
 
     def test_publish_replay_and_verified_reuse_make_zero_requests(self):
-        with patch('driver.prepare.acquire.download', side_effect=AssertionError('network forbidden')):
+        with patch('driver.prepare.get.acquire.download', side_effect=AssertionError('network forbidden')):
             target = self.acquire()
             self.assertEqual(target, self.output / ACCESSION / digest(self.data))
             self.assertEqual(gzip.decompress((target / 'submission.txt.gz').read_bytes()), self.data)
@@ -246,7 +306,7 @@ class PublicationTests(unittest.TestCase):
 
     def test_read_package_decodes_once_and_checks_saved_evidence(self):
         target = self.acquire()
-        with patch('driver.prepare.acquire.parse_package', wraps=parse_package) as parse:
+        with patch('driver.prepare.get.acquire.parse_package', wraps=parse_package) as parse:
             manifest, files = acquisition.read_package(target)
             self.assertEqual(files, {'dir/main.htm': b'<html>hello</html>\n'})
             self.assertEqual(manifest['package']['sha256'], digest(self.data))
@@ -274,7 +334,7 @@ class PublicationTests(unittest.TestCase):
     def test_immutable_compressed_input_is_shared_without_recompression(self):
         self.source.write_bytes(gzip.compress(self.data, compresslevel=1, mtime=123))
         original = self.source.read_bytes()
-        with patch('driver.prepare.acquire._compress', side_effect=AssertionError('compressed twice')):
+        with patch('driver.prepare.get.acquire._compress', side_effect=AssertionError('compressed twice')):
             target = self.acquire()
         saved = target / 'submission.txt.gz'
         self.assertTrue(saved.samefile(self.source), 'the two paths must use one physical copy')
@@ -293,16 +353,16 @@ class PublicationTests(unittest.TestCase):
         self.assertFalse(self.output.exists())
 
     def test_storage_shortage_stops_before_download_and_during_publication(self):
-        from driver.prepare.acquire import StorageError
-        with patch('driver.prepare.acquire.shutil.disk_usage') as usage, \
-                patch('driver.prepare.acquire.download', side_effect=AssertionError('network forbidden')):
+        from driver.prepare.get.acquire import StorageError
+        with patch('driver.prepare.get.acquire.shutil.disk_usage') as usage, \
+                patch('driver.prepare.get.acquire.download', side_effect=AssertionError('network forbidden')):
             usage.return_value.free = 0
             with self.assertRaises(StorageError):
                 acquire(ACCESSION, CIK, FORM, self.output, live=True)
         self.source.write_bytes(gzip.compress(self.data))
         for number in (errno.ENOSPC, errno.EDQUOT, errno.EXDEV):
             with self.subTest(errno=number), \
-                    patch('driver.prepare.acquire.os.link', side_effect=OSError(number, 'storage unavailable')):
+                    patch('driver.prepare.get.acquire.os.link', side_effect=OSError(number, 'storage unavailable')):
                 with self.assertRaises(StorageError):
                     self.acquire()
             self.assertFalse((self.output / ACCESSION / digest(self.data)).exists())
@@ -313,7 +373,7 @@ class PublicationTests(unittest.TestCase):
             b'\tCENTRAL INDEX KEY: ' + CIK.encode() + b'\n\tCENTRAL INDEX KEY: 0000000002')
         self.source.write_bytes(self.data)
         first = self.acquire()
-        with patch('driver.prepare.acquire.download', side_effect=AssertionError('network forbidden')):
+        with patch('driver.prepare.get.acquire.download', side_effect=AssertionError('network forbidden')):
             second = acquire(ACCESSION, '2', FORM, self.output,
                              package=first / 'submission.txt.gz', sha256=digest(self.data))
         self.assertEqual(first, second)
@@ -379,7 +439,7 @@ class PublicationTests(unittest.TestCase):
         prior = (target / 'manifest.json').read_bytes()
         changed = self.data.replace(b'hello', b'world')
         self.source.write_bytes(changed)
-        with patch('driver.prepare.acquire.os.rename', side_effect=OSError('interrupted')):
+        with patch('driver.prepare.get.acquire.os.rename', side_effect=OSError('interrupted')):
             with self.assertRaises(AcquisitionError):
                 self.acquire(sha256=digest(changed))
         self.assertEqual(list((self.output / ACCESSION).iterdir()), [target])
@@ -389,12 +449,12 @@ class PublicationTests(unittest.TestCase):
 
     def test_live_uses_only_derived_package_url_and_preserves_receipt(self):
         receipt = {'retrieved_at': '2026-10-01T00:00:00+00:00', 'attempts': [{'status': 200}]}
-        with patch('driver.prepare.acquire.download', return_value=(self.data, receipt)) as request:
+        with patch('driver.prepare.get.acquire.download', return_value=(self.data, receipt)) as request:
             target = acquire(ACCESSION, CIK, FORM, self.output, live=True)
         request.assert_called_once_with('https://www.sec.gov/Archives/edgar/data/1004434/000100443423000015/0001004434-23-000015.txt')
         self.assertEqual(json.loads((target / 'receipt.json').read_text()), receipt)
         for data in (b'<html>Error</html>', self.data[:-25]):
-            with patch('driver.prepare.acquire.download', return_value=(data, receipt)), self.assertRaises(AcquisitionError) as caught:
+            with patch('driver.prepare.get.acquire.download', return_value=(data, receipt)), self.assertRaises(AcquisitionError) as caught:
                 acquire(ACCESSION, CIK, FORM, self.output, live=True)
             self.assertEqual(caught.exception.receipt, receipt)
         self.assertEqual(len(list((self.output / ACCESSION).iterdir())), 1)
@@ -405,14 +465,14 @@ class PublicationTests(unittest.TestCase):
         for response in ((b'<html>Error</html>', receipt), DownloadError('HTTP 403', receipt)):
             options = {'side_effect': response} if isinstance(response, Exception) else {'return_value': response}
             stderr = io.StringIO()
-            with patch('driver.prepare.acquire.download', **options), redirect_stderr(stderr):
+            with patch('driver.prepare.get.acquire.download', **options), redirect_stderr(stderr):
                 status = main(['--accession', ACCESSION, '--cik', CIK, '--form', FORM, '--output', str(self.output), '--live'])
             self.assertEqual(status, 1)
             self.assertEqual(json.loads(stderr.getvalue().split('\n', 1)[1]), receipt)
             self.assertFalse(self.output.exists())
 
     def test_cli_hash_required_and_errors_have_no_traceback(self):
-        cmd = [sys.executable, '-B', '-S', '-m', 'driver.prepare.acquire', '--accession', ACCESSION,
+        cmd = [sys.executable, '-B', '-S', '-m', 'driver.prepare.get.acquire', '--accession', ACCESSION,
                '--cik', CIK, '--form', FORM, '--output', str(self.output), '--package', str(self.source)]
         failed = subprocess.run(cmd, text=True, capture_output=True)
         self.assertNotEqual(failed.returncode, 0)

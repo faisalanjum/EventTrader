@@ -11,16 +11,16 @@ Missing or damaged fixtures fail. Temporary outputs are removed automatically.
 
 ```text
 Production                         Tests
-driver/prepare/acquire.py           tests/driver/prepare/test_acquire.py
-driver/prepare/transport.py         tests/driver/prepare/test_transport.py
-driver/prepare/archive.py           tests/driver/prepare/test_archive.py
-driver/prepare/campaign.py          tests/driver/prepare/test_campaign.py
-                                   tests/driver/prepare/test_scale.py
-                                   tests/driver/prepare/test_crash.py
-driver/prepare/inventory.py         tests/driver/prepare/test_inventory.py
-driver/prepare/full_run.py          tests/driver/prepare/test_full_run.py
-scripts/driver/prepare/             tests/driver/prepare/test_acquisition_check.py
-                                   tests/driver/prepare/fixtures/
+driver/prepare/get/acquire.py       tests/driver/prepare/get/test_acquire.py
+driver/prepare/get/transport.py     tests/driver/prepare/get/test_transport.py
+driver/prepare/get/archive.py       tests/driver/prepare/get/test_archive.py
+driver/prepare/get/campaign.py      tests/driver/prepare/get/test_campaign.py
+                                   tests/driver/prepare/get/test_scale.py
+                                   tests/driver/prepare/get/test_crash.py
+driver/prepare/get/inventory.py     tests/driver/prepare/get/test_inventory.py
+driver/prepare/get/full_run.py      tests/driver/prepare/get/test_full_run.py
+scripts/driver/prepare/             tests/driver/prepare/get/test_acquisition_check.py
+                                   tests/driver/prepare/get/fixtures/
 ```
 
 Acquisition tests cover identities, framing, decoding, source locations, compressed

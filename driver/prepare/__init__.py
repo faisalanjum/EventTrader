@@ -1,1 +1,1 @@
-"""Byte-preserving, single-filing Prepare acquisition. No ingestion or inference."""
+"""Prepare stage of the Driver pipeline. `get`: download and verify SEC filings, byte for byte."""

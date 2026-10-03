@@ -6,8 +6,8 @@ import sqlite3
 import unittest
 from unittest.mock import patch
 
-from driver.prepare.campaign import Campaign
-from driver.prepare.transport import DownloadError
+from driver.prepare.get.campaign import Campaign
+from driver.prepare.get.transport import DownloadError
 
 
 class CampaignTests(unittest.TestCase):

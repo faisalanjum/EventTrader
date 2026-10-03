@@ -36,6 +36,11 @@ def http_request(url, headers, connect_timeout, read_timeout, wall_timeout):
         connection.request('GET', parsed.path, headers=headers)
         response = connection.getresponse()
         headers = {key.lower(): value for key, value in response.getheaders()}
+        # A body's end is proven only by exactly one framing that Python's reader itself accepted (a length or
+        # chunked); with none, two, or one it does not support, the body ends where the connection did, maybe cut short.
+        framing = [value for name in ('content-length', 'transfer-encoding') for value in response.headers.get_all(name) or ()]
+        if response.status == 200 and (len(framing) != 1 or not (response.chunked or response.length is not None)):
+            raise http.client.HTTPException(f'Body end not provable from its framing headers {framing}')
         # No error/redirect body is a package; 403 stops even with a broken body.
         body = response.read() if response.status == 200 else b''
         return response.status, headers, body

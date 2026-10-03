@@ -2,7 +2,7 @@
 
 No conversion, AI or database writes. results.sqlite3 keeps one row per attempt; a
 filing's latest row is its status. Only OK is final: re-running the same command
-skips OK filings whose saved files still exist and retries every other filing
+skips OK filings whose saved version still fully verifies and retries every other filing
 (FAILED, INVENTORY_GAP, PENDING); saved responses make no requests. complete=true
 means every listed filing is OK. Stops: any HTTP 403, free disk below the reserve,
 or 20 filings in a row not OK; the filing in progress at a 403/disk stop stays PENDING.
@@ -20,12 +20,11 @@ import sqlite3
 import sys
 import time
 
-import driver.prepare
-from driver.prepare.acquire import StorageError, acquire, read_package, _identity, _url
-from driver.prepare.campaign import Campaign
-from driver.prepare.inventory import compare_inventory, parse_index
+from driver.prepare.get.acquire import AcquisitionError, StorageError, acquire, read_package, _identity, _make_dirs, _url
+from driver.prepare.get.campaign import Campaign
+from driver.prepare.get.inventory import compare_inventory, parse_index
 
-SOURCES = sorted(Path(driver.prepare.__file__).parent.glob('*.py'))  # includes this runner
+SOURCES = sorted(Path(__file__).resolve().parent.glob('*.py'))  # the get package, this runner included
 
 
 def _write(path, value):
@@ -35,8 +34,15 @@ def _write(path, value):
 
 
 def _saved(output, row):
-    version = output / 'versions' / row['acc'] / row['sha256']
-    return all((version / name).is_file() for name in ('submission.txt.gz', 'manifest.json', 'receipt.json'))
+    """A previous OK stands only if its saved version still fully verifies as this filing."""
+    try:
+        identity = read_package(output / 'versions' / row['acc'] / row['sha256'])[0]['identity']
+        return ((identity['accession'], identity['form']) == (row['acc'], row['form'])
+                and _identity(row['acc'], row['cik'], row['form'])['cik'] in identity['ciks'])
+    except StorageError:
+        raise
+    except AcquisitionError:
+        return False
 
 
 def _filing(campaign, output, reserve, accession, cik, form):
@@ -67,7 +73,7 @@ def run(inputs, output, *, live=False, every=1, limit=None, min_free_percent=16,
         raise ValueError('Filing list differs from its declared count or SHA-256')
     keys = [(filing['acc'], filing['cik'], filing['form']) for filing in listed[::every][:limit]]
     output = Path(output).absolute()
-    output.mkdir(parents=True, exist_ok=True)
+    _make_dirs(output)
     reserve = int(shutil.disk_usage(output).total * min_free_percent / 100)
     launch = dict(started_at=datetime.now(timezone.utc).isoformat(), argv=sys.argv,
                   inputs_sha256=frozen['sha256_of_filings'],
@@ -80,21 +86,27 @@ def run(inputs, output, *, live=False, every=1, limit=None, min_free_percent=16,
             db.execute('CREATE TABLE IF NOT EXISTS launches (row TEXT NOT NULL)')
             db.execute('CREATE TABLE IF NOT EXISTS results (row TEXT NOT NULL)')
             db.execute('INSERT INTO launches VALUES (?)', (json.dumps(launch),))
-        state = dict.fromkeys(keys, 'PENDING')
+        state, latest = dict.fromkeys(keys, 'PENDING'), {}
         for (text,) in db.execute('SELECT row FROM results ORDER BY rowid'):
             row = json.loads(text)
-            key = (row['acc'], row['cik'], row['form'])
-            if key in state:  # the latest row wins; an OK whose saved files are gone is redone
-                state[key] = row['status'] if row['status'] != 'OK' or _saved(output, row) else 'PENDING'
+            latest[row['acc'], row['cik'], row['form']] = row  # the latest row wins
         streak, stop, started = 0, None, time.monotonic()
 
-        def report(position):
+        def report(position, **extra):
             _write(output / 'progress.json', dict(
                 updated_at=datetime.now(timezone.utc).isoformat(), position=position, of=len(state),
                 counts=Counter(state.values()), last=keys[position - 1][0] if position else None, stop=stop,
                 free_gb=round(shutil.disk_usage(output).free / 1e9, 1), requests_this_run=campaign.sent_attempts,
-                minutes_this_run=round((time.monotonic() - started) / 60, 1)))
+                minutes_this_run=round((time.monotonic() - started) / 60, 1), **extra))
 
+        earlier = [(key, row) for key, row in latest.items() if key in state]
+        reported = started
+        for checked, (key, row) in enumerate(earlier):
+            if checked == 0 or time.monotonic() - reported >= 60:  # a long check of saved results never looks stalled
+                report(0, verified=f'{checked} of {len(earlier)} earlier results')
+                reported = time.monotonic()
+            # an OK is redone unless its saved version still verifies; damage is left as found
+            state[key] = row['status'] if row['status'] != 'OK' or _saved(output, row) else 'PENDING'
         report(0)
         for position, key in enumerate(keys, 1):
             if state[key] == 'OK':

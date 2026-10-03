@@ -5,6 +5,8 @@ from urllib.parse import parse_qs, unquote, urljoin, urlsplit
 
 from .acquire import AcquisitionError, _filename
 
+BINARY = ('pdf', 'zip', 'jpeg', 'png', 'gif')  # format hints of members stored uuencoded
+
 
 class _Tables(HTMLParser):
     def __init__(self):
@@ -67,7 +69,8 @@ def parse_index(data, url):
     text = data.decode('utf-8')
     parser = _Tables()
     parser.feed(text)
-    parser.handle_endtag('table')
+    if parser.file_table:  # the page ended inside a file table: its list may be partial, so never close it here
+        raise AcquisitionError('Incomplete SEC filing index')
     if parser.document_table_count != 1:
         raise AcquisitionError('Missing or duplicate SEC document table')
     for declared in (parser.title, parser.identity):
@@ -112,11 +115,18 @@ def parse_index(data, url):
 
 
 def compare_inventory(manifest, index):
-    """No extension/type exemptions: every SEC-listed member must be present."""
+    """No extension/type exemptions: every SEC-listed member must be present.
+
+    Binary members are uuencoded in the package and SEC lists their exact decoded size,
+    so a size difference exposes a decoding error. Text sizes differ by SEC's web wrappers.
+    """
     members = {m['filename']: m for m in manifest['members']}
     expected = {r['filename']: r for r in index if 'rendered_from' not in r}
     shared = members.keys() & expected.keys()
+    def mismatch(name):
+        member, row = members[name], expected[name]
+        return (any(member[key] != row[key] for key in ('type', 'sequence'))
+                or member.get('format_hint') in BINARY and row['bytes'] not in (None, member.get('bytes')))
     return dict(missing=sorted(expected.keys() - members.keys()),
                 package_only=sorted(members.keys() - expected.keys()),
-                metadata_mismatch=sorted(name for name in shared if any(
-                    members[name][key] != expected[name][key] for key in ('type', 'sequence'))))
+                metadata_mismatch=sorted(filter(mismatch, shared)))

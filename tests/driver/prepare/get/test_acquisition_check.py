@@ -9,8 +9,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from driver.prepare.acquire import parse_package, StorageError
-from driver.prepare.campaign import Campaign
+from driver.prepare.get.acquire import parse_package, StorageError
+from driver.prepare.get.campaign import Campaign
 from scripts.driver.prepare import acquisition_check as audit
 
 

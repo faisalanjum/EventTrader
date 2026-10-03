@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from driver.prepare.archive import load_blob, store_blob
+from driver.prepare.get.archive import load_blob, store_blob
 
 
 class ArchiveTests(unittest.TestCase):
@@ -71,7 +71,7 @@ class ArchiveTests(unittest.TestCase):
             store_blob(self.root, b'original')
 
     def test_failed_publication_has_no_partial_blob(self):
-        with patch('driver.prepare.archive.os.link', side_effect=OSError('interrupted')):
+        with patch('driver.prepare.get.archive.os.link', side_effect=OSError('interrupted')):
             with self.assertRaises(OSError):
                 store_blob(self.root, b'original')
         self.assertEqual(list(self.root.iterdir()), [])

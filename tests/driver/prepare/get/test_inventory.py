@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 import unittest
 
-from driver.prepare.inventory import parse_index, compare_inventory
+from driver.prepare.get.inventory import parse_index, compare_inventory
 
 
 class InventoryTests(unittest.TestCase):
@@ -29,6 +29,15 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(result['missing'], ['amg-20230501.htm'])
         members[0]['type'] = 'GRAPHIC'
         self.assertEqual(compare_inventory({'members': members}, rows)['metadata_mismatch'], ['amg-20230501.htm'])
+
+    def test_binary_size_must_match_the_sec_listed_size(self):
+        rows = parse_index(self.source, self.url)
+        members = [dict(filename=r['filename'], type=r['type'], sequence=r['sequence'], bytes=r['bytes'],
+                        format_hint='pdf' if r['filename'].endswith('.pdf') else 'html') for r in rows]
+        self.assertEqual(compare_inventory({'members': members}, rows)['metadata_mismatch'], [])
+        next(m for m in members if m['filename'] == 'courtesy.pdf')['bytes'] += 1  # a decoding error
+        next(m for m in members if m['filename'] == 'amg-20230501.htm')['bytes'] += 127  # SEC web wrapper only
+        self.assertEqual(compare_inventory({'members': members}, rows)['metadata_mismatch'], ['courtesy.pdf'])
 
     def test_wrong_or_empty_index_and_outside_file_fail(self):
         for source in (b'<html>Access denied</html>', self.source.replace(b'0001004434-23-000015', b'0001004434-23-000099'),
@@ -102,6 +111,26 @@ class InventoryTests(unittest.TestCase):
         except ValueError:
             return  # Explicit rejection is valid; silently omitting the row is not.
         self.assertEqual(actual, parse_index(self.source, self.url))
+
+
+    def test_a_page_ending_inside_a_file_table_is_rejected_not_shortened(self):
+        # Codex audit 2026-10-03: a cut after any file row once returned fewer files and passed as complete.
+        from driver.prepare.get.inventory import _Tables
+        cases = 0
+        for fixture, cik, accession in (('amg_index.html.gz', '1004434', '0001004434-23-000015'),
+                                        ('entergy_index.html.gz', '65984', '0000065984-25-000132'),
+                                        ('schedule13d_index.html.gz', '1468174', '0001193125-26-167598')):
+            source = gzip.decompress((Path(__file__).parent / 'fixtures' / fixture).read_bytes())
+            url = f'https://www.sec.gov/Archives/edgar/data/{cik}/{accession.replace("-", "")}/{accession}-index.html'
+            self.assertTrue(parse_index(source, url))
+            for end in sorted({m.end() for m in re.finditer(br'</t[dr]>|<tr[^>]*>', source)} | set(range(0, len(source), 97))):
+                parser = _Tables()
+                parser.feed(source[:end].decode())
+                if parser.file_table:
+                    cases += 1
+                    with self.subTest(fixture=fixture, end=end), self.assertRaisesRegex(ValueError, 'Incomplete'):
+                        parse_index(source[:end], url)
+        self.assertGreater(cases, 48)
 
 
 class Schedule13DIndexTests(unittest.TestCase):

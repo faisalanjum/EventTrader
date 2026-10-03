@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from driver.prepare.campaign import Campaign
+from driver.prepare.get.campaign import Campaign
 
 
 class ScaleTests(unittest.TestCase):
@@ -60,7 +60,7 @@ class ScaleTests(unittest.TestCase):
         def sender(url, *args):
             self.calls.append((url, self.clock[0]))
             return (429, {}, b'') if len(self.calls) == 1 else (200, {}, b'ok')
-        with patch('driver.prepare.transport.datetime', WallClock):
+        with patch('driver.prepare.get.transport.datetime', WallClock):
             for n in range(2):
                 with self.campaign(requests_per_second=5) as run:
                     run.sender = sender
@@ -87,7 +87,7 @@ class ScaleTests(unittest.TestCase):
     def test_disk_full_and_quota_errors_stop_all_later_downloads(self):
         for number in (errno.ENOSPC, errno.EDQUOT):
             with self.subTest(errno=number), self.campaign() as run:
-                with patch('driver.prepare.campaign.store_blob', side_effect=OSError(number, 'disk unavailable')):
+                with patch('driver.prepare.get.campaign.store_blob', side_effect=OSError(number, 'disk unavailable')):
                     with self.assertRaises(ValueError):
                         run.fetch('https://www.sec.gov/Archives/new')
                 self.assertTrue(run.stopped)

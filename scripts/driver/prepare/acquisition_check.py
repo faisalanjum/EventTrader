@@ -8,9 +8,9 @@ from pathlib import Path
 import time
 from urllib.parse import unquote, urljoin, urlsplit
 
-from driver.prepare.acquire import acquire, read_package, check_space, StorageError, _identity, _url
-from driver.prepare.campaign import Campaign
-from driver.prepare.inventory import parse_index, compare_inventory
+from driver.prepare.get.acquire import acquire, read_package, check_space, StorageError, _identity, _url
+from driver.prepare.get.campaign import Campaign
+from driver.prepare.get.inventory import parse_index, compare_inventory
 
 
 class Links(HTMLParser):
