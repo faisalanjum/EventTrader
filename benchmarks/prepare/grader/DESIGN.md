@@ -424,3 +424,13 @@ the superseded sibling-context and number-joining statements are rewritten in pl
 
 Results after the round (run 15, regrade only — the linker did not change): identical to run 14 except one more `boundary` on EdgarTools (929) and three on
 the PDF route (97), from the join check. 166 tests, 48/48 real pairs. Stated limits unchanged from §23.
+
+## 25. Round 6 (2026-10-03, Codex's `ROUND6_CODEX.md` on the round-5 code) — three gaps in rounds 4–5 fixes, all reproduced, all closed
+
+| Finding | Reproduced problem | Change | Proof |
+|---|---|---|---|
+| R6-1 join read only the gap | the §24 join check read the bytes *between* spans: a span that carried its own leading or trailing space made a kept space fail and a lost space pass; the letter-or-digit exemption let "12.34" → "12. 34" and "1,234" → "1, 234" through | one comparison for the whole pieced unit with the ordinary boundary rule (`boundary_equal`): the source read block by block (each span with its own whitespace, a separator wherever the source prints anything between two spans) against the output read block by block (a separator wherever the output prints anything between two blocks) — same words and numbers inside blocks and across every join; no hand exemptions; the source-order check stays | tests: 9 join cases (4 controls); Codex `join/*` all nine as expected |
+| R6-2 unresolved hid a wrong row or order | a partner split by page boxes went straight to `unresolved: adjacency`, even on the wrong row or the wrong side of the target | row and endpoint order are checked first (provable from the boxes); `unresolved` only when the association holds and only the join is unprovable | tests; Codex `range/*` six as expected |
+| R6-3 CSS still certified | `bad display:none` matched by suffix; `NaN`/`inf` accepted as numbers; `-0.1` not clamped; a stylesheet rule split by a comment missed by the detector | a declaration is one complete `name: value` (split on `;`, matched whole); a CSS number is `<number>`/`<percentage>` by grammar; opacity ≤ 0 hides (clamped); stylesheet detection strips comments first and looks for the hiding properties; everything else → unmeasured. 0 of 116 HTML key sources become unmeasured | test with Chrome-observed expectations; Codex browser 8/8 agree or unmeasured |
+
+Results after the round (run 16, regrade only): identical to run 15. 166 tests, 48/48 real pairs, Codex rounds 4–6 scripts pass live.

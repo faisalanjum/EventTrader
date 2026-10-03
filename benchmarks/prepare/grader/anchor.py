@@ -20,7 +20,8 @@ _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), 
                        **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
 _TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
 _ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
-_DECL = re.compile(r'([A-Za-z-]+)\s*:\s*([^;]+)')  # one CSS declaration inside a style attribute
+_DECL = re.compile(r'\s*([-\w]+)\s*:(.*)', re.S)  # one complete declaration: property name, colon, value (anything else the browser drops)
+_NUM = re.compile(r'[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?%?')  # a CSS <number> or <percentage>; nothing else is a number to CSS
 _COMMENT = re.compile(r'/\*.*?\*/', re.S)  # a CSS comment is a token boundary, not part of a declaration
 _DISPLAY = set('none block inline inline-block flex inline-flex grid inline-grid table inline-table table-row table-cell table-row-group table-header-group '
                'table-footer-group table-column table-column-group table-caption list-item flow flow-root contents ruby ruby-base ruby-text run-in'.split())  # CSS Display Module keywords
@@ -28,7 +29,8 @@ _VISIBILITY = set('visible hidden collapse inherit initial unset revert revert-l
 UNKNOWN = 'unknown'  # a value this scanner does not evaluate: the file's visibility is then reported uncertain
 _IMPORTANT = re.compile(r'\s*!\s*important\s*$')
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
-_SHEET = re.compile(r'<style\b[^>]*>(?:(?!</style).)*?\b(?:display|visibility|opacity)\s*:|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheet rules that hide or re-flow text; this scanner does not apply them
+_STYLE = re.compile(r'<style\b[^>]*>(.*?)</style\s*>|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheets: this scanner does not apply them
+_PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:', re.I)  # a stylesheet rule that could hide or re-flow text makes visibility uncertain
 _NAME = re.compile(r'</?\s*([\w:.-]+)')
 # CSS that removes an element from view (the medium's own rules, guide 2.2 "the screen is the truth"): not shown at all,
 # or shown at a size no reader can see (1pt text printed behind slide pictures)
@@ -52,25 +54,25 @@ def squash(s):
 
 
 def _zero(value):
-    """Is a CSS number zero (opacity: 0, 0.0, 0%)?"""
-    try: return float(value.rstrip('%')) == 0.0
-    except ValueError: return False
+    """Is this opacity zero? The value is a CSS number already (`_number`); opacity is clamped to [0, 1], so a negative one is zero."""
+    return float(value.rstrip('%')) <= 0.0
 
 
 def declarations(style):
     """The declarations of a style attribute, in order: (name, value, important), names and values lower-cased, comments read as
     token boundaries (a comment inside a name or a value breaks it, as in the browser)."""
     out = []
-    for dm in _DECL.finditer(_COMMENT.sub(' ', style)):
-        name, value = dm.group(1).lower(), dm.group(2).strip().lower()
+    for part in _COMMENT.sub(' ', style).split(';'):
+        m = _DECL.fullmatch(part)
+        if not m: continue  # not one complete `name: value` declaration — the browser drops it, so does this
+        name, value = m.group(1).lower(), m.group(2).strip().lower()
         important = _IMPORTANT.search(value) is not None
         out.append((name, _IMPORTANT.sub('', value) if important else value, important))
     return out
 
 
 def _number(value):
-    try: float(value.rstrip('%')); return True
-    except ValueError: return False
+    return _NUM.fullmatch(value) is not None
 
 
 def resolve(decls, prop, valid):
@@ -136,7 +138,8 @@ class Visible:
                 off = start
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); off += n
         self.text, self.starts, self.ends = ''.join(chars), starts, ends
-        self.certain = not computed and not _SHEET.search(s)  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
+        sheet = any(m.group(1) is None or _PROP.search(_COMMENT.sub(' ', m.group(1))) for m in _STYLE.finditer(s))  # an external sheet, or a rule on a hiding property
+        self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))

@@ -700,14 +700,17 @@ class Grader:
         partner = value.get('partner')
         if partner:
             at = sorted(self.rf.cells_at(partner['anchor'], tb), key=lambda c: c['c']); spelt = self.spell(at, partner['printed_value'])
-            cells = [c for c in at if boundary_equal(c.get('text', ''), partner['printed_value'])] or (at if spelt is True else [])
-            if not cells: return ('unresolved', 'adjacency', None) if spelt is None else ('fail', 'partner', None)  # boxes cannot prove a within-number join
+            exact = [c for c in at if boundary_equal(c.get('text', ''), partner['printed_value'])]
+            cells = exact or (at if spelt in (True, None) else [])  # fragments whose join only boxes could prove still carry a row and a position
+            if not cells: return 'fail', 'partner', None
             if not any(row_hit(c, vr) for c in cells): return 'fail', 'row', None
             if source_before(partner['anchor'], self.t['anchor']) != (cells[0]['c'] < vcols[0]): return 'fail', 'order', None
+            pending = not exact and spelt is None  # association proven, join not: unresolved unless something below fails
+        else: pending = False
         for ev in value.get('evidence') or []:
             hits = self.rf.cells_at(ev['anchor'], tb) + self.rf.units_at(ev['anchor'])
             if not any(norm(ev['text']) in norm(h.get('text', '')) for h in hits): return 'fail', 'evidence', ev['text']
-        return 'pass', None, None
+        return ('unresolved', 'adjacency', None) if pending else ('pass', None, None)
 
     # ---- XML
     def grade_xml(self):
@@ -817,14 +820,12 @@ def gates_for_file(rf, status):
                                 or any(byte[k]['byte_start'] < byte[k - 1]['byte_end_exclusive'] for k in range(1, len(byte))) \
                                 or any(squash(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive'])) != sq[a:b] for sp, (a, b) in zip(byte, pieces)): g['dishonest'] += 1; continue  # blocks out of source order, or not reading their text
                         g['inserted_chars'] += len(sq) - sum(b - a for a, b in pieces)  # derived from the blocks, never from the tool's own count
-                        inside = any(not boundary_equal(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive']), nt[idx[a]:idx[b - 1] + 1]) for sp, (a, b) in zip(byte, pieces))
-                        joins = False  # between two blocks, a word or number boundary must be where the source has one: glued across source text, or split with nothing between, is a fault
-                        for k in range(1, len(pieces)):
-                            (a1, b1), (a2, b2) = pieces[k - 1], pieces[k]
-                            if not (sq[b1 - 1].isalnum() and sq[a2].isalnum()): continue  # a boundary beside punctuation or a symbol is reflow
-                            glued = idx[a2] == idx[b1 - 1] + 1; between = rf.vis.at(byte[k - 1]['byte_end_exclusive'], byte[k]['byte_start'])
-                            if glued == bool(between): joins = True; break
-                        if inside or joins: g['boundary'] += 1
+                        # read block by block, the source (each span with its own whitespace, a separator wherever the source prints anything between two
+                        # spans) and the output (each block as printed, a separator wherever the output prints anything between two blocks) must have the
+                        # same words and numbers — inside blocks and across every join; the ordinary boundary rule decides, nothing is exempt by hand
+                        src = ''.join(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive']) + (' ' if k + 1 < len(byte) and rf.vis.at(sp['byte_end_exclusive'], byte[k + 1]['byte_start']) else '') for k, sp in enumerate(byte))
+                        out = ''.join(nt[idx[a]:idx[b - 1] + 1] + (' ' if k + 1 < len(pieces) and idx[pieces[k + 1][0]] > idx[b - 1] + 1 else '') for k, (a, b) in enumerate(pieces))
+                        if not boundary_equal(src, out): g['boundary'] += 1
                         continue
                     for mm in (squash(m) for m in x.get('markers') or []):  # each reported mark sits right before or right after the text
                         if mm and seen.startswith(mm): seen = seen[len(mm):]

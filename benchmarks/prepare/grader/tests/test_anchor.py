@@ -165,7 +165,15 @@ class InvisibleStyleTests(unittest.TestCase):
                  ('<p style="display/*x*/:none">Secret.</p><p>Visible.</p>', 'Visible.', True),
                  ('<p style="display:n/**/one">Visible.</p>', None, False),
                  ('<p style="dis/**/play:none">Visible.</p>', 'Visible.', True),
-                 ('<p style="opacity:0 !important; opacity:1">Secret.</p><p>Visible.</p>', 'Visible.', True)]
+                 ('<p style="opacity:0 !important; opacity:1">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 # Codex round 6 (Chrome, computed opacity): a declaration is the whole `name: value`; NaN/inf are not CSS numbers; opacity is clamped at 0;
+                 # a stylesheet rule hidden behind a comment still makes the file uncertain
+                 ('<p style="bad display:none">Shown.</p><p>Visible.</p>', 'Shown. Visible.', True),
+                 ('<p style="opacity:0">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 ('<p style="opacity:0;opacity:NaN">Secret.</p><p>Visible.</p>', None, False),
+                 ('<p style="opacity:-0.1">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 ('<style>.secret{display/**/:none}</style><p class="secret">Secret.</p><p>Visible.</p>', None, False),
+                 ('<style>.plain{color:red}</style><p class="plain">Shown.</p>', 'Shown.', True)]
         for src, text, certain in cases:
             v = anchor.Visible(src.encode())
             self.assertEqual((anchor.norm(v.text) if text is not None else None, v.certain), (text, certain), src)

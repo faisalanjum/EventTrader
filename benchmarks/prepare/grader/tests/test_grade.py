@@ -337,7 +337,7 @@ class PlantedFaultTests(GraderFixture):
             anchors, pieces, n, cursor = [], [], 0, raw.index(paragraph.encode())
             for part in parts:
                 a = raw.index(part.encode(), raw.index(paragraph.encode()) if reverse else cursor); anchors.append({'byte_start': a, 'byte_end_exclusive': a + len(part)})
-                pieces.append([n, n + len(part)]); n += len(part); cursor = a + len(part)
+                pieces.append([n, n + len(grade.squash(part))]); n += len(grade.squash(part)); cursor = a + len(part)  # blocks are measured on the squashed text
             u = {'id': 'u', 'kind': 'text', 'text': text, 'anchor': anchors, 'pieces': pieces, 'link_flag': 'pieced', 'inserted_chars': 0}
             g = grade.gates_for_file(grade.RouteFile({'file_id': 'x/p.htm', 'units': [{'id': 'l', 'kind': 'text', 'text': 'Lead.', 'anchor': {'byte_start': 3, 'byte_end_exclusive': 8}}, u]}, raw, 'htm'), 'OK')
             return g['dishonest'], g['boundary']
@@ -346,6 +346,11 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(gate('<span>12</span><span>34</span>', '1234', ('12', '34')), (0, 0))               # control: adjacent fragments of one number
         self.assertEqual(gate('<span>12</span><span>34</span>', '12 34', ('12', '34')), (0, 1))              # number boundary inserted at the join
         self.assertEqual(gate('Alpha Beta', 'Beta Alpha', ('Beta', 'Alpha'), reverse=True), (1, 0))          # source order reversed: not an honest mapping
+        # Codex round 6: the space may sit inside a span; numeric punctuation is a number boundary; a symbol is not
+        for parts, text, want in ((('Revenue', ' increased.'), 'Revenue increased.', 0), (('Revenue', ' increased.'), 'Revenueincreased.', 1),
+                                  (('Revenue ', 'increased.'), 'Revenue increased.', 0), (('Revenue ', 'increased.'), 'Revenueincreased.', 1),
+                                  (('12.', '34'), '12.34', 0), (('12.', '34'), '12. 34', 1), (('1,', '234'), '1,234', 0), (('1,', '234'), '1, 234', 1), (('$', '1234'), '$ 1234', 0)):
+            self.assertEqual(gate(''.join(parts), text, parts), (0, want), (parts, text))
 
     def test_a_range_partner_split_by_page_boxes_is_unresolved_not_wrong(self):
         box = lambda x0, x1: {'page': 1, 'region': [x0, 10, x1, 20]}
@@ -363,6 +368,18 @@ class PlantedFaultTests(GraderFixture):
             return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'range')
         self.assertEqual(rows('whole'), ('pass', None)); self.assertEqual(rows('split'), ('unresolved', 'adjacency'))
         self.assertEqual(rows('digits'), ('fail', 'partner')); self.assertEqual(rows('columns'), ('fail', 'partner'))
+        # Codex round 6: an unproved join never hides a proven wrong row or a reversed endpoint order
+        def moved(case):
+            partner, value = box(20, 40), box(70, 90); r, c = (1, 1) if case == 'row' else (0, 4)
+            cells = [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': box(0, 15)}, {'r': r, 'c': c, 'text': '12', 'anchor': box(20, 30)}, {'r': r, 'c': c, 'text': '34', 'anchor': box(30, 40)},
+                     {'r': 0, 'c': 3, 'text': '1500', 'anchor': value}]
+            table = {'id': 'tb', 'kind': 'table', 'anchor': {'page': 1, 'region': [0, 0, 100, 30]}, 'cells': cells}
+            t = {'key_id': 'syn/R1', 'file_id': 'syn/f.pdf', 'format': 'cell/pdf', 'type': 'cell', 'split': 'development', 'anchor': value, 'table_anchor': table['anchor'],
+                 'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_value': '1500', 'display_value': '1500', 'row_label': 'Revenue',
+                 'range': {'kind': 'interval', 'role': 'high', 'partner': {'printed_value': '1234', 'anchor': partner}, 'evidence': []}}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [table]}, None, 'pdf')); g.grade_cell()
+            return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'range')
+        self.assertEqual(moved('row'), ('fail', 'row')); self.assertEqual(moved('order'), ('fail', 'order'))
 
     def test_pieces_of_one_value_cell_pass_only_when_they_share_the_cell_and_the_source_proves_adjacency(self):
         # Codex R4-5: <span>76</span><span>9</span> kept as two anchored pieces at one grid position is faithful output (E12)
