@@ -1,0 +1,47 @@
+{
+ "what": "The frozen golden-set package the Prepare benchmark grades against. The package itself (answers, originals, raw model answers) lives outside the repo; this record pins its location and hashes.",
+ "recorded_at": "2026-10-03T15:51:02+00:00",
+ "package_path": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261003_1134",
+ "evidence_root": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002",
+ "manifest_sha256": "3f7f38f9c04b7c23c41f94a13c5f96a103a9e20b23c4f240dc9b7f7221031a78",
+ "key_sha256": "007e4bd8686a234b275b0b9a4518c1cc7401dcb216181cccfdf8f5b04e45fe53",
+ "targets": 457,
+ "targets_pending": 0,
+ "excluded_fields": 5,
+ "splits": {
+  "development": 249,
+  "heldout": 90,
+  "stratified_control": 118,
+  "supplement": 8
+ },
+ "superseded_packages": [
+  "FINAL_KEY_FOR_CODEX_20261002_2352",
+  "FINAL_KEY_FOR_CODEX_20261003_0005",
+  "FINAL_KEY_FOR_CODEX_20261003_0729"
+ ],
+ "files_sha256": {
+  "FINAL_MANIFEST.json": "3f7f38f9c04b7c23c41f94a13c5f96a103a9e20b23c4f240dc9b7f7221031a78",
+  "CLAUDE_ANSWER_KEY.json": "007e4bd8686a234b275b0b9a4518c1cc7401dcb216181cccfdf8f5b04e45fe53",
+  "CLAUDE_KEY_FLAGS.json": "da6c6cd95647d7600b6dc4780a2277325787037c9f7655e9db6a946d9715f315",
+  "CLAUDE_VERIFIED.json": "721cf0ae31187e8274eafed720565f5018b14126ce9326c7665add1d3c3e3594",
+  "CLAUDE_DECISIONS.json": "4f71fb9c3fd3755c02e44047459459fc34bc519818262577eb51b7bdb2d8c201",
+  "KEY_SUPPORT_MAP.json": "91ed30f66d387d99cb3525078b9d7ea34359097c053dd55064b2f02e291bb7a9",
+  "KEY_SUPPORT_OVERRIDES.json": "2a4408d317bb48ffd30ff15d22f5595c065fd7bafd611517caa86e28cc18e58f",
+  "CONVERTER_COMPARISON.md": "7882cbbb8427f0700c664dccddaf019a712e8ead40e7677d0d03f4c4642b4842",
+  "CLAUDE_KEY_README.md": "bb843f18921b460490f7b5c368a5deeb56c6620c689e37ade12f913985806b33",
+  "CONTRACT_DECISIONS_R2.json": "2298c4aae2718a665e18fadbecb1d1727e9d9b5aeb879521ff70eea38cca2f26",
+  "VERIFY_PACKAGE.py": "4a6bca06bd56be72a1bb0ffbe75f8cb3bef39b54549568229b002fd53a59fe4f",
+  "claude_verify.py": "e462ba1308463e547f792eae1417407e1bb5770468447929aed6112dea727db2",
+  "claude_support_map.py": "0599db170faf9f408d725006f2998f276c36c91720836439be772128c0d39139",
+  "final_pass/test_support_overrides.py": "06c1b3461ced46b5a0ed1fd2b492121f8271d147ac45dab258e12215a9f1515e",
+  "converter_checks/verify_cases.py": "09f77762a7af44549e24dce125794d259d6c2c793c5284c1333f2a6bfc3b02fd",
+  "converter_checks/REGRESSION_CASES.json": "1c54f7642a23121f7e55dd0637620f14c8a3253b6118549b56eba926d32bfd06"
+ },
+ "copies_sha256": {
+  "CONVERTER_COMPARISON.md": "7882cbbb8427f0700c664dccddaf019a712e8ead40e7677d0d03f4c4642b4842",
+  "CLAUDE_KEY_README.md": "bb843f18921b460490f7b5c368a5deeb56c6620c689e37ade12f913985806b33",
+  "CONTRACT_DECISIONS_R2.json": "2298c4aae2718a665e18fadbecb1d1727e9d9b5aeb879521ff70eea38cca2f26"
+ },
+ "gate": "python3 -B <package_path>/VERIFY_PACKAGE.py  (files, packets, every packet source file, raw answers, verification stamps)",
+ "check": "python3 benchmarks/prepare/golden/check_package.py"
+}

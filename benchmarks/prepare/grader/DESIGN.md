@@ -1,0 +1,312 @@
+# Prepare · Step 3, part 5 — the checker (grader) design
+
+*Claude, 2026-10-03. Owner: "sure, go ahead" to writing this spec (chat, 2026-10-03). Status: **built 2026-10-03 in `benchmarks/prepare/grader/` (inside the repo, own folder): 100 unit tests green; the 7 real-original contract pairs + the 8-case supplement = 42/42 variants behave as required (`benchmarks/prepare/grader/checks/RESULTS.json`); not committed; Codex review pending.** Independent checker: Codex (part 5 rule: one builder, independent checker).*
+
+**What it is:** a marking program. The frozen answer key is the answer sheet. The grader takes a conversion route's output, finds each answer's spot in the original file, and marks it: kept exactly, kept in the right row / column / section, or lost. It prints scores per split and per format.
+
+**Why:** Step 4 picks the conversion tool by evidence (PrepareStep.md T1, Step 4: "code scores against the checked key, including omissions"). Without the grader the 457 answers cannot be used.
+
+**Authority:** [Prepare-Step3.md](Prepare-Step3.md) part 5 and "What must be checked"; [PrepareStep.md](../PrepareStep.md) P14, P15, T1, Step 4, §4–5; the key's scoring contract `CLAUDE_KEY_README.md` (E1–E10) and Codex's `CONVERTER_COMPARISON.md` (both in the key package below). Owner rules: no company-specific code; minimal; ask before changes.
+
+## 1. Inputs (all frozen, read-only)
+
+| Input | Where |
+|---|---|
+| Key package **1134** (final; same records and hashes as 0729 — see `benchmarks/prepare/golden/PACKAGE.json`): `CLAUDE_ANSWER_KEY.json` (457 records, sha256 `007e4bd8…`), `CLAUDE_KEY_FLAGS.json` (5 excluded fields), `KEY_SUPPORT_MAP.json` + `KEY_SUPPORT_OVERRIDES.json` (where each answer piece sits in the original), `converter_checks/REGRESSION_CASES.json` (8 development cases: 5 UDR PDF cells, 3 Darden range cells) | `/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261003_0729/` |
+| Target locations (`cell_anchor`, `table_anchor`, `block_anchor`) and source hashes | `packets/<id>/targets.json`, `bundled/packets/<id>/targets.json` beside the package |
+| Splits per source file: development 72 files / stratified_control 41 / heldout 24 (targets 249 / 118 / 90) | `/home/faisal/prepare_work/step3_sample_20261002/case_catalog.csv` |
+| Originals (137 files; hashes checked 2026-10-03: all match) | `packets/*/sources/`, `bundled/packets/*/sources/`; supplement sources under `trial_20261002_v3/` |
+
+The grader verifies every source hash first; any mismatch stops that file with `INPUT_MISMATCH` (never substitutes).
+
+## 2. The common route-output format (what the grader reads)
+
+Tool outputs will change shape (owner, 2026-10-03). The grader therefore reads **one small format**; each route (tool + settings + adapter + linker) has a thin adapter that fills it. Raw tool output is kept beside it (CONVERTER_COMPARISON point 1). One JSON file per source file:
+
+```json
+{"schema": "prepare-route-output/1",
+ "file_id": "0001140361-25-003207/form10q.htm", "sha256": "<original sha256>",
+ "route": {"name": "docling-html", "tool": "docling", "version": "2.131.0", "settings": {"...": "..."},
+           "adapter": "<name@sha>", "linker": "<name@sha or null>"},
+ "status": "OK | FAILED | UNSUPPORTED | PARTIAL", "error": null, "seconds": 1.6,
+ "units": [
+  {"id": "u0", "kind": "heading", "level": 1, "text": "Item 2. Management's Discussion …", "anchor": {"byte_start": 100, "byte_end_exclusive": 160}},
+  {"id": "u1", "kind": "text", "text": "…", "anchor": {"byte_start": 200, "byte_end_exclusive": 900},
+   "links": [{"text": "Note 3", "href": "#n3", "to": "u7"}], "struck": ["words shown struck through"]},
+  {"id": "u2", "kind": "table", "anchor": {"byte_start": 1000, "byte_end_exclusive": 9000}, "caption": ["Free Cash Flow"],
+   "cells": [{"r": 0, "c": 1, "rs": 1, "cs": 2, "text": "December 28, 2024", "anchor": {"byte_start": 1200, "byte_end_exclusive": 1300}, "header": true},
+             {"r": 3, "c": 1, "rs": 1, "cs": 1, "text": "(506", "anchor": {"byte_start": 5200, "byte_end_exclusive": 5300}, "markers": ["(1)"]}],
+   "notes": ["u3"]},
+  {"id": "u3", "kind": "footnote", "marker": "(1)", "text": "(1) Represents …", "anchor": {"byte_start": 9100, "byte_end_exclusive": 9400}},
+  {"id": "u4", "kind": "image", "anchor": {"byte_start": 9500, "byte_end_exclusive": 9570}, "text": "text read from the picture, in order"},
+  {"id": "u5", "kind": "field", "name": "{http://www.sec.gov/edgar/schedule13D}sharedDispositivePower",
+   "path": ["{…}edgarSubmission", "{…}formData", "{…}reportingPersons", "{…}reportingPersonInfo"], "group": {"index": 2, "count": 3},
+   "text": "0", "anchor": {"byte_start": 11000, "byte_end_exclusive": 11001}},
+  {"id": "u6", "kind": "clutter", "text": "Page 4", "anchor": {"byte_start": 9800, "byte_end_exclusive": 9806}}
+ ]}
+```
+
+- **Required** per unit: `id` (unique, stable for the same input), `kind`, `anchor`, and `text` (tables: `cells`, each with `r c rs cs text anchor`, row-major). Units in reading order.
+- **Optional** (reported as "structure" when present): `level`, `header`, `caption`, `markers` (footnote marks kept apart from the number), `notes`, `marker`, `links`/`to`, `struck`, `name`/`path`/`group` (XML).
+- **Kinds:** `heading text list_item caption footnote table image field clutter other`. `clutter` = dropped on purpose (page numbers, running banners); it counts as accounted for, not lost. A `clutter` unit counts only for the nothing-lost gate; it never satisfies any check in §5.
+- **Anchors:** HTML/XML `{byte_start, byte_end_exclusive}` in the original's bytes; PDF `{page, region: [x0,y0,x1,y1]}` in points, 1-based page, top-left origin; picture files `{file, region}` in pixels, top-left origin. Same conventions as the key. A unit or cell that sits in several source places (a merged stacked header, a prose block printed over several lines) may carry a **list** of anchors.
+- **Status:** `FAILED` (tool error) and `UNSUPPORTED` (format the route does not handle) count every target of that file as not converted; `PARTIAL` marks hand-made fixtures that cover only part of a file (the "nothing lost" gate is skipped for them).
+
+## 3. Finding a target in the route output
+
+| Anchor type | Overlap rule |
+|---|---|
+| bytes | ranges intersect |
+| PDF page/region, picture file/region | same page (or file) and intersection area ≥ 50 % of the smaller box |
+
+- A key **cell** → the route cells overlapping its `cell_anchor` (inside a table unit overlapping its `table_anchor`). A key **block** → the route units overlapping its `block_anchor`. None found → `UNRESOLVED` mapping = a miss for the route.
+- Every other answer piece (row label, header line, title line, unit line, period phrase, footnote mark and note, reference, basis phrase) is found through **its own anchor** from `KEY_SUPPORT_MAP.json` (`model`/`inline`/`reviewed` anchors; for `search` pieces any listed occurrence counts for preservation and the `governing` one for association). Matching words anywhere in the file never counts.
+- When a route split one source cell into several, or merged several into one: take all route cells overlapping the piece's anchors, in reading order, joined by one space.
+
+## 4. Text comparison
+
+`norm(s)`: collapse every run of whitespace (space, tab, newline, NBSP, zero-width, BOM, soft hyphen) to one space; trim; fold quote and dash glyphs only (E8: ‘’→', “”→", – — ‑ −→-); drop the key's `~~` marks; keep case, signs, parentheses, `%`, `$`, commas, unit case. Whitespace is **normalised, not deleted**: a word split by styling (`S tockholder`) does not match `Stockholder` (those cases were chosen for this).
+
+- Cell-like pieces (value, labels, headers, title lines, corner, unit line, header-type period phrases, marks, range partner): `norm` **equality** with the overlapping cell(s).
+- Phrase pieces (basis phrases, prose period phrases, reference phrases): `norm` **containment** in the overlapping unit(s).
+- Value cell: equals `printed_value`, or equals `display_value` (symbol cells joined, e.g. `$(506)`), or equals `printed_value` with its symbol cells kept as adjacent cells in the same row. Equals `printed_value` + one of the target's own footnote marks glued (`10.674`) → **fail `marker_glued`**.
+- Label/header pieces with one of the target's own marks glued → preserved, counted as `marker_in_label`.
+- A field with accepted alternatives passes if **any** alternative passes. The 5 excluded fields are skipped and counted in every report.
+
+## 5. Checks per target (T1 = preservation + association; code only, no AI)
+
+| Key field | Preserved (text at its own spot) | Associated (place in the route's structure) | Folds allowed |
+|---|---|---|---|
+| `printed_value` / `display_value` | value text rule above | — | — |
+| `row_label`, `row_context` texts | each piece | same table, same row (`r`); a wrapped or two-column label may be one cell or two | — |
+| `header_path` pieces | each piece (stacked fragments joined or separate) | same table, above the value, column span covers the value's column | E1 |
+| `table_title` lines, `corner_text`, `lead_in`, `unit_printed` | each piece | title: table caption, a top in-table row, or a unit before the table with no table between; corner: header area of the same table; lead-in: unit directly before the table; unit line: in the table or before it | E1, E2 |
+| `section_path` headings | each heading unit, before the target | order kept; **recognised** as `heading` counted separately | E1, E2, E9 |
+| `segment_or_basis` phrases | each phrase | inside the table → same table, above the value; else before the table or in its note | — |
+| `periods` parts | each phrase | header-type parts: column coverage as headers; prose parts: preserved only | E4, E7 |
+| `footnote_markers` | mark kept apart from the value (`markers` field or own cell/unit); `note_text` unit present | mark → note link (`notes`/`marker`) counted as **structure** | — |
+| `range` (supplement) | partner value; connector text or Low/High headers | partner in the same row; source order kept (endpoints not flipped) | — |
+| `references` | phrase inside the block; `href` equal when the key has one | `RESOLVED` target: a route unit exists at the key's target anchor; link `to` that unit counted as **structure** | E6 |
+| structure `printed_text` | units overlapping the block, joined in order, `norm` equal | block order within the file kept | E8, E10 |
+| structure `kind` | — | route kind maps to the key kind for `heading list_item footnote caption table paragraph(=text)`; `image metadata other` reported only | — |
+| pictures / scanned pages (`kind: image`) | route text for that picture/page region `norm` equal to the transcription; otherwise word-error-rate and the missing/extra words are printed (E10: diagnostic). Strict in v1; any page-furniture waiver later, per record, reviewed. | — | E8 |
+| XML (`field` units) | value text; `row_label` = local name; `header_path` = expanded parent names (prefixes may differ) | same group as the key's `row_context` identifiers (same reporting person) | — |
+
+**Not graded here (Step 8, AI reader):** `value_kind`, `sign` (survives through the text), `marker_meaning`, `measure`, `unit_interpretation`, period `role`/`type`, range `role`. Reported as "not T1" so nobody mistakes silence for a pass.
+
+**Target verdict:** `PASS` only if the value and every applicable preserved + associated check pass; otherwise `FAIL` with the failing checks; `UNRESOLVED` (not found at its spot); `NOT_CONVERTED` (file FAILED/UNSUPPORTED). Structure counts (headings recognised, notes linked, references linked) never flip a verdict; they rank routes.
+
+## 6. Route-level gates (P14) — reported with numbers; a failing gate blocks ranking
+
+| Gate | Check |
+|---|---|
+| Anchors tied to the original | every unit/cell has an anchor inside the file; HTML/XML: `norm` of the original's visible text at the anchor equals the unit text (honest anchors); PDF/picture: in bounds (text honesty is diagnostic) |
+| Versioned IDs and run facts | `route` block complete (tool, version, settings, adapter, linker); unit ids unique |
+| Reading order, exact text | top-level anchors non-decreasing in reading order (tables row-major inside); text exactness comes from §5 |
+| Footnote marks apart from numbers | no `marker_glued` on any value |
+| Nothing lost | visible characters of the original (per `anchor.py`'s visible-text map: comments, scripts, styles, `display:none` and `ix:hidden` removed) not inside any unit, cell or `clutter` anchor → listed as uncovered spans with their text, count and % per file; pass = 0 unaccounted |
+
+Secondary facts echoed, never gates: seconds per file, output bytes, files OK/FAILED/UNSUPPORTED.
+
+## 7. Output
+
+- `results.jsonl`: one line per target × check: verdict, reason, key piece, route unit ids and anchors.
+- `summary.md` + `summary.json`: (1) by split × format: targets, PASS, FAIL, UNRESOLVED, NOT_CONVERTED, excluded fields; (2) by field: preserved %, associated %, recognised %; (3) gates; (4) run facts. Held-out shows aggregates only unless `--heldout-detail` (for the checker, never for tool builders). The 8 supplement cases are reported in their own table, never mixed into the 457.
+
+## 8. Proof that the grader itself is right (part 5)
+
+1. **Repo tests** (`tests/driver/prepare/test_grade.py`, `test_anchor.py`; standard library; tiny synthetic HTML and XML fixtures with a hand-written key subset in the key's exact JSON shape and one hand-written correct route output): the correct output passes everything. Then one planted fault per check, each **must fail only its intended check**: changed digit · dropped value cell · value under the next column · value in the next row · parentheses/sign lost · `$` attached to another row · stacked-header fragment lost · header assigned to the next column · mark glued `10.674` · note dropped · heading dropped (fail) vs heading demoted to text (structure count only) · paragraph dropped (uncovered span + unresolved) · paragraphs reordered · struck text dropped · reference destination changed · XML prefix changed (must PASS) vs value moved to another person (must FAIL) · PDF number under another row/column (must FAIL) · missing page (unresolved) · two-column label as two cells (PASS) · range endpoints flipped · dishonest anchor (gate fails).
+2. **The contract pairs on real originals** (CONVERTER_COMPARISON "Required checks"): Berry T05 `$(506)`, Aflac T03 stacked header, UDR P01 PDF cell, Darden C07–C09 range/footnote, one scanned page (bundle-030), Alpha Units XML T01, AMG T05 reference. Hand-made correct outputs (status `PARTIAL`) must pass; their damaged copies must fail for the stated reason. Lives beside the key package: `bulk_20261002/grader_checks/` (reads the frozen originals; run on demand; results recorded).
+3. **Codex** inspects the code and tries its own planted faults before the grader is used to rank anything.
+
+## 9. The linker (`driver/prepare/anchor.py`) — for routes that give no source positions
+
+Docling on HTML gives no positions (study 2026-09-30); edgartools unknown. P14 requires anchors, so a shared, generic, text-only linker is part of the toolkit (allowed by T1: "linking evidence back to the original HTML cells (P20)"):
+
+- `visible_text(raw)` → characters with byte spans: entities decoded once, comments/scripts/styles/head removed, `display:none` and `ix:hidden` subtrees removed (tag stack), block tags → one space, same cp1252 fallback as the key's scripts.
+- `link(raw, units)` → fills anchors by **monotonic** search of each unit's (and cell's) whitespace-stripped, E8-folded text in that stream from a moving cursor; not found → `anchor: null` with the first mismatch shown (the tool changed the text) — such units can never match a target, which is the correct consequence; also returns the uncovered spans for the nothing-lost gate.
+- It never adds, repairs or reorders text (contract point 4). Its own tests: reordered unit flagged; altered digit left unanchored; dropped paragraph uncovered; hidden text excluded; NBSP/entities handled; styled split word found.
+
+## 10. Code home, size, order
+
+| Piece | Path | Size (estimate) |
+|---|---|---|
+| grader | `driver/prepare/grade.py` (CLI: `python3 -m driver.prepare.grade --key <package dir> --route <dir of per-file json> --out <dir>`) | ~400 lines |
+| visible text + linker | `driver/prepare/anchor.py` | ~150 lines |
+| tests + fixtures | `tests/driver/prepare/test_grade.py`, `test_anchor.py`, `fixtures/grader/` | ~400 lines |
+| real-original pairs | `prepare_work/step3_sample_20261002/bulk_20261002/grader_checks/` | small |
+
+Order: tests and fixtures first, then the code until they pass; Codex review; then a **throw-away Docling-HTML adapter** (study venv, Docling 2.131) on 2–3 development files only, to confirm the format fits real output and the linker anchors it. No ranking, no held-out use, no tuning on any key record.
+
+**Not built here:** production adapters (Step 4 builders); the inline-tag context check (P9 — separate, over tagged values, not in the key); replay/determinism (Step 7); a furniture waiver for page transcriptions; AI-reader scoring (Step 8). Part 6 (freeze) still needs the owner's final OK.
+
+## 11. Rules added by the real-original pairs (2026-10-03) — all key- or guide-driven, none document-specific
+
+| Real-document behaviour | Rule now in the grader |
+|---|---|
+| A footnote printed as the table's own last row | the note may be a unit **or a cell of any table**; a note row of the same table counts as linked |
+| A mark raised by CSS (not `<sup>`) glued to a title/header/label | `same()`: text equal once **the target's own marks** are set aside → pass, flag `marker_in_text` (`marker_in_label` for labels) |
+| Header line "X ($000s)" where the key splits the bracketed unit off (guide 3.5 rule 6) | `same()`: text equal once a **trailing bracketed phrase** is set aside → pass, flag `unit_phrase_split` |
+| One key piece over several cells, or several pieces merged in one cell | `match_pieces()`: pieces aligned to cells in order, both directions, every cell consumed |
+| Qualifier sentence printed after the table | outside the table, **preserved at the key's reviewed location** is the association; inside, it must sit above the value |
+| "(continued)" in the key's heading | E2 folded on both sides (`heading_eq`) |
+| Two PDF boxes in one row | `source_before()`: boxes sharing a row compare left to right, else page then top to bottom |
+| A scanned page returned as text blocks, tables included | image targets join every non-clutter unit over the region in reading order |
+| A symbol cell merged into the value cell (`$(506)`) | `unit_printed` found inside the value cell → pass, flag `in_value_cell` |
+
+Controls for the pairs are built from the originals by `benchmarks/prepare/grader/checks/real_pairs.py` (HTML grid with colspan/rowspan and raised marks; PDF words from the file's own text layer; XML elements with expanded names). Two of its early fixtures were wrong and the grader's own gates caught them (an anchor off by one byte; two boxes overlapping) — the mechanical checks work in both directions.
+
+## 12. Generality pass over all 457 targets (2026-10-03)
+
+A read-only scan of every answer piece's location in the sample's HTML files (own table / another table / plain text)
+showed what the 7 pairs never hit: headings carried by one-cell layout tables (126 anchors), titles in their own table
+before the data table (25), footnotes laid out as tiny tables (12), header rows of a table continued across a page break
+(10), lead-ins inside the table element (6), qualifier phrases in other tables (66). The grader therefore treats **any
+text unit or any cell of any table** as a possible carrier of an answer piece (`Grader.carriers`), and judges placement by
+**source order**: inside the value's table the carrier's row order must match the original's byte/box order; a header
+found in an earlier table part counts as a continued table (flag `continued_table`) and must still cover the value's
+columns; outside the table the key's reviewed location is the association. A value cell spanning columns is covered
+when any of its columns is. Structure blocks inside a layout table are read from the overlapping cells (a heading that
+comes back as a table cell fails `kind`: it lost its nature). Cells are indexed by first byte for speed.
+
+## 13. Spike on real Docling output (2026-10-03) — the format fits
+
+Three development HTML files through Docling 2.131 (HTML route, defaults) → a 60-line throw-away adapter → the shared
+linker → the grader (`/home/faisal/prepare_work/grader_spike_docling_20261003/`). 25 targets: 23 pass; the two failures are
+real route limits (no picture text on the HTML route; a styled bullet item labelled `text`). All gates pass; 0 visible
+characters lost in 171,717; 5 unanchored items, all invisible in the originals (a synthetic title, an image file name).
+Headings recognised 0/14 and notes linked 0/2: the known Docling-HTML gaps, now measured. One grader rule came out of
+it: when several route units together cover one key block or note, they are joined **as the original prints them**
+(nothing between adjacent pieces, a space where the original has one), read from the original's bytes, not assumed.
+Not done here: ranking, held-out files, other tools — Step 4.
+
+## 14. Organisation and limits set on 2026-10-03 (owner's requirements restated)
+
+`anchor.py` finds text in the original · `grade.py` scores · `adapters/` turn one tool's output into the common format
+(one small file per route, run under that tool's own environment; the grader stays standard-library) · `checks/` prove
+the grader on real originals · `tests/` prove every rule. Memory of the visible-text map grows with visible characters,
+not with markup (a 22 MB inline-XBRL 10-Q: 1.1 s, 48 MB peak). Every tolerance comes from the key record, the guide or
+the original's bytes and is flagged in the output; no company names, no literals from filings, no per-case branches.
+Route runs (route files, raw tool output, graded results) live outside the repo under `/home/faisal/prepare_work/grader_runs/`.
+
+## 15. Rules added from the first two full development runs (2026-10-03)
+
+Reading the failures of Docling-HTML and edgartools over all 60 development HTML files, one by one, separated tool
+defects from grader strictness. Grader rules added (tests first), each from the key, the guide or the medium:
+
+| Real layout | Rule |
+|---|---|
+| A heading laid out as two or three adjacent cells of a one-row table | a heading may equal the join of consecutive carriers |
+| One source cell holds the title **and** the unit line / basis words the key records in other fields | `same()` may set aside the record's **own** other literal pieces (flag `joined_with_own_pieces`) |
+| A note printed `(1) For…` where the key has `(1)For…` | the mark is set apart before comparing |
+| A qualifier sentence split by the tool at a bold cross-reference | containment is checked in the joined carriers |
+| A time-only section row in the label column (`Year ended December 31:`) | no column coverage demanded for label-column rows |
+| A word broken or glued by the tool (`Ma nagement`) | still a failure, now reported as `spacing` so the cause is visible |
+
+Linker: two passes — long texts (≥ 20 search characters) placed in reading order first, short texts only between
+their anchored neighbours (a synthetic title "Document" or a word like "Target" can no longer drag the cursor);
+nearest-earlier fallback is flagged `out_of_order`; the piecewise fallback was removed (no real user; it guessed).
+Only pictures take a gap anchor; empty or control-only texts get none. Character classes (whitespace and format marks,
+quotation marks, dashes, brackets) come from the Unicode database, not from hand lists; CSS that hides text
+(display:none, visibility:hidden, opacity:0, font-size ≤ 1pt) is hidden text.
+
+Tool facts measured so far (development HTML, both routes): no headings recognised; Docling breaks words at styled
+spans in some filers' markup; neither tool links footnotes or resolves references; header colspans that stop short of the
+value column fail association in both; pictures carry no text on the HTML routes.
+
+## 16. Development scoreboard, 2026-10-03 (HTML files; provisional, no ranking)
+
+60 development HTML files, 231 targets each route, after every rule in §15 and the title/own-pieces rule.
+Docling-HTML: cells 112/171 pass, blocks 23/60; text lost 1,362 characters; ~232k characters of its text could
+not be placed (its hyperlink text is duplicated in contracts — a tool text change, see the review folder).
+edgartools: cells 125/171, blocks 19/60; text lost 362,823 characters (prose inside inline-XBRL wrappers; one
+exhibit 84 % missing); honest anchors. Both: 0 headings recognised, 8 notes linked, 0 references linked; header colspans
+that stop before the value column fail in both; XML and PDF targets not converted by either HTML route.
+Runs: `/home/faisal/prepare_work/grader_runs/`. Review of the key package and contract: `/home/faisal/prepare_work/review_0729_claude/`.
+
+## 17. Step 4 pieces built on the owner's GO (2026-10-03)
+
+| Piece | File | What it does | Rules |
+|---|---|---|---|
+| Docling PDF route | `adapters/docling_pdf.py` | native PDFs: Docling's page boxes become the key's top-left regions (a block over two pages carries two anchors); HTML originals: headless-Chrome print → Docling → shared linker to the **original** bytes (the print is a derivative) | FAST tables, heading hierarchy on, OCR on (picture text) |
+| Heading pre-step (P7) | `adapters/prestep_headings.py` | before an HTML tool runs, wraps lines the guide calls headings (short, standing alone, not a sentence, bold/underlined/capitals) in `<h2>`; visible characters untouched; anchors still point at the original | guide 2.1 only; no words of any filing |
+| Screen-span step (P20) | `adapters/screen_grid.py` | renders the original in headless Chrome, measures every cell's box, derives screen columns from pixel edges and re-grids a route's cells by their byte anchors | guide 3.5 rule 3 ("a header covers the value when the value sits within the header's span on screen"); geometry only |
+
+All three are route-side; the grader is unchanged by them. Runs under `/home/faisal/prepare_work/grader_runs/`:
+`docling_pdf_dev_*`, `docling_html_headings_dev_*`, `*_screen_dev_*`.
+
+## 18. Rules added from the heading/screen/PDF round (2026-10-03, later)
+
+- Footnote text: the note's **body** (its own mark set apart) must sit at the note's anchor — alone, with a space the
+  original lacks, split into pieces, or inside a "Notes:" block that holds several numbered notes (guide G4). Found on
+  13 Docling targets (Levi, Lincoln, MetLife, a slide deck's notes block).
+- Docling adapters use Docling's **own formatting flags**: superscript pieces are footnote marks, strikethrough pieces are
+  struck text; hyperlinks are links. The mark-shape heuristic is gone from the adapters.
+
+## 19. Codex's verdict on the 0729 review, re-derived (2026-10-03) — each rule checked against the requirements, then measured
+
+Codex reviewed `prepare_work/review_0729_claude/` and asked for changes on five grading points. None was taken on authority;
+each was re-derived and, where possible, measured on the real routes (`review_0729_claude/ROUND2_FOR_CODEX.md`).
+
+- **Quotes (B1).** Fold only within a class: curly ↔ straight double, curly ↔ straight single. The earlier all-in-one fold was
+  a bug of mine (the Unicode name of ASCII `"` has no "DOUBLE"); `6"` must never equal `6'`.
+- **Wrong link (E6).** A reference whose explicit `to` points at a block that is not the destination fails with
+  `wrong_link`; a missing `to` with the right destination elsewhere is only a structure miss (`reference_linked`).
+- **Joining pieces (B4).** The key text decides, not the original's bytes: the ordered pieces must spell the key text; a piece
+  boundary may not fall inside a word of the key; the spacing inside a piece must equal the key's (`Grader.pieces_match`,
+  reasons `text` / `word_split` / `spacing`). Used by printed_text, lead-in, notes, basis and multi-cell headings. The
+  byte-based separator rule is gone.
+- **Time rows in the label column (B7).** A period part that is neither on the value's row nor over its column must be a
+  row-group heading: above the value (`order`), with no label-only row between it and the value that is not the target's
+  own label text (`scope`; own = row label, row context, basis, unit, title, corner, period parts). Measured on both
+  screen-span routes: 49 such cells in development, 44 on the value's row, 5 above with only own rows between, 0 below,
+  0 foreign — no development verdict changes; Codex's negative case (value moved under the other dated group) now fails.
+- **Hidden text (B9).** Font size is no longer a hiding rule. Measured: the ≤1-pt rule hid **2.5 M characters of real text**
+  in 69 development files, because `font-size:0` paragraph wrappers (lesl, pfgc exhibits) and
+  `<FONT size="1" style="font-size:1pt;color:white">` wrappers (Arrowhead, exhibit41) have children that reset the size —
+  font size is inherited and overridable, so a subtree rule is unsound. `display:none`, `visibility:hidden`, `opacity:0` and
+  `ix:hidden` remain (no descendant can undo the first two in the sample; `visibility:visible` occurs 0 times in 69 files —
+  a known, unbuilt limit). What they hide is counted per file (`hidden_chars` in the per-file facts) so nothing is dropped
+  silently. All routes were re-linked from their saved raw output after this change.
+- **Not changed.** Codex's remark that the scanned-page control copies the key transcription is true: that control tests
+  joining and fault detection; OCR accuracy is the PDF route's word-error-rate measure.
+
+## 20. Final contract alignment (2026-10-03, after package 1134) — the grader implements E1–E17 as frozen
+
+The round-2 package `FINAL_KEY_FOR_CODEX_20261003_1134` froze the contract (`CONTRACT_DECISIONS_R2.json`, copied verbatim into
+`benchmarks/prepare/golden/`). Three of its texts corrected my §19 rules; the code now follows the frozen text:
+
+- **E12 pieces of one passage.** Unchanged: the pieces must spell the key text, spacing inside a piece must equal the key's, a
+  lost space between words fails (`spacing`). Changed: a piece boundary inside a word is a fault **unless the pieces' own anchors
+  prove adjacency in the source with nothing, not even a space, between them** — span-level output is faithful output; such joins
+  are counted (`detail.fragmented`) so "unresolved joins stay explicit". Without that proof, `word_split` fails.
+- **E15 time rows.** Changed: a label-column time heading's scope ends only at a **competing time heading the key knows** —
+  a cell some record's period part anchors, or a label-only row whose text equals a period part of any record in the file. An
+  unrelated label or lower-level subheading between the time row and the value no longer ends the scope (my §19 rule did, and
+  the contract says it must not). Still: the heading must stand above the value (`order`); column-type parts must cover the
+  value's column (`column`). Limit, stated: a competing group whose heading no record anchors and whose text matches no known
+  period part is invisible to this rule.
+- **E16 hidden text.** The visible-text scanner keeps an element stack: `display:none`, `opacity:0` and `<ix:hidden>` hide every
+  descendant; `visibility:hidden` is inherited but a descendant with `visibility:visible` is visible again (0 occurrences in the
+  69 development files; implemented because the contract and CSS say so). Font size is not a hiding rule. Hidden characters are
+  counted per file (`hidden_chars`) and reported, never graded.
+- **Key and code home.** Key = package 1134 (its 5 excluded fields come from `CLAUDE_KEY_FLAGS.json`, read by `load_key`); the
+  grader lives in `benchmarks/prepare/grader/`, the key record in `benchmarks/prepare/golden/`; commands run from the repo root
+  as `python3 -m benchmarks.prepare.grader.<module>`; `--key` defaults to the recorded package.
+- **Linker: marks before the text (found by the first full run, 2026-10-03 12:05).** 93 Docling cells failed the honest-anchor gate because
+  their superscript mark is printed *before* the cell text (`<SUP>1</SUP>Under the company name of…`, Articles of Association) or before
+  the last piece, and the linker only extended an anchor over marks that follow the text. Now the search key is text+marks, then
+  marks+text, then the text alone, and **the earliest start wins**: in a two-column layout where each column's mark precedes its text, the first
+  column's text+mark would otherwise swallow the second column's leading mark (run 2 still showed 85 such cells; run 3 after this rule is the
+  reported one). Final rule (run 5): the search tries marks+text, text+marks and the text alone (earliest start wins; the
+  longer key on a tie), then every mark not yet covered is tried once right before the text (never past the window start) and once right
+  after it — so a mark before and another after the same text are both covered, and no mark is counted twice. The honest-anchor gate matches: each
+  reported mark is stripped once from whichever end of the anchored text it sits at, and the rest must be the cell text — so one mark
+  before and one after the same text is honest. Cells whose mark is not adjacent at all stay flagged: that is the tool attaching a mark
+  from elsewhere. A mark cut out of the *middle* of a
+  text is still `not_in_source` — the route's text does not exist contiguously in the source, which is the honest answer. One real
+  cell (`[__]` with marks 38 and 39, only 39 present) stays flagged: the tool attached a mark from elsewhere. Fairness note: this gate
+  bit only Docling because only the Docling adapter reports marks from the tool's formatting; the fix is in the shared linker.
+- **Proof after the change.** 116 unit tests, 42/42 real-original pairs; all routes re-linked and re-graded with the final code
+  (`/home/faisal/prepare_work/grader_runs/final_1134_20261003.log`; final table in `REVIEW_HANDOVER.md`, run of 12:36; §16 is the
+  earlier provisional board and is superseded by it).

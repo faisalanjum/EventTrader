@@ -1,0 +1,654 @@
+{
+ "key": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261003_1134",
+ "all_ok": true,
+ "results": [
+  {
+   "case": "Berry T05",
+   "key_id": "0001140361-25-003207/T05",
+   "variant": "valid: $ ( ) kept as separate cells in the row",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Berry T05",
+   "key_id": "0001140361-25-003207/T05",
+   "variant": "valid: symbol cells joined into one cell \"$(506)\"",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Berry T05",
+   "key_id": "0001140361-25-003207/T05",
+   "variant": "damaged: parentheses removed",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "text"
+   },
+   "ok": true
+  },
+  {
+   "case": "Berry T05",
+   "key_id": "0001140361-25-003207/T05",
+   "variant": "damaged: \"$\" attached to the row above",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "symbol_detached"
+   },
+   "ok": true
+  },
+  {
+   "case": "Berry T05",
+   "key_id": "0001140361-25-003207/T05",
+   "variant": "damaged: value moved under the other year column",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path",
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "symbol_missing",
+    "header_path": "column"
+   },
+   "ok": true
+  },
+  {
+   "case": "Aflac T03",
+   "key_id": "bundle-006/0000004977-23-000059:T03",
+   "variant": "valid: five header fragments as separate stacked cells",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Aflac T03",
+   "key_id": "bundle-006/0000004977-23-000059:T03",
+   "variant": "valid: fragments joined into one header cell (several spans)",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Aflac T03",
+   "key_id": "bundle-006/0000004977-23-000059:T03",
+   "variant": "damaged: \"Excluding\" fragment lost",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "text"
+   },
+   "ok": true
+  },
+  {
+   "case": "Aflac T03",
+   "key_id": "bundle-006/0000004977-23-000059:T03",
+   "variant": "damaged: header assigned to the adjacent column",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "column"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P01",
+   "key_id": "udr/P01",
+   "variant": "valid: value linked to its row, column and page",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P01",
+   "key_id": "udr/P01",
+   "variant": "damaged: correct number under a different column",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "column"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P01",
+   "key_id": "udr/P01",
+   "variant": "damaged: value on a missing page",
+   "expected": "UNRESOLVED",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "UNRESOLVED",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P02",
+   "key_id": "udr/P02",
+   "variant": "valid: value linked to its row, column and page",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P02",
+   "key_id": "udr/P02",
+   "variant": "damaged: correct number under a different column",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "column"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P02",
+   "key_id": "udr/P02",
+   "variant": "damaged: value on a missing page",
+   "expected": "UNRESOLVED",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "UNRESOLVED",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P03",
+   "key_id": "udr/P03",
+   "variant": "valid: value linked to its row, column and page",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P03",
+   "key_id": "udr/P03",
+   "variant": "damaged: correct number under a different column",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path",
+    "range"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "column",
+    "range": "order"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P03",
+   "key_id": "udr/P03",
+   "variant": "damaged: value on a missing page",
+   "expected": "UNRESOLVED",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "UNRESOLVED",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P03",
+   "key_id": "udr/P03",
+   "variant": "damaged: scenario columns swapped (Low/High flipped)",
+   "expected": "FAIL",
+   "expected_check": "range",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path",
+    "range"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "column",
+    "range": "order"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P04",
+   "key_id": "udr/P04",
+   "variant": "valid: value linked to its row, column and page",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P04",
+   "key_id": "udr/P04",
+   "variant": "damaged: correct number under a different column",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "column"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P04",
+   "key_id": "udr/P04",
+   "variant": "damaged: value on a missing page",
+   "expected": "UNRESOLVED",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "UNRESOLVED",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P05",
+   "key_id": "udr/P05",
+   "variant": "valid: value linked to its row, column and page",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P05",
+   "key_id": "udr/P05",
+   "variant": "damaged: correct number under a different column",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "column"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P05",
+   "key_id": "udr/P05",
+   "variant": "damaged: value on a missing page",
+   "expected": "UNRESOLVED",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "UNRESOLVED",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Darden darden/C07",
+   "key_id": "darden/C07",
+   "variant": "valid: scenario/range cells with roles kept",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Darden darden/C07",
+   "key_id": "darden/C07",
+   "variant": "damaged: footnote digit joined to the value (\"0.152\")",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "marker_glued"
+   },
+   "ok": true
+  },
+  {
+   "case": "Darden darden/C08",
+   "key_id": "darden/C08",
+   "variant": "valid: scenario/range cells with roles kept",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Darden darden/C08",
+   "key_id": "darden/C08",
+   "variant": "damaged: minus sign lost (\"0.26\")",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "text"
+   },
+   "ok": true
+  },
+  {
+   "case": "Darden darden/C09",
+   "key_id": "darden/C09",
+   "variant": "valid: scenario/range cells with roles kept",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Darden darden/C09",
+   "key_id": "darden/C09",
+   "variant": "damaged: range endpoints flipped",
+   "expected": "FAIL",
+   "expected_check": "range",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "range"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "range": "order"
+   },
+   "ok": true
+  },
+  {
+   "case": "Carnival scanned page T01",
+   "key_id": "bundle-030/0000815097-26-000037:T01",
+   "variant": "valid: page text split into ordered blocks",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Carnival scanned page T01",
+   "key_id": "bundle-030/0000815097-26-000037:T01",
+   "variant": "damaged: one block omitted",
+   "expected": "FAIL",
+   "expected_check": "printed_text",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "printed_text"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "printed_text": "text"
+   },
+   "ok": true
+  },
+  {
+   "case": "Carnival scanned page T01",
+   "key_id": "bundle-030/0000815097-26-000037:T01",
+   "variant": "damaged: one \"not\" omitted",
+   "expected": "FAIL",
+   "expected_check": "printed_text",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "printed_text"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "printed_text": "text"
+   },
+   "ok": true
+  },
+  {
+   "case": "Carnival scanned page T01",
+   "key_id": "bundle-030/0000815097-26-000037:T01",
+   "variant": "damaged: blocks out of order",
+   "expected": "FAIL",
+   "expected_check": "printed_text",
+   "expected_gate_fail": "reading_order",
+   "verdict": "FAIL",
+   "failed_checks": [
+    "printed_text"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "printed_text": "text"
+   },
+   "ok": true
+  },
+  {
+   "case": "Alpha Units XML T01",
+   "key_id": "0000950170-24-139133/T01",
+   "variant": "valid: expanded names (any prefix in the file)",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "Alpha Units XML T01",
+   "key_id": "0000950170-24-139133/T01",
+   "variant": "damaged: value moved to another reporting person",
+   "expected": "FAIL",
+   "expected_check": "row_context",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "row_context"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "row_context": "group"
+   },
+   "ok": true
+  },
+  {
+   "case": "Alpha Units XML T01",
+   "key_id": "0000950170-24-139133/T01",
+   "variant": "damaged: namespace changed",
+   "expected": "FAIL",
+   "expected_check": "header_path",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "header_path",
+    "row_context"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "header_path": "path",
+    "row_context": "group"
+   },
+   "ok": true
+  },
+  {
+   "case": "Alpha Units XML T01",
+   "key_id": "0000950170-24-139133/T01",
+   "variant": "damaged: element renamed (sole/shared)",
+   "expected": "FAIL",
+   "expected_check": "row_label",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "row_label"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "row_label": "name"
+   },
+   "ok": true
+  },
+  {
+   "case": "AMG T05 reference",
+   "key_id": "bundle-001/0001004434-23-000015:T05",
+   "variant": "valid: caption + link to the table it introduces",
+   "expected": "PASS",
+   "expected_check": null,
+   "expected_gate_fail": null,
+   "verdict": "PASS",
+   "failed_checks": [],
+   "structure_misses": [],
+   "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "AMG T05 reference",
+   "key_id": "bundle-001/0001004434-23-000015:T05",
+   "variant": "damaged: referenced table omitted",
+   "expected": "FAIL",
+   "expected_check": "references",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "references"
+   ],
+   "structure_misses": [
+    "reference_linked"
+   ],
+   "reasons": {
+    "reference_linked": null,
+    "references": "destination"
+   },
+   "ok": true
+  },
+  {
+   "case": "AMG T05 reference",
+   "key_id": "bundle-001/0001004434-23-000015:T05",
+   "variant": "damaged: link points to another block (E6: a contradictory destination)",
+   "expected": "FAIL",
+   "expected_check": "references",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "references"
+   ],
+   "structure_misses": [
+    "reference_linked"
+   ],
+   "reasons": {
+    "reference_linked": null,
+    "references": "wrong_link"
+   },
+   "ok": true
+  }
+ ]
+}

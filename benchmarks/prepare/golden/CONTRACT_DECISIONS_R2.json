@@ -1,0 +1,101 @@
+{
+ "created_at": "2026-10-03T15:34:03.258379+00:00",
+ "scope": "Package contract only; no target value, alternative, exclusion or verification stamp changed.",
+ "base_package": "FINAL_KEY_FOR_CODEX_20261003_0729",
+ "base_manifest_sha256": "682ce21c17742a2d7323d53bce5a50baf09cb796ed39ea532d14dbc326c19927",
+ "review_inputs": {
+  "/home/faisal/prepare_work/review_0729_claude/ROUND2_FOR_CODEX.md": "8ecff5e236385a424d3bf31bd122254504ae55802b33d37c1d7d3c09fd494866",
+  "/home/faisal/prepare_work/review_0729_claude/PROPOSED_CORRECTIONS.md": "3353d26939a3a2ee5c1b7a11ef89b752dfdd53e3ac1697e465be725a10d79932",
+  "/home/faisal/prepare_work/review_0729_claude/CODEX_VERDICT.md": "5c77e6b7134a3b4176b4e6a72e5ebe91521e6ae81bc35d28def8a6309afa7736"
+ },
+ "decisions": [
+  {
+   "item": "B1",
+   "rule": "E8",
+   "verdict": "APPROVE",
+   "text": "Typography only: retain the existing allowance for same-function dash glyphs; fold curly/straight glyphs within the same quote class. Keep single versus double marks, apostrophes, measurement marks and meaningful punctuation distinct. Never fold negation, numeric signs, ranges or unit case.",
+   "reason": "",
+   "draft_clarification": "Retains the existing E8 allowance for typographic dash variants; it does not relax signs or ranges."
+  },
+  {
+   "item": "B2",
+   "rule": "E2",
+   "verdict": "APPROVE",
+   "text": "Ignore a heading's continuation marker on either side of comparison, only for the same heading and scope. It never removes body text or resets scope.",
+   "reason": ""
+  },
+  {
+   "item": "B3",
+   "rule": "E11",
+   "verdict": "APPROVE",
+   "text": "A footnote may occupy text blocks, table rows, a one-cell table, or separate marker/body blocks. Require the complete note and correct marker-to-note association. A matching note elsewhere, a wrong note link or a marker glued into a number must not pass.",
+   "reason": ""
+  },
+  {
+   "item": "B4",
+   "rule": "E12",
+   "verdict": "CORRECTED",
+   "text": "Compare ordered, source-mapped pieces of the same passage together, using the order and boundaries retained by the output (including its geometry or mapping). Verify them against the rendered source; never use the key to invent a joiner or restore missing text. Segmentation alone is not a fault, including fragments within a word when adjacency is retained without an inserted separator. Whitespace reflow is allowed only when word/number boundaries and table associations survive. A lost word boundary or an inserted space inside a word must fail; unresolved joins stay explicit.",
+   "reason": "The proposed ban on every within-word piece boundary would penalize faithful character/span output. Letting the key choose boundaries would instead repair missing output. Coty also demonstrates that raw HTML adjacency is not a rendered separator."
+  },
+  {
+   "item": "B5",
+   "rule": "E13",
+   "verdict": "APPROVE",
+   "text": "A cell may hold the title plus the record's own basis/unit text. It passes when each required piece stays identifiable, complete and attached to the same table; grade each piece in its own check. Do not drop other parenthetical text, qualifiers or extra units.",
+   "reason": ""
+  },
+  {
+   "item": "B6",
+   "rule": "E14",
+   "verdict": "APPROVE",
+   "text": "Header scope comes from the rendered source. Accept any representation that preserves the correct association (grid, geometry or explicit association); otherwise count a miss. Source-aware repair is a declared candidate route, scored separately; the grader never repairs from the key.",
+   "reason": ""
+  },
+  {
+   "item": "B7",
+   "rule": "E15",
+   "verdict": "CORRECTED",
+   "text": "Each period part must govern the target: column headings by column, time printed on the target's row by row, and preceding time headings by their containing row group until that scope ends. A lower-level subheading or an unrelated label does not by itself end the containing time scope. A new competing group must not inherit the old group's date. Left-column placement alone establishes none of these associations.",
+   "reason": "The 49 development examples include 44 same-row time parts. The absence of a foreign label-only row in that sample cannot make every such row a universal time-scope boundary."
+  },
+  {
+   "item": "B8",
+   "rule": "E10",
+   "verdict": "APPROVE",
+   "text": "Long transcriptions are strict; word error rate is a diagnostic, never a pass rule. A furniture exclusion requires a reviewed source anchor declared in this key version, must apply equally and must be reported. There is no automatic waiver for page numbers, headers or logos. Without a declared exclusion, retain the text.",
+   "reason": ""
+  },
+  {
+   "item": "B9",
+   "rule": "E16",
+   "verdict": "CORRECTED",
+   "text": "Grade visible-text targets against rendered content. Exclude only proved non-rendered content from that channel and report its size; retain/account for structured metadata separately. Font size alone does not prove a subtree invisible: a zero-size wrapper can contain visible children, and 1-point text is not automatically invisible. A visibility:hidden ancestor can have visibility:visible descendants; do not discard them. OCR must correspond to visible image content; generated titles are not original evidence. Uncertain visibility remains explicit.",
+   "reason": "A font-size:0 wrapper does not always hide nothing, and visibility:hidden is not proof that every descendant is hidden. The revised text also needs the original separate accounting for hidden XBRL metadata."
+  },
+  {
+   "item": "B10",
+   "rule": "E17",
+   "verdict": "APPROVE",
+   "text": "Declare each route's supported formats. Keep all 30 XML targets and count unsupported XML explicitly. HTML-only results compare HTML performance only and cannot select the complete pipeline. Test an approved tool-based XML route before pipeline selection; no custom XML converter.",
+   "reason": ""
+  }
+ ],
+ "package_decisions": [
+  {
+   "item": "A1",
+   "verdict": "APPROVE",
+   "action": "Keep the old 0005 validation unchanged; add CODEX_VALIDATION_0729_20261003.json for the actual 0729 gate and an external post-freeze validation for this package."
+  },
+  {
+   "item": "A2",
+   "verdict": "APPROVE",
+   "action": "Resolve the manifest-declared evidence_root from __file__; verify packet-manifest and source hashes. Keep code/key/tests frozen, without copying originals or raw model outputs."
+  },
+  {
+   "item": "E6",
+   "verdict": "APPROVE",
+   "action": "Make the previously approved explicit-wrong-link failure unambiguous; an explicit edge field is not required if another representation retains the correct association."
+  }
+ ]
+}
