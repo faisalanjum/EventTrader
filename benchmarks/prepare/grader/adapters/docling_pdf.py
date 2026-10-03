@@ -45,11 +45,14 @@ def anchors_from_boxes(doc, units):
     return units
 
 
+def page_sizes(doc):
+    """Docling's page sizes, so the grader can check that every region lies on its page."""
+    return {int(k): [v['size']['width'], v['size']['height']] for k, v in (doc.get('pages') or {}).items() if v.get('size')}
+
+
 def route_for_pdf(doc, file_id, sha256, seconds, version, settings=None):
-    units = anchors_from_boxes(doc, to_units(doc, with_index=True))
-    placed = [u for u in units if u.get('anchor')]
-    units = sorted(placed, key=lambda u: grade.order_key(u['anchor'])) + [u for u in units if not u.get('anchor')]
-    return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
+    units = anchors_from_boxes(doc, to_units(doc, with_index=True))  # the tool's own order is kept
+    return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds, 'pages': page_sizes(doc),
             'route': {'name': NAME, 'tool': 'docling', 'version': version, 'settings': settings or {}, 'adapter': 'benchmarks/prepare/grader/adapters/docling_pdf.py', 'linker': None},
             'units': units, 'uncovered': []}
 
@@ -58,10 +61,8 @@ def route_for_printed_html(doc, raw, file_id, sha256, seconds, version, settings
     units = to_units(doc, with_index=True)
     for u in units:
         for c in u.get('cells') or []: c.pop('_i', None)
-    linked = anchor.link(raw, units)
-    placed = [u for u in linked['units'] if isinstance(u.get('anchor'), (dict, list))]
-    linked['units'] = sorted(placed, key=lambda u: grade.order_key(u['anchor'])) + [u for u in linked['units'] if u not in placed]
-    return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
+    linked = anchor.link(raw, units)  # the tool's own order is kept
+    return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds, 'pages': page_sizes(doc),
             'route': {'name': NAME + ' (printed HTML)', 'tool': 'docling', 'version': version, 'settings': settings or {}, 'adapter': 'benchmarks/prepare/grader/adapters/docling_pdf.py', 'linker': 'benchmarks/prepare/grader/anchor.py'},
             'units': linked['units'], 'uncovered': linked['uncovered']}
 
@@ -69,7 +70,7 @@ def route_for_printed_html(doc, raw, file_id, sha256, seconds, version, settings
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--key', required=True); ap.add_argument('--split', required=True); ap.add_argument('--out', required=True); ap.add_argument('--catalog')
-    ap.add_argument('--limit', type=int, help='only the N files with most targets (native PDFs first)'); ap.add_argument('--no-ocr', action='store_true')
+    ap.add_argument('--limit', type=int, help='only the first N files (native PDFs first, then by name)'); ap.add_argument('--no-ocr', action='store_true')
     ap.add_argument('--reuse-raw', action='store_true', help='adapt saved Docling output again instead of converting')
     a = ap.parse_args(argv)
     from docling.document_converter import DocumentConverter, PdfFormatOption
@@ -82,10 +83,11 @@ def main(argv=None):
     settings = {'pipeline': 'PDF', 'table_mode': 'FAST', 'heading_hierarchy': True, 'ocr': not a.no_ocr, 'print': 'google-chrome --headless=new --print-to-pdf' }
     conv = DocumentConverter(format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=opts)})
     out = Path(a.out); (out / 'raw').mkdir(parents=True, exist_ok=True); (out / 'route').mkdir(exist_ok=True)
-    files, counts = {}, {}
-    for t in grade.load_key(a.key, a.catalog):
-        if t['split'] == a.split: files.setdefault(t['file_id'], (t['path'], t['sha256'])); counts[t['file_id']] = counts.get(t['file_id'], 0) + 1
-    order = sorted(files, key=lambda f: (files[f][0].suffix.lower() != '.pdf', -counts[f], f))
+    files = {}
+    for t in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
+        if t['split'] == a.split: files.setdefault(t['file_id'], (t['path'], t['sha256']))
+    order = sorted(files, key=lambda f: (files[f][0].suffix.lower() != '.pdf', f))  # native PDFs first, then by name
+    if a.reuse_raw: order = [f for f in order if (out / 'raw' / (f + '.docling.json')).exists()]  # re-adapt what was converted, convert nothing new
     if a.limit: order = order[:a.limit]
     facts = {}
     for fid in order:

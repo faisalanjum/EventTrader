@@ -310,3 +310,35 @@ The round-2 package `FINAL_KEY_FOR_CODEX_20261003_1134` froze the contract (`CON
 - **Proof after the change.** 116 unit tests, 42/42 real-original pairs; all routes re-linked and re-graded with the final code
   (`/home/faisal/prepare_work/grader_runs/final_1134_20261003.log`; final table in `REVIEW_HANDOVER.md`, run of 12:36; §16 is the
   earlier provisional board and is superseded by it).
+
+## 21. Codex's independent grader review (2026-10-03, `prepare_work/grader_review_codex_20261003/`) — what changed
+
+Codex found wrong passes and wrong failures with 27 synthetic probes, 22 development-original checks and 4 browser comparisons.
+Each point was reproduced here first, then fixed with a test; their probe scripts were re-run against the live code afterwards
+(`FABLE_RESPONSE.md` in their folder has the per-case outcomes). Numbers after the fixes: 139 unit tests, 48/48 real-original variants.
+
+| Codex | Change made | Where |
+|---|---|---|
+| R1 missing content looked complete | a picture's gap anchor is flagged and never counts as coverage; a PARTIAL route, a file without a text layer, or stylesheet-dependent visibility leave coverage **not measured**, and a gate with any unmeasured file does not pass (`measured_pass` says what the measured files did); the Markdown says "not measured for …" instead of yes | `anchor.link`, `gates_for_file`, `run`, `markdown` |
+| R2 positions not validated | text without a position counts as `unanchored` (gate fails); byte anchors must lie inside the file; PDF regions must lie on their page (routes declare `pages` sizes; without them the file is not measured); a route file naming another source is NOT_CONVERTED; the checking mode comes from the key's format, not the output's file name | `gates_for_file`, `run`, `RouteFile`, adapters declare `pages` |
+| R3 text map vs browser | tags are lexed with quoted attributes (`title="a > b"`), only the `style` attribute is read for hiding and for `display`, a `display:block` span separates and a `display:inline` div does not; a document whose stylesheet rules can hide (`display:none`, `visibility:hidden`, `opacity:0` in `<style>`, or an external sheet) is **uncertain**: its coverage and anchor honesty are reported, not certified (0 of 69 development files) | `anchor._TOKEN/_STYLE/_DISPLAY/_SHEET`, `Visible.certain` |
+| R4 contradictions passed | a note unit whose declared mark is not the key's mark fails (`wrong_note_link`); every explicit link for a phrase must point at the destination; E15 time scope now comes from the source mapping: the rows the route puts between the time heading and the value must lie between them in the source, and the heading must precede the value (`order`/`scope`) — no key date list, no hard-coded words; Codex's "unknown competing group" probe fails as it should | `footnotes`, `references`, `periods` |
+| R5 XML namespace | the leaf's expanded name must be one the source prints for that path and local name (`namespace`); prefixes may differ, URIs may not | `grade_xml`, `xml_names` |
+| R6 erased information | values compare with cell boundaries as the only joinable places (`fused`): "1,9 70" fails with `spacing`; a trailing bracket is set aside only when it, or the whole line, is one of the record's own pieces (E13); range partners likewise | `value`, `same`, `own_bracket_off`, `range_` |
+| R7 correct forms rejected | `kind` is a recognition count like `heading_recognised`, never a target failure; a within-word split whose pieces have only page regions is **unresolved** (`adjacency`), not a fault | `STRUCTURE`, `pieces_match`, `grade_structure` |
+| R8 adapters measured different things | neither adapter re-sorts units: the gate measures the tool's reading order for both; Docling's furniture is a `layer`, excluded from the order count; a footnote or caption body the tool attached only to its table is emitted once, right after the table | `adapters/docling_html.py`, `adapters/docling_pdf.py` |
+| R9 inputs and results | a source without a split assignment stops the run; gate details of any file holding a held-out target are counts only and `unresolved` ids are filtered; `run_facts` records key, manifest and catalog hashes and checks the key files against the frozen manifest; sources resolve through the manifest's `evidence_root`; converters read `load_sources` (files, hashes, splits — no answers) | `load_key`, `load_sources`, `evidence_root`, `run_facts`, adapters, `screen_grid` |
+
+**E13 refinement after the run (13:51):** a title or header cell may also carry the unit/basis/corner lines that *sibling records of
+the same table* declare (`Grader(..., peers)`); the SL Green ratio records still fail because no record of that table declares the
+table's unit line — raised as a wording question for the key thread in `REVIEW_HANDOVER.md`, not weakened here.
+
+**Where I disagree, and why (stated for the next review):**
+- *Whitespace in the honesty gate (R6, last point).* The gate certifies **position**: the source bytes at the anchor spell the claimed
+  text. Whitespace differs legitimately between source bytes and rendered text (indentation, line breaks inside a cell), so the gate
+  keeps comparing without whitespace; spacing damage is a text fault and is caught per target by the value and text checks. Making
+  the gate whitespace-strict would flag honest routes on layout whitespace.
+- *Stylesheet-hidden text (R3, case 3).* The scanner does not apply class rules and will not grow a CSS engine; such files are
+  marked uncertain and their gates not measured. This is the "mark visibility unresolved" option from the review.
+- *E14 explicit header association (R7).* The common format's grid **is** the declared representation today; geometry is a declared
+  separate route. An explicit association field is not built until a tool offers one; this is a stated limit, not a hidden fail.

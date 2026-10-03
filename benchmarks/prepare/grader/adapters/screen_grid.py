@@ -87,7 +87,7 @@ def main(argv=None):
     a = ap.parse_args(argv)
     from playwright.sync_api import sync_playwright
     paths = {}
-    for t in grade.load_key(a.key, a.catalog): paths.setdefault(t['file_id'], t['path'])
+    for t in grade.load_sources(a.key, a.catalog): paths.setdefault(t['file_id'], t['path'])  # sources only
     src, out = Path(a.route), Path(a.out); facts = {}
     with sync_playwright() as pw:
         browser = pw.chromium.launch()

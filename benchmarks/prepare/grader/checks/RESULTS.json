@@ -185,6 +185,40 @@
    "ok": true
   },
   {
+   "case": "UDR udr/P01",
+   "key_id": "udr/P01",
+   "variant": "damaged: a space inserted inside the value",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "spacing"
+   },
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P01",
+   "key_id": "udr/P01",
+   "variant": "damaged: an unrelated qualifier appended to the title",
+   "expected": "FAIL",
+   "expected_check": "table_title",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "table_title"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "table_title": "text"
+   },
+   "ok": true
+  },
+  {
    "case": "UDR udr/P02",
    "key_id": "udr/P02",
    "variant": "valid: value linked to its row, column and page",
@@ -225,6 +259,23 @@
    "failed_checks": [],
    "structure_misses": [],
    "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P02",
+   "key_id": "udr/P02",
+   "variant": "damaged: a space inserted inside the value",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "spacing"
+   },
    "ok": true
   },
   {
@@ -292,6 +343,23 @@
    "ok": true
   },
   {
+   "case": "UDR udr/P03",
+   "key_id": "udr/P03",
+   "variant": "damaged: a space inserted inside the value",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "spacing"
+   },
+   "ok": true
+  },
+  {
    "case": "UDR udr/P04",
    "key_id": "udr/P04",
    "variant": "valid: value linked to its row, column and page",
@@ -335,6 +403,23 @@
    "ok": true
   },
   {
+   "case": "UDR udr/P04",
+   "key_id": "udr/P04",
+   "variant": "damaged: a space inserted inside the value",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "spacing"
+   },
+   "ok": true
+  },
+  {
    "case": "UDR udr/P05",
    "key_id": "udr/P05",
    "variant": "valid: value linked to its row, column and page",
@@ -375,6 +460,23 @@
    "failed_checks": [],
    "structure_misses": [],
    "reasons": {},
+   "ok": true
+  },
+  {
+   "case": "UDR udr/P05",
+   "key_id": "udr/P05",
+   "variant": "damaged: a space inserted inside the value",
+   "expected": "FAIL",
+   "expected_check": "value",
+   "expected_gate_fail": null,
+   "verdict": "FAIL",
+   "failed_checks": [
+    "value"
+   ],
+   "structure_misses": [],
+   "reasons": {
+    "value": "spacing"
+   },
    "ok": true
   },
   {

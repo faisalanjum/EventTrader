@@ -91,8 +91,8 @@ def main(argv=None):
     version = f"edgartools {md.version('edgartools')}"
     out = Path(a.out); (out / 'raw').mkdir(parents=True, exist_ok=True); (out / 'route').mkdir(exist_ok=True)
     files = {}
-    for t in grade.load_key(a.key, a.catalog):
-        if t['split'] == a.split: files.setdefault(t['file_id'], (t['path'], t['sha256']))
+    for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
+        if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
     facts = {}
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)

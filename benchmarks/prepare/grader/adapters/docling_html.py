@@ -51,24 +51,32 @@ def to_units(doc, with_index=False):
         units.append({'id': t['self_ref'], 'kind': 'table', 'cells': cells, 'caption': [item(k['$ref']).get('text') or '' for k in t.get('captions') or []],
                       'notes': [k['$ref'] for k in t.get('footnotes') or []]})
 
-    def walk(ref):
+    def walk(ref, layer=None):
         kind, it = ref.split('/')[1], item(ref)
         if kind == 'texts': text_unit(it)
-        elif kind == 'tables': table_unit(it)
+        elif kind == 'tables':
+            table_unit(it)
+            for k in (it.get('footnotes') or []) + (it.get('captions') or []):  # bodies the tool attached to the table and nowhere else
+                if k['$ref'].split('/')[1] == 'texts' and all(u['id'] != k['$ref'] for u in units) and k['$ref'] not in body_refs: text_unit(item(k['$ref']))
         elif kind == 'pictures': units.append({'id': ref, 'kind': 'image', 'text': ''})
         elif kind == 'groups' and (it.get('name') or '').startswith('rich_cell_group'): return  # read by its cell
+        if layer and units and units[-1].get('id') == ref: units[-1]['layer'] = layer
         if kind != 'tables':  # headings, pictures and groups may hold further items (pre-order = reading order)
-            for k in it.get('children') or []: walk(k['$ref'])
+            for k in it.get('children') or []: walk(k['$ref'], layer)
 
+    def refs_under(ref, acc):
+        acc.add(ref)
+        for k in item(ref).get('children') or []: refs_under(k['$ref'], acc)
+        return acc
+    body_refs = set()
+    for k in doc['body']['children']: refs_under(k['$ref'], body_refs)
     for k in doc['body']['children']: walk(k['$ref'])
-    for k in (doc.get('furniture') or {}).get('children') or []: walk(k['$ref'])  # after the body: the linker places them by content
+    for k in (doc.get('furniture') or {}).get('children') or []: walk(k['$ref'], 'furniture')  # Docling's own layer, kept in its own order
     return units
 
 
 def route_for(doc, raw, file_id, sha256, seconds, version, settings=None):
-    linked = anchor.link(raw, to_units(doc))
-    placed = [u for u in linked['units'] if isinstance(u.get('anchor'), (dict, list))]
-    linked['units'] = sorted(placed, key=lambda u: grade.order_key(u['anchor'])) + [u for u in linked['units'] if u not in placed]  # reading order = source order
+    linked = anchor.link(raw, to_units(doc))  # the tool's own order is kept: the reading-order gate measures the tool, not the adapter
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'docling', 'version': version, 'settings': settings or {'backend': 'HTML', 'options': 'defaults'},
                       'adapter': 'benchmarks/prepare/grader/adapters/docling_html.py', 'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': linked['units'], 'uncovered': linked['uncovered']}
@@ -90,8 +98,8 @@ def main(argv=None):
     version = next((f"{d} {md.version(d)}" for d in ('docling', 'docling-slim') if _installed(md, d)), 'unknown') + f"; docling-core {md.version('docling-core')}"
     out = Path(a.out); (out / 'raw').mkdir(parents=True, exist_ok=True); (out / 'route').mkdir(exist_ok=True)
     files = {}
-    for t in grade.load_key(a.key, a.catalog):
-        if t['split'] == a.split: files.setdefault(t['file_id'], (t['path'], t['sha256']))
+    for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
+        if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
     conv, facts = DocumentConverter(), {}
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)

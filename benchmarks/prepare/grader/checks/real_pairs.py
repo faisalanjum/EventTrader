@@ -267,6 +267,14 @@ def cases(targets):
                     ('damaged: value on a missing page', damage(ctl, lambda r: cell_by_anchor(tbl_of(r), t['anchor'])['anchor'].update(page=t['anchor']['page'] + 1)), 'UNRESOLVED', None)]
         if cid == 'udr/P03':
             variants.append(('damaged: scenario columns swapped (Low/High flipped)', damage(ctl, lambda r: swap_cols(tbl_of(r), t)), 'FAIL', 'range'))
+        def space_inside(r, t=t):  # Codex's review case: "1,970" -> "1,9 70" must fail (R6)
+            c = cell_by_anchor(tbl_of(r), t['anchor']); x = c['text']; c['text'] = x[:len(x) // 2] + ' ' + x[len(x) // 2:]
+        variants.append(('damaged: a space inserted inside the value', damage(ctl, space_inside), 'FAIL', 'value'))
+        if cid == 'udr/P01':
+            title = t['fields']['table_title'][0]
+            def qualify(r):  # Codex's review case: a qualifier the record does not own is appended to the title (E13)
+                u = next(u for u in r['units'] if u.get('kind') != 'table' and grade.norm(u.get('text', '')) == grade.norm(title)); u['text'] += ' (including discontinued operations)'
+            variants.append(('damaged: an unrelated qualifier appended to the title', damage(ctl, qualify), 'FAIL', 'table_title'))
         out.append((f'UDR {cid}', cid, variants))
 
     # 4 + supplement Darden: range / footnote

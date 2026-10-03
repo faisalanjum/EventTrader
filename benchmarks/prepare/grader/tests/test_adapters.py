@@ -3,6 +3,7 @@ import json
 import unittest
 
 from benchmarks.prepare.grader.adapters import docling_html as dh
+from benchmarks.prepare.grader.adapters import edgartools_html as eh
 
 DOC = {  # the DoclingDocument JSON shape that matters: reading order in body, texts, tables with rich cells, groups, pictures
     'furniture': {'children': []},
@@ -39,19 +40,38 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         self.assertEqual([u['text'] for u in dh.to_units(NESTED)], ['Part I', 'First paragraph.', 'Second paragraph.', 'Page 1'])
         self.assertEqual(dh.to_units(NESTED)[3]['kind'], 'clutter')
 
-    def test_route_units_are_ordered_by_their_place_in_the_original(self):
+    def test_route_units_keep_the_tools_own_order_and_furniture_is_marked(self):
+        # the gate measures the tool's reading order; the adapter never re-sorts by source position (R8); furniture is a layer, not an order fault
         raw = b'<p>Page 1</p><p>Part I</p><p>First paragraph.</p><p>Second paragraph.</p>'
         route = dh.route_for(NESTED, raw, 'acc/f.htm', 'sha', seconds=0.1, version='2.x')
-        self.assertEqual([u['text'] for u in route['units']], ['Page 1', 'Part I', 'First paragraph.', 'Second paragraph.'])
+        self.assertEqual([u['text'] for u in route['units']], ['Part I', 'First paragraph.', 'Second paragraph.', 'Page 1'])
+        self.assertEqual([u.get('layer') for u in route['units']], [None, None, None, 'furniture'])
         self.assertTrue(all(u.get('anchor') for u in route['units']))
+
+    def test_both_html_adapters_keep_the_same_wrong_order_so_the_gate_measures_the_tool(self):
+        first, second = 'First paragraph is sufficiently long for an unambiguous match.', 'Second paragraph is sufficiently long for an unambiguous match.'
+        raw = ('<p>' + first + '</p><p>' + second + '</p>').encode()
+        doc = {'body': {'children': [{'$ref': '#/texts/0'}, {'$ref': '#/texts/1'}]}, 'texts': [{'self_ref': '#/texts/0', 'label': 'text', 'text': second}, {'self_ref': '#/texts/1', 'label': 'text', 'text': first}]}
+        tree = {'type': 'DocumentNode', 'children': [{'type': 'ParagraphNode', 'text': second}, {'type': 'ParagraphNode', 'text': first}]}
+        from benchmarks.prepare.grader import grade
+        breaks = [grade.gates_for_file(grade.RouteFile(r, raw, 'htm'), 'OK')['order_breaks'] for r in
+                  (dh.route_for(doc, raw, 'acc/o.htm', 'sha', 0, 't'), eh.route_for(tree, raw, 'acc/o.htm', 'sha', 0, 't'))]
+        self.assertEqual(breaks, [1, 1])
+
+    def test_a_footnote_body_only_referenced_from_its_table_is_still_emitted_once(self):
+        units = dh.to_units(DOC)
+        ids = [u['id'] for u in units]
+        self.assertEqual(ids.count('#/texts/5'), 1)
+        self.assertEqual(ids.index('#/texts/5'), ids.index('#/tables/0') + 1)  # right after its table
+        self.assertEqual(next(u for u in units if u['id'] == '#/texts/5')['kind'], 'footnote')
 
 
     def test_units_follow_reading_order_with_mapped_kinds(self):
         units = dh.to_units(DOC)
         self.assertEqual([(u['id'], u['kind']) for u in units],
-                         [('#/texts/0', 'heading'), ('#/tables/0', 'table'), ('#/texts/3', 'list_item'), ('#/pictures/0', 'image'), ('#/texts/4', 'text')])
+                         [('#/texts/0', 'heading'), ('#/tables/0', 'table'), ('#/texts/5', 'footnote'), ('#/texts/3', 'list_item'), ('#/pictures/0', 'image'), ('#/texts/4', 'text')])
         self.assertEqual(units[0]['level'], 2)
-        self.assertEqual(units[4]['links'], [{'text': 'See the table below', 'href': '#tbl', 'to': None}])
+        self.assertEqual(units[5]['links'], [{'text': 'See the table below', 'href': '#tbl', 'to': None}])
 
     def test_rich_cells_are_read_from_their_pieces_with_marks_apart_and_empty_cells_dropped(self):
         table = dh.to_units(DOC)[1]
@@ -68,7 +88,7 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
 
     def test_struck_pieces_are_reported_as_struck(self):
         doc = json.loads(json.dumps(DOC)); doc['texts'][4]['formatting'] = {'bold': False, 'italic': False, 'underline': False, 'strikethrough': True, 'script': 'baseline'}
-        self.assertEqual(dh.to_units(doc)[4]['struck'], ['See the table below'])
+        self.assertEqual(dh.to_units(doc)[5]['struck'], ['See the table below'])
 
     def test_route_file_is_anchored_by_the_shared_linker(self):
         raw = b'<p>Free Cash Flow</p><table><tr><td colspan="2">Revenue</td></tr><tr><td></td><td>769</td></tr><tr><td>(LFL)<sup>(a)</sup></td></tr></table><ul><li>First point</li></ul><img src="x.jpg"><p>See the table below</p><p>(a) Like for like</p>'
@@ -143,6 +163,10 @@ PDFDOC = {  # Docling's PDF output: items carry prov (page, bottom-left box, cha
 
 
 class DoclingPdfAdapterTests(unittest.TestCase):
+    def test_pdf_routes_declare_their_page_sizes(self):
+        route = dp.route_for_pdf(PDFDOC, 'acc/d.pdf', 'sha', 1.0, '2.x')
+        self.assertEqual(route['pages'], {1: [612.0, 792.0], 2: [612.0, 792.0]})
+
     def test_native_pdf_anchors_are_top_left_page_regions_from_docling_boxes(self):
         route = dp.route_for_pdf(PDFDOC, 'acc/deck.pdf', 'sha', seconds=12.0, version='2.x')
         heading, table, para = route['units']

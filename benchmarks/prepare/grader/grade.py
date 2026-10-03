@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 import re
 import unicodedata
+import xml.etree.ElementTree as ET
 
 from benchmarks.prepare.grader.anchor import Visible, norm, squash
 
@@ -23,7 +24,7 @@ T4 = ('value_kind', 'sign', 'marker_meaning', 'measure', 'unit_interpretation') 
 KIND = {'heading': 'heading', 'title': 'heading', 'list_item': 'list_item', 'footnote': 'footnote', 'caption': 'caption',
         'table': 'table', 'text': 'paragraph'}
 LOOSE_KINDS = ('image', 'metadata', 'other')  # reported, never a pass rule
-STRUCTURE = ('heading_recognised', 'note_linked', 'reference_linked')
+STRUCTURE = ('heading_recognised', 'note_linked', 'reference_linked', 'kind')  # recognition counts: reported, never a pass rule
 _CONTINUED = re.compile(r'\s*\((?:continued)\)', re.I)            # E2
 _OPEN = ''.join(chr(i) for i in range(0x3000) if unicodedata.category(chr(i)) == 'Ps'); _CLOSE = ''.join(chr(i) for i in range(0x3000) if unicodedata.category(chr(i)) == 'Pe')
 _EMPTY_BRACKETS = re.compile('[' + re.escape(_OPEN) + ']\\s*[' + re.escape(_CLOSE) + ']')
@@ -42,7 +43,7 @@ def _packet(bulk, p):
 
 def load_key(key_dir, catalog=None):
     """Targets of the key package plus the development supplement, each with its anchors, support map and split."""
-    key_dir = Path(key_dir); bulk = key_dir.parent
+    key_dir = Path(key_dir); bulk = evidence_root(key_dir)
     records = json.loads((key_dir / 'CLAUDE_ANSWER_KEY.json').read_text())
     flags = json.loads((key_dir / 'CLAUDE_KEY_FLAGS.json').read_text())
     support = json.loads((key_dir / 'KEY_SUPPORT_MAP.json').read_text())
@@ -69,7 +70,51 @@ def load_key(key_dir, catalog=None):
                             'support': {f: {'how': 'model', 'anchors': a} for f, a in c.get('field_support', {}).items() if a}})
     for t in targets:
         ext = Path(t['file_id']).suffix.lower().lstrip('.'); t['format'] = f"{t['type']}/{'htm' if ext == 'html' else ext}"
+    missing = sorted({t['file_id'] for t in targets if t['split'] == 'unknown'})
+    if missing: raise ValueError(f'no split assignment in {catalog} for: ' + ', '.join(missing))  # never let an unassigned file become public
     return targets
+
+
+def load_sources(key_dir, catalog=None):
+    """The source files of the key package with their hashes and splits — and nothing else, so a converter can be run
+    without reading any answer. Packets come from the frozen manifest when there is one, else from the packet folders."""
+    key_dir = Path(key_dir); bulk = evidence_root(key_dir); m = key_dir / 'FINAL_MANIFEST.json'
+    catalog = Path(catalog) if catalog else bulk.parent / 'case_catalog.csv'
+    with open(catalog, newline='') as f: splits = {row['source']: row['split'] for row in csv.DictReader(f)}
+    listed = json.loads(m.read_text()).get('packets_sha256') if m.exists() else None
+    dirs = [bulk / rel for rel in listed] if listed else [d for base in (bulk / 'packets', bulk / 'bundled' / 'packets') if base.exists() for d in sorted(base.iterdir()) if d.is_dir()]
+    out, seen = [], set()
+    for d in dirs:
+        for src in json.loads((d / 'targets.json').read_text())['sources']:
+            if src['file_id'] in seen: continue
+            seen.add(src['file_id']); out.append({'file_id': src['file_id'], 'path': d / src['path'], 'sha256': src['source']['sha256'], 'split': splits.get(src['file_id'], 'unknown')})
+    sup = key_dir / 'converter_checks' / 'REGRESSION_CASES.json'
+    if sup.exists():
+        for fid, src in json.loads(sup.read_text())['sources'].items():
+            if fid not in seen: seen.add(fid); out.append({'file_id': fid, 'path': bulk / src['path'], 'sha256': src['sha256'], 'split': 'supplement'})
+    missing = sorted(x['file_id'] for x in out if x['split'] == 'unknown')
+    if missing: raise ValueError(f'no split assignment in {catalog} for: ' + ', '.join(missing))
+    return out
+
+
+def evidence_root(key_dir):
+    """Where the originals live: the frozen manifest's declared root, else the key folder's parent."""
+    m = key_dir / 'FINAL_MANIFEST.json'
+    root = json.loads(m.read_text()).get('evidence_root') if m.exists() else None
+    return (key_dir / root).resolve() if root else key_dir.parent
+
+
+def run_facts(key_dir, catalog, route_dir):
+    """Identities of the inputs a run read, so a result can be tied to one key package and one catalog; the key files are
+    checked against the frozen manifest when there is one."""
+    key_dir = Path(key_dir); m = key_dir / 'FINAL_MANIFEST.json'
+    facts = {'key_package': str(key_dir), 'route_dir': str(route_dir), 'key_sha256': sha256((key_dir / 'CLAUDE_ANSWER_KEY.json').read_bytes()),
+             'catalog_sha256': sha256(Path(catalog or evidence_root(key_dir).parent / 'case_catalog.csv').read_bytes()), 'manifest_sha256': None}
+    if m.exists():
+        facts['manifest_sha256'] = sha256(m.read_bytes()); listed = json.loads(m.read_text()).get('files_sha256') or {}
+        for rel in ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json'):
+            if rel in listed and sha256((key_dir / rel).read_bytes()) != listed[rel]: raise ValueError(f'{rel} differs from the frozen manifest of {key_dir.name}')
+    return facts
 
 
 def anchors_of(t, field, alt=None):
@@ -130,13 +175,15 @@ def source_before(a, b):
 class RouteFile:
     """One route output file with lookups by location."""
 
-    def __init__(self, data, raw):
+    def __init__(self, data, raw, fmt=None):
         self.data, self.units = data, data.get('units') or []
         for i, u in enumerate(self.units): u['_order'] = i
         self.cells = [(u, c) for u in self.units if u.get('kind') == 'table' for c in u.get('cells') or []]
         self.by_id = {u['id']: u for u in self.units if 'id' in u}
-        ext = Path(data['file_id']).suffix.lower()
+        ext = '.' + fmt.lower().lstrip('.') if fmt else Path(data['file_id']).suffix.lower()  # the key's declared format decides the checking mode
         self.vis = Visible(raw, xml=ext == '.xml') if raw is not None and ext in ('.htm', '.html', '.xml', '.txt') else None  # PDFs/pictures: geometry only
+        self.raw, self.raw_len = raw, (len(raw) if raw is not None else None)
+        self.pages = {int(k): v for k, v in (data.get('pages') or {}).items()}  # page sizes [width, height] declared by the route, if any
         # byte index: cells sorted by first byte, with the longest span, so a lookup scans a small window
         byte_cells = [(min(a['byte_start'] for a in sp), max(a['byte_end_exclusive'] for a in sp), u, c)
                       for u, c in self.cells for sp in [[a for a in spans(c.get('anchor')) if 'byte_start' in a]] if sp]
@@ -212,13 +259,31 @@ def same(got, want, markers=(), own=()):
     got, want = norm(got), norm(want)
     if got == want: return True, None
     if minus_markers(got, markers) == want: return True, 'marker_in_text'
-    bare = _TRAILING_BRACKET.sub('', minus_markers(got, markers))
-    if norm(bare) == want: return True, 'unit_phrase_split'
+    if norm(own_bracket_off(minus_markers(got, markers), own)) == want: return True, 'unit_phrase_split'
     rest = minus_markers(got, markers)
     for piece in sorted((norm(x) for x in own if x and norm(x) != want), key=len, reverse=True): rest = rest.replace(piece, ' ')
     rest = minus_markers(_EMPTY_BRACKETS.sub(' ', rest), markers)  # brackets left empty, and marks now at an end, set aside too
-    if norm(rest) == want or norm(_TRAILING_BRACKET.sub('', norm(rest))) == want: return True, 'joined_with_own_pieces'
+    if norm(rest) == want or norm(own_bracket_off(norm(rest), own)) == want: return True, 'joined_with_own_pieces'
     return False, None
+
+
+def own_bracket_off(text, own):
+    """The text without a trailing bracketed phrase, only when that phrase is one of the record's own pieces (E13: its unit line
+    or basis words); any other parenthetical stays and must match."""
+    m = _TRAILING_BRACKET.search(text)
+    if not m: return text
+    inner = norm(m.group()).strip(); bare = inner[1:-1].strip() if len(inner) > 1 else inner
+    mine = {norm(x) for x in own if x}
+    return text[:m.start()] if mine & {inner, bare, norm(text)} else text  # the bracket, or the whole line, is a declared own piece
+
+
+def fused(texts, want):
+    """Do these cell texts, kept in order, spell `want` when joined with nothing or one space between neighbouring cells? The
+    spacing inside a cell must match; only the cell boundaries may be joined or spaced (symbol cells beside a number)."""
+    parts, want = [norm(x) for x in texts if norm(x)], norm(want)
+    cands = {''}
+    for x in parts: cands = {c + sep + x for c in cands for sep in (('',) if not c else ('', ' '))}
+    return want in cands
 
 
 def spacing_only(got, want):
@@ -246,6 +311,19 @@ def match_pieces(texts, pieces, markers=(), own=()):
     return go(0, 0, None)
 
 
+def xml_names(raw, path, leaf):
+    """Expanded names ({namespace}local) the XML source uses for `leaf` elements under the ancestor path `path` (expanded names)."""
+    try: root = ET.fromstring(raw)
+    except Exception: return set()
+    parent = {c: p for p in root.iter() for c in p}
+    def chain(e):
+        out = []
+        while e in parent: e = parent[e]; out.append(e.tag)
+        return out[::-1] + ([root.tag] if not out else [])
+    want = list(path)
+    return {e.tag for e in root.iter() if local(e.tag) == leaf and (lambda c: c == want or c[-len(want):] == want if want else True)(chain(e) if e is not root else [])}
+
+
 def anchor_of(k):
     """The source anchor of a carrier: its cell's, else its unit's."""
     return (k['cell'] or k['unit'] or {}).get('anchor')
@@ -263,11 +341,13 @@ def wer(a, b):
 
 # ------------------------------------------------------------------------------------------------- grading one
 class Grader:
-    def __init__(self, t, rf):
+    def __init__(self, t, rf, peers=()):
         self.t, self.rf, self.rows = t, rf, []
         self.markers = [m['marker_text'] for _, v in alternatives(t, 'footnote_markers') for m in (v or [])]
         self.own = [p for f in ('unit_printed', 'segment_or_basis', 'corner_text', 'table_title', 'row_label') for _, v in alternatives(t, f) for p in pieces_of(v)]
         self.own += [part['text'] for _, v in alternatives(t, 'periods') for g in (v or []) for part in g.get('parts') or []]
+        # the table's own heading lines, as the key declares them through any record of the same table (E13 read for the table)
+        self.own += [p for q in peers for f in ('unit_printed', 'segment_or_basis', 'corner_text') for _, v in alternatives(q, f) for p in pieces_of(v)]
 
     def same(self, got, want):
         return same(got, want, self.markers, self.own)
@@ -354,7 +434,9 @@ class Grader:
             if not n: continue
             if not sq.startswith(squash(tx), pos): return False, 'text', frag
             if pos and idx[pos] == idx[pos - 1] + 1 and nw[idx[pos]].isalnum() and nw[idx[pos - 1]].isalnum():
-                if not (anchors and self.adjacent(anchors[prev], anchors[n_])): return False, 'word_split', frag
+                if not (anchors and self.adjacent(anchors[prev], anchors[n_])):
+                    regions = anchors and all(any('region' in x for x in spans(anchors[i])) for i in (prev, n_))
+                    return (None, 'adjacency', frag) if regions else (False, 'word_split', frag)  # boxes cannot prove adjacency: unresolved, not a fault
                 frag += 1
             if norm(tx) != nw[idx[pos]:idx[end - 1] + 1]: return False, 'spacing', frag
             pos, prev = end, n_
@@ -367,16 +449,16 @@ class Grader:
 
     def value(self, tb, V, vr):
         t = self.t; printed, display = t['fields'].get('printed_value'), t['fields'].get('display_value') or t['fields'].get('printed_value')
-        vtext = squash(' '.join(c.get('text', '') for c in V))
-        glued = {squash(printed + m) for m in self.markers} | {squash(m + printed) for m in self.markers}
-        if vtext != squash(printed) and vtext in glued: return self.row('value', 'fail', 'marker_glued')
+        texts = [c.get('text', '') for c in sorted(V, key=lambda c: c['c'])]
+        if not fused(texts, printed) and any(fused(texts, printed + m) or fused(texts, m + printed) for m in self.markers): return self.row('value', 'fail', 'marker_glued')
         danch = anchors_of(t, 'display_value')
         D = list({id(c): c for a in danch for c in self.rf.cells_at(a, tb)}.values()) or V
         if any(not row_hit(c, vr) for c in D): return self.row('value', 'fail', 'symbol_detached')
-        shown = squash(''.join(c.get('text', '') for c in sorted(D, key=lambda c: c['c'])))
-        if shown == squash(display) or vtext == squash(display): return self.row('value', 'pass')
-        if vtext == squash(printed): return self.row('value', 'fail', 'symbol_missing', shown)
-        self.row('value', 'fail', 'text', vtext)
+        shown = [c.get('text', '') for c in sorted(D, key=lambda c: c['c'])]
+        if fused(shown, display) or fused(texts, display): return self.row('value', 'pass')
+        if fused(texts, printed): return self.row('value', 'fail', 'symbol_missing', norm(' '.join(shown)))
+        if squash(''.join(texts)) in (squash(printed), squash(display)) or squash(''.join(shown)) == squash(display): return self.row('value', 'fail', 'spacing', norm(' '.join(texts)))
+        self.row('value', 'fail', 'text', norm(' '.join(texts)))
 
     def row_label(self, value, alt, tb, vr):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'row_label', alt)
@@ -406,7 +488,7 @@ class Grader:
         for cands, flag in ((own, None), (own + other, 'continued_table' if other else None)):
             if not cands: continue
             cands = sorted(cands, key=lambda k: (k['order'], k['cell']['r'], k['cell']['c']))
-            ok, f = match_pieces([k['text'] for k in cands], pieces, self.markers)
+            ok, f = match_pieces([k['text'] for k in cands], pieces, self.markers, self.own)
             if not ok: continue
             if any(not col_hit(k['cell'], vcols) for k in cands): return 'fail', 'column', None
             self.ctx_orders.update(k['order'] for k in cands)
@@ -504,17 +586,12 @@ class Grader:
                     label_col = min([c['c'] for c in self.rf.cells_in(tb) if row_hit(c, vr)] or [0])
                     free = [c for c in cells if c['r'] != vr and not col_hit(c, vcols)]  # neither on the value's row nor over its column
                     if any(c['c'] > label_col for c in free): return 'fail', 'column', part['text']
-                    if free:  # a time row in the label column governs the rows after it until a competing time heading opens a new group (E15)
-                        r0 = max(c['r'] for c in free)
-                        if r0 > vr: return 'fail', 'order', part['text']
-                        others = [x for x in self.rf.time_parts if x is not part]  # every time heading the key knows in this file
-                        known = {id(c) for x in others for c in self.rf.cells_at(x['anchor'], tb)}; texts = {norm(x['text']) for x in others}
-                        rows = {}
-                        for c in self.rf.cells_in(tb):
-                            if r0 < c['r'] < vr and squash(c.get('text', '')): rows.setdefault(c['r'], []).append(c)
-                        for cs in rows.values():  # label-only rows between the time row and the value
-                            if all(c['c'] <= label_col for c in cs) and any(c not in cells and (id(c) in known or norm(c['text']) in texts) for c in cs):
-                                return 'fail', 'scope', part['text']
+                    if free:  # a time row in the label column governs the rows after it; the route must keep that group intact (E15)
+                        r0, head = max(c['r'] for c in free), max(free, key=lambda c: c['r'])
+                        if r0 > vr or not source_before(head.get('anchor'), self.V[0].get('anchor')): return 'fail', 'order', part['text']
+                        between = [c for c in self.rf.cells_in(tb) if r0 < c['r'] < vr and squash(c.get('text', '')) and spans(c.get('anchor'))]
+                        if any(not (source_before(head.get('anchor'), c['anchor']) and source_before(c['anchor'], self.V[0].get('anchor'))) for c in between):
+                            return 'fail', 'scope', part['text']  # a row the route placed in this group comes from elsewhere in the source
                     continue
                 cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.units if u.get('kind') not in ('table', 'clutter')]
                 if not any(want in norm(k['text']) or (k.get('unit') and want == local(k['unit'].get('name', ''))) for k in cars): return 'fail', 'missing', part['text']
@@ -537,6 +614,8 @@ class Grader:
                 notes = [k for k in at_note if body and body in norm(minus_markers(k['text'], [mark]))] or ([at_note[0]] if at_note and body and body in norm(' '.join(k['text'] for k in at_note)) else [])
                 if not notes: return 'fail', 'missing_note', mark
                 k = notes[0]
+                declared = (k['unit'] or {}).get('marker')
+                if declared and norm(declared) != norm(mark): return 'fail', 'wrong_note_link', mark  # an explicit wrong mark-to-note assignment
                 if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', mark
                 carrier_ids = {(k['unit'] or k['table']).get('id')}
                 linked.append(k['table'] is tb or bool(carrier_ids & set(tb.get('notes') or [])) or (k['unit'] is not None and k['unit'].get('marker') == mark))
@@ -546,7 +625,7 @@ class Grader:
     def range_(self, value, alt, tb, V, vr, vcols):
         partner = value.get('partner')
         if partner:
-            cells = [c for c in self.rf.cells_at(partner['anchor'], tb) if squash(c.get('text', '')) == squash(partner['printed_value'])]
+            cells = [c for c in self.rf.cells_at(partner['anchor'], tb) if fused([c.get('text', '')], partner['printed_value'])]
             if not cells: return 'fail', 'partner', None
             if not any(row_hit(c, vr) for c in cells): return 'fail', 'row', None
             if source_before(partner['anchor'], self.t['anchor']) != (cells[0]['c'] < vcols[0]): return 'fail', 'order', None
@@ -563,7 +642,10 @@ class Grader:
         v = V[0]; f = t['fields']
         ok = squash(v.get('text', '')) == squash(f.get('printed_value') or ''); self.row('value', 'pass' if ok else 'fail', None if ok else 'text')
         if f.get('row_label') is not None:
-            ok = local(v.get('name', '')) == f['row_label']; self.row('row_label', 'pass' if ok else 'fail', None if ok else 'name')
+            if local(v.get('name', '')) != f['row_label']: self.row('row_label', 'fail', 'name')
+            else:
+                names = xml_names(rf.raw, f.get('header_path') or v.get('path') or [], f['row_label'])  # expanded names the source prints there
+                ok = not names or v.get('name') in names; self.row('row_label', 'pass' if ok else 'fail', None if ok else 'namespace')
         if f.get('header_path'):
             ok = list(v.get('path') or []) == list(f['header_path']); self.row('header_path', 'pass' if ok else 'fail', None if ok else 'path')
         group = v.get('group') or {}
@@ -593,7 +675,7 @@ class Grader:
             return ' '.join(c.get('text', '') for c in sorted(cells, key=lambda c: (c['r'], c['c'])))
         want = norm(f.get('printed_text') or ''); got = norm(' '.join(text_of(u) for u in units))
         ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
-        self.row('printed_text', 'pass' if ok else 'fail', None if ok else why, {'fragmented': frag} if ok and frag else None if ok else {'wer': wer(got, want)})
+        self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, {'fragmented': frag} if ok and frag else None if ok else {'wer': wer(got, want)})
         main = next((u for u in units if u.get('kind') != 'table'), units[0])
         if f.get('kind') in LOOSE_KINDS: self.row('kind', 'na', None, main.get('kind'))
         elif f.get('kind'):
@@ -610,9 +692,9 @@ class Grader:
                 dest = self.rf.units_at(tgt['anchor'], exclude=('clutter',))
                 mine = [l for l in links if norm(l.get('text') or '') == norm(ref['printed_text']) or (ref.get('href') and l.get('href') == ref['href'])] or links
                 explicit = [l for l in mine if l.get('to')]
-                linked.append(bool(dest) and any(self.rf.by_id.get(l.get('to')) in dest for l in explicit))
+                linked.append(bool(dest) and bool(explicit) and all(self.rf.by_id.get(l.get('to')) in dest for l in explicit))
                 if not dest: failure = failure or ('fail', 'destination', ref['printed_text'])
-                elif explicit and not any(self.rf.by_id.get(l.get('to')) in dest for l in explicit):  # E6: a contradictory destination is wrong, not merely unlinked
+                elif explicit and not all(self.rf.by_id.get(l.get('to')) in dest for l in explicit):  # E6: any contradictory destination is wrong, not merely unlinked
                     failure = failure or ('fail', 'wrong_link', ref['printed_text'])
             if norm(ref['printed_text']) not in block_text: failure = failure or ('fail', 'phrase', ref['printed_text'])
             elif ref.get('href') and not any(l.get('href') == ref['href'] for l in links): failure = failure or ('fail', 'href', ref['href'])
@@ -622,26 +704,41 @@ class Grader:
 
 # --------------------------------------------------------------------------------------------------------- gates
 def gates_for_file(rf, status):
-    """Per-file P14 facts: dishonest anchors, duplicate ids, order breaks, uncovered visible text."""
-    g = {'dishonest': 0, 'dup_ids': 0, 'order_breaks': 0, 'uncovered': [], 'hidden_chars': rf.vis.hidden_chars if rf.vis else None}
+    """Per-file P14 facts: dishonest or missing anchors, duplicate ids, order breaks, uncovered visible text. A check that cannot be
+    made (no text layer, no page sizes, stylesheet-dependent visibility, a PARTIAL route) is reported as None = not measured."""
+    g = {'dishonest': 0, 'unanchored': 0, 'dup_ids': 0, 'order_breaks': 0, 'uncovered': None, 'anchors_measured': True,
+         'hidden_chars': rf.vis.hidden_chars if rf.vis else None}
     ids = [u.get('id') for u in rf.units]; g['dup_ids'] = len(ids) - len(set(ids))
-    keys = [order_key(u['anchor']) for u in rf.units if spans(u.get('anchor'))]
+    keys = [order_key(u['anchor']) for u in rf.units if spans(u.get('anchor')) and u.get('layer') != 'furniture']
     g['order_breaks'] = sum(1 for a, b in zip(keys, keys[1:]) if b < a)
-    if rf.vis is None: g['uncovered'] = None; return g
     ranges = []
     for u in rf.units:
         items = rf.cells_in(u) if u.get('kind') == 'table' else [u]
         for x in items:
-            parts = [a for a in spans(x.get('anchor')) if 'byte_start' in a]
-            if not parts: continue
-            ranges.extend((a['byte_start'], a['byte_end_exclusive']) for a in parts)
-            if u.get('kind') == 'image': continue
-            seen = squash(rf.vis.at_any(parts))
-            for mm in (squash(m) for m in x.get('markers') or []):  # each reported mark sits right before or right after the text
-                if mm and seen.startswith(mm): seen = seen[len(mm):]
-                elif mm and seen.endswith(mm): seen = seen[:-len(mm)]
-            if seen != squash(x.get('text', '')): g['dishonest'] += 1
-    if status == 'OK': g['uncovered'] = rf.vis.uncovered(ranges)
+            parts = spans(x.get('anchor'))
+            if u.get('kind') == 'image' or x.get('link_flag') == 'gap': continue  # pictures carry no text to certify
+            if not parts:
+                if squash(x.get('text', '')): g['unanchored'] += 1  # text claimed without a source position
+                continue
+            for a in parts:
+                if 'byte_start' in a:
+                    if not (0 <= a['byte_start'] < a['byte_end_exclusive'] <= (rf.raw_len or 0)): g['dishonest'] += 1; break
+                elif 'region' in a:
+                    size = rf.pages.get(a.get('page'))
+                    if size is None: g['anchors_measured'] = False; break
+                    x0, y0, x1, y1 = a['region']
+                    if not (0 <= x0 < x1 <= size[0] and 0 <= y0 < y1 <= size[1]): g['dishonest'] += 1; break
+            else:
+                byte = [a for a in parts if 'byte_start' in a]
+                if byte and rf.vis is not None:
+                    ranges.extend((a['byte_start'], a['byte_end_exclusive']) for a in byte)
+                    seen = squash(rf.vis.at_any(byte))
+                    for mm in (squash(m) for m in x.get('markers') or []):  # each reported mark sits right before or right after the text
+                        if mm and seen.startswith(mm): seen = seen[len(mm):]
+                        elif mm and seen.endswith(mm): seen = seen[:-len(mm)]
+                    if seen != squash(x.get('text', '')): g['dishonest'] += 1
+    if rf.vis is not None and not rf.vis.certain: g['anchors_measured'] = False  # visibility depends on stylesheet rules this scanner does not read
+    if rf.vis is not None and rf.vis.certain and status == 'OK': g['uncovered'] = rf.vis.uncovered(ranges)
     return g
 
 
@@ -659,23 +756,24 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         if raw is None or sha256(raw) != want: status = 'INPUT_MISMATCH'
         elif data is None: status = 'NOT_CONVERTED'; data = {'file_id': fid, 'status': 'MISSING', 'units': []}
         elif data.get('sha256') != want: status = 'NOT_CONVERTED'; data['error'] = f"route converted other bytes: {data.get('sha256')}"
+        elif data.get('file_id') != fid: status = 'NOT_CONVERTED'; data['error'] = f"route names another source: {data.get('file_id')}"
         elif data.get('status') not in ('OK', 'PARTIAL'): status = 'NOT_CONVERTED'
         else: status = 'OK'
         files[fid] = {'status': status, 'route_status': (data or {}).get('status'), 'error': (data or {}).get('error'), 'seconds': (data or {}).get('seconds')}
         routes[fid] = (data or {}).get('route')
-        rf = RouteFile(data, raw) if status == 'OK' else None
+        rf = RouteFile(data, raw, mine[0]['format'].split('/')[-1]) if status == 'OK' else None
         if rf: per_file[fid] = gates_for_file(rf, data.get('status'))
-        if rf: rf.time_parts = [part for t in mine for _, v in alternatives(t, 'periods') for g in (v or []) for part in (g.get('parts') or []) if part.get('anchor')]
         structure_units = []
         for t in mine:
             if status != 'OK': verdicts[t['key_id']] = status; continue
-            g = Grader(t, rf)
+            peers = [q for q in mine if q is not t and q.get('table_anchor') and q.get('table_anchor') == t.get('table_anchor')]
+            g = Grader(t, rf, peers)
             unit = g.grade_cell() if t['type'] == 'cell' else g.grade_structure()
             if unit is None: verdicts[t['key_id']] = 'UNRESOLVED'; rows += g.rows; continue
             if t['type'] == 'structure': structure_units.append((t['key_id'], order_key(t['anchor']), unit['_order']))
             failed = [r['check'] for r in g.rows if r['verdict'] == 'fail' and r['check'] not in STRUCTURE]
             marker_glued += sum(1 for r in g.rows if r['reason'] == 'marker_glued')
-            verdicts[t['key_id']] = 'FAIL' if failed else 'PASS'
+            verdicts[t['key_id']] = 'FAIL' if failed else 'UNRESOLVED' if any(r['verdict'] == 'unresolved' for r in g.rows) else 'PASS'
             rows += g.rows
         for kid, a, o in structure_units:  # block order within the file
             bad = any((a < a2) != (o < o2) for k2, a2, o2 in structure_units if k2 != kid and a != a2)
@@ -683,13 +781,20 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
                          'format': next(t['format'] for t in mine if t['key_id'] == kid), 'check': 'order', 'verdict': 'fail' if bad else 'pass',
                          'reason': 'order' if bad else None, 'detail': None})
             if bad and verdicts[kid] == 'PASS': verdicts[kid] = 'FAIL'
-    uncovered = {fid: g['uncovered'] for fid, g in per_file.items() if g['uncovered']}
+    hidden_files = set() if heldout_detail else {t['file_id'] for t in targets if t['split'] == 'heldout'}
+    public = {t['file_id'] for t in targets} - hidden_files  # a file with any held-out target shows counts only
+    uncovered = {fid: (g['uncovered'] if fid in public else {'spans': len(g['uncovered']), 'chars': sum(len(squash(x['text'])) for x in g['uncovered'])})
+                 for fid, g in per_file.items() if g['uncovered']}
+    cov_unmeasured = sorted(f for f, g in per_file.items() if g['uncovered'] is None)
+    anc_unmeasured = sorted(f for f, g in per_file.items() if not g['anchors_measured'])
     gates = {
-        'honest_anchors': {'pass': sum(g['dishonest'] for g in per_file.values()) == 0, 'dishonest': {f: g['dishonest'] for f, g in per_file.items() if g['dishonest']}},
+        'honest_anchors': {'pass': not anc_unmeasured and all(g['dishonest'] == 0 and g['unanchored'] == 0 for g in per_file.values()),
+                           'dishonest': {f: g['dishonest'] for f, g in per_file.items() if g['dishonest']},
+                           'unanchored': {f: g['unanchored'] for f, g in per_file.items() if g['unanchored']}, 'not_measured': anc_unmeasured},
         'ids_and_run_facts': {'pass': all(g['dup_ids'] == 0 for g in per_file.values()) and all(all(k in (routes[f] or {}) for k in ('tool', 'version', 'settings')) for f in per_file)},
         'reading_order': {'pass': sum(g['order_breaks'] for g in per_file.values()) == 0, 'breaks': {f: g['order_breaks'] for f, g in per_file.items() if g['order_breaks']}},
         'markers_apart': {'pass': marker_glued == 0, 'glued': marker_glued},
-        'nothing_lost': {'pass': not uncovered, 'uncovered': uncovered, 'not_measured': [f for f, g in per_file.items() if g['uncovered'] is None]},
+        'nothing_lost': {'pass': not uncovered and not cov_unmeasured, 'measured_pass': not uncovered, 'uncovered': uncovered, 'not_measured': cov_unmeasured},
     }
     shown = [t for t in targets if heldout_detail or t['split'] != 'heldout']
     report = {
@@ -698,16 +803,17 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
                                   'failed': sorted({r['check'] for r in rows if r['key_id'] == t['key_id'] and r['verdict'] == 'fail' and r['check'] not in STRUCTURE})}
                     for t in shown},
         'gates': gates, 'files': files,
-        'summary': summarize(targets, rows, verdicts, files, next((r for r in routes.values() if r), None)),
+        'summary': summarize(targets, rows, verdicts, files, next((r for r in routes.values() if r), None), {t['key_id'] for t in shown}),
+        'run_facts': run_facts(key_dir, catalog, route_dir),
     }
     with open(out_dir / 'results.jsonl', 'w') as f:
         for r in report['results']: f.write(json.dumps(r, sort_keys=True, ensure_ascii=False) + '\n')
-    (out_dir / 'summary.json').write_text(json.dumps({k: report[k] for k in ('summary', 'gates', 'files', 'targets')}, indent=1, sort_keys=True, ensure_ascii=False, default=str))
+    (out_dir / 'summary.json').write_text(json.dumps({k: report[k] for k in ('summary', 'gates', 'files', 'targets', 'run_facts')}, indent=1, sort_keys=True, ensure_ascii=False, default=str))
     (out_dir / 'summary.md').write_text(markdown(report))
     return report
 
 
-def summarize(targets, rows, verdicts, files, route):
+def summarize(targets, rows, verdicts, files, route, shown_ids=None):
     by, sup = {}, {'targets': 0, 'PASS': 0, 'FAIL': 0, 'UNRESOLVED': 0, 'NOT_CONVERTED': 0}
     for t in targets:
         v = verdicts[t['key_id']]
@@ -726,7 +832,7 @@ def summarize(targets, rows, verdicts, files, route):
         if r['verdict'] == 'fail' and r['check'] not in STRUCTURE:
             d = reasons.setdefault(r['check'], {}); d[r['reason']] = d.get(r['reason'], 0) + 1
     return {'by_split_format': by, 'supplement': sup, 'by_field': fields, 'structure': structure, 'failures_by_reason': reasons,
-            'unresolved': sorted(k for k, v in verdicts.items() if v == 'UNRESOLVED'),
+            'unresolved': sorted(k for k, v in verdicts.items() if v == 'UNRESOLVED' and (shown_ids is None or k in shown_ids)),
             'excluded_fields': sum(1 for r in rows if r['verdict'] == 'excluded'),
             'run_facts': {'route': route, 'files': {s: sum(1 for f in files.values() if f['status'] == s) for s in sorted({f['status'] for f in files.values()})},
                           'seconds': round(sum(f['seconds'] or 0 for f in files.values()), 3)}}
@@ -744,7 +850,9 @@ def markdown(report):
     out += ['', '| failed check | reason | count |', '|---|---|---:|'] + [f'| {c} | {r} | {n} |' for c, d in s['failures_by_reason'].items() for r, n in d.items()]
     if s['unresolved']: out += ['', 'Unresolved (not found at its spot): ' + ', '.join(s['unresolved'])]
     out += ['', '| structure | pass | total |', '|---|---:|---:|'] + [f"| {k} | {v['pass']} | {v['total']} |" for k, v in s['structure'].items()]
-    out += ['', '| gate | pass |', '|---|---|'] + [f"| {k} | {'yes' if v['pass'] else 'NO'} |" for k, v in report['gates'].items()]
+    word = lambda v: 'yes' if v['pass'] else ('not measured for ' + ', '.join(v['not_measured']) if v.get('not_measured') and v.get('measured_pass', not any(v.get(k) for k in ('dishonest', 'unanchored'))) else 'NO')
+    out += ['', '| gate | pass |', '|---|---|'] + [f"| {k} | {word(v)} |" for k, v in report['gates'].items()]
+    out += ['', f"Run facts: key {report['run_facts']['key_sha256'][:12]}…, manifest {str(report['run_facts'].get('manifest_sha256'))[:12]}…, catalog {report['run_facts']['catalog_sha256'][:12]}…"]
     out += ['', f"Run facts: {json.dumps(s['run_facts'], default=str)}", '']
     return '\n'.join(out)
 

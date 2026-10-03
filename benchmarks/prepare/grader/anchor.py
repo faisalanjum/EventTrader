@@ -18,7 +18,11 @@ _CF = ''.join(chr(i) for i in range(0x110000) if unicodedata.category(chr(i)) ==
 _WS = re.compile('[\\s' + re.escape(_CF) + ']+')
 _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), '') or chr(i) == '"') else "'") for i in range(0x110000) if 'QUOTATION MARK' in unicodedata.name(chr(i), '')},
                        **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
-_TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<[^>]*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
+_TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
+_STYLE = re.compile(r'''\sstyle\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))''', re.I | re.S)  # only the style attribute carries CSS
+_DISPLAY = re.compile(r'display\s*:\s*([a-z-]+)', re.I)
+_INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
+_SHEET = re.compile(r'<style\b[^>]*>(?:(?!</style).)*?(?:display\s*:\s*none|visibility\s*:\s*hidden|opacity\s*:\s*0(?![.\d]))|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheet hiding rules this scanner does not apply
 _NAME = re.compile(r'</?\s*([\w:.-]+)')
 # CSS that removes an element from view (the medium's own rules, guide 2.2 "the screen is the truth"): not shown at all,
 # or shown at a size no reader can see (1pt text printed behind slide pictures)
@@ -59,15 +63,19 @@ class Visible:
                 name = _NAME.match(t)
                 if not name or t.startswith('<!') or t.startswith('<?') or m.group(1): continue
                 name, was_hidden = name.group(1).lower(), hidden
+                sm = _STYLE.search(t); style = (sm.group(1) or sm.group(2) or sm.group(3) or '') if sm else ''
+                dm = _DISPLAY.search(style); block = (dm.group(1).lower() not in _INLINE_DISPLAY) if dm and dm.group(1).lower() != 'none' else name in BLOCK
                 if t.startswith('</'):
                     if any(fr[0] == name for fr in reversed(stack)):
-                        while stack.pop()[0] != name: pass
-                elif not t.endswith('/>') and name not in VOID:  # open elements: (name, blocked for good, visibility hidden)
-                    blocked, vis = stack[-1][1:] if stack else (False, False)
-                    v = _VIS.search(t)
-                    stack.append((name, blocked or name == 'ix:hidden' or bool(_BLOCK_HIDE.search(t)), v.group(1).lower() != 'visible' if v else vis))
+                        while True:
+                            fr = stack.pop()
+                            if fr[0] == name: block = fr[3]; break  # the element's own display decides its closing separator too
+                elif not t.endswith('/>') and name not in VOID:  # open elements: (name, blocked for good, visibility hidden, block)
+                    blocked, vis = stack[-1][1:3] if stack else (False, False)
+                    v = _VIS.search(style)
+                    stack.append((name, blocked or name == 'ix:hidden' or bool(_BLOCK_HIDE.search(style)), v.group(1).lower() != 'visible' if v else vis, block))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
-                if not (hidden or was_hidden) and (xml or name in BLOCK): chars.append(' '); starts.append(start); ends.append(pos)
+                if not (hidden or was_hidden) and (xml or block): chars.append(' '); starts.append(start); ends.append(pos)
                 continue
             if hidden:
                 if not t.startswith('&') or len(t) == 1: self.hidden_chars += len(_WS.sub('', t))
@@ -81,6 +89,7 @@ class Visible:
                 off = start
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); off += n
         self.text, self.starts, self.ends = ''.join(chars), starts, ends
+        self.certain = not _SHEET.search(s)  # with stylesheet rules present, visibility is reported as uncertain, never certified
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))
@@ -174,4 +183,5 @@ def link(raw, units, xml=False):
         before = [last(x['anchor'])['byte_end_exclusive'] for x in units[:i] if isinstance(x.get('anchor'), (dict, list))]
         after = [first(x['anchor'])['byte_start'] for x in units[i + 1:] if isinstance(x.get('anchor'), (dict, list))]
         u['anchor'] = {'byte_start': before[-1] if before else 0, 'byte_end_exclusive': after[0] if after else vis.raw_len}
+        u['link_flag'] = 'gap'  # a derived location: it places the picture, it never certifies coverage of the bytes between
     return {'units': units, 'uncovered': vis.uncovered(ranges)}

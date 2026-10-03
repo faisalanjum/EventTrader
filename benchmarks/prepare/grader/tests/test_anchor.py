@@ -77,6 +77,22 @@ class InvisibleStyleTests(unittest.TestCase):
         self.assertEqual(anchor.norm(v.text), 'back after')
         self.assertEqual(v.hidden_chars, len('gone') + len('gone2') + len('never') + len('stillnever'))
 
+    def test_attribute_values_never_leak_into_text_and_only_the_style_attribute_hides(self):
+        # checked against Chrome by the reviewer (R3): a ">" inside a quoted attribute, and CSS words in a non-style attribute
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p title="a > b">Revenue rose.</p>').text), 'Revenue rose.')
+        v = anchor.Visible(b'<p title="display:none is a CSS rule">Revenue rose.</p>')
+        self.assertEqual((anchor.norm(v.text), v.hidden_chars), ('Revenue rose.', 0))
+
+    def test_display_in_the_style_attribute_decides_block_or_inline(self):
+        self.assertEqual(anchor.norm(anchor.Visible(b'<span style="display:block">Revenue</span><span style="display:block">rose.</span>').text), 'Revenue rose.')
+        self.assertEqual(anchor.norm(anchor.Visible(b'<div style="display:inline">Reve</div><div style="display: inline">nue</div>').text), 'Revenue')
+
+    def test_stylesheet_rules_make_visibility_uncertain_instead_of_wrong(self):
+        v = anchor.Visible(b'<style>.off {display:none}</style><p class="off">Hidden.</p><p>Revenue rose.</p>')
+        self.assertFalse(v.certain)  # a class rule may hide text this scanner cannot see: the file is reported, not certified
+        self.assertTrue(anchor.Visible(b'<p style="display:none">x</p><p>Revenue rose.</p>').certain)
+        self.assertFalse(anchor.Visible(b'<link rel="stylesheet" href="a.css"><p>Revenue rose.</p>').certain)
+
     def test_tiny_or_white_text_is_still_visible_text_and_a_font_size_0_wrapper_hides_nothing(self):
         # font size is inherited and reset by children: a font-size:0 wrapper around real paragraphs hides none of them,
         # and 1pt text is rendered (Codex B9); only display/opacity/visibility hide a subtree
