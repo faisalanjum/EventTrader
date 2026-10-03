@@ -153,9 +153,19 @@ class InvisibleStyleTests(unittest.TestCase):
                  ('<p style="display:none; display:block">Revenue rose.</p>', 'Revenue rose.', True),
                  ('<p style="display&#58;none">Secret.</p><p>Visible.</p>', 'Visible.', True),
                  ('<p style="display/*comment*/:none">Secret.</p><p>Visible.</p>', 'Visible.', True),
-                 ('<p style="visibility:nonsense">Visible.</p>', 'Visible.', True),
                  ('<p style="visibility:hidden">Secret <span style="visibility:visible">Shown</span></p>', 'Shown', True),
-                 ('<p style="--mode:none;display:var(--mode)">Secret.</p><p>Visible.</p>', None, False)]
+                 ('<p style="--mode:none;display:var(--mode)">Secret.</p><p>Visible.</p>', None, False),
+                 # Codex round 5 (Chrome): an invalid later value does not override a valid earlier one, revert keeps the inherited value, a comment splits tokens
+                 ('<p style="display:none;display:nonsense">Secret.</p><p>Visible.</p>', None, False),
+                 ('<p style="visibility:hidden;visibility:nonsense">Secret.</p><p>Visible.</p>', None, False),
+                 ('<p style="visibility:nonsense">Visible.</p>', None, False),
+                 ('<p hidden style="display:nonsense">Secret.</p><p>Visible.</p>', None, False),
+                 ('<div style="visibility:hidden"><span style="visibility:revert">Secret.</span></div><p>Visible.</p>', 'Visible.', True),
+                 ('<div style="visibility:hidden"><span style="visibility:revert-layer">Secret.</span></div><p>Visible.</p>', 'Visible.', True),
+                 ('<p style="display/*x*/:none">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 ('<p style="display:n/**/one">Visible.</p>', None, False),
+                 ('<p style="dis/**/play:none">Visible.</p>', 'Visible.', True),
+                 ('<p style="opacity:0 !important; opacity:1">Secret.</p><p>Visible.</p>', 'Visible.', True)]
         for src, text, certain in cases:
             v = anchor.Visible(src.encode())
             self.assertEqual((anchor.norm(v.text) if text is not None else None, v.certain), (text, certain), src)

@@ -330,6 +330,40 @@ class PlantedFaultTests(GraderFixture):
         dropped = 'First sentence of a long paragraph that the tool kept. Second sentence of the same long paragraph that the tool kept as well.'
         self.assertEqual(gate(dropped), (0, 0, 0, ['7']))                                                 # a deletion inserts nothing; the source text stays uncovered
 
+    def test_joins_between_mapped_blocks_keep_the_source_boundaries_and_order(self):
+        # Codex round 5: each block read its own text, but the output glued two words, split a number, or reversed the source order
+        def gate(paragraph, text, parts, reverse=False):
+            raw = b'<p>Lead.</p><p>' + paragraph.encode() + b'</p>'
+            anchors, pieces, n, cursor = [], [], 0, raw.index(paragraph.encode())
+            for part in parts:
+                a = raw.index(part.encode(), raw.index(paragraph.encode()) if reverse else cursor); anchors.append({'byte_start': a, 'byte_end_exclusive': a + len(part)})
+                pieces.append([n, n + len(part)]); n += len(part); cursor = a + len(part)
+            u = {'id': 'u', 'kind': 'text', 'text': text, 'anchor': anchors, 'pieces': pieces, 'link_flag': 'pieced', 'inserted_chars': 0}
+            g = grade.gates_for_file(grade.RouteFile({'file_id': 'x/p.htm', 'units': [{'id': 'l', 'kind': 'text', 'text': 'Lead.', 'anchor': {'byte_start': 3, 'byte_end_exclusive': 8}}, u]}, raw, 'htm'), 'OK')
+            return g['dishonest'], g['boundary']
+        self.assertEqual(gate('Revenue increased.', 'Revenue increased.', ('Revenue', 'increased.')), (0, 0))   # control: the space survives
+        self.assertEqual(gate('Revenue increased.', 'Revenueincreased.', ('Revenue', 'increased.')), (0, 1))    # word boundary deleted at the join
+        self.assertEqual(gate('<span>12</span><span>34</span>', '1234', ('12', '34')), (0, 0))               # control: adjacent fragments of one number
+        self.assertEqual(gate('<span>12</span><span>34</span>', '12 34', ('12', '34')), (0, 1))              # number boundary inserted at the join
+        self.assertEqual(gate('Alpha Beta', 'Beta Alpha', ('Beta', 'Alpha'), reverse=True), (1, 0))          # source order reversed: not an honest mapping
+
+    def test_a_range_partner_split_by_page_boxes_is_unresolved_not_wrong(self):
+        box = lambda x0, x1: {'page': 1, 'region': [x0, 10, x1, 20]}
+        def rows(case):
+            partner, value = box(20, 40), box(70, 90)
+            cells = [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': box(0, 15)}]
+            if case == 'whole': cells.append({'r': 0, 'c': 1, 'text': '1234', 'anchor': partner})
+            else: cells += [{'r': 0, 'c': 1, 'text': '12', 'anchor': box(20, 30)}, {'r': 0, 'c': 2 if case == 'columns' else 1, 'text': '35' if case == 'digits' else '34', 'anchor': box(30, 40)}]
+            cells.append({'r': 0, 'c': 3, 'text': '1500', 'anchor': value})
+            table = {'id': 'tb', 'kind': 'table', 'anchor': {'page': 1, 'region': [0, 0, 100, 30]}, 'cells': cells}
+            t = {'key_id': 'syn/R1', 'file_id': 'syn/f.pdf', 'format': 'cell/pdf', 'type': 'cell', 'split': 'development', 'anchor': value, 'table_anchor': table['anchor'],
+                 'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_value': '1500', 'display_value': '1500', 'row_label': 'Revenue',
+                 'range': {'kind': 'interval', 'role': 'high', 'partner': {'printed_value': '1234', 'anchor': partner}, 'evidence': []}}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [table]}, None, 'pdf')); g.grade_cell()
+            return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'range')
+        self.assertEqual(rows('whole'), ('pass', None)); self.assertEqual(rows('split'), ('unresolved', 'adjacency'))
+        self.assertEqual(rows('digits'), ('fail', 'partner')); self.assertEqual(rows('columns'), ('fail', 'partner'))
+
     def test_pieces_of_one_value_cell_pass_only_when_they_share_the_cell_and_the_source_proves_adjacency(self):
         # Codex R4-5: <span>76</span><span>9</span> kept as two anchored pieces at one grid position is faithful output (E12)
         def fragments(c2=2):
@@ -364,6 +398,9 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader(); self.assertFalse(res['run_facts']['verified']); self.assertIn('catalog', res['run_facts']['unverified_because'])  # the split list is not pinned
         pinned = dict(base, catalog_sha256=grade.sha256((self.root / 'case_catalog.csv').read_bytes())); (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(pinned))
         res = self.run_grader(); self.assertTrue(res['run_facts']['verified'])
+        cat = self.root / 'case_catalog.csv'; text = cat.read_text(); cat.write_text(text.replace('heldout', 'development', 1))
+        with self.assertRaises(ValueError): self.run_grader(heldout_detail=False)  # Codex round 5: a pinned catalog that changed is refused, never run unverified
+        cat.write_text(text)
         loose = dict(pinned, packets_sha256={'packets/pkt': {'manifest_sha256': 'x'}}); (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(loose))
         with self.assertRaises(ValueError): self.run_grader()  # a packet pinned without its target file is not pinned
         # Codex R4-2: the pins must cover what grading reads, where it reads it

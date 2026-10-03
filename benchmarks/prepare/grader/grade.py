@@ -140,8 +140,9 @@ def verify_inputs(key_dir, catalog, route_dir):
         for fname, key in (('targets.json', 'targets_sha256'), ('manifest.json', 'manifest_sha256')):
             if key in pin and sha256((root / rel / fname).read_bytes()) != pin[key]: raise ValueError(f'{rel}/{fname} differs from the frozen manifest')
     facts['packets_verified'] = len(used)
-    if man.get('catalog_sha256') != facts['catalog_sha256']:  # the split list decides what is public: unpinned, the run is not verified
-        facts['unverified_because'] = 'catalog (split assignments) not pinned by the frozen manifest'; return facts
+    pin = man.get('catalog_sha256')  # the split list decides what is public: unpinned, the run is not verified; pinned and changed, it does not run
+    if pin is None: facts['unverified_because'] = 'catalog (split assignments) not pinned by the frozen manifest'; return facts
+    if pin != facts['catalog_sha256']: raise ValueError(f'case_catalog.csv differs from the frozen manifest of {key_dir.name}')
     facts['verified'] = True
     return facts
 
@@ -698,9 +699,9 @@ class Grader:
     def range_(self, value, alt, tb, V, vr, vcols):
         partner = value.get('partner')
         if partner:
-            at = sorted(self.rf.cells_at(partner['anchor'], tb), key=lambda c: c['c'])
-            cells = [c for c in at if boundary_equal(c.get('text', ''), partner['printed_value'])] or (at if self.spell(at, partner['printed_value']) is True else [])
-            if not cells: return 'fail', 'partner', None
+            at = sorted(self.rf.cells_at(partner['anchor'], tb), key=lambda c: c['c']); spelt = self.spell(at, partner['printed_value'])
+            cells = [c for c in at if boundary_equal(c.get('text', ''), partner['printed_value'])] or (at if spelt is True else [])
+            if not cells: return ('unresolved', 'adjacency', None) if spelt is None else ('fail', 'partner', None)  # boxes cannot prove a within-number join
             if not any(row_hit(c, vr) for c in cells): return 'fail', 'row', None
             if source_before(partner['anchor'], self.t['anchor']) != (cells[0]['c'] < vcols[0]): return 'fail', 'order', None
         for ev in value.get('evidence') or []:
@@ -813,9 +814,17 @@ def gates_for_file(rf, status):
                         nt = norm(x.get('text', '')); idx = [i for i, c in enumerate(nt) if c != ' ']; sq = nt.replace(' ', '')
                         pieces = [tuple(pc) for pc in x.get('pieces') or []]
                         if len(pieces) != len(byte) or not all(0 <= a < b <= len(sq) and (k == 0 or a >= pieces[k - 1][1]) for k, (a, b) in enumerate(pieces)) \
-                                or any(squash(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive'])) != sq[a:b] for sp, (a, b) in zip(byte, pieces)): g['dishonest'] += 1; continue
+                                or any(byte[k]['byte_start'] < byte[k - 1]['byte_end_exclusive'] for k in range(1, len(byte))) \
+                                or any(squash(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive'])) != sq[a:b] for sp, (a, b) in zip(byte, pieces)): g['dishonest'] += 1; continue  # blocks out of source order, or not reading their text
                         g['inserted_chars'] += len(sq) - sum(b - a for a, b in pieces)  # derived from the blocks, never from the tool's own count
-                        if any(not boundary_equal(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive']), nt[idx[a]:idx[b - 1] + 1]) for sp, (a, b) in zip(byte, pieces)): g['boundary'] += 1
+                        inside = any(not boundary_equal(rf.vis.at(sp['byte_start'], sp['byte_end_exclusive']), nt[idx[a]:idx[b - 1] + 1]) for sp, (a, b) in zip(byte, pieces))
+                        joins = False  # between two blocks, a word or number boundary must be where the source has one: glued across source text, or split with nothing between, is a fault
+                        for k in range(1, len(pieces)):
+                            (a1, b1), (a2, b2) = pieces[k - 1], pieces[k]
+                            if not (sq[b1 - 1].isalnum() and sq[a2].isalnum()): continue  # a boundary beside punctuation or a symbol is reflow
+                            glued = idx[a2] == idx[b1 - 1] + 1; between = rf.vis.at(byte[k - 1]['byte_end_exclusive'], byte[k]['byte_start'])
+                            if glued == bool(between): joins = True; break
+                        if inside or joins: g['boundary'] += 1
                         continue
                     for mm in (squash(m) for m in x.get('markers') or []):  # each reported mark sits right before or right after the text
                         if mm and seen.startswith(mm): seen = seen[len(mm):]

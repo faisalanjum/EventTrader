@@ -11,7 +11,7 @@ are reported `not_t1`).
 
 ## Run it (repo root, python 3.10+, no extra packages for the grader itself)
 ```
-python3 -B -m unittest discover -s benchmarks/prepare/grader/tests -t .        # 164 tests, ~1 s
+python3 -B -m unittest discover -s benchmarks/prepare/grader/tests -t .        # 166 tests, ~1 s
 python3 -B -m benchmarks.prepare.grader.checks.real_pairs                       # 48 real-original variants, ~20 s
 python3 -B -m benchmarks.prepare.grader.grade --route <run>/route --out <run>/graded   # grade one route (key defaults to golden/PACKAGE.json)
 python3 -B -m benchmarks.prepare.grader.checks.why <run>/graded [check:reason]  # explain failures: key value vs what the route carried
@@ -22,12 +22,12 @@ below are under `/home/faisal/prepare_work/grader_runs/` (development split only
 
 ## Size and shape
 `__init__.py` 1, `adapters/__init__.py` 2, `adapters/docling_html.py` 124, `adapters/docling_pdf.py` 111, `adapters/edgartools_html.py` 123, `adapters/prestep_headings.py` 59, `adapters/screen_grid.py` 92, `anchor.py` 238, `grade.py` 826 lines of code; tests 1285 lines;
-checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§23; §20 = final contract alignment, §21–§23 = Codex's four review rounds).
+checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§24; §20 = final contract alignment, §21–§24 = Codex's five review rounds).
 
 ## Where the proof comes from
 | Proof | What it shows | Where |
 |---|---|---|
-| 164 unit tests on one fixture (HTML table + text + picture, XML form, native PDF) | every check passes on a correct route; each planted fault (changed digit, dropped cell, value under the next column / next row, lost parentheses, glued footnote digit, dropped note, dropped heading, dropped paragraph, reordered blocks, wrong link, XML value moved to another person, PDF value under another column or on a missing page, dishonest anchor, changed source bytes…) fails with the named reason | `tests/test_grade.py`, `tests/test_anchor.py`, `tests/test_adapters.py` |
+| 166 unit tests on one fixture (HTML table + text + picture, XML form, native PDF) | every check passes on a correct route; each planted fault (changed digit, dropped cell, value under the next column / next row, lost parentheses, glued footnote digit, dropped note, dropped heading, dropped paragraph, reordered blocks, wrong link, XML value moved to another person, PDF value under another column or on a missing page, dishonest anchor, changed source bytes…) fails with the named reason | `tests/test_grade.py`, `tests/test_anchor.py`, `tests/test_adapters.py` |
 | 48 real-original variants | controls built from the originals (never from a tool): the 7 contract pairs and the 8 regression cases of the key package, plus the six development faults from Codex's review; every valid representation passes, every damaged copy fails for the stated reason | `checks/real_pairs.py`, `checks/RESULTS.json` |
 | 7 route variants × 69 development files | generality: no crash, gates computed, every failure explainable with `checks/why.py`; numbers below | `/home/faisal/prepare_work/grader_runs/*/graded/summary.md` |
 
@@ -56,18 +56,18 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§23; §20 
 - E15: time scope is checked from the source mapping (rows between the time heading and the value must lie between them in the source); a route with dishonest anchors is caught by the anchor gate instead.
 - E12: adjacency can be proved only from byte anchors; a within-word split on page-region anchors is reported **unresolved**, never a pass or a fail.
 - E14: the grid is the declared representation; geometry is the separately declared screen-span route; an explicit association field is not built until a tool offers one.
-- Visibility: inline styles only, read as Chrome reads them (checked against headless Chrome on Codex's cases). A document whose stylesheet rules can hide text, or whose inline hiding properties use values this scanner does not evaluate (`var()`, `calc()`, escapes), is reported **uncertain** (coverage and anchor honesty not measured). An invalid `display` value counts as a block for spacing; `<noscript>` content is read as visible.
+- Visibility: inline styles only, read as Chrome reads them (checked against headless Chrome on Codex's rounds 4 and 5 cases). A document whose stylesheet rules can hide text, or whose inline `display`/`visibility`/`opacity` carries a value this scanner does not evaluate (a keyword outside the CSS lists, `var()`, `calc()`, escapes), is reported **uncertain** (coverage and anchor honesty not measured); on the 116 HTML key sources this happens to none. `<noscript>` content is read as visible.
 - Coverage and anchor honesty are **not measured** for files without a text layer (PDF/images) unless the route declares page sizes (bounds only); a gate with any unmeasured file does not pass.
 - Heading recognition, note links, reference links and `kind` are **structure counts**, not pass rules.
 - The linker places long texts in order and short texts between anchored neighbours; a fallback placement is flagged `out_of_order`, a picture's gap anchor is flagged `gap` and never counts as coverage. Approximate alignment (`pieced`) is anchor chaining — 20-grams unique on both sides, the longest order-consistent chain, maximal extension — never a full character diff; within 1 % of difflib's matched characters on the worst file at 500× the speed, and it never claims text the source lacks (what it misses counts as insertion).
 - No XML route exists yet (both tools: unsupported, counted); the PDF route covers 14 development files.
 - Frozen inputs: a run first verifies the key files and the targets file of every packet the answer key names — at the folder it will be read from; a packet name present in two folders is refused — against `FINAL_MANIFEST.json`, and refuses to grade if the manifest does not pin them or pins one that is missing; `run_facts.verified` is true only when the split catalog is pinned too (`catalog_sha256`). Package 1134 does not pin it, so its runs report `unverified: catalog not pinned` until the next package does; fixtures without a manifest run unverified and say so.
-- Text at anchors: the gate certifies position (whitespace-free) **and** word/number boundaries (`boundary_equal`: same characters and the same words and numbers; spaces beside punctuation or symbols are reflow, not faults); a tool that splits or glues a word or number anywhere is counted (`boundary`). Pieced units are judged block by block at their anchors (characters and boundaries), the insertion is derived from the blocks, never from the tool's own count, malformed blocks are dishonest; any inserted text fails the gate for that file — added text is never certified, whatever its size.
+- Text at anchors: the gate certifies position (whitespace-free) **and** word/number boundaries (`boundary_equal`: same characters and the same words and numbers; spaces beside punctuation or symbols are reflow, not faults); a tool that splits or glues a word or number anywhere is counted (`boundary`). Pieced units are judged block by block at their anchors (characters and boundaries) and at every join between blocks (source order kept; a word or number boundary only where the source prints one), the insertion is derived from the blocks, never from the tool's own count, malformed or reordered blocks are dishonest; any inserted text fails the gate for that file — added text is never certified, whatever its size.
 - PDF positions: never certified (no independent page geometry); consistency with the route's declared sizes is reported apart.
 - Table context (E13): admitted only when the key declares it with `byte_ranges` that each lie inside the table and read the phrase (`support[key].table_context.pieces[{text, byte_ranges}]`); any other declaration stops the run as a key defect; package 1134 declares none, so the SL Green ratio records fail by the frozen text until the next package.
-- Review history: Codex's four rounds (`prepare_work/grader_review_codex_20261003/`) and the changes they caused are in `DESIGN.md` §21–§23; every probe script was re-run against this code (`FABLE_RESPONSE*.md` there, `codex_probes_live/`).
+- Review history: Codex's five rounds (`prepare_work/grader_review_codex_20261003/`) and the changes they caused are in `DESIGN.md` §21–§24; every probe script was re-run against this code (`FABLE_RESPONSE*.md` there, `codex_probes_live/`).
 
-## Results on the development split (final code after Codex's rounds 1–4 and my review passes, key 1134; run 14 of 2026-10-03 17:24)
+## Results on the development split (final code after Codex's rounds 1–5 and my review passes, key 1134; run 15 of 2026-10-03 17:48)
 Development split only: 171 HTML cells, 60 HTML blocks, 9 XML cells, 9 PDF blocks (plus supplement PDF cells on the PDF route).
 XML and PDF targets no HTML route claims are counted as not converted (E17), never hidden. Headings / notes / refs / kind are structure
 counts, not pass rules. The screen-span step and the heading pre-step are separate declared routes (E14). Gate columns: "unanchored" =
@@ -84,9 +84,9 @@ split list; the 37 consumed packets and the key files are verified against the f
 | Docling HTML + screen | 120/171 | 44/60 | - | 0/155 | 1058 | 637 | 209 | 13,767 (13) | 9 (2) | 0 of 60 graded files |
 | Docling HTML + headings | 118/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,439 (22) | 29 (8) | 0 of 60 graded files |
 | Docling HTML + headings + screen | 122/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,439 (22) | 29 (8) | 0 of 60 graded files |
-| edgartools HTML | 129/171 | 40/55 | - | 35/166 | 180 | 928 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
-| edgartools HTML + screen | 134/171 | 40/55 | - | 35/166 | 180 | 928 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
-| Docling PDF route (14 files) | 15/46 | 1/7 | 4/9 | 13/24 | 3179 | 94 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |
+| edgartools HTML | 129/171 | 40/55 | - | 35/166 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| edgartools HTML + screen | 134/171 | 40/55 | - | 35/166 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| Docling PDF route (14 files) | 15/46 | 1/7 | 4/9 | 13/24 | 3179 | 97 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |
 
 What the numbers are for here: the grader ran on every development file of both tools without a crash; every gate is computed; every
 failure is explainable with `checks/why.py`. They are **not** a tool ranking (that waits for the controls and the held-out split after
@@ -96,8 +96,8 @@ characters — 11k of them in one Dominion exhibit whose notes it emits as 8k–
 Content s") and drops page numbers; both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
 (a key-side question).
 
-Proof state at hand-over: 164 unit tests, 48/48 real-original variants, package check `golden/check_package.py` passes; Codex's rounds
-1–4 scripts re-run against this code behave as they expected, except the differences stated in
+Proof state at hand-over: 166 unit tests, 48/48 real-original variants, package check `golden/check_package.py` passes; Codex's rounds
+1–5 scripts re-run against this code behave as they expected, except the differences stated in
 `prepare_work/grader_review_codex_20261003/FABLE_RESPONSE_R3.md` (digits split across 22 cells → False; "3.7 %" → pass) and
 `FABLE_RESPONSE_R4.md` (a packet name in two folders is refused as ambiguous; an invalid table-context declaration stops the run; the
 probe's control is accepted but unverified because its synthetic manifest pins no catalog).

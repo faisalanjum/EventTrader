@@ -21,7 +21,11 @@ _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), 
 _TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
 _ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
 _DECL = re.compile(r'([A-Za-z-]+)\s*:\s*([^;]+)')  # one CSS declaration inside a style attribute
-_COMMENT = re.compile(r'/\*.*?\*/', re.S)  # a CSS comment is not part of a declaration
+_COMMENT = re.compile(r'/\*.*?\*/', re.S)  # a CSS comment is a token boundary, not part of a declaration
+_DISPLAY = set('none block inline inline-block flex inline-flex grid inline-grid table inline-table table-row table-cell table-row-group table-header-group '
+               'table-footer-group table-column table-column-group table-caption list-item flow flow-root contents ruby ruby-base ruby-text run-in'.split())  # CSS Display Module keywords
+_VISIBILITY = set('visible hidden collapse inherit initial unset revert revert-layer'.split())  # CSS visibility values and the CSS-wide keywords
+UNKNOWN = 'unknown'  # a value this scanner does not evaluate: the file's visibility is then reported uncertain
 _IMPORTANT = re.compile(r'\s*!\s*important\s*$')
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
 _SHEET = re.compile(r'<style\b[^>]*>(?:(?!</style).)*?\b(?:display|visibility|opacity)\s*:|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheet rules that hide or re-flow text; this scanner does not apply them
@@ -54,16 +58,31 @@ def _zero(value):
 
 
 def declarations(style):
-    """The declarations of a style attribute, names and values lower-cased: the last one wins, except that a plain declaration
-    does not override an earlier `!important` one (the cascade inside one attribute)."""
-    out, strong = {}, set()
-    for dm in _DECL.finditer(_COMMENT.sub('', style)):
+    """The declarations of a style attribute, in order: (name, value, important), names and values lower-cased, comments read as
+    token boundaries (a comment inside a name or a value breaks it, as in the browser)."""
+    out = []
+    for dm in _DECL.finditer(_COMMENT.sub(' ', style)):
         name, value = dm.group(1).lower(), dm.group(2).strip().lower()
         important = _IMPORTANT.search(value) is not None
-        if name in strong and not important: continue
-        out[name] = _IMPORTANT.sub('', value) if important else value
-        if important: strong.add(name)
+        out.append((name, _IMPORTANT.sub('', value) if important else value, important))
     return out
+
+
+def _number(value):
+    try: float(value.rstrip('%')); return True
+    except ValueError: return False
+
+
+def resolve(decls, prop, valid):
+    """The value in force for one property: the last declaration wins and an `!important` one beats a later plain one (the cascade
+    inside one attribute). A value outside the forms this scanner evaluates — an unknown keyword, var(), calc(), an escape — gives
+    UNKNOWN, because the browser may ignore it or honour it; the caller then reports the file uncertain instead of guessing."""
+    value, strong = None, False
+    for name, v, important in decls:
+        if name != prop or (strong and not important): continue
+        if '(' in v or '\\' in v or not valid(v): return UNKNOWN
+        value, strong = v, important
+    return value
 
 
 class Visible:
@@ -76,7 +95,7 @@ class Visible:
             s, blen = raw.decode('cp1252', 'replace'), len
         chars, starts, ends, stack, hidden, pos = [], array('Q'), array('Q'), [], False, 0  # byte offsets tracked per token, not per source byte
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
-        computed = False  # a hiding property was given a value this scanner does not evaluate (var(), calc(), escapes)
+        computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
         for m in _TOKEN.finditer(s):
             t = m.group(); start = pos; pos += blen(t)
             if t.startswith('<'):
@@ -87,9 +106,11 @@ class Visible:
                 attrs = {}
                 for am in _ATTR.finditer(t[len(name) + 2 if t.startswith('</') else len(name) + 1:]):  # the tag's attributes, first occurrence wins, entities decoded
                     attrs.setdefault(am.group(1).lower(), html.unescape(am.group(2) or am.group(3) or am.group(4) or ''))
-                decl = declarations(attrs.get('style', ''))
-                if any(c in decl.get(k, '') for k in ('display', 'visibility', 'opacity') for c in '(\\'): computed = True
-                disp = decl.get('display'); block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or name in STRUCK or 'line-through' in decl.get('text-decoration', '') + decl.get('text-decoration-line', '')
+                decls = declarations(attrs.get('style', ''))
+                disp, v, op = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number)
+                if UNKNOWN in (disp, v, op): computed = True; disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
+                struck = any(n in ('text-decoration', 'text-decoration-line') and 'line-through' in val for n, val, _ in decls)
+                block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or name in STRUCK or struck
                 if t.startswith('</'):
                     if any(fr[0] == name for fr in reversed(stack)):
                         while True:
@@ -97,10 +118,9 @@ class Visible:
                             if fr[0] == name: block = fr[3]; break  # the element's own display decides its closing separator too
                 elif not t.endswith('/>') and name not in VOID:  # open elements: (name, blocked for good, visibility hidden, block)
                     blocked, vis = stack[-1][1:3] if stack else (False, False)
-                    opacity = decl.get('opacity', '').split()[0] if decl.get('opacity') else None
-                    gone = disp == 'none' or (opacity is not None and _zero(opacity)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
-                    v = decl.get('visibility')  # CSS: hidden/collapse hide, visible shows; inherit, unset, absent or invalid keep the parent's
-                    stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial', 'revert', 'revert-layer') else vis, block))
+                    gone = disp == 'none' or (op is not None and _zero(op)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
+                    # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
+                    stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
                 if not (hidden or was_hidden) and (xml or block): chars.append(' '); starts.append(start); ends.append(pos)
                 continue
