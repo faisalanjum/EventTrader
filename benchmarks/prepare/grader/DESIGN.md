@@ -342,3 +342,42 @@ table's unit line — raised as a wording question for the key thread in `REVIEW
   marked uncertain and their gates not measured. This is the "mark visibility unresolved" option from the review.
 - *E14 explicit header association (R7).* The common format's grid **is** the declared representation today; geometry is a declared
   separate route. An explicit association field is not built until a tool offers one; this is a stated limit, not a hidden fail.
+
+## 22. Codex's round 3 (2026-10-03, `grader_review_codex_20261003/ROUND3_CODEX.md`) — eight corrections, each reproduced first
+
+| Codex | Change made (with a failing test first) | Where |
+|---|---|---|
+| C1 frozen inputs verified before reading | `verify_inputs` runs before anything is read: the key files must be pinned by `FINAL_MANIFEST.json` and match; every packet's `targets.json`/`manifest.json` pinned in `packets_sha256` must match; a manifest that pins nothing, or disagrees, **stops the run**; without a manifest the run is marked unverified (fixtures). Identities are recorded in `run_facts`. | `grade.verify_inputs`, `run` |
+| C2 XML occurrence and value | `xml_element_at` (expat, byte positions) gives the expanded name of the element whose text the key's anchor covers — this occurrence, not a same-named sibling; a source that does not parse makes value and label **unresolved** (`input_invalid`), never a pass; XML values use the same boundary-preserving comparison (`1 0` ≠ `10`) | `grade.grade_xml`, `xml_element_at` |
+| C3 visibility certainty | tags are parsed into attributes (first occurrence wins); only the `style` attribute's declarations count, the last declaration wins, `!important` is ignored; the `hidden` attribute hides unless `display` says otherwise; `<template>` content is never text; `visibility` inherits unless a child sets it; a stylesheet that declares `display`, `visibility` or `opacity` (or an external sheet) makes the file **uncertain** (gates not measured) | `anchor._ATTR/_DECL/_SHEET`, `Visible` |
+| C4 unknown is not pass | files that were not graded (failed, unsupported, input mismatch) appear in every gate's `not_measured`, so a run whose only input failed passes no gate; a PDF route's own page sizes certify nothing: regions are **not measured** for honesty, their consistency with the declared sizes is reported apart (`bounds_inconsistent`) | `gates_for_file`, `run` |
+| C5 boundaries outside sampled targets | at every anchored unit and cell the gate now also compares the text with its boundaries (whitespace collapsed, marks set aside): same characters with a lost or added word/number boundary count as `boundary` and fail the gate; the whitespace-free search stays the locator | `gates_for_file`, `marks_off` |
+| C6 bounded joining | `fused` tracks reachable positions in the wanted string instead of building joins: 22 fragments cost nothing | `grade.fused` |
+| C7 reference scope | only a reference's own edges (same phrase or href) can establish or contradict its destination; the fallback to unrelated links is gone | `grade.references` |
+| C8 table context scope | the sibling rule is gone; a title/header/corner comparison may set aside a line only when the key declares it as **table context with a source anchor inside this table** (support entry `table_context` with pieces `{text, byte_ranges}`); the current frozen package declares none, so the SL Green ratio records keep failing until the next package carries the declaration | `Grader.__init__`, `table_title`, `header_path`, `corner_text` |
+
+Also merged from the measured experiments (DOCLING_FEATURES.md, run B): **piecewise anchoring** for long units the exact search cannot
+place (`link_flag: pieced`, `pieces`, `inserted_chars`; the gate certifies the matched blocks and counts the tool's insertions), the Docling
+adapter reads a rich cell's **leaf** pieces through nested groups, and the EdgarTools adapter keeps a paragraph's **heading node** as a
+heading unit plus the rest. Two refinements from the re-read: entity-safe XML chunk ends; CSS `inherit`/`unset` for visibility.
+
+**Positions stated for the reviewer:** an empty or incomplete manifest refuses the run rather than reporting "unverified" (a broken frozen
+package must not produce a report that reads like results); PDF position honesty stays unmeasured until an independent page geometry
+exists (stdlib has none; the route's own sizes are self-consistency only); the boundary gate compares collapsed whitespace, never raw
+indentation. Numbers after this round: 155 unit tests, 48/48 real-original variants; Codex's rounds 1–3 scripts re-run against this code
+behave as expected (`FABLE_RESPONSE_R3.md`).
+
+### 22a. Two rules sharpened by the third review pass (2026-10-03, after run 9)
+- **Boundaries are words and numbers, not punctuation spacing.** Run 9's new `boundary` gate flagged 25,806 Docling and 8,609 EdgarTools
+  places; reading them showed almost all were spaces beside punctuation or symbols ("December 31 , 2025", "( 973 )", "$ 37.81",
+  "• Institutional") — whitespace reflow that E12 explicitly allows when word/number boundaries survive. One rule now serves the gate,
+  the value join and the text comparisons: `boundary_equal(a, b)` = same characters once whitespace is removed **and** the same
+  sequence of words and numbers (`\d(?:[\d.,]*\d)?|\w+`, Unicode categories, no word lists). So "Ma nagement", "6 50", "1,9 70" and
+  "1 ,970" fail; "3.7 %" and "December 31 , 2025" pass. Consequences stated for the reviewer: Codex's development mutation on a percent
+  value ("3.7%" → "3.7 %") now passes by this rule; digits split across 22 cells now return False (a number may not span cells).
+- **Linker: unambiguous texts first, repeated copies claimed once.** Run 9 left 298k characters uncovered on one contract exhibit whose
+  identical signature pages a tool listed out of order; the old cursor walked onto the wrong copies. Now pass 1 anchors long texts that
+  occur exactly once in the source (order-independent), pass 2 places the other long texts inside the window their anchored neighbours
+  leave — an exact copy no other unit holds beats an approximate alignment, which beats the nearest earlier copy — and pass 3 places
+  short texts in their window only (never far ahead by elimination). A unit placed before one the tool listed ahead of it is flagged
+  `out_of_order` by position. Tests: three identical signature pages with the second heading emitted early are all covered once.

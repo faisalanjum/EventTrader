@@ -38,8 +38,11 @@ def to_units(doc, with_index=False):
         cells = []
         for i, c in enumerate(t['data']['table_cells']):
             text, markers = c.get('text') or '', []
-            if c.get('ref'):  # a rich cell: its pieces; raised pieces (Docling's own formatting) are marks kept apart
-                pieces = [item(k['$ref']) for k in item(c['ref']['$ref'])['children']]
+            if c.get('ref'):  # a rich cell: its leaf pieces, through nested inline/list groups; raised pieces (Docling's own formatting) are marks kept apart
+                def leaves(ref):
+                    it = item(ref)
+                    return [p for k in it.get('children') or [] for p in leaves(k['$ref'])] if ref.split('/')[1] == 'groups' else [it] if ref.split('/')[1] == 'texts' else []
+                pieces = leaves(c['ref']['$ref'])
                 markers = [(p.get('text') or '').strip() for p in pieces if (p.get('formatting') or {}).get('script') == 'super' and (p.get('text') or '').strip()]
                 text = ' '.join((p.get('text') or '') for p in pieces if (p.get('formatting') or {}).get('script') != 'super' and (p.get('text') or ''))
             if not text.strip(): continue

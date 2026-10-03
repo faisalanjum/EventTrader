@@ -237,10 +237,11 @@ class CorrectOutputTests(GraderFixture):
         res = self.run_grader()
         self.assertTrue(all(v['verdict'] == 'PASS' for v in res['targets'].values()), res['targets'])
         g = res['gates']
-        for name in ('honest_anchors', 'ids_and_run_facts', 'reading_order', 'markers_apart'): self.assertTrue(g[name]['pass'], (name, g[name]))
+        for name in ('ids_and_run_facts', 'reading_order', 'markers_apart'): self.assertTrue(g[name]['pass'], (name, g[name]))
+        self.assertTrue(g['honest_anchors']['measured_pass'])
         self.assertEqual(g['nothing_lost']['not_measured'], [PDF_ID])  # no text layer: coverage cannot be certified
         self.assertFalse(g['nothing_lost']['pass']); self.assertTrue(g['nothing_lost']['measured_pass'])
-        self.assertEqual(g['honest_anchors']['not_measured'], [])
+        self.assertEqual(g['honest_anchors']['not_measured'], [PDF_ID])  # no independent page sizes: PDF positions are not certified
 
     def test_converters_get_a_source_list_without_any_answers(self):
         (self.pkg / 'CLAUDE_ANSWER_KEY.json').rename(self.pkg / 'answers.hidden')  # no answers readable
@@ -294,6 +295,12 @@ class PlantedFaultTests(GraderFixture):
         g = grade.gates_for_file(grade.RouteFile({'file_id': 'x/image.htm', 'units': linked['units']}, raw, 'htm'), 'OK')
         self.assertEqual([u['text'] for u in g['uncovered']], ['Revenue fell 20 percent.'])
 
+    def test_a_pieced_unit_is_honest_at_its_blocks_and_its_insertions_are_counted(self):
+        raw = b'<p>First sentence of a long paragraph that the tool kept.</p><p>7</p><p>Second sentence of the same long paragraph that the tool kept as well.</p>'
+        u = {'id': 'u', 'kind': 'text', 'text': 'First sentence of a long paragraph that the tool kept. ---- Second sentence of the same long paragraph that the tool kept as well.'}
+        rf = grade.RouteFile({'file_id': 'x/p.htm', 'units': anchor.link(raw, [u])['units']}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
+        self.assertEqual((g['dishonest'], g['boundary'], g['inserted_chars'], [x['text'] for x in g['uncovered']]), (0, 0, 4, ['7']))
+
     def test_partial_route_status_leaves_coverage_unmeasured_never_passed(self):
         def partial(r): self.cells(r).remove(self.cell(r, 'p1')); r[HTM_ID]['status'] = 'PARTIAL'
         res = self.run_grader(partial)
@@ -306,14 +313,6 @@ class PlantedFaultTests(GraderFixture):
     def test_an_anchor_beyond_the_file_is_dishonest(self):
         res = self.run_grader(lambda r: self.unit(r, 'u7')['anchor'].update(byte_end_exclusive=len(HTML) + 1_000_000))
         self.assertEqual(res['gates']['honest_anchors']['dishonest'], {HTM_ID: 1})
-
-    def test_a_pdf_region_outside_its_page_is_dishonest_when_page_sizes_are_known(self):
-        res = self.run_grader(lambda r: r[PDF_ID]['units'][0]['anchor'].update(region=[-100, -100, 99999, 99999]))
-        self.assertEqual(res['gates']['honest_anchors']['dishonest'], {PDF_ID: 1})
-
-    def test_a_pdf_route_without_page_sizes_is_not_measured_for_anchor_honesty(self):
-        res = self.run_grader(lambda r: r[PDF_ID].pop('pages'))
-        self.assertIn(PDF_ID, res['gates']['honest_anchors']['not_measured']); self.assertFalse(res['gates']['honest_anchors']['pass'])
 
     def test_a_route_file_naming_another_source_is_not_converted(self):
         def wrong(r): self.cells(r).remove(self.cell(r, 'p1')); r[HTM_ID]['file_id'] = PDF_ID
@@ -396,7 +395,7 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(self.verdict(res, 'pkt/S01'), 'UNRESOLVED')
         self.assertEqual(self.check(res, 'pkt/T01', 'lead_in')['verdict'], 'fail')
         lost = res['gates']['nothing_lost']
-        self.assertFalse(lost['pass']); self.assertIn('Free cash flow is not a GAAP measure', ' '.join(s['text'] for s in lost['uncovered'][HTM_ID]))
+        self.assertFalse(lost['pass']); self.assertIn('Free cash flow is not a GAAP measure', anchor.norm(' '.join(s['text'] for s in lost['uncovered'][HTM_ID])))
 
     def picture_as_blocks(self, r, drop=None):
         units = self.html(r); img = next(u for u in units if u['id'] == 'u8'); i = units.index(img); units.remove(img)
@@ -453,7 +452,7 @@ class PlantedFaultTests(GraderFixture):
             cells.remove(h24); hb.update(text='Three Months Ended December 28, 2024', rs=2, cs=3, anchor=[elem('hb'), elem('h24')])
         res = self.run_grader(merge)
         self.assertEqual(self.check(res, 'pkt/T01', 'header_path')['verdict'], 'pass')
-        self.assertTrue(res['gates']['honest_anchors']['pass'])
+        self.assertTrue(res['gates']['honest_anchors']['measured_pass']); self.assertEqual(res['gates']['honest_anchors']['dishonest'], {})  # the merged cell's list anchor is honest
         self.assertEqual(self.check(res, 'pkt/T01', 'unit_printed')['verdict'], 'pass')  # the corner cell is untouched
 
     def test_symbol_cells_merged_into_the_value_cell_keep_the_unit_sign(self):
@@ -607,14 +606,22 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook\nexclude discontinued operations\n(unaudited)'))
         self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'fail')  # "(unaudited)" is not one of this record's pieces (E13)
 
-    def test_title_cell_may_hold_a_unit_line_declared_by_a_sibling_record_of_the_same_table(self):
-        # T01..T03 share the table; "(in millions)" is their unit line. A record whose own unit differs still passes when the
-        # title cell carries the table's declared unit line (E13 read for the table), but not an undeclared qualifier.
-        def own_unit_differs(r): self.cell(r, 'ttl').update(text='Free Cash Flow (in millions)')
-        res = self.run_grader(own_unit_differs)
-        self.assertEqual(self.check(res, 'pkt/T02', 'table_title')['verdict'], 'pass')
-        res = self.run_grader(lambda r: self.cell(r, 'ttl').update(text='Free Cash Flow (restated)'))
-        self.assertEqual(self.check(res, 'pkt/T02', 'table_title')['verdict'], 'fail')
+    def test_title_cell_may_hold_a_declared_table_context_line_but_not_a_siblings_qualifier(self):
+        # E13 ruling (Codex round 3): table context is admitted only when the key declares it with a source anchor inside this table
+        def with_unit_line(r): self.cell(r, 'ttl').update(text='Free Cash Flow (in millions)')
+        res = self.run_grader(with_unit_line)
+        self.assertEqual(self.check(res, 'pkt/T02', 'table_title')['verdict'], 'pass')  # "(in millions)" is T02's own unit line
+        # T05's table (tb2) has no declared context: a sibling's basis words may not be borrowed, an invented qualifier fails
+        res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook (unaudited)'))
+        self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'fail')
+        # declared table context: support entry anchored inside tb2 -> the title cell may carry it
+        def declare(fx):
+            sup = json.loads((fx.pkg / 'KEY_SUPPORT_MAP.json').read_text()); sup.setdefault('pkt/T05', {})['table_context'] = {'how': 'reviewed', 'pieces': [{'text': '(unaudited)', 'byte_ranges': [[elem('t2t')['byte_start'], elem('t2t')['byte_end_exclusive']]]}]}
+            (fx.pkg / 'KEY_SUPPORT_MAP.json').write_text(json.dumps(sup))
+        declare(self)
+        res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook (unaudited)'))
+        self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'pass')
+        self.assertFalse(grade.Grader({'key_id': 'x', 'fields': {}, 'alternatives': {}, 'support': {}, 'excluded': set(), 'file_id': HTM_ID, 'split': 'development', 'format': 'cell/htm'}, None).same('Revenue (Unaudited)', 'Revenue')[0])
 
     def test_note_whose_mark_is_glued_in_the_key_but_spaced_by_the_tool_still_matches(self):
         def glue_in_key(r): pass
@@ -717,6 +724,74 @@ class PlantedFaultTests(GraderFixture):
         t = {'key_id': 'x', 'file_id': PDF_ID, 'split': 'development', 'format': 'structure/pdf', 'fields': {}, 'alternatives': {}, 'support': {}, 'excluded': set()}
         g = grade.Grader(t, rf)
         self.assertEqual(g.pieces_match(['Southe', 'ast'], 'Southeast', [{'page': 2, 'region': [0, 0, 10, 10]}, {'page': 2, 'region': [10, 0, 20, 10]}]), (None, 'adjacency', 0))
+
+    def test_joins_keep_word_and_number_boundaries_and_ignore_punctuation_spacing(self):
+        self.assertFalse(grade.fused(['1'] * 22, '1' * 22))                     # digits split across cells are a broken number (bounded work)
+        self.assertTrue(grade.fused(['$', '(506', ')'], '$(506)')); self.assertTrue(grade.fused(['$', '769'], '$ 769'))
+        self.assertFalse(grade.fused(['1,9 70'], '1,970')); self.assertFalse(grade.fused(['76', '9'], '796')); self.assertFalse(grade.fused(['1 ,970'], '1,970'))
+        self.assertTrue(grade.fused(['December 31 , 2025'], 'December 31, 2025'))  # a space beside punctuation is not a boundary (E12)
+        self.assertTrue(grade.boundary_equal('( 973 ) 802-6000', '(973) 802-6000')); self.assertFalse(grade.boundary_equal('Ma nagement', 'Management'))
+        self.assertTrue(grade.same('December 31 , 2025', 'December 31, 2025')[0])
+
+    def test_an_unrelated_link_never_contradicts_an_unlinked_reference(self):
+        raw = b'<p>See Table A and <a href="#b">Table B</a>.</p><table id="a">A</table><table id="b">B</table>'
+        aa = {'byte_start': raw.index(b'<table id="a"'), 'byte_end_exclusive': raw.index(b'</table>') + 8}
+        ba = {'byte_start': raw.index(b'<table id="b"'), 'byte_end_exclusive': len(raw)}; pa = {'byte_start': 0, 'byte_end_exclusive': raw.index(b'</p>') + 4}
+        t = {'key_id': 's', 'file_id': 'syn/t.htm', 'split': 'development', 'format': 'structure/htm', 'fields': {}, 'alternatives': {}, 'support': {}, 'excluded': set()}
+        ref = {'printed_text': 'Table A', 'status': 'RESOLVED', 'target': {'file': 'syn/t.htm', 'anchor': aa}}
+        for link, expect in ((None, 'pass'), ('a', 'pass'), ('b', 'fail')):
+            units = [{'id': 'p', 'kind': 'text', 'anchor': pa, 'text': 'See Table A and Table B.', 'links': [{'text': 'Table B', 'href': '#b', 'to': 'b'}]},
+                     {'id': 'a', 'kind': 'table', 'anchor': aa}, {'id': 'b', 'kind': 'table', 'anchor': ba}]
+            if link: units[0]['links'].append({'text': 'Table A', 'to': link})
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/t.htm', 'units': units}, raw, 'htm'))
+            self.assertEqual(g.references([ref], None, [units[0]], units[0]['text'])[0], expect, link)
+
+    def test_xml_name_is_verified_at_this_occurrence_and_values_keep_their_boundaries(self):
+        xml = b'<r xmlns="urn:main" xmlns:a="urn:a" xmlns:b="urn:b"><p><a:amount>10</a:amount><b:amount>20</b:amount></p></r>'
+        i = xml.index(b'>10<') + 1; a = {'byte_start': i, 'byte_end_exclusive': i + 2}
+        t = {'key_id': 'syn/X1', 'file_id': 'syn/form.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': a, 'table_anchor': a,
+             'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': 'amount', 'header_path': ['{urn:main}r', '{urn:main}p'], 'row_context': [], 'periods': []}}
+        def rows(name, text='10', raw=xml):
+            r = {'file_id': t['file_id'], 'units': [{'id': 'x', 'kind': 'field', 'anchor': a, 'name': name, 'path': t['fields']['header_path'], 'text': text, 'group': {'index': 1, 'count': 1}}]}
+            g = grade.Grader(t, grade.RouteFile(r, raw, 'xml')); g.grade_cell(); return {x['check']: (x['verdict'], x['reason']) for x in g.rows}
+        self.assertEqual(rows('{urn:a}amount')['row_label'], ('pass', None))
+        self.assertEqual(rows('{urn:b}amount')['row_label'], ('fail', 'namespace'))          # the sibling's name is not this occurrence's
+        self.assertEqual(rows('{urn:a}amount', text='1 0')['value'], ('fail', 'spacing'))
+        self.assertEqual(rows('{urn:a}amount', raw=xml[:-8])['row_label'][0], 'unresolved')  # unparsable source: never a pass
+
+    def test_xml_element_lookup_is_exact_with_entities_and_multibyte_text_before_the_value(self):
+        xml = '<r xmlns="urn:m"><n>Caf\u00e9 &amp; Bar</n><v>10</v><w>10</w></r>'.encode('utf-8')
+        i = xml.index(b'<v>10') + 3; j = xml.index(b'<w>10') + 3
+        self.assertEqual(grade.xml_element_at(xml, i), '{urn:m}v'); self.assertEqual(grade.xml_element_at(xml, j), '{urn:m}w')
+        self.assertEqual(grade.xml_element_at(xml, xml.index(b'Bar')), '{urn:m}n')  # inside character data split by an entity
+
+    def test_a_cell_nobody_selected_still_fails_the_text_gate_when_a_boundary_is_lost(self):
+        res = self.run_grader(lambda r: self.cell(r, 'p1').update(text='6 50'))
+        self.assertEqual(res['gates']['honest_anchors']['boundary'], {HTM_ID: 1}); self.assertFalse(res['gates']['honest_anchors']['pass'])
+
+    def test_files_that_were_not_converted_leave_every_gate_unmeasured(self):
+        res = self.run_grader(lambda r: r[HTM_ID].update(status='FAILED', units=[]))
+        for name in ('honest_anchors', 'nothing_lost', 'reading_order'):
+            self.assertFalse(res['gates'][name]['pass'], name); self.assertIn(HTM_ID, res['gates'][name]['not_measured'], name)
+
+    def test_route_declared_page_sizes_do_not_certify_pdf_anchors(self):
+        def spoof(r): r[PDF_ID]['pages']['2'] = [999999, 999999]; r[PDF_ID]['units'][0]['anchor']['region'] = [1, 1, 999998, 999998]
+        res = self.run_grader(spoof)
+        self.assertIn(PDF_ID, res['gates']['honest_anchors']['not_measured']); self.assertFalse(res['gates']['honest_anchors']['pass'])
+        self.assertEqual(res['gates']['honest_anchors']['bounds_inconsistent'], {})
+        res = self.run_grader(lambda r: r[PDF_ID]['units'][0]['anchor'].update(region=[-100, -100, 99999, 99999]))
+        self.assertEqual(res['gates']['honest_anchors']['bounds_inconsistent'], {PDF_ID: 1})  # self-consistency is reported, not certified
+
+    def test_frozen_inputs_are_verified_before_grading(self):
+        names = ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json')
+        manifest = {'evidence_root': '..', 'files_sha256': {n: grade.sha256((self.pkg / n).read_bytes()) for n in names},
+                    'packets_sha256': {'packets/pkt': {'targets_sha256': grade.sha256((self.pkt / 'targets.json').read_bytes())}}}
+        (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps(manifest))
+        res = self.run_grader(); self.assertTrue(res['run_facts']['verified']); self.assertEqual(res['run_facts']['packets_verified'], 1)
+        tj = json.loads((self.pkt / 'targets.json').read_text()); tj['targets'][0]['cell_anchor']['byte_start'] += 1; (self.pkt / 'targets.json').write_text(json.dumps(tj))
+        with self.assertRaises(ValueError): self.run_grader()                                  # a changed packet target file is rejected
+        (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps({'files_sha256': {}}))
+        with self.assertRaises(ValueError): self.run_grader()                                  # a manifest that pins nothing verifies nothing
 
     def test_time_only_section_row_in_the_label_column_needs_no_column_coverage(self):
         def section_row(r):  # the period phrase printed as a section row above the value, in the label column

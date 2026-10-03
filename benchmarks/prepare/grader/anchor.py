@@ -6,6 +6,7 @@ in several source places (a merged stacked header) must come from the adapter wi
 never guesses such a split."""
 from array import array
 from bisect import bisect_left
+import difflib
 import html
 import re
 import unicodedata
@@ -18,22 +19,21 @@ _CF = ''.join(chr(i) for i in range(0x110000) if unicodedata.category(chr(i)) ==
 _WS = re.compile('[\\s' + re.escape(_CF) + ']+')
 _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), '') or chr(i) == '"') else "'") for i in range(0x110000) if 'QUOTATION MARK' in unicodedata.name(chr(i), '')},
                        **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
-_TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
-_STYLE = re.compile(r'''\sstyle\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))''', re.I | re.S)  # only the style attribute carries CSS
-_DISPLAY = re.compile(r'display\s*:\s*([a-z-]+)', re.I)
+_TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
+_ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
+_DECL = re.compile(r'([A-Za-z-]+)\s*:\s*([^;]+)')  # one CSS declaration inside a style attribute
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
-_SHEET = re.compile(r'<style\b[^>]*>(?:(?!</style).)*?(?:display\s*:\s*none|visibility\s*:\s*hidden|opacity\s*:\s*0(?![.\d]))|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheet hiding rules this scanner does not apply
+_SHEET = re.compile(r'<style\b[^>]*>(?:(?!</style).)*?\b(?:display|visibility|opacity)\s*:|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheet rules that hide or re-flow text; this scanner does not apply them
 _NAME = re.compile(r'</?\s*([\w:.-]+)')
 # CSS that removes an element from view (the medium's own rules, guide 2.2 "the screen is the truth"): not shown at all,
 # or shown at a size no reader can see (1pt text printed behind slide pictures)
 # Hidden subtrees (E16). display:none, opacity:0 and inline-XBRL <ix:hidden> hide every descendant; visibility is inherited but a
 # descendant may set visibility:visible again. Font size is never a hiding rule: it is inherited and reset by children, so a
 # font-size:0 wrapper hides nothing, and 1pt text is still rendered.
-_BLOCK_HIDE = re.compile(r'display\s*:\s*none|opacity\s*:\s*0(?![.\d])', re.I)
-_VIS = re.compile(r'visibility\s*:\s*(hidden|visible|collapse)', re.I)
 BLOCK = set('p div br tr td th table li ul ol h1 h2 h3 h4 h5 h6 section article header footer blockquote pre dd dt dl hr '
             'caption thead tbody tfoot body html center form address'.split())
 VOID = set('br img hr input meta link col area base wbr source track embed param'.split())
+STRUCK = set('del s strike'.split())  # removed or struck text is read apart from its neighbours (redlines): a boundary like a block's
 
 
 def norm(s):
@@ -44,6 +44,12 @@ def norm(s):
 def squash(s):
     """Search form: norm without any whitespace."""
     return _WS.sub('', s.translate(_FOLD).replace('~~', ''))
+
+
+def _zero(value):
+    """Is a CSS number zero (opacity: 0, 0.0, 0%)?"""
+    try: return float(value.rstrip('%')) == 0.0
+    except ValueError: return False
 
 
 class Visible:
@@ -63,8 +69,11 @@ class Visible:
                 name = _NAME.match(t)
                 if not name or t.startswith('<!') or t.startswith('<?') or m.group(1): continue
                 name, was_hidden = name.group(1).lower(), hidden
-                sm = _STYLE.search(t); style = (sm.group(1) or sm.group(2) or sm.group(3) or '') if sm else ''
-                dm = _DISPLAY.search(style); block = (dm.group(1).lower() not in _INLINE_DISPLAY) if dm and dm.group(1).lower() != 'none' else name in BLOCK
+                attrs = {}
+                for am in _ATTR.finditer(t[len(name) + 2 if t.startswith('</') else len(name) + 1:]):  # the tag's attributes, first occurrence wins
+                    attrs.setdefault(am.group(1).lower(), am.group(2) or am.group(3) or am.group(4) or '')
+                decl = {dm.group(1).lower(): dm.group(2).strip().lower().removesuffix('!important').strip() for dm in _DECL.finditer(attrs.get('style', ''))}  # last declaration wins
+                disp = decl.get('display'); block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or name in STRUCK or 'line-through' in decl.get('text-decoration', '') + decl.get('text-decoration-line', '')
                 if t.startswith('</'):
                     if any(fr[0] == name for fr in reversed(stack)):
                         while True:
@@ -72,8 +81,10 @@ class Visible:
                             if fr[0] == name: block = fr[3]; break  # the element's own display decides its closing separator too
                 elif not t.endswith('/>') and name not in VOID:  # open elements: (name, blocked for good, visibility hidden, block)
                     blocked, vis = stack[-1][1:3] if stack else (False, False)
-                    v = _VIS.search(style)
-                    stack.append((name, blocked or name == 'ix:hidden' or bool(_BLOCK_HIDE.search(style)), v.group(1).lower() != 'visible' if v else vis, block))
+                    opacity = decl.get('opacity', '').split()[0] if decl.get('opacity') else None
+                    gone = disp == 'none' or (opacity is not None and _zero(opacity)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
+                    v = decl.get('visibility')
+                    stack.append((name, blocked or gone, vis if not v or v in ('inherit', 'unset') else v not in ('visible', 'initial'), block))  # visibility inherits; a child may set it again
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
                 if not (hidden or was_hidden) and (xml or block): chars.append(' '); starts.append(start); ends.append(pos)
                 continue
@@ -141,11 +152,17 @@ def link(raw, units, xml=False):
         """Anchor item i inside flat[lo:hi]; forward search first, else the nearest earlier occurrence (flagged)."""
         obj, n = items[i][1], keys[i]
         marks = [squash(m) for m in obj.get('markers') or () if squash(m)]; allm = ''.join(marks)
-        found = [(j, -len(k), k) for k in ([allm + n, n + allm] if marks else []) + [n] if (j := vis.flat.find(k, lo, hi)) >= 0]
+        taken = {pos[k][0] for k in range(len(items)) if pos[k] and keys[k] == n and k != i}  # copies of this text other units already hold
+        found = []
+        for k in ([allm + n, n + allm] if marks else []) + [n]:
+            off = len(allm) if marks and k == allm + n else 0; j = vis.flat.find(k, lo, hi)
+            while j >= 0 and j + off in taken: j = vis.flat.find(k, j + 1, hi)
+            if j >= 0: found.append((j, -len(k), k))
         j, _, key = min(found) if found else (-1, 0, n)  # marks kept apart sit right before or right after the text; the earliest start wins,
         flag = None                                      # because a mark that follows may belong to the next cell
         if j < 0 and not forward_only:
-            key, j, flag = n, vis.flat.rfind(n, 0, lo + len(n)), 'out_of_order'  # found only before the cursor: the tool moved it
+            key, j, flag = n, vis.flat.rfind(n, 0, lo + len(n)), 'out_of_order'  # found only before the window: the tool moved it
+            while j >= 0 and j in taken: j = vis.flat.rfind(n, 0, j)
         if j < 0: obj['anchor'] = None; obj['link_error'] = 'not_in_source'; return None
         left, end, used = j, j + len(key), set(range(len(marks))) if key != n else set()
         for k in reversed(range(len(marks))):  # marks not covered by the key: right before the text (inside this window) ...
@@ -154,21 +171,62 @@ def link(raw, units, xml=False):
             if k not in used and vis.flat.startswith(marks[k], end): end += len(marks[k]); used.add(k)
         j = left
         if flag: obj['link_flag'] = flag
+        obj.pop('link_error', None)
         obj['anchor'] = {'byte_start': vis.s[j], 'byte_end_exclusive': vis.e[end - 1]}
         ranges.append((obj['anchor']['byte_start'], obj['anchor']['byte_end_exclusive']))
-        return (j, end)
+        return (j + (len(key) - len(n) if key == allm + n and allm else 0), end)  # the text's own start: one copy, one unit
 
-    pos, cursor = [None] * len(items), 0
-    for i, n in enumerate(keys):  # pass 1: long texts, monotonically
-        if len(n) < SHORT: continue
-        hit = place(i, cursor, len(vis.flat), forward_only=False)
-        if hit and not items[i][1].get('link_flag'): cursor = hit[1]
-        pos[i] = hit
-    for i, n in enumerate(keys):  # pass 2: short texts, only between their anchored neighbours
-        if not n or len(n) >= SHORT: continue
+    def piece(i, lo, hi):
+        """A long text the exact search cannot place: align it to the source and anchor its matching blocks (each at least SHORT
+        characters), in order, as a list anchor. The unit's characters outside the blocks are the tool's insertions, reported
+        as `inserted_chars`; the source characters between the blocks stay uncovered (the tool dropped them)."""
+        obj, n = items[i][1], keys[i]
+        taken = {pos[k][0] for k in range(len(items)) if pos[k] and keys[k] == n and k != i}
+        j = vis.flat.find(n[:SHORT], lo, hi)
+        while j >= 0 and j in taken: j = vis.flat.find(n[:SHORT], j + 1, hi)
+        if j < 0: return None
+        seg = vis.flat[j:min(hi, j + 2 * len(n))]
+        blocks = [b for b in difflib.SequenceMatcher(None, n, seg, autojunk=False).get_matching_blocks() if b.size >= SHORT]
+        if not blocks or blocks[0].a > 0 and n[:SHORT] != seg[blocks[0].b:blocks[0].b + SHORT]: return None
+        obj['anchor'] = [{'byte_start': vis.s[j + b.b], 'byte_end_exclusive': vis.e[j + b.b + b.size - 1]} for b in blocks]
+        obj['pieces'] = [[b.a, b.a + b.size] for b in blocks]; obj['inserted_chars'] = len(n) - sum(b.size for b in blocks); obj['link_flag'] = 'pieced'
+        obj.pop('link_error', None); ranges.extend((a['byte_start'], a['byte_end_exclusive']) for a in obj['anchor'])
+        return (j + blocks[0].b, j + blocks[-1].b + blocks[-1].size)
+
+    pos = [None] * len(items)
+    def window(i):
         lo = next((pos[k][1] for k in range(i - 1, -1, -1) if pos[k]), 0)
         hi = next((pos[k][0] for k in range(i + 1, len(items)) if pos[k]), len(vis.flat))
-        pos[i] = place(i, lo, hi, forward_only=False)  # not in its window: the nearest earlier occurrence, flagged; no cursor to drag
+        return lo, hi
+    def unclaimed(i):
+        """A copy of this text that no unit with the same text holds yet, anywhere in the source: a tool that lists repeated
+        blocks out of order still gets one unit per copy. Flagged, because it was not where its neighbours said."""
+        n = keys[i]; taken = {pos[k][0] for k in range(len(items)) if pos[k] and keys[k] == n}; m = sum(len(squash(x)) for x in items[i][1].get('markers') or ())
+        j = vis.flat.find(n)
+        while j >= 0:
+            if j not in taken:
+                hit = place(i, max(0, j - m), j + len(n) + m, forward_only=True)
+                if hit: items[i][1]['link_flag'] = 'out_of_order'
+                return hit
+            j = vis.flat.find(n, j + 1)
+        return None
+    for i, n in enumerate(keys):  # pass 1: long texts that occur exactly once in the source — unambiguous, whatever order the tool used
+        if len(n) < SHORT: continue
+        j = vis.flat.find(n)
+        if j >= 0 and vis.flat.find(n, j + 1) < 0: pos[i] = place(i, 0, len(vis.flat), forward_only=True)
+    for i, n in enumerate(keys):  # pass 2: the other long texts, in the tool's order, inside the window their anchored neighbours leave
+        if len(n) < SHORT or pos[i]: continue
+        lo, hi = window(i)
+        pos[i] = place(i, lo, hi, forward_only=True) or unclaimed(i) or piece(i, lo, hi) or place(i, lo, hi, forward_only=False)
+    for i, n in enumerate(keys):  # pass 3: short texts, only between their anchored neighbours, never far ahead by elimination
+        if not n or len(n) >= SHORT: continue
+        lo, hi = window(i)
+        pos[i] = place(i, lo, hi, forward_only=False)  # not in its window: the nearest earlier occurrence, flagged
+    last = -1
+    for i in range(len(items)):  # a unit placed before the one the tool listed ahead of it: the tool moved it
+        if not pos[i] or items[i][1].get('link_flag'): continue
+        if pos[i][0] < last: items[i][1]['link_flag'] = 'out_of_order'
+        else: last = pos[i][0]
     for u in units:
         if u.get('kind') == 'table':
             got = [x for c in u.get('cells', []) if c.get('anchor') for x in (c['anchor'] if isinstance(c['anchor'], list) else [c['anchor']])]

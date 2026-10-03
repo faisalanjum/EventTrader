@@ -48,6 +48,17 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         self.assertEqual([u.get('layer') for u in route['units']], [None, None, None, 'furniture'])
         self.assertTrue(all(u.get('anchor') for u in route['units']))
 
+    def test_a_heading_node_at_the_start_of_a_paragraph_becomes_a_heading_unit_plus_the_rest(self):
+        def node(kind, text='', children=(), level=None):  # a stand-in for edgartools' node classes: the type name carries the kind
+            cls = type(kind, (), {'text': lambda self: self._t})
+            n = cls(); n._t, n.children, n.level = text, list(children), level; return n
+        head = node('HeadingNode', 'Interest Rate Swap Agreements', level=3)
+        para = node('ParagraphNode', 'Interest Rate Swap Agreements We use swaps to manage risk.', [head, node('TextNode', ' We use swaps to manage risk.')])
+        tree = eh.dump(node('DocumentNode', children=[para, node('ParagraphNode', 'Plain paragraph.', [node('TextNode', 'Plain paragraph.')])]))
+        units = eh.to_units(tree)
+        self.assertEqual([(u['kind'], u['text']) for u in units], [('heading', 'Interest Rate Swap Agreements'), ('text', 'We use swaps to manage risk.'), ('text', 'Plain paragraph.')])
+        self.assertEqual(units[0].get('level'), 3)
+
     def test_both_html_adapters_keep_the_same_wrong_order_so_the_gate_measures_the_tool(self):
         first, second = 'First paragraph is sufficiently long for an unambiguous match.', 'Second paragraph is sufficiently long for an unambiguous match.'
         raw = ('<p>' + first + '</p><p>' + second + '</p>').encode()
@@ -57,6 +68,15 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         breaks = [grade.gates_for_file(grade.RouteFile(r, raw, 'htm'), 'OK')['order_breaks'] for r in
                   (dh.route_for(doc, raw, 'acc/o.htm', 'sha', 0, 't'), eh.route_for(tree, raw, 'acc/o.htm', 'sha', 0, 't'))]
         self.assertEqual(breaks, [1, 1])
+
+    def test_a_rich_cell_whose_content_sits_in_a_nested_inline_group_keeps_its_text(self):
+        doc = json.loads(json.dumps(DOC)); groups = doc.setdefault('groups', []); gi, ti = len(groups), len(doc['texts'])
+        groups += [{'self_ref': f'#/groups/{gi}', 'name': 'rich_cell_group_x', 'label': 'unspecified', 'children': [{'$ref': f'#/groups/{gi + 1}'}]},
+                   {'self_ref': f'#/groups/{gi + 1}', 'name': 'group', 'label': 'inline', 'children': [{'$ref': f'#/texts/{ti}'}]}]
+        doc['texts'].append({'self_ref': f'#/texts/{ti}', 'label': 'text', 'text': 'no later than the Delivery Date'})
+        doc['tables'][0]['data']['table_cells'].append({'start_row_offset_idx': 2, 'end_row_offset_idx': 3, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': '', 'ref': {'$ref': f'#/groups/{gi}'}})
+        cells = next(u for u in dh.to_units(doc) if u['kind'] == 'table')['cells']
+        self.assertIn('no later than the Delivery Date', [c['text'] for c in cells])
 
     def test_a_footnote_body_only_referenced_from_its_table_is_still_emitted_once(self):
         units = dh.to_units(DOC)

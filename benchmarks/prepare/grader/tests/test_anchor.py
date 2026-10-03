@@ -16,7 +16,7 @@ HTML = (b'<html><head><title>Sample</title><style>td{color:red}</style></head><b
 class VisibleTextTests(unittest.TestCase):
     def test_inline_tags_add_no_space_and_entities_decode_once(self):
         v = anchor.Visible(HTML)
-        self.assertIn('Stockholder\xa0letter not final.', v.text)
+        self.assertIn('Stockholder letter not final.', anchor.norm(v.text))  # the struck "not" is read as its own word, so compare with whitespace collapsed
         self.assertIn('Management’s Discussion', v.text)
 
     def test_hidden_subtrees_head_comments_and_styles_are_not_visible(self):
@@ -92,6 +92,58 @@ class InvisibleStyleTests(unittest.TestCase):
         self.assertFalse(v.certain)  # a class rule may hide text this scanner cannot see: the file is reported, not certified
         self.assertTrue(anchor.Visible(b'<p style="display:none">x</p><p>Revenue rose.</p>').certain)
         self.assertFalse(anchor.Visible(b'<link rel="stylesheet" href="a.css"><p>Revenue rose.</p>').certain)
+
+    def test_attributes_are_parsed_and_the_last_display_declaration_wins(self):
+        # Codex round 3, checked against Chrome: a style string inside another attribute's value is not a style; CSS keeps the last declaration
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p title="x style=\'display:none\'">Revenue rose.</p>').text), 'Revenue rose.')
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p style="display:none; display:block">Revenue rose.</p>').text), 'Revenue rose.')
+
+    def test_important_and_case_do_not_defeat_the_style_parser(self):
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p STYLE="DISPLAY: none !important">Secret.</p><p>Visible.</p>').text), 'Visible.')
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p style=display:none>Secret.</p><p>Visible.</p>').text), 'Visible.')  # unquoted value
+
+    def test_visibility_inherit_keeps_the_parents_state(self):
+        raw = b'<div style="visibility:hidden">gone <span style="visibility:inherit">still gone</span> <span style="visibility:visible">back</span></div>'
+        self.assertEqual(anchor.norm(anchor.Visible(raw).text), 'back')
+
+    def test_struck_text_is_its_own_word(self):
+        # a redline "94" beside a struck "93" renders as two numbers, not one: deleted or line-through runs are separated like blocks
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p>Rounding <ins>94</ins><del>93</del></p>').text), 'Rounding 94 93')
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p>Rounding <span>94</span><span style="text-decoration: line-through">93</span></p>').text), 'Rounding 94 93')
+        self.assertEqual(anchor.norm(anchor.Visible(b'<p>Ma<b>nagement</b></p>').text), 'Management')  # plain emphasis is not a boundary
+
+    def test_the_hidden_attribute_and_template_content_are_not_rendered(self):
+        v = anchor.Visible(b'<p hidden>Secret.</p><p>Visible.</p>'); self.assertEqual((anchor.norm(v.text), v.hidden_chars), ('Visible.', len('Secret.')))
+        self.assertEqual(anchor.norm(anchor.Visible(b'<template><p>Template.</p></template><p>Visible.</p>').text), 'Visible.')
+
+    def test_a_stylesheet_that_sets_display_makes_boundaries_uncertain(self):
+        v = anchor.Visible(b'<style>.block{display:block}</style><span class="block">Revenue</span><span class="block">rose.</span>')
+        self.assertFalse(v.certain)  # a class rule can change block boundaries this scanner does not apply
+        self.assertTrue(anchor.Visible(b'<style>p{color:red}</style><p>Revenue rose.</p>').certain)
+
+    def test_repeated_blocks_are_placed_by_their_unique_neighbours_even_when_the_tool_reorders_headings(self):
+        # three identical signature pages; only the lender names differ; the tool emits the second heading before the first body
+        H, B = 'SIGNATURE PAGE TO THE REFINANCING AGREEMENT', 'The undersigned Lender hereby elects the cashless roll option.'
+        names = ['Virtus Fixed Income Advisers, LLC', 'Seix Investment Advisors LLC', 'Black Diamond CLO 2022-1 Adviser']
+        raw = ''.join(f'<h2>{H}</h2><p>{B}</p><p>By: {n}</p>' for n in names).encode()
+        order = [H, H, B, 'By: ' + names[0], H, B, 'By: ' + names[1], B, 'By: ' + names[2]]
+        units = [{'id': f'u{i}', 'kind': 'text', 'text': x} for i, x in enumerate(order)]
+        out = anchor.link(raw, units)
+        self.assertEqual(out['uncovered'], [])  # every copy of every block is covered exactly once
+        starts = sorted(u['anchor']['byte_start'] for u in units)
+        self.assertEqual(len(set(starts)), len(units))  # no two units share a copy
+
+    def test_a_long_unit_the_exact_search_cannot_place_is_anchored_piecewise(self):
+        # the tool skipped a page number the source interleaves, inserted a rule line and flattened a small table into the paragraph
+        raw = (b'<p>The Companies make certain estimates and assumptions that affect reported amounts of assets and liabilities.</p><p>25</p>'
+               b'<p>Dominion Energy maintains pension and other postretirement benefit plans for its employees and retirees.</p><table><tr><td>$341</td><td>$408</td></tr></table>'
+               b'<p>Actual results could differ from those estimates in a material way for the periods presented.</p>')
+        u = {'id': 'u', 'kind': 'text', 'text': 'The Companies make certain estimates and assumptions that affect reported amounts of assets and liabilities. '
+             'Dominion Energy maintains pension and other postretirement benefit plans for its employees and retirees. \u2500\u2500\u2500\u2500 $341$408 '
+             'Actual results could differ from those estimates in a material way for the periods presented.'}
+        out = anchor.link(raw, [u]); u = out['units'][0]
+        self.assertEqual((u['link_flag'], len(u['anchor']), u['inserted_chars']), ('pieced', 3, 4))
+        self.assertEqual([x['text'] for x in out['uncovered']], ['25'])  # what the tool dropped stays uncovered; what it added is counted
 
     def test_tiny_or_white_text_is_still_visible_text_and_a_font_size_0_wrapper_hides_nothing(self):
         # font size is inherited and reset by children: a font-size:0 wrapper around real paragraphs hides none of them,

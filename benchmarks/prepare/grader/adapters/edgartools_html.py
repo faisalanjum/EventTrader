@@ -11,9 +11,10 @@ from pathlib import Path
 
 from benchmarks.prepare.grader import anchor, grade
 
-NAME = 'edgartools-html'
+NAME = 'edgartools-html'  # the tool's heading nodes nested inside paragraphs are kept as headings
 KIND = {'HeadingNode': 'heading', 'ParagraphNode': 'text', 'TextNode': 'text', 'ListItemNode': 'list_item', 'ImageNode': 'image'}
 BRANCH = ('DocumentNode', 'ContainerNode', 'SectionNode', 'ListNode')
+BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode')  # children that make their parent a branch
 
 
 def dump(node):
@@ -25,9 +26,15 @@ def dump(node):
         d['caption'] = node.caption
         d['rows'] = [[{'text': (c.text() if callable(c.text) else c.text) or '', 'colspan': c.colspan or 1, 'rowspan': c.rowspan or 1, 'is_header': bool(c.is_header)} for c in row] for row in rows]
         return d
+    kids = list(getattr(node, 'children', None) or [])
     if kind in BRANCH:
-        d['children'] = [dump(k) for k in node.children or []]; return d
+        d['children'] = [dump(k) for k in kids]; return d
     text = node.text() if callable(getattr(node, 'text', None)) else getattr(node, 'text', '')
+    heads = [k for k in kids if type(k).__name__ == 'HeadingNode']
+    if heads:  # the tool's heading claim inside a paragraph: kept when its text is the paragraph's start or end (the parser's own text, no new joins)
+        ht = (heads[0].text() or '').strip(); pt = (text or '').strip()
+        if ht and pt.startswith(ht): d['heading'] = {'text': ht, 'level': getattr(heads[0], 'level', None)}; d['rest'] = pt[len(ht):].strip(); d['order'] = 'head_first'
+        elif ht and pt.endswith(ht): d['heading'] = {'text': ht, 'level': getattr(heads[0], 'level', None)}; d['rest'] = pt[:-len(ht)].strip(); d['order'] = 'head_last'
     d['text'] = text or ''
     for k in ('level', 'src', 'href'):
         if getattr(node, k, None) is not None: d[k] = getattr(node, k)
@@ -58,6 +65,14 @@ def to_units(tree):
         if kind == 'TableNode': table_unit(n)
         elif kind in BRANCH:
             for k in n.get('children') or []: walk(k)
+        elif n.get('heading'):  # a paragraph the tool marks as (or starting/ending with) a heading
+            parts = [('heading', n['heading']['text'], n['heading'].get('level')), ('text', n.get('rest') or '', None)]
+            if n.get('order') == 'head_last': parts.reverse()
+            for kind2, text2, level in parts:
+                if not anchor.squash(text2): continue
+                u = {'id': f'u{len(units)}', 'kind': kind2, 'text': text2}
+                if level is not None: u['level'] = level
+                units.append(u)
         elif kind == 'ImageNode': units.append({'id': f'u{len(units)}', 'kind': 'image', 'text': ''})
         else:
             if not anchor.squash(n.get('text') or ''): return  # whitespace or control characters only: not a block
