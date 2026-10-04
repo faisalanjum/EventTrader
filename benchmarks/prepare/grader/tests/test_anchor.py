@@ -412,9 +412,10 @@ class LinkTests(unittest.TestCase):
     def test_xml_text_is_the_strict_parsers_character_data(self):
         # Codex N1: CDATA is literal, references decode to their replacement (sharing the reference's bytes), attributes are not hiding instructions, a broken document certifies nothing
         v = anchor.Visible(b'<r><x><![CDATA[<b>literal</b>]]></x><y hidden="true" style="display:none">10 &amp; &lt; 1</y></r>', xml=True)
-        self.assertEqual((anchor.norm(v.text), v.certain, v.plain_certain, v.hidden_chars), ('<b>literal</b> 10 & < 1', True, True, 0))
+        self.assertEqual((anchor.norm(v.text), v.certain, v.plain_certain, v.hidden_chars), ('<b>literal</b>10 & < 1', True, True, 0))  # no space of ours at an element boundary (Codex R12-6)
+        self.assertEqual(anchor.Visible(b'<r><note>1<b>2</b>3</note></r>', xml=True).text, '123')
         raw = b'<!DOCTYPE r [<!ENTITY unit "partnership units">]><r><note>10 &unit;</note></r>'; v = anchor.Visible(raw, xml=True)
-        self.assertEqual(v.at(raw.index(b'<note>'), raw.index(b'</note>')), ' 10 partnership units')  # the replacement text sits at the reference's bytes
+        self.assertEqual(v.at(raw.index(b'<note>'), raw.index(b'</note>')), '10 partnership units')  # the replacement text sits at the reference's bytes
         self.assertEqual(v.at(raw.index(b'&unit;'), raw.index(b'&unit;') + 6), 'partnership units')
         self.assertEqual((anchor.Visible(b'<r><x>1</x>', xml=True).text, anchor.Visible(b'<r><x>1</x>', xml=True).certain), ('', False))
 

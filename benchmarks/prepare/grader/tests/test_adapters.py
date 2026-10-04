@@ -2,6 +2,7 @@
 import copy
 import json
 import unittest
+from pathlib import Path
 
 from benchmarks.prepare.grader.adapters import docling_html as dh
 from benchmarks.prepare.grader.adapters import edgartools_html as eh
@@ -136,14 +137,37 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         units = xf.units_of(raw); R, P1 = raw.index(b'<sub'), raw.index(b'<person>'); P2 = raw.index(b'<person>', P1 + 1)  # an instance is named by its start tag (Codex N2)
         self.assertEqual([(u['name'], u['text'], u['group']) for u in units], [('{urn:x}title', 'Common & Preferred', {'index': 1, 'count': 1, 'at': R}), ('{urn:x}name', 'Alpha', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}shares', '10', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}name', 'Beta', {'index': 2, 'count': 2, 'at': P2}), ('{urn:x}shares', '0', {'index': 2, 'count': 2, 'at': P2})])
         facts = {}; us = xf.units_of(b'<r><note>Ownership is <b>not</b> zero.</note><holding amount="10" unit="shares"/><q>1</q><q>2</q></r>', facts)
-        self.assertEqual([(u['name'], u['text'], u['siblings']) for u in us], [('note', 'Ownership is not zero.', {'index': 1, 'count': 1}), ('q', '1', {'index': 1, 'count': 2}), ('q', '2', {'index': 2, 'count': 2})])  # prose with an inline element is one field; repeated leaves report their own place
+        self.assertEqual([(u['name'], u['text'], u['siblings'], u.get('mixed')) for u in us], [('b', 'not', {'index': 1, 'count': 1}, None), ('note', 'Ownership is not zero.', {'index': 1, 'count': 1}, True), ('q', '1', {'index': 1, 'count': 2}, None), ('q', '2', {'index': 2, 'count': 2}, None)])  # prose around a child: read whole and marked mixed, the child kept as a field of its own (Codex R12-6); repeated leaves report their own place
         self.assertEqual(facts, {'attribute_values': 2})  # attribute values are not read, and the route says so
+        us = xf.units_of(b'<r><holding>Balance:<amount>10</amount><unit>shares</unit></holding><note>1<b>2</b>3</note></r>')
+        self.assertEqual([(u['name'], u['text'], u.get('mixed')) for u in us], [('amount', '10', None), ('unit', 'shares', None), ('holding', 'Balance:10shares', True), ('b', '2', None), ('note', '123', True)])  # no field identity erased, no space of ours
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as d:  # Codex R12-4: the run summary keeps every file (the per-file unread dictionary used to overwrite it)
+            pa, pb = Path(d) / 'a.xml', Path(d) / 'b.xml'; pa.write_bytes(b'<r><v u="x">1</v></r>'); pb.write_bytes(b'<r><v>2</v></r>')
+            srcs = [{'file_id': 'acc/a.xml', 'path': pa, 'sha256': 'a', 'split': 'development'}, {'file_id': 'acc/b.xml', 'path': pb, 'sha256': 'b', 'split': 'development'}]
+            with patch.object(xf.grade, 'load_sources', return_value=srcs): xf.main(['--key', 'unused', '--split', 'development', '--out', d + '/run'])
+            facts_run = json.loads((Path(d) / 'run' / 'facts.json').read_text())['files']
+            self.assertEqual(sorted(facts_run), ['acc/a.xml', 'acc/b.xml']); self.assertEqual(facts_run['acc/a.xml']['status'], 'OK')
+            self.assertEqual(json.loads((Path(d) / 'run' / 'route' / 'acc' / 'a.xml.json').read_text()).get('not_read'), {'attribute_values': 1})
         self.assertEqual(units[3]['path'], ['{urn:x}sub', '{urn:x}data', '{urn:x}persons', '{urn:x}person'])
         a = units[3]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<name>Beta')  # from the start tag to the end of the text: the key's name and text anchors both fall inside
         a = units[0]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<title>Common &amp; Preferred')  # entities inside the text do not shift the span
         with self.assertRaises(expat.ExpatError): xf.units_of(b'<root><number>10</number><discarded')  # Codex R10: a truncated document is refused, never repaired
         raw2 = b'<r><note><![CDATA[a > b & c]]></note></r>'; u = xf.units_of(raw2)[0]  # CDATA: character data; the anchor still starts at the element's own tag
         self.assertEqual((u['text'], raw2[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']]), ('a > b & c', b'<note><![CDATA[a > b & c]]>'))
+
+    def test_table_captions_and_notes_are_emitted_once_at_their_place(self):
+        # Codex R12-1: a note both attached to the table and listed among its children was skipped twice (table children were never walked, and the
+        # attachment loop refused anything in the body); 65 attached notes in three development PDFs had no unit
+        doc = {'body': {'children': [{'$ref': '#/tables/0'}, {'$ref': '#/texts/2'}]}, 'furniture': {'children': []}, 'groups': [], 'pictures': [],
+               'texts': [{'self_ref': '#/texts/0', 'label': 'footnote', 'text': 'note: child and attached'}, {'self_ref': '#/texts/1', 'label': 'caption', 'text': 'caption attached only'},
+                         {'self_ref': '#/texts/2', 'label': 'footnote', 'text': 'note listed after the table'}],
+               'tables': [{'self_ref': '#/tables/0', 'children': [{'$ref': '#/texts/0'}], 'footnotes': [{'$ref': '#/texts/0'}, {'$ref': '#/texts/2'}], 'captions': [{'$ref': '#/texts/1'}],
+                           'data': {'table_cells': [{'text': 'x', 'start_row_offset_idx': 0, 'start_col_offset_idx': 0, 'end_row_offset_idx': 1, 'end_col_offset_idx': 1}]}}]}
+        units = dh.to_units(doc)
+        self.assertEqual([(u['id'], u.get('text', 'table')) for u in units], [('#/tables/0', 'table'), ('#/texts/0', 'note: child and attached'), ('#/texts/1', 'caption attached only'), ('#/texts/2', 'note listed after the table')])
+        self.assertEqual(units[0]['notes'], ['#/texts/0', '#/texts/2'])
 
     def test_a_cell_printed_wholly_raised_is_kept_as_a_cell(self):
         # Codex round 7 (R7-1): a raised 4 is still the cell's text; superscript is formatting, not proof of a footnote
@@ -253,15 +277,29 @@ class DoclingPdfAdapterTests(unittest.TestCase):
         self.assertEqual(route['status'], 'OK'); self.assertEqual(route['route']['tool'], 'docling')
         self.assertTrue(all(not k.startswith('_') for u in route['units'] for c in (u.get('cells') or [u]) for k in c))
 
-    def test_a_reread_page_takes_its_place_with_unique_ids(self):
-        # ledger §17 / DOCLING_FEATURES #12: a page Docling grades POOR on parsing is converted again with full-page OCR; its units replace the page's, order and ids kept sound
-        u = lambda i, page, text: {'id': f'#/texts/{i}', 'kind': 'text', 'text': text, 'anchor': {'page': page, 'region': [0, 0, 10, 10]}}
-        first = [u(0, 1, 'one'), u(1, 2, '\u2588CF H<9'), u(2, 3, 'three'), {'id': '#/texts/3', 'kind': 'text', 'text': 'spans 2-3', 'anchor': [{'page': 2, 'region': [0, 0, 1, 1]}, {'page': 3, 'region': [0, 0, 1, 1]}]}]
-        out = dp.spliced(first, {2: [u(0, 2, 'For the'), u(1, 2, 'three months')]})
-        self.assertEqual([(x['id'], x['text']) for x in out], [('#/texts/0', 'one'), ('p2:#/texts/0', 'For the'), ('p2:#/texts/1', 'three months'), ('#/texts/2', 'three')])  # the unreadable unit and the unit spanning the re-read page go
-        self.assertEqual(len({x['id'] for x in out}), 4)
+    def test_a_reread_page_group_takes_its_place_in_page_order_keeping_other_pages_and_references(self):
+        # Codex R12-2: a page Docling grades POOR on parsing is converted again (ledger §17); the re-read group's units stand in page order, also where the first
+        # pass had nothing; a unit that spans a re-read page and another is kept and marked, never dropped; re-read ids and the references between them follow
+        u = lambda i, page, text: {'id': i, 'kind': 'text', 'text': text, 'anchor': {'page': page, 'region': [0, 0, 100, 20]}}
+        first = [u('a', 1, 'One.'), u('b', 2, '\u2588CF H<9'), u('c', 3, 'Three.')]
+        self.assertEqual([(x['id'], x['text']) for x in dp.spliced(first, {(2, 2): [u('n', 2, 'Two.')]})], [('a', 'One.'), ('p2:n', 'Two.'), ('c', 'Three.')])
+        self.assertEqual([x['id'] for x in dp.spliced([u('a', 1, 'One.'), u('c', 3, 'Three.')], {(2, 2): [u('n', 2, 'Two.')]})], ['a', 'p2:n', 'c'])  # a page the first pass had nothing on
+        span = {'id': 'b', 'kind': 'text', 'text': 'End of two. Start of three.', 'anchor': [{'page': 2, 'region': [0, 0, 1, 1]}, {'page': 3, 'region': [0, 0, 1, 1]}]}
+        out = dp.spliced([u('a', 1, 'One.'), span, u('c', 3, 'Rest of three.')], {(2, 2): [u('n', 2, 'End of two.')]})
+        self.assertEqual([(x['id'], x.get('incomplete')) for x in out], [('a', None), ('p2:n', None), ('b', 'spans a page converted again'), ('c', None)])  # kept, marked
+        tb = {'id': 't', 'kind': 'table', 'anchor': {'page': 2, 'region': [0, 0, 1, 1]}, 'cells': [], 'notes': ['n']}; note = {'id': 'n', 'kind': 'footnote', 'text': 'x', 'anchor': {'page': 2, 'region': [0, 0, 1, 1]}, 'links': [{'text': 'x', 'href': None, 'to': 't'}]}
+        out = dp.spliced([u('a', 1, 'One.')], {(2, 2): [tb, note]})
+        self.assertEqual([(x['id'], x.get('notes'), [l['to'] for l in x.get('links') or []]) for x in out], [('a', None, []), ('p2:t', ['p2:n'], []), ('p2:n', None, ['p2:t'])])
         self.assertEqual(dp.spliced(first, {}), first)
+        self.assertEqual(dp.reread_groups([u('a', 1, 'x'), span, u('c', 3, 'y'), u('d', 7, 'z')], [2]), [(2, 3)])  # the group closes over the spanning unit: read again whole
+        self.assertEqual(dp.reread_groups([u('a', 1, 'x')], [2, 3, 7]), [(2, 3), (7, 7)])
 
+    def test_route_status_keeps_a_partial_conversion_partial(self):
+        # Codex R12-3: only a full success is OK; a partial success is PARTIAL with the tool's errors; an unknown or missing cached outcome is never success
+        self.assertEqual(dh.route_status('ConversionStatus.SUCCESS'), ('OK', None))
+        self.assertEqual(dh.route_status('ConversionStatus.PARTIAL_SUCCESS', ['page 3: layout failed']), ('PARTIAL', 'page 3: layout failed'))
+        self.assertEqual(dh.route_status('ConversionStatus.FAILURE', []), ('FAILED', 'conversion status ConversionStatus.FAILURE'))
+        self.assertEqual(dh.route_status('reused raw')[0], 'FAILED')
 
 from benchmarks.prepare.grader.adapters import prestep_headings as ph
 

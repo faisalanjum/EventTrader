@@ -698,8 +698,9 @@ source's at its own place), else the only run; when the key's search pieces name
 certain: if the source strikes the other place and not this one, the claim is that one; if the source strikes neither, the claim lands on the field (an
 invented strike fails, Codex's `strike_equals_field`). Readings are judged per key string (a string without a run keeps the old text rule; a definite
 failure on any string is a failure; an open reading is unresolved). `value()` now sends the very cells that spelled the value through the same check;
-`basis` keeps every piece of a joined phrase; `periods`, `footnotes` and `range_` record the carriers they used. Audit from the live code: every field
-callback records what it matched; `field()`'s anchor fallback is kept as the safety net only.
+`basis` keeps every piece of a joined phrase; `periods`, `footnotes` and `range_` record the carriers they used. Audit from the live code (corrected in round
+12): row_label, header_path, table_title, corner_text, lead_in, section_path, unit_printed, basis, periods, footnotes, range, row_context and the in-value unit
+record what they matched; the caption shortcut of `table_title` (a table's own `caption`, not a unit) still relies on `field()`'s anchor fallback.
 
 **XML (`anchor.py::xml_chars`, `adapters/xml_fields.py`, `grade_xml`).** The scanner reads XML through the strict standard parser's character data with
 byte spans: CDATA literal, entity and character references decoded (every character of a reference shares the reference's bytes), attributes never text or
@@ -747,3 +748,45 @@ tool's order, drops the unreadable and the spanning unit, keeps ids unique, and 
 
 Tests 203. This is the first escalation inside a route: cheap default, the route's own gate, one measured recovery; the browser render for HTML
 stays off because its gains were not predictable from gates (§33).
+
+## 36. Round 12 (2026-10-04 04:15, Codex's `ROUND12_CODEX.md` on 15c42c278) — seven findings, all reproduced, all closed; the route stays a candidate
+
+**What Codex found (all reproduced live first, his scripts pointed at the repository).** R12-1 the shared unit builder skipped a table's attached notes that
+were also listed among the table's children (65 attached items in three development PDFs had no unit; 39 texts nowhere in the output); R12-2 `spliced`
+dropped a unit spanning a re-read page and another, appended a re-read page the first pass had nothing on at the end (1, 3, 2), and left `notes`
+pointing at old ids; R12-3 a `PARTIAL_SUCCESS` conversion became route `OK`, `--reuse-raw` after a crashed re-read reported OK with no re-read, and
+`--reuse-raw --no-ocr` reused full-page OCR while declaring `ocr: false`; R12-4 the XML run summary kept only the last file; R12-5 an XML unit could be
+supplied by another holding; R12-6 the scanner put a space at every XML element boundary (`123` read `1 2 3`) and a parent with text of its own erased
+its children's field identities; R12-7 an invented strike over a marked label (`Total(1) revenue`) slipped past the text fallback.
+
+**Attachments once, at their place (`docling_html.py::to_units`).** The walk descends into a table's children (captions and notes in the tool's own
+order); the attachment loop emits only what the walk never reaches, computed with the walk's own rules (rich-cell groups excluded); each item once.
+Audit on the nine cached development PDFs: 0 attached items without a unit (was 65).
+
+**Page groups, order, nothing dropped (`docling_pdf.py::reread_groups`, `spliced`).** The parse-POOR pages are closed over first-pass units that span
+further pages and converted again as contiguous page groups, so a paragraph across a page break is read again whole. The splice keeps the first pass's
+order, puts each group where the first pass reaches its first page (also for a page it had nothing on), drops a unit only when all its pages are
+re-read, keeps a unit that would still straddle (marked `incomplete`), and renames re-read ids with every reference between them.
+
+**Partial stays partial; a cache is reused only whole (`docling_html.py::route_status`, `docling_pdf.py::main`).** Only `SUCCESS` is OK; a partial
+conversion or re-read is PARTIAL with the tool's errors; a failure or an unknown cached outcome is FAILED. Each conversion writes `raw/<file>.meta.json`
+(source sha256, settings, status, errors, required and completed re-read groups); `--reuse-raw` refuses a cache with no record, other bytes, other
+settings or missing re-reads — FAILED with the reason — and otherwise carries the cached outcome. The HTML adapter maps and carries statuses the same
+way. The existing caches had no record, so run 32 converted the Docling HTML and PDF routes again.
+
+**XML (`xml_fields.py`, `anchor.py::xml_chars`, `grade_xml`).** The run summary keeps every file (the per-file unread dictionary no longer shadows it).
+The scanner adds no character at an element boundary: XML text is the character data alone. A parent with text of its own around child elements is
+read whole as prose (`mixed`) and its children stay fields of their own — nothing lost, no identity erased; the prose unit overlaps its children. The
+key records no source support for XML `unit_printed`, so support is the containing instance: a unit counts from the same instance (`group.at`) or from
+outside every repeated ancestor (the document's shared context, a security title); another holding's word cannot stand in.
+
+**Strikes over a marked label (`grade.py::struck_kept(…, markers)`).** The record's own footnote marks are set aside first with a position map; the
+field is the run of the remaining characters and a strike is judged on the field's own characters inside it (a strike on the mark alone is not the
+field's). Audit corrected: row_context and the in-value unit record their carriers; the caption shortcut keeps the anchor fallback.
+
+**Run 32.** Run 32 (04:22–05:01: the two Docling HTML routes converted again with their statuses recorded — 60/60 SUCCESS each — the render route re-adapted from its raw output, the PDF route's 14 files converted again under the new rules, XML regenerated, formatting and screen steps re-run, 13 routes regraded): every HTML number is identical to run 29 (EdgarTools + formatting + screen 168/171 and 49/60 with 11 unresolved; browser render + formatting 165/171 and 52/60; best single route 217/231, best pick 221, no route 10); XML 9/9 with all three files in the run summary; the Adobe document re-read as one 54-page group; native PDF 4/9 — the attachments emitted now add text units but no development verdict moved. Run 33 (05:03, the owner's page-break rule (e) in the grader, regrade only): the continued paragraph of `0000950170-24-131547` passes with the `continued` flag → **native PDF 5/9**; nothing else moved; the round-7 grader on the same 13 route folders: 0 passes lost. The PDF route folder now holds 19 route files (14 converted in run 32, 5 printed-HTML files of the 2026-10-03 experiment left as they were), hence the wider printed-HTML columns in its row.
+
+Tests 203 → 208 (the owner's rule (e) included: a unit anchored on several pages, the key's page among them, that carries the block's text in order passes with the flag `continued`; `grade.py::continuous`; the within-unit page split is not verified until the route carries per-page character spans). Codex's five round-12 scripts and the r4–r11 probes re-run: as expected (the documented `3.7 %` tolerance aside). The route proposal
+is corrected to a candidate: no net gain against the render (each 217/231, each recovers 3 the other misses, union 220, best 221), the complete-route
+time ≈ 7.7 min per 60 files, page numbers a route loss under the active contract until the key side changes it, pictures under the frozen contract
+until the owner's rule enters the next package.

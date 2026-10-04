@@ -145,7 +145,7 @@ def sheet_can_strike(sheet):
 def xml_chars(raw, chars, starts, ends):
     """Character data of an XML document by the strict standard parser, each character with its byte span: a CDATA section is literal text,
     an entity or character reference decodes to its replacement (every character of it shares the reference's bytes), attributes are not
-    text, an element boundary separates words. False when the bytes are not a complete well-formed document (nothing is certified then)."""
+    text, an element boundary adds no character (`<note>1<b>2</b>3</note>` reads 123). False when the bytes are not a complete well-formed document (nothing is certified then)."""
     p = expat.ParserCreate(); events = []  # (byte index, kind, text), in document order; every construct is an event so each span ends where the next begins
     p.CharacterDataHandler = lambda t: events.append((p.CurrentByteIndex, 'text', t))
     p.StartElementHandler = lambda n, a: events.append((p.CurrentByteIndex, 'tag', None))
@@ -157,8 +157,7 @@ def xml_chars(raw, chars, starts, ends):
     except expat.ExpatError: return False
     events.append((len(raw), 'mark', None))
     for (b0, kind, t), (b1, _, _) in zip(events, events[1:]):
-        if kind == 'tag' and b1 > b0: chars.append(' '); starts.append(b0); ends.append(b1)
-        elif kind == 'text':
+        if kind == 'text':  # a tag adds nothing: XML text is the character data alone; element boundaries are structure the route reports apart
             if b1 - b0 == len(t.encode('utf-8')):
                 for c in t: n = len(c.encode('utf-8')); chars.append(c); starts.append(b0); ends.append(b0 + n); b0 += n
             else:

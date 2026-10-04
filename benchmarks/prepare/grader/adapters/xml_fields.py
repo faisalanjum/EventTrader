@@ -1,8 +1,8 @@
 """XML route (agreement point 4): one `field` unit per element that carries text, from the standard library's strict XML parser (expat):
 the element's expanded name `{namespace}local`, its ancestors' expanded names, the instance it belongs to (the nearest repeated ancestor: its
 place among same-named siblings, "2 of 8", and the byte of its start tag, which tells two first children of two parents apart), the element's
-own place among its siblings, its text, and the byte span from its start tag to the end of its text. An element whose own text holds inline
-elements (prose) is one field read whole: its descendants are formatting, not fields. Attribute values are not read; their count is reported
+own place among its siblings, its text, and the byte span from its start tag to the end of its text. An element whose own text stands around child
+elements is read whole as prose (`mixed`) and its children stay fields of their own: nothing is lost and no structure is erased. Attribute values are not read; their count is reported
 as `not_read` so the omission is visible. No field list, nothing inferred, nothing repaired: a document that does not parse is reported FAILED
 with the parser's own message.
 
@@ -36,9 +36,8 @@ def units_of(raw, facts=None):
         fr = stack.pop(); text = ''.join(fr['parts'])
         if stack: stack[-1]['parts'].append(text)  # a parent that is prose sees its children's text in place
         if not ''.join(fr['own']).strip(): return  # no text of its own: a container of elements, or empty
-        del leaves[fr['mark']:]  # prose with inline elements is one field; the elements inside it are formatting, not fields
-        leaves.append({'name': fr['name'], 'index': fr['index'], 'siblings': fr['parent_counts'], 'ancestors': [(a['name'], a['index'], a['parent_counts'], a['start_tag']) for a in stack],
-                       'text': text.strip(), 'anchor': {'byte_start': fr['start_tag'], 'byte_end_exclusive': p.CurrentByteIndex}})  # from the element's own start tag to the end of its text
+        leaves.append({'name': fr['name'], 'index': fr['index'], 'siblings': fr['parent_counts'], 'ancestors': [(a['name'], a['index'], a['parent_counts'], a['start_tag']) for a in stack], 'mixed': len(leaves) > fr['mark'],
+                       'text': text.strip(), 'anchor': {'byte_start': fr['start_tag'], 'byte_end_exclusive': p.CurrentByteIndex}})  # from the element's own start tag to the end of its text; an element with text of its own around child elements is read whole as prose AND its children stay fields of their own
     p.StartElementHandler, p.EndElementHandler, p.CharacterDataHandler = start, end, data
     p.Parse(raw, True)
     if facts is not None: facts['attribute_values'] = attrs
@@ -47,7 +46,7 @@ def units_of(raw, facts=None):
         group = next(({'index': idx, 'count': counts[name], 'at': at} for name, idx, counts, at in reversed(leaf['ancestors']) if counts[name] > 1), None) \
             or {'index': 1, 'count': 1, 'at': leaf['ancestors'][0][3] if leaf['ancestors'] else leaf['anchor']['byte_start']}  # no repeated ancestor: the document is the instance
         out.append({'id': f'f{i}', 'kind': 'field', 'name': clark(leaf['name']), 'path': [clark(n) for n, _, _, _ in leaf['ancestors']], 'group': group,
-                    'siblings': {'index': leaf['index'], 'count': leaf['siblings'][leaf['name']]}, 'text': leaf['text'], 'anchor': leaf['anchor']})
+                    'siblings': {'index': leaf['index'], 'count': leaf['siblings'][leaf['name']]}, 'text': leaf['text'], 'anchor': leaf['anchor'], **({'mixed': True} if leaf['mixed'] else {})})
     return out
 
 
@@ -62,8 +61,8 @@ def main(argv=None):
         dst = out / 'route' / (fid + '.json'); dst.parent.mkdir(parents=True, exist_ok=True); t0 = time.time()
         raw = path.read_bytes(); doc = {'schema': 'prepare-route-output/1', 'file_id': fid, 'sha256': sha, 'status': 'OK', 'error': None, 'route': route, 'units': []}
         try:
-            facts = {}; doc['units'] = units_of(raw, facts)
-            if facts.get('attribute_values'): doc['not_read'] = facts  # what the route leaves unread, stated rather than silent
+            unread = {}; doc['units'] = units_of(raw, unread)  # the per-file unread count, apart from the run's facts
+            if unread.get('attribute_values'): doc['not_read'] = unread  # what the route leaves unread, stated rather than silent
         except expat.ExpatError as e: doc['status'], doc['error'] = 'FAILED', f'not a complete well-formed XML document: {e}'
         doc['seconds'] = round(time.time() - t0, 3); dst.write_text(json.dumps(doc, ensure_ascii=False)); facts[fid] = {'status': doc['status'], 'fields': len(doc['units']), 'seconds': doc['seconds']}
         print(fid, facts[fid], flush=True)

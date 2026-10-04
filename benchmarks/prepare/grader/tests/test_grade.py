@@ -1498,6 +1498,46 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader()
         self.assertEqual(res['files'][XML_ID]['not_read'], {'attribute_values': 2}); self.assertIsNone(res['files'][HTM_ID]['not_read'])
 
+    def test_an_xml_unit_comes_from_its_own_instance_or_the_documents_shared_context(self):
+        # Codex R12-5: two holdings both say "shares"; the first holding's unit removed must fail its target, the other holding's word cannot stand in; a document-level title still serves every holding
+        from benchmarks.prepare.grader.adapters import xml_fields as xf
+        raw = b'<r><title>Common</title><holding><qty>10</qty><unit>shares</unit></holding><holding><qty>20</qty><unit>shares</unit></holding></r>'
+        def unit_row(unit, drop=None):
+            units = [u for u in xf.units_of(raw) if u['text'] != drop or u['name'] != 'unit' or u['group']['index'] != 1]; a = raw.index(b'10')
+            t = {'key_id': 'syn/X1', 'file_id': 'syn/a.xml', 'format': 'cell/xml', 'type': 'cell', 'split': 'development', 'anchor': {'byte_start': a, 'byte_end_exclusive': a + 2}, 'alternatives': {}, 'excluded': set(), 'support': {},
+                 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': 'qty', 'unit_printed': unit}}
+            grader = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': units}, raw, 'xml')); grader.grade_cell()
+            return next((r['verdict'], r.get('reason')) for r in grader.rows if r['check'] == 'unit_printed')
+        self.assertEqual(unit_row('shares'), ('pass', None))
+        self.assertEqual(unit_row('shares', drop='shares'), ('fail', 'missing'))  # the second holding's "shares" is not this holding's
+        self.assertEqual(unit_row('Common'), ('pass', None))  # the title outside every repeated ancestor is shared context
+
+    def test_a_strike_over_a_marked_label_is_judged_on_the_labels_own_characters(self):
+        # Codex R12-7: the label prints "Total(1) revenue" (the record's own mark set aside when matching); an invented strike over the whole label slipped past the text fallback
+        raw = b'<table><tr><td>Total<sup>(1)</sup> revenue</td><td>1234</td></tr></table><p>(1) a note</p>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        def label_row(key_label, struck):
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': raw.index(b'</table>') + 8}, 'cells': [{'r': 0, 'c': 0, 'text': 'Total(1) revenue', 'anchor': span(b'Total<sup>(1)</sup> revenue'), 'struck': struck}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}]}
+            rows = self.synthetic_cell(raw, [], {'row_label': key_label, 'footnote_markers': [{'marker_text': '(1)', 'anchor': span(b'<sup>(1)</sup>'), 'note_text': '(1) a note', 'note_anchor': span(b'(1) a note')}]}, {'row_label': {'anchors': [span(b'Total<sup>(1)</sup> revenue')]}}, tb)
+            return rows['row_label']
+        self.assertEqual(label_row('Total revenue', []), ('pass', None))
+        self.assertEqual(label_row('Total revenue', ['Total(1) revenue']), ('fail', 'struck'))  # invented
+        self.assertEqual(label_row('~~Total~~ revenue', ['Total']), ('pass', None))  # faithful
+        self.assertEqual(label_row('~~Total~~ revenue', []), ('fail', 'struck'))  # lost
+
+    def test_a_paragraph_read_whole_across_a_page_break_carries_the_block_on_its_page(self):
+        # owner decision (e), 2026-10-04: a genuinely continuous paragraph is accepted when the target text is preserved in order and mapped to the correct source page
+        def block_row(unit, want='Start of three. More words.'):
+            t = {'key_id': 'syn/B1', 'file_id': 'syn/f.pdf', 'format': 'structure/pdf', 'type': 'structure', 'split': 'development', 'anchor': {'page': 3, 'region': [0, 0, 100, 20]},
+                 'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_text': want, 'kind': 'paragraph'}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [unit], 'pages': {2: [612, 792], 3: [612, 792]}}, None, 'pdf')); g.grade_structure()
+            r = next(r for r in g.rows if r['check'] == 'printed_text'); return r['verdict'], r.get('reason'), r.get('detail')
+        across = {'id': 'p', 'kind': 'text', 'text': 'End of two. Start of three. More words.', 'anchor': [{'page': 2, 'region': [0, 700, 100, 792]}, {'page': 3, 'region': [0, 0, 100, 20]}]}
+        self.assertEqual(block_row(across), ('pass', None, {'continued': True}))  # the block is the page-3 part of a paragraph the route read whole
+        self.assertEqual(block_row(dict(across, text='End of two. More words. Start of three.'))[0], 'fail')  # not in order
+        self.assertEqual(block_row(dict(across, anchor={'page': 3, 'region': [0, 0, 100, 20]}))[0], 'fail')  # one page only: extra text is a boundary fault, as before
+        self.assertEqual(block_row(dict(across, anchor=[{'page': 2, 'region': [0, 700, 100, 792]}, {'page': 3, 'region': [0, 0, 100, 20]}]), want='Start of three. More words.')[0], 'pass')
+
     def test_wer_counts_insertions_substitutions_and_deletions_over_the_reference(self):
         # Codex N3: the old figure was a similarity distance — three inserted words scored zero
         self.assertEqual(grade.wer('revenue was flat elsewhere rose', 'revenue rose'), 1.5)

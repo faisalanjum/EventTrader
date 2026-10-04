@@ -11,14 +11,13 @@ confidence grades POOR on parsing (an unreadable font encoding: the cells are no
 its units take the page's place — the route's own gate escalates, never a file name (ledger §17: one block from word error 1.0 to 0.0)."""
 import argparse
 import json
-import re
 import subprocess
 import tempfile
 import time
 from pathlib import Path
 
 from benchmarks.prepare.grader import anchor, grade
-from benchmarks.prepare.grader.adapters.docling_html import to_units, unsupported as _unsupported
+from benchmarks.prepare.grader.adapters.docling_html import to_units, unsupported as _unsupported, route_status
 
 NAME = 'docling-pdf'
 CHROME = ['google-chrome', '--headless=new', '--disable-gpu', '--no-sandbox', '--no-pdf-header-footer']  # as the 2026-09-30 study
@@ -58,17 +57,45 @@ def poor_parse_pages(confidence):
     return sorted(p for p, c in confidence.pages.items() if type(c)(parse_score=c.parse_score).low_grade.value == 'poor')
 
 
+def pages_of(u):
+    return {a['page'] for a in (u['anchor'] if isinstance(u['anchor'], list) else [u['anchor']]) if a and 'page' in a} if u.get('anchor') else set()
+
+
+def reread_groups(units, poor):
+    """The page groups to convert again: the parse-POOR pages, closed over first-pass units that span further pages (a paragraph read across a
+    page break is read again whole, never cut), as contiguous ranges (a, b)."""
+    pages, changed = set(poor), True
+    while changed:
+        changed = False
+        for u in units:
+            ps = pages_of(u)
+            if ps & pages and not ps <= pages: pages |= ps; changed = True
+    out, run = [], []
+    for p in sorted(pages):
+        if run and p != run[-1] + 1: out.append((run[0], run[-1])); run = []
+        run.append(p)
+    return out + ([(run[0], run[-1])] if run else [])
+
+
 def spliced(units, reread):
-    """The first pass's units in their own order, except that every unit on a re-read page goes and the re-read page's units stand where its
-    first unit stood (ids prefixed by the page, so ids stay unique). A unit anchored on several pages goes when any of them is re-read."""
-    pages = lambda u: {a['page'] for a in (u['anchor'] if isinstance(u['anchor'], list) else [u['anchor']]) if a} if u.get('anchor') else set()
-    renamed = lambda p: [dict(x, id=f"p{p}:{x['id']}") for x in reread[p]]
-    out, done = [], set()
+    """The first pass's units in their own order, with each re-read page group's units standing where the first pass reaches the group's first
+    page (page order kept, also for a page the first pass had nothing on). A first-pass unit whose pages are all re-read goes; a unit that spans
+    a re-read page and one not re-read is kept and marked incomplete, never dropped (the groups are closed over such units upstream). Re-read
+    units' ids are prefixed by their group's first page, and references between them (a table's notes, links) follow the new ids."""
+    reread = {(k, k) if isinstance(k, int) else tuple(k): v for k, v in reread.items()}  # a group is a page range (a, b); a bare page number means that one page
+    covered = {p for a, b in reread for p in range(a, b + 1)}
+    def renamed(a, b):
+        ren = {u['id']: f"p{a}:{u['id']}" for u in reread[(a, b)] if 'id' in u}
+        fix = lambda x: ren.get(x, x) if isinstance(x, str) else [fix(v) for v in x] if isinstance(x, list) else {k: fix(v) for k, v in x.items()} if isinstance(x, dict) else x
+        return [fix(u) for u in reread[(a, b)]]
+    pending, out = sorted(reread), []
     for u in units:
-        hit = pages(u) & set(reread)
-        if not hit: out.append(u); continue
-        for p in sorted(hit - done): out += renamed(p); done.add(p)
-    for p in sorted(set(reread) - done): out += renamed(p)  # a re-read page the first pass had nothing on
+        ps = pages_of(u)
+        if ps and ps <= covered: continue
+        first = min(ps) if ps else None
+        while pending and first is not None and pending[0][0] <= first: out += renamed(*pending.pop(0))
+        out.append(dict(u, incomplete='spans a page converted again') if ps & covered else u)
+    for g in pending: out += renamed(*g)
     return out
 
 
@@ -121,32 +148,44 @@ def main(argv=None):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if ext not in ('.pdf', '.htm', '.html'):
             (out / 'route' / (fid + '.json')).write_text(json.dumps(_unsupported(fid, sha, version))); facts[fid] = {'status': 'UNSUPPORTED'}; continue
-        rawjson = out / 'raw' / (fid + '.docling.json'); t0 = time.time(); printed = 0.0; reread = {}
-        rawpage = lambda p: out / 'raw' / f'{fid}.p{p}.fullocr.docling.json'
+        rawjson = out / 'raw' / (fid + '.docling.json'); metajson = out / 'raw' / (fid + '.meta.json'); t0 = time.time(); printed = 0.0; reread, groups, errors = {}, [], []
+        rawpage = lambda g: out / 'raw' / f'{fid}.p{g[0]}-{g[1]}.fullocr.docling.json'
         try:
-            if a.reuse_raw and rawjson.exists():
-                doc = json.loads(rawjson.read_text()); prev = (json.loads((out / 'facts.json').read_text())['files'].get(fid) or {}) if (out / 'facts.json').exists() else {}
-                dt, printed, status = prev.get('docling_seconds', 0), prev.get('print_seconds', 0), 'reused raw'
-                reread = {int(m.group(1)): json.loads(p.read_text()) for p in (out / 'raw' / fid).parent.glob(Path(fid).name + '.p*.fullocr.docling.json') for m in [re.search(r'\.p(\d+)\.fullocr\.docling\.json$', p.name)] if m}
+            if a.reuse_raw and rawjson.exists():  # a cached run is reused only whole: same bytes, same settings, every required re-read present, its own outcome kept
+                meta = json.loads(metajson.read_text()) if metajson.exists() else None
+                required, done = [tuple(g) for g in (meta or {}).get('reread_required') or []], [tuple(g) for g in (meta or {}).get('reread_done') or []]
+                problem = ('no record of the cached run' if not meta else 'the cached run converted other bytes' if meta.get('sha256') != sha else 'the cached run used other settings' if meta.get('settings') != settings
+                           else 'the cached run is incomplete' if sorted(required) != sorted(done) or not all(rawpage(g).exists() for g in done) else None)
+                if problem: raise RuntimeError(f'cache refused: {problem}')
+                doc, groups, status, errors = json.loads(rawjson.read_text()), done, meta['status'], meta.get('errors') or []
+                reread = {g: json.loads(rawpage(g).read_text()) for g in done}; dt, printed = meta.get('docling_seconds', 0), meta.get('print_seconds', 0)
             else:
                 src = str(path)
                 if ext != '.pdf':
                     tmp = tempfile.NamedTemporaryFile(suffix='.pdf', delete=False); tmp.close(); src = tmp.name; t1 = time.time()
                     subprocess.run(CHROME + [f'--print-to-pdf={src}', 'file://' + str(path)], capture_output=True, timeout=900, check=True); printed = round(time.time() - t1, 1)
-                t2 = time.time(); res = conv.convert(src); doc = res.document.export_to_dict(); status = str(res.status)
+                t2 = time.time(); res = conv.convert(src); doc = res.document.export_to_dict(); status, errors = str(res.status), [str(e) for e in res.errors]
                 rawjson.write_text(json.dumps(doc, ensure_ascii=False))
-                for p in (poor_parse_pages(res.confidence) if ext == '.pdf' and not a.no_ocr else []):  # the route's own gate: an unreadable text layer is read again by OCR (printed HTML is our own print: readable)
-                    reread[p] = conv_full.convert(src, page_range=(p, p)).document.export_to_dict(); rawpage(p).write_text(json.dumps(reread[p], ensure_ascii=False))
+                poor = poor_parse_pages(res.confidence) if ext == '.pdf' and not a.no_ocr else []  # the route's own gate: an unreadable text layer is read again by OCR (printed HTML is our own print: readable)
+                groups = reread_groups(route_for_pdf(doc, fid, sha, 0, version, settings)['units'], poor) if poor else []
+                for g in groups:  # a page group is read again whole, so a paragraph across a page break is never cut
+                    r2 = conv_full.convert(src, page_range=g); reread[g] = r2.document.export_to_dict(); rawpage(g).write_text(json.dumps(reread[g], ensure_ascii=False))
+                    if str(r2.status).split('.')[-1] != 'SUCCESS': errors.append(f'pages {g[0]}-{g[1]} read again: {r2.status}'); errors += [str(e) for e in r2.errors]
+                if str(status).split('.')[-1] == 'SUCCESS' and any(e.startswith('pages ') for e in errors): status = 'ConversionStatus.PARTIAL_SUCCESS'  # a re-read that did not fully succeed leaves the file partial
                 dt = round(time.time() - t2, 1)
+                metajson.write_text(json.dumps({'sha256': sha, 'settings': settings, 'status': status, 'errors': errors, 'reread_required': groups, 'reread_done': groups, 'docling_seconds': dt, 'print_seconds': printed}))
         except Exception as e:  # a tool crash is a result, never a stop
             facts[fid] = {'status': 'FAILED', 'error': repr(e)[:300], 'seconds': round(time.time() - t0, 1)}
             (out / 'route' / (fid + '.json')).write_text(json.dumps(dict(_unsupported(fid, sha, version), status='FAILED', error=repr(e)[:300]))); print(fid, facts[fid], flush=True); continue
         t3 = time.time()
         route = route_for_pdf(doc, fid, sha, dt, version, settings) if ext == '.pdf' else route_for_printed_html(doc, path.read_bytes(), fid, sha, dt, version, settings)
         if reread:
-            route['units'] = spliced(route['units'], {p: route_for_pdf(d, fid, sha, dt, version, settings)['units'] for p, d in reread.items()}); route['reread'] = {'full_page_ocr_pages': sorted(reread)}
+            route['units'] = spliced(route['units'], {g: route_for_pdf(d, fid, sha, dt, version, settings)['units'] for g, d in reread.items()})
+            route['reread'] = {'full_page_ocr_pages': sorted(p for a_, b_ in reread for p in range(a_, b_ + 1)), 'groups': sorted(reread)}
+        route['status'], route['error'] = route_status(status, errors)  # SUCCESS alone is OK; a partial conversion or re-read is PARTIAL with its errors
         flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
-        facts[fid] = {'status': status, 'print_seconds': printed, 'docling_seconds': dt, 'adapter_seconds': round(time.time() - t3, 2), 'items': len(flat), 'reread_pages': sorted(reread),
+        facts[fid] = {'status': status, 'errors': errors, 'print_seconds': printed, 'docling_seconds': dt, 'adapter_seconds': round(time.time() - t3, 2), 'items': len(flat),
+                      'reread_required': groups, 'reread_done': sorted(reread), 'reread_pages': sorted(p for a_, b_ in reread for p in range(a_, b_ + 1)),
                       'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
                       'uncovered_chars': sum(len(anchor.squash(s['text'])) for s in route['uncovered']), 'pages': len(doc.get('pages') or {})}
         (out / 'route' / (fid + '.json')).write_text(json.dumps(route, ensure_ascii=False))

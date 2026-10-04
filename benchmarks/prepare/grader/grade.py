@@ -341,15 +341,31 @@ def strings_in(value):
     return []
 
 
-def struck_kept(key_texts, items, anchors=(), vis=None):
+def continuous(unit, anchor):
+    """Is this unit one block read across a page break that reaches the key's page? Its anchor lists several pages and the key's page is among
+    them (owner decision (e), 2026-10-04). The split of the unit's text between its pages is not verified until the route carries per-page
+    character spans: the rule is stated as that limit."""
+    spans_ = unit.get('anchor') if isinstance(unit.get('anchor'), list) else []
+    pages = {a.get('page') for a in spans_ if isinstance(a, dict) and 'page' in a}
+    return len(pages) > 1 and isinstance(anchor, dict) and anchor.get('page') in pages
+
+
+def struck_kept(key_texts, items, anchors=(), vis=None, markers=()):
     """When the key marks words struck (~~…~~), the route must report the same words struck over the field's own text and no others:
     struck evidence stays struck and never becomes active text (key README). Items are the cells or units that carry the text, in reading
     order. Each key string is one run of their joined text — the run the key's anchor names where the item's text is the source's at its
     place, else the only run — and a route strike counts for the part of it inside that run: a strike crossing the field's boundary is
     seen, a strike elsewhere in a shared unit is not. A strike whose text repeats in its item is placed by the source's own formatting
     (the place the source strikes) when the scanner is certain. None when repeated text leaves the run or a strike's place open
-    (unresolved, never certified). A key string that is no single run (the record's own marks printed into it) is checked by text."""
+    (unresolved, never certified). The record's own footnote marks printed into the items' text are set aside first: the field is then the run of the
+    remaining characters, so a strike over a marked label is judged on the label's own characters; a key string that still is no single run is
+    checked by text, as before."""
     texts = [squash(it.get('text', '')) for it in items]; T = ''.join(texts)
+    marked = set()  # positions of the record's own marks in T (longest mark first, each position claimed once)
+    for m in sorted({squash(m) for m in markers if squash(m)}, key=len, reverse=True):
+        for i in range(len(T) - len(m) + 1):
+            if T.startswith(m, i) and not any(j in marked for j in range(i, i + len(m))): marked.update(range(i, i + len(m)))
+    held = [i for i in range(len(T)) if i not in marked]; T2 = ''.join(T[i] for i in held)  # the text with the marks set aside, and where each remaining character stands in T
     bases, pos = [], 0  # (offset in T, flat index in the source) of each item whose text is the source's at its own place
     for it, tx in zip(items, texts):
         first = [x['byte_start'] for x in spans(it.get('anchor')) if 'byte_start' in x]
@@ -380,21 +396,23 @@ def struck_kept(key_texts, items, anchors=(), vis=None):
         field = squash(key or '')
         if not field: continue
         want = ''.join(squash(m) for m in _STRUCK.findall(key))
-        runs = [i for i in range(len(T) - len(field) + 1) if T.startswith(field, i)]
+        runs = [list(range(i, i + len(field))) for i in range(len(T) - len(field) + 1) if T.startswith(field, i)]  # each run: the positions in T of the field's characters
+        if not runs and marked: runs = [held[j:j + len(field)] for j in range(len(T2) - len(field) + 1) if T2.startswith(field, j)]  # the field around the record's own marks
         if not runs: loose.append((field, want)); continue
-        if len(runs) > 1: runs = sorted({o for o in located() if o in runs}) or runs
+        if len(runs) > 1: runs = [r for r in runs if r[0] in set(located())] or runs
         readings = set()
-        for f0 in runs:
-            f1, inside = f0 + len(field), []
+        for pos in runs:
+            P, inside = set(pos), []
+            hits = lambda iv: any(a in P for a in range(iv[0], iv[1]))
             for _, places in strikes:
-                here = [iv for iv in places if iv[0] < f1 and iv[1] > f0]; away = [iv for iv in places if not (iv[0] < f1 and iv[1] > f0)]
+                here = [iv for iv in places if hits(iv)]; away = [iv for iv in places if not hits(iv)]
                 if not here: continue
                 if any(source(*iv) for iv in away) and all(source(*iv) is False for iv in here): continue  # the source strikes the other place, not this one: the claim is that one
                 if away and not all(source(*iv) is False for iv in away): here.append(None)  # the strike may sit at the other place
                 inside.append(here)
             if len(runs) * prod(map(len, inside)) > 4096: return None  # ponytail: too many readings to enumerate — unresolved, never a guess
             for combo in product(*inside):
-                readings.add(''.join(T[max(a, f0):min(b, f1)] for a, b in sorted(iv for iv in combo if iv)) == want)
+                readings.add(''.join(T[i] for a, b in sorted(iv for iv in combo if iv) for i in range(a, b) if i in P) == want)
         if readings == {False}: return False
         if len(readings) > 1: verdict = None
     if loose:
@@ -580,7 +598,7 @@ class Grader:
             alt, value = alts[len(results) - 1]; anchors = anchors_of(self.t, name, alt)
             items = matched[len(results) - 1] or ([c for a in anchors for c in self.rf.cells_at(a)] + [c for a in anchors for u in self.rf.units_at(a, exclude=('clutter',)) for c in ([x for x in self.rf.cells_in(u) if any(overlap(x.get('anchor'), b) for b in anchors)] if u.get('kind') == 'table' else [u])] if anchors else (self.rf.cells_in(self.tb) if getattr(self, 'tb', None) else []))  # the matched carriers; else a table at the anchor contributes only the cells at this field's support, never another row's strikes
             items = list({id(x): x for x in items if x is not None}.values())
-            kept = struck_kept(strings_in(value), items, anchors, self.rf.vis)
+            kept = struck_kept(strings_in(value), items, anchors, self.rf.vis, self.markers)
             if kept is not True: verdict, reason, detail = ('fail' if kept is False else 'unresolved'), 'struck', None
         self.row(name, verdict, reason, detail)
 
@@ -711,7 +729,7 @@ class Grader:
         if any(not row_hit(c, vr) for c in D): return self.row('value', 'fail', 'symbol_detached')
         shown = sorted(D, key=lambda c: c['c']); said = (self.spell(shown, display), self.spell(cells, display), self.spell(cells, printed))
         if True in said[:2]:  # the cancellation on the very cells that spell the value: lost or invented, either changes the number's meaning
-            kept = struck_kept([display], shown if said[0] is True else cells, [t['anchor']], self.rf.vis)
+            kept = struck_kept([display], shown if said[0] is True else cells, [t['anchor']], self.rf.vis, self.markers)
             return self.row('value', 'pass' if kept is True else 'unresolved' if kept is None else 'fail', None if kept is True else 'struck')
         if said[2] is True: return self.row('value', 'fail', 'symbol_missing', joined(shown))
         if None in said: return self.row('value', 'unresolved', 'adjacency')  # pieces of the value whose page boxes cannot prove adjacency
@@ -741,6 +759,7 @@ class Grader:
         for item in value:
             cells = [c for c in pool if row_hit(c, vr) and self.same(c.get('text', ''), item['text'])[0]]  # a row may print the same text twice: the one under the named header is meant
             if not cells: return ('unresolved', 'adjacency', item['text']) if any(row_hit(c, vr) and c.get('joins') and self.same(spaced(c), item['text'])[0] for c in pool) else ('fail', 'row', item['text'])
+            self.matched = (self.matched or []) + list(cells)
             if item.get('header') and item['header'] != 'position':
                 heads = [c for c in pool if c['r'] < vr] + [k['cell'] for k in self.carriers(anchors_of(self.t, 'row_context', alt), [item['header']])
                                                                            if k['cell'] is not None and k['table'] is not tb and k['order'] < tb['_order']]  # or printed in the first part of a continued table (E1, addendum C5)
@@ -873,7 +892,7 @@ class Grader:
             k = good[0]; self.matched = objects(cars)
             if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', None
             return 'pass', None, None
-        if squash(value) and squash(value) in squash(''.join(c.get('text', '') for c in V)): return 'pass', None, 'in_value_cell'
+        if squash(value) and squash(value) in squash(''.join(c.get('text', '') for c in V)): self.matched = list(V); return 'pass', None, 'in_value_cell'
         if any(k.get('joins') and self.same(spaced(k), value)[0] for k in cars): return 'unresolved', 'adjacency', None
         return ('fail', 'text', ' '.join(k['text'] for k in cars)) if cars else ('fail', 'missing', None)
 
@@ -992,7 +1011,8 @@ class Grader:
             else: ok &= any(local(u.get('name', '')) == item['header'] and norm(u.get('text', '')) == norm(item['text']) for u in same_group)
         if f.get('row_context'): self.row('row_context', 'excluded' if 'row_context' in ex else 'pass' if ok else 'fail', None if ok or 'row_context' in ex else 'group')
         if f.get('unit_printed'):
-            hit = any(norm(f['unit_printed']) in norm(u.get('text', '')) or norm(f['unit_printed']) == norm(local(u.get('name', ''))) for u in rf.units if u.get('kind') == 'field')  # an XML unit may be a printed text (a security title) or the element's own name (percentOfClass), as periods already allow
+            own = lambda u: (u.get('group') or {}).get('at') == group.get('at') or (u.get('group') or {}).get('count') == 1  # this instance's fields, or a field outside every repeated ancestor (the document's shared context, e.g. a security title)
+            hit = any(norm(f['unit_printed']) in norm(u.get('text', '')) or norm(f['unit_printed']) == norm(local(u.get('name', ''))) for u in rf.units if u.get('kind') == 'field' and own(u))  # an XML unit may be a printed text (a security title) or the element's own name (percentOfClass, anchored on its tag); another instance's cannot stand in
             if 'unit_printed' in ex: self.row('unit_printed', 'excluded')
             else: self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing', 'anchor_unknown')
         self.field('periods', self.periods, {'_order': v['_order'], 'cells': []}, 0, (0, 1))
@@ -1017,11 +1037,14 @@ class Grader:
         if 'printed_text' in t['excluded']: self.row('printed_text', 'excluded'); ok = True
         else:
             ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
+            continued = False
+            if ok is False and len(units) == 1 and continuous(units[0], t['anchor']) and contains(text_of(units[0]), want):  # owner 2026-10-04 (e): a paragraph the route reads whole across a page break carries the block
+                ok, why, continued = True, None, True
             bearing = [c for u in units for c in ([x for x in u.get('cells') or [] if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
             if ok:  # the words survive, but a cancelled word may have become active, or the wrong one cancelled
-                kept = struck_kept([f.get('printed_text') or ''], bearing, [t['anchor']], rf.vis)
+                kept = struck_kept([f.get('printed_text') or ''], bearing, [t['anchor']], rf.vis, self.markers)
                 if kept is not True: ok, why = kept, 'struck'
-            self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, {'fragmented': frag} if ok and frag else None if ok else {'wer': wer(got, want)})
+            self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, ({'continued': True} if continued else {'fragmented': frag} if frag else None) if ok else {'wer': wer(got, want)})
         main = next((u for u in units if u.get('kind') != 'table'), units[0])
         if f.get('kind') in LOOSE_KINDS: self.row('kind', 'na', None, main.get('kind'))
         elif f.get('kind'):

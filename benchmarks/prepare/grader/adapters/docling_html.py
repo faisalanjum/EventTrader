@@ -60,22 +60,24 @@ def to_units(doc, with_index=False):
     def walk(ref, layer=None):
         kind, it = ref.split('/')[1], item(ref)
         if kind == 'texts': text_unit(it)
-        elif kind == 'tables':
-            table_unit(it)
-            for k in (it.get('footnotes') or []) + (it.get('captions') or []):  # bodies the tool attached to the table and nowhere else
-                if k['$ref'].split('/')[1] == 'texts' and all(u['id'] != k['$ref'] for u in units) and k['$ref'] not in body_refs: text_unit(item(k['$ref']))
+        elif kind == 'tables': table_unit(it)
         elif kind == 'pictures': units.append({'id': ref, 'kind': 'image', 'text': ''})
         elif kind == 'groups' and (it.get('name') or '').startswith('rich_cell_group'): return  # read by its cell
         if layer and units and units[-1].get('id') == ref: units[-1]['layer'] = layer
-        if kind != 'tables':  # headings, pictures and groups may hold further items (pre-order = reading order)
-            for k in it.get('children') or []: walk(k['$ref'], layer)
+        for k in it.get('children') or []: walk(k['$ref'], layer)  # headings, tables (their captions and notes), pictures and groups may hold further items (pre-order = reading order)
+        if kind == 'tables':  # a caption or note the tool attached to the table and placed nowhere the walk reaches: emitted once, here, in its own order
+            for k in (it.get('footnotes') or []) + (it.get('captions') or []):
+                if k['$ref'].split('/')[1] == 'texts' and k['$ref'] not in walked and all(u['id'] != k['$ref'] for u in units): text_unit(item(k['$ref']))
 
     def refs_under(ref, acc):
+        it = item(ref)
+        if ref.split('/')[1] == 'groups' and (it.get('name') or '').startswith('rich_cell_group'): return acc  # cell pieces are read by their cell, never walked
         acc.add(ref)
-        for k in item(ref).get('children') or []: refs_under(k['$ref'], acc)
+        for k in it.get('children') or []: refs_under(k['$ref'], acc)
         return acc
-    body_refs = set()
-    for k in doc['body']['children']: refs_under(k['$ref'], body_refs)
+    walked = set()  # every item the walk will reach (table children included): membership here, not in the body at large, says an item is emitted
+    for k in doc['body']['children']: refs_under(k['$ref'], walked)
+    for k in (doc.get('furniture') or {}).get('children') or []: refs_under(k['$ref'], walked)
     for k in doc['body']['children']: walk(k['$ref'])
     for k in (doc.get('furniture') or {}).get('children') or []: walk(k['$ref'], 'furniture')  # Docling's own layer, kept in its own order
     return units
@@ -86,6 +88,15 @@ def route_for(doc, raw, file_id, sha256, seconds, version, settings=None):
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'docling', 'version': version, 'settings': settings or {'backend': 'HTML', 'options': 'defaults'},
                       'adapter': 'benchmarks/prepare/grader/adapters/docling_html.py', 'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': linked['units'], 'uncovered': linked['uncovered']}
+
+
+def route_status(status, errors=()):
+    """The route file's status from the tool's own: only a full success is OK; a partial success is PARTIAL with the tool's errors; anything
+    else (a failure, an unknown or missing cached outcome) is FAILED. Missing work is never reported as success."""
+    name = str(status).split('.')[-1].upper()
+    if name == 'SUCCESS': return 'OK', None
+    if name == 'PARTIAL_SUCCESS': return 'PARTIAL', '; '.join(str(e) for e in errors) or 'partial conversion'
+    return 'FAILED', ('; '.join(str(e) for e in errors) or f'conversion status {status}')
 
 
 def unsupported(file_id, sha256, version):
@@ -114,7 +125,8 @@ def main(argv=None):
         t0 = time.time(); rawjson = out / 'raw' / (fid + '.docling.json')
         try:
             if a.reuse_raw and rawjson.exists():
-                doc, dt, status, errors = json.loads(rawjson.read_text()), (json.loads((out / 'facts.json').read_text())['files'].get(fid) or {}).get('docling_seconds', 0), 'reused raw', []
+                prev = (json.loads((out / 'facts.json').read_text())['files'].get(fid) or {}) if (out / 'facts.json').exists() else {}
+                doc, dt, status, errors = json.loads(rawjson.read_text()), prev.get('docling_seconds', 0), prev.get('status') or 'unknown', prev.get('errors') or []  # the cached run's own outcome travels with its output
             else:
                 src = str(path)
                 if a.prestep_headings:
@@ -128,6 +140,7 @@ def main(argv=None):
         if not (a.reuse_raw and rawjson.exists()): rawjson.write_text(json.dumps(doc, ensure_ascii=False))
         t1 = time.time(); route = route_for(doc, path.read_bytes(), fid, sha, round(dt, 2), version, {'backend': 'HTML', 'options': 'defaults', 'prestep': 'headings' if a.prestep_headings else None})
         if a.prestep_headings: route['route']['name'] = NAME + '+headings'
+        route['status'], route['error'] = route_status(status, errors)  # SUCCESS alone is OK; a partial conversion is PARTIAL with its errors; an unknown cached outcome is not success
         flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
         facts[fid] = {'status': status, 'docling_seconds': round(dt, 2), 'adapter_seconds': round(time.time() - t1, 2), 'items': len(flat),
                       'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
