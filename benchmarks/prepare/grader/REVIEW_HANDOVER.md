@@ -27,7 +27,7 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 ## Where the proof comes from
 | Proof | What it shows | Where |
 |---|---|---|
-| 193 unit tests on one fixture (HTML table + text + picture, XML form, native PDF) | every check passes on a correct route; each planted fault (changed digit, dropped cell, value under the next column / next row, lost parentheses, glued footnote digit, dropped note, dropped heading, dropped paragraph, reordered blocks, wrong link, XML value moved to another person, PDF value under another column or on a missing page, dishonest anchor, changed source bytes…) fails with the named reason | `tests/test_grade.py`, `tests/test_anchor.py`, `tests/test_adapters.py` |
+| 194 unit tests on one fixture (HTML table + text + picture, XML form, native PDF) | every check passes on a correct route; each planted fault (changed digit, dropped cell, value under the next column / next row, lost parentheses, glued footnote digit, dropped note, dropped heading, dropped paragraph, reordered blocks, wrong link, XML value moved to another person, PDF value under another column or on a missing page, dishonest anchor, changed source bytes…) fails with the named reason | `tests/test_grade.py`, `tests/test_anchor.py`, `tests/test_adapters.py` |
 | 48 real-original variants | controls built from the originals (never from a tool): the 7 contract pairs and the 8 regression cases of the key package, plus the six development faults from Codex's review; every valid representation passes, every damaged copy fails for the stated reason | `checks/real_pairs.py`, `checks/RESULTS.json` |
 | 7 route variants × 69 development files | generality: no crash, gates computed, every failure explainable with `checks/why.py`; numbers below | `/home/faisal/prepare_work/grader_runs/*/graded/summary.md` |
 
@@ -68,7 +68,7 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 - Table context (E13): admitted only when the key declares it with `byte_ranges` that each read the phrase and lie inside the table or its title block (between the declared title and the table's end); any other declaration stops the run as a key defect. Package 2 declares the SL Green lines (the title block is a separate layout table that precedes the data table). The three change-column records keep their `value`/`comparison` roles: Codex found the direction stated in the surrounding text. A compared column's heading must belong to the value's group (C2 after Codex's reproducer).
 - Review history: Codex's ten rounds and the package-2 verdict (`prepare_work/grader_review_codex_20261003/`) and the changes they caused are in `DESIGN.md` §21–§31; every probe script was re-run against this code (`FABLE_RESPONSE*.md` there, `codex_probes_live/`).
 
-## Results on the development split (package 2, grader after Codex's rounds 1–10 and tool tests 1–3; run 28 of 2026-10-03 23:55 — raw converter routes re-linked from cached tool output, the formatting step and the screen step in their own route folders; identical to run 25)
+## Results on the development split (package 2, grader after Codex's rounds 1–10 and tool tests 1–3; run 29 of 2026-10-04 00:52 — EdgarTools re-converted after the adapter fix (paragraphs that hold blocks), its formatting and screen steps re-run, all 12 routes regraded with the table-span rule; the Docling route folders are those of run 25)
 Development split only: 171 HTML cells, 60 HTML blocks, 9 XML cells (the XML route `xml_fields` passes 9/9 with honest anchors, run `grader_runs/xml_fields_dev_20261004`), 9 PDF blocks (plus supplement PDF cells on the PDF route).
 XML and PDF targets no HTML route claims are counted as not converted (E17), never hidden. Headings / notes / refs / kind are structure
 counts, not pass rules. The screen-span step and the heading pre-step are separate declared routes (E14). Gate columns: "unanchored" =
@@ -81,18 +81,18 @@ reports `verified: true`; the 37 consumed packets and the key files are verified
 
 | route | HTML cells | HTML blocks | PDF targets | headings recognised | unanchored | boundary | inserted chars | uncovered chars (files) | reading-order breaks (files) | anchors not measured |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Docling HTML (converter alone) | 145/171 | 47/60 | - | 0/164 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
-| Docling HTML + formatting | 147/171 | 48/60 | - | 0/164 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
-| Docling HTML + formatting + screen | 153/171 | 48/60 | - | 0/164 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
-| Docling HTML + headings pre-step (alone) | 148/171 | 41/60 | - | 104/158 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
-| Docling HTML + headings + formatting | 149/171 | 42/60 | - | 104/158 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
-| Docling HTML + headings + formatting + screen | 155/171 | 42/60 | - | 104/158 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
-| edgartools HTML (converter alone) | 155/171 | 44/55 | - | 35/176 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
-| edgartools HTML + formatting | 160/171 | 45/55 | - | 35/176 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
-| edgartools HTML + formatting + screen | 168/171 | 45/55 | - | 35/176 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| Docling HTML (converter alone) | 145/171 | 48/60 | - | 0/164 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + formatting | 147/171 | 49/60 | - | 0/164 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + formatting + screen | 153/171 | 49/60 | - | 0/164 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + headings pre-step (alone) | 148/171 | 42/60 | - | 104/158 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
+| Docling HTML + headings + formatting | 149/171 | 43/60 | - | 104/158 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
+| Docling HTML + headings + formatting + screen | 155/171 | 43/60 | - | 104/158 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
+| edgartools HTML (converter alone) | 155/171 | 48/60 (11 unresolved) | - | 35/178 | 180 | 923 | 7 | 22,030 (41) | 16 (6) | 0 of 60 graded files |
+| edgartools HTML + formatting | 160/171 | 49/60 (11 unresolved) | - | 35/178 | 180 | 923 | 7 | 22,030 (41) | 16 (6) | 0 of 60 graded files |
+| edgartools HTML + formatting + screen | 168/171 | 49/60 (11 unresolved) | - | 35/178 | 180 | 923 | 7 | 22,030 (41) | 16 (6) | 0 of 60 graded files |
 | Docling browser render (alone) | 163/171 | 51/60 | - | 0/178 | 696 | 329 | 209 | 13,418 (10) | 0 (0) | 0 of 60 graded files |
 | Docling browser render + formatting | 165/171 | 52/60 | - | 0/178 | 696 | 329 | 209 | 13,418 (10) | 0 (0) | 0 of 60 graded files |
-| Docling PDF route of HTML files printed to PDF (14 files; the 9 native-PDF blocks are the "PDF targets" column) | 15/46 | 1/7 | 4/9 | 14/25 | 3179 | 97 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |
+| Docling PDF route of HTML files printed to PDF (14 files; the 9 native-PDF blocks are the "PDF targets" column) | 15/51 (5 unresolved) | 3/8 (1 unresolved) | 4/9 | 14/25 | 3179 | 97 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |
 
 "Converter alone" rows are the tools' own output re-linked from cached tool output; "+ formatting" rows add the declared source-formatting step
 (the source's own strike-through written as `struck`); "+ screen" rows add the Chrome cell-geometry step. Against run 18 (round 7) every HTML route only
@@ -101,7 +101,7 @@ and no new unresolved verdict (DESIGN §28–§31); round 10 changed no corpus v
 carry stylesheet decoration rules and keep the converter's own strike claims) and made an invented cancellation fail. The gains are the round-8 and round-9 rules (fragments read from the source alone, exact struck text at the
 field's own cells, the innermost group row, a run-in heading read from its pieces), the record's own footnote marks set aside wherever they stand (tool
 test 1: a grader gap), the formatting step (tool test 2), and the run-in heading rule (tool test 3: a grader gap — the eight "contract heading" targets
-were never a tool gap). Of 231 HTML development targets the best single route passes 217 (browser render + formatting), the best pick per target 221,
+were never a tool gap). Of 231 HTML development targets the best single route passes 217 — EdgarTools + formatting + screen and the browser render + formatting now tie (213 and 217 in run 28; the EdgarTools gain is run 29's adapter fix) —, the best pick per target 221,
 no route 10: pictures 8 (text printed inside images; Docling's OCR recovers 85 % of the words of the one block measured — a measurement, not a route) and two key-side items for the next package — a unit line "(in millions)"
 printed inside a header cell while the key records "$" (0001617406 T03), and Aflac's "Adjusted" spanning the EPS columns only, in the source and in Chrome,
 while the key's path reads the implied group over "Growth" (0000004977 T02).
@@ -109,12 +109,12 @@ while the key's path reads the implied group over "Growth" (0000004977 T02).
 What the numbers are for here: the grader ran on every development file of both tools without a crash; every gate is computed; every
 failure is explainable with `checks/why.py`. They are **not** a tool ranking (that waits for the controls and the held-out split after
 this review closes). What remains charged to the tools is specific: Docling drops a few whole paragraphs in two contract exhibits and
-emits hidden Word field codes (its unanchored units); EdgarTools inserts rule lines and flattens some tables into prose (its inserted
-characters — 11k of them in one Dominion exhibit whose notes it emits as 8k–50k-character units), splits a few words ("Table of
-Content s") and drops page numbers; both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
+emits hidden Word field codes (its unanchored units); EdgarTools inserts rule lines (7 characters after run 29 — run 28's 22k "inserted" characters were our adapter's own
+giant units, since fixed), flattens some tables into prose, splits a few words ("Table of Content s") and drops page numbers and pictures
+(11 of its 60 blocks come back unresolved: nothing is emitted at their place — 3 page numbers, 8 pictures); both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
 (a key-side question).
 
-Proof state at hand-over: 193 unit tests, 48/48 real-original variants on package 2, package check `golden/check_package.py` passes; Codex's rounds
+Proof state at hand-over: 194 unit tests, 48/48 real-original variants on package 2, package check `golden/check_package.py` passes; Codex's rounds
 1–10 scripts and the package-2 reproducers re-run against this code behave as they expected (adapter audits over all 60 saved outputs: 0 cells lost, 0 tables shifted), except the differences stated in
 `prepare_work/grader_review_codex_20261003/FABLE_RESPONSE_R3.md` (digits split across 22 cells → False; "3.7 %" → pass) and
 `FABLE_RESPONSE_R4.md` (a packet name in two folders is refused as ambiguous; an invalid table-context declaration stops the run; the

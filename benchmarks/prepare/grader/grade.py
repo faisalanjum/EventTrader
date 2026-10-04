@@ -936,6 +936,8 @@ class Grader:
         t, rf, f = self.t, self.rf, self.t['fields']
         # a block may come back as text units, as one image unit, as ordered blocks (a scanned page) or inside a layout table
         units = rf.units_at(t['anchor'], exclude=('clutter',))
+        carries = lambda u: u.get('kind') != 'table' or any(overlap(c.get('anchor'), t['anchor']) for c in u.get('cells') or [])  # a table whose span covers the block but whose cells lie elsewhere (a flattened nested table) does not carry it
+        units = [u for u in units if carries(u)] or units
         if not units: return None
         def text_of(u):
             if u.get('kind') != 'table': return u.get('text', '')

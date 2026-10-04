@@ -617,6 +617,19 @@ class PlantedFaultTests(GraderFixture):
             g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
             self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'lead_in'), (want, None if want == 'pass' else 'struck'), struck)
 
+    def test_a_table_whose_span_covers_a_block_but_whose_cells_lie_elsewhere_does_not_carry_it(self):
+        # run 28: EdgarTools flattens a nested table into one table unit whose span covers a footnote paragraph; the paragraph's own unit matched the key exactly,
+        # yet every cell of that table was read into the block and the block failed with a high word error rate
+        raw = b'<table><tr><td>Revenue</td><td>1234</td></tr></table><p>(1) Balances are translated at the period-end rate.</p><table><tr><td>Costs</td><td>99</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        note = span(b'(1) Balances are translated at the period-end rate.')
+        big = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}, {'r': 1, 'c': 0, 'text': 'Costs', 'anchor': span(b'Costs')}, {'r': 1, 'c': 1, 'text': '99', 'anchor': span(b'99')}]}
+        para = {'id': 'p', 'kind': 'text', 'text': '(1) Balances are translated at the period-end rate.', 'anchor': note}
+        t = {'key_id': 'syn/S2', 'file_id': 'syn/f.htm', 'format': 'structure/htm', 'type': 'structure', 'split': 'development', 'anchor': {'byte_start': note['byte_start'] - 3, 'byte_end_exclusive': note['byte_end_exclusive'] + 4}, 'alternatives': {}, 'excluded': set(), 'support': {},
+             'fields': {'printed_text': '(1) Balances are translated at the period-end rate.', 'kind': 'paragraph', 'visible': True}}
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [big, para]}, raw, 'htm')); g.grade_structure()
+        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'printed_text'), ('pass', None))
+
     def test_an_invented_cancellation_fails_a_plain_passage_and_a_plain_label(self):
         # Codex R10-2: the key marks nothing struck; a route that cancels "not" changed the meaning as surely as dropping a strike (the label case is in the strike-scope test)
         raw = b'<p>The company may not borrow.</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'

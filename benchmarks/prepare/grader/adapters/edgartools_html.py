@@ -27,8 +27,14 @@ def dump(node):
         d['rows'] = [[{'text': (c.text() if callable(c.text) else c.text) or '', 'colspan': c.colspan or 1, 'rowspan': c.rowspan or 1, 'is_header': bool(c.is_header)} for c in row] for row in rows]
         return d
     kids = list(getattr(node, 'children', None) or [])
-    if kind in BRANCH:
-        d['children'] = [dump(k) for k in kids]; return d
+    if kind in BRANCH or any(type(k).__name__ in BLOCKY and type(k).__name__ != 'HeadingNode' for k in kids):  # a paragraph that holds blocks (a heading child alone keeps the run-in handling below) (a note emitted as one 60,000-character node) is a branch: its own inline runs become units, its blocks are walked
+        children, run = [], []
+        def flush():
+            if run: children.append({'type': 'TextNode', 'text': ''.join(t + (' ' if (getattr(k, 'metadata', None) or {}).get('has_tail_whitespace') else '') for k, t in run).strip(), 'links': [{'text': (l.text() if callable(l.text) else l.text) or '', 'href': l.href} for k, _ in run for l in ([k] if type(k).__name__ == 'LinkNode' else (k.walk() if hasattr(k, 'walk') else [])) if type(l).__name__ == 'LinkNode']}); run.clear()
+        for k in kids:
+            if type(k).__name__ in BLOCKY: flush(); children.append(dump(k))
+            else: run.append((k, (k.text() if callable(getattr(k, 'text', None)) else getattr(k, 'text', '')) or ''))
+        flush(); d['children'] = [c for c in children if c.get('type') != 'TextNode' or c.get('text')]; d['type'] = kind if kind in BRANCH else 'ContainerNode'; return d
     text = node.text() if callable(getattr(node, 'text', None)) else getattr(node, 'text', '')
     heads = [k for k in kids if type(k).__name__ == 'HeadingNode']
     if heads:  # the tool's heading claim inside a paragraph: kept when its text is the paragraph's start or end (the parser's own text, no new joins)

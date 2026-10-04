@@ -632,3 +632,40 @@ pictures kept (56/56 vs 3), the same blindness to CSS strike-through and to the 
 source has none `<sup>`), no character offsets, 3.8 s / 545 MB plain and ~80 s render on the 6.8 MB 10-K.
 
 193 tests, 48/48 real pairs; Codex's rounds 4–10 scripts behave.
+
+## 33. Run 29 — the EdgarTools route's own losses (2026-10-04 00:52): one adapter gap, one grader gap, both closed
+
+**What run 28 showed (agreement point 6; `FABLE_ROUTE_NOTE_20261004.md`).** EdgarTools + formatting + screen passed 213 of the 231 HTML development
+targets, the browser render + formatting 217; the render recovered 7 targets and lost 3. Key-free escalation triggers from the cheap route's own gates do
+not predict the 7 ("any fault" escalates 46 of 60 files for +4 targets; "uncovered > 100" 29 files for +3). Of the 7: 3 page numbers (EdgarTools drops
+them by design since 5.54.0 — a contract question, not a route fault), and four blocks charged below.
+
+**Grader gap — a table that spans a block does not carry it.** EdgarTools flattens a nested layout table into one `table` unit whose span covers 2.4 MB of
+the source; a footnote block inside that span has its own text unit that matched the key exactly, yet `grade_structure` read the block from the table
+unit's cells (all elsewhere) and failed it. Rule now: a table unit counts as carrying a block only when one of its cells overlaps the block's anchor; when
+every unit at the anchor is such a table the old reading stays, so a block laid out inside a real table is still read from that table. Measured with the
+committed grader on the same route folders (`PYTHONPATH` cleared, loaded path printed): it recovers 0001104659-23-055027 T01 on the Docling HTML routes,
+0001040971-25-000027 T01 and 0001040971-24-000028 T01 on the printed-HTML PDF route, and 0000815097-23-000012 T03 and 0001053507-23-000023 T05 on the
+EdgarTools route; no other verdict moves. Test: a block inside a table unit's span whose cells lie elsewhere.
+
+**Adapter gap — our walk stopped at a paragraph.** `adapters/edgartools_html.py::dump` treated every `ParagraphNode` as a leaf; a paragraph that holds
+`ContainerNode` children (EdgarTools' own tree keeps the blocks as their own nodes) came out as one unit of up to 60,000 characters, and those characters
+were the route's 22,494 "inserted" ones — ours, not the library's. A paragraph that holds blocks is now walked like a container: inline runs become text
+units (spacing from the library's `has_tail_whitespace`), block children are walked, a heading-only child keeps the run-in handling. No library option
+covers this (`merge_adjacent_nodes=False` changes nothing: tested). Measured by running the committed adapter again and grading both outputs with this
+grader: the new walk recovers 0001140361-25-003207 T01 and 0000950170-23-061206 T01 and turns the six picture blocks the giant units used to cover from
+FAIL into UNRESOLVED — nothing is emitted at their place any more, which is the truthful record (§33 below on denominators).
+
+**Run 29 (12 routes regraded; development split).** EdgarTools + formatting + screen: cells 168/171 unchanged; blocks 45 → 49 of 60, 0 failures, 11
+unresolved; inserted characters 22,494 → 7; uncovered 30,585 → 22,030 characters (41 files: the page numbers and headers it drops). Docling HTML routes
++1 block each (the grader gap); printed-HTML PDF blocks 1 → 3 of 8; browser render unchanged (51 / 52). Best single HTML route **217 of 231 — EdgarTools +
+formatting + screen now ties the browser render + formatting** at 1.4 s against ~80 s per file; best pick per target 221; no route 10 (8 pictures, 2
+key-side items). The round-7 grader re-run on the same 12 route folders: only FAIL → PASS flips, no pass lost.
+
+**Denominators.** The 11 unresolved EdgarTools blocks are the 3 page numbers ("12", "9", "12") and the 8 picture blocks: the route emits nothing at their
+place, which the grader records as UNRESOLVED (a dropped block is not graded — `test_dropped_paragraph_is_unresolved_and_counted_as_lost`; the
+uncovered gate counts its characters; a picture's text is not in the HTML at all, so for pictures only the verdict records the loss). The results tables
+now count unresolved targets in every denominator, as Codex asked ("45/55 is 45 passes, 10 failures and 5 unresolved out of 60"): EdgarTools' row reads
+49/60 (11 unresolved), not 49/49.
+
+194 tests, 48/48 real pairs.
