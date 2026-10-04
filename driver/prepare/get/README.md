@@ -131,6 +131,9 @@ event, publication/version and actual retrieval metadata in caller-owned receipt
 Existing news/transcript ingestion has not been connected to it yet.
 
 The full runner is `driver/prepare/get/full_run.py`; tests live in `tests/driver/prepare/get/`.
+On the cluster its data lives on minisforum2 at `/home/faisal/data/sec_filings` (mounted at `/data`
+in pods): frozen list `inputs.json`, `results.sqlite3`, `campaign/`, `versions/`, `versions_superseded/`
+and the deployed `code/`.
 Frozen list → package + SEC file list per filing; only OK is final, so a rerun retries
 everything else, and an earlier OK counts only if its saved version still fully verifies as
 that filing; UNRESOLVED marks a filing with a file lacking SEC proof, and its retry may
