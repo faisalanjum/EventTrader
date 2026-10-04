@@ -2,7 +2,7 @@
 
 *Claude + Codex · 2026-10-01 · v5, consolidating the independently checked reviews, including subsequent Bot 1–2 findings.*
 
-- Evidence: code, read-only database checks, cached originals, saved scripts and official documentation. Provisional or unverified figures are labelled below; converter choice and production accuracy remain untested.
+- Evidence: code, read-only database checks, cached originals, saved scripts and official documentation. Provisional or unverified figures are labelled below; converter comparisons are underway, with no final choice or production-accuracy claim.
 - This is a design update, not implementation or a change to the governing rules. Versions 1–4 are in `~/.claude/projects/-home-faisal-EventMarketDB/backups/runningIdeas/`.
 
 **Reviewers:** reply to each ID with ✅ agree, ✏️ change (say how) or ❌ reject (say why). Add new ideas as `NEW-n`. IDs are stable; 🆕 marks additions since v2.
@@ -25,11 +25,18 @@
 
 **Flow:** original files → source-linked blocks → pieces sized for the reader.
 
-**Next actions, one at a time:**
+**Locked execution order (owner, 2026-10-04):**
 
-1. **Now — A · Get:** confirmed fixes pass 28 tests and the saved 60-filing sample (3,223 members; P3; [result and work order](StepsPlans/Prepare-A_Get.md)). Step 2 still needs independent inventory/coverage validation; readability remains separate.
-2. **Then — compare converters:** define the output checks first; test complete routes against them (P14, T1).
-3. **After validation — reuse:** use the same preparation process for future ingestion and a separate historical-cleanup task, while Driver development continues (P19, D14).
+1. **Finish the grader.** Close [Round 15's remaining findings](/home/faisal/prepare_work/grader_review_codex_20261003/CODEX_REVIEW_R15.md), verify the fixes, then commit and push only reviewed files to main. Package 3 is approved but still staged; switch the pointer and complete official run 35 after the grader passes review.
+2. ✅ **SEC downloader done (2026-10-04):** 42,629 of 42,633 complete, 1 with one file SEC cannot prove, 3 not served by SEC; Codex approved.
+3. **Finish HTML/XML; temporarily park PDF/OCR.** Reconcile the preserved worktree with main, merge verified improvements selectively, and validate complete outputs on the agreed tests, unseen documents and a database-wide source inventory/coverage audit. Measure end-to-end latency and resources. Existing news/transcript copies require completeness checks too; missing originals stay explicit. Images inside HTML remain deferred content, so affected documents remain partial until that content is processed.
+4. **Resume PDF/OCR from saved checkpoints.** Reuse validated outputs, finish the remaining cases, then repeat integrated correctness, completeness and performance checks. Deferral changes the order, not the required coverage.
+
+**Completion rule:** 100% on agreed tests and zero observed unexplained errors or omissions in the assessed scope; every source has an explicit status. Unread, missing and unresolved content never counts as complete. A perfect sample score does not prove universal accuracy. Converter scores remain provisional until the full checks pass.
+
+**Work preservation:** start with [the compaction handoff](/home/faisal/prepare_work/tool_selection_20261004/RESUME.md): worktree recovery archive, main/code differences, successful and rejected approaches, evidence, outstanding gates and PDF/OCR resume commands. [The chronological checkpoint](/home/faisal/prepare_work/tool_selection_20261004/STATUS.md) retains the detailed history. This order does not restart paused jobs.
+
+**Following preparation:** Step 5 saves ordered blocks with exact source locations; Step 6 assembles AI-sized pieces and validates size limits, coverage and required context. Reuse the validated process for future ingestion and separate historical cleanup while Driver development continues (P19, D14).
 
 **Documentation follow-up:** align [rough_design.md](rough_design.md) and [Notion Prepare](https://app.notion.com/p/3eca0a3f310681ffb36de687666c09f0) with these decisions: converter choice remains open, cover facts stay, and evidence/smaller-read choices are settled. Claude handles Notion edits.
 
@@ -362,7 +369,7 @@ All steps use the common records (§4), sampling rules (§5), execution rules (�
 **Checked 2026-10-02 UTC:** [implementation and evidence](StepsPlans/Prepare-Step2.md).
 50 filings across 12 forms passed inventory checks; compressed-only replay made zero requests.
 Scale follow-up: all 502 filings/23,958 files match the independent extractor;
-all five reviewed fixes pass. The planned full run checks every SEC file list.
+all five reviewed fixes pass. Full run done 2026-10-04; see the Step 2 plan.
 External reference resolution and unavailable news/call originals remain explicit limits.
 
 **Entry:** accepted Step 1 and frozen expansion manifest.
