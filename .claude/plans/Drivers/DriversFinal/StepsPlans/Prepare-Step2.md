@@ -1,8 +1,6 @@
 # Prepare · Step 2 — Extend acquisition
 
-**Status: Step 2 accepted by the owner (2026-10-02).** Acquisition and validation
-passed. Historical download continues separately; two SEC 404 filings remain
-tracked for investigation. Ready for Step 3.
+**Status:** accepted 2026-10-02; full download done 2026-10-04: 42,633 filings → 42,629 complete, 1 with one file SEC cannot prove (Guidewire), 3 not served by SEC; Codex approved. Live download of new filings: not built.
 
 **Goal:** preserve complete originals, prove which files were acquired, and reuse
 saved copies cheaply. Standing requirements remain minimal, generic code and

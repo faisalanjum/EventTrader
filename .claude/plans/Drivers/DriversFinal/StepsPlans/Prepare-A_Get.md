@@ -1,8 +1,7 @@
 # Prepare · A Get
 
 **Goal:** preserve an SEC submission and every packaged file, unchanged and traceable.
-**Status:** implementation and confirmed review fixes complete. The saved 60-filing
-sample passes; [Step 2's inventory/coverage check](Prepare-Step2.md) also passed.
+**Status:** done (2026-10-04): 42,633 filings → 42,629 complete, 1 with one file SEC cannot prove (Guidewire), 3 not served by SEC; Codex approved. Live download of new filings: not built.
 
 ```text
 SEC package → verify identity/framing → inventory files → save compressed original
