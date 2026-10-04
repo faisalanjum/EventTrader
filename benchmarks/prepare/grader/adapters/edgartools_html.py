@@ -47,16 +47,15 @@ def to_units(tree):
     units = []
 
     def table_unit(t):
-        cells, pending = [], {}
+        cells, until = [], {}  # until[column] = the first row at which that column is free again: a rowspan expires by row, whatever later rows hold
         for r, row in enumerate(t.get('rows') or []):
             c = 0
             for cell in row:
-                while pending.get(c, 0): pending[c] -= 1; c += 1
+                while until.get(c, 0) > r: c += 1
                 cs, rs = cell.get('colspan') or 1, cell.get('rowspan') or 1
                 if (cell.get('text') or '').strip():
                     cells.append({'r': r, 'c': c, 'rs': rs, 'cs': cs, 'text': cell['text'], 'header': bool(cell.get('is_header'))})
-                for k in range(c, c + cs):
-                    if rs > 1: pending[k] = rs - 1
+                for k in range(c, c + cs): until[k] = r + rs
                 c += cs
         units.append({'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else []})
 

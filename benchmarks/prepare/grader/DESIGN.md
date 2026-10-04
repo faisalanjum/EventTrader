@@ -475,3 +475,33 @@ headings 8, footnote marks glued into cells 7 — all tool-side.
 | edgartools HTML + screen | 159/171 | 40/55 | - | 35/166 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
 | Docling HTML, browser render (no screen step) | 154/171 | 48/60 | - | 0/169 | 696 | 329 | 209 | 13,594 (11) | 0 (0) | 0 of 60 graded files |
 | Docling PDF route (14 files) | 15/46 | 1/7 | 4/9 | 13/24 | 3179 | 97 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |
+
+## 27. Round 7 and the package-2 verdict (2026-10-03 evening) — seven findings plus two corrections, all reproduced, all closed
+
+**Codex's package-2 verdict** (`PACKAGE2_CODEX_VERDICT.md`): package integrity and the 12 context declarations **approved**; the three questioned period
+roles **kept** (the originals state the direction in the surrounding text: Carnival's heading "2021 Compared to 2020", Duke's and Levi's discussions);
+C3–C6 approved; two corrections, both applied:
+- **C1 wording.** SL Green's title block is a *separate* layout table that closes 79 bytes before the data table opens — not a nested table as §26 and the
+  test said. The rule is unchanged (context admitted between the declared title's anchor and the table's end; each line must read its anchor); the
+  test now uses the real sibling layout first and the nested shape only as a second control. The frozen addendum text in package 2 keeps the wrong
+  word "nested" in its C1 reason; the correction travels with the next package.
+- **C2 group association.** "Same table, above the value" let year headings swapped into the other group pass. Now a compared column's heading must
+  belong to the value's group: the headers above it that cover its column — leaving out the record's own period headings, which are time, not group —
+  must include one that also covers the value's column; a heading with nothing but period headings above it stands in the table's top block. Codex's
+  North/South reproducer: correct output passes, swapped headings fail `group`; Levi's three- and six-month groups are told apart the same way.
+
+**Round 7** (`ROUND7_CODEX.md`, reviewed on eb96daa58):
+
+| Finding | Reproduced problem | Change | Proof |
+|---|---|---|---|
+| R7-1 Docling adapter dropped raised-only cells | 64 nonempty cells in 3 files (a raised "(10)" alone in a cell) vanished because every superscript piece became a mark and nothing remained | a cell printed wholly raised keeps its text (the mark standing alone is the cell); rich cells also report struck pieces | adapter test; Codex's audit over all 60 saved outputs: 0 lost |
+| R7-2 EdgarTools adapter shifted cells | rowspans expired only when a later cell visited the column: an empty or short row left them active, shifting 21 tables | occupancy by row (`until[column] = row + rowspan`) in the adapter and in `checks/real_pairs.py` | Codex's control (A spans 3, B spans 2, an empty row); Codex's independent occupancy audit: 0 shifted of 10,753 |
+| R7-3 struck words became active | the key marks struck evidence `~~…~~`; the grader compared words only, so a lost or moved strike-through passed | `struck_kept`: the route's `struck` entries at that place must match the key's struck phrases, no more and no fewer; checked for `printed_text` and, through `field()`, for every cell field whose key text carries `~~` | tests: control passes, lost and wrong strike fail `struck`; Codex `strike/*` |
+| R7-4 one boundary rule for every field | within-word fragments at one grid position failed in seven context fields (the checker inserted the space); a number split at a decimal point or comma across two columns passed | `merged()`: pieces at one grid position whose anchors touch are one cell, used by every cell comparison (`carriers`, `row_label`, `row_context`, `periods`, structure tables); `pieces_match` joins pieces as the reader meets them — a proven touching join as nothing, every other join as a space — and applies `boundary_equal` to the whole | tests: the seven-field matrix, eight numeric cases; Codex's two probe scripts all as expected |
+| R7-5 unsupported browser behaviour certified | six more Chrome disagreements: `1.` as a number, `;` inside a quoted value, an escaped property name in a stylesheet, an unclosed `<p>`, a slash on `<div>`, a hidden `<br>` | CSS numbers by grammar (no trailing dot); declarations split outside quotes and parentheses; CSS escapes decoded in inline and stylesheet text; HTML implied end tags (`p`, `li`, `dt/dd`, `td/th`, `tr`, sections, `option`); a slash on a non-void HTML tag closes nothing; a hidden void element breaks nothing. **Supported subset**: inline `display`/`visibility`/`opacity` with keywords or numbers; stylesheets only detected; an implied end tag that drops unclosed hiding inline elements (the browser rebuilds them around the new block) makes the file **unmeasured** | test with Chrome-observed expectations (10 new cases); Codex's 9 cases agree or unmeasured; 0 of 116 corpus files become unmeasured |
+| R7-6 exclusions on every path | the two `unit_interpretation` exclusions took the `not_t1` path and were not counted; XML and structure checks ignored exclusions | T4 fields report `excluded` when excluded; XML `value`/`row_label`/`header_path`/`row_context`/`unit_printed` and structure `printed_text` honour exclusions; the five excluded fields are counted | test; Codex `exclusion/*` |
+| R7-7 coverage naming | the text map cannot prove a picture's content survived | gate `nothing_lost` states `measures: visible source text; picture content is not measured` and lists `pictures_not_measured` per file (count of `<img>`) | test; Codex `image/missing` |
+
+Also: the `test_anchor` inline fixture had a `<div>` inside a hidden `<span>` inside a `<p>` — a shape the browser handles by rebuilding the hidden span
+around the block; the fixture now nests a `<b>`, and that shape is a stated unmeasured case. 176 tests, 48/48 real pairs, Codex's rounds 4–7 scripts
+and the C2 reproducer behave. Run 18 (re-link, regrid, regrade with the fixed adapters) is recorded in `REVIEW_HANDOVER.md`.

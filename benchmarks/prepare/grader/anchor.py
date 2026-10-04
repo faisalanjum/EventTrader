@@ -21,7 +21,8 @@ _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), 
 _TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
 _ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
 _DECL = re.compile(r'\s*([-\w]+)\s*:(.*)', re.S)  # one complete declaration: property name, colon, value (anything else the browser drops)
-_NUM = re.compile(r'[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?%?')  # a CSS <number> or <percentage>; nothing else is a number to CSS
+_NUM = re.compile(r'[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?%?')  # a CSS <number> or <percentage> (no trailing dot); nothing else is a number to CSS
+_CSS_ESC = re.compile(r'\\([0-9a-fA-F]{1,6})\s?|\\(.)', re.S)  # CSS escapes: \69 is i
 _COMMENT = re.compile(r'/\*.*?\*/', re.S)  # a CSS comment is a token boundary, not part of a declaration
 _DISPLAY = set('none block inline inline-block flex inline-flex grid inline-grid table inline-table table-row table-cell table-row-group table-header-group '
                'table-footer-group table-column table-column-group table-caption list-item flow flow-root contents ruby ruby-base ruby-text run-in'.split())  # CSS Display Module keywords
@@ -30,7 +31,12 @@ UNKNOWN = 'unknown'  # a value this scanner does not evaluate: the file's visibi
 _IMPORTANT = re.compile(r'\s*!\s*important\s*$')
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
 _STYLE = re.compile(r'<style\b[^>]*>(.*?)</style\s*>|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheets: this scanner does not apply them
-_PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:', re.I)  # a stylesheet rule that could hide or re-flow text makes visibility uncertain
+_PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:|@import\b', re.I)  # a stylesheet rule that could hide or re-flow text, or an imported sheet, makes visibility uncertain
+# HTML tree construction: an opening tag of a kind in `by` closes an open element of a kind in `closes` unless an element in `stop` lies above it
+_P_CLOSERS = set('address article aside blockquote details dialog div dl fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 header hgroup hr main menu nav ol p pre section table ul'.split())
+_IMPLIED = [(_P_CLOSERS, {'p'}, {'table', 'td', 'th', 'caption', 'body', 'html'}), ({'li'}, {'li'}, {'ul', 'ol', 'menu', 'table', 'td', 'th', 'body'}),
+            ({'dt', 'dd'}, {'dt', 'dd'}, {'dl', 'table', 'td', 'th', 'body'}), ({'td', 'th'}, {'td', 'th'}, {'tr', 'table', 'body'}),
+            ({'tr'}, {'tr', 'td', 'th'}, {'table', 'body'}), ({'tbody', 'thead', 'tfoot'}, {'tbody', 'thead', 'tfoot', 'tr', 'td', 'th'}, {'table', 'body'}), ({'option'}, {'option'}, {'select', 'body'})]
 _NAME = re.compile(r'</?\s*([\w:.-]+)')
 # CSS that removes an element from view (the medium's own rules, guide 2.2 "the screen is the truth"): not shown at all,
 # or shown at a size no reader can see (1pt text printed behind slide pictures)
@@ -58,11 +64,33 @@ def _zero(value):
     return float(value.rstrip('%')) <= 0.0
 
 
+def unescape_css(text):
+    """CSS escapes decoded (`d\\69 splay` is `display`), so a hiding rule cannot hide behind one."""
+    return _CSS_ESC.sub(lambda m: chr(int(m.group(1), 16)) if m.group(1) and int(m.group(1), 16) < 0x110000 else (m.group(2) or ''), text)
+
+
+def split_declarations(style):
+    """Declarations split at `;` outside quotes and parentheses (a `;` inside a string or a function is not a separator)."""
+    out, buf, quote, depth = [], [], None, 0
+    for ch in style:
+        if quote:
+            buf.append(ch)
+            if ch == quote: quote = None
+            continue
+        if ch in '"\'': quote = ch
+        elif ch == '(': depth += 1
+        elif ch == ')': depth = max(0, depth - 1)
+        if ch == ';' and depth == 0: out.append(''.join(buf)); buf = []
+        else: buf.append(ch)
+    out.append(''.join(buf))
+    return out
+
+
 def declarations(style):
-    """The declarations of a style attribute, in order: (name, value, important), names and values lower-cased, comments read as
-    token boundaries (a comment inside a name or a value breaks it, as in the browser)."""
+    """The declarations of a style attribute, in order: (name, value, important), names and values lower-cased, escapes decoded,
+    comments read as token boundaries (a comment inside a name or a value breaks it, as in the browser)."""
     out = []
-    for part in _COMMENT.sub(' ', style).split(';'):
+    for part in split_declarations(_COMMENT.sub(' ', unescape_css(style))):
         m = _DECL.fullmatch(part)
         if not m: continue  # not one complete `name: value` declaration — the browser drops it, so does this
         name, value = m.group(1).lower(), m.group(2).strip().lower()
@@ -113,18 +141,27 @@ class Visible:
                 if UNKNOWN in (disp, v, op): computed = True; disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
                 struck = any(n in ('text-decoration', 'text-decoration-line') and 'line-through' in val for n, val, _ in decls)
                 block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or name in STRUCK or struck
+                gone = disp == 'none' or (op is not None and _zero(op)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
                 if t.startswith('</'):
                     if any(fr[0] == name for fr in reversed(stack)):
                         while True:
                             fr = stack.pop()
                             if fr[0] == name: block = fr[3]; break  # the element's own display decides its closing separator too
-                elif not t.endswith('/>') and name not in VOID:  # open elements: (name, blocked for good, visibility hidden, block)
-                    blocked, vis = stack[-1][1:3] if stack else (False, False)
-                    gone = disp == 'none' or (op is not None and _zero(op)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
-                    # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
-                    stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block))
+                else:
+                    if not xml:  # HTML's implied end tags: a new <p>, <li>, <td>, <tr> ... closes the open one, as the browser builds the tree
+                        for by, closes, stop in _IMPLIED:
+                            if name not in by: continue
+                            for i in range(len(stack) - 1, -1, -1):
+                                if stack[i][0] in stop: break
+                                if stack[i][0] in closes:
+                                    if any(fr[1] or fr[2] for fr in stack[i + 1:]): computed = True  # unclosed hiding elements inside: the browser rebuilds them around the new block
+                                    del stack[i:]; break
+                    if name not in VOID and not (xml and t.endswith('/>')):  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block)
+                        blocked, vis = stack[-1][1:3] if stack else (False, False)
+                        # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
+                        stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
-                if not (hidden or was_hidden) and (xml or block): chars.append(' '); starts.append(start); ends.append(pos)
+                if not (hidden or was_hidden) and (xml or block) and not (name in VOID and gone): chars.append(' '); starts.append(start); ends.append(pos)  # a hidden <br> breaks nothing
                 continue
             if hidden:
                 if not t.startswith('&') or len(t) == 1: self.hidden_chars += len(_WS.sub('', t))
@@ -138,7 +175,7 @@ class Visible:
                 off = start
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); off += n
         self.text, self.starts, self.ends = ''.join(chars), starts, ends
-        sheet = any(m.group(1) is None or _PROP.search(_COMMENT.sub(' ', m.group(1))) for m in _STYLE.finditer(s))  # an external sheet, or a rule on a hiding property
+        sheet = any(m.group(1) is None or _PROP.search(_COMMENT.sub(' ', unescape_css(m.group(1)))) for m in _STYLE.finditer(s))  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)

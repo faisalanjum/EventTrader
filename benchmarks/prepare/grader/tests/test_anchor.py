@@ -7,7 +7,7 @@ from benchmarks.prepare.grader import anchor
 HTML = (b'<html><head><title>Sample</title><style>td{color:red}</style></head><body>\n'
         b'<!-- cover -->\n'
         b'<div style="font-weight:bold">Item 2. Management&#8217;s Discussion</div>\n'
-        b'<p>S<span>tock</span>holder&nbsp;letter <s>not</s> final.<span style="display:none">HIDDEN <div>deep</div> text</span></p>\n'
+        b'<p>S<span>tock</span>holder&nbsp;letter <s>not</s> final.<span style="display:none">HIDDEN <b>deep</b> text</span></p>\n'
         b'<div style="display:none"><div>inner</div>still hidden</div>\n'
         b'<ix:hidden><ix:nonNumeric>tagged</ix:nonNumeric></ix:hidden>\n'
         b'<table><tr><td>Free cash flow<sup>(1)</sup></td><td>$</td><td>(506</td><td>)</td></tr></table>\n'
@@ -173,7 +173,19 @@ class InvisibleStyleTests(unittest.TestCase):
                  ('<p style="opacity:0;opacity:NaN">Secret.</p><p>Visible.</p>', None, False),
                  ('<p style="opacity:-0.1">Secret.</p><p>Visible.</p>', 'Visible.', True),
                  ('<style>.secret{display/**/:none}</style><p class="secret">Secret.</p><p>Visible.</p>', None, False),
-                 ('<style>.plain{color:red}</style><p class="plain">Shown.</p>', 'Shown.', True)]
+                 ('<style>.plain{color:red}</style><p class="plain">Shown.</p>', 'Shown.', True),
+                 # Codex round 7 (Chrome): '1.' is no CSS number; a ';' inside a quoted custom value splits nothing; an escaped property name in a
+                 # stylesheet still makes the file uncertain; a new <p> closes an open one; a slash on <div> closes nothing; a hidden <br> breaks nothing
+                 ('<p style="opacity:0;opacity:1.">Secret.</p><p>Visible.</p>', None, False),
+                 ('<p style="--note:\'a;display:none;b\'">Visible.</p>', 'Visible.', True),
+                 ('<style>.x{d\\69 splay:none}</style><p class="x">Secret.</p><p>Visible.</p>', None, False),
+                 ('<p style="display:none">Secret.<p>Visible.</p>', 'Visible.', True),
+                 ('<div style="display:none"/>Secret.</div><p>Visible.</p>', 'Visible.', True),
+                 ('<span>12<br hidden>34</span>', '1234', True),
+                 ('<span>12<br>34</span>', '12 34', True),
+                 ('<p style="d\\69 splay:none">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 # a block opened inside an unclosed hidden inline element: the browser closes the <p> and rebuilds the hidden span around the block — not certifiable here
+                 ('<p>Shown.<span style="display:none">HIDDEN <div>deep</div> text</span></p>', None, False)]
         for src, text, certain in cases:
             v = anchor.Visible(src.encode())
             self.assertEqual((anchor.norm(v.text) if text is not None else None, v.certain), (text, certain), src)

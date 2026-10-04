@@ -37,11 +37,11 @@ _WORD = re.compile(r'<page\b|<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+
 # ------------------------------------------------------------------------------------------- building controls
 def html_table(raw, vis, a, b, uid):
     """A table unit from the original's <tr>/<td> grid in bytes [a, b): colspan/rowspan expanded, raised marks apart."""
-    cells, pending = [], {}
+    cells, until = [], {}  # until[column] = the first row at which that column is free again (rowspans expire by row)
     for r, tr in enumerate(_TR.finditer(raw, a, b)):
         c = 0
         for td in _TD.finditer(tr.group()):
-            while pending.get(c, 0): pending[c] -= 1; c += 1
+            while until.get(c, 0) > r: c += 1
             attrs = td.group(2); cs = int((re.search(rb'colspan\s*=\s*["\']?(\d+)', attrs) or [0, b'1'])[1]); rs = int((re.search(rb'rowspan\s*=\s*["\']?(\d+)', attrs) or [0, b'1'])[1])
             start, end = tr.start() + td.start(), tr.start() + td.end()
             text, markers = norm(vis.at(start, end)), []
@@ -53,8 +53,7 @@ def html_table(raw, vis, a, b, uid):
                 cell = {'r': r, 'c': c, 'rs': rs, 'cs': cs, 'text': text, 'anchor': {'byte_start': start, 'byte_end_exclusive': end}}
                 if markers: cell['markers'] = markers
                 cells.append(cell)
-            for k in range(c, c + cs):
-                if rs > 1: pending[k] = rs - 1
+            for k in range(c, c + cs): until[k] = r + rs
             c += cs
     return {'id': uid, 'kind': 'table', 'anchor': {'byte_start': a, 'byte_end_exclusive': b}, 'cells': cells}
 

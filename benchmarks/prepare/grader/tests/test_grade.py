@@ -316,12 +316,18 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader(pieced)
         self.assertFalse(res['gates']['honest_anchors']['pass']); self.assertEqual(list(res['gates']['honest_anchors']['inserted_chars']), [HTM_ID])
 
-    def test_table_context_may_sit_in_the_title_block_above_a_nested_data_table(self):
-        # addendum C1 (SL Green layout): the title cell of an outer table prints the title, 'Unaudited' and the unit line; the data table is nested below it
-        raw = (b'<table><tr><td><div id="ttl">KEY FINANCIAL DATA</div><div>Unaudited</div><div>(Dollars in Thousands)</div></td></tr>'
-               b'<tr><td><table id="data"><tr><td>Debt coverage</td><td>2.31x</td></tr></table></td></tr></table><p>(Dollars in millions)</p>')
+    def test_table_context_may_sit_in_the_title_block_before_the_data_table(self):
+        # addendum C1, the real SL Green shape (Codex package-2 verdict): a separate layout table prints the title, 'Unaudited' and the unit line,
+        # closes, and the data table follows as a sibling; the nested variant below is a second control
+        for raw, data_end in ((b'<table><tr><td><div id="ttl">KEY FINANCIAL DATA</div><div>Unaudited</div><div>(Dollars in Thousands)</div></td></tr></table>'
+                               b'<div><table id="data"><tr><td>Debt coverage</td><td>2.31x</td></tr></table></div><p>(Dollars in millions)</p>', b'</table></div>'),
+                              (b'<table><tr><td><div id="ttl">KEY FINANCIAL DATA</div><div>Unaudited</div><div>(Dollars in Thousands)</div></td></tr>'
+                               b'<tr><td><table id="data"><tr><td>Debt coverage</td><td>2.31x</td></tr></table></td></tr></table><p>(Dollars in millions)</p>', b'</table></td></tr></table>')):
+            self._context_case(raw, data_end)
+
+    def _context_case(self, raw, data_end):
         span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
-        data = {'byte_start': raw.index(b'<table id="data">'), 'byte_end_exclusive': raw.index(b'</table></td></tr></table>') + 8}
+        data = {'byte_start': raw.index(b'<table id="data">'), 'byte_end_exclusive': raw.index(data_end) + 8}
         def grader(context, **support):
             t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'2.31x'), 'table_anchor': data,
                  'fields': {'table_title': ['KEY FINANCIAL DATA'], 'row_label': 'Debt coverage', 'unit_printed': 'x'}, 'alternatives': {}, 'excluded': set(),
@@ -389,6 +395,79 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(rows([{'id': 'l', 'kind': 'text', 'text': lead.decode(), 'anchor': span(lead)}, {'id': 'x', 'kind': 'text', 'text': 'Elsewhere.', 'anchor': None}])[:2], ('fail', 'placement'))
         merged = {'id': 'm', 'kind': 'text', 'text': lead.decode() + ' 94 Table of Contents', 'anchor': [span(lead), span(b'94 Table of Contents')]}
         self.assertEqual(rows([merged]), ('pass', None, 'contained'))
+
+    def test_struck_words_the_key_marks_must_stay_struck_in_the_route(self):
+        # Codex round 7 (R7-3): the words survive, the cancellation must too — lost or moved strike-through fails printed_text
+        for change, want in ((lambda u: u.pop('struck', None), 'fail'), (lambda u: u.update(struck=['GAAP']), 'fail'), (lambda u: None, 'pass')):
+            res = self.run_grader(lambda r: change(self.unit(r, 'u2')))
+            self.assertEqual(self.check(res, 'pkt/S01', 'printed_text')['verdict'], want)
+        self.assertEqual(self.check(self.run_grader(lambda r: self.unit(r, 'u2').pop('struck', None)), 'pkt/S01', 'printed_text')['reason'], 'struck')
+
+    def test_fragments_of_one_cell_position_pass_in_every_context_field_and_numbers_do_not_span_columns(self):
+        # Codex round 7 (R7-4): <span>Rev</span><span>enue</span> kept as two adjacent pieces at one grid position is faithful output in all seven fields;
+        # a number split across two grid columns is two numbers, whether the split is at a digit, a decimal point or a thousands comma
+        for field, word in (('row_label', 'Revenue'), ('header_path', '2025'), ('table_title', 'Summary'), ('corner_text', 'Summary'), ('unit_printed', 'Millions'), ('periods', '2025'), ('segment_or_basis', 'Adjusted')):
+            r, c = (1, 0) if field == 'row_label' else (0, 1) if field in ('header_path', 'periods') else (0, 0)
+            left, right = word[:2], word[2:]; grid = [['<td>Other</td>', '<td>Other</td>'], ['<td>Other</td>', '<td>1234</td>']]
+            grid[r][c] = '<td id="f"><span>' + left + '</span><span>' + right + '</span></td>'
+            raw = ('<table>' + ''.join('<tr>' + ''.join(row) + '</tr>' for row in grid) + '</table>').encode()
+            span = lambda text: {'byte_start': raw.index(text.encode()), 'byte_end_exclusive': raw.index(text.encode()) + len(text)}
+            evidence = {'byte_start': raw.index(b'<td id="f">'), 'byte_end_exclusive': raw.index(b'</td>', raw.index(b'<td id="f">')) + 5}
+            for form in ('whole', 'fragments'):
+                fc = [{'r': r, 'c': c, 'text': word, 'anchor': evidence}] if form == 'whole' else [{'r': r, 'c': c, 'text': piece, 'anchor': span(piece)} for piece in (left, right)]
+                tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': fc + [{'r': 1, 'c': 1, 'text': '1234', 'anchor': span('1234')}]}
+                value = [{'parts': [{'text': word, 'anchor': evidence}]}] if field == 'periods' else [word] if field == 'header_path' else word
+                t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span('1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+                     'support': {field: {'how': 'model', 'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', field: value}}
+                g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
+                self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == field), 'pass', (field, form))
+        for number, pieces in (('1234', ['12', '34']), ('12.34', ['12.', '34']), ('1,234', ['1,', '234']), ('$1234', ['$', '1234'])):
+            for separate in (False, True):
+                raw = ('<table><tr><td>' + number + '</td></tr></table>').encode(); start = raw.index(number.encode()); offset = start; cells = []
+                for i, piece in enumerate(pieces):
+                    cells.append({'r': 0, 'c': i if separate else 0, 'text': piece, 'anchor': {'byte_start': offset, 'byte_end_exclusive': offset + len(piece)}}); offset += len(piece)
+                tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': cells}
+                t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': {'byte_start': start, 'byte_end_exclusive': offset}, 'table_anchor': tb['anchor'],
+                     'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_value': number, 'display_value': number}}
+                g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
+                self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == 'value'), 'fail' if separate and number != '$1234' else 'pass', (number, separate))
+
+    def test_exclusions_are_honoured_and_counted_on_every_grading_path(self):
+        # Codex round 7 (R7-6): an excluded meaning field is reported excluded (not not_t1); XML labels and structure text honour exclusions too
+        def exclude(kid, field):
+            def go(fx):
+                p = fx.pkg / 'CLAUDE_KEY_FLAGS.json'; flags = json.loads(p.read_text()); flags['uncertain'].append({'key_id': kid, 'field': field, 'scoring': 'excluded', 'why': 'test'}); p.write_text(json.dumps(flags))
+            return go
+        base = self.run_grader()['summary']['excluded_fields']
+        for kid, field, check in (('pkt/T01', 'unit_interpretation', 'unit_interpretation'), ('pkt/X01', 'row_label', 'row_label'), ('pkt/S01', 'printed_text', 'printed_text')):
+            exclude(kid, field)(self); res = self.run_grader()
+            self.assertEqual(self.check(res, kid, check)['verdict'], 'excluded', (kid, field))
+        self.assertEqual(res['summary']['excluded_fields'], base + 3)  # every exclusion counted, the meaning field included
+        self.assertEqual(res['gates']['nothing_lost']['measures'], 'visible source text; picture content is not measured')
+        self.assertIn(HTM_ID, res['gates']['nothing_lost']['pictures_not_measured'])  # the fixture has one picture: its content is not what the text map measures
+
+    def test_a_compared_columns_heading_must_belong_to_the_values_group(self):
+        # Codex package-2 verdict (C2): North and South groups; swapping the year headings between the groups keeps every anchor exact but breaks the association
+        raw = (b'<table><tr><td></td><td colspan="3">North</td><td colspan="3">South</td></tr><tr><td></td><td id="a">2024</td><td id="b">2023</td><td id="c">Change</td>'
+               b'<td id="d">2022</td><td id="e">2021</td><td id="f">Change</td></tr><tr><td>Sales</td><td>10</td><td>8</td><td id="target">2</td><td>15</td><td>11</td><td>4</td></tr></table>')
+        def span(text, after=None):
+            a = raw.index(text, raw.index(after) if after else 0); return {'byte_start': a, 'byte_end_exclusive': a + len(text)}
+        cells = [{'r': 0, 'c': 1, 'cs': 3, 'text': 'North', 'anchor': span(b'North')}, {'r': 0, 'c': 4, 'cs': 3, 'text': 'South', 'anchor': span(b'South')}]
+        for c, (text, ident) in enumerate([(b'2024', b'a'), (b'2023', b'b'), (b'Change', b'c'), (b'2022', b'd'), (b'2021', b'e'), (b'Change', b'f')], 1):
+            cells.append({'r': 1, 'c': c, 'text': text.decode(), 'anchor': span(text, b'id="' + ident + b'"')})
+        cells += [{'r': 2, 'c': 0, 'text': 'Sales', 'anchor': span(b'Sales')}, {'r': 2, 'c': 3, 'text': '2', 'anchor': span(b'2', b'id="target"')}]
+        t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'2', b'id="target"'), 'table_anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)},
+             'alternatives': {}, 'excluded': set(), 'support': {'row_label': {'anchors': [span(b'Sales')]}, 'header_path': {'anchors': [span(b'North'), span(b'Change', b'id="c"')]}},
+             'fields': {'printed_value': '2', 'display_value': '2', 'row_label': 'Sales', 'header_path': ['North', 'Change'],
+                        'periods': [{'role': 'value', 'parts': [{'text': '2024', 'anchor': span(b'2024')}]}, {'role': 'comparison', 'parts': [{'text': '2023', 'anchor': span(b'2023')}]}]}}
+        def verdicts(swap):
+            cs = [dict(c) for c in cells]
+            if swap:
+                for c in cs:
+                    if c['r'] == 1 and c['c'] in (1, 2, 4, 5): c['c'] += 3 if c['c'] < 3 else -3
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 't', 'kind': 'table', 'anchor': t['table_anchor'], 'cells': sorted(cs, key=lambda c: (c['r'], c['c']))}]}, raw, 'htm')); g.grade_cell()
+            return {r['check']: (r['verdict'], r['reason']) for r in g.rows}
+        self.assertEqual(verdicts(False)['periods'], ('pass', None)); self.assertEqual(verdicts(True)['periods'], ('fail', 'group'))
 
     def test_a_pieced_unit_is_judged_from_its_blocks_never_from_its_own_counts(self):
         # Codex R4-1: the gate derives the insertion from the blocks, checks each block's boundaries and refuses malformed pieces

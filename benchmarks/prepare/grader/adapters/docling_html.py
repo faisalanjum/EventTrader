@@ -45,10 +45,13 @@ def to_units(doc, with_index=False):
                 pieces = leaves(c['ref']['$ref'])
                 markers = [(p.get('text') or '').strip() for p in pieces if (p.get('formatting') or {}).get('script') == 'super' and (p.get('text') or '').strip()]
                 text = ' '.join((p.get('text') or '') for p in pieces if (p.get('formatting') or {}).get('script') != 'super' and (p.get('text') or ''))
+                struck = [(p.get('text') or '').strip() for p in pieces if (p.get('formatting') or {}).get('strikethrough') and (p.get('text') or '').strip()]
+                if not text.strip() and markers: text, markers = ' '.join(markers), []  # a cell printed wholly raised (a mark standing alone, a raised figure) is a cell: its text is what it prints
             if not text.strip(): continue
             cell = {'r': c['start_row_offset_idx'], 'c': c['start_col_offset_idx'], 'rs': c['end_row_offset_idx'] - c['start_row_offset_idx'],
                     'cs': c['end_col_offset_idx'] - c['start_col_offset_idx'], 'text': text, 'header': bool(c.get('column_header'))}
             if markers: cell['markers'] = markers
+            if c.get('ref') and struck: cell['struck'] = struck  # Docling says: shown struck through
             if with_index: cell['_i'] = i  # for routes that anchor cells by Docling's own boxes
             cells.append(cell)
         units.append({'id': t['self_ref'], 'kind': 'table', 'cells': cells, 'caption': [item(k['$ref']).get('text') or '' for k in t.get('captions') or []],

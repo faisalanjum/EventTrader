@@ -298,6 +298,27 @@ def same(got, want, markers=(), own=()):
     return False, None
 
 
+_STRUCK = re.compile(r'~~(.+?)~~', re.S)
+
+
+def strings_in(value):
+    """Every string inside a field value (a string, a list of pieces, period groups, context items)."""
+    if isinstance(value, str): return [value]
+    if isinstance(value, dict): return [x for v in value.values() for x in strings_in(v)]
+    if isinstance(value, list): return [x for v in value for x in strings_in(v)]
+    return []
+
+
+def struck_kept(key_texts, items):
+    """When the key marks words struck (~~…~~), the route must report the same words struck at that place and no others: struck evidence
+    stays struck and never becomes active text (key README). Items are the cells or units that carry the text."""
+    want = [norm(m) for t in key_texts for m in _STRUCK.findall(t or '')]
+    if not want: return True
+    got = [norm(x) for it in items for x in (it.get('struck') or []) if norm(x)]
+    close = lambda a, b: a in b or b in a
+    return all(any(close(w, g) for g in got) for w in want) and all(any(close(w, g) for w in want) for g in got)
+
+
 def own_bracket_off(text, own):
     """The text without a trailing bracketed phrase, only when that phrase is one of the record's own pieces (E13: its unit line
     or basis words); any other parenthetical stays and must match."""
@@ -435,6 +456,10 @@ class Grader:
             results.append(fn(value, alt, *args))
             if results[-1][0] == 'pass': break
         verdict, reason, detail = results[-1] if results[-1][0] == 'pass' else results[0]
+        if verdict == 'pass':  # struck words the key marks must still be struck where the route carries them
+            alt, value = alts[len(results) - 1]; anchors = anchors_of(self.t, name, alt)
+            items = [c for a in anchors for c in self.rf.cells_at(a)] + [u for a in anchors for u in self.rf.units_at(a)] if anchors else (self.rf.cells_in(self.tb) if getattr(self, 'tb', None) else [])
+            if not struck_kept(strings_in(value), items): verdict, reason, detail = 'fail', 'struck', None
         self.row(name, verdict, reason, detail)
 
     # ---- cells
@@ -460,7 +485,7 @@ class Grader:
         self.field('footnote_markers', self.footnotes, tb, V, vr)
         self.field('range', self.range_, tb, V, vr, vcols)
         for f in T4:
-            if f in t['fields']: self.row(f, 'not_t1')
+            if f in t['fields']: self.row(f, 'excluded' if f in t['excluded'] else 'not_t1')
         return tb
 
     def carriers(self, anchors, pieces=(), tb=None, equal=True):
@@ -483,7 +508,25 @@ class Grader:
             seen.add(key)
             out.append({'text': (cell or unit).get('text', ''), 'order': (table or unit)['_order'], 'table': table, 'cell': cell, 'unit': unit,
                         'anchor': (cell or unit).get('anchor')})
-        return sorted(out, key=lambda k: (k['order'], k['cell']['r'] if k['cell'] else -1, k['cell']['c'] if k['cell'] else -1))
+        out = sorted(out, key=lambda k: (k['order'], k['cell']['r'] if k['cell'] else -1, k['cell']['c'] if k['cell'] else -1, order_key(k['anchor'])))
+        merged = []  # pieces of one cell position that touch in the source are one carrier (E12); the first piece's cell object is kept
+        for k in out:
+            p = merged[-1] if merged else None
+            if p is not None and k['cell'] is not None and p['cell'] is not None and p['table'] is k['table'] and (p['cell']['r'], p['cell']['c']) == (k['cell']['r'], k['cell']['c']) and self.adjacent(p['anchor'], k['anchor']):
+                merged[-1] = dict(p, text=p['text'] + k['text'], anchor=spans(p['anchor']) + spans(k['anchor']))
+            else: merged.append(k)
+        return merged
+
+    def merged(self, cells):
+        """Cells in reading order; consecutive pieces at one grid position whose anchors touch in the source are read as one cell
+        (E12, span-level output), every other cell stays apart. The first piece's cell object is kept, so identity checks still hold."""
+        out = []
+        for c in sorted(cells, key=lambda c: (c['r'], c['c'], order_key(c.get('anchor')))):
+            p = out[-1] if out else None
+            if p is not None and (p['r'], p['c']) == (c['r'], c['c']) and self.adjacent(p.get('anchor'), c.get('anchor')):
+                out[-1] = dict(p, text=p.get('text', '') + c.get('text', ''), anchor=spans(p.get('anchor')) + spans(c.get('anchor')), markers=(p.get('markers') or []) + (c.get('markers') or []), struck=(p.get('struck') or []) + (c.get('struck') or []))
+            else: out.append(c)
+        return out
 
     def adjacent(self, a, b):
         """Does the output's own mapping put piece b right after piece a in the source, with nothing (not even a space) between?"""
@@ -498,19 +541,24 @@ class Grader:
         separator (E12: span-level output; counted as `fragmented`) — and, for table cells, unless both pieces sit at one grid position:
         two cells show two words whatever the bytes say. Returns (ok, reason, fragments)."""
         nw = norm(want); idx = [i for i, c in enumerate(nw) if not c.isspace()]; sq = ''.join(nw[i] for i in idx); pos = frag = 0; prev = None
+        out, pending = '', False  # the pieces as the reader meets them: a proven touching join reads as nothing, every other join as a space
         for n_, tx in enumerate(texts):
             n = len(squash(tx)); end = pos + n
             if not n: continue
             if not sq.startswith(squash(tx), pos): return False, 'text', frag
-            if pos and idx[pos] == idx[pos - 1] + 1 and nw[idx[pos]].isalnum() and nw[idx[pos - 1]].isalnum():
-                apart = bool(cells) and (cells[prev]['r'], cells[prev]['c']) != (cells[n_]['r'], cells[n_]['c'])
-                if apart or not (anchors and self.adjacent(anchors[prev], anchors[n_])):
-                    regions = not apart and anchors and all(any('region' in x for x in spans(anchors[i])) for i in (prev, n_))
-                    return (None, 'adjacency', frag) if regions else (False, 'word_split', frag)  # boxes cannot prove adjacency: unresolved, not a fault
-                frag += 1
-            if not boundary_equal(tx, nw[idx[pos]:idx[end - 1] + 1]): return False, 'spacing', frag
-            pos, prev = end, n_
-        return (pos == len(sq)), (None if pos == len(sq) else 'text'), frag
+            sep = ''
+            if prev is not None:
+                apart = bool(cells) and (cells[prev]['r'], cells[prev]['c']) != (cells[n_]['r'], cells[n_]['c'])  # two cells show two words whatever the bytes say
+                touching = not apart and bool(anchors) and self.adjacent(anchors[prev], anchors[n_])
+                glue = idx[pos] == idx[pos - 1] + 1  # the key prints no space here
+                if glue and touching: frag += 1
+                elif glue and not apart and bool(anchors) and all(any('region' in x for x in spans(anchors[i])) for i in (prev, n_)): pending = True  # boxes cannot prove the join
+                elif glue and nw[idx[pos]].isalnum() and nw[idx[pos - 1]].isalnum(): return False, 'word_split', frag  # a word or number split without proof
+                else: sep = ' '
+            out += sep + norm(tx); pos, prev = end, n_
+        if pos != len(sq): return False, 'text', frag
+        if pending: return None, 'adjacency', frag
+        return (True, None, frag) if boundary_equal(out, nw) else (False, 'spacing', frag)
 
     def in_order(self, k, tb, vr):
         """A carrier inside the value's table keeps the source order of rows; outside, it comes before the table."""
@@ -540,7 +588,7 @@ class Grader:
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'row_label', alt)
         cands = [c for a in anchors for c in self.rf.cells_at(a, tb)] if anchors else \
             [c for c in self.rf.cells_in(tb) if abs(c['r'] - vr) <= 1 and norm(c.get('text', '')) in {norm(p) for p in pieces}]
-        cands = list({id(c): c for c in cands}.values())
+        cands = self.merged({id(c): c for c in cands}.values())
         if not cands: return 'fail', 'missing', None
         ok, flag = self.same(joined(cands), ' '.join(pieces))
         if not ok: return 'fail', 'text', joined(cands)
@@ -548,11 +596,12 @@ class Grader:
         return 'pass', None, 'marker_in_label' if flag == 'marker_in_text' else flag or ('anchor_unknown' if not anchors else None)
 
     def row_context(self, value, alt, tb, vr):
+        pool = self.merged(self.rf.cells_in(tb))
         for item in value:
-            cells = [c for c in self.rf.cells_in(tb) if row_hit(c, vr) and self.same(c.get('text', ''), item['text'])[0]]  # a row may print the same text twice: the one under the named header is meant
+            cells = [c for c in pool if row_hit(c, vr) and self.same(c.get('text', ''), item['text'])[0]]  # a row may print the same text twice: the one under the named header is meant
             if not cells: return 'fail', 'row', item['text']
             if item.get('header') and item['header'] != 'position':
-                heads = [c for c in self.rf.cells_in(tb) if c['r'] < vr] + [k['cell'] for k in self.carriers(anchors_of(self.t, 'row_context', alt), [item['header']])
+                heads = [c for c in pool if c['r'] < vr] + [k['cell'] for k in self.carriers(anchors_of(self.t, 'row_context', alt), [item['header']])
                                                                            if k['cell'] is not None and k['table'] is not tb and k['order'] < tb['_order']]  # or printed in the first part of a continued table (E1, addendum C5)
                 if not any(col_hit(h, c['c']) and self.same(h.get('text', ''), item['header'])[0] for c in cells for h in heads): return 'fail', 'header', item['header']
         return 'pass', None, None
@@ -661,14 +710,15 @@ class Grader:
         for group in value:
             for part in group.get('parts') or []:
                 want, a = norm(part['text']), part.get('anchor')
-                cells = self.rf.cells_at(a, tb) if a else []
+                cells = self.merged(self.rf.cells_at(a, tb)) if a else []
                 if cells:
                     if not self.same(joined(cells), want)[0] and not any(want in norm(c.get('text', '')) for c in cells): return 'fail', 'text', part['text']
                     label_col = min([c['c'] for c in self.rf.cells_in(tb) if row_hit(c, vr)] or [0])
                     free = [c for c in cells if c['r'] != vr and not col_hit(c, vcols)]  # neither on the value's row nor over its column
                     if any(c['c'] > label_col for c in free):
                         if not change or any(c['r'] > vr for c in free): return 'fail', 'column', part['text']
-                        continue  # the compared columns' headings, above the value in its table; the change column itself is proven by header_path
+                        if any(not self.same_group(c, tb, vcols, value) for c in free if c['c'] > label_col): return 'fail', 'group', part['text']
+                        continue  # the compared columns' headings, in the value's own group above it; the change column itself is proven by header_path
                     if free:  # a time row in the label column governs the rows after it; the route must keep that group intact (E15)
                         r0, head = max(c['r'] for c in free), max(free, key=lambda c: c['r'])
                         if r0 > vr or not source_before(head.get('anchor'), self.V[0].get('anchor')): return 'fail', 'order', part['text']
@@ -679,6 +729,14 @@ class Grader:
                 cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.units if u.get('kind') not in ('table', 'clutter')]
                 if not any(want in norm(k['text']) or (k.get('unit') and want == local(k['unit'].get('name', ''))) for k in cars): return 'fail', 'missing', part['text']
         return 'pass', None, None
+
+    def same_group(self, cell, tb, vcols, periods):
+        """Does the heading of a compared column belong to the value's group? The headers above it that cover its column — leaving out
+        the record's own period headings — must include one that also covers the value's column; a heading with no such header above it
+        stands in the table's top block (addendum C2, Codex's reproducer: year headings swapped into the other group)."""
+        parts = [norm(p['text']) for g in periods for p in g.get('parts') or []]
+        above = [h for h in self.rf.cells_in(tb) if h['r'] < cell['r'] and col_hit(h, cell['c']) and squash(h.get('text', '')) and not any(self.same(h.get('text', ''), p)[0] for p in parts)]
+        return not above or any(col_hit(h, vcols) for h in above)
 
     def footnotes(self, value, alt, tb, V, vr):
         linked = []
@@ -729,26 +787,31 @@ class Grader:
         v = V[0]; f = t['fields']; printed = f.get('printed_value') or ''
         here = xml_element_at(rf.raw, t['anchor']['byte_start'])  # the element whose text the key points at, by its expanded name
         if here is None: self.row('value', 'unresolved', 'input_invalid'); self.row('row_label', 'unresolved', 'input_invalid'); return v
-        if fused([v.get('text', '')], printed): self.row('value', 'pass')
+        ex = t['excluded']
+        if 'printed_value' in ex: self.row('value', 'excluded')
+        elif fused([v.get('text', '')], printed): self.row('value', 'pass')
         else: self.row('value', 'fail', 'spacing' if squash(v.get('text', '')) == squash(printed) else 'text')
         if f.get('row_label') is not None:
-            if local(v.get('name', '')) != f['row_label']: self.row('row_label', 'fail', 'name')
+            if 'row_label' in ex: self.row('row_label', 'excluded')
+            elif local(v.get('name', '')) != f['row_label']: self.row('row_label', 'fail', 'name')
             else: ok = v.get('name') == here; self.row('row_label', 'pass' if ok else 'fail', None if ok else 'namespace')
         if f.get('header_path'):
-            ok = list(v.get('path') or []) == list(f['header_path']); self.row('header_path', 'pass' if ok else 'fail', None if ok else 'path')
+            if 'header_path' in ex: self.row('header_path', 'excluded')
+            else: ok = list(v.get('path') or []) == list(f['header_path']); self.row('header_path', 'pass' if ok else 'fail', None if ok else 'path')
         group = v.get('group') or {}
         same_group = [u for u in rf.units if u.get('kind') == 'field' and u.get('path') == v.get('path') and (u.get('group') or {}).get('index') == group.get('index')]
         ok = True
         for item in f.get('row_context') or []:
             if item['header'] == 'position': ok &= f"{group.get('index')} of {group.get('count')}" == item['text']
             else: ok &= any(local(u.get('name', '')) == item['header'] and norm(u.get('text', '')) == norm(item['text']) for u in same_group)
-        if f.get('row_context'): self.row('row_context', 'pass' if ok else 'fail', None if ok else 'group')
+        if f.get('row_context'): self.row('row_context', 'excluded' if 'row_context' in ex else 'pass' if ok else 'fail', None if ok or 'row_context' in ex else 'group')
         if f.get('unit_printed'):
             hit = any(norm(f['unit_printed']) in norm(u.get('text', '')) for u in rf.units if u.get('kind') == 'field')
-            self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing', 'anchor_unknown')
+            if 'unit_printed' in ex: self.row('unit_printed', 'excluded')
+            else: self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing', 'anchor_unknown')
         self.field('periods', self.periods, {'_order': v['_order'], 'cells': []}, 0, (0, 1))
         for name in T4:
-            if name in f: self.row(name, 'not_t1')
+            if name in f: self.row(name, 'excluded' if name in ex else 'not_t1')
         return v
 
     # ---- structure
@@ -760,10 +823,13 @@ class Grader:
         def text_of(u):
             if u.get('kind') != 'table': return u.get('text', '')
             cells = [c for c in u.get('cells') or [] if overlap(c.get('anchor'), t['anchor'])] or u.get('cells') or []
-            return ' '.join(c.get('text', '') for c in sorted(cells, key=lambda c: (c['r'], c['c'])))
+            return ' '.join(c.get('text', '') for c in self.merged(cells))
         want = norm(f.get('printed_text') or ''); got = norm(' '.join(text_of(u) for u in units))
-        ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
-        self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, {'fragmented': frag} if ok and frag else None if ok else {'wer': wer(got, want)})
+        if 'printed_text' in t['excluded']: self.row('printed_text', 'excluded'); ok = True
+        else:
+            ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
+            if ok and not struck_kept([f.get('printed_text') or ''], units): ok, why = False, 'struck'  # the words survive but a cancelled word became active, or the wrong one was cancelled
+            self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, {'fragmented': frag} if ok and frag else None if ok else {'wer': wer(got, want)})
         main = next((u for u in units if u.get('kind') != 'table'), units[0])
         if f.get('kind') in LOOSE_KINDS: self.row('kind', 'na', None, main.get('kind'))
         elif f.get('kind'):
@@ -843,6 +909,7 @@ def gates_for_file(rf, status):
                     elif not boundary_equal(marks_off(rf.vis.at_any(byte), x.get('markers') or []), x.get('text', '')): g['boundary'] += 1  # same characters, a word or number boundary lost or added
     if rf.vis is not None and not rf.vis.certain: g['anchors_measured'] = False  # visibility depends on stylesheet rules this scanner does not read
     if rf.vis is not None and rf.vis.certain and status == 'OK': g['uncovered'] = rf.vis.uncovered(ranges)
+    g['pictures'] = rf.raw.count(b'<img') if rf.vis is not None and rf.raw is not None else None  # picture content is never measured by the text map
     return g
 
 
@@ -903,7 +970,8 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         'ids_and_run_facts': {'pass': not ungraded and all(g['dup_ids'] == 0 for g in per_file.values()) and all(all(k in (routes[f] or {}) for k in ('tool', 'version', 'settings')) for f in per_file), 'not_measured': ungraded},
         'reading_order': {'pass': not ungraded and sum(g['order_breaks'] for g in per_file.values()) == 0, 'breaks': {f: g['order_breaks'] for f, g in per_file.items() if g['order_breaks']}, 'not_measured': ungraded},
         'markers_apart': {'pass': not ungraded and marker_glued == 0, 'glued': marker_glued, 'not_measured': ungraded},
-        'nothing_lost': {'pass': not uncovered and not cov_unmeasured, 'measured_pass': not uncovered, 'uncovered': uncovered, 'not_measured': cov_unmeasured},
+        'nothing_lost': {'pass': not uncovered and not cov_unmeasured, 'measured_pass': not uncovered, 'uncovered': uncovered, 'not_measured': cov_unmeasured,
+                         'measures': 'visible source text; picture content is not measured', 'pictures_not_measured': {f: g['pictures'] for f, g in per_file.items() if g.get('pictures')}},
     }
     shown = [t for t in targets if heldout_detail or t['split'] != 'heldout']
     report = {

@@ -1,4 +1,5 @@
 """Docling HTML adapter: Docling's document dict -> common route format (shape rules only; no company, no filing text)."""
+import copy
 import json
 import unittest
 
@@ -106,6 +107,17 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         doc['texts'][2]['formatting']['script'] = 'super'; doc['texts'][2]['text'] = 'TM'
         self.assertEqual(dh.to_units(doc)[1]['cells'][2]['markers'], ['TM'])  # raised: kept apart, whatever its shape
 
+    def test_a_cell_printed_wholly_raised_is_kept_as_a_cell(self):
+        # Codex round 7 (R7-1): a raised 4 is still the cell's text; superscript is formatting, not proof of a footnote
+        doc = copy.deepcopy(DOC); doc['groups'][0]['children'] = [{'$ref': '#/texts/2'}]; doc['texts'][2]['text'] = '4'
+        for script, want in (('baseline', ('4', None)), ('super', ('4', None))):
+            doc['texts'][2]['formatting']['script'] = script
+            cells = next(u for u in dh.to_units(doc) if u['kind'] == 'table')['cells']
+            self.assertEqual([(c['text'], c.get('markers')) for c in cells if c['r'] == 2 and c['c'] == 0], [want], script)
+        doc['texts'][2]['formatting']['script'] = 'baseline'; doc['texts'][2]['formatting']['strikethrough'] = True
+        cells = next(u for u in dh.to_units(doc) if u['kind'] == 'table')['cells']
+        self.assertEqual(next(c.get('struck') for c in cells if c['r'] == 2 and c['c'] == 0), ['4'])
+
     def test_struck_pieces_are_reported_as_struck(self):
         doc = json.loads(json.dumps(DOC)); doc['texts'][4]['formatting'] = {'bold': False, 'italic': False, 'underline': False, 'strikethrough': True, 'script': 'baseline'}
         self.assertEqual(dh.to_units(doc)[5]['struck'], ['See the table below'])
@@ -147,6 +159,12 @@ class EdgartoolsHtmlAdapterTests(unittest.TestCase):
         units = eh.to_units(TREE)
         self.assertEqual([u['kind'] for u in units], ['heading', 'text', 'table', 'list_item', 'image', 'text'])
         self.assertEqual(units[0]['level'], 2); self.assertEqual(units[1]['links'], [{'text': 'the table', 'href': '#tbl', 'to': None}])
+
+    def test_rowspans_expire_by_row_even_across_an_empty_or_short_row(self):
+        # Codex round 7 (R7-2): A spans 3 rows and B 2; row 1 is empty; C must land in column 1 of row 2, D and E in columns 0 and 1 of row 3
+        c = lambda text, rs=1: {'text': text, 'rowspan': rs, 'colspan': 1, 'is_header': False}
+        t = {'type': 'TableNode', 'caption': None, 'rows': [[c('A', 3), c('B', 2)], [], [c('C')], [c('D'), c('E')]]}
+        self.assertEqual([(x['text'], x['r'], x['c']) for x in eh.to_units(t)[0]['cells']], [('A', 0, 0), ('B', 0, 1), ('C', 2, 1), ('D', 3, 0), ('E', 3, 1)])
 
     def test_cells_get_grid_positions_from_colspan_and_rowspan(self):
         cells = eh.to_units(TREE)[2]['cells']
