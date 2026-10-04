@@ -7,6 +7,7 @@ never guesses such a split."""
 from array import array
 from bisect import bisect_left
 import html
+import xml.parsers.expat as expat
 import re
 import unicodedata
 
@@ -19,7 +20,6 @@ _WS = re.compile('[\\s' + re.escape(_CF) + ']+')
 _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), '') or chr(i) == '"') else "'") for i in range(0x110000) if 'QUOTATION MARK' in unicodedata.name(chr(i), '')},
                        **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
 _TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?=[A-Za-z/])(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
-_TOKEN_XML = re.compile(r'<!--.*?-->|<!\[CDATA\[.*?\]\]>|<[!?][^>]*>|<(?=[A-Za-z/])(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S)  # XML: no HTML-only skipped elements — a <title> is an ordinary element there
 _ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
 _DECL = re.compile(r'\s*([-\w]+)\s*:(.*)', re.S)  # one complete declaration: property name, colon, value (anything else the browser drops)
 _NUM = re.compile(r'[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?%?')  # a CSS <number> or <percentage> (no trailing dot); nothing else is a number to CSS
@@ -33,9 +33,9 @@ _IMPORTANT = re.compile(r'\s*!\s*important\s*$')
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
 _STYLE = re.compile(r'<style\b[^>]*>(.*?)</style\s*>|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheets: this scanner does not apply them
 _PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:|@import\b', re.I)
-_DECO = re.compile(r'\btext-decoration(?:-line)?\s*:[^;}]*(?:line-through|!\s*important)', re.I)  # a stylesheet rule that strikes text, or forces a decoration: "nothing struck here" cannot be certified
-_DECO_ANY = re.compile(r'\btext-decoration(?:-line)?\s*:', re.I)  # any stylesheet rule on a decoration can remove a strike: a struck run cannot be certified
-_DECO_LINES, _DECO_STYLES = {'none', 'underline', 'overline', 'line-through', 'blink'}, {'solid', 'double', 'dotted', 'dashed', 'wavy'}  # a stylesheet rule that could hide or re-flow text, or an imported sheet, makes visibility uncertain
+_DECO_RULE = re.compile(r'\btext-decoration(?:-line)?\s*:([^;}]*)', re.I)  # a stylesheet rule on a decoration, with its value: can it add a strike?
+_DECO_LINES, _DECO_STYLES = {'none', 'underline', 'overline', 'line-through', 'blink'}, {'solid', 'double', 'dotted', 'dashed', 'wavy'}  # text-decoration-line and text-decoration-style keywords (CSS Text Decoration)
+INVALID = 'invalid'  # a declaration the grammar proves the browser drops (it keeps the one before it): no uncertainty
 # HTML tree construction: an opening tag of a kind in `by` closes an open element of a kind in `closes` unless an element in `stop` lies above it
 _P_CLOSERS = set('address article aside blockquote details dialog div dl fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 header hgroup hr main menu nav ol p pre section table ul'.split())
 _IMPLIED = [(_P_CLOSERS, {'p'}, {'table', 'td', 'th', 'caption', 'body', 'html'}), ({'li'}, {'li'}, {'ul', 'ol', 'menu', 'table', 'td', 'th', 'body'}),
@@ -118,16 +118,52 @@ def last(decls, prop):
     return value
 
 
-def decoration(value):
-    """What one text-decoration / text-decoration-line value says about striking: True (line-through), False (none), 'default' (revert:
-    the tag's own default), or UNKNOWN for anything this scanner does not evaluate — colours, lengths, inherit, functions, invalid tokens
-    (the browser drops an invalid declaration and keeps a valid one it does not know; this scanner reports uncertainty instead)."""
+def decoration(value, prop='text-decoration'):
+    """What one text-decoration / text-decoration-line declaration says about striking: True (line-through), False (no line), 'default'
+    (revert: the tag's own default), 'inherit' (the parent's own line), INVALID when the grammar proves the browser drops the declaration
+    (a style keyword in the line longhand, two styles, a repeated or a `none`-plus-other line keyword), or UNKNOWN for anything this scanner
+    does not evaluate — colours, lengths, functions, escapes — which the browser may honour or drop."""
     toks = _IMPORTANT.sub('', value).split()
     if toks in (['initial'], ['unset']): return False  # text-decoration is not inherited: unset is initial, none
     if toks in (['revert'], ['revert-layer']): return 'default'
-    if 'none' in toks: return False if toks == ['none'] else UNKNOWN
-    if toks and all(t in _DECO_LINES or t in _DECO_STYLES for t in toks) and any(t in _DECO_LINES for t in toks): return 'line-through' in toks
-    return UNKNOWN
+    if toks == ['inherit']: return 'inherit'
+    known = _DECO_LINES | (_DECO_STYLES if prop == 'text-decoration' else set())
+    if not toks or '(' in value or '\\' in value or any(t not in known for t in toks):
+        return INVALID if toks and '(' not in value and '\\' not in value and all(t in _DECO_LINES | _DECO_STYLES for t in toks) else UNKNOWN  # a style keyword can never be a line
+    lines = [t for t in toks if t in _DECO_LINES]
+    if len(set(toks)) < len(toks) or len(toks) - len(lines) > 1 or ('none' in lines and len(lines) > 1): return INVALID  # each keyword once, one style at most, none alone
+    return 'line-through' in lines
+
+
+def sheet_can_strike(sheet):
+    """Can a stylesheet rule on a decoration add or force a strike? Only a value made of line keywords other than line-through, style
+    keywords, initial or unset, without !important, provably cannot; inherit, revert, functions, colours and unknown tokens may."""
+    harmless = (_DECO_LINES - {'line-through'}) | _DECO_STYLES | {'initial', 'unset'}
+    return any('!' in m.group(1) or '(' in m.group(1) or not m.group(1).split() or any(t not in harmless for t in m.group(1).lower().split()) for m in _DECO_RULE.finditer(sheet))
+
+
+def xml_chars(raw, chars, starts, ends):
+    """Character data of an XML document by the strict standard parser, each character with its byte span: a CDATA section is literal text,
+    an entity or character reference decodes to its replacement (every character of it shares the reference's bytes), attributes are not
+    text, an element boundary separates words. False when the bytes are not a complete well-formed document (nothing is certified then)."""
+    p = expat.ParserCreate(); events = []  # (byte index, kind, text), in document order; every construct is an event so each span ends where the next begins
+    p.CharacterDataHandler = lambda t: events.append((p.CurrentByteIndex, 'text', t))
+    p.StartElementHandler = lambda n, a: events.append((p.CurrentByteIndex, 'tag', None))
+    p.EndElementHandler = lambda n: events.append((p.CurrentByteIndex, 'tag', None))
+    p.StartCdataSectionHandler = lambda: events.append((p.CurrentByteIndex, 'mark', None))
+    p.EndCdataSectionHandler = lambda: events.append((p.CurrentByteIndex, 'mark', None))
+    p.DefaultHandlerExpand = lambda d: events.append((p.CurrentByteIndex, 'mark', None))
+    try: p.Parse(raw, True)
+    except expat.ExpatError: return False
+    events.append((len(raw), 'mark', None))
+    for (b0, kind, t), (b1, _, _) in zip(events, events[1:]):
+        if kind == 'tag' and b1 > b0: chars.append(' '); starts.append(b0); ends.append(b1)
+        elif kind == 'text':
+            if b1 - b0 == len(t.encode('utf-8')):
+                for c in t: n = len(c.encode('utf-8')); chars.append(c); starts.append(b0); ends.append(b0 + n); b0 += n
+            else:
+                for c in t: chars.append(c); starts.append(b0); ends.append(b1)
+    return True
 
 
 def resolve(decls, prop, valid):
@@ -155,9 +191,10 @@ class Visible:
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
-        for m in (_TOKEN_XML if xml else _TOKEN).finditer(s):
+        if xml:  # XML: character data by the strict standard parser (CDATA literal, references decoded, attributes not text); no CSS, nothing hidden
+            computed = not xml_chars(raw, chars, starts, ends); struck_chars.extend([0] * len(chars))
+        for m in () if xml else _TOKEN.finditer(s):
             t = m.group(); start = pos; pos += blen(t)
-            if xml and t.startswith('<![CDATA[') and t.endswith(']]>'): t, start = t[9:-3], start + 9  # a CDATA section is character data (XML); its marker is 9 ASCII bytes
             if t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
                 name = _NAME.match(t)
                 if not name or t.startswith('<!') or t.startswith('<?') or (m.re.groups and m.group(1)): continue
@@ -168,11 +205,13 @@ class Visible:
                 decls = declarations(attrs.get('style', ''))
                 disp, v, op = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number)
                 if UNKNOWN in (disp, v, op): computed = True; disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
-                deco, strong = None, False  # the decoration in force: the last resolved text-decoration / text-decoration-line declaration wins, !important beats a later plain one
+                deco, strong = None, False  # the decoration in force: the last valid text-decoration / text-decoration-line declaration wins, !important beats a later plain one
                 for n, val, important in decls:
                     if n in ('text-decoration', 'text-decoration-line') and (important or not strong):
-                        d = decoration(val)
+                        d = decoration(val, n)
+                        if d == INVALID: continue  # the grammar proves the browser drops this declaration and keeps the one before it
                         if d == UNKNOWN: struck_computed = True; continue  # not evaluated: struck text in this file is uncertain, the declaration is skipped as the browser would skip an invalid one
+                        if d == 'inherit': d = stack[-1][5] if stack else False  # the parent's own computed line, whatever propagation would have done
                         deco, strong = d, important
                 struck = (name in STRUCK) if deco in (None, 'default') else deco  # an <s>/<del>/<strike> that declares none or underline is not struck by the tag; revert restores the tag's default
                 atomic = disp in ('inline-block', 'inline-table', 'inline-flex', 'inline-grid') or last(decls, 'float') in ('left', 'right') or last(decls, 'position') in ('absolute', 'fixed')  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
@@ -186,7 +225,7 @@ class Visible:
                             if fr[0] == name: block, shown = fr[3], not (fr[1] or fr[2]); break  # the element's own display decides its closing separator too
                             if fr[0] in STRUCK: struck_computed = True  # an unclosed <s>/<del>/<strike>: the browser reopens it in the next block (formatting elements); not followed here
                 else:
-                    if not xml:  # HTML's implied end tags: a new <p>, <li>, <td>, <tr> ... closes the open one, as the browser builds the tree
+                    if True:  # HTML's implied end tags: a new <p>, <li>, <td>, <tr> ... closes the open one, as the browser builds the tree
                         for by, closes, stop in _IMPLIED:
                             if name not in by: continue
                             lowest = None
@@ -197,13 +236,13 @@ class Visible:
                                 if any(fr[1] or fr[2] for fr in stack[lowest + 1:] if fr[0] not in closes): computed = True  # unclosed hiding inline elements inside: the browser rebuilds them around the new block
                                 if any(fr[0] in STRUCK for fr in stack[lowest:]): struck_computed = True  # an unclosed <s>/<del>/<strike> the browser would reopen in the new block
                                 del stack[lowest:]
-                    if name not in VOID and not (xml and t.endswith('/>')):  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block)
+                    if name not in VOID:  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block, struck in effect, own line)
                         blocked, vis = stack[-1][1:3] if stack else (False, False)
                         # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
-                        stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block, (stack[-1][4] if stack and not atomic else False) or struck))
+                        stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block, (stack[-1][4] if stack and not atomic else False) or struck, struck))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
                 if not t.startswith('</'): shown = not hidden and not gone  # an opening element shows when it is not hidden itself (a void element: when it is not hidden either)
-                if shown and (xml or block): chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0)  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
+                if shown and block: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0)  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
                 continue
             st = 1 if stack and stack[-1][4] else 0
             if stack and stack[-1][0] in ('table', 'thead', 'tbody', 'tfoot', 'tr') and not _WS.fullmatch(html.unescape(t) if t.startswith('&') else t): computed = True  # the browser moves such text before the table
@@ -219,12 +258,12 @@ class Visible:
                 off = start
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); struck_chars.append(st); off += n
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
-        sheets = [None if m.group(1) is None else _COMMENT.sub(' ', unescape_css(m.group(1))) for m in _STYLE.finditer(s)]
+        sheets = [] if xml else [None if m.group(1) is None else _COMMENT.sub(' ', unescape_css(m.group(1))) for m in _STYLE.finditer(s)]
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
         external = any(x is None or '@import' in x.lower() for x in sheets)
-        self.struck_certain = not struck_computed and not external and not any(_DECO_ANY.search(x) for x in sheets if x)  # a struck run is certified only when no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
-        self.plain_certain = not struck_computed and not external and not any(_DECO.search(x) for x in sheets if x)  # "nothing struck here" needs only that no sheet rule can add or force a strike
+        self.struck_certain = not struck_computed and not external and not any(_DECO_RULE.search(x) for x in sheets if x)  # a struck run is certified only when no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
+        self.plain_certain = not struck_computed and not external and not any(sheet_can_strike(x) for x in sheets if x)  # "nothing struck here" needs that no sheet rule can add or force a strike (line-through, inherit, revert, a function, !important or any token this scanner does not know)
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))

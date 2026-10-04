@@ -388,9 +388,35 @@ class LinkTests(unittest.TestCase):
         self.assertEqual(struck(b'<s style="text-decoration:initial">plain</s>'), ([], True))
         self.assertEqual(struck(b'<s style="text-decoration:bogus">x</s>')[1], False)  # an unevaluated value: uncertain, never a guess
         self.assertEqual(struck(b'<p style="text-decoration:line-through;text-decoration:bogus">x</p>'), (['x'], False))  # the resolved declaration stands, the file stays uncertain
-        self.assertEqual(struck(b'<s style="text-decoration:line-through none">x</s>')[1], False)
+        self.assertEqual(struck(b'<s style="text-decoration:line-through none">x</s>'), (['x'], True))  # invalid (none stands alone): dropped, the tag's default stands (R11-1 grammar)
         self.assertEqual(struck(b'<p><s>a b</p><p>next</p>')[1], False)  # the browser reopens the <s> in the next paragraph
         self.assertEqual(struck(b'<s style="text-decoration: var(--d)">x</s>')[1], False)
+
+    def test_decoration_grammar_drops_invalid_declarations_and_inherit_copies_the_parents_own_line(self):
+        # Codex R11-1 with headless Chrome: a style keyword in the line longhand, two styles or a repeated line keyword invalidate the declaration (dropped,
+        # no uncertainty); an invalid later declaration leaves the earlier one in force; inherit copies the parent's own line even into an atomic box;
+        # a sheet's inherit can add a strike, so neither reading of such a file is certified
+        struck = lambda raw: ([anchor.Visible(raw).at(a, b) for a, b in anchor.Visible(raw).struck_runs()], anchor.Visible(raw).struck_certain, anchor.Visible(raw).plain_certain)
+        self.assertEqual(struck(b'<p style="text-decoration-line:line-through solid">not</p>'), ([], True, True))
+        self.assertEqual(struck(b'<p style="text-decoration:line-through solid dotted">not</p>'), ([], True, True))
+        self.assertEqual(struck(b'<p style="text-decoration:line-through line-through">not</p>'), ([], True, True))
+        self.assertEqual(struck(b'<p style="text-decoration:line-through;text-decoration-line:underline dotted">not</p>'), (['not'], True, True))
+        self.assertEqual(struck(b'<p style="text-decoration:line-through solid">not</p>'), (['not'], True, True))
+        self.assertEqual(struck(b'<p style="text-decoration:solid">not</p>'), ([], True, True))  # valid: the line part defaults to none
+        self.assertEqual(struck(b'<p style="text-decoration:line-through"><span style="display:inline-block;text-decoration:inherit">not</span></p>'), (['not'], True, True))
+        self.assertEqual(struck(b'<p><span style="display:inline-block;text-decoration:inherit">not</span></p>'), ([], True, True))
+        self.assertEqual(struck(b'<style>.x{text-decoration:inherit}</style><p style="text-decoration:line-through"><span class="x" style="display:inline-block">not</span></p>')[1:], (False, False))
+        self.assertEqual(struck(b'<style>.u{text-decoration:underline dotted}</style><p>y</p>')[1:], (False, True))  # that rule cannot add a strike
+        self.assertEqual(struck(b'<p style="text-decoration:line-through red">x</p>')[1:], (False, False))  # a colour: not evaluated, uncertain either way
+
+    def test_xml_text_is_the_strict_parsers_character_data(self):
+        # Codex N1: CDATA is literal, references decode to their replacement (sharing the reference's bytes), attributes are not hiding instructions, a broken document certifies nothing
+        v = anchor.Visible(b'<r><x><![CDATA[<b>literal</b>]]></x><y hidden="true" style="display:none">10 &amp; &lt; 1</y></r>', xml=True)
+        self.assertEqual((anchor.norm(v.text), v.certain, v.plain_certain, v.hidden_chars), ('<b>literal</b> 10 & < 1', True, True, 0))
+        raw = b'<!DOCTYPE r [<!ENTITY unit "partnership units">]><r><note>10 &unit;</note></r>'; v = anchor.Visible(raw, xml=True)
+        self.assertEqual(v.at(raw.index(b'<note>'), raw.index(b'</note>')), ' 10 partnership units')  # the replacement text sits at the reference's bytes
+        self.assertEqual(v.at(raw.index(b'&unit;'), raw.index(b'&unit;') + 6), 'partnership units')
+        self.assertEqual((anchor.Visible(b'<r><x>1</x>', xml=True).text, anchor.Visible(b'<r><x>1</x>', xml=True).certain), ('', False))
 
     def test_whitespace_quotes_dashes_and_brackets_come_from_unicode_categories_not_hand_lists(self):
         import unicodedata

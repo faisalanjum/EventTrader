@@ -623,7 +623,8 @@ documented as a semantic cross-check (typed fields in source order, an lxml tree
 
 **Pictures (point 5, test 4).** The eight picture-text targets are HTML exhibits made of page images; the image files are present locally for the development
 exhibits (23/23, 4/4, 2/2). Docling's own OCR (RapidOCR, the only engine installed offline; EasyOCR and Tesseract are not) on the 23 pages of
-`0000049071-24-000040`: 94 s, 8,796 words; the key's block (493 words, kind image) is recovered at **word error rate 0.146** — 421 of 493 words. That is a
+`0000049071-24-000040`: 94 s, 8,796 words; the key's block (493 words, kind image) scored **0.146** — but that figure was 1 − matched words / reference words over all 23 pages, an
+unmatched-reference fraction, not a word error rate (Codex N3); remeasured on the block's own image with the real word error rate: **0.144** (§34). That is a
 measurement, not a route: at 85 % the exact-text rule fails; the options are a better engine (an install the owner decides), the vision pipeline measured
 earlier (156 s/page, misreads), or a contract decision on picture text. Recorded in the ledger as class A's first number.
 
@@ -669,3 +670,58 @@ now count unresolved targets in every denominator, as Codex asked ("45/55 is 45 
 49/60 (11 unresolved), not 49/49.
 
 194 tests, 48/48 real pairs.
+
+## 34. Round 11 (2026-10-04 01:00, Codex's `ROUND11_CODEX.md` on 44c442cad and bba2530b8) — four grader classes and three XML/picture findings, all reproduced, all closed
+
+**What Codex found (all reproduced live first: his r11 scripts pointed at the repository, loaded paths printed).** R11-1 the formatter certified the wrong
+decoration in five Chrome cases (a style keyword in the line longhand, two styles, a repeated line keyword, an invalid later declaration, a sheet `inherit`
+into an atomic child); R11-2 `value()` never ran the strike check, so an invented cancellation of the number passed (eight development-supplement targets);
+R11-3 `struck_kept` dropped a strike longer than the field ("Ownership remains." over the heading "Ownership") through its text filter; R11-4 basis kept only
+the first piece of a joined phrase, periods and footnotes never handed their carriers to the strike check; N1 the XML scanner read CDATA as markup, decoded
+`&amp;` inside CDATA and honoured HTML hiding attributes; N2 two first holdings of two persons shared `path` + "1 of 2", so a wrong name borrowed the other
+person's context; N3 the picture figure was 1 − matched/reference over all 23 pages, not a word error rate.
+
+**Decoration grammar (`anchor.py::decoration(value, prop)`, `sheet_can_strike`).** Validity is checked per property: the line longhand takes line
+keywords only; the shorthand takes each keyword once, one style at most, `none` alone. A declaration the grammar proves invalid is dropped and the one
+before it stays in force, with no uncertainty (that is what the browser does); a token the scanner does not evaluate (a colour, a length, a function) still
+makes the file uncertain. Inline `inherit` copies the parent's own computed line — the frame now carries the element's own line beside the propagated
+one — so it reaches an atomic box. A stylesheet certifies "nothing struck here" only when every decoration value in it is provably strike-free (line
+keywords other than line-through, style keywords, initial, unset, no `!important`); `inherit`, `revert`, functions, colours and unknown tokens cannot.
+Chrome: Codex's ten cases 10/10 (were 5/10); the 20-shape oracle unchanged. On the corpus nothing moved: the four formatting steps write the same struck
+items as before (2,219 / 2,219 / 3,015 / 1,629), 0 uncertain files.
+
+**The field's own run (`grade.py::struck_kept(key_texts, items, anchors, vis)`).** The text filter is gone. Each key string is one run of the matched
+items' joined search text; a route strike counts for the part of it inside that run — a strike crossing the field's boundary is seen, a strike elsewhere in
+a shared unit is not. The run is the one the key's anchor names (the anchor's byte mapped through the scanner to the item's text, where that text is the
+source's at its own place), else the only run; when the key's search pieces name several occurrences and the readings disagree the verdict is
+**unresolved**. A route strike whose text repeats inside its item carries no position, so the source's own formatting places it when the scanner is
+certain: if the source strikes the other place and not this one, the claim is that one; if the source strikes neither, the claim lands on the field (an
+invented strike fails, Codex's `strike_equals_field`). Readings are judged per key string (a string without a run keeps the old text rule; a definite
+failure on any string is a failure; an open reading is unresolved). `value()` now sends the very cells that spelled the value through the same check;
+`basis` keeps every piece of a joined phrase; `periods`, `footnotes` and `range_` record the carriers they used. Audit from the live code: every field
+callback records what it matched; `field()`'s anchor fallback is kept as the safety net only.
+
+**XML (`anchor.py::xml_chars`, `adapters/xml_fields.py`, `grade_xml`).** The scanner reads XML through the strict standard parser's character data with
+byte spans: CDATA literal, entity and character references decoded (every character of a reference shares the reference's bytes), attributes never text or
+hiding, an element boundary a word boundary, a document that does not parse certifies nothing; `_TOKEN_XML` and the CDATA branch are gone. The route
+names the containing instance by the byte of its start tag (`group.at`) and `same_group` compares that; an element whose own text holds inline elements is
+one field read whole (its inner elements are formatting, not fields); repeated leaves report their own place (`siblings`); attribute values are not read and
+their count travels as `not_read` in the route file and the grader's per-file facts. Three development forms regenerated: 209 / 225 / 367 fields, 9 of 9
+cells pass, 0 dishonest anchors, nothing uncovered, `not_read` empty (these forms carry no attribute values).
+
+**Word error rate (`grade.py::wer`) and the picture number.** `wer` is the edit rate (substitutions + deletions + insertions over the reference's words;
+Codex's control `revenue was flat elsewhere rose` vs `revenue rose` = 1.5). The block of `0000049071-24-000040` was remeasured on its own image (slide 11,
+the one `<img>` inside the key's anchor), full OCR text and inputs saved under `prepare_work/docling_deepdive_20261003/ocr_region_20261004/`: **0.144**
+(455 OCR words against 492 reference words, 5.8 s); the neighbouring slides as controls score 0.986 and 0.882. §32's 0.146 is relabelled.
+
+**Run 30 (formatting and screen steps re-run, XML regenerated, 13 routes regraded).** Every HTML number is identical to run 29 (EdgarTools + formatting +
+screen 168/171 and 49/60 with 11 unresolved; browser render + formatting 165/171 and 52/60; best single route 217 of 231, best pick 221, no route 10);
+XML 9/9; printed-HTML PDF unchanged. The round-7 grader on the same 13 route folders: 0 passes lost. The committed run-29 grader re-run on the same 13 route folders against this one: no target flips and no change in any check-row count on any route — round 11 changes no corpus verdict, the corpus holds none of the shapes it corrects, and no new unresolved strike reading appears.
+
+Tests 194 → 202 (value both ways; the crossing strike with the anchor naming the occurrence, both occurrences named → unresolved, the source placing the
+strike; basis / period / note / range carriers; the five Chrome decoration cases and controls; XML character data; XML instances; unread attributes; the
+word error rate). Codex's r4–r11 scripts, the Chrome probes and the 20-shape oracle re-run: as expected. The three key-side questions were read from the
+originals and recorded with the smallest corrections (ledger §16): the "(in millions)" line is printed inside the header cell, "Adjusted" stands over the
+EPS columns only and nothing stands over "Growth", Carnival's header cell holds three `<br>`-separated lines. The five failed native-PDF blocks were traced
+through the cached output (ledger §17): three are OCR quality on scanned pages, one an unreadable text layer (a font without a usable ToUnicode map — forced
+page OCR is the justified experiment), one a paragraph joined across a page break (a contract question); none is a table failure.

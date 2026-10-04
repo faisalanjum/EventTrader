@@ -12,6 +12,8 @@ from bisect import bisect_left
 import csv
 import difflib
 import hashlib
+from itertools import product
+from math import prod
 import json
 from pathlib import Path, PurePosixPath
 import re
@@ -339,13 +341,66 @@ def strings_in(value):
     return []
 
 
-def struck_kept(key_texts, items):
-    """When the key marks words struck (~~…~~), the route must report the same words struck at that place and no others: struck evidence
-    stays struck and never becomes active text (key README). Items are the cells or units that carry the text."""
-    want = ''.join(squash(m) for t in key_texts for m in _STRUCK.findall(t or ''))
-    scope = squash(' '.join(_STRUCK.sub(r'\1', t or '') for t in key_texts))  # the field's own text: a strike elsewhere in a shared unit is not this field's
-    got = ''.join(s for it in items for x in (it.get('struck') or []) for s in [squash(x)] if s and s in scope)  # in reading order; a phrase the route splits into pieces still reads whole
-    return got == want  # a lost, partial, extra or invented cancellation all change what the reader is told
+def struck_kept(key_texts, items, anchors=(), vis=None):
+    """When the key marks words struck (~~…~~), the route must report the same words struck over the field's own text and no others:
+    struck evidence stays struck and never becomes active text (key README). Items are the cells or units that carry the text, in reading
+    order. Each key string is one run of their joined text — the run the key's anchor names where the item's text is the source's at its
+    place, else the only run — and a route strike counts for the part of it inside that run: a strike crossing the field's boundary is
+    seen, a strike elsewhere in a shared unit is not. A strike whose text repeats in its item is placed by the source's own formatting
+    (the place the source strikes) when the scanner is certain. None when repeated text leaves the run or a strike's place open
+    (unresolved, never certified). A key string that is no single run (the record's own marks printed into it) is checked by text."""
+    texts = [squash(it.get('text', '')) for it in items]; T = ''.join(texts)
+    bases, pos = [], 0  # (offset in T, flat index in the source) of each item whose text is the source's at its own place
+    for it, tx in zip(items, texts):
+        first = [x['byte_start'] for x in spans(it.get('anchor')) if 'byte_start' in x]
+        j0 = bisect_left(vis.s, min(first)) if vis is not None and first else None
+        bases.append((pos, j0 if j0 is not None and vis.flat[j0:j0 + len(tx)] == tx else None)); pos += len(tx)
+    def source(a, b):  # does the source print T[a:b] struck through? True / False when the scanner is certain of it, else None
+        for (p, j0), tx in zip(bases, texts):
+            if p <= a and b <= p + len(tx):
+                if j0 is None: return None
+                st = {vis.struck_chars[vis.idx[j0 + k - p]] for k in range(a, b)}
+                return True if st == {1} and vis.struck_certain else False if st == {0} and vis.plain_certain else None
+        return None
+    def located():  # offsets in T the key's anchors point at
+        out = []
+        for a in anchors or () if vis is not None else ():
+            for sp in spans(a):
+                if 'byte_start' in sp:
+                    i0 = bisect_left(vis.s, sp['byte_start'])
+                    out += [p + i0 - j0 for (p, j0), tx in zip(bases, texts) if j0 is not None and 0 <= i0 - j0 < len(tx)]
+        return out
+    strikes = []  # every place each route strike can take in its own item's text
+    for (p, _), it, tx in zip(bases, items, texts):
+        for x in it.get('struck') or []:
+            w = squash(x)
+            if w: strikes.append((w, [(p + i, p + i + len(w)) for i in range(len(tx) - len(w) + 1) if tx.startswith(w, i)]))
+    verdict, loose = True, []
+    for key in key_texts:
+        field = squash(key or '')
+        if not field: continue
+        want = ''.join(squash(m) for m in _STRUCK.findall(key))
+        runs = [i for i in range(len(T) - len(field) + 1) if T.startswith(field, i)]
+        if not runs: loose.append((field, want)); continue
+        if len(runs) > 1: runs = sorted({o for o in located() if o in runs}) or runs
+        readings = set()
+        for f0 in runs:
+            f1, inside = f0 + len(field), []
+            for _, places in strikes:
+                here = [iv for iv in places if iv[0] < f1 and iv[1] > f0]; away = [iv for iv in places if not (iv[0] < f1 and iv[1] > f0)]
+                if not here: continue
+                if any(source(*iv) for iv in away) and all(source(*iv) is False for iv in here): continue  # the source strikes the other place, not this one: the claim is that one
+                if away and not all(source(*iv) is False for iv in away): here.append(None)  # the strike may sit at the other place
+                inside.append(here)
+            if len(runs) * prod(map(len, inside)) > 4096: return None  # ponytail: too many readings to enumerate — unresolved, never a guess
+            for combo in product(*inside):
+                readings.add(''.join(T[max(a, f0):min(b, f1)] for a, b in sorted(iv for iv in combo if iv)) == want)
+        if readings == {False}: return False
+        if len(readings) > 1: verdict = None
+    if loose:
+        field = ''.join(f for f, _ in loose); want = ''.join(w for _, w in loose)
+        if ''.join(w for w, _ in strikes if w in field) != want: return False
+    return verdict
 
 
 def own_bracket_off(text, own):
@@ -473,9 +528,14 @@ def heading_eq(a, b):
     return boundary_equal(_CONTINUED.sub('', norm(a)), _CONTINUED.sub('', norm(b)))
 
 
-def wer(a, b):
-    x, y = norm(a).split(), norm(b).split()
-    return round(1 - difflib.SequenceMatcher(None, x, y).ratio(), 3)
+def wer(got, want):
+    """Word error rate: the substitutions, deletions and insertions that turn the output's words into the reference's, over the reference's words."""
+    x, y = norm(want).split(), norm(got).split()
+    d = list(range(len(y) + 1))
+    for i, a in enumerate(x, 1):
+        prev, d[0] = d[0], i
+        for j, b in enumerate(y, 1): prev, d[j] = d[j], min(d[j] + 1, d[j - 1] + 1, prev + (a != b))
+    return round(d[-1] / max(1, len(x)), 3)
 
 
 # ------------------------------------------------------------------------------------------------- grading one
@@ -520,7 +580,8 @@ class Grader:
             alt, value = alts[len(results) - 1]; anchors = anchors_of(self.t, name, alt)
             items = matched[len(results) - 1] or ([c for a in anchors for c in self.rf.cells_at(a)] + [c for a in anchors for u in self.rf.units_at(a, exclude=('clutter',)) for c in ([x for x in self.rf.cells_in(u) if any(overlap(x.get('anchor'), b) for b in anchors)] if u.get('kind') == 'table' else [u])] if anchors else (self.rf.cells_in(self.tb) if getattr(self, 'tb', None) else []))  # the matched carriers; else a table at the anchor contributes only the cells at this field's support, never another row's strikes
             items = list({id(x): x for x in items if x is not None}.values())
-            if not struck_kept(strings_in(value), items): verdict, reason, detail = 'fail', 'struck', None
+            kept = struck_kept(strings_in(value), items, anchors, self.rf.vis)
+            if kept is not True: verdict, reason, detail = ('fail' if kept is False else 'unresolved'), 'struck', None
         self.row(name, verdict, reason, detail)
 
     # ---- cells
@@ -649,7 +710,9 @@ class Grader:
         D = list({id(c): c for a in danch for c in self.rf.cells_at(a, tb)}.values()) or V
         if any(not row_hit(c, vr) for c in D): return self.row('value', 'fail', 'symbol_detached')
         shown = sorted(D, key=lambda c: c['c']); said = (self.spell(shown, display), self.spell(cells, display), self.spell(cells, printed))
-        if True in said[:2]: return self.row('value', 'pass')
+        if True in said[:2]:  # the cancellation on the very cells that spell the value: lost or invented, either changes the number's meaning
+            kept = struck_kept([display], shown if said[0] is True else cells, [t['anchor']], self.rf.vis)
+            return self.row('value', 'pass' if kept is True else 'unresolved' if kept is None else 'fail', None if kept is True else 'struck')
         if said[2] is True: return self.row('value', 'fail', 'symbol_missing', joined(shown))
         if None in said: return self.row('value', 'unresolved', 'adjacency')  # pieces of the value whose page boxes cannot prove adjacency
         if squash(''.join(texts)) in (squash(printed), squash(display)) or squash(joined(shown)) == squash(display): return self.row('value', 'fail', 'spacing', norm(' '.join(texts)))
@@ -795,7 +858,7 @@ class Grader:
             want = norm(phrase)
             at = self.carriers(anchors, [phrase], tb, equal=False)
             holds = lambda text: contains(text, want) or contains(minus_marks_anywhere(text, self.markers), want)  # the phrase, with the record's own marks printed into it; spacing by the boundary rule
-            cars = [k for k in at if holds(k['text'])] or ([at[0]] if at and holds(' '.join(k['text'] for k in at)) else [])
+            cars = [k for k in at if holds(k['text'])] or (at if at and holds(' '.join(k['text'] for k in at)) else [])  # a phrase read across pieces: every piece carries it
             if not cars and any(k.get('joins') for k in at) and (any(holds(spaced(k)) for k in at) or holds(' '.join(spaced(k) for k in at))): return 'unresolved', 'adjacency', phrase
             if not cars: return 'fail', 'missing', phrase
             self.matched = (self.matched or []) + objects(cars)
@@ -824,6 +887,7 @@ class Grader:
                     if not self.same(joined(cells), want)[0] and not any(contains(c.get('text', ''), want) for c in cells):
                         if any(c.get('joins') for c in cells) and (self.same(norm(' '.join(spaced(c) for c in sorted(cells, key=lambda c: (c['r'], c['c'])))), want)[0] or any(contains(spaced(c), want) for c in cells)): return 'unresolved', 'adjacency', part['text']
                         return 'fail', 'text', part['text']
+                    self.matched = (self.matched or []) + list(cells)
                     label_col = min([c['c'] for c in self.rf.cells_in(tb) if row_hit(c, vr)] or [0])
                     free = [c for c in cells if c['r'] != vr and not col_hit(c, vcols)]  # neither on the value's row nor over its column
                     if any(c['c'] > label_col for c in free):
@@ -838,9 +902,11 @@ class Grader:
                             return 'fail', 'scope', part['text']  # a row the route placed in this group comes from elsewhere in the source
                     continue
                 cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.units if u.get('kind') not in ('table', 'clutter')]
-                if not any(contains(k['text'], want) or (k.get('unit') and want == local(k['unit'].get('name', ''))) for k in cars) and not contains(' '.join(k['text'] for k in cars), want):
+                hit = [k for k in cars if contains(k['text'], want) or (k.get('unit') and want == local(k['unit'].get('name', '')))]
+                if not hit and not contains(' '.join(k['text'] for k in cars), want):
                     if any(k.get('joins') for k in cars) and contains(' '.join(spaced(k) for k in cars), want): return 'unresolved', 'adjacency', part['text']
                     return 'fail', 'missing', part['text']
+                self.matched = (self.matched or []) + objects(hit or cars)
         return 'pass', None, None
 
     def same_group(self, cell, tb, vcols, periods):
@@ -869,7 +935,7 @@ class Grader:
                 at_note = self.carriers([m['note_anchor']], [m.get('note_text') or ''], tb)
                 notes = [k for k in at_note if body and contains(minus_markers(k['text'], [mark]), body)] or ([at_note[0]] if at_note and body and contains(' '.join(k['text'] for k in at_note), body) else [])
                 if not notes: return ('unresolved', 'adjacency', mark) if any(k.get('joins') and contains(minus_markers(spaced(k), [mark]), body) for k in at_note) else ('fail', 'missing_note', mark)
-                k = notes[0]
+                k = notes[0]; self.matched = (self.matched or []) + objects([k]) + objects([c for c in cars if squash(c['text']) == squash(mark)])
                 declared = (k['unit'] or {}).get('marker')
                 if declared and norm(declared) != norm(mark): return 'fail', 'wrong_note_link', mark  # an explicit wrong mark-to-note assignment
                 if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', mark
@@ -887,13 +953,16 @@ class Grader:
             if not cells: return 'fail', 'partner', None
             if not any(row_hit(c, vr) for c in cells): return 'fail', 'row', None
             if source_before(partner['anchor'], self.t['anchor']) != (cells[0]['c'] < vcols[0]): return 'fail', 'order', None
+            self.matched = (self.matched or []) + list(cells)
             pending = not exact and spelt is None  # association proven, join not: unresolved unless something below fails
         else: pending = False
         for ev in value.get('evidence') or []:
             hits = self.merged(self.rf.cells_at(ev['anchor'], tb)) + self.merged_units(self.rf.units_at(ev['anchor']))
-            if not any(contains(h.get('text', ''), ev['text']) for h in hits):
+            held = [h for h in hits if contains(h.get('text', ''), ev['text'])]
+            if not held:
                 if any(h.get('joins') and contains(spaced(h), ev['text']) for h in hits): pending = True; continue  # evidence split where the page alone could show the space
                 return 'fail', 'evidence', ev['text']
+            self.matched = (self.matched or []) + held
         return ('unresolved', 'adjacency', None) if pending else ('pass', None, None)
 
     # ---- XML
@@ -916,7 +985,7 @@ class Grader:
             if 'header_path' in ex: self.row('header_path', 'excluded')
             else: ok = list(v.get('path') or []) == list(f['header_path']); self.row('header_path', 'pass' if ok else 'fail', None if ok else 'path')
         group = v.get('group') or {}
-        same_group = [u for u in rf.units if u.get('kind') == 'field' and u.get('path') == v.get('path') and (u.get('group') or {}).get('index') == group.get('index')]
+        same_group = [u for u in rf.units if u.get('kind') == 'field' and (u.get('group') or {}).get('at') == group.get('at')]  # the fields of the same instance: the one that starts at the same source place (names and "n of m" alone mix two first children of two parents)
         ok = True
         for item in f.get('row_context') or []:
             if item['header'] == 'position': ok &= f"{group.get('index')} of {group.get('count')}" == item['text']
@@ -949,7 +1018,9 @@ class Grader:
         else:
             ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
             bearing = [c for u in units for c in ([x for x in u.get('cells') or [] if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
-            if ok and not struck_kept([f.get('printed_text') or ''], bearing): ok, why = False, 'struck'  # the words survive but a cancelled word became active, or the wrong one was cancelled
+            if ok:  # the words survive, but a cancelled word may have become active, or the wrong one cancelled
+                kept = struck_kept([f.get('printed_text') or ''], bearing, [t['anchor']], rf.vis)
+                if kept is not True: ok, why = kept, 'struck'
             self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, {'fragmented': frag} if ok and frag else None if ok else {'wer': wer(got, want)})
         main = next((u for u in units if u.get('kind') != 'table'), units[0])
         if f.get('kind') in LOOSE_KINDS: self.row('kind', 'na', None, main.get('kind'))
@@ -1052,7 +1123,7 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         elif data.get('file_id') != fid: status = 'NOT_CONVERTED'; data['error'] = f"route names another source: {data.get('file_id')}"
         elif data.get('status') not in ('OK', 'PARTIAL'): status = 'NOT_CONVERTED'
         else: status = 'OK'
-        files[fid] = {'status': status, 'route_status': (data or {}).get('status'), 'error': (data or {}).get('error'), 'seconds': (data or {}).get('seconds')}
+        files[fid] = {'status': status, 'route_status': (data or {}).get('status'), 'error': (data or {}).get('error'), 'seconds': (data or {}).get('seconds'), 'not_read': (data or {}).get('not_read')}
         routes[fid] = (data or {}).get('route')
         rf = RouteFile(data, raw, mine[0]['format'].split('/')[-1]) if status == 'OK' else None
         if rf: per_file[fid] = gates_for_file(rf, data.get('status'))

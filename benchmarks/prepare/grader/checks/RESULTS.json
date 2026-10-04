@@ -672,13 +672,11 @@
    "expected_gate_fail": null,
    "verdict": "FAIL",
    "failed_checks": [
-    "header_path",
-    "row_context"
+    "header_path"
    ],
    "structure_misses": [],
    "reasons": {
-    "header_path": "path",
-    "row_context": "group"
+    "header_path": "path"
    },
    "ok": true
   },

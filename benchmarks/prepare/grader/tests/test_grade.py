@@ -163,12 +163,15 @@ def route_html():
                 {'id': 'u7', 'kind': 'clutter', 'text': '4', 'anchor': elem('pg')}]}
 
 
+PERSON_AT = [XML.index(b'<ns1:reportingPersonInfo>'), XML.index(b'<ns1:reportingPersonInfo>', XML.index(b'<ns1:reportingPersonInfo>') + 1)]  # each instance by its start tag
+
+
 def route_xml():
-    f = lambda i, name, text, g: {'id': f'x{i}', 'kind': 'field', 'name': NS + name, 'path': PATH, 'group': {'index': g, 'count': 2}, 'text': text,
+    f = lambda i, name, text, g: {'id': f'x{i}', 'kind': 'field', 'name': NS + name, 'path': PATH, 'group': {'index': g, 'count': 2, 'at': PERSON_AT[g - 1]}, 'text': text,
                                   'anchor': xml_text(text, name)}
-    return {'schema': 'prepare-route-output/1', 'file_id': XML_ID, 'sha256': sha(XML), 'status': 'OK', 'error': None, 'seconds': 0.1,
+    return {'schema': 'prepare-route-output/1', 'file_id': XML_ID, 'sha256': sha(XML), 'status': 'OK', 'error': None, 'seconds': 0.1, 'not_read': {'attribute_values': 2},
             'route': {'name': 'fixture', 'tool': 'hand', 'version': '1', 'settings': {}, 'adapter': 'test', 'linker': None},
-            'units': [{'id': 'x0', 'kind': 'field', 'name': NS + 'securitiesClassTitle', 'path': PATH[:2], 'group': {'index': 1, 'count': 1}, 'text': 'Units',
+            'units': [{'id': 'x0', 'kind': 'field', 'name': NS + 'securitiesClassTitle', 'path': PATH[:2], 'group': {'index': 1, 'count': 1, 'at': XML.index(b'<ns1:edgarSubmission')}, 'text': 'Units',
                        'anchor': xml_text('Units', 'securitiesClassTitle')},
                       f(1, 'reportingPersonName', 'Alpha', 1), f(2, 'sharedDispositivePower', '10', 1), f(3, 'reportingPersonName', 'Beta', 2),
                       f(4, 'sharedDispositivePower', '0', 2)]}
@@ -1368,7 +1371,7 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(self.check(res, 'pkt/S01', 'reference_linked')['verdict'], 'fail')
 
     def test_xml_value_moved_to_another_reporting_person_fails(self):
-        res = self.run_grader(lambda r: r[XML_ID]['units'][4].update(group={'index': 1, 'count': 2}))
+        res = self.run_grader(lambda r: r[XML_ID]['units'][4].update(group={'index': 1, 'count': 2, 'at': PERSON_AT[0]}))
         self.assertEqual(self.check(res, 'pkt/X01', 'row_context')['reason'], 'group')
 
     def test_xml_element_name_changed_fails_row_label_and_path(self):
@@ -1408,6 +1411,97 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader()
         self.assertEqual(self.verdict(res, 'pkt/X01'), 'INPUT_MISMATCH')
         self.assertEqual(self.verdict(res, 'pkt/T01'), 'PASS')
+
+    # ---- Codex round 11: the strike check over the field's own run, every matched carrier, the value's own cells; XML instances; word error rate
+    def synthetic_cell(self, raw, units, fields, support, tb=None, value=b'1234'):
+        """One synthetic cell target over `raw`: the check rows of a grader run as {check: (verdict, reason)}."""
+        span = lambda text, after=0: {'byte_start': raw.index(text, after), 'byte_end_exclusive': raw.index(text, after) + len(text)}
+        tb = tb or {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': raw.index(b'</table>') + 8},
+                    'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': value.decode(), 'anchor': span(value)}]}
+        t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(value), 'table_anchor': tb['anchor'],
+             'alternatives': {}, 'excluded': set(), 'support': support, 'fields': {'printed_value': value.decode(), 'display_value': value.decode(), **fields}}
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
+        return {r['check']: (r['verdict'], r.get('reason')) for r in g.rows}
+
+    def test_the_value_cells_own_cancellation_is_checked_both_ways(self):
+        # Codex R11-2: value() sits outside field(); an invented cancellation of the number passed, and so did a lost one
+        raw = b'<table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        def value_row(printed, struck):
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234'), 'struck': struck}]}
+            return self.synthetic_cell(raw, [], {'printed_value': printed, 'display_value': printed}, {}, tb)['value']
+        self.assertEqual(value_row('1234', []), ('pass', None))
+        self.assertEqual(value_row('1234', ['1234']), ('fail', 'struck'))  # invented
+        self.assertEqual(value_row('~~1234~~', ['1234']), ('pass', None))  # faithful
+        self.assertEqual(value_row('~~1234~~', []), ('fail', 'struck'))  # lost
+
+    def test_a_strike_crossing_the_fields_boundary_is_seen_at_the_occurrence_the_key_names(self):
+        # Codex R11-3: "Ownership remains. Ownership ends." — the heading is the first "Ownership"; a longer strike crossing it was dropped by the text filter
+        raw = b'<p>Ownership remains. Ownership ends.</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        span = lambda text, after=0: {'byte_start': raw.index(text, after), 'byte_end_exclusive': raw.index(text, after) + len(text)}
+        first, second = span(b'Ownership'), span(b'Ownership', 10)
+        def path_row(anchors, struck, raw=raw):
+            unit = {'id': 'h', 'kind': 'text', 'text': 'Ownership remains. Ownership ends.', 'anchor': {'byte_start': raw.index(b'Ownership'), 'byte_end_exclusive': raw.index(b'</p>')}, 'struck': struck}
+            return self.synthetic_cell(raw, [unit], {'section_path': ['Ownership']}, {'section_path': {'anchors': anchors}})['section_path']
+        self.assertEqual(path_row([first], []), ('pass', None))
+        self.assertEqual(path_row([first], ['Ownership remains.']), ('fail', 'struck'))  # crosses the heading's boundary: the heading's own word is cancelled
+        self.assertEqual(path_row([first], ['Ownership']), ('fail', 'struck'))  # the source strikes neither occurrence: the claim lands on the heading
+        self.assertEqual(path_row([second], ['Ownership remains.']), ('pass', None))  # the heading is the second occurrence; the strike lies before it
+        self.assertEqual(path_row([first, second], ['Ownership remains.']), ('unresolved', 'struck'))  # the key's search pieces name both: the occurrence stays open
+        struck_second = raw.replace(b'Ownership ends', b'<s>Ownership</s> ends')  # the source strikes the second occurrence: a claim of "Ownership" is that one
+        self.assertEqual(path_row([span(b'Ownership')], ['Ownership'], struck_second), ('pass', None))
+
+    def test_qualifier_period_note_and_range_evidence_carry_their_own_strikes_to_the_check(self):
+        # Codex R11-4: every carrier a match used reaches the strike check — the middle piece of a joined phrase, a period part in a paragraph, a note outside the table, a range partner
+        table = b'<table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        span = lambda raw, text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        for source_struck, key, struck, want in ((True, 'These ~~old~~ terms', ['old'], 'pass'), (True, 'These ~~old~~ terms', [], 'fail'), (False, 'These old terms', ['old'], 'fail'), (False, 'These old terms', [], 'pass')):
+            raw = (b'<p><span>These</span> <s>old</s> <span>terms</span></p>' if source_struck else b'<p><span>These</span> <span>old</span> <span>terms</span></p>') + table
+            units = [{'id': str(i), 'kind': 'text', 'text': w, 'anchor': span(raw, w.encode()), 'struck': struck if w == 'old' else []} for i, w in enumerate(['These', 'old', 'terms'])]
+            rows = self.synthetic_cell(raw, units, {'segment_or_basis': [key]}, {'segment_or_basis': {'anchors': [{'byte_start': 0, 'byte_end_exclusive': raw.index(b'<table>')}]}})
+            self.assertEqual(rows['segment_or_basis'], (want, None if want == 'pass' else 'struck'), (source_struck, key, struck))
+        for source_struck, key, struck, want in ((True, 'Period ended ~~2025~~', ['2025'], 'pass'), (True, 'Period ended ~~2025~~', [], 'fail'), (False, 'Period ended 2025', ['2025'], 'fail')):
+            text = b'Period ended <s>2025</s>' if source_struck else b'Period ended 2025'; raw = b'<p>' + text + b'</p>' + table
+            unit = {'id': 'p', 'kind': 'text', 'text': 'Period ended 2025', 'anchor': span(raw, text), 'struck': struck}
+            rows = self.synthetic_cell(raw, [unit], {'periods': [{'parts': [{'text': key, 'anchor': span(raw, text)}], 'role': 'value'}]}, {})
+            self.assertEqual(rows['periods'], (want, None if want == 'pass' else 'struck'), (source_struck, key, struck))
+        for source_struck, key, struck, want in ((True, 'a These ~~old~~ terms apply.', ['old'], 'pass'), (True, 'a These ~~old~~ terms apply.', [], 'fail'), (False, 'a These old terms apply.', ['old'], 'fail')):
+            note = b'a These <s>old</s> terms apply.' if source_struck else b'a These old terms apply.'
+            raw = b'<table><tr><td>Revenue</td><td>1234<sup>a</sup></td></tr></table><p>' + note + b'</p>'
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': raw.index(b'</table>') + 8}, 'notes': ['n'],
+                  'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(raw, b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'markers': ['a'], 'anchor': span(raw, b'1234<sup>a</sup>')}]}
+            side = {'id': 'n', 'kind': 'footnote', 'marker': 'a', 'text': 'a These old terms apply.', 'anchor': span(raw, note), 'struck': struck}
+            rows = self.synthetic_cell(raw, [side], {'footnote_markers': [{'marker_text': 'a', 'anchor': span(raw, b'<sup>a</sup>'), 'note_text': key, 'note_anchor': span(raw, note)}]}, {}, tb)
+            self.assertEqual(rows['footnote_markers'], (want, None if want == 'pass' else 'struck'), (source_struck, key, struck))
+        raw = b'<table><tr><td>Revenue</td><td>10</td><td>to</td><td>20</td></tr></table>'
+        for struck, want in (([], ('pass', None)), (['20'], ('fail', 'struck'))):
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(raw, b'Revenue')}, {'r': 0, 'c': 1, 'text': '10', 'anchor': span(raw, b'10')},
+                  {'r': 0, 'c': 2, 'text': 'to', 'anchor': span(raw, b'to')}, {'r': 0, 'c': 3, 'text': '20', 'anchor': span(raw, b'20'), 'struck': struck}]}
+            rows = self.synthetic_cell(raw, [], {'range': {'partner': {'printed_value': '20', 'anchor': span(raw, b'20')}, 'evidence': [{'text': 'to', 'anchor': span(raw, b'to')}]}}, {}, tb, value=b'10')
+            self.assertEqual(rows['range'], want, struck)
+
+    def test_xml_context_comes_from_the_same_instance_not_from_a_namesake_elsewhere(self):
+        # Codex N2: two persons, each with holdings; the first holding of each had the same names-only path and "1 of 2", so the other person's "Common" rescued a wrong name
+        from benchmarks.prepare.grader.adapters import xml_fields as xf
+        raw = b'<r><person><holdings><holding><name>Common</name><qty>10</qty></holding><holding><name>Preferred</name><qty>20</qty></holding></holdings></person><person><holdings><holding><name>Common</name><qty>30</qty></holding></holdings></person></r>'
+        def ctx_row(mutate):
+            units = xf.units_of(raw); mutate(units); a = raw.index(b'10')
+            t = {'key_id': 'syn/X1', 'file_id': 'syn/a.xml', 'format': 'cell/xml', 'type': 'cell', 'split': 'development', 'anchor': {'byte_start': a, 'byte_end_exclusive': a + 2}, 'alternatives': {}, 'excluded': set(), 'support': {},
+                 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': 'qty', 'header_path': ['r', 'person', 'holdings', 'holding'], 'row_context': [{'header': 'position', 'text': '1 of 2'}, {'header': 'name', 'text': 'Common'}]}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': units}, raw, 'xml')); g.grade_cell()
+            return {r['check']: (r['verdict'], r.get('reason')) for r in g.rows}
+        rows = ctx_row(lambda u: None); self.assertEqual((rows['value'], rows['row_label'], rows['header_path'], rows['row_context']), (('pass', None), ('pass', None), ('pass', None), ('pass', None)))
+        self.assertEqual(ctx_row(lambda u: u[0].update(text='Wrong'))['row_context'], ('fail', 'group'))  # the other person's first holding is also "Common": not this instance's
+
+    def test_what_a_route_declares_unread_travels_with_the_file_facts(self):
+        # Codex N2: attribute values the XML route does not read are stated, not silent — the grader carries the route's own statement per file
+        res = self.run_grader()
+        self.assertEqual(res['files'][XML_ID]['not_read'], {'attribute_values': 2}); self.assertIsNone(res['files'][HTM_ID]['not_read'])
+
+    def test_wer_counts_insertions_substitutions_and_deletions_over_the_reference(self):
+        # Codex N3: the old figure was a similarity distance — three inserted words scored zero
+        self.assertEqual(grade.wer('revenue was flat elsewhere rose', 'revenue rose'), 1.5)
+        self.assertEqual((grade.wer('a b c', 'a b c'), grade.wer('a x c', 'a b c'), grade.wer('a c', 'a b c')), (0.0, 0.333, 0.333))
 
 
 if __name__ == '__main__':

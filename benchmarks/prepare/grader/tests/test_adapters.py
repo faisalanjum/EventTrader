@@ -133,8 +133,11 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         import xml.parsers.expat as expat
         raw = (b'<?xml version="1.0"?><sub xmlns="urn:x"><data><title>Common &amp; Preferred</title><persons><person><name>Alpha</name><shares>10</shares></person>'
                b'<person><name>Beta</name><shares>0</shares></person></persons></data></sub>')
-        units = xf.units_of(raw)
-        self.assertEqual([(u['name'], u['text'], u['group']) for u in units], [('{urn:x}title', 'Common & Preferred', {'index': 1, 'count': 1}), ('{urn:x}name', 'Alpha', {'index': 1, 'count': 2}), ('{urn:x}shares', '10', {'index': 1, 'count': 2}), ('{urn:x}name', 'Beta', {'index': 2, 'count': 2}), ('{urn:x}shares', '0', {'index': 2, 'count': 2})])
+        units = xf.units_of(raw); R, P1 = raw.index(b'<sub'), raw.index(b'<person>'); P2 = raw.index(b'<person>', P1 + 1)  # an instance is named by its start tag (Codex N2)
+        self.assertEqual([(u['name'], u['text'], u['group']) for u in units], [('{urn:x}title', 'Common & Preferred', {'index': 1, 'count': 1, 'at': R}), ('{urn:x}name', 'Alpha', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}shares', '10', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}name', 'Beta', {'index': 2, 'count': 2, 'at': P2}), ('{urn:x}shares', '0', {'index': 2, 'count': 2, 'at': P2})])
+        facts = {}; us = xf.units_of(b'<r><note>Ownership is <b>not</b> zero.</note><holding amount="10" unit="shares"/><q>1</q><q>2</q></r>', facts)
+        self.assertEqual([(u['name'], u['text'], u['siblings']) for u in us], [('note', 'Ownership is not zero.', {'index': 1, 'count': 1}), ('q', '1', {'index': 1, 'count': 2}), ('q', '2', {'index': 2, 'count': 2})])  # prose with an inline element is one field; repeated leaves report their own place
+        self.assertEqual(facts, {'attribute_values': 2})  # attribute values are not read, and the route says so
         self.assertEqual(units[3]['path'], ['{urn:x}sub', '{urn:x}data', '{urn:x}persons', '{urn:x}person'])
         a = units[3]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<name>Beta')  # from the start tag to the end of the text: the key's name and text anchors both fall inside
         a = units[0]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<title>Common &amp; Preferred')  # entities inside the text do not shift the span
