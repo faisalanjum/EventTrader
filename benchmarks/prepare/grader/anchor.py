@@ -190,6 +190,8 @@ class Visible:
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
+        self.pictures = []  # byte spans of the <img>/<svg> opening tags the reader sees: the grader's picture inventory, from the same visibility state as the text (Codex R15-4)
+        style_cache = {}
         if xml:  # XML: character data by the strict standard parser (CDATA literal, references decoded, attributes not text); no CSS, nothing hidden
             computed = not xml_chars(raw, chars, starts, ends); struck_chars.extend([0] * len(chars))
         for m in () if xml else _TOKEN.finditer(s):
@@ -201,7 +203,9 @@ class Visible:
                 attrs = {}
                 for am in _ATTR.finditer(t[len(name) + 2 if t.startswith('</') else len(name) + 1:]):  # the tag's attributes, first occurrence wins, entities decoded
                     attrs.setdefault(am.group(1).lower(), html.unescape(am.group(2) or am.group(3) or am.group(4) or ''))
-                decls = declarations(attrs.get('style', ''))
+                style = attrs.get('style', '')
+                if style not in style_cache: style_cache[style] = tuple(declarations(style))  # the literal declarations of one style string, parsed once; inheritance is still evaluated per element
+                decls = style_cache[style]
                 disp, v, op = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number)
                 if UNKNOWN in (disp, v, op): computed = True; disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
                 deco, strong = None, False  # the decoration in force: the last valid text-decoration / text-decoration-line declaration wins, !important beats a later plain one
@@ -240,7 +244,10 @@ class Visible:
                         # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
                         stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block, (stack[-1][4] if stack and not atomic else False) or struck, struck))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
-                if not t.startswith('</'): shown = not hidden and not gone  # an opening element shows when it is not hidden itself (a void element: when it is not hidden either)
+                if not t.startswith('</'):  # an opening element shows when nothing above it is gone and neither it nor an ancestor hides it; a void element was not pushed, so its own visibility is read here
+                    own = True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else bool(stack) and stack[-1][2]
+                    shown = (not gone and not (bool(stack) and stack[-1][1]) and not own) if name in VOID else not hidden
+                    if shown and name in ('img', 'svg'): self.pictures.append((start, pos))
                 if shown and block: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0)  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
                 continue
             st = 1 if stack and stack[-1][4] else 0

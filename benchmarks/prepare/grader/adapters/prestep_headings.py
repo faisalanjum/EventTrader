@@ -33,7 +33,7 @@ class _Blocks(HTMLParser):
         if tag in ('p', 'div') or tag in ('table', 'li', 'tr', 'td', 'th') or tag.startswith('h'):
             for frame in self.stack: frame['leaf'] = False  # a block inside: the outer one is not a line
         in_table = any(f['tag'] in ('table', 'td', 'th') for f in self.stack)  # table cells keep their own rules: never wrapped
-        self.stack.append({'tag': tag, 'start': self._pos(), 'clue': clue, 'leaf': not in_table})
+        self.stack.append({'tag': tag, 'open_end': self._pos() + len(self.get_starttag_text()), 'clue': clue, 'leaf': not in_table})  # the tag's extent from the parser itself: a quoted '>' inside an attribute ends nothing (Codex R15-6)
 
     def handle_startendtag(self, tag, attrs):
         pass
@@ -42,9 +42,7 @@ class _Blocks(HTMLParser):
         for i in range(len(self.stack) - 1, -1, -1):
             if self.stack[i]['tag'] == tag:
                 frame = self.stack.pop(i); end = self._pos()
-                if tag in WRAP and frame['leaf']:
-                    open_end = self.text.index('>', frame['start']) + 1
-                    self.leaves.append((open_end, end, frame['clue']))
+                if tag in WRAP and frame['leaf']: self.leaves.append((frame['open_end'], end, frame['clue']))
                 del self.stack[i:]
                 break
 

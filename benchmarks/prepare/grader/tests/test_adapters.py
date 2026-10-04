@@ -357,6 +357,44 @@ class DoclingPdfAdapterTests(unittest.TestCase):
             sources[0]['sha256'] = 'h2'
             r = run(dh, [], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('other bytes', r[1])  # the original changed under the cache
 
+    def test_an_edgartools_parse_is_reused_only_whole_and_keeps_its_producing_version(self):
+        # Codex R15-5: the EdgarTools adapter read its saved dump with no record — stamped with the installed version, kept after the source changed
+        import importlib.metadata, io, sys, tempfile
+        from contextlib import redirect_stdout
+        from types import ModuleType
+        from unittest.mock import patch
+        class ParagraphNode:
+            children = []
+            def __init__(self, t): self._t = t
+            def text(self): return self._t
+            def walk(self): return []
+        class DocumentNode:
+            def __init__(self, *kids): self.children = list(kids)
+        plan = []
+        def parse_html(text):
+            r = plan.pop(0)
+            if isinstance(r, Exception): raise r
+            return type('Parsed', (), {'root': DocumentNode(ParagraphNode(r))})()
+        docs = ModuleType('edgar.documents'); docs.parse_html = parse_html
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td); src = p / 's.htm'; src.write_bytes(b'<p>Revenue 10.</p>'); sources = [{'file_id': 's.htm', 'path': src, 'sha256': 'h1', 'split': 'development'}]
+            def run(texts, flags=(), version='A'):
+                plan[:] = list(texts)
+                with patch.dict(sys.modules, {'edgar': ModuleType('edgar'), 'edgar.documents': docs}), patch.object(eh.grade, 'load_sources', return_value=sources), patch.object(importlib.metadata, 'version', return_value=version), redirect_stdout(io.StringIO()):
+                    eh.main(['--key', td, '--split', 'development', '--out', str(p / 'run'), *flags])
+                r = json.loads((p / 'run' / 'route' / 's.htm.json').read_text())
+                return r['status'], r['error'] or '', [u['text'] for u in r['units'] if u.get('text')][:1], r['route']['version']
+            self.assertEqual(run(['Revenue 10.']), ('OK', '', ['Revenue 10.'], 'edgartools A')); self.assertTrue((p / 'run' / 'raw' / 's.htm.meta.json').exists())
+            self.assertEqual(run([], ['--reuse-raw'], version='B'), ('OK', '', ['Revenue 10.'], 'edgartools A'))  # reused whole; the producing version, not the installed one
+            self.assertEqual(run([RuntimeError('parser crashed')])[0], 'FAILED')  # the old record went before the overwrite; the crash left none
+            r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('cache refused: no record', r[1])
+            run(['Revenue 10.']); raw = p / 'run' / 'raw' / 's.htm.edgartools.json'; raw.write_bytes(raw.read_bytes() + b' ')
+            r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('is not the file the cached run saved', r[1])  # an output changed under its record
+            run(['Revenue 10.']); sources[0]['sha256'] = 'h2'
+            r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('other bytes', r[1])  # the original changed under the cache
+            sources[0]['sha256'] = 'h1'; run(['Revenue 10.']); meta = p / 'run' / 'raw' / 's.htm.meta.json'; m = json.loads(meta.read_text()); m.pop('status'); meta.write_text(json.dumps(m))
+            r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('did not succeed', r[1])  # a record without an outcome vouches for nothing (Codex's control)
+
 from benchmarks.prepare.grader.adapters import prestep_headings as ph
 
 HTML_STYLED = (b'<html><body><div style="font-weight:bold">Item 2. Management\xe2\x80\x99s Discussion</div>'
@@ -381,6 +419,11 @@ class HeadingPrestepTests(unittest.TestCase):
             self.assertIn(kept, out)  # a sentence, a styled opener of a sentence, and table cells are left alone
         from benchmarks.prepare.grader.anchor import Visible
         self.assertEqual(Visible(out).text.replace(' ', ''), Visible(HTML_STYLED).text.replace(' ', ''))  # visible characters untouched
+
+    def test_a_quoted_greater_than_inside_the_start_tag_does_not_cut_it(self):
+        # Codex R15-6: the end of the opening tag was the first '>' after it, so <h2> landed inside a title attribute
+        for raw in (b'<div title="x > y" style="font-weight:bold">Annual results</div>', b"<div title='x > y' style='font-weight:bold'>Annual results</div>", b'<p style="font-weight:bold" title="a &gt; b">Annual results</p>'):
+            self.assertEqual(ph.mark_headings(raw), raw.replace(b'>Annual results<', b'><h2>Annual results</h2><'), raw)
 
 
 from benchmarks.prepare.grader.adapters import screen_grid as sg

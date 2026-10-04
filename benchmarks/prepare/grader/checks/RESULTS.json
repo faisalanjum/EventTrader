@@ -270,11 +270,13 @@
    "expected_gate_fail": null,
    "verdict": "FAIL",
    "failed_checks": [
+    "unit_printed",
     "value"
    ],
    "structure_misses": [],
    "reasons": {
-    "value": "spacing"
+    "value": "spacing",
+    "unit_printed": "text"
    },
    "ok": true
   },

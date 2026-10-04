@@ -10,6 +10,7 @@ import time
 from pathlib import Path
 
 from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader.adapters import cache
 
 NAME = 'edgartools-html'  # the tool's heading nodes nested inside paragraphs are kept as headings
 KIND = {'HeadingNode': 'heading', 'ParagraphNode': 'text', 'TextNode': 'text', 'ListItemNode': 'list_item', 'ImageNode': 'image'}
@@ -89,10 +90,10 @@ def to_units(tree):
     return units
 
 
-def route_for(tree, raw, file_id, sha256, seconds, version):
+def route_for(tree, raw, file_id, sha256, seconds, version, settings=None):
     linked = anchor.link(raw, to_units(tree))
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
-            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': {'parse_html': 'defaults'}, 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
+            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': settings or {'parse_html': 'defaults'}, 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
                       'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': linked['units'], 'uncovered': linked['uncovered']}
 
 
@@ -113,26 +114,29 @@ def main(argv=None):
     files = {}
     for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
         if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
-    facts = {}
+    facts, settings = {}, {'parse_html': 'defaults'}
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if path.suffix.lower() not in ('.htm', '.html'):
             (out / 'route' / (fid + '.json')).write_text(json.dumps(unsupported(fid, sha, version))); facts[fid] = {'status': 'UNSUPPORTED'}; continue
-        raw = path.read_bytes(); t0 = time.time(); rawjson = out / 'raw' / (fid + '.edgartools.json')
+        raw = path.read_bytes(); t0 = time.time(); rawjson = out / 'raw' / (fid + '.edgartools.json'); metajson = out / 'raw' / (fid + '.meta.json'); ver = version
         try:
-            if a.reuse_raw and rawjson.exists():
-                tree, dt = json.loads(rawjson.read_text()), (json.loads((out / 'facts.json').read_text())['files'].get(fid) or {}).get('tool_seconds', 0)
+            if a.reuse_raw and rawjson.exists():  # a saved parse is reused only whole: its record names the source bytes, settings, producing version and output (adapters/cache.py; Codex R13 C1, R15-5)
+                meta = cache.reuse(metajson, sha, settings)
+                if meta.get('status') != 'OK': raise RuntimeError('cache refused: the cached run did not succeed')
+                tree, dt, ver = json.loads(rawjson.read_text()), meta.get('tool_seconds', 0), meta['version']
             else:
+                cache.begin(metajson)  # from here the old record vouches for nothing: a crash below leaves no record
                 try: text = raw.decode('utf-8')
                 except UnicodeDecodeError: text = raw.decode('cp1252', 'replace')
                 tree = dump(parse_html(text).root); dt = time.time() - t0
+                rawjson.write_text(json.dumps(tree, ensure_ascii=False)); cache.save(metajson, [rawjson], sha256=sha, version=version, settings=settings, status='OK', tool_seconds=round(dt, 2))
         except Exception as e:  # a tool crash is a result, never a stop
             facts[fid] = {'status': 'FAILED', 'error': repr(e)[:300], 'seconds': round(time.time() - t0, 2)}
             (out / 'route' / (fid + '.json')).write_text(json.dumps(unsupported(fid, sha, version, 'FAILED', repr(e)[:300]))); continue
-        if not (a.reuse_raw and rawjson.exists()): rawjson.write_text(json.dumps(tree, ensure_ascii=False))
-        t1 = time.time(); route = route_for(tree, raw, fid, sha, round(dt, 2), version)
+        t1 = time.time(); route = route_for(tree, raw, fid, sha, round(dt, 2), ver, settings)
         flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
-        facts[fid] = {'status': 'OK', 'tool_seconds': round(dt, 2), 'adapter_seconds': round(time.time() - t1, 2), 'items': len(flat),
+        facts[fid] = {'status': 'OK', 'version': ver, 'tool_seconds': round(dt, 2), 'adapter_seconds': round(time.time() - t1, 2), 'items': len(flat),
                       'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
                       'uncovered_chars': sum(len(anchor.squash(s['text'])) for s in route['uncovered'])}
         (out / 'route' / (fid + '.json')).write_text(json.dumps(route, ensure_ascii=False))

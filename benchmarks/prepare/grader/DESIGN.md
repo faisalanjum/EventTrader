@@ -914,3 +914,83 @@ dropped footer `measured_pass` with `excluded_chars` 1, every critical case flag
 2, regrade of the same 13 route folders): **0 verdict flips, every gate number identical** to run 34 (the only summary difference: the two zero-valued
 verdict keys the declarations added after run 34); round-7 grader: 0 passes lost. Package-3 preview on the same saved outputs: 0 verdict flips; the
 three page-number files now report `excluded_chars` 1, 2 and 2 and their required loss drops by exactly that.
+
+## 39. Round 15 (2026-10-04 07:03, Codex's `ROUND15_CODEX.md` on 81f62ce1a; package 3 still approved, still staged) — six defects, all reproduced, all closed by class
+
+**Method this round (owner, 07:14: an independent audit before his findings, at least three line-by-line passes with distinct purposes, every behaviour
+tested, root causes not symptoms, evidence or a stated gap for every conclusion).** From his six one-line headlines alone, before his file was opened,
+the whole grader, every adapter and the scanner were read again and probed (`grader_review_codex_20261003/R15_SELF_AUDIT.md`, hashed 07:26,
+`codex_probes_live/r15_self_audit_probes.py`): all six mechanisms found; three sibling instances he names were not (`R15_LEDGER.md` S9). Then his
+two probe scripts re-run live, a ledger of every claim and demand, each defect fixed at its class with every sibling found by grep, every new control
+shown red on 81f62ce1a (a throwaway worktree) and green after, a mutation check (each changed condition inverted on a copy of the package: 34 of 34
+make the suite fail), the standard-library tracer over the suite and over the 48 originals (every changed line executed; the eighteen unexecuted lines
+of `grade.py` are untouched branches, listed in the response), the saved outputs regraded on package 2 and previewed on package 3 with every change
+explained down to the field row, and five lenses (trust, wrong-but-passes, right-but-fails, field flow, agreement) over every function on the path until
+a cycle found nothing: the second cycle found three refinements of my own, the third none.
+
+**What Codex found (all reproduced).** R15-1 `contains` returned on a plain substring, so `Revenue 10` was found in `Revenue 100`, `10.5` and
+`10,000`, `not own` in `cannot own`: a mapped continuation and a period year passed with a changed number. R15-2 two blocks of one paragraph mapped
+into one unit: the earlier failed `order` because equal unit indexes read as an inversion, and a reversed mapping gave the same verdicts. R15-3
+position validation covered byte spans only, and only some consumers: an XML unit at `[-1, beyond the end)` was dishonest yet still carried
+`unit_printed`; a context field at `{}` still proved the person; `{}` and an end-only anchor passed the gate as clean; a region holding a string
+crashed the run; a huge or negative box located the key's box. R15-4 `picture_at` searched the raw bytes, so an `<img` inside a comment, a script,
+an attribute or a hidden subtree made a picture, and invented text there escaped certification; the picture count was `count(b'<img')`. R15-5 the
+EdgarTools adapter reused its saved dump with no record: stamped with the installed version, kept after the source changed. R15-6 the heading
+pre-step cut the start tag at the first `>`, inside a quoted attribute.
+
+**Whole words and numbers (`contains`, `mark_in`, and every caller).** A phrase is printed inside a text only when a stretch of the text spells it by
+the boundary rule and begins and ends where a word or number of the text does: positions strictly inside a `_TOKEN_WORDS` token are no cut points,
+so `note 1` is not in `note 10`, `250` not in `1,250`, `not own` not in `cannot own`, while `(Revenue 10).`, `3.7 %` and `$1,250` keep their
+matches. The same rule now reads the reference phrase (`references`, both readings), the unit printed inside the value's own cells (`unit_printed`)
+and the XML unit text (`grade_xml`). A footnote mark may be glued to a word (`Revenue1`, `2015(1)`), so for marks only numbers cut
+(`contains(…, marker=True)`: `1` is not printed in `2015`, `1,000` or `1.5`), and a comma group made only of the record's own marks (`1,2`) is
+marks, not a number (both rules Codex's, taken from his worktree; my first rule read only the neighbouring characters and let `1,000` through).
+
+**Order inside one unit (`inner_position`, the verdict loop).** Between units the route's order decides as before. When one unit carries two blocks,
+the route's own data orders them: the interval of characters its mapping puts at each block's place, or the interval of its cells in the table's grid
+order (two cells at one grid position keep the route's listing order); the pairs to compare come from `source_before`, so two boxes side by side on
+one row are compared too; a contradiction with the source fails both and outranks any other reading; no readable order — whole texts, no mapping — is
+`unresolved` (`internal_order`), which outranks `APPROXIMATE`. The key never orders the blocks. (The interval form, the `source_before` pairing and the
+failure precedence are Codex's, taken from his worktree; my first version used the first offset only and left a block whose neighbour's text had
+failed without an order check — positions are the route's claims whatever the text says, so his rule is the right one.)
+
+**A position that cannot be true is no position (`RouteFile.possible`, `cells_in`, `placed`, the gate).** Every span of every unit and cell is tested
+at load: a byte span is integers with `0 <= start < end <= length`; a page box is four finite numbers with left < right and top < bottom from 0, a
+positive integer page that the route's declared sizes name when it declares any, inside that size; a declared size that is no size declares nothing;
+a span of neither kind, or failing its own kind's test, and any anchor value that is no list of places at all (a string, a number) is impossible. Such an
+item loses its anchor (`_claimed` keeps the claim for the gate): it locates nothing, overlaps nothing, no consumer can crash on a malformed box, and only
+placed cells (`cells_in`) and placed units (`placed`) are evidence in any lookup by text — row context, header rows, period columns, the XML instance's
+fields and `unit_printed` lookups, text fallbacks. The gate counts text at an impossible position `dishonest` (whatever flag the route gives it: `gap`
+exempts no text; a table's own impossible envelope too), a textless item there `unplaced` (a picture the linker gave an empty gap: no claim, no
+coverage, reported apart), and among them the page boxes also under `bounds_inconsistent` — the key kept with that meaning, visible as such (Codex's
+wording); its one real case is a zero-width box holding one letter in `udr…ex99d2.pdf`, dishonest now.
+
+**Pictures the reader sees (`Visible.pictures`, `picture_at`, the count).** The scanner records the byte span of every `img`/`svg` opening tag it
+shows: tokens inside comments, scripts, styles, templates or attribute values never reach it; a tag under `display:none`, `opacity:0`, `hidden` or
+`ix:hidden` is not shown; a void element's own `visibility` is read (`visibility:hidden` hides it, `visibility:visible` shows it under a hidden parent).
+`picture_at` asks whether such a tag starts inside the anchor and no visible text lies there — only where visibility is certain; under a stylesheet rule
+nothing is shown for certain and `pictures` is `None` (Codex's condition). The scanner now parses each distinct style string once (his cache).
+
+**EdgarTools cache (`adapters/edgartools_html.py`).** The same record protocol as the Docling adapters: `begin` before parsing, `save` after the dump
+with source bytes, producing version, settings, output hash and outcome, `reuse` on `--reuse-raw` refusing other bytes, other settings, a changed
+output, no record or a record whose outcome is not OK; the route carries the producing version. Existing conversions were not re-run (Codex: no relabelling).
+
+**Compared with Codex's own fixes (his worktree `prepare_work/tool_selection_20261004/code`, snapshot 08:31, never touched).** His grader and this one
+over the same 13 saved routes: identical verdicts and identical field rows; the only gate difference is the textless pictures in empty linker gaps (his
+`dishonest`, here `unplaced`). His thirteen grader-scope controls pass on this code. Taken from his: the marker rule, the comma groups, the order
+intervals and pairing, string anchors as false claims, finite coordinates, the table envelope, `bounds_inconsistent` as impossible boxes, pictures under
+certain visibility, the cache outcome check, the style cache. Kept here: the anchor set to None at load (his keep-and-filter variant leaves a malformed
+box reachable by `source_before` in `lead_in`), the undeclared-page rule, `unplaced`. Not taken (his wider scope, adapters only): the linker's picture
+placement by source tag, the XML element tree and external-entity refusal, the screen-grid tokenizer.
+
+**Heading pre-step (`adapters/prestep_headings.py`).** The start tag's extent comes from the parser (`get_starttag_text()`), recorded when the tag
+opens; the first `>` is never searched.
+
+**Verification.** 222 tests (eight new, four extended; ten red on 81f62ce1a, green after; one adapted helper green on both). His `deep_probes.py` and
+`browser_and_siblings.py` live on the fixed code: every case as he requires (containment 9/9, anchors 7/7, pictures, XML bad anchor `FAIL`, merged
+`PASS`/`PASS`, reversed `FAIL`/`FAIL`, EdgarTools reuse refused); his thirteen grader-scope controls from his own worktree green here; his r14
+boundary cases byte-identical to the round-14 output; his Docling cache follow-ups unchanged; 48/48 originals. Run 34c (package 2, regrade of the
+same 13 route folders): **0 verdict flips, 0 field-row changes**; one detail changed (a failed block's word error rate, its carrying table no longer
+counting unplaced cells); gates: `unplaced` 1–29 in seven HTML files of the Docling routes (textless pictures in empty gaps, formerly skipped), the
+PDF route's one zero-width box dishonest and its order breaks 434 → 433; round-7 grader: 0 passes lost. Package-3 preview on the same saved
+outputs: 0 verdict flips, 0 field-row changes, the same gate changes. Mutation checks 43/43; tracer: every changed line executed by the suite.

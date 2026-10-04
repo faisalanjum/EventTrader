@@ -246,6 +246,13 @@ class GraderFixture(unittest.TestCase):
         want = elem(id_)
         return next(c for c in self.cells(route, unit) if c['anchor'] == want)
 
+    def block_row(self, unit, want='Start of three. More words.', region=(0, 0, 100, 20), approximate=False):
+        """One structure target on page 3 of a two-page PDF route, graded against one route unit: (verdict, reason, detail) of `printed_text`."""
+        t = {'key_id': 'syn/B1', 'file_id': 'syn/f.pdf', 'format': 'structure/pdf', 'type': 'structure', 'split': 'development', 'anchor': {'page': 3, 'region': list(region)},
+             'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_text': want, 'kind': 'image' if approximate else 'paragraph'}, **({'approximate': True} if approximate else {})}
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [unit], 'pages': {2: [612, 792], 3: [612, 792]}}, None, 'pdf')); g.grade_structure()
+        r = next(r for r in g.rows if r['check'] == 'printed_text'); return r['verdict'], r.get('reason'), r.get('detail')
+
 
 class CorrectOutputTests(GraderFixture):
     def test_every_target_passes_and_every_gate_holds(self):
@@ -1404,9 +1411,12 @@ class PlantedFaultTests(GraderFixture):
         def spoof(r): r[PDF_ID]['pages']['2'] = [999999, 999999]; r[PDF_ID]['units'][0]['anchor']['region'] = [1, 1, 999998, 999998]
         res = self.run_grader(spoof)
         self.assertIn(PDF_ID, res['gates']['honest_anchors']['not_measured']); self.assertFalse(res['gates']['honest_anchors']['pass'])
-        self.assertEqual(res['gates']['honest_anchors']['bounds_inconsistent'], {})
-        res = self.run_grader(lambda r: r[PDF_ID]['units'][0]['anchor'].update(region=[-100, -100, 99999, 99999]))
-        self.assertEqual(res['gates']['honest_anchors']['bounds_inconsistent'], {PDF_ID: 1})  # self-consistency is reported, not certified
+        self.assertEqual((res['gates']['honest_anchors']['dishonest'], res['gates']['honest_anchors']['bounds_inconsistent']), ({}, {}))  # consistent with the route's own sizes: uncertified, not dishonest
+        # Codex R15-3: a box beyond the route's own page, or with no area, is a position that cannot be true — it locates nothing, supplies nothing (the title it carried is now missing), counts dishonest and stays visible as an impossible box
+        for place in ({'region': [-100, -100, 99999, 99999]}, {'region': [100, 50, 100, 70]}, {'region': [100, 50, 500, 793]}, {'page': 9}):  # negative, no area, beyond the page, a page the route never declared
+            res = self.run_grader(lambda r: r[PDF_ID]['units'][0]['anchor'].update(place))
+            self.assertEqual((res['gates']['honest_anchors']['dishonest'], res['gates']['honest_anchors']['bounds_inconsistent']), ({PDF_ID: 1}, {PDF_ID: 1}), place)
+            self.assertEqual((self.check(res, 'pkt/P01', 'table_title')['verdict'], self.check(res, 'pkt/P01', 'table_title')['reason']), ('fail', 'missing'), place)
 
     def test_frozen_inputs_are_verified_before_grading(self):
         names = ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json')
@@ -1598,8 +1608,11 @@ class PlantedFaultTests(GraderFixture):
         from benchmarks.prepare.grader.adapters import xml_fields as xf
         raw = b'<r><title>Common</title><holding><qty>10</qty><unit>shares</unit><comment>No shares were sold</comment></holding><holding><qty>20</qty><unit>shares</unit></holding><fees><description>shares</description></fees></r>'
         at = lambda b: {'byte_start': raw.index(b), 'byte_end_exclusive': raw.index(b) + len(b)}
-        def unit_row(unit, declared=None, drop=False):
+        def unit_row(unit, declared=None, drop=False, corrupt=False):
             units = [u for u in xf.units_of(raw) if not (drop and u['name'] == 'unit' and u['group']['index'] == 1)]; a = raw.index(b'10')
+            if corrupt:  # the first holding's fields that print the word (its unit, its comment) at no true position (Codex R15-3)
+                for u in units:
+                    if u['group']['index'] == 1 and u['name'] in ('unit', 'comment'): u['anchor'] = {}
             t = {'key_id': 'syn/X1', 'file_id': 'syn/a.xml', 'format': 'cell/xml', 'type': 'cell', 'split': 'development', 'anchor': {'byte_start': a, 'byte_end_exclusive': a + 2}, 'alternatives': {}, 'excluded': set(),
                  'support': {'unit_printed': {'anchors': [declared]}} if declared else {}, 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': 'qty', 'unit_printed': unit}}
             grader = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': units}, raw, 'xml')); grader.grade_cell()
@@ -1607,8 +1620,10 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(unit_row('shares', at(b'<unit>shares</unit>')), ('pass', None))  # the first holding's own unit, where the key says
         self.assertEqual(unit_row('shares', at(b'<unit>shares</unit>'), drop=True), ('fail', 'missing'))  # removed: the second holding's, the fee description's and the comment's "shares" do not stand in
         self.assertEqual(unit_row('units', at(b'<unit>shares</unit>')), ('fail', 'text'))  # the declared place holds another word
+        self.assertEqual(unit_row('share', at(b'<unit>shares</unit>')), ('fail', 'text'))  # Codex R15-1 class: a unit is carried as a whole word, never as the start of a longer one
         self.assertEqual(unit_row('Common', at(b'Common')), ('pass', None))  # the title's place declared: the document's shared context
         self.assertEqual(unit_row('shares'), ('unresolved', 'support'))  # no declared place: a word of this holding proves no association with the value
+        self.assertEqual(unit_row('shares', corrupt=True), ('fail', 'missing'))  # the holding's own unit field has no true position: it proves nothing, not even nearness
         self.assertEqual(unit_row('Common'), ('fail', 'missing'))  # no declared place and not in this holding
 
     def test_a_strike_over_a_marked_label_is_judged_on_the_labels_own_characters(self):
@@ -1626,11 +1641,7 @@ class PlantedFaultTests(GraderFixture):
 
     def test_a_paragraph_read_whole_across_a_page_break_carries_the_block_on_its_page(self):
         # owner decision (e), 2026-10-04: a genuinely continuous paragraph is accepted when the target text is preserved in order and mapped to the correct source page
-        def block_row(unit, want='Start of three. More words.', region=(0, 0, 100, 20), approximate=False):
-            t = {'key_id': 'syn/B1', 'file_id': 'syn/f.pdf', 'format': 'structure/pdf', 'type': 'structure', 'split': 'development', 'anchor': {'page': 3, 'region': list(region)},
-                 'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_text': want, 'kind': 'image' if approximate else 'paragraph'}, **({'approximate': True} if approximate else {})}
-            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [unit], 'pages': {2: [612, 792], 3: [612, 792]}}, None, 'pdf')); g.grade_structure()
-            r = next(r for r in g.rows if r['check'] == 'printed_text'); return r['verdict'], r.get('reason'), r.get('detail')
+        block_row = self.block_row
         across = {'id': 'p', 'kind': 'text', 'text': 'End of two. Start of three. More words.', 'anchor': [{'page': 2, 'region': [0, 700, 100, 792], 'charspan': [0, 11]}, {'page': 3, 'region': [0, 0, 100, 20], 'charspan': [12, 39]}]}
         self.assertEqual(block_row(across), ('pass', None, {'continued': True}))  # the block is the part of the paragraph the route maps to page 3
         self.assertEqual(block_row(dict(across, text='End of two. More words. Start of three.'))[:2], ('fail', 'text'))  # not in order
@@ -1655,6 +1666,137 @@ class PlantedFaultTests(GraderFixture):
         # Codex N3: the old figure was a similarity distance — three inserted words scored zero
         self.assertEqual(grade.wer('revenue was flat elsewhere rose', 'revenue rose'), 1.5)
         self.assertEqual((grade.wer('a b c', 'a b c'), grade.wer('a x c', 'a b c'), grade.wer('a c', 'a b c')), (0.0, 0.333, 0.333))
+
+    def test_a_phrase_is_contained_only_as_whole_words_and_numbers(self):
+        # Codex R15-1: 'Revenue 10' was found inside 'Revenue 100', '10.5' and '10,000', 'not own' inside 'cannot own' — a changed number passed a period, a continuation, a reference
+        for text, want, expect in (('Revenue 100', 'Revenue 10', False), ('Revenue 10.5', 'Revenue 10', False), ('Revenue 10,000', 'Revenue 10', False), ('cannot own', 'not own', False),
+                                   ('see note 10', 'note 1', False), ('1,250', '250', False), ('years ended', 'year', False), ('Revenue -10', 'Revenue 10', False),
+                                   ('First (Revenue 10).', 'Revenue 10', True), ('3.7 %', '3.7%', True), ('$1,250', '$', True), ('2024 2025', '2024', True), ('period-ended', 'ended', True), ('x', '', True)):
+            self.assertEqual(grade.contains(text, want), expect, (text, want))
+        res = self.run_grader(lambda r: self.cell(r, 'h24').update(text='December 28, 20245'))
+        self.assertEqual(self.check(res, 'pkt/T01', 'periods')['verdict'], 'fail')  # the period '2024' is not printed inside '20245'
+        res = self.run_grader(lambda r: self.unit(r, 'u2').update(text='Free cash flow is not a GAAP measure. See the table belows.'))
+        self.assertEqual((self.check(res, 'pkt/S01', 'references')['verdict'], self.check(res, 'pkt/S01', 'references')['reason']), ('fail', 'phrase'))  # the reference phrase is not printed inside a longer word
+        across = {'id': 'p', 'kind': 'text', 'text': 'End of two. First Revenue 100', 'anchor': [{'page': 2, 'region': [0, 700, 100, 792], 'charspan': [0, 11]}, {'page': 3, 'region': [0, 0, 100, 20], 'charspan': [12, 29]}]}
+        self.assertEqual(self.block_row(across, want='Revenue 10')[:2], ('fail', 'text'))  # a mapped continuation holds 'Revenue 100', not the block 'Revenue 10'
+        self.assertEqual(self.block_row(dict(across, text='End of two. First Revenue 10.'), want='Revenue 10')[:2], ('pass', None))
+        def in_cell(r, text):  # the unit line printed inside the value cell, no unit cell of its own
+            self.cells(r).remove(self.cell(r, 'unit')); self.cell(r, 'v1').update(text=text)
+        self.assertEqual(self.check(self.run_grader(lambda r: in_cell(r, '769 (in millions)')), 'pkt/T01', 'unit_printed')['detail'], 'in_value_cell')
+        self.assertEqual(self.check(self.run_grader(lambda r: in_cell(r, '769 (in millionsx)')), 'pkt/T01', 'unit_printed')['verdict'], 'fail')
+        for text, mark, expect in (('Revenue 2015', '1', False), ('Revenue1', '1', True), ('Note(1)', '1', True), ('2015(1)', '(1)', True), ('Total(1) revenue', '(1)', True), ('Note1, next', '1', True), ('Note1.5', '1', False), ('Note1,000', '1', False), ('see 21', '1', False), ('100*', '*', True)):
+            self.assertEqual(grade.contains(text, mark, marker=True), expect, (text, mark))  # a footnote mark may touch a word; it never cuts a number (the number-token rule is Codex's)
+        raw = b'<p>December 2024</p><table><tr><td>Revenue 2015<sup>1</sup></td><td>1234</td></tr></table><p>1 a note</p>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        def label_rows(label, marks=('1',)):  # the marks dropped by the tool; their anchor names the label cell
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': raw.index(b'</table>') + 8}, 'cells': [{'r': 0, 'c': 0, 'text': label, 'anchor': span(b'Revenue 2015<sup>1</sup>')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}]}
+            return self.synthetic_cell(raw, [{'id': 'n', 'kind': 'footnote', 'text': '1 a note', 'anchor': span(b'1 a note')}], {'footnote_markers': [{'marker_text': m, 'anchor': span(b'<sup>1</sup>'), 'note_text': '1 a note', 'note_anchor': span(b'1 a note')} for m in marks]}, {}, tb)['footnote_markers']
+        self.assertEqual(label_rows('Revenue 2015'), ('fail', 'marker_missing')); self.assertEqual(label_rows('Revenue 2015 1'), ('pass', None))
+        self.assertEqual(label_rows('Revenue1,2', ('1', '2')), ('pass', None)); self.assertEqual(label_rows('Revenue1,20', ('1', '2')), ('fail', 'marker_missing'))  # a comma group of the record's own marks is marks; '1,20' is a number
+        def period_rows(anchor):  # a period part with no source place: found among units that have a position, never among the unplaced
+            return self.synthetic_cell(raw, [{'id': 'd', 'kind': 'text', 'text': 'December 2024', 'anchor': anchor}], {'periods': [{'role': 'value', 'type': 'duration', 'parts': [{'text': 'December 2024'}]}]}, {})['periods']
+        self.assertEqual(period_rows(span(b'December 2024')), ('pass', None)); self.assertEqual(period_rows(None), ('fail', 'missing'))
+        def unit_rows(unit, cell_text=b'1234 shares'):  # the unit printed inside the value cell itself, as a whole word
+            raw2 = b'<table><tr><td>Revenue</td><td>' + cell_text + b'</td></tr></table>'; sp = lambda text: {'byte_start': raw2.index(text), 'byte_end_exclusive': raw2.index(text) + len(text)}
+            tb = {'id': 't', 'kind': 'table', 'anchor': sp(b'<table>'), 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': sp(b'Revenue')}, {'r': 0, 'c': 1, 'text': cell_text.decode(), 'anchor': sp(cell_text)}]}
+            return self.synthetic_cell(raw2, [], {'unit_printed': unit}, {}, tb)['unit_printed']
+        self.assertEqual(unit_rows('shares'), ('pass', None)); self.assertEqual(unit_rows('share'), ('fail', 'missing'))  # 'share' is not the word the cell prints
+
+    def test_order_inside_one_unit_is_the_routes_own_mapping_never_the_unit_index(self):
+        # Codex R15-2: two blocks of one paragraph read whole across a page break passed as separate units and failed `order` as one correctly mapped unit, while a reversed mapping gave the same verdicts
+        parts, boxes = ['The continuous paragraph begins here', 'and finishes on the next page.'], [{'page': 1, 'region': [0, 0, 100, 20]}, {'page': 2, 'region': [0, 0, 100, 20]}]
+        (self.pkg / 'CLAUDE_ANSWER_KEY.json').write_text(json.dumps([{'key_id': f'pkt/S{i}', 'id': f'S{i}', 'file_id': PDF_ID, 'type': 'structure', 'fields': {'printed_text': p, 'kind': 'paragraph'}, 'alternatives': {}} for i, p in enumerate(parts, 1)]))
+        (self.pkg / 'CLAUDE_KEY_FLAGS.json').write_text(json.dumps({'uncertain': []})); (self.pkg / 'KEY_SUPPORT_MAP.json').write_text('{}')
+        tj = json.loads((self.pkt / 'targets.json').read_text()); tj['targets'] = [{'id': f'S{i}', 'kind': 'structure', 'file_id': PDF_ID, 'block_anchor': b} for i, b in enumerate(boxes, 1)]; (self.pkt / 'targets.json').write_text(json.dumps(tj))
+        def one_unit(order):  # one unit over both pages; the route's own character mapping says which words lie on which page
+            def m(r):
+                p = [parts[i] for i in order]; a = [dict(boxes[order[0]], charspan=[0, len(p[0])]), dict(boxes[order[1]], charspan=[len(p[0]) + 1, len(' '.join(p))])]
+                r[PDF_ID]['units'] = [{'id': 'u', 'kind': 'text', 'text': ' '.join(p), 'anchor': a}]
+            return m
+        def separate(r): r[PDF_ID]['units'] = [{'id': f'u{i}', 'kind': 'text', 'text': p, 'anchor': b} for i, (p, b) in enumerate(zip(parts, boxes))]
+        verdicts = lambda res: (res['targets']['pkt/S1']['verdict'], res['targets']['pkt/S2']['verdict'], self.check(res, 'pkt/S1', 'order')['verdict'], self.check(res, 'pkt/S2', 'order')['verdict'])
+        self.assertEqual(verdicts(self.run_grader(separate)), ('PASS', 'PASS', 'pass', 'pass'))
+        self.assertEqual(verdicts(self.run_grader(one_unit((0, 1)))), ('PASS', 'PASS', 'pass', 'pass'))  # merged, mapped in source order: the same as separate
+        self.assertEqual(verdicts(self.run_grader(one_unit((1, 0)))), ('FAIL', 'FAIL', 'fail', 'fail'))  # the mapping puts the page-2 words first: a genuine inversion
+        self.declare(kinds=('paragraph',))
+        self.assertEqual(verdicts(self.run_grader(one_unit((0, 1)))), ('APPROXIMATE', 'APPROXIMATE', 'pass', 'pass'))  # an approximate block keeps its order check
+        self.assertEqual(verdicts(self.run_grader(one_unit((1, 0)))), ('FAIL', 'FAIL', 'fail', 'fail'))
+
+    def test_two_blocks_carried_by_one_table_are_ordered_by_its_cells_or_left_unresolved(self):
+        # Codex R15-2, table-carried blocks: the cell order inside the unit is the route's own order; two cells at one grid position prove nothing
+        def layout(r, rows=((0, 0), (1, 0))):  # the lead paragraph and the list item laid out as the rows of one layout table
+            u = self.html(r); lead, li = self.unit(r, 'u2'), self.unit(r, 'u12'); i = u.index(lead); u.remove(lead); u.remove(li)
+            u.insert(i, {'id': 'lay', 'kind': 'table', 'anchor': {'byte_start': lead['anchor']['byte_start'], 'byte_end_exclusive': li['anchor']['byte_end_exclusive']}, 'links': lead['links'], 'cells': [
+                {'r': rows[0][0], 'c': rows[0][1], 'rs': 1, 'cs': 1, 'text': lead['text'], 'anchor': lead['anchor'], 'struck': lead['struck']}, {'r': rows[1][0], 'c': rows[1][1], 'rs': 1, 'cs': 1, 'text': li['text'], 'anchor': li['anchor']}]})
+        verdicts = lambda res: (self.verdict(res, 'pkt/S01'), self.verdict(res, 'pkt/S04'), self.check(res, 'pkt/S01', 'order')['verdict'], self.check(res, 'pkt/S04', 'order')['verdict'])
+        self.assertEqual(verdicts(self.run_grader(layout)), ('PASS', 'PASS', 'pass', 'pass'))
+        self.assertEqual(verdicts(self.run_grader(lambda r: layout(r, ((1, 0), (0, 0))))), ('FAIL', 'FAIL', 'fail', 'fail'))  # the rows swapped against the source
+        self.assertEqual(verdicts(self.run_grader(lambda r: layout(r, ((0, 0), (0, 0))))), ('PASS', 'PASS', 'pass', 'pass'))  # one grid position: the route's own cell order decides (Codex's reading of "its cell order")
+        def listed_backwards(r): layout(r, ((0, 0), (0, 0))); self.unit(r, 'lay')['cells'].reverse()
+        self.assertEqual(verdicts(self.run_grader(listed_backwards)), ('FAIL', 'FAIL', 'fail', 'fail'))
+        def wrong_second(r): layout(r, ((1, 0), (0, 0))); self.unit(r, 'lay')['cells'][1]['text'] = 'Other words.'
+        self.assertEqual(verdicts(self.run_grader(wrong_second)), ('FAIL', 'FAIL', 'fail', 'fail'))  # the arrangement is wrong whatever the second cell's text: positions are the route's claims
+        def whole_unit(r):  # one text unit, one place, holding both blocks' bytes but only the first block's words: no order to read inside it
+            u = self.html(r); lead, li = self.unit(r, 'u2'), self.unit(r, 'u12'); u.remove(li); lead['anchor'] = {'byte_start': lead['anchor']['byte_start'], 'byte_end_exclusive': li['anchor']['byte_end_exclusive']}
+        self.assertEqual(verdicts(self.run_grader(whole_unit)), ('UNRESOLVED', 'FAIL', 'unresolved', 'unresolved'))
+
+    def test_blocks_side_by_side_on_one_row_keep_their_source_order(self):
+        # Codex's round-15 control: two boxes on one visual row differ in x only; the route's order against the source's left-to-right order is still checked
+        parts, boxes = ['Left block', 'Right block'], [{'page': 1, 'region': [0, 0, 40, 20]}, {'page': 1, 'region': [60, 0, 100, 20]}]
+        (self.pkg / 'CLAUDE_ANSWER_KEY.json').write_text(json.dumps([{'key_id': f'pkt/S{i}', 'id': f'S{i}', 'file_id': PDF_ID, 'type': 'structure', 'fields': {'printed_text': p, 'kind': 'paragraph'}, 'alternatives': {}} for i, p in enumerate(parts, 1)]))
+        (self.pkg / 'CLAUDE_KEY_FLAGS.json').write_text(json.dumps({'uncertain': []})); (self.pkg / 'KEY_SUPPORT_MAP.json').write_text('{}')
+        tj = json.loads((self.pkt / 'targets.json').read_text()); tj['targets'] = [{'id': f'S{i}', 'kind': 'structure', 'file_id': PDF_ID, 'block_anchor': b} for i, b in enumerate(boxes, 1)]; (self.pkt / 'targets.json').write_text(json.dumps(tj))
+        for table in (False, True):
+            for reverse in (False, True):
+                def m(r):
+                    items = list(zip(parts, boxes))[::-1 if reverse else 1]
+                    r[PDF_ID]['units'] = [{'id': 't', 'kind': 'table', 'anchor': boxes, 'cells': [{'r': 0, 'c': i, 'text': p, 'anchor': b} for i, (p, b) in enumerate(items)]}] if table else [{'id': f'u{i}', 'kind': 'text', 'text': p, 'anchor': b} for i, (p, b) in enumerate(items)]
+                res = self.run_grader(m)
+                self.assertEqual([x['verdict'] for x in res['results'] if x['check'] == 'order'], ['fail' if reverse else 'pass'] * 2, (table, reverse))
+
+    def test_a_position_that_cannot_be_true_supplies_no_evidence_whatever_the_lookup(self):
+        # Codex R15-3: an XML unit at [-1, beyond the end) was dishonest and still carried `unit_printed`; a context field with `{}` still proved the person; an anchor with an end and no start, or a string box, read as clean (or crashed)
+        def xml_unit(r, anchor, name='securitiesClassTitle'): next(u for u in r[XML_ID]['units'] if grade.local(u['name']) == name).update(anchor=anchor)
+        res = self.run_grader(lambda r: xml_unit(r, {'byte_start': -1, 'byte_end_exclusive': 10 ** 6}))
+        self.assertEqual((self.verdict(res, 'pkt/X01'), self.check(res, 'pkt/X01', 'unit_printed')['reason'], res['gates']['honest_anchors']['dishonest']), ('FAIL', 'missing', {XML_ID: 1}))
+        res = self.run_grader(lambda r: next(u for u in r[XML_ID]['units'] if u['text'] == 'Beta').update(anchor={}))
+        self.assertEqual((self.check(res, 'pkt/X01', 'row_context')['verdict'], res['gates']['honest_anchors']['dishonest']), ('fail', {XML_ID: 1}))
+        for anchor in ({'byte_end_exclusive': 5}, {'byte_start': 5}, {'byte_start': elem('after')['byte_start'] + 3, 'byte_end_exclusive': elem('after')['byte_start'] + 3}, {'byte_start': 'a', 'byte_end_exclusive': 9}, {'page': 1, 'region': ['x', 0, 1, 1]}, {'page': 1, 'region': [0, 0, 1]}, {'page': 0, 'region': [0, 0, 1, 1]}, {'page': 1, 'region': [0, 0, float('inf'), 1]}, 'gap', 7):
+            res = self.run_grader(lambda r: self.unit(r, 'u9').update(anchor=anchor))
+            self.assertEqual(res['gates']['honest_anchors']['dishonest'], {HTM_ID: 1}, anchor)  # any claim that is no possible position is a false claim (a string or a number too, as Codex's controls require)
+            self.assertEqual(res['gates']['honest_anchors']['bounds_inconsistent'], {HTM_ID: 1} if isinstance(anchor, dict) and 'region' in anchor else {}, anchor)  # of those, the page boxes stay visible as such
+            self.assertEqual(self.check(res, 'pkt/T05', 'segment_or_basis')['verdict'], 'fail', anchor)
+        res = self.run_grader(lambda r: self.unit(r, 'u9').update(anchor={'byte_start': 5}, link_flag='gap'))
+        self.assertEqual(res['gates']['honest_anchors']['dishonest'], {HTM_ID: 1})  # a route flag never hides an impossible position
+        res = self.run_grader(lambda r: self.unit(r, 'u3').update(anchor={'byte_start': 5}))
+        self.assertEqual((res['gates']['honest_anchors']['dishonest'], self.verdict(res, 'pkt/T01')), ({HTM_ID: 1}, 'PASS'))  # a table's own envelope is a claim too; its placed cells still carry their values
+        empty_gap = lambda text: lambda r: self.html(r).append({'id': 'pic2', 'kind': 'image', 'text': text, 'anchor': {'byte_start': 10, 'byte_end_exclusive': 10}, 'link_flag': 'gap'})
+        res = self.run_grader(empty_gap(''))
+        self.assertEqual((res['gates']['honest_anchors']['dishonest'], res['gates']['honest_anchors']['unplaced']), ({}, {HTM_ID: 1}))  # a picture the linker could not place claims no text: counted apart, never dishonest, never covering
+        self.assertEqual(self.run_grader(empty_gap('Invented'))['gates']['honest_anchors']['dishonest'], {HTM_ID: 1})  # text at that position is a claim, and an impossible one
+        res = self.run_grader(lambda r: r[PDF_ID]['pages'].update({'2': 'big'}))
+        self.assertEqual((res['gates']['honest_anchors']['dishonest'], self.verdict(res, 'pkt/P01')), ({PDF_ID: 10}, 'UNRESOLVED'))  # a page whose declared size is no size: every box on it (two texts, the table's envelope, seven cells) is a position that cannot be checked against the route's own declaration — dishonest, never a crash
+        res = self.run_grader(lambda r: self.unit(r, 'u9').update(text='Invented words', link_flag='gap', anchor={'byte_start': elem('after')['byte_start'], 'byte_end_exclusive': elem('after')['byte_end_exclusive']}))
+        self.assertEqual(res['gates']['honest_anchors']['dishonest'], {HTM_ID: 1})  # a route's `gap` flag exempts no text from certification
+        def unanchored_label(r): next(c for c in r[PDF_ID]['units'][2]['cells'] if c['text'] == 'Southeast')['anchor'] = None
+        res = self.run_grader(unanchored_label)
+        self.assertEqual((self.check(res, 'pkt/P01', 'row_label')['reason'], res['gates']['honest_anchors']['unanchored']), ('missing', {PDF_ID: 1}))  # a cell with no position is counted, never consulted
+
+    def test_a_picture_is_what_the_reader_sees_never_a_tag_in_the_bytes(self):
+        # Codex R15-4: an <img> inside a comment, a script, an attribute or a hidden subtree counted as a picture, so invented text there escaped certification
+        page = lambda inner, tail=b'': b'<html><body><p>Text here.</p>' + inner + b'<p>More.</p>' + tail + b'</body></html>'
+        raw = page(b'<span></span>', b'<img src="later.png">'); a = {'byte_start': raw.index(b'.</p>') + 5, 'byte_end_exclusive': raw.index(b'<p>More')}
+        rf = grade.RouteFile({'file_id': 'syn/doc.htm', 'units': [{'id': 'u', 'kind': 'text', 'text': 'Profit 999', 'anchor': a}]}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
+        self.assertEqual((grade.picture_at(rf, [a]), g['dishonest'], g['pictures']), (False, 1, 1))  # a picture elsewhere on the page is no picture at these bytes
+        raw = page(b'<img src="x.png">', b'<style>p{display:none}</style>'); a = {'byte_start': raw.index(b'.</p>') + 5, 'byte_end_exclusive': raw.index(b'<p>More')}
+        rf = grade.RouteFile({'file_id': 'syn/doc.htm', 'units': [{'id': 'u', 'kind': 'text', 'text': 'Profit 999', 'anchor': a}]}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
+        self.assertEqual((grade.picture_at(rf, [a]), g['pictures'], g['anchors_measured']), (False, None, False))  # a stylesheet rule: what is shown is uncertain, so no picture is certain either and nothing is measured
+        for inner, picture in ((b'<img src="x.png">', True), (b'<IMG SRC="x.png">', True), (b'<svg width="1" height="1"><rect/></svg>', True), (b'<div style="visibility:hidden"><img src="x" style="visibility:visible"></div>', True),
+                               (b'<!-- <img src="x.png"> -->', False), (b'<script>let x="<img src=x>";</script>', False), (b'<div title="<img src=x>"></div>', False),
+                               (b'<div style="display:none"><img src="x.png"></div>', False), (b'<img src="x" style="visibility:hidden">', False), (b'<div style="visibility:hidden"><img src="x"></div>', False), (b'<div hidden><img src="x"></div>', False)):
+            raw = page(inner); a = {'byte_start': raw.index(b'.</p>') + 5, 'byte_end_exclusive': raw.index(b'<p>More')}
+            rf = grade.RouteFile({'file_id': 'syn/doc.htm', 'units': [{'id': 'u', 'kind': 'text', 'text': 'Profit 999', 'anchor': a}]}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
+            self.assertEqual((grade.picture_at(rf, [a]), g['dishonest'], g['pictures']), (picture, 0 if picture else 1, 1 if picture else 0), inner)
 
 
 if __name__ == '__main__':

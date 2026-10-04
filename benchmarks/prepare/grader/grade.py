@@ -13,7 +13,7 @@ import csv
 import difflib
 import hashlib
 from itertools import product
-from math import prod
+from math import prod, isfinite
 import json
 from pathlib import Path, PurePosixPath
 import re
@@ -235,19 +235,35 @@ class RouteFile:
         ext = '.' + fmt.lower().lstrip('.') if fmt else Path(data['file_id']).suffix.lower()  # the key's declared format decides the checking mode
         self.vis = Visible(raw, xml=ext == '.xml') if raw is not None and ext in ('.htm', '.html', '.xml', '.txt') else None  # PDFs/pictures: geometry only
         self.raw, self.raw_len = raw, (len(raw) if raw is not None else None)
-        self.pages = {int(k): v for k, v in (data.get('pages') or {}).items()}  # page sizes [width, height] declared by the route, if any
-        for x in [*self.units, *(c for _, c in self.cells)]:  # a byte anchor outside the source, or malformed, is a position that cannot be true: it locates nothing and the gate counts it dishonest (Codex R14-3)
-            if any('byte_start' in a and not (type(a.get('byte_start')) is int and type(a.get('byte_end_exclusive')) is int and 0 <= a['byte_start'] < a['byte_end_exclusive'] <= (self.raw_len if self.raw_len is not None else a['byte_end_exclusive'])) for a in spans(x.get('anchor'))): x['_bad_anchor'] = True
+        self.pages = {int(k): v for k, v in (data.get('pages') or {}).items() if str(k).isdigit() and isinstance(v, list) and len(v) == 2 and all(type(x) in (int, float) for x in v)}  # page sizes [width, height] declared by the route, if any; an entry that is no size declares nothing (a box on that page then has no size to be checked against: not a position)
+        for x in [*self.units, *(c for _, c in self.cells)]:  # a position that cannot be true is no position: it locates nothing, supplies nothing, and the gate counts it (Codex R14-3, R15-3); the claim is kept apart for the gate's report
+            a = x.get('anchor'); sp = spans(a)
+            if a not in (None, []) and not (sp and all(self.possible(s) for s in sp)): x['_bad_anchor'], x['_claimed'], x['anchor'] = True, a, None
+        self.placed = [u for u in self.units if spans(u.get('anchor'))]  # the units with a position: the only ones that may stand as evidence when a lookup goes by text
         # byte index: cells sorted by first byte, with the longest span, so a lookup scans a small window
         byte_cells = [(min(a['byte_start'] for a in sp), max(a['byte_end_exclusive'] for a in sp), u, c)
-                      for u, c in self.cells if not c.get('_bad_anchor') for sp in [[a for a in spans(c.get('anchor')) if 'byte_start' in a]] if sp]
+                      for u, c in self.cells for sp in [[a for a in spans(c.get('anchor')) if 'byte_start' in a]] if sp]
         byte_cells.sort(key=lambda x: x[0])
         self._starts, self._byte_cells = [x[0] for x in byte_cells], byte_cells
         self._max_len = max([e - b for b, e, _, _ in byte_cells], default=0)
         self._box_cells = [(u, c) for u, c in self.cells if any('region' in a for a in spans(c.get('anchor')))]
 
+    def possible(self, a):
+        """Can this place be true? A byte span: integers, 0 <= start < end <= the source's length. A page box: four numbers, left < right and
+        top < bottom from 0, a positive integer page which, when the route declares its page sizes, is one of them, with the box inside that size.
+        A place of both kinds must satisfy both; a place of neither kind, or one that fails its own test, cannot be true."""
+        if not isinstance(a, dict) or not ({'byte_start', 'byte_end_exclusive', 'region', 'page'} & set(a)): return False
+        if 'byte_start' in a or 'byte_end_exclusive' in a:
+            s, e = a.get('byte_start'), a.get('byte_end_exclusive')
+            if not (type(s) is int and type(e) is int and 0 <= s < e <= (self.raw_len if self.raw_len is not None else e)): return False
+        if 'region' in a or 'page' in a:
+            r, p = a.get('region'), a.get('page'); size = self.pages.get(p) if type(p) is int else None
+            if not (isinstance(r, list) and len(r) == 4 and all(type(v) in (int, float) and isfinite(v) for v in r) and 0 <= r[0] < r[2] and 0 <= r[1] < r[3]
+                    and (p is None or (type(p) is int and p > 0)) and (not self.pages or p is None or size is not None) and (size is None or (r[2] <= size[0] and r[3] <= size[1]))): return False
+        return True
+
     def units_at(self, anchor, kinds=None, exclude=('table', 'clutter')):
-        return [u for u in self.units if u.get('kind') not in exclude and (kinds is None or u.get('kind') in kinds) and not u.get('_bad_anchor') and overlap(u.get('anchor'), anchor)]
+        return [u for u in self.units if u.get('kind') not in exclude and (kinds is None or u.get('kind') in kinds) and overlap(u.get('anchor'), anchor)]
 
     def cells_at(self, anchor, table=None):
         """Cells overlapping an anchor, from one table or any. Touching PDF boxes: only the best-overlapping cells."""
@@ -267,7 +283,9 @@ class RouteFile:
         return next(u for u, c in self.cells if c is cell)
 
     def cells_in(self, table):
-        return table.get('cells') or []
+        """The table's cells that have a position: the only ones a lookup may consult. A cell with none, or with one that cannot be true, is
+        counted by the gate (unanchored, dishonest) and is evidence of nothing (Codex R15-3)."""
+        return [c for c in table.get('cells') or [] if spans(c.get('anchor'))]
 
 
 # ------------------------------------------------------------------------------------------------ small helpers
@@ -379,6 +397,19 @@ def mapped_part(unit, anchor):
     return part, 'mapped'
 
 
+def inner_position(unit, anchor, rf):
+    """A block's interval inside the unit that carries it, from the route's own data: the characters its mapping puts at the key's place, or the
+    positions of its cells in the table's grid order. None when the unit gives no order to read (a whole text, no mapping). Orders the blocks one
+    unit carries, never by the key (Codex R15-2; the interval form is Codex's)."""
+    if unit.get('kind') == 'table':
+        cells = sorted(rf.cells_in(unit), key=lambda c: (c['r'], c['c']))
+        hits = [i for i, c in enumerate(cells) if overlap(c.get('anchor'), anchor)]
+        return (min(hits), max(hits) + 1) if hits else None
+    if mapped_part(unit, anchor)[1] != 'mapped': return None
+    cuts = [a['charspan'] for a in spans(unit.get('anchor')) if overlap(a, anchor) and a['charspan'][0] < a['charspan'][1]]
+    return (min(a for a, b in cuts), max(b for a, b in cuts)) if cuts else None
+
+
 def owners(units):
     """Of the field units at one source position, the innermost: those inside which no other of them lies (the field inside prose, not the prose).
     Several innermost units — the same bytes claimed twice — are an ambiguity to report, never a choice by the wanted value (Codex R14-2)."""
@@ -468,7 +499,8 @@ def own_bracket_off(text, own):
     return text[:m.start()] if mine & {inner, bare, norm(text)} else text  # the bracket, or the whole line, is a declared own piece
 
 
-_TOKEN_WORDS = re.compile(r'\d(?:[\d.,]*\d)?|\w+')  # the words and numbers of a text, by Unicode category; numbers keep their separators
+_TOKEN_NUMBERS = re.compile(r'\d(?:[\d.,]*\d)?')  # a number keeps its separators
+_TOKEN_WORDS = re.compile(_TOKEN_NUMBERS.pattern + r'|\w+')  # the words and numbers of a text, by Unicode category
 
 
 def tokens(text):
@@ -497,16 +529,20 @@ def spaced(item):
     out.append(text[last:]); return ' '.join(out)
 
 
-def contains(text, want):
-    """Is `want` printed inside `text`? By the boundary rule on the matching stretch: whitespace may move around punctuation and symbols,
-    never inside a word or a number."""
-    nt, nw = norm(text), norm(want)
-    if nw in nt: return True
-    idx = [i for i, c in enumerate(nt) if not c.isspace()]; st = ''.join(nt[i] for i in idx); sw = squash(nw)
+def contains(text, want, marker=False):
+    """Is `want` printed inside `text` as whole words and numbers? A matching stretch may move whitespace around punctuation and symbols
+    (E12), never inside a word or a number, and it begins and ends where a word or number of `text` does: 'note 1' is not printed in
+    'note 10', nor '250' in '1,250', nor 'not own' in 'cannot own' (Codex R15-1). A footnote mark (`marker`) may touch a word ('Revenue1'),
+    but never cut a number ('1' is not printed in '2015', '1,000' or '1.5')."""
+    nt, nw = norm(text), norm(want); sw = squash(nw)
     if not sw: return True
+    idx = [i for i, c in enumerate(nt) if not c.isspace()]; st = ''.join(nt[i] for i in idx)
     p = st.find(sw)
+    if p == -1: return False
+    cut = {i for m in (_TOKEN_NUMBERS if marker else _TOKEN_WORDS).finditer(nt) for i in range(m.start() + 1, m.end())}  # positions strictly inside a word or number of the text
     while p != -1:
-        if boundary_equal(nt[idx[p]:idx[p + len(sw) - 1] + 1], nw): return True
+        a, b = idx[p], idx[p + len(sw) - 1] + 1
+        if a not in cut and b not in cut and boundary_equal(nt[a:b], nw): return True
         p = st.find(sw, p + 1)
     return False
 
@@ -724,7 +760,7 @@ class Grader:
             want = [norm(p) for p in pieces]
             hit = (lambda s: any(self.same(s, w)[0] for w in want)) if equal else (lambda s: any(contains(s, w) for w in want))
             found += [(tb, c, None) for c in (self.rf.cells_in(tb) if tb else []) if hit(c.get('text', ''))]
-            found += [(None, None, u) for u in self.rf.units if u.get('kind') not in ('table', 'clutter') and hit(u.get('text', ''))]
+            found += [(None, None, u) for u in self.rf.placed if u.get('kind') not in ('table', 'clutter') and hit(u.get('text', ''))]  # by text, among units that have a position (Codex R15-3)
         out, seen = [], set()
         for table, cell, unit in found:
             key = id(cell if cell is not None else unit)
@@ -976,7 +1012,7 @@ class Grader:
             k = good[0]; self.matched = objects(cars)
             if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', None
             return 'pass', None, None
-        if squash(value) and squash(value) in squash(''.join(c.get('text', '') for c in V)): self.matched = list(V); return 'pass', None, 'in_value_cell'
+        if squash(value) and contains(' '.join(c.get('text', '') for c in V), value): self.matched = list(V); return 'pass', None, 'in_value_cell'  # printed inside the value's own cells, as whole words (Codex R15-1 class)
         if any(k.get('joins') and self.same(spaced(k), value)[0] for k in cars): return 'unresolved', 'adjacency', None
         return ('fail', 'text', ' '.join(k['text'] for k in cars)) if cars else ('fail', 'missing', None)
 
@@ -1004,7 +1040,7 @@ class Grader:
                         if any(not (source_before(head.get('anchor'), c['anchor']) and source_before(c['anchor'], self.V[0].get('anchor'))) for c in between):
                             return 'fail', 'scope', part['text']  # a row the route placed in this group comes from elsewhere in the source
                     continue
-                cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.units if u.get('kind') not in ('table', 'clutter')]
+                cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.placed if u.get('kind') not in ('table', 'clutter')]
                 hit = [k for k in cars if contains(k['text'], want) or (k.get('unit') and want == local(k['unit'].get('name', '')))]
                 if not hit and not contains(' '.join(k['text'] for k in cars), want):
                     if any(k.get('joins') for k in cars) and contains(' '.join(spaced(k) for k in cars), want): return 'unresolved', 'adjacency', part['text']
@@ -1023,14 +1059,15 @@ class Grader:
         return any(col_hit(h, vcols) for h in above if h['r'] == nearest)
 
     def footnotes(self, value, alt, tb, V, vr):
-        linked = []
+        linked, own_marks = [], {norm(m['marker_text']) for m in value}
         for m in value:
             mark, a = m['marker_text'], m.get('anchor')
             cars = self.carriers([a], [mark], tb) if a else []
+            grouped = lambda k: any(',' in tok and norm(mark) in tok.split(',') and set(tok.split(',')) <= own_marks for tok in _TOKEN_NUMBERS.findall(norm(k['text'])))  # a comma group of the record's own marks (guide 3.2) is marks, not a number (Codex R15)
             apart = any(k['cell'] is not None and mark in (k['cell'].get('markers') or []) for k in cars) or any(squash(k['text']) == squash(mark) for k in cars)
             if not apart:
                 if any(k['cell'] in V for k in cars): return 'fail', 'marker_glued', mark
-                if not any(mark in k['text'] for k in cars): return 'fail', 'marker_missing', mark  # glued to a label or title: allowed, flagged there
+                if not any(contains(k['text'], mark, marker=True) or grouped(k) for k in cars): return 'fail', 'marker_missing', mark  # glued to a label or title: allowed, flagged there; a digit inside a number is no mark
             if m.get('note_anchor'):
                 # the note's body, with its own mark set apart, must sit at the note's anchor: alone, spaced, split into
                 # pieces, or inside a "Notes:" block that holds several notes
@@ -1089,15 +1126,15 @@ class Grader:
             if 'header_path' in ex: self.row('header_path', 'excluded')
             else: ok = list(v.get('path') or []) == list(f['header_path']); self.row('header_path', 'pass' if ok else 'fail', None if ok else 'path')
         group = v.get('group') or {}
-        same_group = [u for u in rf.units if u.get('kind') == 'field' and (u.get('group') or {}).get('at') == group.get('at')]  # the fields of the same instance: the one that starts at the same source place (names and "n of m" alone mix two first children of two parents)
+        same_group = [u for u in rf.placed if u.get('kind') == 'field' and (u.get('group') or {}).get('at') == group.get('at')]  # the fields of the same instance: the one that starts at the same source place (names and "n of m" alone mix two first children of two parents); a field with no true position proves nothing (Codex R15-3)
         ok = True
         for item in f.get('row_context') or []:
             if item['header'] == 'position': ok &= f"{group.get('index')} of {group.get('count')}" == item['text']
             else: ok &= any(local(u.get('name', '')) == item['header'] and norm(u.get('text', '')) == norm(item['text']) for u in same_group)
         if f.get('row_context'): self.row('row_context', 'excluded' if 'row_context' in ex else 'pass' if ok else 'fail', None if ok or 'row_context' in ex else 'group')
         if f.get('unit_printed'):
-            carries = lambda u: norm(f['unit_printed']) in norm(u.get('text', '')) or norm(f['unit_printed']) == norm(local(u.get('name', '')))  # an XML unit may be a printed text (a security title) or the element's own name (percentOfClass, anchored on its tag)
-            declared, fields = (t['support'].get('unit_printed') or {}).get('anchors') or [], [u for u in rf.units if u.get('kind') == 'field']
+            carries = lambda u: contains(u.get('text', ''), f['unit_printed']) or norm(f['unit_printed']) == norm(local(u.get('name', '')))  # an XML unit may be a printed text (a security title, as whole words) or the element's own name (percentOfClass, anchored on its tag)
+            declared, fields = (t['support'].get('unit_printed') or {}).get('anchors') or [], [u for u in rf.placed if u.get('kind') == 'field']
             if 'unit_printed' in ex: self.row('unit_printed', 'excluded')
             elif declared:  # the key names the unit's source place: the field that owns that place must carry it, no other field stands in (Codex R13 C3, R14-2)
                 found = [owners([u for u in fields if overlap(u.get('anchor'), a)]) for a in declared]
@@ -1118,13 +1155,13 @@ class Grader:
         t, rf, f = self.t, self.rf, self.t['fields']
         # a block may come back as text units, as one image unit, as ordered blocks (a scanned page) or inside a layout table
         units = rf.units_at(t['anchor'], exclude=('clutter',))
-        carries = lambda u: u.get('kind') != 'table' or any(overlap(c.get('anchor'), t['anchor']) for c in u.get('cells') or [])  # a table whose span covers the block but whose cells lie elsewhere (a flattened nested table) does not carry it
+        carries = lambda u: u.get('kind') != 'table' or any(overlap(c.get('anchor'), t['anchor']) for c in rf.cells_in(u))  # a table whose span covers the block but whose cells lie elsewhere (a flattened nested table) does not carry it
         units = [u for u in units if carries(u)] or units
         if not units: return None
         parts = {id(u): mapped_part(u, t['anchor']) for u in units}  # each unit's text at the key's place, by the route's own mapping — applied before any comparison (Codex R14-1)
         def text_of(u):
             if u.get('kind') != 'table': return parts.get(id(u), (u.get('text', ''), 'whole'))[0] or ''
-            cells = [c for c in u.get('cells') or [] if overlap(c.get('anchor'), t['anchor'])] or u.get('cells') or []
+            cells = [c for c in rf.cells_in(u) if overlap(c.get('anchor'), t['anchor'])] or rf.cells_in(u)
             return ' '.join(c.get('text', '') for c in self.merged(cells))
         mapped, unmapped = any(parts[id(u)][1] == 'mapped' for u in units), any(parts[id(u)][1] == 'unmapped' for u in units)
         want = norm(f.get('printed_text') or ''); got = norm(' '.join(text_of(u) for u in self.merged_units(units)))  # touching pieces read as one; the reference phrase and the WER see the block as printed
@@ -1136,7 +1173,7 @@ class Grader:
             if ok is False and len(units) == 1 and mapped and contains(text_of(units[0]), want): ok, why = True, None  # owner 2026-10-04 (e): the block is the part of a paragraph the route read whole across a page break; the part mapped to the key's place holds the key's text in order
             elif ok is False and why == 'text' and len(units) == 1 and mapped and contains(units[0].get('text', ''), want): why = 'page'  # the words exist in the unit, but the route maps them to another place: a contradiction, not a transcription difference
             continued = bool(mapped) and ok is True  # the block is the part of a unit the route read across several places, taken by the route's own mapping
-            bearing = [c for u in units for c in ([x for x in u.get('cells') or [] if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
+            bearing = [c for u in units for c in ([x for x in rf.cells_in(u) if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
             if ok:  # the words survive, but a cancelled word may have become active, or the wrong one cancelled
                 kept = struck_kept([f.get('printed_text') or ''], bearing, [t['anchor']], rf.vis, self.markers)
                 if kept is not True: ok, why = kept, 'struck'
@@ -1163,20 +1200,19 @@ class Grader:
                 if not dest: failure = failure or ('fail', 'destination', ref['printed_text'])
                 elif explicit and not all(self.rf.by_id.get(l.get('to')) in dest for l in explicit):  # E6: any contradictory destination is wrong, not merely unlinked
                     failure = failure or ('fail', 'wrong_link', ref['printed_text'])
-            if norm(ref['printed_text']) not in block_text: failure = failure or (('unresolved', 'adjacency', ref['printed_text']) if norm(ref['printed_text']) in getattr(self, 'block_spaced', '') else ('fail', 'phrase', ref['printed_text']))
+            if not contains(block_text, ref['printed_text']): failure = failure or (('unresolved', 'adjacency', ref['printed_text']) if contains(getattr(self, 'block_spaced', ''), ref['printed_text']) else ('fail', 'phrase', ref['printed_text']))  # the phrase as whole words (Codex R15-1 class)
             elif ref.get('href') and not any(l.get('href') == ref['href'] for l in links): failure = failure or ('fail', 'href', ref['href'])
         if linked: self.row('reference_linked', 'pass' if all(linked) else 'fail')
         return failure or ('pass', None, None)
 
 
 # --------------------------------------------------------------------------------------------------------- gates
-_IMG = re.compile(rb'<(?:img|svg)\b', re.I)  # the picture elements of HTML: an image reference or an inline drawing
-
-
 def picture_at(rf, byte):
     """Does the source show a picture and no text at these bytes? Then a unit's text there is a reading of the picture — approximate evidence the
-    bytes cannot certify — whatever the route calls the unit: the source decides, never the output kind (Codex R14-3)."""
-    return not squash(rf.vis.at_any(byte)) and any(_IMG.search(rf.raw[a['byte_start']:a['byte_end_exclusive']]) for a in byte)
+    bytes cannot certify — whatever the route calls the unit: the source decides, never the output kind (Codex R14-3). The source means what the
+    reader sees: a picture element the scanner found shown, never a tag inside a comment, a script, an attribute or a hidden subtree (Codex R15-4);
+    where visibility is uncertain (stylesheet rules) nothing is shown for certain."""
+    return rf.vis.certain and not squash(rf.vis.at_any(byte)) and any(a['byte_start'] <= s < a['byte_end_exclusive'] for a in byte for s, _ in rf.vis.pictures)
 
 
 def gates_for_file(rf, status, excluded=()):
@@ -1184,7 +1220,7 @@ def gates_for_file(rf, status, excluded=()):
     made (no text layer, no page sizes, stylesheet-dependent visibility, a PARTIAL route) is reported as None = not measured. `excluded`: the
     anchors of targets the package declares out of scoring (page numbers): their characters are subtracted from required-content coverage only,
     and counted apart (Codex R14-4)."""
-    g = {'dishonest': 0, 'unanchored': 0, 'boundary': 0, 'inserted_chars': 0, 'bounds_inconsistent': 0, 'dup_ids': 0, 'order_breaks': 0, 'uncovered': None, 'anchors_measured': True,
+    g = {'dishonest': 0, 'unanchored': 0, 'unplaced': 0, 'bounds_inconsistent': 0, 'boundary': 0, 'inserted_chars': 0, 'dup_ids': 0, 'order_breaks': 0, 'uncovered': None, 'anchors_measured': True,
          'hidden_chars': rf.vis.hidden_chars if rf.vis else None}
     ids = [u.get('id') for u in rf.units]; g['dup_ids'] = len(ids) - len(set(ids))
     def held(u):  # a unit declared `within` another (a field inside prose) is read there, once: it follows its holder and its span lies inside the holder's (Codex R13 C4)
@@ -1195,21 +1231,18 @@ def gates_for_file(rf, status, excluded=()):
     g['order_breaks'] = sum(1 for a, b in zip(keys, keys[1:]) if b < a)
     ranges = []
     for u in rf.units:
-        items = rf.cells_in(u) if u.get('kind') == 'table' else [u]
+        items = (u.get('cells') or []) if u.get('kind') == 'table' else [u]  # every item, placed or not: the gate counts what a lookup never consults
+        if u.get('kind') == 'table' and u.get('_bad_anchor'): g['dishonest'] += 1  # the table's own envelope, a false claim of position
         for x in items:
+            if x.get('_bad_anchor'):  # a position that cannot be true (RouteFile), for every kind of unit and of anchor (Codex R14-3, R15-3): text there is a false claim; an item with no text (a picture the linker gave an empty gap) claims nothing — counted apart, covering nothing; impossible boxes stay visible as such
+                g['dishonest' if squash(x.get('text', '')) else 'unplaced'] += 1; g['bounds_inconsistent'] += any(isinstance(a, dict) and 'region' in a for a in spans(x.get('_claimed'))); continue
             parts = spans(x.get('anchor'))
-            if x.get('link_flag') == 'gap': continue  # a derived location between neighbours: it places a picture, certifies nothing, covers nothing
+            if x.get('link_flag') == 'gap' and not squash(x.get('text', '')): continue  # a picture placed between its neighbours: the derived location certifies nothing, covers nothing; text under that flag is certified like any other
             if not parts:
                 if squash(x.get('text', '')): g['unanchored'] += 1  # text claimed without a source position, whatever the route calls the unit
                 continue
-            if x.get('_bad_anchor'): g['dishonest'] += 1; continue  # outside the source or malformed (RouteFile): a position that cannot be true, for every kind of unit
             for a in parts:
-                if 'region' in a and 'byte_start' not in a:  # no independent page geometry: a region is never certified; its consistency with the route's own sizes is reported
-                    g['anchors_measured'] = False; size = rf.pages.get(a.get('page'))
-                    if size is not None:
-                        x0, y0, x1, y1 = a['region']
-                        if not (0 <= x0 < x1 <= size[0] and 0 <= y0 < y1 <= size[1]): g['bounds_inconsistent'] += 1
-                    break
+                if 'region' in a and 'byte_start' not in a: g['anchors_measured'] = False; break  # no independent page geometry: a region is never certified (its consistency with the route's own page sizes is a condition of being a position at all, RouteFile)
             else:
                 byte = [a for a in parts if 'byte_start' in a]
                 if byte and rf.vis is not None:
@@ -1240,7 +1273,7 @@ def gates_for_file(rf, status, excluded=()):
         excl = [(a['byte_start'], a['byte_end_exclusive']) for e in excluded for a in spans(e) if 'byte_start' in a]  # the declared exclusions' own bytes, nothing wider
         raw_loss, g['uncovered'] = rf.vis.uncovered(ranges), rf.vis.uncovered(ranges + excl)  # raw coverage kept; required-content coverage subtracts the declared bytes only
         g['excluded_chars'] = sum(len(squash(x['text'])) for x in raw_loss) - sum(len(squash(x['text'])) for x in g['uncovered'])
-    g['pictures'] = rf.raw.count(b'<img') if rf.vis is not None and rf.raw is not None else None  # picture content is never measured by the text map
+    g['pictures'] = len(rf.vis.pictures) if rf.vis is not None and rf.vis.certain else None  # the pictures the reader sees (the scanner's inventory, certain visibility only): their content is never measured by the text map
     return g
 
 
@@ -1274,17 +1307,25 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
             g = Grader(t, rf)
             unit = g.grade_cell() if t['type'] == 'cell' else g.grade_structure()
             if unit is None: verdicts[t['key_id']] = 'UNRESOLVED'; rows += g.rows; continue
-            if t['type'] == 'structure': structure_units.append((t['key_id'], order_key(t['anchor']), unit['_order']))
+            if t['type'] == 'structure': structure_units.append((t['key_id'], t['anchor'], unit['_order'], inner_position(unit, t['anchor'], rf)))
             failed = [r['check'] for r in g.rows if r['verdict'] == 'fail' and r['check'] not in STRUCTURE]
             marker_glued += sum(1 for r in g.rows if r['reason'] == 'marker_glued')
             verdicts[t['key_id']] = 'FAIL' if failed else 'UNRESOLVED' if any(r['verdict'] == 'unresolved' for r in g.rows) else 'APPROXIMATE' if any(r['verdict'] == 'approximate' for r in g.rows) else 'PASS'
             rows += g.rows
-        for kid, a, o in structure_units:  # block order within the file
-            bad = any((a < a2) != (o < o2) for k2, a2, o2 in structure_units if k2 != kid and a != a2)
+        for kid, a, o, inner in structure_units:  # block order within the file: the route's own order between units, its mapping or cell order inside a shared unit, never the key's (Codex R15-2); the source's order comes from `source_before`, side by side on one row included
+            bad = pending = False
+            for k2, a2, o2, inner2 in structure_units:
+                if k2 == kid or not (source_before(a, a2) or source_before(a2, a)): continue
+                if o != o2: before = o < o2
+                elif inner is not None and inner2 is not None and inner[1] <= inner2[0]: before = True
+                elif inner is not None and inner2 is not None and inner2[1] <= inner[0]: before = False
+                else: pending = True; continue  # one unit, no readable order between the two blocks: unproved
+                bad |= source_before(a, a2) != before
             rows.append({'key_id': kid, 'file_id': fid, 'split': next(t['split'] for t in mine if t['key_id'] == kid),
-                         'format': next(t['format'] for t in mine if t['key_id'] == kid), 'check': 'order', 'verdict': 'fail' if bad else 'pass',
-                         'reason': 'order' if bad else None, 'detail': None})
-            if bad and verdicts[kid] in ('PASS', 'APPROXIMATE'): verdicts[kid] = 'FAIL'  # a strict failure outranks an approximate reading (Codex R14-3)
+                         'format': next(t['format'] for t in mine if t['key_id'] == kid), 'check': 'order', 'verdict': 'fail' if bad else 'unresolved' if pending else 'pass',
+                         'reason': 'order' if bad else 'internal_order' if pending else None, 'detail': None})
+            if bad: verdicts[kid] = 'FAIL'  # a strict failure outranks an approximate or an unresolved reading (Codex R14-3)
+            elif pending and verdicts[kid] in ('PASS', 'APPROXIMATE'): verdicts[kid] = 'UNRESOLVED'
     hidden_files = set() if heldout_detail else {t['file_id'] for t in targets if t['split'] == 'heldout'}
     public = {t['file_id'] for t in targets} - hidden_files  # a file with any held-out target shows counts only
     uncovered = {fid: (g['uncovered'] if fid in public else {'spans': len(g['uncovered']), 'chars': sum(len(squash(x['text'])) for x in g['uncovered'])})
@@ -1297,8 +1338,9 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         'honest_anchors': {'pass': not anc_unmeasured and clean, 'measured_pass': clean,
                            'dishonest': {f: g['dishonest'] for f, g in per_file.items() if g['dishonest']},
                            'unanchored': {f: g['unanchored'] for f, g in per_file.items() if g['unanchored']},
+                           'unplaced': {f: g['unplaced'] for f, g in per_file.items() if g['unplaced']},  # textless items at a position that cannot be true (pictures in an empty linker gap): no claim, no coverage, reported
+                           'bounds_inconsistent': {f: g['bounds_inconsistent'] for f, g in per_file.items() if g['bounds_inconsistent']},  # of the impossible positions, the page boxes (beyond the page, no area, malformed): visible as such
                            'boundary': {f: g['boundary'] for f, g in per_file.items() if g['boundary']},
-                           'bounds_inconsistent': {f: g['bounds_inconsistent'] for f, g in per_file.items() if g['bounds_inconsistent']},
                            'inserted_chars': {f: g['inserted_chars'] for f, g in per_file.items() if g['inserted_chars']}, 'not_measured': anc_unmeasured},
         'ids_and_run_facts': {'pass': not ungraded and all(g['dup_ids'] == 0 for g in per_file.values()) and all(all(k in (routes[f] or {}) for k in ('tool', 'version', 'settings')) for f in per_file), 'not_measured': ungraded},
         'reading_order': {'pass': not ungraded and sum(g['order_breaks'] for g in per_file.values()) == 0, 'breaks': {f: g['order_breaks'] for f, g in per_file.items() if g['order_breaks']}, 'not_measured': ungraded},
