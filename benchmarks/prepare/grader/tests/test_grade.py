@@ -581,6 +581,63 @@ class PlantedFaultTests(GraderFixture):
         tb['cells'][0]['struck'] = []  # the label's own strike lost: still a failure
         g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
         self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'row_label'), ('fail', 'struck'))
+        t2 = dict(t, fields=dict(t['fields'], row_label='Obsolete')); tb['cells'][0]['struck'] = ['Obsolete']  # Codex R10-2: an invented cancellation changes meaning too
+        g = grade.Grader(t2, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
+        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'row_label'), ('fail', 'struck'))
+        tb['cells'][0]['struck'] = []
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
+        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'row_label'), ('fail', 'struck'))
+
+    def test_the_struck_check_reads_the_occurrence_that_matched_not_every_anchor(self):
+        # run 26: "EXHIBIT A" is printed plain where the path matched and again later with the A struck (a redline); the key's anchors name both
+        table = b'<table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        raw = b'<p><b>EXHIBIT A</b></p><p>Body text of the exhibit.</p>' + table + b'<p>See <u>EXHIBIT </u><s>A</s></p>'
+        span = lambda text, after=0: {'byte_start': raw.index(text, after), 'byte_end_exclusive': raw.index(text, after) + len(text)}
+        first, later = span(b'EXHIBIT A'), {'byte_start': raw.index(b'<u>EXHIBIT'), 'byte_end_exclusive': raw.index(b'</s>') + 4}
+        def graded(units):
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': raw.index(b'</table>') + 8}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}]}
+            t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+                 'support': {'section_path': {'anchors': [first, later]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', 'section_path': ['EXHIBIT A']}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
+            return next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'section_path')
+        heading = {'id': 'h', 'kind': 'heading', 'text': 'EXHIBIT A', 'anchor': first}
+        later_units = [{'id': 'x', 'kind': 'text', 'text': 'See EXHIBIT', 'anchor': {'byte_start': raw.index(b'See'), 'byte_end_exclusive': raw.index(b'</u>')}}, {'id': 'y', 'kind': 'text', 'text': 'A', 'anchor': span(b'A', raw.index(b'<s>')), 'struck': ['A']}]
+        self.assertEqual(graded([heading] + later_units), ('pass', None))
+        self.assertEqual(graded([dict(heading, struck=['A'])] + later_units), ('fail', 'struck'))  # the strike at the matched heading itself is invented
+
+    def test_a_lead_in_spread_over_pieces_keeps_its_struck_word_in_the_check(self):
+        # run 27: the struck word of a lead-in sits in a middle piece; the struck check must read every piece the match used, not the last one
+        raw = b'<p><span>Rates apply to</span> <s>Eurocurrency</s> <span>Term loans and more words here.</span></p><table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        for struck, want in ((['Eurocurrency'], 'pass'), ([], 'fail')):
+            units = [{'id': 'a', 'kind': 'text', 'text': 'Rates apply to', 'anchor': span(b'Rates apply to')}, {'id': 'b', 'kind': 'text', 'text': 'Eurocurrency', 'anchor': span(b'Eurocurrency'), 'struck': struck}, {'id': 'c', 'kind': 'text', 'text': 'Term loans and more words here.', 'anchor': span(b'Term loans and more words here.')}]
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}]}
+            t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+                 'support': {'lead_in': {'anchors': [{'byte_start': raw.index(b'<p>'), 'byte_end_exclusive': raw.index(b'</p>')}]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', 'lead_in': 'Rates apply to ~~Eurocurrency~~ Term loans and more words here.'}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
+            self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'lead_in'), (want, None if want == 'pass' else 'struck'), struck)
+
+    def test_an_invented_cancellation_fails_a_plain_passage_and_a_plain_label(self):
+        # Codex R10-2: the key marks nothing struck; a route that cancels "not" changed the meaning as surely as dropping a strike (the label case is in the strike-scope test)
+        raw = b'<p>The company may not borrow.</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        for struck, want in (([], 'pass'), (['not'], 'fail')):
+            unit = {'id': 'p', 'kind': 'paragraph', 'text': 'The company may not borrow.', 'anchor': span(b'The company may not borrow.'), 'struck': struck}
+            t = {'key_id': 'syn/S1', 'file_id': 'syn/f.htm', 'format': 'structure/htm', 'type': 'structure', 'split': 'development', 'anchor': span(b'The company may not borrow.'), 'alternatives': {}, 'excluded': set(), 'support': {},
+                 'fields': {'printed_text': 'The company may not borrow.', 'kind': 'paragraph', 'visible': True}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [unit]}, raw, 'htm')); g.grade_structure()
+            self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'printed_text'), (want, None if want == 'pass' else 'struck'), struck)
+
+    def test_a_row_label_split_where_the_page_alone_could_show_the_space_is_unresolved(self):
+        # Codex R10-4: the same unresolved-join rule for the row label (touching "Cash" + "flow" under a key "Cash flow"; "Cashflow" passes; a changed word fails)
+        for key, verdict in (('Cashflow', 'pass'), ('Cash flow', 'unresolved'), ('Wrong flow', 'fail')):
+            raw = b'<table><tr><td><span>Cash</span><span>flow</span></td><td>10</td></tr></table>'
+            span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Cash', 'anchor': span(b'Cash')}, {'r': 0, 'c': 0, 'text': 'flow', 'anchor': span(b'flow')}, {'r': 0, 'c': 1, 'text': '10', 'anchor': span(b'10')}]}
+            t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'10'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+                 'support': {'row_label': {'anchors': [{'byte_start': raw.index(b'Cash'), 'byte_end_exclusive': raw.index(b'flow') + 4}]}}, 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': key}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
+            self.assertEqual(next(r['verdict'] for r in g.rows if r['check'] == 'row_label'), verdict, key)
 
     def test_a_two_line_heading_whose_second_line_says_continued_is_read_as_pieces(self):
         # E2 inside E12: the window that reads a heading's pieces measures them without "(continued)", so the piece carrying it is not skipped
@@ -622,6 +679,9 @@ class PlantedFaultTests(GraderFixture):
             self.assertEqual(rows['section_path'], verdict, key)
         rows = graded(b'<p><span>Cash</span> <span>flow</span></p>' + table, [{'id': 'a', 'kind': 'heading', 'text': 'Cash', 'anchor': b'Cash'}, {'id': 'b', 'kind': 'heading', 'text': 'flow', 'anchor': b'flow'}], 'section_path', ['Cashflow'])
         self.assertEqual(rows['section_path'], 'fail')  # a real space in the source: the output's two words cannot spell the key's one
+        for key, verdict in (('Cashflow', 'pass'), ('Cash flow', 'unresolved')):  # Codex R10-4: the same rule for a run-in heading that continues into its paragraph
+            rows = graded(b'<p><span>Cash</span><span>flow</span> is defined as the net amount of cash generated in the period.</p>' + table, [{'id': 'a', 'kind': 'text', 'text': 'Cash', 'anchor': b'Cash'}, {'id': 'b', 'kind': 'text', 'text': 'flow', 'anchor': b'flow'}, {'id': 'c', 'kind': 'text', 'text': ' is defined as the net amount of cash generated in the period.', 'anchor': b' is defined as the net amount of cash generated in the period.'}], 'section_path', [key])
+            self.assertEqual(rows['section_path'], verdict, key)
 
     def test_a_pieced_unit_is_judged_from_its_blocks_never_from_its_own_counts(self):
         # Codex R4-1: the gate derives the insertion from the blocks, checks each block's boundaries and refuses malformed pieces

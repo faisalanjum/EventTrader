@@ -364,6 +364,8 @@ class LinkTests(unittest.TestCase):
             runs = [v.at(a, b) for a, b in v.struck_runs()]  # the strike flags stay aligned with the characters on every path
             self.assertEqual(runs, ['A'] if b'<s>' in raw else [], raw)
         self.assertEqual(anchor.Visible(b'<p>a</p><b>bold</b> <br/>x').text, ' a bold  x')  # real tags still are tags
+        for raw in (b'<div hidden>Secret < 1</div><p>Shown</p>', b'<div style="display:none">Secret < 1</div><p>Shown</p>', b'<div style="visibility:hidden">Secret < 1</div><p>Shown</p>'):
+            v = anchor.Visible(raw); self.assertEqual((v.text.strip(), v.certain, v.hidden_chars), ('Shown', True, 8), raw)  # Codex R10-3: a hidden literal < is hidden text like any other
 
     def test_struck_text_follows_the_cascade_and_the_propagation_rules_chrome_observed(self):
         # Codex R9-2A with headless Chrome: the last declaration wins, a tag's default yields to its own declaration, atomic boxes are not reached,
@@ -379,7 +381,14 @@ class LinkTests(unittest.TestCase):
         self.assertEqual(struck(b'<table style="text-decoration:line-through"><tr><td>cell words</td></tr></table>'), (['cell words'], True))
         self.assertEqual(struck(b'<span style="TEXT-DECORATION: LINE-THROUGH !important">loud</span>'), (['loud'], True))
         self.assertEqual(struck(b'<style>.gone{text-decoration:line-through}</style><span class="gone">by class</span>')[1], False)
-        self.assertEqual(struck(b'<style>a{text-decoration:none}</style><s>x</s>'), (['x'], True))  # a sheet rule that cannot strike or force anything changes nothing
+        self.assertEqual(struck(b'<style>a{text-decoration:none}</style><s>x</s>')[1], False)  # Codex R10-1: a sheet rule can remove a strike, so a struck run is not certified...
+        self.assertTrue(anchor.Visible(b'<style>a{text-decoration:none}</style><s>x</s>').plain_certain)  # ...but "nothing struck here" still is (that rule cannot add one)
+        self.assertEqual((anchor.Visible(b'<style>.x{text-decoration:line-through}</style><p>y</p>').plain_certain, anchor.Visible(b'<style>.x{text-decoration:line-through}</style><p>y</p>').struck_certain), (False, False))
+        self.assertEqual(struck(b'<s style="text-decoration:revert">kept</s>'), (['kept'], True))  # Chrome: revert restores the tag's default
+        self.assertEqual(struck(b'<s style="text-decoration:initial">plain</s>'), ([], True))
+        self.assertEqual(struck(b'<s style="text-decoration:bogus">x</s>')[1], False)  # an unevaluated value: uncertain, never a guess
+        self.assertEqual(struck(b'<p style="text-decoration:line-through;text-decoration:bogus">x</p>'), (['x'], False))  # the resolved declaration stands, the file stays uncertain
+        self.assertEqual(struck(b'<s style="text-decoration:line-through none">x</s>')[1], False)
         self.assertEqual(struck(b'<p><s>a b</p><p>next</p>')[1], False)  # the browser reopens the <s> in the next paragraph
         self.assertEqual(struck(b'<s style="text-decoration: var(--d)">x</s>')[1], False)
 

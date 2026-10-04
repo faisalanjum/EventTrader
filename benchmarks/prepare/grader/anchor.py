@@ -32,7 +32,9 @@ _IMPORTANT = re.compile(r'\s*!\s*important\s*$')
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
 _STYLE = re.compile(r'<style\b[^>]*>(.*?)</style\s*>|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheets: this scanner does not apply them
 _PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:|@import\b', re.I)
-_DECO = re.compile(r'\btext-decoration(?:-line)?\s*:[^;}]*(?:line-through|!\s*important)', re.I)  # a stylesheet rule that strikes text, or forces a decoration, makes struck text uncertain  # a stylesheet rule that could hide or re-flow text, or an imported sheet, makes visibility uncertain
+_DECO = re.compile(r'\btext-decoration(?:-line)?\s*:[^;}]*(?:line-through|!\s*important)', re.I)  # a stylesheet rule that strikes text, or forces a decoration: "nothing struck here" cannot be certified
+_DECO_ANY = re.compile(r'\btext-decoration(?:-line)?\s*:', re.I)  # any stylesheet rule on a decoration can remove a strike: a struck run cannot be certified
+_DECO_LINES, _DECO_STYLES = {'none', 'underline', 'overline', 'line-through', 'blink'}, {'solid', 'double', 'dotted', 'dashed', 'wavy'}  # a stylesheet rule that could hide or re-flow text, or an imported sheet, makes visibility uncertain
 # HTML tree construction: an opening tag of a kind in `by` closes an open element of a kind in `closes` unless an element in `stop` lies above it
 _P_CLOSERS = set('address article aside blockquote details dialog div dl fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 header hgroup hr main menu nav ol p pre section table ul'.split())
 _IMPLIED = [(_P_CLOSERS, {'p'}, {'table', 'td', 'th', 'caption', 'body', 'html'}), ({'li'}, {'li'}, {'ul', 'ol', 'menu', 'table', 'td', 'th', 'body'}),
@@ -115,6 +117,18 @@ def last(decls, prop):
     return value
 
 
+def decoration(value):
+    """What one text-decoration / text-decoration-line value says about striking: True (line-through), False (none), 'default' (revert:
+    the tag's own default), or UNKNOWN for anything this scanner does not evaluate — colours, lengths, inherit, functions, invalid tokens
+    (the browser drops an invalid declaration and keeps a valid one it does not know; this scanner reports uncertainty instead)."""
+    toks = _IMPORTANT.sub('', value).split()
+    if toks in (['initial'], ['unset']): return False  # text-decoration is not inherited: unset is initial, none
+    if toks in (['revert'], ['revert-layer']): return 'default'
+    if 'none' in toks: return False if toks == ['none'] else UNKNOWN
+    if toks and all(t in _DECO_LINES or t in _DECO_STYLES for t in toks) and any(t in _DECO_LINES for t in toks): return 'line-through' in toks
+    return UNKNOWN
+
+
 def resolve(decls, prop, valid):
     """The value in force for one property: the last declaration wins and an `!important` one beats a later plain one (the cascade
     inside one attribute). A value outside the forms this scanner evaluates — an unknown keyword, var(), calc(), an escape — gives
@@ -142,8 +156,7 @@ class Visible:
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
         for m in _TOKEN.finditer(s):
             t = m.group(); start = pos; pos += blen(t)
-            if t.startswith('<'):
-                if len(t) == 1: chars.append(t); starts.append(start); ends.append(pos); struck_chars.append(1 if stack and stack[-1][4] else 0); continue  # a literal < is text
+            if t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
                 name = _NAME.match(t)
                 if not name or t.startswith('<!') or t.startswith('<?') or m.group(1): continue
                 name, was_hidden = name.group(1).lower(), hidden
@@ -153,11 +166,13 @@ class Visible:
                 decls = declarations(attrs.get('style', ''))
                 disp, v, op = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number)
                 if UNKNOWN in (disp, v, op): computed = True; disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
-                deco, strong = None, False  # the decoration line in force: the last of text-decoration / text-decoration-line wins, !important beats a later plain one
+                deco, strong = None, False  # the decoration in force: the last resolved text-decoration / text-decoration-line declaration wins, !important beats a later plain one
                 for n, val, important in decls:
-                    if n in ('text-decoration', 'text-decoration-line') and (important or not strong): deco, strong = val, important
-                if deco is not None and ('(' in deco or '\\' in deco): struck_computed = True  # a value this scanner does not evaluate
-                struck = ('line-through' in deco) if deco is not None else name in STRUCK  # an <s>/<del>/<strike> that declares its own decoration (none, underline) is not struck by the tag
+                    if n in ('text-decoration', 'text-decoration-line') and (important or not strong):
+                        d = decoration(val)
+                        if d == UNKNOWN: struck_computed = True; continue  # not evaluated: struck text in this file is uncertain, the declaration is skipped as the browser would skip an invalid one
+                        deco, strong = d, important
+                struck = (name in STRUCK) if deco in (None, 'default') else deco  # an <s>/<del>/<strike> that declares none or underline is not struck by the tag; revert restores the tag's default
                 atomic = disp in ('inline-block', 'inline-table', 'inline-flex', 'inline-grid') or last(decls, 'float') in ('left', 'right') or last(decls, 'position') in ('absolute', 'fixed')  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                 block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or struck
                 gone = disp == 'none' or (op is not None and _zero(op)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
@@ -205,7 +220,9 @@ class Visible:
         sheets = [None if m.group(1) is None else _COMMENT.sub(' ', unescape_css(m.group(1))) for m in _STYLE.finditer(s)]
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
-        self.struck_certain = not struck_computed and not any(x is None or '@import' in x.lower() or _DECO.search(x) for x in sheets)  # struck text: a sheet rule that strikes or forces a decoration, an unevaluated value or a reopened formatting element make it uncertain
+        external = any(x is None or '@import' in x.lower() for x in sheets)
+        self.struck_certain = not struck_computed and not external and not any(_DECO_ANY.search(x) for x in sheets if x)  # a struck run is certified only when no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
+        self.plain_certain = not struck_computed and not external and not any(_DECO.search(x) for x in sheets if x)  # "nothing struck here" needs only that no sheet rule can add or force a strike
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))

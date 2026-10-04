@@ -120,6 +120,12 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         self.assertEqual(sf.apply(raw, units), 2)
         self.assertEqual(units[0]['struck'], ['Eurocurrency Rate']); self.assertEqual(units[1]['cells'][0]['struck'], ['LIBOR'])
         self.assertNotIn('struck', units[1]['cells'][1]); self.assertNotIn('struck', units[2])
+        raw2 = b'<style>s{text-decoration:none}</style><p><s>maybe</s> plain words.</p>'  # Codex R10-1: a sheet rule can remove the tag's strike: the converter's own claim stands, nothing is written or dropped where the scanner saw a run
+        units2 = an.link(raw2, [{'id': 'u', 'kind': 'text', 'text': 'maybe plain words.', 'struck': ['maybe']}, {'id': 'v', 'kind': 'text', 'text': 'absent'}])['units']
+        self.assertEqual(sf.apply(raw2, units2), 0); self.assertEqual(units2[0].get('struck'), ['maybe'])
+        raw3 = b'<style>.x{text-decoration:line-through}</style><p>plain words here.</p>'  # a sheet rule could add a strike: nothing is certified either way
+        units3 = an.link(raw3, [{'id': 'u', 'kind': 'text', 'text': 'plain words here.', 'struck': ['plain']}])['units']
+        self.assertIsNone(sf.apply(raw3, units3)); self.assertEqual(units3[0].get('struck'), ['plain'])
 
     def test_a_cell_printed_wholly_raised_is_kept_as_a_cell(self):
         # Codex round 7 (R7-1): a raised 4 is still the cell's text; superscript is formatting, not proof of a footnote

@@ -14,10 +14,11 @@ from benchmarks.prepare.grader.anchor import Visible, norm
 
 def apply(raw, units):
     """Set `struck` on every unit and cell with byte anchors from the source's struck runs; returns how many items carry struck text.
-    When the scanner cannot certify struck text (a stylesheet rule on text-decoration, a formatting element the browser would reopen,
-    an unevaluated value) nothing is changed and None is returned: the tool's own claims stand."""
+    Only resolved decoration is certified: a struck run is written when no stylesheet rule touches decorations (`struck_certain`); a
+    converter's claim is dropped only where nothing is struck and no sheet rule could add a strike (`plain_certain`); anywhere else the
+    converter's own claim stands. When neither can be certified nothing is changed and None is returned."""
     vis = Visible(raw)
-    if not vis.struck_certain: return None
+    if not vis.struck_certain and not vis.plain_certain: return None
     runs = vis.struck_runs(); n = 0
     for u in units:
         for x in (u.get('cells') or []) if u.get('kind') == 'table' else [u]:
@@ -25,8 +26,9 @@ def apply(raw, units):
             if not byte: continue
             phrases = [norm(vis.at(max(s, a['byte_start']), min(e, a['byte_end_exclusive']))) for a in byte for s, e in runs if s < a['byte_end_exclusive'] and a['byte_start'] < e]
             phrases = [p for p in phrases if p and grade.squash(p) in grade.squash(x.get('text', ''))]  # only text the item carries: an anchor may span text the tool dropped
-            if phrases: x['struck'] = phrases; n += 1
-            else: x.pop('struck', None)  # the source prints nothing struck here: a tool's own claim is dropped
+            if phrases and vis.struck_certain: x['struck'] = phrases; n += 1  # a struck run the scanner resolved in full
+            elif not phrases and vis.plain_certain: x.pop('struck', None)  # nothing struck here and no sheet rule could add one: a tool's own claim is dropped
+            # otherwise the converter's own claim stands: the source's decoration here was not resolved
     return n
 
 
