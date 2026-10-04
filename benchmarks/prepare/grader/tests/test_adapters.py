@@ -253,6 +253,15 @@ class DoclingPdfAdapterTests(unittest.TestCase):
         self.assertEqual(route['status'], 'OK'); self.assertEqual(route['route']['tool'], 'docling')
         self.assertTrue(all(not k.startswith('_') for u in route['units'] for c in (u.get('cells') or [u]) for k in c))
 
+    def test_a_reread_page_takes_its_place_with_unique_ids(self):
+        # ledger §17 / DOCLING_FEATURES #12: a page Docling grades POOR on parsing is converted again with full-page OCR; its units replace the page's, order and ids kept sound
+        u = lambda i, page, text: {'id': f'#/texts/{i}', 'kind': 'text', 'text': text, 'anchor': {'page': page, 'region': [0, 0, 10, 10]}}
+        first = [u(0, 1, 'one'), u(1, 2, '\u2588CF H<9'), u(2, 3, 'three'), {'id': '#/texts/3', 'kind': 'text', 'text': 'spans 2-3', 'anchor': [{'page': 2, 'region': [0, 0, 1, 1]}, {'page': 3, 'region': [0, 0, 1, 1]}]}]
+        out = dp.spliced(first, {2: [u(0, 2, 'For the'), u(1, 2, 'three months')]})
+        self.assertEqual([(x['id'], x['text']) for x in out], [('#/texts/0', 'one'), ('p2:#/texts/0', 'For the'), ('p2:#/texts/1', 'three months'), ('#/texts/2', 'three')])  # the unreadable unit and the unit spanning the re-read page go
+        self.assertEqual(len({x['id'] for x in out}), 4)
+        self.assertEqual(dp.spliced(first, {}), first)
+
 
 from benchmarks.prepare.grader.adapters import prestep_headings as ph
 

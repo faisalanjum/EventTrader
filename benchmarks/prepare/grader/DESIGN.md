@@ -625,7 +625,7 @@ documented as a semantic cross-check (typed fields in source order, an lxml tree
 exhibits (23/23, 4/4, 2/2). Docling's own OCR (RapidOCR, the only engine installed offline; EasyOCR and Tesseract are not) on the 23 pages of
 `0000049071-24-000040`: 94 s, 8,796 words; the key's block (493 words, kind image) scored **0.146** — but that figure was 1 − matched words / reference words over all 23 pages, an
 unmatched-reference fraction, not a word error rate (Codex N3); remeasured on the block's own image with the real word error rate: **0.144** (§34). That is a
-measurement, not a route: at 85 % the exact-text rule fails; the options are a better engine (an install the owner decides), the vision pipeline measured
+measurement, not a route: at a word error rate of 0.144 the exact-text rule fails; the options are a better engine (an install the owner decides), the vision pipeline measured
 earlier (156 s/page, misreads), or a contract decision on picture text. Recorded in the ledger as class A's first number.
 
 **Docling rows (point 2).** `DOCLING_FEATURES.md` now carries the same rows as the EdgarTools table, measured on the same files: hyperlinks kept (82/84 vs 0),
@@ -725,3 +725,25 @@ originals and recorded with the smallest corrections (ledger §16): the "(in mil
 EPS columns only and nothing stands over "Growth", Carnival's header cell holds three `<br>`-separated lines. The five failed native-PDF blocks were traced
 through the cached output (ledger §17): three are OCR quality on scanned pages, one an unreadable text layer (a font without a usable ToUnicode map — forced
 page OCR is the justified experiment), one a paragraph joined across a page break (a contract question); none is a table failure.
+
+## 35. The PDF route's own gate: a parse-POOR page is read again by OCR (2026-10-04 02:15; Codex's step 4 and agreement point 6)
+
+**Evidence first (ledger §17).** Of the five failed native-PDF development blocks none is a table failure: three are RapidOCR misreads on scanned
+pages, one is a paragraph joined across a page break (a contract question), and one is an **unreadable text layer** — the Adobe "unofficial" 10-Q's
+font has no usable ToUnicode map, so every character comes out shifted (`pdftotext` reads the same mojibake). Converting that page alone with OCR
+mode FULL_PAGE reads the block perfectly (word error 1.000 → 0.000, 6.9 s). Docling's own confidence report marks exactly that page: `parse_score`
+(the 10th-percentile score of the digital text cells) is 0.0, grade POOR, while the other eight block pages score 1.0 or n/a (scanned) with grades
+EXCELLENT (`prepare_work/docling_deepdive_20261003/pdf_confidence_20261004/`). The confidence does not see OCR misreads (ocr_score 0.98–0.99 on the
+three scanned pages), so it is a trigger for the unreadable-layer case only.
+
+**The rule (`adapters/docling_pdf.py::poor_parse_pages`, `spliced`).** After the first conversion, every page whose parse grade is POOR — judged by
+Docling's own grade scale through its public model, no threshold of ours — is converted again alone with the same pipeline and OCR mode FULL_PAGE;
+its units take the page's place in the first pass's order, ids prefixed by the page; a unit anchored on several pages goes when any of them is
+re-read; the route file records `reread.full_page_ocr_pages`, the facts `reread_pages`, the settings the rule. Printed HTML is our own print (a
+readable layer) and is not re-read. The re-read documents are cached beside the first pass so `--reuse-raw` replays them. Test: the splice keeps the
+tool's order, drops the unreadable and the spanning unit, keeps ids unique, and is the identity when nothing is re-read.
+
+**Run 31 (the nine native PDFs converted again; the printed-HTML files untouched).** The rule fired on one document only — the Adobe 10-Q, all 54 pages parse-POOR, re-read in 254 s for the whole file — and on none of the other eight (0 pages: no false trigger; the nine files took 1,191 s in all). The block's text now passes (`printed_text` pass, was word error 1.0), but the target still fails on its section path: RapidOCR drops every capital L on this font ("PART IFINANCIA INFORMATION", "CONSO IDATED"), so the heading is not found — the next fault is the engine's reading, not the layer. Native PDF stays 4 of 9 at the target level; the other eight blocks keep their verdicts (their word errors now read by the real metric: 0.043, 0.082, 0.044, and 4.343 for the page-break block, whose unit is thirty times its text).
+
+Tests 203. This is the first escalation inside a route: cheap default, the route's own gate, one measured recovery; the browser render for HTML
+stays off because its gains were not predictable from gates (§33).
