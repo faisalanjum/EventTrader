@@ -923,7 +923,7 @@ class Grader:
             else: ok &= any(local(u.get('name', '')) == item['header'] and norm(u.get('text', '')) == norm(item['text']) for u in same_group)
         if f.get('row_context'): self.row('row_context', 'excluded' if 'row_context' in ex else 'pass' if ok else 'fail', None if ok or 'row_context' in ex else 'group')
         if f.get('unit_printed'):
-            hit = any(norm(f['unit_printed']) in norm(u.get('text', '')) for u in rf.units if u.get('kind') == 'field')
+            hit = any(norm(f['unit_printed']) in norm(u.get('text', '')) or norm(f['unit_printed']) == norm(local(u.get('name', ''))) for u in rf.units if u.get('kind') == 'field')  # an XML unit may be a printed text (a security title) or the element's own name (percentOfClass), as periods already allow
             if 'unit_printed' in ex: self.row('unit_printed', 'excluded')
             else: self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing', 'anchor_unknown')
         self.field('periods', self.periods, {'_order': v['_order'], 'cells': []}, 0, (0, 1))

@@ -607,3 +607,28 @@ two key-side items; the third key-side item, Carnival's three-line header, is in
 no pass lost, no new unresolved. Round 10 changed no corpus verdict; it removed wrong certainties (2 of 116 key sources carry stylesheet decoration rules and now
 keep the converter's own strike claims) and closed the invented-strike hole. 191 tests, 48/48 real pairs, Codex's rounds 4–10 scripts behave, 20-shape Chrome
 oracle 0 wrong.
+
+## 32. XML route built and graded; picture OCR measured; Docling rows (2026-10-04 00:15, agreement points 2, 4 and 5)
+
+**XML (point 4).** `adapters/xml_fields.py` (45 lines, standard library): the strict expat parser with namespace processing; one `field` unit per leaf element
+that carries text — expanded name `{namespace}local`, the ancestors' expanded names, the place among same-named siblings of the nearest repeated ancestor
+("2 of 8"), the text, and the byte span from the element's own start tag to the end of its text (so the key's anchors on the tag name and on the text both fall
+inside). No field list, nothing inferred; a truncated or malformed document raises and the route file says FAILED with the parser's message (Codex's
+`recover=True` finding is the reason: recovery is not completeness). Entities and CDATA sections are character data. Run on the three development forms:
+209 / 225 / 367 fields, a millisecond each; graded: **9 of 9 development XML cells pass**, anchors honest (0 dishonest), nothing uncovered. Two grader gaps
+surfaced and were fixed with tests: an XML unit may be the element's own name (`percentOfClass`, anchored on its tag) as periods already allowed, not only a
+printed text; and the scanner's HTML skip list (`<title>` is the document title in HTML) and `<[!…]>` markup rule do not apply to XML — a `<title>` element is
+text there and a CDATA section is character data. Both are confined to XML mode. EdgarTools' `Schedule13D.parse_xml` and `xmltools.parse_xml` remain
+documented as a semantic cross-check (typed fields in source order, an lxml tree without offsets); the route itself needs neither.
+
+**Pictures (point 5, test 4).** The eight picture-text targets are HTML exhibits made of page images; the image files are present locally for the development
+exhibits (23/23, 4/4, 2/2). Docling's own OCR (RapidOCR, the only engine installed offline; EasyOCR and Tesseract are not) on the 23 pages of
+`0000049071-24-000040`: 94 s, 8,796 words; the key's block (493 words, kind image) is recovered at **word error rate 0.146** — 421 of 493 words. That is a
+measurement, not a route: at 85 % the exact-text rule fails; the options are a better engine (an install the owner decides), the vision pipeline measured
+earlier (156 s/page, misreads), or a contract decision on picture text. Recorded in the ledger as class A's first number.
+
+**Docling rows (point 2).** `DOCLING_FEATURES.md` now carries the same rows as the EdgarTools table, measured on the same files: hyperlinks kept (82/84 vs 0),
+pictures kept (56/56 vs 3), the same blindness to CSS strike-through and to the "raised-top" footnote marks these filers use (0 super/subscript pieces where the
+source has none `<sup>`), no character offsets, 3.8 s / 545 MB plain and ~80 s render on the 6.8 MB 10-K.
+
+193 tests, 48/48 real pairs; Codex's rounds 4–10 scripts behave.

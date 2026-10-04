@@ -127,6 +127,21 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         units3 = an.link(raw3, [{'id': 'u', 'kind': 'text', 'text': 'plain words here.', 'struck': ['plain']}])['units']
         self.assertIsNone(sf.apply(raw3, units3)); self.assertEqual(units3[0].get('struck'), ['plain'])
 
+    def test_xml_fields_route_reads_names_paths_groups_text_and_positions_and_refuses_broken_input(self):
+        # agreement point 4: a strict standard parser, no field list; names expanded, ancestors kept, "n of m" from the nearest repeated ancestor, exact byte spans
+        from benchmarks.prepare.grader.adapters import xml_fields as xf
+        import xml.parsers.expat as expat
+        raw = (b'<?xml version="1.0"?><sub xmlns="urn:x"><data><title>Common &amp; Preferred</title><persons><person><name>Alpha</name><shares>10</shares></person>'
+               b'<person><name>Beta</name><shares>0</shares></person></persons></data></sub>')
+        units = xf.units_of(raw)
+        self.assertEqual([(u['name'], u['text'], u['group']) for u in units], [('{urn:x}title', 'Common & Preferred', {'index': 1, 'count': 1}), ('{urn:x}name', 'Alpha', {'index': 1, 'count': 2}), ('{urn:x}shares', '10', {'index': 1, 'count': 2}), ('{urn:x}name', 'Beta', {'index': 2, 'count': 2}), ('{urn:x}shares', '0', {'index': 2, 'count': 2})])
+        self.assertEqual(units[3]['path'], ['{urn:x}sub', '{urn:x}data', '{urn:x}persons', '{urn:x}person'])
+        a = units[3]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<name>Beta')  # from the start tag to the end of the text: the key's name and text anchors both fall inside
+        a = units[0]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<title>Common &amp; Preferred')  # entities inside the text do not shift the span
+        with self.assertRaises(expat.ExpatError): xf.units_of(b'<root><number>10</number><discarded')  # Codex R10: a truncated document is refused, never repaired
+        raw2 = b'<r><note><![CDATA[a > b & c]]></note></r>'; u = xf.units_of(raw2)[0]  # CDATA: character data; the anchor still starts at the element's own tag
+        self.assertEqual((u['text'], raw2[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']]), ('a > b & c', b'<note><![CDATA[a > b & c]]>'))
+
     def test_a_cell_printed_wholly_raised_is_kept_as_a_cell(self):
         # Codex round 7 (R7-1): a raised 4 is still the cell's text; superscript is formatting, not proof of a footnote
         doc = copy.deepcopy(DOC); doc['groups'][0]['children'] = [{'$ref': '#/texts/2'}]; doc['texts'][2]['text'] = '4'

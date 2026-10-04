@@ -19,6 +19,7 @@ _WS = re.compile('[\\s' + re.escape(_CF) + ']+')
 _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), '') or chr(i) == '"') else "'") for i in range(0x110000) if 'QUOTATION MARK' in unicodedata.name(chr(i), '')},
                        **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
 _TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?=[A-Za-z/])(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
+_TOKEN_XML = re.compile(r'<!--.*?-->|<!\[CDATA\[.*?\]\]>|<[!?][^>]*>|<(?=[A-Za-z/])(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S)  # XML: no HTML-only skipped elements — a <title> is an ordinary element there
 _ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
 _DECL = re.compile(r'\s*([-\w]+)\s*:(.*)', re.S)  # one complete declaration: property name, colon, value (anything else the browser drops)
 _NUM = re.compile(r'[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?%?')  # a CSS <number> or <percentage> (no trailing dot); nothing else is a number to CSS
@@ -154,11 +155,12 @@ class Visible:
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
-        for m in _TOKEN.finditer(s):
+        for m in (_TOKEN_XML if xml else _TOKEN).finditer(s):
             t = m.group(); start = pos; pos += blen(t)
+            if xml and t.startswith('<![CDATA[') and t.endswith(']]>'): t, start = t[9:-3], start + 9  # a CDATA section is character data (XML); its marker is 9 ASCII bytes
             if t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
                 name = _NAME.match(t)
-                if not name or t.startswith('<!') or t.startswith('<?') or m.group(1): continue
+                if not name or t.startswith('<!') or t.startswith('<?') or (m.re.groups and m.group(1)): continue
                 name, was_hidden = name.group(1).lower(), hidden
                 attrs = {}
                 for am in _ATTR.finditer(t[len(name) + 2 if t.startswith('</') else len(name) + 1:]):  # the tag's attributes, first occurrence wins, entities decoded

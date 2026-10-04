@@ -1245,6 +1245,23 @@ class PlantedFaultTests(GraderFixture):
             g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/t.htm', 'units': units}, raw, 'htm'))
             self.assertEqual(g.references([ref], None, [units[0]], units[0]['text'])[0], expect, link)
 
+    def test_an_xml_unit_may_be_the_elements_own_name_and_a_title_element_is_text(self):
+        # XML route: the key may name the unit as the element itself (percentOfClass) by anchoring its tag; a printed text (a security title) still counts;
+        # an XML <title> is an ordinary element, never the HTML document title the scanner skips
+        xml = b'<r xmlns="urn:main"><p><percentOfClass>2.4</percentOfClass><title>Chair</title></p></r>'
+        i = xml.index(b'>2.4<') + 1; a = {'byte_start': i, 'byte_end_exclusive': i + 3}
+        units = [{'id': 'x', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<percentOfClass>'), 'byte_end_exclusive': i + 3}, 'name': '{urn:main}percentOfClass', 'path': ['{urn:main}r', '{urn:main}p'], 'text': '2.4', 'group': {'index': 1, 'count': 1}},
+                 {'id': 'y', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<title>'), 'byte_end_exclusive': xml.index(b'</title>')}, 'name': '{urn:main}title', 'path': ['{urn:main}r', '{urn:main}p'], 'text': 'Chair', 'group': {'index': 1, 'count': 1}}]
+        for unit, want in (('percentOfClass', 'pass'), ('Chair', 'pass'), ('shares', 'fail')):
+            t = {'key_id': 'syn/X2', 'file_id': 'syn/form.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': a, 'table_anchor': a, 'alternatives': {}, 'excluded': set(), 'support': {},
+                 'fields': {'printed_value': '2.4', 'display_value': '2.4', 'row_label': 'percentOfClass', 'header_path': ['{urn:main}r', '{urn:main}p'], 'row_context': [], 'periods': [], 'unit_printed': unit}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': t['file_id'], 'units': units}, xml, 'xml')); g.grade_cell()
+            self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == 'unit_printed'), want, unit)
+        rf = grade.RouteFile({'file_id': 'syn/form.xml', 'units': units}, xml, 'xml'); self.assertIn('Chair', rf.vis.text)
+        self.assertEqual(grade.gates_for_file(rf, 'OK')['dishonest'], 0)
+        cd = b'<r><job><![CDATA[Manager of A > B & C]]></job></r>'; rf = grade.RouteFile({'file_id': 'syn/c.xml', 'units': [{'id': 'j', 'kind': 'field', 'anchor': {'byte_start': 3, 'byte_end_exclusive': cd.index(b'</job>')}, 'name': 'job', 'path': ['r'], 'text': 'Manager of A > B & C', 'group': {'index': 1, 'count': 1}}]}, cd, 'xml')
+        self.assertEqual((rf.vis.text.strip(), grade.gates_for_file(rf, 'OK')['dishonest']), ('Manager of A > B & C', 0))  # a CDATA section is text in XML
+
     def test_xml_name_is_verified_at_this_occurrence_and_values_keep_their_boundaries(self):
         xml = b'<r xmlns="urn:main" xmlns:a="urn:a" xmlns:b="urn:b"><p><a:amount>10</a:amount><b:amount>20</b:amount></p></r>'
         i = xml.index(b'>10<') + 1; a = {'byte_start': i, 'byte_end_exclusive': i + 2}
