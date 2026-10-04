@@ -98,7 +98,7 @@ SUPPORT = {
     'pkt/S02': {'printed_text': MODEL('h2'), 'section_path': MODEL('h1'), 'references': NONE, 'kind': NONE, 'visible': NONE},
     'pkt/S03': {'printed_text': NONE, 'section_path': MODEL('h1', 'h2'), 'references': NONE, 'kind': NONE, 'visible': NONE},
     'pkt/S04': {'printed_text': MODEL('li'), 'section_path': MODEL('h1', 'h2'), 'references': NONE, 'kind': NONE, 'visible': NONE},
-    'pkt/X01': {'printed_value': NONE, 'row_label': NONE, 'header_path': NONE, 'row_context': NONE, 'unit_printed': NONE},
+    'pkt/X01': {'printed_value': NONE, 'row_label': NONE, 'header_path': NONE, 'row_context': NONE, 'unit_printed': {'how': 'model', 'model': 'openai', 'anchors': [xml_text('Units', 'securitiesClassTitle')]}},  # the unit's declared source place (Codex R13 C3)
     'pkt/P01': {f: {'how': 'none', 'why': 'PDF or picture source: no byte offsets'} for f in ('row_label', 'header_path', 'table_title', 'unit_printed', 'segment_or_basis')},
 }
 FLAGS = {'about': 'fixture', 'p1_constraints': [], 'source_conflicts': [], 'p1_converted_20261003': [],
@@ -255,11 +255,43 @@ class CorrectOutputTests(GraderFixture):
 
     def test_summary_counts_targets_by_split_and_format(self):
         s = self.run_grader()['summary']['by_split_format']
-        self.assertEqual(s['development']['cell/htm'], {'targets': 4, 'PASS': 4, 'FAIL': 0, 'UNRESOLVED': 0, 'NOT_CONVERTED': 0})
+        self.assertEqual(s['development']['cell/htm'], {'targets': 4, 'PASS': 4, 'FAIL': 0, 'UNRESOLVED': 0, 'NOT_CONVERTED': 0, 'EXCLUDED': 0, 'APPROXIMATE': 0})
         self.assertEqual(s['development']['structure/htm']['PASS'], 4)
         self.assertEqual(s['stratified_control']['cell/xml']['PASS'], 1)
         self.assertEqual(s['heldout']['cell/pdf']['PASS'], 1)
         self.assertEqual(self.run_grader()['summary']['supplement']['PASS'], 1)
+
+    def test_package_declarations_exclude_targets_and_report_pictures_approximately(self):
+        # package 3 (owner decisions (a) and (d), Codex R13 E10 R4): the manifest names the declarations; a declared page-number target is EXCLUDED (never a pass,
+        # counted apart); a block the key declares an image is APPROXIMATE with its word error rate and aligned critical tokens; a declaration that does not match the key stops the run
+        def declare(anchor):  # the package names its declarations in the frozen manifest, pinned like every other input
+            decl = {'decisions': [{'rule': 'E10', 'policy': {'approximate_kinds': ['image']}}, {'rule': 'E10', 'exclusions': [{'key_id': 'pkt/S02', 'role': 'page_number', 'file_id': HTM_ID, 'sha256': sha(HTML), 'anchor': anchor}]}]}
+            (self.pkg / 'CONTRACT_DECISIONS_R4.json').write_text(json.dumps(decl))
+            pins = {rel: sha((self.pkg / rel).read_bytes()) for rel in grade.KEY_FILES + ('CONTRACT_DECISIONS_R4.json',)}
+            (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps({'evidence_root': '..', 'contract_declarations': 'CONTRACT_DECISIONS_R4.json', 'files_sha256': pins,
+                                                                       'packets_sha256': {'packets/pkt': {'targets_sha256': sha((self.pkt / 'targets.json').read_bytes())}}}))
+        declare(elem('h2'))
+        res = self.run_grader(); self.assertEqual(res['run_facts']['contract_declarations'], 'CONTRACT_DECISIONS_R4.json')
+        self.assertEqual((self.verdict(res, 'pkt/S02'), self.check(res, 'pkt/S02', 'target')['reason']), ('EXCLUDED', 'page_number'))
+        self.assertEqual(sum(1 for r in res['results'] if r['key_id'] == 'pkt/S02'), 1)  # nothing of it is graded
+        self.assertEqual(self.verdict(res, 'pkt/S03'), 'APPROXIMATE')
+        self.assertEqual(self.check(res, 'pkt/S03', 'printed_text')['detail'], {'word_error_rate': 0.0, 'critical_tokens': {'missing': [], 'extra': [], 'reference_numbers': 0}})  # exact OCR is still not a pass
+        self.assertEqual({k: res['summary']['by_split_format']['development']['structure/htm'][k] for k in ('PASS', 'EXCLUDED', 'APPROXIMATE', 'FAIL')}, {'PASS': 2, 'EXCLUDED': 1, 'APPROXIMATE': 1, 'FAIL': 0})
+        def garble(route): next(u for u in self.html(route) if u['id'] == 'u8')['text'] = 'Picture words one. Picture words 2.'
+        row = self.check(self.run_grader(garble), 'pkt/S03', 'printed_text')
+        self.assertEqual((row['verdict'], row['detail']['critical_tokens']['extra']), ('approximate', ['2']))
+        dropped = lambda route: self.html(route).remove(next(u for u in self.html(route) if u['id'] == 'u8'))
+        self.assertEqual(self.verdict(self.run_grader(dropped), 'pkt/S03'), 'UNRESOLVED')  # a dropped picture is not approximate
+        declare(elem('lead'))
+        with self.assertRaises(ValueError): self.run_grader()  # the declared anchor is not the target's
+
+    def test_critical_tokens_are_compared_by_ordered_alignment(self):
+        # Codex R13: unordered multisets missed swapped values, a dropped Unicode minus and a negation moved to another action
+        self.assertEqual(grade.critical('Revenue 20. Profit 10.', 'Revenue 10. Profit 20.'), {'missing': ['10', '20'], 'extra': ['20', '10'], 'reference_numbers': 2})
+        self.assertEqual(grade.critical('Earnings 20', 'Earnings −20')['missing'], ['-20'])
+        c = grade.critical('Buy and do not sell', 'Do not buy and sell'); self.assertEqual((c['missing'], c['extra']), (['not buy'], ['not sell']))  # a negation is read with the word it governs
+        self.assertEqual(grade.critical("We don't expect growth", "We don't expect growth")['missing'], [])
+        self.assertEqual(grade.critical('Sales rose 5% to $1.2 million in 2024', 'Sales rose 5% to $1.2 million in 2024'), {'missing': [], 'extra': [], 'reference_numbers': 3})
 
     def test_structure_recognition_is_counted_separately(self):
         res = self.run_grader()
@@ -1268,8 +1300,10 @@ class PlantedFaultTests(GraderFixture):
         i = xml.index(b'>2.4<') + 1; a = {'byte_start': i, 'byte_end_exclusive': i + 3}
         units = [{'id': 'x', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<percentOfClass>'), 'byte_end_exclusive': i + 3}, 'name': '{urn:main}percentOfClass', 'path': ['{urn:main}r', '{urn:main}p'], 'text': '2.4', 'group': {'index': 1, 'count': 1}},
                  {'id': 'y', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<title>'), 'byte_end_exclusive': xml.index(b'</title>')}, 'name': '{urn:main}title', 'path': ['{urn:main}r', '{urn:main}p'], 'text': 'Chair', 'group': {'index': 1, 'count': 1}}]
-        for unit, want in (('percentOfClass', 'pass'), ('Chair', 'pass'), ('shares', 'fail')):
-            t = {'key_id': 'syn/X2', 'file_id': 'syn/form.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': a, 'table_anchor': a, 'alternatives': {}, 'excluded': set(), 'support': {},
+        at = lambda b: {'byte_start': xml.index(b), 'byte_end_exclusive': xml.index(b) + len(b)}
+        for unit, declared, want in (('percentOfClass', at(b'<percentOfClass>'), 'pass'), ('Chair', at(b'Chair'), 'pass'), ('shares', at(b'Chair'), 'fail'), ('percentOfClass', None, 'unresolved')):  # Codex R13 C3: the key's declared place decides; none declared is no association
+            t = {'key_id': 'syn/X2', 'file_id': 'syn/form.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': a, 'table_anchor': a, 'alternatives': {}, 'excluded': set(),
+                 'support': {'unit_printed': {'anchors': [declared]}} if declared else {},
                  'fields': {'printed_value': '2.4', 'display_value': '2.4', 'row_label': 'percentOfClass', 'header_path': ['{urn:main}r', '{urn:main}p'], 'row_context': [], 'periods': [], 'unit_printed': unit}}
             g = grade.Grader(t, grade.RouteFile({'file_id': t['file_id'], 'units': units}, xml, 'xml')); g.grade_cell()
             self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == 'unit_printed'), want, unit)
@@ -1498,19 +1532,24 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader()
         self.assertEqual(res['files'][XML_ID]['not_read'], {'attribute_values': 2}); self.assertIsNone(res['files'][HTM_ID]['not_read'])
 
-    def test_an_xml_unit_comes_from_its_own_instance_or_the_documents_shared_context(self):
-        # Codex R12-5: two holdings both say "shares"; the first holding's unit removed must fail its target, the other holding's word cannot stand in; a document-level title still serves every holding
+    def test_an_xml_unit_comes_from_its_declared_place_not_from_a_namesake_or_a_neighbour(self):
+        # Codex R12-5 and R13 C3: the key declares the unit's source place; the field read there must carry the word. The other holding's "shares", a unique
+        # unrelated branch, a comment of the same holding and a word with no declared place cannot stand in (a word of this holding alone is unresolved, never a pass)
         from benchmarks.prepare.grader.adapters import xml_fields as xf
-        raw = b'<r><title>Common</title><holding><qty>10</qty><unit>shares</unit></holding><holding><qty>20</qty><unit>shares</unit></holding></r>'
-        def unit_row(unit, drop=None):
-            units = [u for u in xf.units_of(raw) if u['text'] != drop or u['name'] != 'unit' or u['group']['index'] != 1]; a = raw.index(b'10')
-            t = {'key_id': 'syn/X1', 'file_id': 'syn/a.xml', 'format': 'cell/xml', 'type': 'cell', 'split': 'development', 'anchor': {'byte_start': a, 'byte_end_exclusive': a + 2}, 'alternatives': {}, 'excluded': set(), 'support': {},
-                 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': 'qty', 'unit_printed': unit}}
+        raw = b'<r><title>Common</title><holding><qty>10</qty><unit>shares</unit><comment>No shares were sold</comment></holding><holding><qty>20</qty><unit>shares</unit></holding><fees><description>shares</description></fees></r>'
+        at = lambda b: {'byte_start': raw.index(b), 'byte_end_exclusive': raw.index(b) + len(b)}
+        def unit_row(unit, declared=None, drop=False):
+            units = [u for u in xf.units_of(raw) if not (drop and u['name'] == 'unit' and u['group']['index'] == 1)]; a = raw.index(b'10')
+            t = {'key_id': 'syn/X1', 'file_id': 'syn/a.xml', 'format': 'cell/xml', 'type': 'cell', 'split': 'development', 'anchor': {'byte_start': a, 'byte_end_exclusive': a + 2}, 'alternatives': {}, 'excluded': set(),
+                 'support': {'unit_printed': {'anchors': [declared]}} if declared else {}, 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': 'qty', 'unit_printed': unit}}
             grader = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': units}, raw, 'xml')); grader.grade_cell()
             return next((r['verdict'], r.get('reason')) for r in grader.rows if r['check'] == 'unit_printed')
-        self.assertEqual(unit_row('shares'), ('pass', None))
-        self.assertEqual(unit_row('shares', drop='shares'), ('fail', 'missing'))  # the second holding's "shares" is not this holding's
-        self.assertEqual(unit_row('Common'), ('pass', None))  # the title outside every repeated ancestor is shared context
+        self.assertEqual(unit_row('shares', at(b'<unit>shares</unit>')), ('pass', None))  # the first holding's own unit, where the key says
+        self.assertEqual(unit_row('shares', at(b'<unit>shares</unit>'), drop=True), ('fail', 'missing'))  # removed: the second holding's, the fee description's and the comment's "shares" do not stand in
+        self.assertEqual(unit_row('units', at(b'<unit>shares</unit>')), ('fail', 'text'))  # the declared place holds another word
+        self.assertEqual(unit_row('Common', at(b'Common')), ('pass', None))  # the title's place declared: the document's shared context
+        self.assertEqual(unit_row('shares'), ('unresolved', 'support'))  # no declared place: a word of this holding proves no association with the value
+        self.assertEqual(unit_row('Common'), ('fail', 'missing'))  # no declared place and not in this holding
 
     def test_a_strike_over_a_marked_label_is_judged_on_the_labels_own_characters(self):
         # Codex R12-7: the label prints "Total(1) revenue" (the record's own mark set aside when matching); an invented strike over the whole label slipped past the text fallback
@@ -1532,11 +1571,14 @@ class PlantedFaultTests(GraderFixture):
                  'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_text': want, 'kind': 'paragraph'}}
             g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [unit], 'pages': {2: [612, 792], 3: [612, 792]}}, None, 'pdf')); g.grade_structure()
             r = next(r for r in g.rows if r['check'] == 'printed_text'); return r['verdict'], r.get('reason'), r.get('detail')
-        across = {'id': 'p', 'kind': 'text', 'text': 'End of two. Start of three. More words.', 'anchor': [{'page': 2, 'region': [0, 700, 100, 792]}, {'page': 3, 'region': [0, 0, 100, 20]}]}
-        self.assertEqual(block_row(across), ('pass', None, {'continued': True}))  # the block is the page-3 part of a paragraph the route read whole
+        across = {'id': 'p', 'kind': 'text', 'text': 'End of two. Start of three. More words.', 'anchor': [{'page': 2, 'region': [0, 700, 100, 792], 'charspan': [0, 11]}, {'page': 3, 'region': [0, 0, 100, 20], 'charspan': [12, 39]}]}
+        self.assertEqual(block_row(across), ('pass', None, {'continued': True}))  # the block is the part of the paragraph the route maps to page 3
         self.assertEqual(block_row(dict(across, text='End of two. More words. Start of three.'))[0], 'fail')  # not in order
+        self.assertEqual(block_row(across, want='End of two.')[0], 'fail')  # Codex R13 C2: the words the key wants on page 3 are mapped to page 2
+        unmapped = lambda spans_: [{k: v for k, v in a.items() if k != 'charspan'} for a in spans_]
+        self.assertEqual(block_row(dict(across, anchor=unmapped(across['anchor'])))[:2], ('unresolved', 'page_map'))  # pages listed, no character mapping: which page holds the words is unknown
+        self.assertEqual(block_row(dict(across, anchor=[across['anchor'][0], dict(across['anchor'][1], charspan=[12, 99])]))[:2], ('unresolved', 'page_map'))  # a span outside the text maps nothing
         self.assertEqual(block_row(dict(across, anchor={'page': 3, 'region': [0, 0, 100, 20]}))[0], 'fail')  # one page only: extra text is a boundary fault, as before
-        self.assertEqual(block_row(dict(across, anchor=[{'page': 2, 'region': [0, 700, 100, 792]}, {'page': 3, 'region': [0, 0, 100, 20]}]), want='Start of three. More words.')[0], 'pass')
 
     def test_wer_counts_insertions_substitutions_and_deletions_over_the_reference(self):
         # Codex N3: the old figure was a similarity distance — three inserted words scored zero

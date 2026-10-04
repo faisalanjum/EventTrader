@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 
 from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader.adapters import cache
 
 NAME = 'docling-html'
 KIND = {'section_header': 'heading', 'title': 'heading', 'text': 'text', 'paragraph': 'text', 'list_item': 'list_item', 'caption': 'caption',
@@ -122,27 +123,29 @@ def main(argv=None):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if path.suffix.lower() not in ('.htm', '.html'):
             (out / 'route' / (fid + '.json')).write_text(json.dumps(unsupported(fid, sha, version))); facts[fid] = {'status': 'UNSUPPORTED'}; continue
-        t0 = time.time(); rawjson = out / 'raw' / (fid + '.docling.json')
+        t0 = time.time(); rawjson = out / 'raw' / (fid + '.docling.json'); metajson = out / 'raw' / (fid + '.meta.json'); ver = version
+        settings = {'backend': 'HTML', 'options': 'defaults', 'prestep': 'headings' if a.prestep_headings else None}
         try:
-            if a.reuse_raw and rawjson.exists():
-                prev = (json.loads((out / 'facts.json').read_text())['files'].get(fid) or {}) if (out / 'facts.json').exists() else {}
-                doc, dt, status, errors = json.loads(rawjson.read_text()), prev.get('docling_seconds', 0), prev.get('status') or 'unknown', prev.get('errors') or []  # the cached run's own outcome travels with its output
+            if a.reuse_raw and rawjson.exists():  # a cached run is reused only whole: its record names the source bytes, settings, producing version, output and outcome (adapters/cache.py)
+                meta = cache.reuse(metajson, sha, settings)
+                doc, dt, status, errors, ver = json.loads(rawjson.read_text()), meta.get('docling_seconds', 0), meta['status'], meta.get('errors') or [], meta['version']
             else:
+                cache.begin(metajson)  # from here the old record vouches for nothing
                 src = str(path)
                 if a.prestep_headings:
                     from benchmarks.prepare.grader.adapters.prestep_headings import mark_headings
                     import tempfile
                     tmp = tempfile.NamedTemporaryFile(suffix='.htm', delete=False); tmp.write(mark_headings(path.read_bytes())); tmp.close(); src = tmp.name
                 res = conv.convert(src); doc = res.document.export_to_dict(); dt = time.time() - t0; status, errors = str(res.status), [str(e) for e in res.errors]
+                rawjson.write_text(json.dumps(doc, ensure_ascii=False)); cache.save(metajson, [rawjson], sha256=sha, version=version, settings=settings, status=status, errors=errors, docling_seconds=round(dt, 2))
         except Exception as e:  # a tool crash is a result, never a stop
             facts[fid] = {'status': 'FAILED', 'error': repr(e)[:300], 'seconds': round(time.time() - t0, 2)}
             (out / 'route' / (fid + '.json')).write_text(json.dumps(dict(unsupported(fid, sha, version), status='FAILED', error=repr(e)[:300]))); continue
-        if not (a.reuse_raw and rawjson.exists()): rawjson.write_text(json.dumps(doc, ensure_ascii=False))
-        t1 = time.time(); route = route_for(doc, path.read_bytes(), fid, sha, round(dt, 2), version, {'backend': 'HTML', 'options': 'defaults', 'prestep': 'headings' if a.prestep_headings else None})
+        t1 = time.time(); route = route_for(doc, path.read_bytes(), fid, sha, round(dt, 2), ver, settings)
         if a.prestep_headings: route['route']['name'] = NAME + '+headings'
         route['status'], route['error'] = route_status(status, errors)  # SUCCESS alone is OK; a partial conversion is PARTIAL with its errors; an unknown cached outcome is not success
         flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
-        facts[fid] = {'status': status, 'docling_seconds': round(dt, 2), 'adapter_seconds': round(time.time() - t1, 2), 'items': len(flat),
+        facts[fid] = {'status': status, 'version': ver, 'docling_seconds': round(dt, 2), 'adapter_seconds': round(time.time() - t1, 2), 'items': len(flat),
                       'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
                       'uncovered_chars': sum(len(anchor.squash(s['text'])) for s in route['uncovered']), 'errors': errors}
         (out / 'route' / (fid + '.json')).write_text(json.dumps(route, ensure_ascii=False))

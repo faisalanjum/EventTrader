@@ -17,6 +17,7 @@ import time
 from pathlib import Path
 
 from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader.adapters import cache
 from benchmarks.prepare.grader.adapters.docling_html import to_units, unsupported as _unsupported, route_status
 
 NAME = 'docling-pdf'
@@ -30,13 +31,23 @@ def region(bbox, page_height):
     return [l, min(t, b), r, max(t, b)]
 
 
+def mapped(provs, text):
+    """Do the provenance character spans split the text page by page: every page has one, each lies inside the text, none reaching back into
+    the one before? Docling writes `prov[].charspan` per page (Codex R13 C2); a unit without that mapping keeps its pages only."""
+    cs = [p.get('charspan') for p in provs]
+    return all(isinstance(c, list) and len(c) == 2 and all(isinstance(v, int) for v in c) and 0 <= c[0] <= c[1] <= len(text) for c in cs) \
+        and all(cs[i][0] >= cs[i - 1][1] for i in range(1, len(cs)))
+
+
 def anchors_from_boxes(doc, units):
-    """Give units and cells page/region anchors from Docling's provenance; a block over several pages gets a list."""
+    """Give units and cells page/region anchors from Docling's provenance; a block over several pages gets a list, each page with the span of
+    the text it holds (`charspan`) when the tool's spans are consistent."""
     heights = {int(k): v['size']['height'] for k, v in (doc.get('pages') or {}).items()}
     items = {k: v for key in ('texts', 'tables', 'pictures') for k, v in ((it['self_ref'], it) for it in doc.get(key) or [])}
     for u in units:
         it = items.get(u['id'], {})
-        provs = [{'page': p['page_no'], 'region': region(p['bbox'], heights.get(p['page_no'], 0))} for p in it.get('prov') or [] if p.get('bbox')]
+        provs = [{'page': p['page_no'], 'region': region(p['bbox'], heights.get(p['page_no'], 0)), **({'charspan': list(p['charspan'])} if p.get('charspan') else {})} for p in it.get('prov') or [] if p.get('bbox')]
+        if not mapped(provs, u.get('text', '')): provs = [{k: v for k, v in p.items() if k != 'charspan'} for p in provs]  # spans out of bounds or out of order map nothing: the pages stay, the split of the text between them is unknown
         if u.get('kind') == 'table':
             for c in u['cells']:
                 raw = it['data']['table_cells'][c.pop('_i')]; bb = raw.get('bbox')
@@ -84,9 +95,10 @@ def spliced(units, reread):
     units' ids are prefixed by their group's first page, and references between them (a table's notes, links) follow the new ids."""
     reread = {(k, k) if isinstance(k, int) else tuple(k): v for k, v in reread.items()}  # a group is a page range (a, b); a bare page number means that one page
     covered = {p for a, b in reread for p in range(a, b + 1)}
-    def renamed(a, b):
+    def renamed(a, b):  # ids and the fields that refer to them (a table's notes, a link's destination); never text, captions, cell values or hrefs (Codex R13 C5)
         ren = {u['id']: f"p{a}:{u['id']}" for u in reread[(a, b)] if 'id' in u}
-        fix = lambda x: ren.get(x, x) if isinstance(x, str) else [fix(v) for v in x] if isinstance(x, list) else {k: fix(v) for k, v in x.items()} if isinstance(x, dict) else x
+        ref = lambda k, v: ren.get(v, v) if k in ('id', 'to') and isinstance(v, str) else [ren.get(n, n) if isinstance(n, str) else n for n in v] if k == 'notes' and isinstance(v, list) else fix(v)
+        fix = lambda x: {k: ref(k, v) for k, v in x.items()} if isinstance(x, dict) else [fix(v) for v in x] if isinstance(x, list) else x
         return [fix(u) for u in reread[(a, b)]]
     pending, out = sorted(reread), []
     for u in units:
@@ -148,18 +160,16 @@ def main(argv=None):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if ext not in ('.pdf', '.htm', '.html'):
             (out / 'route' / (fid + '.json')).write_text(json.dumps(_unsupported(fid, sha, version))); facts[fid] = {'status': 'UNSUPPORTED'}; continue
-        rawjson = out / 'raw' / (fid + '.docling.json'); metajson = out / 'raw' / (fid + '.meta.json'); t0 = time.time(); printed = 0.0; reread, groups, errors = {}, [], []
+        rawjson = out / 'raw' / (fid + '.docling.json'); metajson = out / 'raw' / (fid + '.meta.json'); t0 = time.time(); printed = 0.0; reread, groups, errors = {}, [], []; ver = version
         rawpage = lambda g: out / 'raw' / f'{fid}.p{g[0]}-{g[1]}.fullocr.docling.json'
         try:
-            if a.reuse_raw and rawjson.exists():  # a cached run is reused only whole: same bytes, same settings, every required re-read present, its own outcome kept
-                meta = json.loads(metajson.read_text()) if metajson.exists() else None
-                required, done = [tuple(g) for g in (meta or {}).get('reread_required') or []], [tuple(g) for g in (meta or {}).get('reread_done') or []]
-                problem = ('no record of the cached run' if not meta else 'the cached run converted other bytes' if meta.get('sha256') != sha else 'the cached run used other settings' if meta.get('settings') != settings
-                           else 'the cached run is incomplete' if sorted(required) != sorted(done) or not all(rawpage(g).exists() for g in done) else None)
-                if problem: raise RuntimeError(f'cache refused: {problem}')
-                doc, groups, status, errors = json.loads(rawjson.read_text()), done, meta['status'], meta.get('errors') or []
+            if a.reuse_raw and rawjson.exists():  # a cached run is reused only whole: its record names the source bytes, settings, producing version, every output and the outcome (adapters/cache.py)
+                meta = cache.reuse(metajson, sha, settings); done = [tuple(g) for g in meta.get('reread_done') or []]
+                if sorted(tuple(g) for g in meta.get('reread_required') or []) != sorted(done): raise RuntimeError('cache refused: the cached run is incomplete')
+                doc, groups, status, errors, ver = json.loads(rawjson.read_text()), done, meta['status'], meta.get('errors') or [], meta['version']
                 reread = {g: json.loads(rawpage(g).read_text()) for g in done}; dt, printed = meta.get('docling_seconds', 0), meta.get('print_seconds', 0)
             else:
+                cache.begin(metajson)  # from here the old record vouches for nothing: a crash below leaves no record
                 src = str(path)
                 if ext != '.pdf':
                     tmp = tempfile.NamedTemporaryFile(suffix='.pdf', delete=False); tmp.close(); src = tmp.name; t1 = time.time()
@@ -173,18 +183,18 @@ def main(argv=None):
                     if str(r2.status).split('.')[-1] != 'SUCCESS': errors.append(f'pages {g[0]}-{g[1]} read again: {r2.status}'); errors += [str(e) for e in r2.errors]
                 if str(status).split('.')[-1] == 'SUCCESS' and any(e.startswith('pages ') for e in errors): status = 'ConversionStatus.PARTIAL_SUCCESS'  # a re-read that did not fully succeed leaves the file partial
                 dt = round(time.time() - t2, 1)
-                metajson.write_text(json.dumps({'sha256': sha, 'settings': settings, 'status': status, 'errors': errors, 'reread_required': groups, 'reread_done': groups, 'docling_seconds': dt, 'print_seconds': printed}))
+                cache.save(metajson, [rawjson, *(rawpage(g) for g in groups)], sha256=sha, version=version, settings=settings, status=status, errors=errors, reread_required=groups, reread_done=groups, docling_seconds=dt, print_seconds=printed)
         except Exception as e:  # a tool crash is a result, never a stop
             facts[fid] = {'status': 'FAILED', 'error': repr(e)[:300], 'seconds': round(time.time() - t0, 1)}
             (out / 'route' / (fid + '.json')).write_text(json.dumps(dict(_unsupported(fid, sha, version), status='FAILED', error=repr(e)[:300]))); print(fid, facts[fid], flush=True); continue
         t3 = time.time()
-        route = route_for_pdf(doc, fid, sha, dt, version, settings) if ext == '.pdf' else route_for_printed_html(doc, path.read_bytes(), fid, sha, dt, version, settings)
+        route = route_for_pdf(doc, fid, sha, dt, ver, settings) if ext == '.pdf' else route_for_printed_html(doc, path.read_bytes(), fid, sha, dt, ver, settings)
         if reread:
-            route['units'] = spliced(route['units'], {g: route_for_pdf(d, fid, sha, dt, version, settings)['units'] for g, d in reread.items()})
+            route['units'] = spliced(route['units'], {g: route_for_pdf(d, fid, sha, dt, ver, settings)['units'] for g, d in reread.items()})
             route['reread'] = {'full_page_ocr_pages': sorted(p for a_, b_ in reread for p in range(a_, b_ + 1)), 'groups': sorted(reread)}
         route['status'], route['error'] = route_status(status, errors)  # SUCCESS alone is OK; a partial conversion or re-read is PARTIAL with its errors
         flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
-        facts[fid] = {'status': status, 'errors': errors, 'print_seconds': printed, 'docling_seconds': dt, 'adapter_seconds': round(time.time() - t3, 2), 'items': len(flat),
+        facts[fid] = {'status': status, 'version': ver, 'errors': errors, 'print_seconds': printed, 'docling_seconds': dt, 'adapter_seconds': round(time.time() - t3, 2), 'items': len(flat),
                       'reread_required': groups, 'reread_done': sorted(reread), 'reread_pages': sorted(p for a_, b_ in reread for p in range(a_, b_ + 1)),
                       'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
                       'uncovered_chars': sum(len(anchor.squash(s['text'])) for s in route['uncovered']), 'pages': len(doc.get('pages') or {})}

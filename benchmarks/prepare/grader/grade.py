@@ -88,7 +88,26 @@ def load_key(key_dir, catalog=None):
         ext = Path(t['file_id']).suffix.lower().lstrip('.'); t['format'] = f"{t['type']}/{'htm' if ext == 'html' else ext}"
     missing = sorted({t['file_id'] for t in targets if t['split'] == 'unknown'})
     if missing: raise ValueError(f'no split assignment in {catalog} for: ' + ', '.join(missing))  # never let an unassigned file become public
+    declare(key_dir, targets)
     return targets
+
+
+def declare(key_dir, targets):
+    """The package's contract declarations (FINAL_MANIFEST `contract_declarations`; package 3: CONTRACT_DECISIONS_R4.json): targets EXCLUDED by a
+    reviewed source anchor (page numbers, owner decision (d) 2026-10-04) and block kinds compared approximately (pictures, decision (a)). An
+    exclusion must name a key target, its file, the file's bytes and the target's own anchor, else the run stops: a declaration that fails its
+    checks never grades silently (as E13). A package that declares nothing (package 2) grades as before."""
+    name = manifest(key_dir).get('contract_declarations')
+    if not name: return
+    by, kinds = {t['key_id']: t for t in targets}, set()
+    for d in json.loads((Path(key_dir) / name).read_text()).get('decisions') or []:
+        kinds |= set((d.get('policy') or {}).get('approximate_kinds') or [])
+        for e in d.get('exclusions') or []:
+            t = by.get(e['key_id'])
+            if not t or (t['file_id'], t['sha256'], t['anchor']) != (e['file_id'], e['sha256'], e['anchor']): raise ValueError(f"{name}: exclusion does not match the key: {e['key_id']}")
+            t['excluded_target'] = e['role']
+    for t in targets:
+        if t['type'] == 'structure' and t['fields'].get('kind') in kinds: t['approximate'] = True
 
 
 def load_sources(key_dir, catalog=None):
@@ -128,8 +147,8 @@ def verify_inputs(key_dir, catalog, route_dir):
     facts = {'key_package': str(key_dir), 'route_dir': str(route_dir), 'key_sha256': sha256((key_dir / 'CLAUDE_ANSWER_KEY.json').read_bytes()),
              'catalog_sha256': sha256(Path(catalog or evidence_root(key_dir).parent / 'case_catalog.csv').read_bytes()), 'manifest_sha256': None, 'verified': False, 'packets_verified': 0}
     if not m.exists(): facts['unverified_because'] = 'no frozen manifest'; return facts
-    man = manifest(key_dir); listed = man.get('files_sha256') or {}; facts['manifest_sha256'] = sha256(m.read_bytes())
-    for rel in KEY_FILES:  # pinned and present, or neither: a pinned file that is missing is a declared input lost
+    man = manifest(key_dir); listed = man.get('files_sha256') or {}; facts['manifest_sha256'] = sha256(m.read_bytes()); facts['contract_declarations'] = man.get('contract_declarations')
+    for rel in KEY_FILES + ((man['contract_declarations'],) if man.get('contract_declarations') else ()):  # pinned and present, or neither: a pinned file that is missing is a declared input lost; a named declarations file is an input too
         if (rel in listed) != (key_dir / rel).exists(): raise ValueError(f'{rel} is ' + (f'pinned by the frozen manifest of {key_dir.name} but missing' if rel in listed else f'not pinned by the frozen manifest of {key_dir.name}'))
         if rel in listed and sha256((key_dir / rel).read_bytes()) != listed[rel]: raise ValueError(f'{rel} differs from the frozen manifest of {key_dir.name}')
     root, pins = evidence_root(key_dir), man.get('packets_sha256') or {}
@@ -341,13 +360,17 @@ def strings_in(value):
     return []
 
 
-def continuous(unit, anchor):
-    """Is this unit one block read across a page break that reaches the key's page? Its anchor lists several pages and the key's page is among
-    them (owner decision (e), 2026-10-04). The split of the unit's text between its pages is not verified until the route carries per-page
-    character spans: the rule is stated as that limit."""
+def continuous(unit, anchor, want):
+    """Is the key's text the part of this unit that the route maps to the key's page? The unit is one block read across a page break (its anchor
+    lists several pages, the key's among them) and the route's per-page character spans (`charspan`) put `want` inside the key's page (owner
+    decision (e), 2026-10-04; Codex R13 C2). None when the route maps no characters to that page: the split is unknown, the verdict unresolved.
+    False when the mapping puts the text elsewhere, or the unit is not such a block."""
     spans_ = unit.get('anchor') if isinstance(unit.get('anchor'), list) else []
     pages = {a.get('page') for a in spans_ if isinstance(a, dict) and 'page' in a}
-    return len(pages) > 1 and isinstance(anchor, dict) and anchor.get('page') in pages
+    if not (len(pages) > 1 and isinstance(anchor, dict) and anchor.get('page') in pages): return False
+    text, own = unit.get('text', ''), [a.get('charspan') for a in spans_ if isinstance(a, dict) and a.get('page') == anchor.get('page')]
+    if not all(isinstance(c, list) and len(c) == 2 and 0 <= c[0] <= c[1] <= len(text) for c in own): return None
+    return any(contains(text[a:b], want) for a, b in own)
 
 
 def struck_kept(key_texts, items, anchors=(), vis=None, markers=()):
@@ -544,6 +567,29 @@ def anchor_of(k):
 def heading_eq(a, b):
     """E2: "X (continued)" is X, on either side; spacing by the boundary rule (reflow at punctuation and symbols)."""
     return boundary_equal(_CONTINUED.sub('', norm(a)), _CONTINUED.sub('', norm(b)))
+
+
+NEG = {'not', 'no', 'never', 'none', 'nor', 'without', 'cannot'}  # the critical token classes of an approximate text (E10 R4): negation words ...
+UNIT = {'thousand', 'thousands', 'million', 'millions', 'billion', 'billions', 'percent', 'bps'}  # ... unit words; numbers and dates by their digits
+_TOKEN = re.compile(r"[(\-+]?\$?\d(?:[\d,]|[./:-](?=\d))*%?\)?|[A-Za-z']+|[^\sA-Za-z\d]")  # a number keeps its sign, parentheses, currency, percent, and separators between digits only
+
+
+def critical(got, want):
+    """The critical tokens that differ between an approximate (OCR) text and its reference, by ordered alignment, never multisets (Codex R13): numbers
+    with their sign, parentheses, currency and percent; other tokens holding digits (dates); unit words; negation words. A swapped pair of values,
+    a dropped minus and a negation moved to another clause all show. {'missing': from the reference, 'extra': in the output, 'reference_numbers'}."""
+    neg = lambda w: w.lower() in NEG or w.lower().endswith("n't")
+    def tok(s):
+        words, out = _TOKEN.findall(norm(s).replace('−', '-')), []
+        for w in words: out[-1:] = [out[-1] + ' ' + w] if out and neg(out[-1].split()[0]) and ' ' not in out[-1] else out[-1:] + [w]  # a negation is read with the word it governs: 'not buy' and 'not sell' are different facts
+        return out
+    crit = lambda w: any(c.isdigit() for c in w) or neg(w.split()[0]) or w.lower() in UNIT
+    a, b = tok(want), tok(got); ca, cb = [w for w in a if crit(w)], [w for w in b if crit(w)]; missing, extra = [], []
+    if len(ca) == len(cb) and ca != cb: missing, extra = [x for x, y in zip(ca, cb) if x != y], [y for x, y in zip(ca, cb) if x != y]  # as many critical tokens, read in order: every changed place (two swapped values both show; an aligner may pair one of them elsewhere)
+    else:  # otherwise the whole text aligned: a critical token outside a matching stretch is missing or extra (a negation moved to another clause shows)
+        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
+            if op != 'equal': missing += [w for w in a[i1:i2] if crit(w)]; extra += [w for w in b[j1:j2] if crit(w)]
+    return {'missing': missing, 'extra': extra, 'reference_numbers': sum(1 for w in a if any(c.isdigit() for c in w))}
 
 
 def wer(got, want):
@@ -1011,10 +1057,15 @@ class Grader:
             else: ok &= any(local(u.get('name', '')) == item['header'] and norm(u.get('text', '')) == norm(item['text']) for u in same_group)
         if f.get('row_context'): self.row('row_context', 'excluded' if 'row_context' in ex else 'pass' if ok else 'fail', None if ok or 'row_context' in ex else 'group')
         if f.get('unit_printed'):
-            own = lambda u: (u.get('group') or {}).get('at') == group.get('at') or (u.get('group') or {}).get('count') == 1  # this instance's fields, or a field outside every repeated ancestor (the document's shared context, e.g. a security title)
-            hit = any(norm(f['unit_printed']) in norm(u.get('text', '')) or norm(f['unit_printed']) == norm(local(u.get('name', ''))) for u in rf.units if u.get('kind') == 'field' and own(u))  # an XML unit may be a printed text (a security title) or the element's own name (percentOfClass, anchored on its tag); another instance's cannot stand in
+            carries = lambda u: norm(f['unit_printed']) in norm(u.get('text', '')) or norm(f['unit_printed']) == norm(local(u.get('name', '')))  # an XML unit may be a printed text (a security title) or the element's own name (percentOfClass, anchored on its tag)
+            declared, fields = (t['support'].get('unit_printed') or {}).get('anchors') or [], [u for u in rf.units if u.get('kind') == 'field']
             if 'unit_printed' in ex: self.row('unit_printed', 'excluded')
-            else: self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing', 'anchor_unknown')
+            elif declared:  # the key names the unit's source place: the field read there must carry it, no other field stands in (Codex R13 C3)
+                at = [u for u in fields if any(overlap(u.get('anchor'), a) for a in declared)]; hit = any(carries(u) for u in at)
+                self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing' if not at else 'text')
+            else:  # no declared place: the word in this instance proves no association with the value (unresolved), the word elsewhere none at all
+                near = any(carries(u) for u in fields if (u.get('group') or {}).get('at') == group.get('at'))
+                self.row('unit_printed', 'unresolved' if near else 'fail', 'support' if near else 'missing', 'anchor_unknown')
         self.field('periods', self.periods, {'_order': v['_order'], 'cells': []}, 0, (0, 1))
         for name in T4:
             if name in f: self.row(name, 'excluded' if name in ex else 'not_t1')
@@ -1038,13 +1089,17 @@ class Grader:
         else:
             ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
             continued = False
-            if ok is False and len(units) == 1 and continuous(units[0], t['anchor']) and contains(text_of(units[0]), want):  # owner 2026-10-04 (e): a paragraph the route reads whole across a page break carries the block
-                ok, why, continued = True, None, True
+            if ok is False and len(units) == 1 and contains(text_of(units[0]), want):  # owner 2026-10-04 (e): a paragraph the route reads whole across a page break carries the block when its mapping puts the text on the key's page
+                cont = continuous(units[0], t['anchor'], want)
+                if cont: ok, why, continued = True, None, True
+                elif cont is None: ok, why = None, 'page_map'  # several pages, no character mapping: which page holds the text is unknown
             bearing = [c for u in units for c in ([x for x in u.get('cells') or [] if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
             if ok:  # the words survive, but a cancelled word may have become active, or the wrong one cancelled
                 kept = struck_kept([f.get('printed_text') or ''], bearing, [t['anchor']], rf.vis, self.markers)
                 if kept is not True: ok, why = kept, 'struck'
-            self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, ({'continued': True} if continued else {'fragmented': frag} if frag else None) if ok else {'wer': wer(got, want)})
+            if t.get('approximate') and ok is not None:  # a picture's text is approximate evidence (owner decision (a), E10 R4): its word error rate and the critical tokens that differ, never a pass
+                self.row('printed_text', 'approximate', None, {'word_error_rate': wer(got, want), 'critical_tokens': critical(got, want)})
+            else: self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, ({'continued': True} if continued else {'fragmented': frag} if frag else None) if ok else {'wer': wer(got, want)})
         main = next((u for u in units if u.get('kind') != 'table'), units[0])
         if f.get('kind') in LOOSE_KINDS: self.row('kind', 'na', None, main.get('kind'))
         elif f.get('kind'):
@@ -1078,6 +1133,10 @@ def gates_for_file(rf, status):
     g = {'dishonest': 0, 'unanchored': 0, 'boundary': 0, 'inserted_chars': 0, 'bounds_inconsistent': 0, 'dup_ids': 0, 'order_breaks': 0, 'uncovered': None, 'anchors_measured': True,
          'hidden_chars': rf.vis.hidden_chars if rf.vis else None}
     ids = [u.get('id') for u in rf.units]; g['dup_ids'] = len(ids) - len(set(ids))
+    def held(u):  # a unit declared `within` another (a field inside prose) is read there, once: it follows its holder and its span lies inside the holder's (Codex R13 C4)
+        h = rf.by_id.get(u.get('within')); a, b = (spans(u.get('anchor')) or [{}])[0], (spans(h.get('anchor')) or [{}])[0] if h else {}
+        return bool(h) and h['_order'] < u['_order'] and 'byte_start' in a and 'byte_start' in b and b['byte_start'] <= a['byte_start'] and a['byte_end_exclusive'] <= b['byte_end_exclusive']
+    g['dishonest'] += sum(1 for u in rf.units if u.get('within') and not held(u))
     keys = [order_key(u['anchor']) for u in rf.units if spans(u.get('anchor')) and u.get('layer') != 'furniture']
     g['order_breaks'] = sum(1 for a, b in zip(keys, keys[1:]) if b < a)
     ranges = []
@@ -1152,6 +1211,8 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         if rf: per_file[fid] = gates_for_file(rf, data.get('status'))
         structure_units = []
         for t in mine:
+            if t.get('excluded_target'):  # declared out of scoring by the package (page numbers): reported apart, never a pass
+                verdicts[t['key_id']] = 'EXCLUDED'; rows.append({'key_id': t['key_id'], 'file_id': fid, 'split': t['split'], 'format': t['format'], 'check': 'target', 'verdict': 'excluded', 'reason': t['excluded_target'], 'detail': None}); continue
             if status != 'OK': verdicts[t['key_id']] = status; continue
             g = Grader(t, rf)
             unit = g.grade_cell() if t['type'] == 'cell' else g.grade_structure()
@@ -1159,7 +1220,7 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
             if t['type'] == 'structure': structure_units.append((t['key_id'], order_key(t['anchor']), unit['_order']))
             failed = [r['check'] for r in g.rows if r['verdict'] == 'fail' and r['check'] not in STRUCTURE]
             marker_glued += sum(1 for r in g.rows if r['reason'] == 'marker_glued')
-            verdicts[t['key_id']] = 'FAIL' if failed else 'UNRESOLVED' if any(r['verdict'] == 'unresolved' for r in g.rows) else 'PASS'
+            verdicts[t['key_id']] = 'FAIL' if failed else 'UNRESOLVED' if any(r['verdict'] == 'unresolved' for r in g.rows) else 'APPROXIMATE' if any(r['verdict'] == 'approximate' for r in g.rows) else 'PASS'
             rows += g.rows
         for kid, a, o in structure_units:  # block order within the file
             bad = any((a < a2) != (o < o2) for k2, a2, o2 in structure_units if k2 != kid and a != a2)
@@ -1205,13 +1266,16 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
     return report
 
 
+VERDICTS = ('PASS', 'FAIL', 'UNRESOLVED', 'NOT_CONVERTED', 'EXCLUDED', 'APPROXIMATE')  # a target's verdicts; the last two only where the package declares them (R4), counted apart, never passes
+
+
 def summarize(targets, rows, verdicts, files, route, shown_ids=None):
-    by, sup = {}, {'targets': 0, 'PASS': 0, 'FAIL': 0, 'UNRESOLVED': 0, 'NOT_CONVERTED': 0}
+    by, sup = {}, {'targets': 0, **{v: 0 for v in VERDICTS}}
     for t in targets:
         v = verdicts[t['key_id']]
         if t['split'] == 'supplement':
             sup['targets'] += 1; sup[v] = sup.get(v, 0) + 1; continue
-        cell = by.setdefault(t['split'], {}).setdefault(t['format'], {'targets': 0, 'PASS': 0, 'FAIL': 0, 'UNRESOLVED': 0, 'NOT_CONVERTED': 0})
+        cell = by.setdefault(t['split'], {}).setdefault(t['format'], {'targets': 0, **{v: 0 for v in VERDICTS}})
         cell['targets'] += 1; cell[v] = cell.get(v, 0) + 1
     fields, structure = {}, {}
     for r in rows:
@@ -1232,10 +1296,11 @@ def summarize(targets, rows, verdicts, files, route, shown_ids=None):
 
 def markdown(report):
     s, out = report['summary'], ['# Route grading summary', '']
-    out += ['| split | format | targets | PASS | FAIL | UNRESOLVED | NOT_CONVERTED |', '|---|---|---:|---:|---:|---:|---:|']
+    out += ['| split | format | targets | ' + ' | '.join(VERDICTS) + ' |', '|---|---|---:|' + '---:|' * len(VERDICTS)]
+    line = lambda split, fmt, c: f"| {split} | {fmt} | {c['targets']} | " + ' | '.join(str(c.get(v, 0)) for v in VERDICTS) + ' |'
     for split, fmts in s['by_split_format'].items():
-        for fmt, c in fmts.items(): out.append(f"| {split} | {fmt} | {c['targets']} | {c['PASS']} | {c['FAIL']} | {c['UNRESOLVED']} | {c['NOT_CONVERTED']} |")
-    sp = s['supplement']; out.append(f"| supplement | cell | {sp['targets']} | {sp['PASS']} | {sp['FAIL']} | {sp['UNRESOLVED']} | {sp['NOT_CONVERTED']} |")
+        for fmt, c in fmts.items(): out.append(line(split, fmt, c))
+    out.append(line('supplement', 'cell', s['supplement']))
     out += ['', f"Excluded fields (not scored, counted): {s['excluded_fields']}", '', '| check | pass | fail | unresolved | na | excluded | not_t1 |', '|---|---:|---:|---:|---:|---:|---:|']
     for f, c in s['by_field'].items():
         out.append(f"| {f} | {c.get('pass', 0)} | {c.get('fail', 0)} | {c.get('unresolved', 0)} | {c.get('na', 0)} | {c.get('excluded', 0)} | {c.get('not_t1', 0)} |")

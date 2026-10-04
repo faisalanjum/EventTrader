@@ -790,3 +790,69 @@ Tests 203 → 208 (the owner's rule (e) included: a unit anchored on several pag
 is corrected to a candidate: no net gain against the render (each 217/231, each recovers 3 the other misses, union 220, best 221), the complete-route
 time ≈ 7.7 min per 60 files, page numbers a route loss under the active contract until the key side changes it, pictures under the frozen contract
 until the owner's rule enters the next package.
+
+## 37. Round 13 (2026-10-04 05:33, Codex's `ROUND13_CODEX.md` on 5658a7c89) — five corrections, all reproduced, all closed; package 3 staged on his build order
+
+**What Codex found (all reproduced live first, his scripts pointed at the repository: `codex_probes_live/r13_*`).** C1 a cached conversion could revive a
+stale success: the PDF adapter wrote the base output before the re-read and left the old record beside it, so a crash in the re-read followed by
+`--reuse-raw` reported OK over a half-finished output; the HTML adapter reused a plain-mode cache under `--prestep-headings` and a cache of other source
+bytes, and a reused PDF output was labelled with the installed version instead of its producing one. C2 the owner's page-break rule (e) accepted a
+paragraph whose text the tool mapped to another page, and passed when no mapping existed at all — the mapping condition of decision (e) was stated as a
+limit, not implemented, although Docling already writes `prov[].charspan` per page. C3 `grade_xml` ignored the key's declared source place of a unit
+(`support.unit_printed`): a unit removed from its holding was supplied by an unrelated unique branch or by a comment of the same holding. C4 the XML route
+emitted a prose parent after the fields inside it (a reading-order break on every mixed element, and the texts read twice when joined). C5 the re-read id
+renamer rewrote every equal string, source text and hrefs included.
+
+**A cache is a record of the run that produced it (`adapters/cache.py`, used by `docling_pdf.py` and `docling_html.py`).** The record beside the raw
+output names the source bytes, the producing version and settings, every output file with its own hash, and the run's outcome. It is removed before any
+output is written again and written only after every output is saved, so a crash between leaves no record and no stale success. Reuse checks the record
+against the files on disk (other bytes, other settings, a changed or missing output, no version: refused, FAILED with the reason) and keeps the producing
+version on the route and in the facts — a newer installed tool never relabels an old conversion. The PDF route's records from run 32 were completed once
+(`grader_next/migrate_cache_records.py`: the producing version from the run's facts and the hash of every output, only where the record is newer than
+all its outputs, as the old writer wrote it last) so run 34 could re-adapt the saved output without converting again; HTML caches have no record yet and
+are reconverted when next needed.
+
+**The page-break rule reads the tool's own mapping (`docling_pdf.py::mapped`, `anchors_from_boxes`; `grade.py::continuous`).** Each page anchor of a
+unit carries the span of the text it holds (`charspan`) when the tool's spans are consistent (inside the text, in page order); inconsistent spans are
+dropped, the pages stay. The rule passes only when the part of the unit mapped to the key's page contains the key's text in order (`continued`); a unit
+over several pages without a mapping is **unresolved** (`page_map`); a mapping that puts the text elsewhere fails. The real case (`0000950170-24-131547`,
+item `#/texts/304`, page 35 `[0,1026)`, page 36 `[1027,1239)`) passes on its page-36 span: native PDF stays 5/9 on evidence, not on a page list.
+
+**An XML unit is read where the key says (`grade_xml`).** With declared support anchors, the field read there must carry the word (pass), another
+word there fails (`text`), no field there fails (`missing`); with no declared place, a word of the same instance is **unresolved** (`support`: no
+association with the value is shown) and a word elsewhere fails. All nine development XML cells carry declared anchors (model support); they pass by
+them. The document-level shortcut (`count == 1`) is gone.
+
+**XML units in source order with explicit containment (`xml_fields.py::units_of`; `gates_for_file`).** Units stand in source order (a prose parent
+before the fields inside it); each field inside prose names the prose unit it stands `within`. The reading stream is the units held by no other, each
+source character once; field lookups see every unit. The gate checks the declaration (a `within` unit must follow its holder and lie inside its bytes,
+else dishonest) and keeps the order check over every unit, so swapped fields inside prose still break order.
+
+**References only (`docling_pdf.py::spliced`).** The renamer touches `id`, `notes` and `links[].to`; text, captions, cell values and hrefs keep their bytes.
+
+**Run 34 (05:53–05:58; PDF route re-adapted from its saved output through the completed records, XML regenerated, 13 routes regraded, round-7 A/B).**
+Every HTML number equals run 33 (EdgarTools + formatting + screen 168/171, 49/60 with 11 unresolved; render + formatting 165/171, 52/60; best single
+route 217/231, best pick 221, no route 10); XML 9/9 with every unit bound to its declared place; native PDF 5/9 with the continued paragraph passing on
+its page mapping; the PDF facts carry the producing version; round-7 grader on the same folders: 0 passes lost. Tests 208 → 211. Codex's r4–r13 probe
+scripts: as expected (`r10_xml_capability_check.py` needs the EdgarTools environment: exit 0 there).
+
+**Package 3, staged on Codex's build order (`prepare_work/grader_review_codex_20261003/package3_build.py`, reproducible; the folder
+`bulk_20261002/FINAL_KEY_FOR_CODEX_20261004_0557`, read-only).** A full copy of package 2 beside it (same evidence root); the staged `claude_build_key.py` and
+`claude_support_map.py` read packets and raw answers through the manifest's declared, hash-checked evidence root (the frozen copies assumed the bulk
+folder as working directory); the unchanged three-row batch applied through `claude_decide.py`; the key rebuilt — 457 records, 0 pending, exactly three
+changed and only their `header_path`; Codex's reviewed Park header pointer (8 spans, source hash checked) in `KEY_SUPPORT_OVERRIDES.json`; the support
+map regenerated (Park `reviewed`, Aflac `search` 1 hit, Carnival `model`; 0 searched pieces missing); the three records re-verified and stamped;
+`CONTRACT_DECISIONS_R4.json` (the owner's decisions (a)–(e) in Codex's wording: E10 picture text, E10 page numbers with the three declared exclusions
+and their reviewed anchors, E12 continuous paragraphs, E17 XML-route exception, the OCR adoption rule) mirrored in the README E-rules and the
+comparison contract; the manifest written last (`final_pass/make_manifest.py`: packets, raw answers, regression evidence and the catalog re-hashed and
+required equal to package 2; `contract_declarations` names the R4 file) and the gate run: 103 files, 37 packets, 1881 packet files, 296 raw answers, 457
+stamps current, no mismatch; the frozen support tests (11) and regression cases (8) pass. Package 2, the repository pointer and the golden copies are
+untouched until Codex's verification.
+
+**The grader reads a package's declarations (`grade.py::declare`, `critical`; `verify_inputs` pins the declarations file too).** A target the package
+excludes by a reviewed source anchor (page numbers) is **EXCLUDED** — one row, nothing graded, counted apart in every summary, never a pass; the
+declaration must name the key target, its file, the file's bytes and the target's own anchor, else the run stops. A block the key declares an image is
+**APPROXIMATE** when its text was converted: the row carries the word error rate and the critical tokens that differ — numbers with sign, parentheses,
+currency and percent, tokens holding digits, unit words, and a negation read with the word it governs — compared position by position when both texts hold
+as many critical tokens (two swapped values both show) and by ordered alignment otherwise; exact OCR is still not a pass; a dropped picture stays
+unresolved; the other checks of the block (section path, references) stay strict. Package 2 declares nothing and grades as before.

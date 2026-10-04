@@ -137,10 +137,16 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         units = xf.units_of(raw); R, P1 = raw.index(b'<sub'), raw.index(b'<person>'); P2 = raw.index(b'<person>', P1 + 1)  # an instance is named by its start tag (Codex N2)
         self.assertEqual([(u['name'], u['text'], u['group']) for u in units], [('{urn:x}title', 'Common & Preferred', {'index': 1, 'count': 1, 'at': R}), ('{urn:x}name', 'Alpha', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}shares', '10', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}name', 'Beta', {'index': 2, 'count': 2, 'at': P2}), ('{urn:x}shares', '0', {'index': 2, 'count': 2, 'at': P2})])
         facts = {}; us = xf.units_of(b'<r><note>Ownership is <b>not</b> zero.</note><holding amount="10" unit="shares"/><q>1</q><q>2</q></r>', facts)
-        self.assertEqual([(u['name'], u['text'], u['siblings'], u.get('mixed')) for u in us], [('b', 'not', {'index': 1, 'count': 1}, None), ('note', 'Ownership is not zero.', {'index': 1, 'count': 1}, True), ('q', '1', {'index': 1, 'count': 2}, None), ('q', '2', {'index': 2, 'count': 2}, None)])  # prose around a child: read whole and marked mixed, the child kept as a field of its own (Codex R12-6); repeated leaves report their own place
+        self.assertEqual([(u['id'], u['name'], u['text'], u['siblings'], u.get('mixed'), u.get('within')) for u in us], [('f0', 'note', 'Ownership is not zero.', {'index': 1, 'count': 1}, True, None), ('f1', 'b', 'not', {'index': 1, 'count': 1}, None, 'f0'), ('f2', 'q', '1', {'index': 1, 'count': 2}, None, None), ('f3', 'q', '2', {'index': 2, 'count': 2}, None, None)])  # source order; prose around a child: read whole and marked mixed, the child kept as a field of its own that names the prose it stands within (Codex R12-6, R13 C4); repeated leaves report their own place
         self.assertEqual(facts, {'attribute_values': 2})  # attribute values are not read, and the route says so
-        us = xf.units_of(b'<r><holding>Balance:<amount>10</amount><unit>shares</unit></holding><note>1<b>2</b>3</note></r>')
-        self.assertEqual([(u['name'], u['text'], u.get('mixed')) for u in us], [('amount', '10', None), ('unit', 'shares', None), ('holding', 'Balance:10shares', True), ('b', '2', None), ('note', '123', True)])  # no field identity erased, no space of ours
+        rawm = b'<r><holding>Balance:<amount>10</amount><unit>shares</unit></holding><note>1<b>2</b>3</note></r>'; us = xf.units_of(rawm)
+        self.assertEqual([(u['name'], u['text'], u.get('mixed'), u.get('within')) for u in us], [('holding', 'Balance:10shares', True, None), ('amount', '10', None, 'f0'), ('unit', 'shares', None, 'f0'), ('note', '123', True, None), ('b', '2', None, 'f3')])  # no field identity erased, no space of ours
+        from benchmarks.prepare.grader import grade
+        gate = lambda units: grade.gates_for_file(grade.RouteFile({'file_id': 'syn/m.xml', 'units': copy.deepcopy(units)}, rawm, 'xml'), 'OK')
+        self.assertEqual((''.join(u['text'] for u in us if not u.get('within')), gate(us)['order_breaks'], gate(us)['dishonest']), ('Balance:10shares123', 0, 0))  # the reading stream: the units held by no other, each source character once, in source order
+        self.assertEqual((gate([us[1], us[0]] + us[2:])['order_breaks'], gate([us[1], us[0]] + us[2:])['dishonest']), (1, 1))  # a field emitted before the prose that holds it: out of order, and not held
+        self.assertEqual(gate([us[0], us[2], us[1]] + us[3:])['order_breaks'], 1)  # two fields of the prose swapped: still an order break, nothing waived
+        self.assertEqual(gate(us[:4] + [dict(us[4], within='f0')])['dishonest'], 1)  # a declared holder whose bytes do not hold the field
         import tempfile
         from unittest.mock import patch
         with tempfile.TemporaryDirectory() as d:  # Codex R12-4: the run summary keeps every file (the per-file unread dictionary used to overwrite it)
@@ -270,10 +276,12 @@ class DoclingPdfAdapterTests(unittest.TestCase):
     def test_native_pdf_anchors_are_top_left_page_regions_from_docling_boxes(self):
         route = dp.route_for_pdf(PDFDOC, 'acc/deck.pdf', 'sha', seconds=12.0, version='2.x')
         heading, table, para = route['units']
-        self.assertEqual(heading['anchor'], {'page': 1, 'region': [100.0, 50.0, 500.0, 70.0]})   # 792 - 742 = 50, 792 - 722 = 70
+        self.assertEqual(heading['anchor'], {'page': 1, 'region': [100.0, 50.0, 500.0, 70.0], 'charspan': [0, 32]})   # 792 - 742 = 50, 792 - 722 = 70; the tool's span of the text on this page
         self.assertEqual(table['cells'][1]['anchor'], {'page': 1, 'region': [454.0, 449.0, 474.0, 458.0]})
         self.assertEqual([c['text'] for c in table['cells']], ['YTD 24', '1,970'])  # empty cells dropped
-        self.assertEqual(para['anchor'], [{'page': 1, 'region': [50.0, 692.0, 550.0, 712.0]}, {'page': 2, 'region': [50.0, 32.0, 550.0, 52.0]}])  # a block over two pages
+        self.assertEqual(para['anchor'], [{'page': 1, 'region': [50.0, 692.0, 550.0, 712.0], 'charspan': [0, 20]}, {'page': 2, 'region': [50.0, 32.0, 550.0, 52.0], 'charspan': [20, 46]}])  # a block over two pages, each page with its characters (Codex R13 C2)
+        bad = copy.deepcopy(PDFDOC); bad['texts'][1]['prov'][1]['charspan'] = [20, 99]
+        self.assertEqual(dp.route_for_pdf(bad, 'acc/deck.pdf', 'sha', seconds=1.0, version='2.x')['units'][2]['anchor'], [{'page': 1, 'region': [50.0, 692.0, 550.0, 712.0]}, {'page': 2, 'region': [50.0, 32.0, 550.0, 52.0]}])  # a span outside the text: the pages stay, the split is unknown
         self.assertEqual(route['status'], 'OK'); self.assertEqual(route['route']['tool'], 'docling')
         self.assertTrue(all(not k.startswith('_') for u in route['units'] for c in (u.get('cells') or [u]) for k in c))
 
@@ -290,6 +298,8 @@ class DoclingPdfAdapterTests(unittest.TestCase):
         tb = {'id': 't', 'kind': 'table', 'anchor': {'page': 2, 'region': [0, 0, 1, 1]}, 'cells': [], 'notes': ['n']}; note = {'id': 'n', 'kind': 'footnote', 'text': 'x', 'anchor': {'page': 2, 'region': [0, 0, 1, 1]}, 'links': [{'text': 'x', 'href': None, 'to': 't'}]}
         out = dp.spliced([u('a', 1, 'One.')], {(2, 2): [tb, note]})
         self.assertEqual([(x['id'], x.get('notes'), [l['to'] for l in x.get('links') or []]) for x in out], [('a', None, []), ('p2:t', ['p2:n'], []), ('p2:n', None, ['p2:t'])])
+        lit = dp.spliced([], {(2, 2): [dict(note, text='n', links=[{'text': 'n', 'href': 'n', 'to': 'n'}])]})[0]
+        self.assertEqual((lit['id'], lit['text'], lit['links']), ('p2:n', 'n', [{'text': 'n', 'href': 'n', 'to': 'p2:n'}]))  # Codex R13 C5: ids and references are renamed; text, labels and hrefs keep their bytes
         self.assertEqual(dp.spliced(first, {}), first)
         self.assertEqual(dp.reread_groups([u('a', 1, 'x'), span, u('c', 3, 'y'), u('d', 7, 'z')], [2]), [(2, 3)])  # the group closes over the spanning unit: read again whole
         self.assertEqual(dp.reread_groups([u('a', 1, 'x')], [2, 3, 7]), [(2, 3), (7, 7)])
@@ -300,6 +310,52 @@ class DoclingPdfAdapterTests(unittest.TestCase):
         self.assertEqual(dh.route_status('ConversionStatus.PARTIAL_SUCCESS', ['page 3: layout failed']), ('PARTIAL', 'page 3: layout failed'))
         self.assertEqual(dh.route_status('ConversionStatus.FAILURE', []), ('FAILED', 'conversion status ConversionStatus.FAILURE'))
         self.assertEqual(dh.route_status('reused raw')[0], 'FAILED')
+
+    def test_a_cached_conversion_is_reused_only_whole_and_keeps_its_producing_version(self):
+        # Codex R13 C1: the record beside the raw output binds it to the source bytes, settings, producing version and every output file; it is removed before
+        # any output is written again and written after all are saved — a crash between leaves no record; a newer installed tool never relabels an old run
+        import importlib.metadata, io, sys, tempfile
+        from contextlib import redirect_stdout
+        from types import ModuleType, SimpleNamespace as NS
+        from unittest.mock import patch
+        class Options:
+            def __init__(self, **kw): self.table_structure_options, self.ocr_options = NS(mode=None), NS(mode='AUTO')
+            def model_copy(self, deep=False): return copy.deepcopy(self)
+        class Score:
+            def __init__(self, parse_score): self.parse_score, self.low_grade = parse_score, NS(value='poor' if parse_score == 0 else 'good')
+        class Converter:
+            plan = []
+            def __init__(self, **kw): pass
+            def convert(self, *args, **kw):
+                r = Converter.plan.pop(0)
+                if isinstance(r, Exception): raise r
+                text, poor = r; d = copy.deepcopy(PDFDOC); d['texts'][0]['text'] = text
+                return NS(status='ConversionStatus.SUCCESS', errors=[], confidence=NS(pages={1: Score(0 if poor else 1)}), document=NS(export_to_dict=lambda: d))
+        mods = {n: ModuleType(n) for n in ('docling', 'docling.datamodel', 'docling.document_converter', 'docling.datamodel.base_models', 'docling.datamodel.pipeline_options')}
+        mods['docling.document_converter'].DocumentConverter, mods['docling.document_converter'].PdfFormatOption = Converter, lambda **kw: NS(**kw)
+        mods['docling.datamodel.base_models'].InputFormat = NS(PDF='PDF'); po = mods['docling.datamodel.pipeline_options']
+        po.PdfPipelineOptions, po.TableFormerMode, po.HeadingHierarchyOptions, po.OcrMode = Options, NS(FAST='FAST'), lambda **kw: NS(**kw), NS(FULL_PAGE='FULL_PAGE')
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td); src = p / 's.pdf'; src.write_bytes(b'mocked'); sources = [{'file_id': 's.pdf', 'path': src, 'sha256': 'fixture', 'split': 'development'}]
+            def run(module, plan, flags=(), version='A'):
+                Converter.plan = list(plan)
+                with patch.dict(sys.modules, mods), patch.object(module.grade, 'load_sources', return_value=sources), patch.object(importlib.metadata, 'version', return_value=version), redirect_stdout(io.StringIO()):
+                    module.main(['--key', td, '--split', 'development', '--out', str(p / 'run'), *flags])
+                r = json.loads((p / 'run' / 'route' / (sources[0]['file_id'] + '.json')).read_text())
+                return r['status'], r['error'] or '', [u['text'] for u in r['units'] if u.get('text')][:1], r['route']['version']
+            self.assertEqual(run(dp, [('Good', False)])[0], 'OK')
+            self.assertEqual(run(dp, [('Needs OCR', True), RuntimeError('reread crashed')])[0], 'FAILED')  # the base output was overwritten, the re-read never came
+            r = run(dp, [], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('cache refused: no record', r[1])  # the old success record went before the overwrite
+            run(dp, [('Good again', False)]); self.assertTrue((p / 'run' / 'raw' / 's.pdf.meta.json').exists())
+            self.assertEqual(run(dp, [], ['--reuse-raw'], version='B')[2:], (['Good again'], 'docling A; docling-core A'))  # reused whole; the producing version, not the installed one
+            raw = p / 'run' / 'raw' / 's.pdf.docling.json'; raw.write_bytes(raw.read_bytes() + b' ')
+            r = run(dp, [], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('is not the file the cached run saved', r[1])  # an output changed under its record
+            src = p / 's.htm'; src.write_bytes(b'<p>x</p>'); sources[:] = [{'file_id': 's.htm', 'path': src, 'sha256': 'h1', 'split': 'development'}]
+            self.assertEqual(run(dh, [('Plain', False)])[0], 'OK')
+            r = run(dh, [], ['--reuse-raw', '--prestep-headings']); self.assertEqual(r[0], 'FAILED'); self.assertIn('other settings', r[1])  # a plain run is not the headings route
+            self.assertEqual(run(dh, [], ['--reuse-raw'], version='B')[2:], (['Plain'], 'docling A; docling-core A'))
+            sources[0]['sha256'] = 'h2'
+            r = run(dh, [], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('other bytes', r[1])  # the original changed under the cache
 
 from benchmarks.prepare.grader.adapters import prestep_headings as ph
 
