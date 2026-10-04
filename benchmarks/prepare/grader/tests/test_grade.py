@@ -547,6 +547,26 @@ class PlantedFaultTests(GraderFixture):
                 g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
                 self.assertEqual(next(r['verdict'] for r in g.rows if r['check'] == field), 'pass', (field, n))
 
+    def test_a_run_in_heading_printed_in_pieces_is_found_at_its_anchor(self):
+        # tool test 3 (contract exhibits): "Section 1.01 Defined Terms." runs into its paragraph; tools emit it as pieces, glued ("1.01Defined") or split by
+        # a no-break space; the run-in rule reads the pieces as the source prints them and compares by the boundary rule (same rule as every other field)
+        table = b'<table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        def graded(raw, units):
+            span = lambda text: {'byte_start': raw.index(text[0] if isinstance(text, tuple) else text), 'byte_end_exclusive': raw.index(text[1] if isinstance(text, tuple) else text) + len(text[1] if isinstance(text, tuple) else text)}  # bytes, or (first, last) when tags sit between
+            evidence = {'byte_start': 0, 'byte_end_exclusive': raw.index(b'<table>')}
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}]}
+            t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+                 'support': {'section_path': {'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', 'section_path': ['Section 1.01 Defined Terms.']}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [dict(u, anchor=span(u['anchor'])) for u in units] + [tb]}, raw, 'htm')); g.grade_cell()
+            return next((r['verdict'], r.get('detail')) for r in g.rows if r['check'] == 'section_path')
+        body = b'. As used in this Agreement, the following terms have the meanings set forth below.'
+        glued = b'<p><b>Section 1.01</b><u>Defined Terms</u>' + body + b'</p>' + table   # three pieces, glued in the bytes (Docling's shape)
+        self.assertEqual(graded(glued, [{'id': 'a', 'kind': 'text', 'text': 'Section 1.01', 'anchor': b'Section 1.01'}, {'id': 'b', 'kind': 'text', 'text': 'Defined Terms', 'anchor': b'Defined Terms'}, {'id': 'c', 'kind': 'text', 'text': body.decode(), 'anchor': body}]), ('pass', 'run_in'))
+        self.assertEqual(graded(glued, [{'id': 'a', 'kind': 'heading', 'text': 'Section 1.01', 'anchor': b'Section 1.01'}, {'id': 'b', 'kind': 'text', 'text': 'Defined Terms' + body.decode(), 'anchor': (b'Defined Terms', body)}]), ('pass', 'run_in'))  # EdgarTools' shape
+        nbsp = '<p><b>Section 1.01</b>\u00a0\u00a0<u>Defined Terms</u>'.encode() + body + b'</p>' + table   # pieces apart by no-break spaces
+        self.assertEqual(graded(nbsp, [{'id': 'a', 'kind': 'heading', 'text': 'Section 1.01', 'anchor': b'Section 1.01'}, {'id': 'b', 'kind': 'text', 'text': 'Defined Terms' + body.decode(), 'anchor': (b'Defined Terms', body)}]), ('pass', 'run_in'))
+        self.assertEqual(graded(glued, [{'id': 'a', 'kind': 'text', 'text': 'Section 1.02', 'anchor': b'Section 1.01'}, {'id': 'c', 'kind': 'text', 'text': 'Defined Terms' + body.decode(), 'anchor': (b'Defined Terms', body)}])[0], 'fail')  # a changed number is not the heading
+
     def test_another_rows_strike_does_not_fail_a_correctly_struck_label(self):
         # Codex R9-2B: the struck check reads the cells at this field's own support, never every cell of the containing table
         raw = b'<table><tr><td><s>Obsolete</s></td><td>10</td></tr><tr><td><s>Cancelled</s></td><td>20</td></tr></table>'

@@ -758,10 +758,14 @@ class Grader:
             if hit is None and i + 1 < len(pieces):  # E9: two levels printed on one line
                 hit2 = next((k for k in cars if heading_eq(k['text'], pieces[i] + ' ' + pieces[i + 1])), None)
                 if hit2 is not None: found.append(hit2); i += 2; continue
-            if hit is None and anchors:  # a run-in heading: the block at the heading's own anchor starts with it (guide V18)
-                want = _CONTINUED.sub('', norm(pieces[i])).strip()
-                hit = next((k for k in cars if norm(k['text']).startswith(want) and len(norm(k['text'])) > len(want)), None)
-                if hit is not None: run_in = True
+            if hit is None and anchors:  # a run-in heading: the block at the heading's own anchor starts with it (guide V18); the heading may be printed in pieces (E12), spacing by the boundary rule
+                want = _CONTINUED.sub('', norm(pieces[i])).strip(); sw, tw = squash(want), tokens(want)
+                for a in range(len(cars)):
+                    text = cars[a]['text']
+                    for b in range(a + 1, len(cars)):
+                        if len(squash(text)) > len(sw): break
+                        text += ('' if self.adjacent(anchor_of(cars[b - 1]), anchor_of(cars[b])) else ' ') + cars[b]['text']  # read as the source prints the pieces
+                    if len(squash(text)) > len(sw) and squash(norm(text)).startswith(sw) and tokens(text)[:len(tw)] == tw: hit, run_in = cars[a], True; break
             if hit is None:
                 if any(k.get('joins') and heading_eq(spaced(k), pieces[i]) for k in cars): return 'unresolved', 'adjacency', pieces[i]  # the pieces touch where the heading prints a space: the page may space them
                 near = next((k for k in cars if spacing_only(k['text'], pieces[i])), None)

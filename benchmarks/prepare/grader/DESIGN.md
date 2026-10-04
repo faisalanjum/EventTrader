@@ -567,3 +567,19 @@ pick 213, no route 18 (pictures 8, contract-exhibit headings 8, two key-side ite
 only (Docling +8, pre-step +7, EdgarTools +6, browser render +10), no pass lost, no new unresolved. 186 tests, 48/48 real pairs, Codex's rounds 4–9 scripts
 behave (his `merged_units(units, [want])` call adapted to the live signature, which no longer takes the key). Method: every comparison run and proof prints the
 module it loaded, with `PYTHONPATH=` (§28).
+
+## 30. Tool test 3 — contract-exhibit headings (2026-10-03 23:05): a grader gap, not a tool gap
+
+The ledger's class C (8 targets in three credit agreements) was described as "bold/centred paragraphs no tool reads as headings". Looking at what the
+routes emit at the key's anchors: both tools carry every heading's text; the failing level is always the last one, a **run-in heading** — "Section 1.01
+Defined Terms." continues into its paragraph in the same block — which the tools print in pieces (Docling: `Section 1.01` · `Defined Terms` · `. As used in
+this Agreement…`; EdgarTools: heading `Section 1.01` · text `Defined Terms. As used…`), glued in the bytes ("1.01Defined") or parted by no-break spaces. The
+run-in rule (guide V18) still demanded one carrier whose text starts with the heading, spaces exact. It now reads consecutive carriers as the source prints
+them (touching → nothing, else a space) and compares the prefix by the boundary rule — the same generalisation every other field received in rounds 7–9 —
+while a changed number still fails. Test: Docling's three-piece shape, EdgarTools' shape, the no-break-space shape, the negative.
+
+Run 25 (regrade of the 12 route folders): all 8 class-C targets pass on at least one route; browser render + formatting 165/171 cells, 52/60 blocks;
+EdgarTools + formatting + screen 168/171, 45/55; best single route 217 of 231, best pick 221, no route 10 = pictures 8 + the two key-side items. The
+committed round-7 grader on the same folders: pass gains only (the new section-path passes are run-ins, so `heading_recognised` — a structure count —
+records them as not recognised). 187 tests. Heading **recognition** by the tools stays as measured (EdgarTools calls `Section 1.01` a heading, neither tool
+the two-line `ARTICLE I / DEFINITIONS`); it is a structure count, not a pass rule, and is the honest remaining tool-side fact for this class.
