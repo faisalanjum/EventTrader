@@ -130,15 +130,10 @@ Call it before JSON/schema parsing or transcript SDK transformations; keep sourc
 event, publication/version and actual retrieval metadata in caller-owned receipts.
 Existing news/transcript ingestion has not been connected to it yet.
 
-The bounded comparison job lives in `scripts/driver/prepare/acquisition_check.py`;
-tests live in `tests/driver/prepare/get/`. It consumes a frozen filing list and local
-originals, writes the final outcome report once, and separates this-run requests
-from cached history. It is a comparison job, not the overnight runner
-(`driver/prepare/get/full_run.py`: frozen list → package + SEC file list per
-filing; only OK is final, so a rerun retries everything else, and an earlier OK
-counts only if its saved version still fully verifies as that filing; UNRESOLVED marks a
-filing with a file lacking SEC proof, and its retry may replace that unusable version; `--repair`
-re-saves versions the decoder now makes differently). Its HTML
-links are observations, not a claim of complete reference
-resolution. Conversion, reference interpretation and ingestion activation are
+The full runner is `driver/prepare/get/full_run.py`; tests live in `tests/driver/prepare/get/`.
+Frozen list → package + SEC file list per filing; only OK is final, so a rerun retries
+everything else, and an earlier OK counts only if its saved version still fully verifies as
+that filing; UNRESOLVED marks a filing with a file lacking SEC proof, and its retry may
+replace that unusable version; `--repair` re-saves versions the decoder now makes
+differently. Conversion, reference interpretation and ingestion activation are
 separate steps.

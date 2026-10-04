@@ -19,7 +19,6 @@ driver/prepare/get/campaign.py      tests/driver/prepare/get/test_campaign.py
                                    tests/driver/prepare/get/test_crash.py
 driver/prepare/get/inventory.py     tests/driver/prepare/get/test_inventory.py
 driver/prepare/get/full_run.py      tests/driver/prepare/get/test_full_run.py
-scripts/driver/prepare/             tests/driver/prepare/get/test_acquisition_check.py
                                    tests/driver/prepare/get/fixtures/
 ```
 
