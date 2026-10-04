@@ -405,14 +405,16 @@ class Grader:
         self.markers = [m['marker_text'] for _, v in alternatives(t, 'footnote_markers') for m in (v or [])]
         self.own = [p for f in ('unit_printed', 'segment_or_basis', 'corner_text', 'table_title', 'row_label') for _, v in alternatives(t, f) for p in pieces_of(v)]
         self.own += [part['text'] for _, v in alternatives(t, 'periods') for g in (v or []) for part in g.get('parts') or []]
-        # table context the key declares for this table (E13 ruling): admitted only for the table's heading block — title, header path,
-        # corner — and only when every declared anchor reads the phrase inside this table; anything else is a key defect, stated loudly
+        # table context the key declares for this table (E13, addendum C1): admitted only for the table's heading block — title, header
+        # path, corner — and only when every declared anchor reads the phrase inside the table or in its title block (from the declared
+        # title's anchor to the table's end: a title printed in an outer cell above a nested data table); anything else is a key defect
         ta = t.get('table_anchor') or {}; self.table_context = []
+        lo = min([ta['byte_start']] + [a['byte_start'] for a in anchors_of(t, 'table_title') if 'byte_start' in a]) if 'byte_start' in ta else None
         for pc in (t['support'].get('table_context') or {}).get('pieces') or []:
             at = pc.get('byte_ranges') or []
-            if not (pc.get('text') and at and rf.vis is not None and 'byte_start' in ta and
-                    all(ta['byte_start'] <= a < b <= ta['byte_end_exclusive'] and squash(rf.vis.at(a, b)) == squash(pc['text']) for a, b in at)):
-                raise ValueError(f"{t['key_id']}: table_context {pc.get('text')!r} is not the text at an anchor inside this table (fix the key package)")
+            if not (pc.get('text') and at and rf.vis is not None and lo is not None and
+                    all(lo <= a < b <= ta['byte_end_exclusive'] and squash(rf.vis.at(a, b)) == squash(pc['text']) for a, b in at)):
+                raise ValueError(f"{t['key_id']}: table_context {pc.get('text')!r} is not the text at an anchor inside this table or its title block (fix the key package)")
             self.table_context.append(pc['text'])
 
     def same(self, got, want):
@@ -547,11 +549,12 @@ class Grader:
 
     def row_context(self, value, alt, tb, vr):
         for item in value:
-            cell = next((c for c in self.rf.cells_in(tb) if row_hit(c, vr) and self.same(c.get('text', ''), item['text'])[0]), None)
-            if cell is None: return 'fail', 'row', item['text']
-            if item.get('header') and item['header'] != 'position' and not any(
-                    c['r'] < vr and col_hit(c, cell['c']) and self.same(c.get('text', ''), item['header'])[0] for c in self.rf.cells_in(tb)):
-                return 'fail', 'header', item['header']
+            cells = [c for c in self.rf.cells_in(tb) if row_hit(c, vr) and self.same(c.get('text', ''), item['text'])[0]]  # a row may print the same text twice: the one under the named header is meant
+            if not cells: return 'fail', 'row', item['text']
+            if item.get('header') and item['header'] != 'position':
+                heads = [c for c in self.rf.cells_in(tb) if c['r'] < vr] + [k['cell'] for k in self.carriers(anchors_of(self.t, 'row_context', alt), [item['header']])
+                                                                           if k['cell'] is not None and k['table'] is not tb and k['order'] < tb['_order']]  # or printed in the first part of a continued table (E1, addendum C5)
+                if not any(col_hit(h, c['c']) and self.same(h.get('text', ''), item['header'])[0] for c in cells for h in heads): return 'fail', 'header', item['header']
         return 'pass', None, None
 
     def header_path(self, value, alt, tb, vr, vcols):
@@ -596,12 +599,15 @@ class Grader:
         if not cars: return 'fail', 'missing', None
         hit = next((k for k in cars if norm(k['text']) == norm(value)), None)
         if hit is None and self.pieces_match([k['text'] for k in cars], value, [anchor_of(k) for k in cars])[0]: hit = cars[-1]
+        flag = None
         if hit is None:
             got = norm(' '.join(k['text'] for k in cars))
-            return 'fail', 'spacing' if any(spacing_only(k['text'], value) for k in cars) or spacing_only(got, value) else 'text', got
-        if hit['table'] is tb: return 'pass', None, None
-        between = [u for u in self.rf.units if hit['order'] < u['_order'] < tb['_order'] and u.get('kind') not in ('clutter', 'image') and u['_order'] not in self.ctx_orders]
-        return ('pass', None, None) if not between else ('fail', 'placement', None)
+            if re.search(r'(?<!\w)' + re.escape(norm(value)) + r'(?!\w)', got): hit, flag = cars[-1], 'contained'  # whole and in order inside the carriers (addendum C6)
+            else: return 'fail', 'spacing' if any(spacing_only(k['text'], value) for k in cars) or spacing_only(got, value) else 'text', got
+        if hit['table'] is tb: return 'pass', None, flag
+        between = [u for u in self.rf.units if hit['order'] < u['_order'] < tb['_order'] and u.get('kind') not in ('clutter', 'image') and u['_order'] not in self.ctx_orders
+                   and not (source_before(hit['anchor'], u.get('anchor')) and source_before(u.get('anchor'), tb.get('anchor')))]  # what the source prints between them (page furniture) is not a displacement
+        return ('pass', None, flag) if not between else ('fail', 'placement', None)
 
     def section_path(self, value, alt, target_order, tb=None):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'section_path', alt)
@@ -651,6 +657,7 @@ class Grader:
         return ('fail', 'text', ' '.join(k['text'] for k in cars)) if cars else ('fail', 'missing', None)
 
     def periods(self, value, alt, tb, vr, vcols):
+        change = any(g.get('role') in ('compared', 'comparison') for g in value)  # a change between periods (guide 3.10, addendum C2): its parts head the compared columns
         for group in value:
             for part in group.get('parts') or []:
                 want, a = norm(part['text']), part.get('anchor')
@@ -659,7 +666,9 @@ class Grader:
                     if not self.same(joined(cells), want)[0] and not any(want in norm(c.get('text', '')) for c in cells): return 'fail', 'text', part['text']
                     label_col = min([c['c'] for c in self.rf.cells_in(tb) if row_hit(c, vr)] or [0])
                     free = [c for c in cells if c['r'] != vr and not col_hit(c, vcols)]  # neither on the value's row nor over its column
-                    if any(c['c'] > label_col for c in free): return 'fail', 'column', part['text']
+                    if any(c['c'] > label_col for c in free):
+                        if not change or any(c['r'] > vr for c in free): return 'fail', 'column', part['text']
+                        continue  # the compared columns' headings, above the value in its table; the change column itself is proven by header_path
                     if free:  # a time row in the label column governs the rows after it; the route must keep that group intact (E15)
                         r0, head = max(c['r'] for c in free), max(free, key=lambda c: c['r'])
                         if r0 > vr or not source_before(head.get('anchor'), self.V[0].get('anchor')): return 'fail', 'order', part['text']

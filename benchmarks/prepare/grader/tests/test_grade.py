@@ -316,6 +316,80 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader(pieced)
         self.assertFalse(res['gates']['honest_anchors']['pass']); self.assertEqual(list(res['gates']['honest_anchors']['inserted_chars']), [HTM_ID])
 
+    def test_table_context_may_sit_in_the_title_block_above_a_nested_data_table(self):
+        # addendum C1 (SL Green layout): the title cell of an outer table prints the title, 'Unaudited' and the unit line; the data table is nested below it
+        raw = (b'<table><tr><td><div id="ttl">KEY FINANCIAL DATA</div><div>Unaudited</div><div>(Dollars in Thousands)</div></td></tr>'
+               b'<tr><td><table id="data"><tr><td>Debt coverage</td><td>2.31x</td></tr></table></td></tr></table><p>(Dollars in millions)</p>')
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        data = {'byte_start': raw.index(b'<table id="data">'), 'byte_end_exclusive': raw.index(b'</table></td></tr></table>') + 8}
+        def grader(context, **support):
+            t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'2.31x'), 'table_anchor': data,
+                 'fields': {'table_title': ['KEY FINANCIAL DATA'], 'row_label': 'Debt coverage', 'unit_printed': 'x'}, 'alternatives': {}, 'excluded': set(),
+                 'support': {'table_title': {'how': 'reviewed', 'anchors': [span(b'KEY FINANCIAL DATA')]}, 'table_context': {'how': 'reviewed', 'pieces': context}}}
+            return grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, raw, 'htm'))
+        piece = lambda text: {'text': text.decode(), 'byte_ranges': [[raw.index(text), raw.index(text) + len(text)]]}
+        g = grader([piece(b'Unaudited'), piece(b'(Dollars in Thousands)')])
+        self.assertEqual(g.table_context, ['Unaudited', '(Dollars in Thousands)'])
+        self.assertTrue(grade.same('KEY FINANCIAL DATA Unaudited (Dollars in Thousands)', 'KEY FINANCIAL DATA', [], g.own + g.table_context)[0])
+        with self.assertRaises(ValueError): grader([piece(b'(Dollars in millions)')])                       # after the table: another table's line
+        with self.assertRaises(ValueError): grader([{'text': 'Unaudited', 'byte_ranges': [[0, len(raw)]]}])  # a container is not the line
+
+    def test_a_change_between_periods_is_governed_by_the_compared_columns_headings(self):
+        # addendum C2: '2' under Variance; its periods are the 2024 and 2023 column headings, which never cover the change column
+        raw = b'<table id="t"><tr><td></td><td>2024</td><td>2023</td><td>Variance</td></tr><tr><td>Revenue</td><td>10</td><td>8</td><td>2</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        cells = [{'r': 0, 'c': 1, 'text': '2024', 'anchor': span(b'2024')}, {'r': 0, 'c': 2, 'text': '2023', 'anchor': span(b'2023')}, {'r': 0, 'c': 3, 'text': 'Variance', 'anchor': span(b'Variance')},
+                 {'r': 1, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 1, 'c': 1, 'text': '10', 'anchor': span(b'10')}, {'r': 1, 'c': 2, 'text': '8', 'anchor': span(b'>8<')}, {'r': 1, 'c': 3, 'text': '2', 'anchor': span(b'>2<')}]
+        def rows(value_anchor, periods, header_path):
+            t = {'key_id': 'syn/C', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': value_anchor, 'table_anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)},
+                 'fields': {'printed_value': raw[value_anchor['byte_start']:value_anchor['byte_end_exclusive']].strip(b'<>').decode(), 'row_label': 'Revenue', 'header_path': header_path, 'periods': periods}, 'alternatives': {}, 'excluded': set(), 'support': {}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 't', 'kind': 'table', 'anchor': t['table_anchor'], 'cells': cells}]}, raw, 'htm')); g.grade_cell()
+            return {r['check']: (r['verdict'], r['reason']) for r in g.rows}
+        change = [{'role': 'value', 'type': 'duration', 'parts': [{'text': '2024', 'anchor': span(b'2024')}]}, {'role': 'comparison', 'type': 'duration', 'parts': [{'text': '2023', 'anchor': span(b'2023')}]}]
+        r = rows(span(b'>2<'), change, ['Variance']); self.assertEqual((r['periods'], r['header_path']), (('pass', None), ('pass', None)))
+        r = rows(span(b'>8<'), change, ['Variance']); self.assertEqual((r['periods'][0], r['header_path']), ('pass', ('fail', 'column')))   # moved under 2023: the column proof fails
+        plain = [{'role': 'value', 'type': 'duration', 'parts': [{'text': '2023', 'anchor': span(b'2023')}]}]
+        self.assertEqual(rows(span(b'10'), plain, ['2024'])['periods'], ('fail', 'column'))                                               # a plain value's period must cover its column
+
+    def test_row_context_header_may_be_in_the_first_part_of_a_continued_table_and_a_row_may_print_a_text_twice(self):
+        # addendum C5: a form repeats its header row per page (two table units); a note names the same company as grantor and payee
+        raw = (b'<table id="p1"><tr><td>State</td><td>Type</td></tr><tr><td>NY</td><td>CWS</td></tr></table>'
+               b'<table id="p2"><tr><td>NJ</td><td>CWS</td><td>105</td></tr></table>'
+               b'<table id="n"><tr><td>Grantor</td><td>Payee</td><td>Amount</td></tr><tr><td>Scotts</td><td>Scotts</td><td>$39</td></tr></table>')
+        span = lambda text, start=0: {'byte_start': raw.index(text, start), 'byte_end_exclusive': raw.index(text, start) + len(text)}
+        p1 = {'id': 'p1', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': raw.index(b'<table id="p2">')}, 'cells': [
+            {'r': 0, 'c': 0, 'text': 'State', 'anchor': span(b'State')}, {'r': 0, 'c': 1, 'text': 'Type', 'anchor': span(b'Type')}, {'r': 1, 'c': 0, 'text': 'NY', 'anchor': span(b'NY')}, {'r': 1, 'c': 1, 'text': 'CWS', 'anchor': span(b'CWS')}]}
+        p2s = raw.index(b'<table id="p2">'); p2 = {'id': 'p2', 'kind': 'table', 'anchor': {'byte_start': p2s, 'byte_end_exclusive': raw.index(b'<table id="n">')}, 'cells': [
+            {'r': 0, 'c': 0, 'text': 'NJ', 'anchor': span(b'NJ')}, {'r': 0, 'c': 1, 'text': 'CWS', 'anchor': span(b'CWS', p2s)}, {'r': 0, 'c': 2, 'text': '105', 'anchor': span(b'105')}]}
+        ns = raw.index(b'<table id="n">'); n = {'id': 'n', 'kind': 'table', 'anchor': {'byte_start': ns, 'byte_end_exclusive': len(raw)}, 'cells': [
+            {'r': 0, 'c': 0, 'text': 'Grantor', 'anchor': span(b'Grantor')}, {'r': 0, 'c': 1, 'text': 'Payee', 'anchor': span(b'Payee')}, {'r': 0, 'c': 2, 'text': 'Amount', 'anchor': span(b'Amount')},
+            {'r': 1, 'c': 0, 'text': 'Scotts', 'anchor': span(b'Scotts')}, {'r': 1, 'c': 1, 'text': 'Scotts', 'anchor': span(b'Scotts', raw.index(b'Scotts') + 1)}, {'r': 1, 'c': 2, 'text': '$39', 'anchor': span(b'$39')}]}
+        rf = grade.RouteFile({'file_id': 'syn/f.htm', 'units': [p1, p2, n]}, raw, 'htm')
+        def rows(anchor, table, ctx, anchors):
+            t = {'key_id': 'syn/R', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': anchor, 'table_anchor': table['anchor'],
+                 'fields': {'printed_value': rf.cells_at(anchor)[0]['text'], 'row_context': ctx}, 'alternatives': {}, 'excluded': set(), 'support': {'row_context': {'how': 'reviewed', 'anchors': anchors}}}
+            g = grade.Grader(t, rf); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'row_context')
+        self.assertEqual(rows(span(b'105'), p2, [{'header': 'State', 'text': 'NJ'}], [span(b'State'), span(b'NJ')]), ('pass', None))        # header on the previous page
+        self.assertEqual(rows(span(b'105'), p2, [{'header': 'Type', 'text': 'NJ'}], [span(b'Type'), span(b'NJ')]), ('fail', 'header'))     # wrong header stays wrong
+        self.assertEqual(rows(span(b'$39'), n, [{'header': 'Payee', 'text': 'Scotts'}], [span(b'Payee'), span(b'Scotts', raw.index(b'Scotts') + 1)]), ('pass', None))
+
+    def test_lead_in_keeps_its_place_across_the_sources_own_page_furniture_and_counts_when_kept_whole_inside_a_unit(self):
+        # addendum C6: '94 Table of Contents' printed between the lead-in and its table is the source's own layout, not a displacement
+        raw = b'<p>The following table presents the totals.</p><p>94 Table of Contents</p><p>Elsewhere.</p><table id="t"><tr><td>Total</td><td>5</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        lead = b'The following table presents the totals.'; table = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table'), 'byte_end_exclusive': len(raw)},
+                                                                     'cells': [{'r': 0, 'c': 0, 'text': 'Total', 'anchor': span(b'Total')}, {'r': 0, 'c': 1, 'text': '5', 'anchor': span(b'>5<')}]}
+        def rows(units):
+            t = {'key_id': 'syn/L', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'>5<'), 'table_anchor': table['anchor'],
+                 'fields': {'printed_value': '5', 'row_label': 'Total', 'lead_in': lead.decode()}, 'alternatives': {}, 'excluded': set(), 'support': {'lead_in': {'how': 'reviewed', 'anchors': [span(lead)]}}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [table]}, raw, 'htm')); g.grade_cell(); return next((r['verdict'], r['reason'], r['detail']) for r in g.rows if r['check'] == 'lead_in')
+        furniture = {'id': 'f', 'kind': 'text', 'text': '94 Table of Contents', 'anchor': span(b'94 Table of Contents')}
+        self.assertEqual(rows([{'id': 'l', 'kind': 'text', 'text': lead.decode(), 'anchor': span(lead)}, furniture]), ('pass', None, None))
+        moved = dict(furniture, anchor=span(b'Elsewhere.'), text='Elsewhere.')  # a unit the tool moved in front of the table from elsewhere: displacement
+        self.assertEqual(rows([{'id': 'l', 'kind': 'text', 'text': lead.decode(), 'anchor': span(lead)}, {'id': 'x', 'kind': 'text', 'text': 'Elsewhere.', 'anchor': None}])[:2], ('fail', 'placement'))
+        merged = {'id': 'm', 'kind': 'text', 'text': lead.decode() + ' 94 Table of Contents', 'anchor': [span(lead), span(b'94 Table of Contents')]}
+        self.assertEqual(rows([merged]), ('pass', None, 'contained'))
+
     def test_a_pieced_unit_is_judged_from_its_blocks_never_from_its_own_counts(self):
         # Codex R4-1: the gate derives the insertion from the blocks, checks each block's boundaries and refuses malformed pieces
         raw = b'<p>First sentence of a long paragraph that the tool kept.</p><p>7</p><p>Second sentence of the same long paragraph that the tool kept as well.</p>'

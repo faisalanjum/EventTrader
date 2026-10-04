@@ -434,3 +434,44 @@ the PDF route (97), from the join check. 166 tests, 48/48 real pairs. Stated lim
 | R6-3 CSS still certified | `bad display:none` matched by suffix; `NaN`/`inf` accepted as numbers; `-0.1` not clamped; a stylesheet rule split by a comment missed by the detector | a declaration is one complete `name: value` (split on `;`, matched whole); a CSS number is `<number>`/`<percentage>` by grammar; opacity ≤ 0 hides (clamped); stylesheet detection strips comments first and looks for the hiding properties; everything else → unmeasured. 0 of 116 HTML key sources become unmeasured | test with Chrome-observed expectations; Codex browser 8/8 agree or unmeasured |
 
 Results after the round (run 16, regrade only): identical to run 15. 166 tests, 48/48 real pairs, Codex rounds 4–6 scripts pass live.
+
+## 26. Key package 2 and the ledger's key-side items (2026-10-03 20:14, owner's order "finish everything key-related end to end")
+
+**Package `FINAL_KEY_FOR_CODEX_20261003_2014` supersedes 1134** (1134 untouched, read-only). Built with the package's own tools (`claude_support_map.py`,
+`final_pass/freeze_package.py`), gate `VERIFY_PACKAGE.py` passes, `golden/check_package.py` passes, grader runs report `verified: true`.
+
+| changed | what |
+|---|---|
+| `KEY_SUPPORT_OVERRIDES.json` → `KEY_SUPPORT_MAP.json` | 12 SL Green records (two filings, T02–T07) gain `table_context`: the title cell's lines "Unaudited" and "(Dollars in Thousands …)" anchored byte-for-byte; the regenerated map differs from 1134 in exactly those 12 slots |
+| `FINAL_MANIFEST.json` | pins `case_catalog.csv` (`catalog_sha256`); `VERIFY_PACKAGE.py` checks it |
+| `CONTRACT_DECISIONS_R3.json` (new, copied to `golden/`) | six clarifications, PROPOSED until Codex's check: C1 table context in the table or its title block · C2 change values' periods · C3 Arrowhead 1-pt text is content · C4 symbol spacing (Codex-approved in round 4) · C5 row-context headers in continued tables, a text printed twice · C6 lead-in across the source's own page furniture, contained whole |
+| tooling | `claude_support_map.py` accepts the slot; `freeze_package.py` pins the catalog; `test_support_overrides.py` +2 tests |
+
+Unchanged, proven by diff: the 457 answers (bytes), flags, pending, stamps, decisions, raw answers, every packet hash, the catalog (now pinned, not edited).
+Left as reviewed: three change-column records carry `value`/`comparison` roles where guide 3.10 reads both `compared` (no direction printed); C2 treats both forms
+alike, so no score depends on it — flagged for Codex.
+
+**Grader changes that make the key items effective (each with a test, Codex's rounds 4–6 probes unchanged, 170 tests, 48/48 real pairs):**
+- C1 `Grader.__init__`: a context piece is admitted inside the table **or its title block** (from the declared title's anchor to the table's end) — SL Green prints
+  the title block in an outer cell above the nested data table; a phrase after the table, or a container, is still refused.
+- C2 `periods`: for a value with a `compared` or `comparison` group the column-type parts must head columns of the same table above the value; the value's own
+  column (the change column) is proven by `header_path`, which still fails when the value moves under a compared column.
+- C5 `row_context`: every cell printing the item's text is considered (a row may print a company twice); the header may sit in the first part of a continued
+  table, as `header_path` already allowed.
+- C6 `lead_in`: units the route prints between the lead-in and its table are not a displacement when the source prints them there too (page furniture); a
+  lead-in kept whole inside a larger unit counts as present (`contained`).
+
+**Run 17 (regrade only, package 2):** EdgarTools + screen 134 → 159 cells — exactly the 12 + 6 + 5 + 2 targets above; Docling render 129 → 154. Of 231 HTML
+development targets the best single route now passes 202 (87 %), the best pick per target 208, and 23 pass on no route: picture text 8, contract-exhibit
+headings 8, footnote marks glued into cells 7 — all tool-side.
+
+| route | HTML cells | HTML blocks | PDF targets | headings recognised | unanchored | boundary | inserted chars | uncovered chars (files) | reading-order breaks (files) | anchors not measured |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Docling HTML | 138/171 | 44/60 | - | 0/155 | 1058 | 637 | 209 | 13,767 (13) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + screen | 144/171 | 44/60 | - | 0/155 | 1058 | 637 | 209 | 13,767 (13) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + headings | 140/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,439 (22) | 29 (8) | 0 of 60 graded files |
+| Docling HTML + headings + screen | 146/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,439 (22) | 29 (8) | 0 of 60 graded files |
+| edgartools HTML | 151/171 | 40/55 | - | 35/166 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| edgartools HTML + screen | 159/171 | 40/55 | - | 35/166 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| Docling HTML, browser render (no screen step) | 154/171 | 48/60 | - | 0/169 | 696 | 329 | 209 | 13,594 (11) | 0 (0) | 0 of 60 graded files |
+| Docling PDF route (14 files) | 15/46 | 1/7 | 4/9 | 13/24 | 3179 | 97 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |

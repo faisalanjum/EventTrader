@@ -2,9 +2,9 @@
 
 **What it is.** 457 reviewed answer records (Step 3 of Prepare) over 249 development + 90 held-out
 targets, with accepted alternatives, 5 excluded fields, source anchors into the original filings, and the scoring contract
-(rules E1–E17). Reviewed by two independent reviewers; package **1134** is final (`CODEX_ROUND2_UPDATE_20261003.md` inside it).
+(rules E1–E17). Reviewed by two independent reviewers; package **1134** was reviewed as final (`CODEX_ROUND2_UPDATE_20261003.md` inside it); **package 2 (`FINAL_KEY_FOR_CODEX_20261003_2014`)** supersedes it with the same 457 answers: SL Green table-context declarations in the support map, the split catalog pinned, and the contract addendum `CONTRACT_DECISIONS_R3.json` (six clarifications, proposed for Codex's check).
 
-**Where it lives (outside the repo, on purpose).** `/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261003_1134` — the answers, the originals (`bundled/packets/*/sources`) and the
+**Where it lives (outside the repo, on purpose).** `/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261003_2014` — the answers, the originals (`bundled/packets/*/sources`) and the
 raw model answers stay out of git. `PACKAGE.json` here pins the path and the SHA-256 of every file that matters; the package's
 own manifest pins all 1,881 packet files. The package folder is immutable: corrections go through a new package, never edits.
 

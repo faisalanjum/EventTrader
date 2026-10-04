@@ -1,0 +1,47 @@
+{
+ "what": "Addendum to CONTRACT_DECISIONS_R2.json: clarifications raised by the grader review rounds 3-6 and the failure ledger. Written by Fable on 2026-10-03; verdict PROPOSED until Codex's independent check. Nothing in R2 is changed.",
+ "decisions": [
+  {
+   "item": "C1",
+   "rule": "E13",
+   "verdict": "PROPOSED",
+   "text": "A table's context lines (the unit, basis or qualifier lines printed with its title) are declared in the key's support map as `table_context` pieces, each with its text and one source anchor. A piece is admitted only when its anchor reads that text and lies inside the table or in its title block, that is between the declared title's anchor and the table's end. Context is set aside only in title, header and corner comparisons of that table, never in values, labels or rows of another table. A declaration that fails these checks stops the grader run.",
+   "reason": "SL Green's supplemental tables print 'KEY FINANCIAL DATA / Unaudited / (Dollars in Thousands Except Per Share)' in one title cell of the outer page table above the nested data table; the key's title anchor itself lies outside the data table's anchor, so 'inside the table' alone cannot describe where a table's own title block is. Twelve development records."
+  },
+  {
+   "item": "C2",
+   "rule": "E15",
+   "verdict": "PROPOSED",
+   "text": "For a value that is a change between periods (its periods carry a `compared` group, or a `value` group with a `comparison` group), each column-type period part must head a column of the same table above the value; it need not cover the value's own column, which is the change column and is proven by header_path.",
+   "reason": "Six development values in change columns (% Change, Variance, Increase (Decrease), Percent Change 2022 vs 2021) failed only on column coverage although every tool kept the right association; the compared columns' headings never cover a change column. Guide 3.10 already defines these roles."
+  },
+  {
+   "item": "C3",
+   "rule": "E16",
+   "verdict": "PROPOSED",
+   "text": "Text rendered at 1 point in a colour matching its background (the Arrowhead slide exhibit) is content: it is the text layer of slides otherwise printed only as pictures. A converter that drops it loses coverage; the key does not exclude it.",
+   "reason": "E16 already says 1-point text is not automatically invisible; this records the ruling for the one development exhibit where both tools drop it."
+  },
+  {
+   "item": "C4",
+   "rule": "E12",
+   "verdict": "APPROVED by Codex (ROUND4_CODEX.md)",
+   "text": "Whitespace beside a symbol is reflow: '3.7 %' for '3.7%' passes; a boundary inside a word or a number ('1,9 70', 'Ma nagement') fails.",
+   "reason": "E12 already states it; recorded here because the development probe expectation was changed to match."
+  },
+  {
+   "item": "C5",
+   "rule": "E1/E14",
+   "verdict": "PROPOSED",
+   "text": "A row-context header may be printed in an earlier part of a continued table (the previous page's table unit), as header_path already allows. When a row prints the same text in two cells, the cell under the named header is the one meant.",
+   "reason": "A claim form repeats its header row once per page; a note lists the same company as grantor and payee. Two development records failed on the grader's first-match and same-table assumptions, not on the tools."
+  },
+  {
+   "item": "C6",
+   "rule": "E13 (lead-in)",
+   "verdict": "PROPOSED",
+   "text": "A lead-in keeps its placement when every unit the route prints between it and the table lies between them in the source (page furniture, a continuation). The lead-in sentence counts as present when a carrier contains it whole and in order before the table.",
+   "reason": "Five development lead-ins are separated from their table by a page break's 'Table of Contents' line, or continue across a page break into a unit the tool merged with the next paragraph; the sentences are intact and in place."
+  }
+ ]
+}
