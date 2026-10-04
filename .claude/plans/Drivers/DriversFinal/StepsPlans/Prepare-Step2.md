@@ -26,8 +26,6 @@ comprehensive checks ([project instructions](/home/faisal/EventMarketDB/AGENTS.m
   in the planned 42,633-filing run requires its SEC file-list check. Unrelated tests
   are untouched. The overnight runner and 1,000-filing rehearsal remain separate.
 
-[Scale evidence and reproduction](/home/faisal/prepare_work/prepare_step2_revision_20261002/README.md).
-
 ## Initial 50-filing comparison
 
 - **50 filings, 12 form types, 2,223 packaged files.** Every SEC-listed physical
@@ -87,16 +85,10 @@ comparing converters.
 
 ## Evidence and use
 
-- [Frozen work order and inputs](/home/faisal/prepare_work/prepare_step2_20261002/WORK_ORDER.md)
-  · [measured results](/home/faisal/prepare_work/prepare_step2_20261002/measured_summary.json)
-  · [replay proof](/home/faisal/prepare_work/prepare_step2_20261002/final_run/results/replay_proof.json).
-- [Final independent acceptance](/home/faisal/prepare_work/prepare_step2_20261002/checker/final_acceptance.md)
-  · [source readback](/home/faisal/prepare_work/prepare_step2_20261002/checker/source_readback.md)
-  · [news/transcript audit](/home/faisal/prepare_work/prepare_step2_20261002/audit/README.md).
+- [News/transcript audit](/home/faisal/prepare_work/news_transcript_audit_20261002/README.md) (kept: it holds
+  the only saved copies of the audited news/transcript records).
 - [Runtime/API notes](/home/faisal/EventMarketDB/driver/prepare/get/README.md)
   · [tests](/home/faisal/EventMarketDB/tests/driver/README.md).
 
-The retained `final_run` contains compressed originals, exact response versions,
-manifests, receipts, logs and reproduction scripts. Copy it to scratch before
-rerunning; do not overwrite frozen evidence. The full Driver test command is
+The working folders behind these results were deleted on 2026-10-04, after the full download was approved; the numbers here are the record. The full Driver test command is
 `python3 -B -S -m unittest discover -s tests/driver -t . -v`.

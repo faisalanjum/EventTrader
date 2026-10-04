@@ -34,7 +34,7 @@ retries and timeouts. The three real packages cover:
 
 Each losslessly compressed fixture has independent expected metadata, original
 SHA-256, decoded-file hashes and source ranges. Never regenerate expected answers
-from the parser under test. Broader sample evidence is linked in the
+from the parser under test. Sample results are recorded in the
 [work order](../../.claude/plans/Drivers/DriversFinal/StepsPlans/Prepare-A_Get.md).
 
 Future stages use matching test folders. Keep small synthetic inputs with tests;

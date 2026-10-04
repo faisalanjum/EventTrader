@@ -49,15 +49,14 @@ decoded bytes are held in memory; large-file resource limits need Step 2 validat
 - Measured package bytes: **516,737,723 → 103,208,566** with gzip. Whole-database
   storage estimates from the review remain projections, not measured requirements.
 - Fresh follow-up: **47/47 filings, 12 types, 1,793 members** match independent
-  decoded bytes. [Results](/home/faisal/prepare_work/amg_stylesheet_check_20261002T000901Z/fresh_summary.json).
+  decoded bytes.
 - **Closed as an acquisition blocker for this sample:** missing `include/report.css` occurs only in
   generated SEC views across 111 filings; 491 company HTML documents have no outside
   stylesheets, and all 1,057 HTML image references resolve inside their packages.
   Convert must retain inline styles and handle hidden XBRL separately from visible prose.
-  [Asset audit](/home/faisal/prepare_work/amg_stylesheet_check_20261002T000901Z/all_styles_summary.json).
 - AMG's browser check confirms the missing sheet affects only its cover-page appearance:
   all 82 visible cells retain their text and associations; the main 8-K and earnings
-  tables are unaffected. [Browser comparison and limits](/home/faisal/prepare_work/amg_stylesheet_check_20261002T000901Z/README.md).
+  tables are unaffected.
 - The earlier live AMG check used one successful request (**0.334 s**, one observation).
   This revision used saved inputs and simulated HTTP; it made no new SEC requests.
 
@@ -68,14 +67,6 @@ remain later work. Acquisition success does not mean all evidence is ready to re
 
 ## Evidence
 
-- [Current sample results](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/sample_summary.json)
-  · [test results](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/checker_fixes_green.txt)
-  · [independent review](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/checker/final_report.md).
-- [Received Claude review](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/review_received.md)
-  · [prior live verification](/home/faisal/prepare_work/prepare_get_package_first_20261001T222443Z/evidence/live_verification.json).
 - [Permanent tests and fixtures](../../../../../tests/driver/README.md). Runtime stays
-  in `driver/prepare/get/`; tests mirror it. Historical evidence stays outside the repo.
-- Removed three obsolete working copies after verifying their archived files; removed
-  the stale `temp_delete.md` redirect. [Cleanup record](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/cleanup_result.json).
-- Owner-approved historical cleanup removed the listed old Step 0/1 runs, retaining
-  linked evidence and unrelated tests. [Record](/home/faisal/prepare_work/prepare_get_revision_20261001T234114Z/approved_cleanup_20261002/result.json).
+  in `driver/prepare/get/`; tests mirror it.
+- The working folders behind these results were deleted on 2026-10-04, after the full download was approved; the numbers here are the record.
