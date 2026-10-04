@@ -185,7 +185,16 @@ class InvisibleStyleTests(unittest.TestCase):
                  ('<span>12<br>34</span>', '12 34', True),
                  ('<p style="d\\69 splay:none">Secret.</p><p>Visible.</p>', 'Visible.', True),
                  # a block opened inside an unclosed hidden inline element: the browser closes the <p> and rebuilds the hidden span around the block — not certifiable here
-                 ('<p>Shown.<span style="display:none">HIDDEN <div>deep</div> text</span></p>', None, False)]
+                 ('<p>Shown.<span style="display:none">HIDDEN <div>deep</div> text</span></p>', None, False),
+                 # Codex round 8 (Chrome): a new <tr> closes the open <td> and <tr>; a block boundary after a hidden element still separates words;
+                 # an escaped ; inside a value is not a separator; text straight inside a table skeleton is not certifiable
+                 ('<table><tr style="display:none"><td>Secret.</td></tr><tr><td>Visible.</td></tr></table>', 'Visible.', True),
+                 ('<table><tr style="display:none"><td>Secret.<tr><td>Visible.</table>', 'Visible.', True),
+                 ('<table><thead style="display:none"><tr><td>Secret.<tbody><tr><td>Visible.</table>', 'Visible.', True),
+                 ('<span>Before</span><p hidden>Secret.</p><p>After</p>', 'Before After', True),
+                 ('<span>Before</span><p hidden>Secret.<p>After</p>', 'Before After', True),
+                 ('<p style="--note:a\\;display:none">Visible.</p>', 'Visible.', True),
+                 ('<table>stray<tr><td>Cell</td></tr></table>', None, False)]
         for src, text, certain in cases:
             v = anchor.Visible(src.encode())
             self.assertEqual((anchor.norm(v.text) if text is not None else None, v.certain), (text, certain), src)

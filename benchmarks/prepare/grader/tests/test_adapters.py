@@ -107,6 +107,20 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         doc['texts'][2]['formatting']['script'] = 'super'; doc['texts'][2]['text'] = 'TM'
         self.assertEqual(dh.to_units(doc)[1]['cells'][2]['markers'], ['TM'])  # raised: kept apart, whatever its shape
 
+    def test_source_formatting_step_writes_the_sources_own_strike_through_onto_units_and_cells(self):
+        # ledger class I: redlines marked with CSS line-through (and the three tags) become `struck` phrases by anchor; a tool's own wrong claim is dropped
+        from benchmarks.prepare.grader.adapters import source_formatting as sf
+        from benchmarks.prepare.grader import anchor as an
+        raw = (b'<p>Applicable <span style="text-decoration:line-through">Eurocurrency Rate</span>Term SOFR Spread</p>'
+               b'<table><tr><td><s>LIBOR</s> Loans</td><td>12</td></tr></table><p>Plain words.</p>')
+        self.assertEqual([an.norm(an.Visible(raw).at(a, b)) for a, b in an.Visible(raw).struck_runs()], ['Eurocurrency Rate', 'LIBOR'])
+        units = an.link(raw, [{'id': 'u0', 'kind': 'text', 'text': 'Applicable Eurocurrency RateTerm SOFR Spread'},
+                              {'id': 't', 'kind': 'table', 'cells': [{'r': 0, 'c': 0, 'text': 'LIBOR Loans'}, {'r': 0, 'c': 1, 'text': '12'}]},
+                              {'id': 'u2', 'kind': 'text', 'text': 'Plain words.', 'struck': ['Plain']}])['units']
+        self.assertEqual(sf.apply(raw, units), 2)
+        self.assertEqual(units[0]['struck'], ['Eurocurrency Rate']); self.assertEqual(units[1]['cells'][0]['struck'], ['LIBOR'])
+        self.assertNotIn('struck', units[1]['cells'][1]); self.assertNotIn('struck', units[2])
+
     def test_a_cell_printed_wholly_raised_is_kept_as_a_cell(self):
         # Codex round 7 (R7-1): a raised 4 is still the cell's text; superscript is formatting, not proof of a footnote
         doc = copy.deepcopy(DOC); doc['groups'][0]['children'] = [{'$ref': '#/texts/2'}]; doc['texts'][2]['text'] = '4'

@@ -70,18 +70,21 @@ def unescape_css(text):
 
 
 def split_declarations(style):
-    """Declarations split at `;` outside quotes and parentheses (a `;` inside a string or a function is not a separator)."""
-    out, buf, quote, depth = [], [], None, 0
-    for ch in style:
+    """Declarations split at `;` outside quotes and parentheses; an escaped character (`\\;`) is part of its token, never a separator."""
+    out, buf, quote, depth, i = [], [], None, 0, 0
+    while i < len(style):
+        ch = style[i]
+        if ch == '\\' and i + 1 < len(style): buf.append(ch); buf.append(style[i + 1]); i += 2; continue
         if quote:
             buf.append(ch)
             if ch == quote: quote = None
-            continue
-        if ch in '"\'': quote = ch
-        elif ch == '(': depth += 1
-        elif ch == ')': depth = max(0, depth - 1)
-        if ch == ';' and depth == 0: out.append(''.join(buf)); buf = []
-        else: buf.append(ch)
+        else:
+            if ch in '"\'': quote = ch
+            elif ch == '(': depth += 1
+            elif ch == ')': depth = max(0, depth - 1)
+            if ch == ';' and depth == 0: out.append(''.join(buf)); buf = []; i += 1; continue
+            buf.append(ch)
+        i += 1
     out.append(''.join(buf))
     return out
 
@@ -90,8 +93,8 @@ def declarations(style):
     """The declarations of a style attribute, in order: (name, value, important), names and values lower-cased, escapes decoded,
     comments read as token boundaries (a comment inside a name or a value breaks it, as in the browser)."""
     out = []
-    for part in split_declarations(_COMMENT.sub(' ', unescape_css(style))):
-        m = _DECL.fullmatch(part)
+    for part in split_declarations(_COMMENT.sub(' ', style)):  # split first: an escaped `;` inside a value is not a separator
+        m = _DECL.fullmatch(unescape_css(part))
         if not m: continue  # not one complete `name: value` declaration — the browser drops it, so does this
         name, value = m.group(1).lower(), m.group(2).strip().lower()
         important = _IMPORTANT.search(value) is not None
@@ -124,6 +127,7 @@ class Visible:
         except UnicodeDecodeError:
             s, blen = raw.decode('cp1252', 'replace'), len
         chars, starts, ends, stack, hidden, pos = [], array('Q'), array('Q'), [], False, 0  # byte offsets tracked per token, not per source byte
+        struck_chars = array('b')  # per visible character: printed struck through (an <s>/<del>/<strike> ancestor or CSS line-through)
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
         for m in _TOKEN.finditer(s):
@@ -142,45 +146,63 @@ class Visible:
                 struck = any(n in ('text-decoration', 'text-decoration-line') and 'line-through' in val for n, val, _ in decls)
                 block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or name in STRUCK or struck
                 gone = disp == 'none' or (op is not None and _zero(op)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
+                shown = False  # does this tag's own element show (it is the element whose boundary may separate words)
                 if t.startswith('</'):
                     if any(fr[0] == name for fr in reversed(stack)):
                         while True:
                             fr = stack.pop()
-                            if fr[0] == name: block = fr[3]; break  # the element's own display decides its closing separator too
+                            if fr[0] == name: block, shown = fr[3], not (fr[1] or fr[2]); break  # the element's own display decides its closing separator too
                 else:
                     if not xml:  # HTML's implied end tags: a new <p>, <li>, <td>, <tr> ... closes the open one, as the browser builds the tree
                         for by, closes, stop in _IMPLIED:
                             if name not in by: continue
-                            for i in range(len(stack) - 1, -1, -1):
+                            lowest = None
+                            for i in range(len(stack) - 1, -1, -1):  # every open element of those kinds down to the boundary closes (a new <tr> closes the open <td> and the open <tr>)
                                 if stack[i][0] in stop: break
-                                if stack[i][0] in closes:
-                                    if any(fr[1] or fr[2] for fr in stack[i + 1:]): computed = True  # unclosed hiding elements inside: the browser rebuilds them around the new block
-                                    del stack[i:]; break
+                                if stack[i][0] in closes: lowest = i
+                            if lowest is not None:
+                                if any(fr[1] or fr[2] for fr in stack[lowest + 1:] if fr[0] not in closes): computed = True  # unclosed hiding inline elements inside: the browser rebuilds them around the new block
+                                del stack[lowest:]
                     if name not in VOID and not (xml and t.endswith('/>')):  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block)
                         blocked, vis = stack[-1][1:3] if stack else (False, False)
                         # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
-                        stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block))
+                        stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block, (stack[-1][4] if stack else False) or name in STRUCK or struck))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
-                if not (hidden or was_hidden) and (xml or block) and not (name in VOID and gone): chars.append(' '); starts.append(start); ends.append(pos)  # a hidden <br> breaks nothing
+                if not t.startswith('</'): shown = not hidden and not gone  # an opening element shows when it is not hidden itself (a void element: when it is not hidden either)
+                if shown and (xml or block): chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0)  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
                 continue
+            st = 1 if stack and stack[-1][4] else 0
+            if stack and stack[-1][0] in ('table', 'thead', 'tbody', 'tfoot', 'tr') and not _WS.fullmatch(html.unescape(t) if t.startswith('&') else t): computed = True  # the browser moves such text before the table
             if hidden:
                 if not t.startswith('&') or len(t) == 1: self.hidden_chars += len(_WS.sub('', t))
                 elif not _WS.match(html.unescape(t)): self.hidden_chars += 1
                 continue
             if t.startswith('&') and len(t) > 1:
-                for c in html.unescape(t): chars.append(c); starts.append(start); ends.append(pos)
+                for c in html.unescape(t): chars.append(c); starts.append(start); ends.append(pos); struck_chars.append(st)
             elif t.isascii() or blen is len:
-                chars.extend(t); starts.extend(range(start, start + len(t))); ends.extend(range(start + 1, start + len(t) + 1))
+                chars.extend(t); starts.extend(range(start, start + len(t))); ends.extend(range(start + 1, start + len(t) + 1)); struck_chars.extend([st] * len(t))
             else:
                 off = start
-                for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); off += n
-        self.text, self.starts, self.ends = ''.join(chars), starts, ends
+                for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); struck_chars.append(st); off += n
+        self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
         sheet = any(m.group(1) is None or _PROP.search(_COMMENT.sub(' ', unescape_css(m.group(1)))) for m in _STYLE.finditer(s))  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))
         self.raw_len = len(raw)
+
+    def struck_runs(self):
+        """Byte ranges the source prints struck through, each a run of consecutive visible characters."""
+        runs, i = [], 0
+        while i < len(self.text):
+            if self.struck_chars[i] and not self.text[i].isspace():
+                j = i
+                while j + 1 < len(self.text) and self.struck_chars[j + 1]: j += 1
+                while j > i and self.text[j].isspace(): j -= 1
+                runs.append((self.starts[i], self.ends[j])); i = j + 1
+            else: i += 1
+        return runs
 
     def at(self, byte_start, byte_end_exclusive):
         """Visible text whose characters lie wholly inside the byte range."""

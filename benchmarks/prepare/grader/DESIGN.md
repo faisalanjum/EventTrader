@@ -505,3 +505,47 @@ C3–C6 approved; two corrections, both applied:
 Also: the `test_anchor` inline fixture had a `<div>` inside a hidden `<span>` inside a `<p>` — a shape the browser handles by rebuilding the hidden span
 around the block; the fixture now nests a `<b>`, and that shape is a stated unmeasured case. 176 tests, 48/48 real pairs, Codex's rounds 4–7 scripts
 and the C2 reproducer behave. Run 18 (re-link, regrid, regrade with the fixed adapters) is recorded in `REVIEW_HANDOVER.md`.
+
+## 28. Round 8 and the first two tool tests (2026-10-03 22:00) — four shared-rule classes, all reproduced, all closed; glued marks and line-through settled
+
+**Round 8** (`ROUND8_CODEX.md`, reviewed on eceec06a9):
+
+| Finding | Reproduced problem | Change | Proof |
+|---|---|---|---|
+| R8-1 a table-wide title defeated the group rule | `same_group` accepted any header above the compared heading that also covered the value's column, so a title spanning both groups let swapped year headings pass | the innermost header row decides: among the headers above the heading that cover its column (the record's own period headings left out), only those in the lowest such row must cover the value's column; flat tables (nothing above) and multi-level groups unchanged | test: title/no title × correct/swapped; Codex `period/*` 4/4 |
+| R8-2 strike-through compared by substring | `a in b or b in a` accepted `n`/`no` for `not` and `not a GAAP measure` for `not`; a one-cell layout table failed because the table unit, not its cell, was inspected | `struck_kept`: the key's struck phrases and the route's struck entries at that place, each concatenated whitespace-free in reading order, must be equal — a partly cancelled word, an extra cancelled word or a lost cancellation all fail; the items inspected are the text-bearing cells or units (a block laid out in a table is its cells), for `printed_text` and, through `field()`, every cell field | test (text units and cells, five wrong shapes); Codex `strike/*`, `strike_layout/*` 9/9 |
+| R8-3 E12 depended on cells vs text units | the round-7 merge covered pieces at one grid position only; faithful text-unit fragments failed table title, printed unit, basis and period (two or seven units), the heading window tried two or three pieces only, and footnote, reference and range evidence split inside a word failed | pieces that touch in the source — cells at one grid position **or** text units — are read as one carrier **where the key reads them glued** (`reads_glued`, below); `merged_units` with the key text for structure blocks and range evidence; the heading window is bounded by the heading's own length (measured without "(continued)"), not by a piece count; a period part may be read across pieces the key spaces apart | test: six fields × whole/two/per-character units, the "(continued)" piece; Codex `unit_fragment` 18/18, `related_fragment` 6/6 |
+| R8-4 three scanner certainties were wrong | a hidden `<tr>` with optional end tags stayed open (the implied close stopped at the nearest `<td>`); a hidden paragraph suppressed the boundary before the next shown one; an escaped `;` inside a custom property value split a declaration | implied end tags close every open element of those kinds down to the boundary (a new `<tr>` closes the open `<td>` **and** the open `<tr>`); a word boundary comes only from an element that itself shows; declarations are split before escapes are decoded; text written directly inside a table skeleton (which the browser moves before the table) makes the file uncertain | test with Chrome-observed expectations; Codex's 9 Chrome cases agree and are certain; 0 of 116 key sources uncertain |
+
+**Key-driven gluing (the rule R8-3 settled on, after a false step).** The first round-8 code glued *every* pair of touching text units. Run 20 showed what
+that costs on real filings: "Section 1.01" + "Defined Terms" touch in the bytes, yet the key — read from the rendered page, where CSS spaces them —
+prints "Section 1.01 Defined Terms" (two credit-agreement headings lost); an empty picture unit touching "Financial Trends" swallowed the heading and
+its kind (fifteen `heading_recognised` counts on the pre-step route, six on the PDF route); "•" + "depreciation" became "•depreciation" against a key
+that prints the bullet with a space. Touching bytes prove only that the tool inserted nothing; the key is the authority on spacing (E12, as
+`pieces_match` has held since round 7). So `reads_glued(left, right, key texts)` decides each join: take the longest context around the join (up to six
+characters a side) that the key text contains at all — the key may begin or end inside a piece — and glue only if the key prints no space there; a piece
+with no characters never glues. Proof: each shape above is a test that fails on the previous rule (re-proved from a copy of the code carrying the old
+rule), and a per-target comparison of the committed round-7 grader against this one on the same route files shows **only pass gains, no pass lost** on
+any of the eight routes (Docling routes +7 to +8 targets, EdgarTools +4, browser render +10; the three heading counts back at their round-7 values).
+
+**Tool tests 1 and 2 (owner's order, in that sequence).**
+- *Glued footnote marks (ledger class F):* the tools print "Covenants (1)", "features(1):", "fibrosis1,2", "EPS (1)" as one cell text; the key spells
+  the text and lists the mark apart. The grader set marks aside only at the ends of a text. Now `without_marks` deletes the record's own marks wherever
+  they stand — grouped with commas or spaces, glued to a word, before a colon — with the gap closing up, and never deletes a mark that is part of the key
+  text itself ("1-stage"); `minus_marks_anywhere` does the same for basis containment (linear; a first, quadratic attempt stalled run 19, which was killed
+  and replaced). Verdict: a **grader comparison gap**, not a tool fault — the text is faithful, the mark is printed there. No mark-related failure remains on
+  any route.
+- *Line-through (ledger class I):* three credit-agreement redlines strike deleted words with CSS `text-decoration: line-through`; Docling maps only
+  `<s>`/`<del>`/`<strike>`, EdgarTools reports no strikes. New declared route step `adapters/source_formatting.py` (like the screen step): the scanner records
+  struck runs (the three tags and CSS line-through, inherited by descendants) and the step writes them onto units and cells as `struck` by byte-anchor
+  overlap, dropping a tool's own claim where the source prints nothing struck; text and anchors untouched. Run facts: items with struck text — Docling
+  2,219, browser render 3,015, EdgarTools 1,628 over 60 files. Verdict: closed by a small step; `struck` failures on every route: 0.
+
+**Also fixed on the way.** The screen step read another step's facts file as a route file (`KeyError: 'file_id'`; its outputs were complete, its own facts
+were lost) — foreign JSON files are now copied through, and the three screen routes were rebuilt cleanly (run 21: numbers identical to run 20). A method
+note: with `PYTHONPATH=/home/faisal/EventMarketDB` set in this shell and `benchmarks/__init__.py` present, a copy of the grader in another folder is never
+the one imported — a regular package anywhere on `sys.path` beats a namespace copy found first — so every comparison run and every "fails without the
+fix" proof here prints the module path it loaded and runs with `PYTHONPATH=`.
+
+183 tests, 48/48 real pairs, Codex's rounds 4–8 scripts behave, 0 of 116 HTML key sources uncertain. Run 23 is recorded in `REVIEW_HANDOVER.md`; the
+ledger's §10 names what remains (pictures 8, contract-exhibit headings 8, two key-side items).

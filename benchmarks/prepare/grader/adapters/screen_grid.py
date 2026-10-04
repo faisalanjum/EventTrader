@@ -92,8 +92,8 @@ def main(argv=None):
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         for rp in sorted(src.rglob('*.json')):
-            d = json.loads(rp.read_text()); fid = d['file_id']; dest = out / rp.relative_to(src); dest.parent.mkdir(parents=True, exist_ok=True)
-            if d.get('status') != 'OK' or not fid.lower().endswith(('.htm', '.html')): dest.write_text(json.dumps(d, ensure_ascii=False)); continue
+            d = json.loads(rp.read_text()); fid = d.get('file_id'); dest = out / rp.relative_to(src); dest.parent.mkdir(parents=True, exist_ok=True)
+            if d.get('status') != 'OK' or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue  # another step's facts file is copied through
             t0 = time.time(); marked, spans = tag_cells(paths[fid].read_bytes())
             try: measured = measure(marked, browser)
             except Exception as e: facts[fid] = {'error': repr(e)[:200]}; dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True); continue

@@ -469,6 +469,113 @@ class PlantedFaultTests(GraderFixture):
             return {r['check']: (r['verdict'], r['reason']) for r in g.rows}
         self.assertEqual(verdicts(False)['periods'], ('pass', None)); self.assertEqual(verdicts(True)['periods'], ('fail', 'group'))
 
+    def test_a_mark_printed_inside_a_label_header_or_basis_phrase_is_the_records_own_mark(self):
+        # ledger class F: the contract allows a mark glued to a label or title (flagged); the comparison must see through it wherever it sits
+        self.assertEqual(grade.same('Resolution of NASH and ≥ 1-stage improvement in fibrosis1,2', 'Resolution of NASH and ≥ 1-stage improvement in fibrosis', ['1', '2']), (True, 'marker_in_text'))
+        self.assertEqual(grade.same('Living benefit/GMDB features(1):', 'Living benefit/GMDB features:', ['(1)']), (True, 'marker_in_text'))
+        self.assertEqual(grade.same('Additional Shares recovered for issuance (iv) in:', 'Additional Shares recovered for issuance in:', ['(iv)']), (True, 'marker_in_text'))
+        self.assertEqual(grade.same('Unsecured Notes Covenants (1)', 'Unsecured Notes Covenants', ['(1)']), (True, 'marker_in_text'))
+        self.assertEqual(grade.same('Phase 1 trial', 'Phase 1 trial', ['1']), (True, None))  # a 1 the key prints is text, matched as text
+        self.assertFalse(grade.same('Living benefit/GMDB features(2):', 'Living benefit/GMDB features:', ['(1)'])[0])  # another mark is other text
+        self.assertFalse(grade.without_marks('Phase trial', 'Phase 1 trial', ['1']))   # nothing may be invented
+        for got, want in (('Living benefit/GMDB features(1):', 'Living benefit/GMDB features:'), ('Unsecured Notes Covenants (1)', 'Unsecured Notes Covenants'), ('EPS (1) Growth', 'EPS Growth')):
+            self.assertEqual(grade.minus_marks_anywhere(got, ['(1)']), grade.norm(want))  # the space a mark leaves behind closes up (basis containment)
+        # basis containment and a heading printed twice above the value
+        res = self.run_grader(lambda r: self.cell(r, 'l2').update(text='Free cash flow(1)'))
+        self.assertEqual(self.check(res, 'pkt/T02', 'row_label')['verdict'], 'pass')
+
+    def test_a_table_wide_title_does_not_override_a_conflicting_subgroup(self):
+        # Codex round 8 (R8-1): with 'Regional results' above both groups, swapped year headings must still fail; without a swap they pass
+        for with_title in (False, True):
+            raw = (b'<table>' + (b'<tr><td colspan="7">Regional results</td></tr>' if with_title else b'') + b'<tr><td></td><td colspan="3">North</td><td colspan="3">South</td></tr>'
+                   b'<tr><td></td><td id="a">2024</td><td id="b">2023</td><td id="c">Change</td><td id="d">2022</td><td id="e">2021</td><td id="f">Change</td></tr>'
+                   b'<tr><td>Sales</td><td>10</td><td>8</td><td id="target">2</td><td>15</td><td>11</td><td>4</td></tr></table>')
+            def span(text, after=None):
+                a = raw.index(text, raw.index(after) if after else 0); return {'byte_start': a, 'byte_end_exclusive': a + len(text)}
+            s = int(with_title); cells = [{'r': s, 'c': 1, 'cs': 3, 'text': 'North', 'anchor': span(b'North')}, {'r': s, 'c': 4, 'cs': 3, 'text': 'South', 'anchor': span(b'South')}]
+            if with_title: cells.insert(0, {'r': 0, 'c': 0, 'cs': 7, 'text': 'Regional results', 'anchor': span(b'Regional results')})
+            for c, (text, ident) in enumerate([(b'2024', b'a'), (b'2023', b'b'), (b'Change', b'c'), (b'2022', b'd'), (b'2021', b'e'), (b'Change', b'f')], 1):
+                cells.append({'r': 1 + s, 'c': c, 'text': text.decode(), 'anchor': span(text, b'id="' + ident + b'"')})
+            cells += [{'r': 2 + s, 'c': 0, 'text': 'Sales', 'anchor': span(b'Sales')}, {'r': 2 + s, 'c': 3, 'text': '2', 'anchor': span(b'2', b'id="target"')}]
+            t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'2', b'id="target"'), 'table_anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)},
+                 'alternatives': {}, 'excluded': set(), 'support': {'row_label': {'anchors': [span(b'Sales')]}, 'header_path': {'anchors': [span(b'North'), span(b'Change', b'id="c"')]}},
+                 'fields': {'printed_value': '2', 'display_value': '2', 'row_label': 'Sales', 'header_path': ['North', 'Change'],
+                            'periods': [{'role': 'value', 'parts': [{'text': '2024', 'anchor': span(b'2024')}]}, {'role': 'comparison', 'parts': [{'text': '2023', 'anchor': span(b'2023')}]}]}}
+            for swap in (False, True):
+                cs = [dict(c) for c in cells]
+                if swap:
+                    for c in cs:
+                        if c['r'] == 1 + s and c['c'] in (1, 2, 4, 5): c['c'] += 3 if c['c'] < 3 else -3
+                g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 't', 'kind': 'table', 'anchor': t['table_anchor'], 'cells': sorted(cs, key=lambda c: (c['r'], c['c']))}]}, raw, 'htm')); g.grade_cell()
+                self.assertEqual(next(r['verdict'] for r in g.rows if r['check'] == 'periods'), 'fail' if swap else 'pass', (with_title, swap))
+
+    def test_struck_evidence_must_match_the_cancelled_text_exactly_in_text_units_and_in_table_cells(self):
+        # Codex round 8 (R8-2): a part of the cancelled word, or extra cancelled words, change meaning; a one-cell layout table carries the strike on its cell
+        for marks, want in ((['not'], 'pass'), ([], 'fail'), (['n'], 'fail'), (['no'], 'fail'), (['not a GAAP measure'], 'fail'), (['GAAP'], 'fail')):
+            res = self.run_grader(lambda r: self.unit(r, 'u2').update(struck=marks))
+            self.assertEqual(self.check(res, 'pkt/S01', 'printed_text')['verdict'], want, marks)
+        def as_table(struck):
+            def go(r):
+                u = self.unit(r, 'u2'); cell = {'r': 0, 'c': 0, 'text': u['text'], 'anchor': u['anchor'], 'struck': struck}
+                u.clear(); u.update(id='u2', kind='table', anchor=cell['anchor'], cells=[cell])
+            return go
+        self.assertEqual(self.check(self.run_grader(as_table(['not'])), 'pkt/S01', 'printed_text')['verdict'], 'pass')
+        self.assertEqual(self.check(self.run_grader(as_table([])), 'pkt/S01', 'printed_text')['verdict'], 'fail')
+
+    def test_fragments_that_are_text_units_pass_like_cell_fragments_in_every_field(self):
+        # Codex round 8 (R8-3): <span>Sum</span><span>mary</span> as two or seven touching text units is faithful output for titles, units, basis, periods, lead-ins and headings
+        for field, word in (('table_title', 'Summary'), ('unit_printed', 'Millions'), ('segment_or_basis', 'Adjusted'), ('periods', '2025'), ('lead_in', 'Summary'), ('section_path', 'Summary')):
+            for n in (1, 2, len(word)):
+                raw = ('<p><span>' + word[:2] + '</span><span>' + word[2:] + '</span></p><table><tr><td>Revenue</td><td>1234</td></tr></table>').encode()
+                span = lambda text: {'byte_start': raw.index(text.encode()), 'byte_end_exclusive': raw.index(text.encode()) + len(text)}
+                evidence = {'byte_start': 0, 'byte_end_exclusive': raw.index(b'<table>')}
+                if n == 1: units = [{'id': 'p1', 'kind': 'heading', 'text': word, 'anchor': evidence}]
+                elif n == 2: units = [{'id': f'p{i}', 'kind': 'heading', 'text': s, 'anchor': span(s)} for i, s in enumerate([word[:2], word[2:]])]
+                else:
+                    left, right = raw.index(word[:2].encode()), raw.index(word[2:].encode())
+                    units = [{'id': f'p{i}', 'kind': 'heading', 'text': c, 'anchor': {'byte_start': left + i if i < 2 else right + i - 2, 'byte_end_exclusive': left + i + 1 if i < 2 else right + i - 1}} for i, c in enumerate(word)]
+                tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span('Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span('1234')}]}
+                value = [{'role': 'value', 'parts': [{'text': word, 'anchor': evidence}]}] if field == 'periods' else [word] if field in ('section_path', 'table_title') else word
+                t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span('1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+                     'support': {field: {'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', field: value}}
+                g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
+                self.assertEqual(next(r['verdict'] for r in g.rows if r['check'] == field), 'pass', (field, n))
+
+    def test_a_two_line_heading_whose_second_line_says_continued_is_read_as_pieces(self):
+        # E2 inside E12: the window that reads a heading's pieces measures them without "(continued)", so the piece carrying it is not skipped
+        raw = b'<p>Consolidated</p><p>Summary (continued)</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        units = [{'id': 'p0', 'kind': 'heading', 'text': 'Consolidated', 'anchor': span(b'Consolidated')}, {'id': 'p1', 'kind': 'heading', 'text': 'Summary (continued)', 'anchor': span(b'Summary (continued)')}]
+        tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}]}
+        evidence = {'byte_start': 0, 'byte_end_exclusive': raw.index(b'<table>')}
+        t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+             'support': {'section_path': {'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', 'section_path': ['Consolidated Summary']}}
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
+        self.assertEqual([(r['check'], r['verdict']) for r in g.rows if r['check'] in ('section_path', 'heading_recognised')], [('heading_recognised', 'pass'), ('section_path', 'pass')])
+
+    def test_touching_pieces_are_read_as_the_key_prints_them(self):
+        # pieces that touch in the source are glued only where the key (read from the rendered page) prints them glued: "Section 1.01" + "Defined Terms"
+        # under "Section 1.01 Defined Terms" stay two pieces (CSS spacing), an empty picture unit never swallows the heading after it, a bullet beside a word is reflow
+        def graded(raw, units, field, value):
+            span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+            evidence = {'byte_start': 0, 'byte_end_exclusive': raw.index(b'<table>')}
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': span(b'1234')}]}
+            t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+                 'support': {field: {'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', field: value}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [dict(u, anchor=span(u['anchor'])) for u in units] + [tb]}, raw, 'htm')); g.grade_cell()
+            return {r['check']: r['verdict'] for r in g.rows}
+        table = b'<table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        rows = graded(b'<p><span>Section 1.01</span><span>Defined Terms</span></p>' + table, [{'id': 'h1', 'kind': 'heading', 'text': 'Section 1.01', 'anchor': b'Section 1.01'}, {'id': 'h2', 'kind': 'heading', 'text': 'Defined Terms', 'anchor': b'Defined Terms'}], 'section_path', ['Section 1.01 Defined Terms'])
+        self.assertEqual((rows['section_path'], rows['heading_recognised']), ('pass', 'pass'))
+        rows = graded(b'<p><img src="x.png"><span>Financial Trends</span></p>' + table, [{'id': 'i', 'kind': 'image', 'text': '', 'anchor': b'<img src="x.png">'}, {'id': 'h', 'kind': 'heading', 'text': 'Financial Trends', 'anchor': b'Financial Trends'}], 'section_path', ['Financial Trends'])
+        self.assertEqual((rows['section_path'], rows['heading_recognised']), ('pass', 'pass'))
+        rows = graded('<p><span>•</span><span>depreciation and amortization;</span></p>'.encode() + table, [{'id': 'b', 'kind': 'text', 'text': '•', 'anchor': '•'.encode()}, {'id': 'w', 'kind': 'text', 'text': 'depreciation and amortization;', 'anchor': b'depreciation and amortization;'}], 'segment_or_basis', ['• depreciation and amortization;'])
+        self.assertEqual(rows['segment_or_basis'], 'pass')
+        rows = graded(b'<p><span>Sum</span><span>mary</span></p>' + table, [{'id': 'h1', 'kind': 'heading', 'text': 'Sum', 'anchor': b'Sum'}, {'id': 'h2', 'kind': 'heading', 'text': 'mary', 'anchor': b'mary'}], 'section_path', ['Summary'])
+        self.assertEqual((rows['section_path'], rows['heading_recognised']), ('pass', 'pass'))  # a within-word split the key reads glued still is (E12)
+        rows = graded(b'<p><span>written (the "</span><span>Effective Date</span><span>") when:</span></p>' + table, [{'id': 'a', 'kind': 'text', 'text': 'written (the "', 'anchor': b'written (the "'}, {'id': 'b', 'kind': 'text', 'text': 'Effective Date', 'anchor': b'Effective Date'}, {'id': 'c', 'kind': 'text', 'text': '") when:', 'anchor': b'") when:'}], 'segment_or_basis', ['(the "Effective Date")'])
+        self.assertEqual(rows['segment_or_basis'], 'pass')  # the key phrase ends two characters into the last piece: glued where the key reads it glued
+
     def test_a_pieced_unit_is_judged_from_its_blocks_never_from_its_own_counts(self):
         # Codex R4-1: the gate derives the insertion from the blocks, checks each block's boundaries and refuses malformed pieces
         raw = b'<p>First sentence of a long paragraph that the tool kept.</p><p>7</p><p>Second sentence of the same long paragraph that the tool kept as well.</p>'
