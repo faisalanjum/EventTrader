@@ -190,7 +190,7 @@ def _ratio(a, b):
     if 'byte_start' in a and 'byte_start' in b:
         return float(a['byte_start'] < b['byte_end_exclusive'] and b['byte_start'] < a['byte_end_exclusive'])
     if 'region' in a and 'region' in b:
-        if a.get('page') != b.get('page') or Path(str(a.get('file'))).name != Path(str(b.get('file'))).name: return 0.0
+        if a.get('page') != b.get('page') or a.get('file') != b.get('file'): return 0.0  # the same page of the source, or the same picture by its whole identifier: a base name is no identity (Codex R17-C3)
         (x0, y0, x1, y1), (u0, v0, u1, v1) = a['region'], b['region']
         inter = max(0, min(x1, u1) - max(x0, u0)) * max(0, min(y1, v1) - max(y0, v0))
         smaller = min((x1 - x0) * (y1 - y0), (u1 - u0) * (v1 - v0))
@@ -235,7 +235,8 @@ class RouteFile:
         ext = '.' + fmt.lower().lstrip('.') if fmt else Path(data['file_id']).suffix.lower()  # the key's declared format decides the checking mode
         self.vis = Visible(raw, xml=ext == '.xml') if raw is not None and ext in ('.htm', '.html', '.xml', '.txt') else None  # PDFs/pictures: geometry only
         self.raw, self.raw_len, self.paged = raw, (len(raw) if raw is not None else None), ext == '.pdf'  # a PDF's boxes always name their page (contract)
-        self.pages = {int(k): v for k, v in (data.get('pages') or {}).items() if str(k).isdigit() and isinstance(v, list) and len(v) == 2 and all(type(x) in (int, float) for x in v)}  # page sizes [width, height] declared by the route, if any; an entry that is no size declares nothing (a box on that page then has no size to be checked against: not a position)
+        decl = data.get('pages'); self.pages_declared = bool(decl)  # the route declares its page sizes: a box must then lie on a page it validly declares — an unusable declaration never reads as none (Codex R17-C1)
+        self.pages = {int(k): v for k, v in (decl.items() if isinstance(decl, dict) else ()) if str(k).isdecimal() and int(k) > 0 and isinstance(v, list) and len(v) == 2 and all(type(x) in (int, float) and isfinite(x) and x > 0 for x in v)}  # the usable entries: a positive page number with [width, height], two finite positive numbers
         for x in [*self.units, *(c for _, c in self.cells)]:  # a position that cannot be true is no position: it locates nothing, supplies nothing, and the gate counts it (Codex R14-3, R15-3); the claim is kept apart for the gate's report
             a = x.get('anchor'); sp = spans(a)
             if a not in (None, []) and not (sp and all(self.possible(s) for s in sp)): x['_bad_anchor'], x['_claimed'], x['anchor'] = True, a, None
@@ -251,7 +252,7 @@ class RouteFile:
     def possible(self, a):
         """Can this place be true? A byte span: integers, 0 <= start < end <= the source's length. A box: four numbers, left < right and top < bottom
         from 0, on the canvas the source's format gives it (contract: PDF {page, region}, picture files {file, region}) — in a PDF a positive integer
-        page which, when the route declares its page sizes, is one of them, with the box inside that size; elsewhere its picture file, and no page.
+        page which, when the route declares page sizes, is one it validly declares, with the box inside that size; elsewhere its picture file, and no page.
         A PDF is addressed by page boxes: a byte span alone is no place in one. A place of both kinds must satisfy both; a place of neither kind,
         a box naming no canvas (Codex R16-2), or one that fails its own test, cannot be true."""
         if not isinstance(a, dict) or not ({'byte_start', 'byte_end_exclusive', 'region', 'page'} & set(a)): return False
@@ -260,7 +261,7 @@ class RouteFile:
             if not (type(s) is int and type(e) is int and 0 <= s < e <= (self.raw_len if self.raw_len is not None else e)): return False
         if 'region' in a or 'page' in a or self.paged:
             r, p = a.get('region'), a.get('page'); size = self.pages.get(p) if type(p) is int else None
-            canvas = (type(p) is int and p > 0 and (not self.pages or size is not None)) if self.paged else 'page' not in a and isinstance(a.get('file'), str) and a['file'].strip() != ''
+            canvas = (type(p) is int and p > 0 and (not self.pages_declared or size is not None)) if self.paged else 'page' not in a and isinstance(a.get('file'), str) and a['file'].strip() != ''
             if not (isinstance(r, list) and len(r) == 4 and all(type(v) in (int, float) and isfinite(v) for v in r) and 0 <= r[0] < r[2] and 0 <= r[1] < r[3]
                     and canvas and (size is None or (r[2] <= size[0] and r[3] <= size[1]))): return False
         return True
@@ -323,8 +324,8 @@ def minus_markers(text, markers):
     """The text without the target's own footnote marks at its ends (a mark glued to a label or title)."""
     text = norm(text)
     for m in sorted((norm(m) for m in markers if m), key=len, reverse=True):
-        if text.endswith(m) and len(text) - len(m) not in cut_points(text, False, markers): text = text[:-len(m)].rstrip()  # never a digit cut out of a number (Codex R16-1 class)
-        elif text.startswith(m) and len(m) not in cut_points(text, False, markers): text = text[len(m):].lstrip()
+        if text.endswith(m) and not splits(numbers(text, markers), len(text) - len(m), len(text)): text = text[:-len(m)].rstrip()  # never a digit cut out of a number (Codex R16-1 class)
+        elif text.startswith(m) and not splits(numbers(text, markers), 0, len(m)): text = text[len(m):].lstrip()
     return text
 
 
@@ -334,8 +335,8 @@ def minus_marks_anywhere(text, markers):
     is never cut out of a number ('Segment 215' keeps its '1')."""
     marks = sorted({re.escape(norm(m)) for m in markers if norm(m)}, key=len, reverse=True)
     if not marks: return norm(text)
-    one, t = '(?:' + '|'.join(marks) + ')', norm(text); cut = cut_points(t, False, markers)
-    return norm(re.sub(r'\s*' + one + r'(?:\s*,?\s*' + one + ')*', lambda m: m.group() if m.end() - len(m.group().lstrip()) in cut or m.end() in cut else '', t))
+    one, t = '(?:' + '|'.join(marks) + ')', norm(text); nums = numbers(t, markers)
+    return norm(re.sub(r'\s*' + one + r'(?:\s*,?\s*' + one + ')*', lambda m: m.group() if splits(nums, m.end() - len(m.group().lstrip()), m.end()) else '', t))
 
 
 def without_marks(got, want, markers):
@@ -346,11 +347,11 @@ def without_marks(got, want, markers):
     if g == w: return True
     if not marks or len(g) <= len(w) or not any(m in g for m in marks): return False  # cheap exits: nothing to delete
     if not any(m in w for m in marks) and squash(minus_marks_anywhere(g, markers)) != squash(w): return False  # when no mark string is part of the key text, deleting them all must leave exactly the key text
-    at, cut = {0: {(0, False)}}, cut_points(g, False, markers)  # positions of `got` reached → (position in `want`, gap: the previous character of `got` was deleted — a mark or its separator); forward, no recursion
+    at, nums = {0: {(0, False)}}, numbers(g, markers)  # positions of `got` reached → (position in `want`, gap: the previous character of `got` was deleted — a mark or its separator); forward, no recursion
     for i in range(len(g)):
         for j, gap in at.pop(i, ()):
             for m in marks:
-                if g.startswith(m, i) and i not in cut and i + len(m) not in cut:  # a mark is never cut out of a number (Codex R16-1 class)
+                if g.startswith(m, i) and not splits(nums, i, i + len(m)):  # a mark is never cut out of a number (Codex R16-1 class)
                     k = i + len(m); at.setdefault(k, set()).add((j, True))
                     for sep in (', ', ',', ' '):  # the next mark of a group
                         if g.startswith(sep, k) and any(g.startswith(m2, k + len(sep)) for m2 in marks): at.setdefault(k + len(sep), set()).add((j, True))
@@ -368,7 +369,7 @@ def same(got, want, markers=(), own=()):
     if norm(own_bracket_off(minus_markers(got, markers), own)) == want: return True, 'unit_phrase_split'
     rest = minus_markers(got, markers)
     for piece in sorted((norm(x) for x in own if x and norm(x) != want), key=len, reverse=True):
-        cut = cut_points(rest); rest = re.sub(re.escape(piece), lambda m: m.group() if m.start() in cut or m.end() in cut else ' ', rest)  # set aside only where it is printed whole (Codex R16-1 class)
+        toks = pieces(rest); rest = re.sub(re.escape(piece), lambda m: m.group() if splits(toks, m.start(), m.end()) else ' ', rest)  # set aside only where it is printed whole (Codex R16-1 class)
     rest = minus_markers(_EMPTY_BRACKETS.sub(' ', rest), markers)  # brackets left empty, and marks now at an end, set aside too
     if norm(rest) == want or norm(own_bracket_off(norm(rest), own)) == want or without_marks(own_bracket_off(norm(rest), own), want, markers): return True, 'joined_with_own_pieces'
     return False, None
@@ -508,31 +509,42 @@ _TOKEN_NUMBERS = re.compile(r'\d(?:[\d.,]*\d)?')  # a number keeps its separator
 _TOKEN_WORDS = re.compile(_TOKEN_NUMBERS.pattern + r'|\w+')  # the words and numbers of a text, by Unicode category
 
 
-def number_spans(nt, marks=()):
-    """The numbers of a normalized text as printed, (start, end): a number with its sign and its leading point — '-10', '− 10' (glyphs folded,
-    the spacing rule moves whitespace around a sign), '+10', '.5', '-.5', '-$10' (the sign before the currency symbol); a hyphen glued to a word
-    or number before it joins them ('COVID-19', '5-10'), a dash after a number is a range ('5 - 10'), a point glued to a word is the word's
-    ('No.5'). A comma group of the record's own marks ('1,2', guide 3.2) is marks, not a number (Codex R15-1, R16-1)."""
+def numbers(nt, marks=()):
+    """The numbers of a normalized text as printed: (first, core, end, maybe). `core`..`end`: the digits with their separators and a leading point
+    ('.5'; a point glued to a word is the word's: 'No.5'). Before them may stand a '-' or '+' (glyphs folded; a currency symbol between: '-$10').
+    The text settles three cases: glued to a word or number on its left it joins or ranges ('COVID-19', '5-10') — no part of the number; touching
+    the number, with nothing before it but a space or an opening bracket and no number before that, it is the number's sign, `first` ('-10',
+    'of -10', '(-10)'); standing free between two numbers it ranges ('5 - 10'). Anything else is `maybe`: free-standing before the number
+    ('stock – 10,000,000', '1.01% - 2.00%', 'LIBOR + 3.8%'), glued to other punctuation ('11%-63%', "2'-0", '(206)-392', 'x=-10', '$-10') or
+    touching it after a number ('n.d. -23 -18', 'US2007 -0287831', '0.79% -3.27%') it is a separator, a range, a join, an operator or a sign —
+    the text alone cannot tell (Codex R17-C5; each shape is printed in the development texts). A comma group of the record's own marks ('1,2',
+    guide 3.2) is marks, not a number (R15-1, R16-1)."""
     own, out = {norm(m) for m in marks}, []
     for m in _TOKEN_NUMBERS.finditer(nt):
         if ',' in m.group() and set(m.group().split(',')) <= own: continue
-        s = m.start() - (nt[m.start() - 1:m.start()] == '.' and not nt[m.start() - 2:m.start() - 1].isalnum())
-        j = s
-        while j and (nt[j - 1].isspace() or unicodedata.category(nt[j - 1]) == 'Sc'): j -= 1  # a currency symbol, by Unicode class, may stand between the sign and the digits
-        if j and nt[j - 1] in '+-':
-            p = j - 1
-            while p and nt[p - 1].isspace(): p -= 1
-            if not nt[j - 2:j - 1].isalnum() and not nt[p - 1:p].isdigit(): s = j - 1
-        out.append((s, m.end()))
+        core = j = m.start() - (nt[m.start() - 1:m.start()] == '.' and not nt[m.start() - 2:m.start() - 1].isalnum())
+        while j and (nt[j - 1].isspace() or unicodedata.category(nt[j - 1]) == 'Sc'): j -= 1  # back over a currency symbol, by Unicode class, and the spaces around it
+        s = j - 1 if j and nt[j - 1] in '+-' and not nt[j - 2:j - 1].isalnum() else None  # a dash or plus that no word or number is glued before
+        p = s or 0
+        while p and nt[p - 1].isspace(): p -= 1
+        q = p
+        while q and not nt[q - 1].isspace() and not nt[q - 1].isalnum(): q -= 1  # back over the punctuation of what stands before it ('0.79% -3.27%')
+        free = s is not None and (p < s or s == 0 or unicodedata.category(nt[s - 1]) == 'Ps')  # nothing glued before it but an opening bracket
+        touching = s is not None and not nt[s + 1].isspace()
+        sign = free and touching and not nt[q - 1:q].isdigit()  # it touches the number and no number stands before it
+        out.append((s if sign else core, core, m.end(), None if s is None or sign or (nt[p - 1:p].isdigit() and not touching) else s))  # free between two numbers, it ranges
     return out
 
 
-def cut_points(nt, words=True, marks=()):
-    """Positions of a normalized text strictly inside one of its numbers as printed (and words): where a match, a deleted mark or a removed
-    piece may not begin or end."""
-    out = {i for s, e in number_spans(nt, marks) for i in range(s + 1, e)}
-    if words: out.update(i for m in _TOKEN_WORDS.finditer(nt) for i in range(m.start() + 1, m.end()))
-    return out
+def pieces(nt, words=True, marks=()):
+    """The numbers of a normalized text and, with `words`, its words: what a stretch may take whole or not at all."""
+    return numbers(nt, marks) + ([(m.start(), m.start(), m.end(), None) for m in _TOKEN_WORDS.finditer(nt)] if words else [])
+
+
+def splits(toks, a, b):
+    """Does the stretch [a, b) take part of a word or number and leave part: some of its characters, its digits without their sign or point, its
+    sign alone? A currency symbol or a space between a sign and its digits is no part of the number ('$' is printed in '-$506')."""
+    return any((a <= first < b or (a < end and core < b)) and not (a <= first and end <= b) for first, core, end, _ in toks)
 
 
 def tokens(text):
@@ -563,22 +575,27 @@ def spaced(item):
 
 def contains(text, want, marker=False, marks=()):
     """Is `want` printed inside `text` as whole words and numbers? A matching stretch may move whitespace around punctuation and symbols
-    (E12), never inside a word or a number, and it begins and ends where a word or number of `text` does: 'note 1' is not printed in
-    'note 10', nor '250' in '1,250', nor 'not own' in 'cannot own' (Codex R15-1), nor '10' in '-10' or '5' in '.5' (R16-1). A footnote mark
-    (`marker`) may touch a word ('Revenue1'), but never cut a number ('1' is not printed in '2015', '1,000' or '1.5'); `marks` grouped by
-    commas are marks."""
+    (E12), never inside a word or a number, and takes each word and number of `text` whole or not at all: 'note 1' is not printed in
+    'note 10', nor '250' in '1,250', nor 'not own' in 'cannot own' (Codex R15-1), nor '10' in '-10' or '5' in '.5' (R16-1); a stretch that itself
+    begins with a sign or a point begins at one ('-10' is not printed in '5-10'). A footnote mark (`marker`) may touch a word ('Revenue1'),
+    but never cut a number ('1' is not printed in '2015', '1,000' or '1.5'); `marks` grouped by commas are marks. Returns True, False, or None:
+    printed there only if the dash or plus before its first number is no sign ('stock – 10,000,000 shares', '11%-63%') — the text cannot
+    tell, the caller asks the source (R17-C5)."""
     nt, nw = norm(text), norm(want); sw = squash(nw)
     if not sw: return True
     idx = [i for i, c in enumerate(nt) if not c.isspace()]; st = ''.join(nt[i] for i in idx)
     p = st.find(sw)
     if p == -1: return False
-    cut = cut_points(nt, not marker, marks)
-    starts = {s for s, _ in number_spans(nt, marks)} if nw[0] in '+-.' and any(s == 0 for s, _ in number_spans(nw)) else None  # a stretch that begins with a number's sign or point begins a number of the text, never a hyphen that joins ('-10' is not printed in '5-10')
+    nums = numbers(nt, marks); toks = pieces(nt, not marker, marks)
+    starts = {first for first, *_ in nums} | {maybe for *_, maybe in nums} if nw[0] in '+-.' and any(first == 0 for first, *_ in numbers(nw)) else None  # a stretch that begins with a number's sign or point begins where a number of the text does, or at a free-standing dash before one — never at a hyphen that joins
+    open_ = False
     while p != -1:
         a, b = idx[p], idx[p + len(sw) - 1] + 1
-        if a not in cut and b not in cut and (starts is None or a in starts) and boundary_equal(nt[a:b], nw): return True
+        if not splits(toks, a, b) and (starts is None or a in starts) and boundary_equal(nt[a:b], nw):
+            if not any(maybe is not None and maybe < a <= core for _, core, _, maybe in nums): return True
+            open_ = True  # it begins right after a dash that may be its number's sign
         p = st.find(sw, p + 1)
-    return False
+    return None if open_ else False
 
 
 def fused(texts, want):
@@ -713,7 +730,7 @@ def wer(got, want):
 # ------------------------------------------------------------------------------------------------- grading one
 class Grader:
     def __init__(self, t, rf):
-        self.t, self.rf, self.rows = t, rf, []
+        self.t, self.rf, self.rows, self.boundary = t, rf, [], False
         self.markers = [m['marker_text'] for _, v in alternatives(t, 'footnote_markers') for m in (v or [])]
         self.own = [p for f in ('unit_printed', 'segment_or_basis', 'corner_text', 'table_title', 'row_label') for _, v in alternatives(t, f) for p in pieces_of(v)]
         self.own += [part['text'] for _, v in alternatives(t, 'periods') for g in (v or []) for part in g.get('parts') or []]
@@ -732,6 +749,24 @@ class Grader:
     def same(self, got, want):
         return same(got, want, self.markers, self.own)
 
+    def printed(self, texts, want, anchors=(), **kw):
+        """`contains` over one text or several, with the source as arbiter where a dash or plus stands before the wanted number and the text alone
+        cannot tell a separator from a sign (Codex R17-C5). The key's own span for the phrase decides: where the source prints the phrase at that
+        span with a dash or plus before it, and a text prints that same stretch — the source's dash through the phrase — the route kept the source's
+        text and the phrase is printed; where the source prints none there, or another one, the route's is its own — not printed. With no such
+        span, no source text (a PDF, a field found by text) or an uncertain reading of the source the question stays open: True for now, and the
+        field's verdict cannot be a pass (`numeric_boundary`, unresolved) — never a guessed negative."""
+        texts = [texts] if isinstance(texts, str) else texts; rs = [contains(x, want, **kw) for x in texts]
+        if True in rs or None not in rs: return True in rs
+        vis, proof = self.rf.vis, None
+        for a in (x for y in anchors or () for x in spans(y) if 'byte_start' in x) if vis is not None and vis.certain else ():
+            if boundary_equal(vis.at(a['byte_start'], a['byte_end_exclusive']), want):  # the source prints the wanted phrase at the key's own span: what stands before it there?
+                j = bisect_left(vis.starts, a['byte_start']) - 1
+                while j >= 0 and (not squash(vis.text[j]) or unicodedata.category(vis.text[j]) == 'Sc'): j -= 1
+                proof = proof or (j >= 0 and norm(vis.text[j]) in ('+', '-') and any(contains(x, vis.at(vis.starts[j], a['byte_end_exclusive']), **kw) is True for x in texts))
+        if proof is None: self.boundary = True
+        return proof is not False
+
     def row(self, check, verdict, reason=None, detail=None):
         self.rows.append({'key_id': self.t['key_id'], 'file_id': self.t['file_id'], 'split': self.t['split'], 'format': self.t['format'],
                           'check': check, 'verdict': verdict, 'reason': reason, 'detail': detail})
@@ -744,8 +779,10 @@ class Grader:
         results, matched = [], []
         for alt, value in alts:
             if value in (None, [], {}): return self.row(name, 'na')
-            self.matched = None  # a field may say which carriers matched; the struck check then reads those, not every occurrence the key points at
-            results.append(fn(value, alt, *args)); matched.append(self.matched)
+            self.matched, self.boundary = None, False  # a field may say which carriers matched; the struck check then reads those, not every occurrence the key points at
+            r = fn(value, alt, *args)
+            if r[0] == 'pass' and self.boundary: r = ('unresolved', 'numeric_boundary', r[2])  # printed only if a free-standing dash before the number is no sign, and the source could not say (Codex R17-C5)
+            results.append(r); matched.append(self.matched)
             if results[-1][0] == 'pass': break
         verdict, reason, detail = results[-1] if results[-1][0] == 'pass' else results[0]
         if verdict == 'pass':  # struck words the key marks must still be struck where the route carries them
@@ -792,7 +829,7 @@ class Grader:
                 found += [(None, None, u) for u in self.rf.units_at(a)]
         else:
             want = [norm(p) for p in pieces]
-            hit = (lambda s: any(self.same(s, w)[0] for w in want)) if equal else (lambda s: any(contains(s, w) for w in want))
+            hit = (lambda s: any(self.same(s, w)[0] for w in want)) if equal else (lambda s: any(contains(s, w) is not False for w in want))
             found += [(tb, c, None) for c in (self.rf.cells_in(tb) if tb else []) if hit(c.get('text', ''))]
             found += [(None, None, u) for u in self.rf.placed if u.get('kind') not in ('table', 'clutter') and hit(u.get('text', ''))]  # by text, among units that have a position (Codex R15-3)
         out, seen = [], set()
@@ -968,15 +1005,16 @@ class Grader:
         return ('pass', None, flag) if ok else ('fail', 'text', ' '.join(k['text'] for k in cars))
 
     def lead_in(self, value, alt, tb, vr):
-        cars = [k for k in self.carriers(anchors_of(self.t, 'lead_in', alt), [value], tb) if self.in_order(k, tb, vr) and (k['table'] is not tb or k['cell']['r'] < vr)]
+        anchors = anchors_of(self.t, 'lead_in', alt)
+        cars = [k for k in self.carriers(anchors, [value], tb) if self.in_order(k, tb, vr) and (k['table'] is not tb or k['cell']['r'] < vr)]
         if not cars: return 'fail', 'missing', None
         hit = next((k for k in cars if boundary_equal(k['text'], value)), None)
         if hit is None and self.pieces_match([k['text'] for k in cars], value, [anchor_of(k) for k in cars])[0]: hit = cars[-1]
         flag = None
         if hit is None:
             got = norm(' '.join(k['text'] for k in cars))
-            if contains(got, value): hit, flag = cars[-1], 'contained'  # whole and in order inside the carriers (addendum C6), as whole words and numbers (Codex R16-1 class)
-            elif any(k.get('joins') for k in cars) and (any(boundary_equal(spaced(k), value) for k in cars) or contains(' '.join(spaced(k) for k in cars), value)): return 'unresolved', 'adjacency', None
+            if self.printed(got, value, anchors): hit, flag = cars[-1], 'contained'  # whole and in order inside the carriers (addendum C6), as whole words and numbers (Codex R16-1 class)
+            elif any(k.get('joins') for k in cars) and (any(boundary_equal(spaced(k), value) for k in cars) or self.printed(' '.join(spaced(k) for k in cars), value, anchors)): return 'unresolved', 'adjacency', None
             else: return 'fail', 'spacing' if any(spacing_only(k['text'], value) for k in cars) or spacing_only(got, value) else 'text', got
         self.matched = objects(cars)  # a lead-in may be spread over several pieces; strikes outside its text do not count (struck_kept scopes by the key text)
         if hit['table'] is tb: return 'pass', None, flag
@@ -1030,7 +1068,7 @@ class Grader:
         for phrase in pieces_of(value):
             want = norm(phrase)
             at = self.carriers(anchors, [phrase], tb, equal=False)
-            holds = lambda text: contains(text, want) or contains(minus_marks_anywhere(text, self.markers), want)  # the phrase, with the record's own marks printed into it; spacing by the boundary rule
+            holds = lambda text: self.printed([text, minus_marks_anywhere(text, self.markers)], want, anchors)  # the phrase, with the record's own marks printed into it; spacing by the boundary rule
             cars = [k for k in at if holds(k['text'])] or (at if at and holds(' '.join(k['text'] for k in at)) else [])  # a phrase read across pieces: every piece carries it
             if not cars and any(k.get('joins') for k in at) and (any(holds(spaced(k)) for k in at) or holds(' '.join(spaced(k) for k in at))): return 'unresolved', 'adjacency', phrase
             if not cars: return 'fail', 'missing', phrase
@@ -1046,7 +1084,7 @@ class Grader:
             k = good[0]; self.matched = objects(cars)
             if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', None
             return 'pass', None, None
-        if squash(value) and contains(' '.join(c.get('text', '') for c in V), value): self.matched = list(V); return 'pass', None, 'in_value_cell'  # printed inside the value's own cells, as whole words (Codex R15-1 class)
+        if squash(value) and self.printed(' '.join(c.get('text', '') for c in V), value, anchors): self.matched = list(V); return 'pass', None, 'in_value_cell'  # printed inside the value's own cells, as whole words (Codex R15-1 class)
         if any(k.get('joins') and self.same(spaced(k), value)[0] for k in cars): return 'unresolved', 'adjacency', None
         return ('fail', 'text', ' '.join(k['text'] for k in cars)) if cars else ('fail', 'missing', None)
 
@@ -1057,8 +1095,8 @@ class Grader:
                 want, a = norm(part['text']), part.get('anchor')
                 cells = self.merged(self.rf.cells_at(a, tb)) if a else []
                 if cells:
-                    if not self.same(joined(cells), want)[0] and not any(contains(c.get('text', ''), want) for c in cells):
-                        if any(c.get('joins') for c in cells) and (self.same(norm(' '.join(spaced(c) for c in sorted(cells, key=lambda c: (c['r'], c['c'])))), want)[0] or any(contains(spaced(c), want) for c in cells)): return 'unresolved', 'adjacency', part['text']
+                    if not self.same(joined(cells), want)[0] and not self.printed([c.get('text', '') for c in cells], want, [a]):
+                        if any(c.get('joins') for c in cells) and (self.same(norm(' '.join(spaced(c) for c in sorted(cells, key=lambda c: (c['r'], c['c'])))), want)[0] or self.printed([spaced(c) for c in cells], want, [a])): return 'unresolved', 'adjacency', part['text']
                         return 'fail', 'text', part['text']
                     self.matched = (self.matched or []) + list(cells)
                     label_col = min([c['c'] for c in self.rf.cells_in(tb) if row_hit(c, vr)] or [0])
@@ -1075,9 +1113,9 @@ class Grader:
                             return 'fail', 'scope', part['text']  # a row the route placed in this group comes from elsewhere in the source
                     continue
                 cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.placed if u.get('kind') not in ('table', 'clutter')]
-                hit = [k for k in cars if contains(k['text'], want) or (k.get('unit') and want == local(k['unit'].get('name', '')))]
-                if not hit and not contains(' '.join(k['text'] for k in cars), want):
-                    if any(k.get('joins') for k in cars) and contains(' '.join(spaced(k) for k in cars), want): return 'unresolved', 'adjacency', part['text']
+                hit = [k for k in cars if contains(k['text'], want) is True or (k.get('unit') and want == local(k['unit'].get('name', '')))] or [k for k in cars if self.printed(k['text'], want, [a])]  # a plain match first; else one the source must confirm
+                if not hit and not self.printed(' '.join(k['text'] for k in cars), want, [a]):
+                    if any(k.get('joins') for k in cars) and self.printed(' '.join(spaced(k) for k in cars), want, [a]): return 'unresolved', 'adjacency', part['text']
                     return 'fail', 'missing', part['text']
                 self.matched = (self.matched or []) + objects(hit or cars)
         return 'pass', None, None
@@ -1100,14 +1138,14 @@ class Grader:
             apart = any(k['cell'] is not None and mark in (k['cell'].get('markers') or []) for k in cars) or any(squash(k['text']) == squash(mark) for k in cars)
             if not apart:
                 if any(k['cell'] in V for k in cars): return 'fail', 'marker_glued', mark
-                if not any(contains(k['text'], mark, marker=True, marks=own_marks) for k in cars): return 'fail', 'marker_missing', mark  # glued to a label or title: allowed, flagged there; a digit inside a number is no mark; a comma group of the record's own marks is marks (guide 3.2)
+                if not self.printed([k['text'] for k in cars], mark, [a], marker=True, marks=own_marks): return 'fail', 'marker_missing', mark  # glued to a label or title: allowed, flagged there; a digit inside a number is no mark; a comma group of the record's own marks is marks (guide 3.2)
             if m.get('note_anchor'):
                 # the note's body, with its own mark set apart, must sit at the note's anchor: alone, spaced, split into
                 # pieces, or inside a "Notes:" block that holds several notes
                 body = norm(minus_markers(m.get('note_text') or '', [mark]))
                 at_note = self.carriers([m['note_anchor']], [m.get('note_text') or ''], tb)
-                notes = [k for k in at_note if body and contains(minus_markers(k['text'], [mark]), body)] or ([at_note[0]] if at_note and body and contains(' '.join(k['text'] for k in at_note), body) else [])
-                if not notes: return ('unresolved', 'adjacency', mark) if any(k.get('joins') and contains(minus_markers(spaced(k), [mark]), body) for k in at_note) else ('fail', 'missing_note', mark)
+                notes = [k for k in at_note if body and self.printed(minus_markers(k['text'], [mark]), body, [m['note_anchor']])] or ([at_note[0]] if at_note and body and self.printed(' '.join(k['text'] for k in at_note), body, [m['note_anchor']]) else [])
+                if not notes: return ('unresolved', 'adjacency', mark) if any(k.get('joins') and self.printed(minus_markers(spaced(k), [mark]), body, [m['note_anchor']]) for k in at_note) else ('fail', 'missing_note', mark)
                 k = notes[0]; self.matched = (self.matched or []) + objects([k]) + objects([c for c in cars if squash(c['text']) == squash(mark)])
                 declared = (k['unit'] or {}).get('marker')
                 if declared and norm(declared) != norm(mark): return 'fail', 'wrong_note_link', mark  # an explicit wrong mark-to-note assignment
@@ -1131,9 +1169,9 @@ class Grader:
         else: pending = False
         for ev in value.get('evidence') or []:
             hits = self.merged(self.rf.cells_at(ev['anchor'], tb)) + self.merged_units(self.rf.units_at(ev['anchor']))
-            held = [h for h in hits if contains(h.get('text', ''), ev['text'])]
+            held = [h for h in hits if self.printed(h.get('text', ''), ev['text'], [ev['anchor']])]
             if not held:
-                if any(h.get('joins') and contains(spaced(h), ev['text']) for h in hits): pending = True; continue  # evidence split where the page alone could show the space
+                if any(h.get('joins') and self.printed(spaced(h), ev['text'], [ev['anchor']]) for h in hits): pending = True; continue  # evidence split where the page alone could show the space
                 return 'fail', 'evidence', ev['text']
             self.matched = (self.matched or []) + held
         return ('unresolved', 'adjacency', None) if pending else ('pass', None, None)
@@ -1166,15 +1204,15 @@ class Grader:
             else: ok &= any(local(u.get('name', '')) == item['header'] and norm(u.get('text', '')) == norm(item['text']) for u in same_group)
         if f.get('row_context'): self.row('row_context', 'excluded' if 'row_context' in ex else 'pass' if ok else 'fail', None if ok or 'row_context' in ex else 'group')
         if f.get('unit_printed'):
-            carries = lambda u: contains(u.get('text', ''), f['unit_printed']) or norm(f['unit_printed']) == norm(local(u.get('name', '')))  # an XML unit may be a printed text (a security title, as whole words) or the element's own name (percentOfClass, anchored on its tag)
-            declared, fields = (t['support'].get('unit_printed') or {}).get('anchors') or [], [u for u in rf.placed if u.get('kind') == 'field']
+            declared, fields = (t['support'].get('unit_printed') or {}).get('anchors') or [], [u for u in rf.placed if u.get('kind') == 'field']; self.boundary = False
+            carries = lambda u: self.printed(u.get('text', ''), f['unit_printed'], declared) or norm(f['unit_printed']) == norm(local(u.get('name', '')))  # an XML unit may be a printed text (a security title, as whole words) or the element's own name (percentOfClass, anchored on its tag)
             if 'unit_printed' in ex: self.row('unit_printed', 'excluded')
             elif declared:  # the key names the unit's source place: the field that owns that place must carry it, no other field stands in (Codex R13 C3, R14-2)
                 found = [owners([u for u in fields if overlap(u.get('anchor'), a)]) for a in declared]
                 if any(len(o) > 1 for o in found): self.row('unit_printed', 'unresolved', 'ambiguous')
                 else:
-                    at = [o[0] for o in found if o]; hit = any(carries(u) for u in at)
-                    self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing' if not at else 'text')
+                    at = [o[0] for o in found if o]; hit = any(carries(u) for u in at); open_ = hit and self.boundary  # printed only if a free-standing dash is no sign, and the source could not say (Codex R17-C5)
+                    self.row('unit_printed', 'unresolved' if open_ else 'pass' if hit else 'fail', 'numeric_boundary' if open_ else None if hit else 'missing' if not at else 'text')
             else:  # no declared place: the word in this instance proves no association with the value (unresolved), the word elsewhere none at all
                 near = any(carries(u) for u in fields if (u.get('group') or {}).get('at') == group.get('at'))
                 self.row('unit_printed', 'unresolved' if near else 'fail', 'support' if near else 'missing', 'anchor_unknown')
@@ -1203,7 +1241,9 @@ class Grader:
         elif unmapped: self.row('printed_text', 'unresolved', 'page_map', {'wer': wer(got, want)}); ok = None  # a unit over several places with no character mapping: which words lie at the key's place is unknown
         else:
             ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
-            if ok is False and len(units) == 1 and mapped and contains(text_of(units[0]), want): ok, why = True, None  # owner 2026-10-04 (e): the block is the part of a paragraph the route read whole across a page break; the part mapped to the key's place holds the key's text in order
+            held = contains(text_of(units[0]), want) if ok is False and len(units) == 1 and mapped else False
+            if held is None: ok, why = None, 'numeric_boundary'  # the part holds the key's text only if a free-standing dash before its number is no sign: a page box has no source text to ask (Codex R17-C5)
+            elif held: ok, why = True, None  # owner 2026-10-04 (e): the block is the part of a paragraph the route read whole across a page break; the part mapped to the key's place holds the key's text in order
             elif ok is False and why == 'text' and len(units) == 1 and mapped and contains(units[0].get('text', ''), want): why = 'page'  # the words exist in the unit, but the route maps them to another place: a contradiction, not a transcription difference
             continued = bool(mapped) and ok is True  # the block is the part of a unit the route read across several places, taken by the route's own mapping
             bearing = [c for u in units for c in ([x for x in rf.cells_in(u) if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
@@ -1233,7 +1273,7 @@ class Grader:
                 if not dest: failure = failure or ('fail', 'destination', ref['printed_text'])
                 elif explicit and not all(self.rf.by_id.get(l.get('to')) in dest for l in explicit):  # E6: any contradictory destination is wrong, not merely unlinked
                     failure = failure or ('fail', 'wrong_link', ref['printed_text'])
-            if not contains(block_text, ref['printed_text']): failure = failure or (('unresolved', 'adjacency', ref['printed_text']) if contains(getattr(self, 'block_spaced', ''), ref['printed_text']) else ('fail', 'phrase', ref['printed_text']))  # the phrase as whole words (Codex R15-1 class)
+            if not self.printed(block_text, ref['printed_text'], [ref.get('anchor')]): failure = failure or (('unresolved', 'adjacency', ref['printed_text']) if self.printed(getattr(self, 'block_spaced', ''), ref['printed_text'], [ref.get('anchor')]) else ('fail', 'phrase', ref['printed_text']))  # the phrase as whole words (Codex R15-1 class)
             elif ref.get('href') and not any(l.get('href') == ref['href'] for l in links): failure = failure or ('fail', 'href', ref['href'])
         if linked: self.row('reference_linked', 'pass' if all(linked) else 'fail')
         return failure or ('pass', None, None)
@@ -1241,14 +1281,11 @@ class Grader:
 
 # --------------------------------------------------------------------------------------------------------- gates
 def picture_at(rf, byte):
-    """Does the source show a picture and no text at these bytes? True: a picture the reader sees — a unit's text there is a reading of it,
-    approximate evidence the bytes cannot certify, whatever the route calls the unit: the source decides, never the output kind (Codex R14-3).
-    None: a picture the reader may see — the file's visibility (stylesheet rules) or the picture's size is beyond this scanner — not measured,
-    never a mismatch. False: no picture here — a tag inside a comment, a script, an attribute or a hidden subtree, or one with no width or
-    height, is no picture (Codex R15-4, R16-3). The picture is at the bytes when its tag touches them."""
-    if squash(rf.vis.at_any(byte)): return False
-    hits = [shown for s, e, shown in rf.vis.pictures for a in byte if shown is not False and s < a['byte_end_exclusive'] and a['byte_start'] < e]
-    return False if not hits else True if rf.vis.certain and True in hits else None
+    """Does the source hold a picture element and no text at these bytes? Then a unit's text there is a reading of the picture — approximate evidence
+    the bytes cannot certify — whatever the route calls the unit: the source decides, never the output kind (Codex R14-3). A picture element is one
+    the scanner found in a subtree the contract's hiding rules leave shown, never a tag inside a comment, a script, an attribute, literal text or a
+    hidden subtree (R15-4, R17-C4). Whether it paints — its size, clipping, transforms — is beyond the scanner, so the reading is not measured."""
+    return not squash(rf.vis.at_any(byte)) and any(a['byte_start'] <= s < a['byte_end_exclusive'] for a in byte for s, _ in rf.vis.pictures)
 
 
 def gates_for_file(rf, status, excluded=()):
@@ -1284,9 +1321,10 @@ def gates_for_file(rf, status, excluded=()):
                 if byte and rf.vis is None: g['anchors_measured'] = False  # a source with no text layer: nothing reads these bytes, so nothing certifies them
                 if byte and rf.vis is not None:
                     ranges.extend((a['byte_start'], a['byte_end_exclusive']) for a in byte)
-                    pic = picture_at(rf, byte)
-                    if pic is None: g['anchors_measured'] = False  # a picture the reader may see: its reading is not measured (Codex R16-3)
-                    if pic is not False: continue  # the source shows (or may show) a picture and no text here: the unit's text is a reading of it, counted under pictures, certified by nothing
+                    if not rf.vis.certain: continue  # an uncertain reading proves no mismatch: nothing that depends on it is counted (the file is reported not measured below) (Codex R17-C4)
+                    if picture_at(rf, byte):  # a picture element and no text here: the unit's text is a reading of it, counted under pictures — not measured, never a mismatch, never a certificate (R16-3, R17-C4)
+                        if squash(x.get('text', '')): g['anchors_measured'] = False
+                        continue
                     if x.get('link_flag') == 'pieced':  # each anchor must read its block of the text; the characters outside the blocks are the tool's insertion
                         nt = norm(x.get('text', '')); idx = [i for i, c in enumerate(nt) if c != ' ']; sq = nt.replace(' ', '')
                         pieces = [tuple(pc) for pc in x.get('pieces') or []]
@@ -1312,7 +1350,7 @@ def gates_for_file(rf, status, excluded=()):
         excl = [(a['byte_start'], a['byte_end_exclusive']) for e in excluded for a in spans(e) if 'byte_start' in a]  # the declared exclusions' own bytes, nothing wider
         raw_loss, g['uncovered'] = rf.vis.uncovered(ranges), rf.vis.uncovered(ranges + excl)  # raw coverage kept; required-content coverage subtracts the declared bytes only
         g['excluded_chars'] = sum(len(squash(x['text'])) for x in raw_loss) - sum(len(squash(x['text'])) for x in g['uncovered'])
-    g['pictures'] = sum(1 for *_, shown in rf.vis.pictures if shown is not False) if rf.vis is not None and rf.vis.certain else None  # the pictures the reader sees or may see (the scanner's inventory under certain visibility; one with no area is none): their content is never measured by the text map
+    g['pictures'] = len(rf.vis.pictures) if rf.vis is not None and rf.vis.certain else None  # the picture elements in shown subtrees (the scanner's inventory, certain visibility only): their content is never measured by the text map
     return g
 
 

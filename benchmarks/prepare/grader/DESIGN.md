@@ -1061,3 +1061,116 @@ follow-up) give byte-identical output. Mutations 115/115 red. Tracer: every chan
 48/48 originals. Run 34d (package 2, the same 13 route folders): **0 verdict flips, 0 field-row changes, 0 changes in any gate value, file row or
 result row**; package-3 preview (5 routes): the same; round-7 guard identical; grading time unchanged (2 min 05 s for the 13 routes). The development
 sources hold no stylesheet, no zero-size picture and no SVG (60 files, 732 pictures, 724 with both sizes), so the picture rules change nothing measured.
+
+## 41. Round 17 (2026-10-04 14:15, Codex's `CODEX_REVIEW_R16.md` on 511a16e0e; package 3 still approved, still staged) — five wider classes, all reproduced, closed; two of round 16's own rules withdrawn; a final pass against Chrome and the real texts closed more of the same two classes
+
+**Method.** As rounds 15–16: an audit of my own from the headlines the owner relayed, before his file was opened (`grader_review_codex_20261003/
+R17_SELF_AUDIT.md`, hashed 14:21; probes under `codex_probes_live/r17/`, read-only while he was still checking); then his file three times, his
+patch, his eight regression tests and his probes run against this code, every new control red on 511a16e0e and green after, a mutation run on a
+copy, the tracer, every earlier round's probe replayed with each difference explained, and the 13 saved routes regraded with every gate value, file
+row, target and result row compared. The audit had four of his five classes (page declarations, the deleted characters and the file they occur in,
+the sign rule on real texts, picture identity in outline); it did not have C4's breadth.
+*Final pass.* C4 and C5 are open-ended classes — "HTML the scanner does not follow", "a dash the text cannot read" — and examples do not close
+such a class. So before hand-over both were tested against evidence instead: the scanner against local Chrome (every request aborted) on every
+element of the HTML Standard's index, current and obsolete, and on 148 shapes around raw text, the head, the parser's moves, tables and files
+with no doctype (`codex_probes_live/r17/final_pass/fp_all_cases.py`: 286 cases; a case passes when the scanner's text and line breaks are the
+browser's, or the scanner says uncertain); the sign rule against the census of every dash or plus before a number in the texts the development
+routes hand the grader (`r17_dash_census.json`). At 511a16e0e the scanner was certain and wrong on 95 of the 286; three shapes of the sign rule
+still guessed. Both are closed below. None of these constructs occurs in the 60 development originals (census in `final_pass/`), so no saved
+result moves; they matter for filings not yet seen.
+
+**C1 — an unusable page declaration is still a declaration (`RouteFile.__init__`, `possible`).** Round 16 kept only the usable entries and then asked
+"does the route declare any?" of that filtered map: `{"1": null}`, a size as an object or as strings, a key that is no number — all read as "declares
+nothing", and every page and size went unchecked. Now `pages_declared` records that a non-empty declaration was supplied; usable entries are a
+positive decimal page number with two finite positive numbers; when a declaration exists a box must lie on a usable entry (his patch). Added: a
+declaration that is no object (a list, a string, a number) and a key such as `²` no longer stop the run. An empty or absent declaration is none, as
+before (located, never measured).
+
+**C2 — the source's character references are read as the browser reads them (`text_reference`, the scanner's three text uses).** Python's
+`html.unescape` deletes numeric references to control characters and non-characters; the HTML parser keeps the character. One development original
+(`0000879407-25-000007/a9912025-09x10arrowheadc.htm`, slides with a 1pt text layer) holds 18,146 such references; the tools keep the characters, so
+their units could not be placed there. The helper is his: the standard decoder's result, and for a numeric reference it wrongly empties, the scalar;
+one token, never decoded twice. Used for visible text, the hidden count and the text-in-a-table rule.
+
+**C3 — the same picture is the same whole identifier (`_ratio`).** Base names were compared, so `assets/original/chart.png` overlapped
+`assets/unrelated/chart.png` (his patch: exact identifiers; an alias needs a verified asset mapping, not a guess). No saved route emits picture boxes.
+
+**C4 — what the scanner cannot judge is not measured (`html_tokens`, `Visible`, `picture_at`, the gate).** Four parts.
+*Raw text.* The content of `textarea`, `xmp`, `plaintext`, `iframe`, `noembed`, `noframes`, `noscript` (and an unclosed `script`, `style`,
+`title`) is literal text, never child tags: his worktree's tokenizer, adapted to keep round 16's stylesheets-from-tokens (`textarea`: text with
+references decoded; `xmp`, `plaintext`: literal text; the others: not rendered). An apparent `<img>` in there is no picture. An unclosed `<style>`
+is CSS to the end of the source and is read as a sheet. `noscript` is raw text where scripts run — the reading this scanner states; read as tags,
+a comment or an attribute holding `</noscript>` hid the rest of the page (final pass).
+*Beyond the subset.* SVG/MathML content and an inline `content-visibility` other than `visible` make the file uncertain — their rendering is not
+modelled (round 16's SVG presentation attributes and self-closing rule are withdrawn: a half-model asserted what it could not prove, e.g. `hidden`
+on an `<svg>` hides nothing, a `<p>` breaks out of a hidden one). Under an uncertain reading the gate counts nothing that depends on the reading —
+no mismatch, no boundary fault, no insertion, no omission; impossible positions and text without a position are counted as before.
+*The edge of the scanner's scope (final pass; each rule a class with its Chrome facts).*
+(a) Content the page does not flow as its text (`UNMODELLED`): besides SVG and MathML, a `<template>` (its fragment nests and may never close) and
+the fallback content of `audio`, `video`, `canvas`, `meter`, `progress`, `select`, `object` — Chrome prints none of it, the scanner read it as
+text: uncertain.
+(b) What is skipped as never rendered can be shown or moved. A `display` the author gives a `script`, `style`, `title` or `noframes` shows its
+literal text (`SHOWN_BY_DISPLAY`; a `<head>` too, for what it holds): uncertain. `iframe`, `noembed`, `noscript` stay unshown whatever their
+display (Chrome). A `<head>` is skipped whole only while it holds nothing but comments, closed `title`/`style`/`script` elements and
+`meta`/`link`/`base` tags (`_HEAD_SAFE`); text or elements the parser moves into the body, or a `<title/>` an HTML parser reads to the end of the
+source, make the file uncertain — the scanner's own reading keeps the body.
+(c) Elements the browser starts on a line of their own: 19 names missing from `BLOCK` (`aside` … `xmp`; the sweep) — the scanner glued words the
+page prints apart.
+(d) The parser's own rules. A `</p>` that closes no paragraph is an empty paragraph and a `</br>` a `<br>`: a break (two development originals
+hold nine such `</p>`, all between blocks: no reading changes). A table part with no open table is dropped by the parser: uncertain. In a file
+with no doctype — 58 of the 60 development originals — a table does not close the open paragraph, so what that paragraph itself hides or strikes
+reaches the table; with a doctype it does not: the reading depends on the mode, so a hiding paragraph left open before a table is uncertain (a
+striking one: struck text uncertain). An element that is no part of a table, opened directly inside one, is moved out by the parser while the rows
+stay, so what it hides or strikes does not reach them: uncertain when it changes either (one that changes nothing, `<table><font size=2><tr>`,
+reads the same and stays certain).
+*Pictures.* Round 16 judged a picture's size (shown / zero / unknown). Chrome shows that a zero box does not prove absence (visible overflow) and
+that a normal-looking picture can be clipped, scaled to nothing or hidden by its container: no size rule short of a layout engine is right. So the
+size grammar is withdrawn and the inventory is again byte spans of `img`/`svg` tags in subtrees the contract's hiding rules leave shown; a unit's
+text at such a tag (and no visible text there) is a reading of a picture and is **not measured** — the file's anchors are reported not measured,
+never a mismatch and never a certificate; a textless unit there leaves nothing unmeasured. A tag starts inside the span, as in round 15.
+Consequence, stated: a correct route that carries a picture reading can no longer pass the honest-anchors gate for that file (the fixture's HTML
+file is now listed not measured); no saved route places text at a picture, so no saved result changes.
+
+**C5 — a dash before a number is settled by the source, never guessed (`numbers`, `splits`, `contains`, `Grader.printed`).** Real development
+texts: `Preferred stock – 10,000,000 shares authorized:`, `1.01% - 2.00%`, `EURIBOR + 3.8%`, `- 2 -`, `Results from Operations – 2023 compared
+to 2022`; round 16 read each dash as a minus and rejected the positive phrase. The text alone settles three cases, and only these: a dash or plus
+glued to a word or number on its left **joins or ranges** (`COVID-19`, `5-10`) — no part of the number; one that touches the number with nothing
+before it but a space or an opening bracket, and no number before that, is its **sign** (`-10`, `of -10`, `(-10)`, `-$10`); one standing free
+between two numbers **ranges** (`5 - 10`, `2023 - $111,528`). Every other shape is **undecided**: free-standing before the number (`stock –
+10,000,000`, `1.01% - 2.00%`), glued to other punctuation (`11%-63%`, `2'-0-methoxyethyl`, `(206)-392-5040`, `x=-10`, `$-10`), or touching the
+number after another number (`n.d. -23 -18` is a list of signed values, `US2007 -0287831` a broken join, `0.79% -3.27%` either) — the census holds
+each shape with more than one meaning, or its sibling. The first version of this round still guessed three of them (a join for any glued
+punctuation, a sign after a currency symbol, a sign after a number and a space); the final pass moved them to undecided. `contains` returns True,
+False or None (printed only if that dash is no sign). `Grader.printed` asks the source: where the key's own span prints exactly the phrase, a
+dash or plus stands before it in the source, and the route's text prints that same stretch — the source's dash through the phrase — the route kept
+the source's text: printed; where the source prints none there, or another one (the route's plus for the source's dash), the route's is its own:
+not printed; with no such span, no source text (a PDF, a field found by text) or an uncertain reading, the field's verdict is `unresolved`
+(`numeric_boundary`), never a guessed negative and never a pass. Every phrase comparison goes through it (lead-ins, periods, qualifiers, units,
+notes and marks, range evidence, references, XML units; the mapped page continuation resolves `numeric_boundary` directly — a page box has no
+source text). One predicate (`splits`) replaces round 16's edge positions: a stretch takes a word or a number whole or not at all — its sign, its
+point, its digits — and a currency symbol between sign and digits stays a piece of its own (`$` is printed in `-$506`; round 16 lost that).
+
+**Known, not changed (reported to Codex).** References without their semicolon (`&#150 `, `&nbsp `) are not decoded though Chrome decodes them, and
+cp1252 bytes 0x81/8D/8F/90/9D read as U+FFFD (0 development cases each); a route file malformed beyond anchors and page declarations (a null text, a
+cell that is no object) stops the run with a Python error — loud, never a wrong verdict; field checks that read source adjacency are not conditioned
+on the scanner's certainty (no development file is uncertain); with scripts off a browser shows `noscript` content (the scanner states scripts on);
+hiding by clipping, positions or transforms is outside the model for text; closing tags that cross a table cell or another scope boundary are not
+followed (the development originals nest cleanly: census); only Chrome was asked. Four of the 286 cases differ on purpose: struck elements (`del`,
+`s`, `strike`) are read apart from their neighbours where the browser prints them in the line (the contract's redline rule), and a `<textarea>`'s
+text is read as the box shows it though `innerText` leaves a control's value out. A dash that touches its number after a word, at the start or
+after an opening bracket is its sign even where the key's own span starts after it (the source is not asked: his control); no development key
+phrase begins there. The saved routes were linked with the old scanner: linked again on this one, the Arrowhead file's 8–9 unplaced units are
+placed (EdgarTools 0 characters uncovered) — an adapter step for Codex to order, not done here.
+
+**Verification (on the final code).** 229 tests (five new, four changed; exactly those nine red on 511a16e0e, 220 green on both). His eight
+regression tests pass; his remaining-cases probe reports no raw-text pseudo-picture and no visible SVG text vanishing; against his 58 saved Chrome
+observations the scanner is certain and wrong nowhere under scripting on, and no invented picture reading is measured and clean (the one difference
+of the 58 is `noscript` with scripting off); his 13 real paragraphs: 7 printed by the text alone, 6 undecided by the text and printed once the
+source is asked, none rejected. The 286 Chrome cases: 220 the same, 62 uncertain, 4 different on purpose, **0 certain and different** (95 at
+511a16e0e). Earlier probes: every difference from their saved outputs is the picture rule — 4 values in the round-15 deep probes
+(`anchors_measured` for a picture reading) and 7 rows of his round-15 picture probe; his percent/currency probes unchanged (47/50); the final pass
+changed none of them. Mutations 242 of 242 red (51 earlier conditions still in the code, 191 of this round). Tracer: every changed line executed (grade.py 81 of 81 executable, anchor.py 66 of 66).
+48/48 originals. Run 34f (package 2, the same 13 route folders, the final code): against run 34d **0 verdict flips, 0 result-row changes**; one
+gate value changes in the eleven HTML routes — the Arrowhead file's uncovered text, 3 spans and 8,754 characters → 10 spans and 24,059, the
+characters the scanner now sees there and no saved unit covers; run 34e (this round before the final pass) and run 34f are byte-identical in
+every graded file; the package-3 preview shows the same; round-7 guard identical; grading time 2 min 13 s (2 min 05 s before).

@@ -263,7 +263,7 @@ class CorrectOutputTests(GraderFixture):
         self.assertTrue(g['honest_anchors']['measured_pass'])
         self.assertEqual(g['nothing_lost']['not_measured'], [PDF_ID])  # no text layer: coverage cannot be certified
         self.assertFalse(g['nothing_lost']['pass']); self.assertTrue(g['nothing_lost']['measured_pass'])
-        self.assertEqual(g['honest_anchors']['not_measured'], [PDF_ID])  # no independent page sizes: PDF positions are not certified
+        self.assertEqual(g['honest_anchors']['not_measured'], [PDF_ID, HTM_ID])  # no independent page sizes: PDF positions are not certified; the HTML route carries a reading of its picture, which the bytes cannot certify (Codex R17-C4)
 
     def test_converters_get_a_source_list_without_any_answers(self):
         (self.pkg / 'CLAUDE_ANSWER_KEY.json').rename(self.pkg / 'answers.hidden')  # no answers readable
@@ -1790,28 +1790,36 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual((grade.picture_at(rf, [a]), g['dishonest'], g['pictures']), (False, 1, 1))  # a picture elsewhere on the page is no picture at these bytes
         raw = page(b'<img src="x.png">', b'<style>p{display:none}</style>'); a = {'byte_start': raw.index(b'.</p>') + 5, 'byte_end_exclusive': raw.index(b'<p>More')}
         rf = grade.RouteFile({'file_id': 'syn/doc.htm', 'units': [{'id': 'u', 'kind': 'text', 'text': 'Profit 999', 'anchor': a}]}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
-        self.assertEqual((grade.picture_at(rf, [a]), g['dishonest'], g['pictures'], g['anchors_measured']), (None, 0, None, False))  # a stylesheet rule: what is shown is uncertain, so the picture may be shown — its reading is not measured, never a mismatch (Codex R16-3)
-        for inner, picture in ((b'<img src="x.png">', True), (b'<IMG SRC="x.png">', True), (b'<svg width="1" height="1"><rect/></svg>', True), (b'<div style="visibility:hidden"><img src="x" style="visibility:visible"></div>', True),
+        self.assertEqual((grade.picture_at(rf, [a]), g['dishonest'], g['pictures'], g['anchors_measured']), (True, 0, None, False))  # a stylesheet rule: what is shown is uncertain — nothing that depends on the reading is counted, never a mismatch (Codex R16-3, R17-C4)
+        for inner, picture in ((b'<img src="x.png">', True), (b'<IMG SRC="x.png">', True), (b'<div style="visibility:hidden"><img src="x" style="visibility:visible"></div>', True),
                                (b'<!-- <img src="x.png"> -->', False), (b'<script>let x="<img src=x>";</script>', False), (b'<div title="<img src=x>"></div>', False),
                                (b'<div style="display:none"><img src="x.png"></div>', False), (b'<img src="x" style="visibility:hidden">', False), (b'<div style="visibility:hidden"><img src="x"></div>', False), (b'<div hidden><img src="x"></div>', False)):
             raw = page(inner); a = {'byte_start': raw.index(b'.</p>') + 5, 'byte_end_exclusive': raw.index(b'<p>More')}
             rf = grade.RouteFile({'file_id': 'syn/doc.htm', 'units': [{'id': 'u', 'kind': 'text', 'text': 'Profit 999', 'anchor': a}]}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
-            self.assertEqual((grade.picture_at(rf, [a]), g['dishonest'], g['pictures']), (picture, 0 if picture else 1, 1 if picture else 0), inner)
+            self.assertEqual((grade.picture_at(rf, [a]), g['dishonest'], g['pictures'], g['anchors_measured']), (picture, 0 if picture else 1, 1 if picture else 0, not picture), inner)  # a reading of a picture is not measured; text at no picture is compared as text
 
     def test_a_number_is_printed_with_its_sign_and_its_point(self):
         # Codex R16-1: '10 million' was found inside '-10 million', '−10 million', '+10 million'; '5 million' inside '.5 million' — a changed sign or value passed a
         # continuation. Same class (own audit): the lead-in's own containment regex, footnote marks deleted from inside a number, own pieces removed from inside one
         for text, want, expect in (('-10 million', '10 million', False), ('−10 million', '10 million', False), ('+10 million', '10 million', False), ('.5 million', '5 million', False),
-                                   ('-.5 million', '5 million', False), ('$.5', '5', False), ('- 10 million', '10 million', False), ('(-10)', '10', False), ('Revenue -10 million', '10 million', False),
+                                   ('-.5 million', '5 million', False), ('$.5', '5', False), ('- 10 million', '10 million', None), ('\u2212 10 million', '10 million', None), ('(-10)', '10', False), ('Revenue -10 million', '10 million', False),
                                    ('-10 million', '- 10 million', True), ('- 10 million', '-10 million', True), ('10 million', '-10 million', False), ('The amount is 10 million.', '10 million', True),
                                    ('ages 5-10', '10', True), ('ages 5 - 10', '10', True), ('COVID-19 cases', '19 cases', True), ('No.5', '5', True), ('10.5', '5', False), ('1.5', '.5', False),
                                    ('ages 5-10', '-10', False), ('ages 5 - 10', '-10', False), ('x-.5', '-.5', False), ('rate .5', '.5', True), ('total (-10)', '-10', True),
-                                   ('-$10 million', '10 million', False), ('-$10 million', '$10 million', False), ('- $ 10 million', '$10 million', False), ('loss of -$10 million', '-$10 million', True),
+                                   ('-$10 million', '10 million', False), ('-$10 million', '$10 million', False), ('- $ 10 million', '$10 million', None), ('loss of -$10 million', '-$10 million', True),
+                                   ('Preferred stock \u2013 10,000,000 shares authorized:', '10,000,000 shares authorized', None), ('1.01% - 2.00%', '2.00%', None), ('EURIBOR + 3.8%', '3.8%', None), ('- 2 -', '2', None),  # Codex R17-C5, real development texts: a free-standing dash or plus before a number is a separator, a range, an operator or a sign — the text alone cannot tell
+                                   ('Preferred stock \u2013 10,000,000 shares', 'stock - 10,000,000 shares', True), ('1/1/23 \u2013 1/31/23', '1/31/23', True), ('CI 0.74 \u2013 0.93, p', '0.93', True), ('2023 - $111,528; 2022', '$111,528', True), ('PTE 84- 14 (a class', '14 (a class', True),  # the dash inside the stretch, a free dash between two numbers, a dash glued to a number: no sign in question
+                                   ('11%-63%', '63%', None), ('11 %- 63 %', '63 %', None), ("a 2'-0-methoxyethyl sugar", '0-methoxyethyl sugar', None), ('call (206)-392-5040', '392-5040', None), ('x=-10', '10', None), ('Total:-10', '10', None), ('"-10"', '10', None),
+                                   ('5,-10', '10', None), ('$-506', '506', None), ('5\u00a2-10\u00a2', '10\u00a2', None), ('(2)-4', '4', None), ('11%-63%', '-63%', True), ('x=-10', '-10', True), ('(2)-4', '-4', True), ('11%-63%', '11%', True),  # a dash glued to other punctuation: a range, a join or a sign (each printed in the development texts, or its sibling) — undecided; with the dash, the same characters
+                                   ('Day 8 n.d. -23 -18 Day 15', '23', False), ('Day 8 n.d. -23 -18 Day 15', '18', None), ('Day 8 n.d. -23 -18 Day 15', '-18', True), ('Codification 825 - 10 -25 (previously', '25 (previously', None), ('US2007 -0287831; US2004', '0287831', None), ('0.79% -3.27% (9)', '3.27% (9)', None), ('(5) -10', '10', None),
+                                   ('15 13 % -81 -69 +78', '81', False), ('change (mg/dL) -13 -32', '13', False), ('CI, \u221290 to \u221228; P', '28; P', False),  # after a number (with its own punctuation) a touching dash is a sign in a list of values and a broken join or range elsewhere: undecided, never a pass by the text; after a word or free punctuation it is a sign
+                                   ('-$506', '$', True), ('-$506', '506', False), ('-$506', '-', False), ('$-506', '$', True), (chr(0x201c) + 'Premiums' + chr(0x201d) + ' ' + chr(0x2014) + ' $12,100 million unfavorable', '12,100 million', None),  # own audit: a currency symbol between sign and digits stays a piece of its own
                                    ('5-$10', '$10', True), ('5-$10', '-$10', False), ('−€5', '€5', False), ('rated A- or better', '- or better', True), ('$10 million', '10 million', True), ('10%', '10', True)):  # the last two: an unsigned number and its symbol are separate pieces (the key's own split of printed and display values)
-            self.assertEqual(grade.contains(text, want), expect, (text, want))  # a sign glued or spaced before the digits is the number's; a hyphen after a word or a number joins, a dash after a number is a range
+            self.assertIs(grade.contains(text, want), expect, (text, want))  # the text settles three cases: a dash glued to a word or number joins or ranges; one touching its number, free of what precedes it, is its sign; one free between two numbers ranges. Any other is undecided (None)
         across = lambda local: {'id': 'p', 'kind': 'text', 'text': 'End of two. ' + local, 'anchor': [{'page': 2, 'region': [0, 700, 100, 792], 'charspan': [0, 11]}, {'page': 3, 'region': [0, 0, 100, 20], 'charspan': [12, 12 + len(local)]}]}
         for local, want, verdict in (('-10 million', '10 million', 'fail'), ('.5 million', '5 million', 'fail'), ('−10 million', '-10 million', 'pass'), ('The amount is 10 million.', '10 million', 'pass')):
             self.assertEqual(self.block_row(across(local), want=want)[0], verdict, (local, want))  # Codex's reproducer: the mapped page-2 part of a continued paragraph
+        self.assertEqual(self.block_row(across('Preferred stock \u2013 10,000,000 shares authorized'), want='10,000,000 shares authorized')[:2], ('unresolved', 'numeric_boundary'))  # a page box has no source text to ask: neither a guessed negative nor a pass (R17-C5)
         raw = b'<p>Then sales of 1,250 million follow.</p><table id="t"><tr><td>Total</td><td>5</td></tr></table>'
         span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
         table = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table'), 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Total', 'anchor': span(b'Total')}, {'r': 0, 'c': 1, 'text': '5', 'anchor': span(b'>5<')}]}
@@ -1838,6 +1846,7 @@ class PlantedFaultTests(GraderFixture):
                          ['Segment 215'] * 3 + ['Segment total', 'Revenue 2015', '12 Revenue', 'Revenue'])
         self.assertEqual((grade.same('Total 12015', 'Total 1', (), ['2015']), grade.same('Total 12015', 'Total 5', (), ['1201']), grade.same('Total 2015', 'Total', (), ['2015'])),
                          ((False, None), (False, None), (True, 'joined_with_own_pieces')))  # an own piece is set aside only where it is printed whole, at both edges
+        self.assertEqual(grade.same('Revenues total', 'Revenue total', (), ['s']), (False, None))  # nor out of a word
         # the gate is different: a mark the route reports APART may touch a number, as a superscript does ('10.67' + mark '4' over '10.67<sup>4</sup>'): the gate certifies
         # the characters, the value check judges the split ('Revenue 201' + '5' over 'Revenue 2015' is honest characters and a wrong value, test_footnote_digit_glued_to_the_value_fails)
         for source, text, marks in ((b'<p>10.67<sup>4</sup></p>', '10.67', ['4']), (b'<p>Revenue 2015</p>', 'Revenue 201', ['5'])):
@@ -1855,6 +1864,13 @@ class PlantedFaultTests(GraderFixture):
         bare = grade.RouteFile({'file_id': 'syn/f.pdf', 'units': []}, None, 'pdf')  # a PDF route that declares no page sizes: only the box's own rules decide
         for place, ok in (({'page': 3, 'region': box}, True), ({'region': box}, False), ({'page': None, 'region': box}, False), ({'page': 1, 'region': [0, 0, float('inf'), 10]}, False), ({'page': 1, 'region': [0, 0, 80]}, False)):
             self.assertEqual(bare.possible(place), ok, place)
+        for pages in ({'1': None}, {'1': []}, {'1': ['100', '100']}, {'1': 'big'}, {'1': {'width': 100, 'height': 100}}, {'bad': [100, 100]}, {'1.0': [100, 100]}, {'\u00b2': [100, 100]}, {'0': [100, 100]},
+                      {'1': [float('inf'), 100]}, {'1': [100, float('inf')]}, {'1': [float('nan'), 100]}, {'1': [True, 100]}, {'1': [0, 100]}, {'1': [-100, 100]}, [[100, 100]], 'x', 7):
+            rf = grade.RouteFile({'file_id': 'syn/f.pdf', 'pages': pages, 'units': []}, None, 'pdf')  # Codex R17-C1: a declaration that is unusable never reads as no declaration (and never stops the run: a list, a string, a key that is no number)
+            self.assertEqual((rf.possible({'page': 1, 'region': box}), rf.possible({'page': 99, 'region': box})), (False, False), pages)
+        for data in ({}, {'pages': {}}, {'pages': None}):
+            self.assertTrue(grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [], **data}, None, 'pdf').possible({'page': 3, 'region': box}), data)  # a route that declares no sizes stays as it was: located, never measured
+        self.assertEqual([pdf.possible({'page': 1, 'region': r}) for r in ([0, 0, 100, 100], [0, 0, 101, 10])], [True, False])
         htm = grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, b'<p>x</p>', 'htm')
         for place, ok in (({'file': 'scan.png', 'region': box}, True), ({'region': box}, False), ({'file': '', 'region': box}, False), ({'file': 7, 'region': box}, False), ({'file': 'scan.png', 'page': None, 'region': box}, False),
                           ({'page': 1, 'region': box}, False), ({'file': 'scan.png', 'page': 1, 'region': box}, False), ({'byte_start': 0, 'byte_end_exclusive': 2}, True)):
@@ -1867,43 +1883,164 @@ class PlantedFaultTests(GraderFixture):
             g = grade.gates_for_file(grade.RouteFile({'file_id': fid, 'units': unit(anchor)}, b'no text layer', fmt), 'OK')
             self.assertEqual((g['dishonest'], g['anchors_measured']), (0, False), fid)  # bytes in a source with no text layer are certified by nothing: not measured, never "measured and clean"
 
-    def test_a_picture_is_shown_may_be_shown_or_absent_and_only_a_known_absence_is_a_mismatch(self):
-        # Codex R16-3: an exact reading of a shown picture became dishonest once any stylesheet made the file uncertain (even a commented-out one), and a picture with
-        # no area kept the picture exemption for invented text. Same class (own audit): SVG presentation attributes, a self-closing SVG tag, a span starting inside the tag
+    def test_what_the_scanner_cannot_judge_is_not_measured_and_never_a_mismatch(self):
+        # Codex R16-3, R17-C4: an exact picture reading became dishonest once a stylesheet made the file uncertain; a picture the page cannot show kept a certain
+        # exemption for invented text; an apparent <img> inside literal text counted as a picture; text in SVG vanished from a file reported measured and clean
         def gate(html, text='Revenue 10', at=b'<img', end=None):
             raw = b'<html><body>' + html + b'</body></html>'; s = raw.index(at); a = {'byte_start': s, 'byte_end_exclusive': raw.index(b'>', s) + 1 if end is None else end(raw)}
             rf = grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 'u', 'kind': 'image', 'text': text, 'anchor': a}]}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
             return grade.picture_at(rf, [a]), g['dishonest'], g['anchors_measured']
         img = b'<img width="200" height="40" src="scan.png">'
-        for html, expect in ((img, (True, 0, True)), (b'<style>img{opacity:1}</style>' + img, (None, 0, False)), (b'<link rel="stylesheet" href="unavailable.css">' + img, (None, 0, False)),
-                             (b'<!-- <style>img{opacity:0}</style> -->' + img, (True, 0, True)), (img + b'<style><!-- p{display:none} --></style>', (None, 0, False)),
-                             (b'<img src="scan.png" style="width:0px;height:0px;border:0;padding:0">', (False, 1, True)), (b'<img width="0" height="40" src="scan.png">', (False, 1, True)),
-                             (b'<img style="width:0%" src="scan.png">', (False, 1, True)), (b'<img width="0" style="width:30px" src="scan.png">', (True, 0, True)), (b'<img style="width:calc(0px)" src="scan.png">', (None, 0, False)),
-                             (b'<img style="width:inherit" src="scan.png">', (None, 0, False)), (b'<img style="width:0;min-width:50px" height="40" src="scan.png">', (None, 0, False)),
-                             (b'<style>img{width:0;height:0}</style>' + img, (None, 0, False)), (b'<style>img{max-width:90%}</style><img width="0" height="40" src="scan.png">', (None, 0, False)),
-                             (b'<style>p{color:red}</style>' + img, (True, 0, True)), (b'<style>p{color:red}</style><img width="0" height="40" src="scan.png">', (False, 1, True)),
-                             (b'<link rel="stylesheet" href="unavailable.css"><img width="0" height="40" src="scan.png">', (None, 0, False)),
-                             (b'<img width="0 px" height="40" src="scan.png">', (None, 0, False)), (b'<img width="0" style="width:10" height="40" src="scan.png">', (None, 0, False)), (b'<img style="width:-5px" src="scan.png">', (None, 0, False)),
-                             (b'<img style="width:10xyz" src="scan.png">', (None, 0, False)), (b'<img width="200pt" height=".5" src="scan.png">', (True, 0, True)), (b'<img style="height:0.0em" src="scan.png">', (False, 1, True)),  # a size not cleanly read (a bare or negative CSS number, an unknown unit, a malformed attribute) is unknown, never shown
-                             (b'<noscript>' + img + b'</noscript>', (False, 1, True)), (b'<dialog>' + img + b'</dialog>', (False, 1, True)), (b'<dialog open>' + img + b'</dialog>', (True, 0, True))):
-            self.assertEqual(gate(html), expect, html)  # unknown visibility or size (a stylesheet may size a picture, a min-/max- declaration overrides one): not measured, never a mismatch; a known zero width or height, or a subtree the browser never shows: no picture
+        for html in (img, b'<!-- <style>img{opacity:0}</style> -->' + img, b'<style>p{color:red}</style>' + img, b'<dialog open>' + img + b'</dialog>',
+                     b'<img width="0" height="40" src="scan.png">', b'<img src="scan.png" style="width:0px;height:0px;border:0;padding:0">', b'<img style="inline-size:0;block-size:0" src="scan.png">',
+                     b'<img style="clip-path:inset(100%)" src="scan.png">', b'<div style="transform:scale(0)">' + img + b'</div>', b'<div style="width:0;height:0;overflow:hidden">' + img + b'</div>',
+                     b'<style>img{opacity:1}</style>' + img, b'<link rel="stylesheet" href="unavailable.css">' + img, img + b'<style><!-- p{display:none} --></style>'):
+            self.assertEqual(gate(html), (True, 0, False), html)  # a picture element in a subtree the hiding rules leave shown: whether it paints — its size, clipping, transforms, a stylesheet — is beyond the scanner, so its reading is not measured: never a mismatch, never a certificate
+        self.assertEqual(gate(img, text=''), (True, 0, True))  # a unit that claims no text at a picture leaves nothing unmeasured
+        for html in (b'<noscript>' + img + b'</noscript>', b'<dialog>' + img + b'</dialog>', b'<div style="display:none">' + img + b'</div>', b'<textarea>' + img + b'</textarea>', b'<xmp>' + img + b'</xmp>',
+                     b'<plaintext>' + img, b'<iframe>' + img + b'</iframe>', b'<noembed>' + img + b'</noembed>', b'<noframes>' + img + b'</noframes>'):
+            self.assertEqual(gate(html), (False, 1, True), html)  # no picture element there — a hidden subtree, or an apparent tag that is literal text of a raw-text element: the claimed text is compared as text
+        self.assertEqual(gate(img, at=b'src=', end=lambda raw: raw.index(b'>', raw.index(b'src=')) + 1), (False, 1, True))  # a span inside the tag is not at the picture (as round 15)
+        self.assertEqual(gate(b'<p>Caption</p>' + img, text='Invented', at=b'<p>', end=lambda raw: raw.index(b'scan.png">') + 10), (False, 1, True))  # text the reader sees at the span: no picture-only place
+        for html, text, certain, pictures in ((b'<textarea><img src="x">Revenue &amp; 10</textarea>', '<img src="x">Revenue & 10', True, 0), (b'<xmp><img src="x">Revenue &amp; 10</xmp><p>z</p>', '<img src="x">Revenue &amp; 10 z', True, 0),
+                                              (b'<p>a</p><plaintext><img src="x"></p>', 'a <img src="x"></p>', True, 0), (b'<iframe><img src="x">Revenue</iframe><p>After</p>', 'After', True, 0),
+                                              (b'<noembed style="display:block"><img src="x">Revenue</noembed><p>After</p>', 'After', True, 0), (b'<noframes><img src="x">Revenue</noframes><p>After</p>', 'After', True, 0),
+                                              (b'<noframes style="display:block">Revenue</noframes><p>After</p>', 'After', False, 0), (b'<noembed><script></noembed><img src="x"><p>After</p>', 'After', True, 1),
+                                              (b'<p>a</p><style>p{display:none}', 'a', False, 0), (b'<p>a</p><title>b', 'a', True, 0), (b'<p>a</p><script>b', 'a', True, 0),
+                                              (b'<plaintext>a</plaintext>b', 'a</plaintext>b', True, 0), (b'<XMP><IMG SRC="x"></XMP><p>z</p>', '<IMG SRC="x"> z', True, 0), (b'<p>x</p><textarea hidden><img src="y"></textarea>', 'x', True, 0), (b'<xmp>&amp; 10</xmp>', '&amp; 10', True, 0)):
+            v = anchor.Visible(html); self.assertEqual((' '.join(v.text.split()), v.certain, len(v.pictures)), (text, certain, pictures), html)  # raw-text elements hold literal text, never child tags (Chrome: round16_codex/logs/browser_cases.json); a <noframes> the author displays shows its text: uncertain; an unclosed <style> is CSS to the end
+        for html, certain in ((b'<svg width="200" height="40" hidden><text y="20">Shown 30</text></svg>', False), (b'<svg style="display:none"><p>Shown 30</p></svg>', False), (b'<p>x</p><math><mi>y</mi></math>', False),
+                              (b'<div style="content-visibility:hidden"><p>Hidden 10</p></div>', False), (b'<div style="content-visibility:visible"><p>Shown 10</p></div>', True), (b'<p style="color:red">x</p>', True)):
+            self.assertEqual(anchor.Visible(html).certain, certain, html)  # SVG/MathML content and a content-visibility other than visible are beyond the scanner: the file is uncertain, never measured and clean
+        raw = b'<html><body><style>p{display:none}</style><p>Revenue</p></body></html>'; at = {'byte_start': raw.index(b'Revenue'), 'byte_end_exclusive': raw.index(b'Revenue') + 7}
+        for unit, dishonest in (({'id': 'u', 'kind': 'text', 'text': 'INVENTED', 'anchor': at}, 0), ({'id': 'u', 'kind': 'text', 'text': 'INVENTED', 'anchor': {'byte_start': 5}}, 1)):
+            g = grade.gates_for_file(grade.RouteFile({'file_id': 'syn/f.htm', 'units': [unit]}, raw, 'htm'), 'OK')
+            self.assertEqual((g['dishonest'], g['boundary'], g['anchors_measured'], g['uncovered']), (dishonest, 0, False, None), unit)  # under an uncertain reading no mismatch and no omission is proven; a position that cannot be true is counted independently
         for html, text, certain in ((b'<datalist><p>Revenue</p></datalist><p>After</p>', 'After', True), (b'<datalist style="display:block"><p>Revenue</p></datalist><p>After</p>', 'Revenue After', True),
-                                    (b'<noembed>Revenue</noembed><p>After</p>', 'After', True), (b'<noframes>Revenue</noframes><p>After</p>', 'After', True), (b'<noscript><p>Revenue</p></noscript><p>After</p>', 'After', True),
-                                    (b'<ruby>kan<rp>(</rp><rt>ji</rt><rp>)</rp></ruby>', 'kanji', True), (b'<dialog><p>Revenue</p></dialog><p>After</p>', 'After', True), (b'<dialog open><p>Revenue</p></dialog><p>After</p>', 'Revenue After', True),
-                                    (b'<details open><summary>Sum</summary><p>Revenue</p></details>', 'Sum Revenue', True), (b'<details><summary>Sum</summary><p>Revenue</p></details>', 'Sum Revenue', False)):
+                                    (b'<noscript><p>Revenue</p></noscript><p>After</p>', 'After', True), (b'<ruby>kan<rp>(</rp><rt>ji</rt><rp>)</rp></ruby>', 'kanji', True), (b'<dialog><p>Revenue</p></dialog><p>After</p>', 'After', True),
+                                    (b'<dialog open><p>Revenue</p></dialog><p>After</p>', 'Revenue After', True), (b'<details open><summary>Sum</summary><p>Revenue</p></details>', 'Sum Revenue', True),
+                                    (b'<details><summary>Sum</summary><p>Revenue</p></details>', 'Sum Revenue', False), (b'<div display="none">Revenue</div>', 'Revenue', True)):
             v = anchor.Visible(html); self.assertEqual((' '.join(v.text.split()), v.certain), (text, certain), html)  # what the browser's own sheet never shows is not read (Chrome: r16_browser_facts); a closed <details> is not followed: uncertain
-        self.assertEqual(grade.gates_for_file(grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, b'<p>x</p><img style="width:calc(5px)" src="a.png"><img src="b.png"><img width="0" src="c.png">', 'htm'), 'OK')['pictures'], 2)  # counted as content the text map cannot measure: the pictures shown or possibly shown, never one with no area
-        self.assertTrue(anchor.Visible(b'<html><head><!-- <style>p{display:none}</style> --></head><body><p>x</p></body></html>').certain)  # a commented-out sheet in the head applies nothing
-        self.assertEqual(anchor.Visible(b'<svg width="50" height="50"><rect style="display:none"/><text>Revenue</text></svg>').text.strip(), 'Revenue')  # a self-closing child inside SVG closes too
-        svg = lambda attrs: b'<svg ' + attrs + b'><rect width="20" height="20"/></svg>'
-        for attrs, expect in ((b'width="50" height="50"', (True, 0, True)), (b'width="0" height="0"', (False, 1, True)), (b'display="none" width="50" height="50"', (False, 1, True)), (b'visibility="hidden"', (False, 1, True)),
-                              (b'opacity="0"', (False, 1, True)), (b'display="none" style="display:inline"', (True, 0, True))):
-            self.assertEqual(gate(svg(attrs), at=b'<svg'), expect, attrs)  # SVG presentation attributes are read, the style attribute beats them (Chrome: r16_browser_facts)
-        self.assertEqual(anchor.Visible(b'<div display="none">Revenue</div>').text.strip(), 'Revenue')  # an HTML element has no presentation attributes
-        raw = b'<html><body><svg style="display:none"/><p>Revenue</p><img src="scan.png"></body></html>'
-        self.assertEqual((anchor.Visible(raw).text.strip(), len(anchor.Visible(raw).pictures)), ('Revenue', 1))  # a self-closing SVG tag closes (foreign content): what follows it is shown
-        self.assertEqual(gate(img, at=b'src=', end=lambda raw: raw.index(b'>', raw.index(b'src=')) + 1), (True, 0, True))  # a span touching the tag is at the picture
-        self.assertEqual(gate(b'<p>Caption</p>' + img, text='Invented', at=b'<p>', end=lambda raw: raw.index(b'scan.png">') + 10), (False, 1, True))  # text the reader sees at the span: no picture-only place, no exemption
+        pics = lambda html: grade.gates_for_file(grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, html, 'htm'), 'OK')['pictures']
+        self.assertEqual((pics(b'<p>x</p><img src="a.png"><img width="0" src="c.png"><div hidden><img src="d.png"></div>'), pics(b'<style>img{opacity:1}</style><img src="a.png">')), (2, None))  # counted: picture elements in shown subtrees, no claim about size; nothing under an uncertain reading
+        self.assertEqual([anchor.Visible(b'<html><head>' + sheet + b'</head><body><p>x</p></body></html>').certain for sheet in (b'<!-- <style>p{display:none}</style> -->', b'<style>p{display:none}</style>', b'<style>p{color:red}</style>')], [True, False, True])  # a commented-out sheet in the head applies nothing; a real one there is read
+
+    def test_markup_the_browser_reads_its_own_way_is_read_that_way_or_not_certified(self):
+        # own final pass of round 17, the classes of Codex R17-C4, every case against local Chrome (codex_probes_live/r17/final_pass): the scanner was certain and
+        # wrong on <noscript> content read as tags, on a <script>, <style>, <title> or <head> the author displays, on a head holding body content, on templates and
+        # the fallback content of embedded elements, on block elements read as inline, on a </p> that closes nothing, on cells with no table
+        read = lambda html: (lambda v: (' '.join(v.text.split()), v.certain, len(v.pictures)))(anchor.Visible(html))
+        for html, expect in ((b'<p>A</p><noscript><!-- </noscript><p>shown 10</p> --><p>B</p>', ('A shown 10 --> B', True, 0)), (b'<p>A</p><noscript><a title="</noscript>">N 10</a></noscript><p>B</p>', ('A ">N 10 B', True, 0)),
+                             (b'<p>A</p><noscript style="display:block">N <b>10</b></noscript><p>B</p>', ('A B', True, 0)), (b'<p>A</p><noscript><img src="x.png"></noscript><img src="y.png"><p>B</p>', ('A B', True, 1)), (b'<p>A</p><noscript>N <p>10', ('A', True, 0))):
+            self.assertEqual(read(html), expect, html)  # where scripts run — the reading this scanner states — a <noscript> holds raw text to its first closing tag and is never shown
+        for html, certain in ((b'<p>A</p><script style="display:block">var x = 10;</script><p>B</p>', False), (b'<p>A</p><style style="display:block">.a{color:red}</style><p>B</p>', False), (b'<p>A</p><title style="display:block">T10</title><p>B</p>', False),
+                              (b'<p>A</p><script style="display:inline">var x = 10;', False), (b'<p>A</p><style style="display:block">p{color:red}', False), (b'<p>A</p><title style="display:block">T10', False),
+                              (b'<p>A</p><noframes style="display:none">N 10</noframes><p>B</p>', True), (b'<p>A</p><script style="d\\69 splay:block">x</script><p>B</p>', False), (b'<p>A</p><script style="display:var(--d)">x</script><p>B</p>', False),
+                              (b'<html><head style="display:block"><title style="display:block">T10</title></head><body><p>B</p></body></html>', False), (b'<p>A</p><script style="display:none">var x = 10;</script><p>B</p>', True),
+                              (b'<p>A</p><script style="color:red">var x = 10;</script><p>B</p>', True), (b'<html><head><title style="display:block">T10</title></head><body><p>B</p></body></html>', True), (b'<p>A</p><iframe style="display:block">I 10</iframe><p>B</p>', True)):
+            self.assertEqual(read(html)[1], certain, html)  # the browser's own sheet hides them; a display from the author shows their literal text (script, style, title, noframes; inside a head only when the head is displayed too) — uncertain then. An <iframe> or <noembed> stays unshown
+        for head, certain in ((b'Hello<title>T</title>', False), (b'<title>T</title><p>Hello 10</p>', False), (b'<title>T</title><img src="x.png">', False), (b'<meta charset="utf-8"/><title/>', False), (b'<title>My doc', False), (b'<noscript><p>N</p></noscript>', False),
+                              (b'\n<!-- c --><meta name="a" content="x > y"><base href="/"><title>T</title><style>p{color:red}</style><script>var a;</script>\n', True), (b'<link rel="icon" href="x.ico">', True), (b'', True)):
+            self.assertEqual(read(b'<html><head>' + head + b'</head><body><p>B</p></body></html>')[:2], ('B', certain), head)  # a head is skipped whole; what the parser would move into the body, or read to the end of the source (a <title/>), is not followed: uncertain
+        for name in 'audio video canvas meter progress select object template svg math'.split():
+            self.assertEqual(read(f'<p>A</p><{name}>F 10</{name}><p>B</p>'.encode())[1], False, name)  # content the page does not flow as its text, not modelled here
+        self.assertEqual((read(b'<p>A</p><template><p>T</p>')[1], read(b'<p>A</p><button>F 10</button><label>G</label><p>B</p>')[:2]), (False, ('A F 10G B', True)))  # a template never closed, too; ordinary elements stay certain
+        for name in 'aside dir fieldset figcaption figure hgroup legend listing main menu nav optgroup option search summary xmp'.split():
+            self.assertEqual(read(f'x<{name}>F</{name}>y'.encode())[:2], ('x F y', True), name)  # elements the browser starts on a line of their own: a word boundary (sweep of every element of the HTML Standard's index)
+        for html, expect in ((b'x<details open>F</details>y', ('x F y', True)), (b'x<dialog open>F</dialog>y', ('x F y', True)), (b'x<plaintext>F', ('x F', True)), (b'x<span>F</span>y', ('xFy', True)), (b'x<font size="2">F</font>y', ('xFy', True)),
+                             (b'x</p>y', ('x y', True)), (b'x</br>y', ('x y', True)), (b'x</div>y', ('xy', True)), (b'x</span>y', ('xy', True)), (b'a<span style="display:none">x</p>y</span>b', ('ab', True)), (b'<p>x</p></p>y', ('x y', True)),
+                             (b'x<td>F</td>y', ('x F y', False)), (b'x<tr><td>F</td></tr>y', ('x F y', False)), (b'x<tbody><tr><td>F</td></tr></tbody>y', ('x F y', False)),
+                             (b'<table><td>F</td><td>G</td></table>', ('F G', True)), (b'<table><tr><div><td>F</td></div></tr></table>', ('F', True)), (b'<table><caption>C</caption><tr><td>F</td></tr></table>', ('C F', True)),
+                             (b'<table><tr><td><table><tr><td>F</td></tr></table></td><td>G</td></tr></table>', ('F G', True))):
+            self.assertEqual(read(html)[:2], expect, html)  # a </p> that closes no paragraph is an empty paragraph and a </br> a <br> (a break), any other stray closing tag nothing; a table part with no open table is dropped by the parser: uncertain
+        for part in ('caption', 'colgroup', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th'):
+            self.assertEqual((read(f'x<{part}></{part}>y'.encode())[1], read(f'<table><{part}></{part}></table><p>y</p>'.encode())[1]), (False, True), part)  # each part: dropped with no table (Chrome prints xy on one line), a part of its table inside one
+        state = lambda html: (lambda v: (v.certain, v.struck_certain))(anchor.Visible(html))
+        for html, expect in ((b'<p style="display:none">x<table><tr><td>y</td></tr></table>z', (False, True)), (b'<p style="visibility:hidden">x<table><tr><td>y</td></tr></table>z', (False, True)),
+                             (b'<p style="text-decoration:line-through">x<table><tr><td>y</td></tr></table>z', (True, False)), (b'<p>x<table><tr><td>y</td></tr></table>z', (True, True)),
+                             (b'<div style="display:none"><p>x<table><tr><td>y</td></tr></table></div>z', (True, True)), (b'<p style="display:none">x<div>y</div>z', (True, True))):
+            self.assertEqual(state(html), expect, html)  # a file with no doctype is read in quirks mode, where a table does not close the open paragraph: what the paragraph itself hides or strikes then reaches the table (Chrome; 58 of the 60 development originals carry no doctype) — the reading depends on the mode: uncertain
+        for html, expect in ((b'<table><font style="display:none"><tr><td>y</td></tr></font></table>', (False, True)), (b'<table><tr><span style="visibility:hidden"><td>y</td></span></tr></table>', (False, True)),
+                             (b'<table><form style="display:none"><tr><td>y</td></tr></form></table>', (False, True)), (b'<table><s><tr><td>y</td></tr></s></table>', (True, False)),
+                             (b'<table><font size="2"><tr><td>y</td></tr></font></table>', (True, True)), (b'<table><tbody style="display:none"><tr><td>y</td></tr></tbody></table>z', (True, True)),
+                             (b'<table><tr style="display:none"><td>y</td></tr><tr><td>z</td></tr></table>', (True, True)), (b'<table><tr><td><font style="display:none">a</font>y</td></tr></table>', (True, True)),
+                             (b'<div style="display:none"><table><font color="red"><tr><td>y</td></tr></font></table></div>z', (True, True))):
+            self.assertEqual(state(html), expect, html)  # an element that is no part of a table, opened directly inside one, is moved out by the parser while the rows stay: what it hides or strikes does not reach them (Chrome shows y) — uncertain; one that changes nothing, a table part, a hiding element inside a cell are read as written
+
+    def test_the_source_s_character_references_are_read_as_the_browser_reads_them(self):
+        # Codex R17-C2: Python's html.unescape deletes numeric references to control characters and non-characters; the browser keeps the character. One development original
+        # holds 18,146 of them; the tools keep them, so their units could not be placed
+        for token, scalar in (('&#2;', '\x02'), ('&#7;', '\x07'), ('&#11;', '\x0b'), ('&#127;', '\x7f'), ('&#xFFFF;', '￿'), ('&amp;', '&'), ('&#65;', 'A'), ('&#x41;', 'A'), ('&#x80;', '€'),
+                              ('&#0;', '�'), ('&#xD800;', '�'), ('&#x110000;', '�'), ('&amp;#2;', '&#2;'), ('&#X7F;', chr(0x7f)), ('&#x1f;', chr(0x1f))):
+            self.assertEqual(anchor.Visible(('<p>A' + token + 'B</p>').encode()).text.strip(), 'A' + scalar + 'B', token)  # his controls: retained scalars; the standard's named, C1, null and surrogate rules; never decoded twice
+        raw = b'<p>A&#2;B</p>'
+        for text, dishonest in (('A\x02B', 0), ('AB', 1)):
+            rf = grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 'p', 'kind': 'text', 'text': text, 'anchor': {'byte_start': 3, 'byte_end_exclusive': len(raw) - 4}}]}, raw, 'htm')
+            self.assertEqual(grade.gates_for_file(rf, 'OK')['dishonest'], dishonest, text)  # the route that keeps the character is honest; the one that drops it is not
+        hidden = anchor.Visible(b'<p>x</p><div style="display:none">A&#2;B&#11;</div>'); self.assertEqual((hidden.text.strip(), hidden.hidden_chars), ('x', 3))  # counted among the hidden characters too; a referenced character the comparison form reads as whitespace (U+000B) is none
+        self.assertEqual([anchor.Visible(b'<table>' + ref + b'<tr><td>x</td></tr></table>').certain for ref in (b'&#2;', b'&#11;', b'')], [False, True, True])  # and it is text where the browser would move it out of the table (whitespace moved changes nothing)
+        placed = anchor.link(raw, [{'id': 'p', 'kind': 'text', 'text': 'A\x02B'}])['units'][0]
+        self.assertEqual(placed['anchor'], {'byte_start': 3, 'byte_end_exclusive': 9})  # the linker places the tool's text again
+
+    def test_the_same_picture_is_the_same_whole_identifier(self):
+        # Codex R17-C3: two pictures with one base name in different folders overlapped, so the wrong picture could carry a block
+        a = {'file': 'assets/original/chart.png', 'region': [0, 0, 100, 20]}
+        self.assertEqual((grade.overlap(a, dict(a)), grade.overlap(a, dict(a, file='assets/unrelated/chart.png')), grade.overlap(a, dict(a, file='chart.png'))), (True, False, False))
+        t = {'key_id': 'syn/S', 'file_id': 'source.png', 'type': 'structure', 'format': 'structure/png', 'split': 'development', 'anchor': a, 'fields': {'printed_text': 'Revenue 10', 'kind': 'paragraph'}, 'support': {}, 'alternatives': {}, 'excluded': set()}
+        for asset, found in (('assets/original/chart.png', True), ('assets/unrelated/chart.png', False)):
+            rf = grade.RouteFile({'file_id': 'source.png', 'units': [{'id': 'p', 'kind': 'text', 'text': 'Revenue 10', 'anchor': dict(a, file=asset)}]}, b'image', 'png')
+            self.assertEqual(grade.Grader(t, rf).grade_structure() is not None, found, asset)
+        page = {'page': 1, 'region': [0, 0, 100, 20]}; self.assertTrue(grade.overlap(page, dict(page)))  # a PDF's page boxes name no file: unchanged
+
+    def test_a_free_standing_dash_before_a_number_is_settled_by_the_source(self):
+        # Codex R17-C5: 'Preferred stock – 10,000,000 shares authorized:' is printed in a development filing; round 16 read every spaced dash as a minus and rejected
+        # the positive phrase. The text alone cannot tell; the key's own span and the source can
+        def lead(source, unit_text, want='10,000,000 shares authorized: see below.', pinned=None, head=b''):
+            raw = head + b'<p>' + source.encode() + b'</p><table id="t"><tr><td>Total</td><td>5</td></tr></table>'; at = lambda x: {'byte_start': raw.index(x), 'byte_end_exclusive': raw.index(x) + len(x)}
+            table = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table'), 'byte_end_exclusive': len(raw)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Total', 'anchor': at(b'Total')}, {'r': 0, 'c': 1, 'text': '5', 'anchor': at(b'>5<')}]}
+            t = {'key_id': 'syn/L', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': at(b'>5<'), 'table_anchor': table['anchor'], 'alternatives': {}, 'excluded': set(),
+                 'fields': {'printed_value': '5', 'lead_in': want}, 'support': {'lead_in': {'anchors': [at((pinned or want).encode())]}}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 'l', 'kind': 'text', 'text': unit_text, 'anchor': at(source.encode())}, table]}, raw, 'htm'))
+            g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'lead_in')
+        real = 'Preferred stock – 10,000,000 shares authorized: see below.'
+        self.assertEqual(lead(real, real), ('pass', None))  # the source prints the phrase at the key's own span with the same dash before it: the route kept the source's text
+        self.assertEqual(lead('Preferred stock 10,000,000 shares authorized: see below.', real), ('fail', 'text'))  # the source prints no dash there: the route invented one
+        self.assertEqual(lead('Preferred stock –10,000,000 shares authorized: see below.', 'Preferred stock –10,000,000 shares authorized: see below.'), ('fail', 'text'))  # a sign that touches its number stays protected
+        self.assertEqual(lead('Rate: EURIBOR + 3.8% of the notional: see below.', 'Rate: EURIBOR + 3.8% of the notional: see below.', want='3.8% of the notional: see below.'), ('pass', None))  # a plus as an operator, the same way
+        premiums = chr(0x201c) + 'Premiums' + chr(0x201d) + ' ' + chr(0x2014) + ' $12,100 million unfavorable: see below.'
+        self.assertEqual(lead(premiums, premiums, want='12,100 million unfavorable: see below.'), ('pass', None))  # the dash before the currency symbol of the key's number, read back over the symbol
+        ranges = 'Ranges: 11%-63% of the notional: see below.'
+        self.assertEqual(lead(ranges, ranges, want='63% of the notional: see below.'), ('pass', None))  # a dash glued to other punctuation, the same way: the source prints it before the key's span
+        self.assertEqual(lead('Ranges: 11% 63% of the notional: see below.', ranges, want='63% of the notional: see below.'), ('fail', 'text'))  # and an invented one fails
+        self.assertEqual(lead(real, real.replace(chr(0x2013), '+')), ('fail', 'text'))  # the source prints a dash, the route a plus: the route's is not the source's — the stretch from the source's dash through the phrase must be printed
+        self.assertEqual(lead(real, real, head=b'<style>p{display:block}</style>'), ('unresolved', 'numeric_boundary'))  # an uncertain reading of the source proves nothing
+        self.assertEqual(lead(real, real, pinned=real), ('unresolved', 'numeric_boundary'))  # the key's span does not pin the phrase (it holds more): the source cannot say — neither a guessed negative nor a pass
+        raw = b'<p>Results from Operations \xe2\x80\x93 2023 compared to 2022</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        unit = lambda text: [{'id': 'd', 'kind': 'text', 'text': text, 'anchor': {'byte_start': 3, 'byte_end_exclusive': raw.index(b'</p>')}}]
+        period = lambda units, part: self.synthetic_cell(raw, units, {'periods': [{'role': 'value', 'type': 'duration', 'parts': [part]}]}, {})['periods']
+        at = {'byte_start': raw.index(b'2023 compared'), 'byte_end_exclusive': raw.index(b'</p>')}
+        self.assertEqual(period(unit('Results from Operations – 2023 compared to 2022'), {'text': '2023 compared to 2022', 'anchor': at}), ('pass', None))  # a period part at its own anchor: the source decides
+        self.assertEqual(period(unit('Results from Operations – 2023 compared to 2022'), {'text': '2023 compared to 2022'}), ('unresolved', 'numeric_boundary'))  # found by text only: open
+        self.assertEqual(period(unit('Results from Operations – 2023 compared to 2022') + [{'id': 'e', 'kind': 'text', 'text': 'In 2023 compared to 2022', 'anchor': {'byte_start': 3, 'byte_end_exclusive': 10}}], {'text': '2023 compared to 2022'}), ('pass', None))  # a plain match elsewhere needs no arbiter
+        raw3 = b'<p>Results from Operations \xe2\x80\x93 2023 compared to 2022</p><table><tr><td>Revenue 2015<sup>1</sup></td><td>1234</td></tr></table><p>1 a note</p>'; sp = lambda x: {'byte_start': raw3.index(x), 'byte_end_exclusive': raw3.index(x) + len(x)}
+        tb = {'id': 't', 'kind': 'table', 'anchor': sp(b'<table>'), 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue 2015 1', 'anchor': sp(b'Revenue 2015<sup>1</sup>')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': sp(b'1234')}]}
+        rows = self.synthetic_cell(raw3, [{'id': 'd', 'kind': 'text', 'text': raw3[3:raw3.index(b'</p>')].decode(), 'anchor': {'byte_start': 3, 'byte_end_exclusive': raw3.index(b'</p>')}}, {'id': 'n', 'kind': 'footnote', 'text': '1 a note', 'anchor': sp(b'1 a note')}],
+                                   {'periods': [{'role': 'value', 'type': 'duration', 'parts': [{'text': '2023 compared to 2022'}]}], 'footnote_markers': [{'marker_text': '1', 'anchor': sp(b'<sup>1</sup>'), 'note_text': '1 a note', 'note_anchor': sp(b'1 a note')}]}, {}, tb)
+        self.assertEqual((rows['periods'], rows['footnote_markers']), (('unresolved', 'numeric_boundary'), ('pass', None)))  # the open question is the field's own: the next field is judged afresh
+        xml = b'<r><holding><title>Series B - 5 shares</title><qty>10</qty></holding></r>'; xs = lambda x: {'byte_start': xml.index(x), 'byte_end_exclusive': xml.index(x) + len(x)}
+        fields = [{'id': n, 'kind': 'field', 'name': n, 'text': x.decode(), 'anchor': xs(x), 'path': ['r', 'holding'], 'group': {'index': 1, 'count': 1, 'at': xml.index(b'<holding>')}} for n, x in (('title', b'Series B - 5 shares'), ('qty', b'10'))]
+        def xml_unit(declared):
+            t = {'key_id': 'syn/X', 'file_id': 'syn/a.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': xs(b'10'), 'fields': {'printed_value': '10', 'row_label': 'qty', 'unit_printed': '5 shares'},
+                 'support': {'unit_printed': {'anchors': [xs(declared)]}}, 'alternatives': {}, 'excluded': set()}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': copy.deepcopy(fields)}, xml, 'xml')); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'unit_printed')
+        g = grade.Grader({'key_id': 'syn/X', 'file_id': 'syn/a.xml', 'fields': {}, 'alternatives': {}, 'support': {}, 'excluded': set()}, grade.RouteFile({'file_id': 'syn/a.xml', 'units': []}, xml, 'xml'))
+        self.assertEqual((g.printed(['x - 10 units', 'of 10 units'], '10 units'), g.boundary, g.printed(['x - 10 units'], '10 units'), g.boundary), (True, False, True, True))  # among several texts a plain match settles it; only an undecided one leaves the question open
+        self.assertEqual((xml_unit(b'5 shares'), xml_unit(b'Series B - 5 shares')), (('pass', None), ('unresolved', 'numeric_boundary')))  # an XML unit, the same way: the key's own span decides, a wider one cannot
+        raw4 = b'<table><tr><td>Revenue</td><td>10</td><td><span>up</span><span>to</span></td><td>20</td></tr></table>'; s4 = lambda x: {'byte_start': raw4.index(x), 'byte_end_exclusive': raw4.index(x) + len(x)}
+        tb4 = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw4)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': s4(b'Revenue')}, {'r': 0, 'c': 1, 'text': '10', 'anchor': s4(b'10')},
+              {'r': 0, 'c': 2, 'text': 'up', 'anchor': s4(b'up')}, {'r': 0, 'c': 2, 'text': 'to', 'anchor': s4(b'to')}, {'r': 0, 'c': 3, 'text': '20', 'anchor': s4(b'20')}]}
+        rows = self.synthetic_cell(raw4, [], {'range': {'partner': {'printed_value': '20', 'anchor': s4(b'20')}, 'evidence': [{'text': 'up to', 'anchor': s4(b'<span>up</span><span>to</span>')}]}}, {}, tb4, value=b'10')
+        self.assertEqual(rows['range'], ('unresolved', 'adjacency'))  # range evidence read through the same method: pieces that touch where the key prints a space stay unresolved, as before
 
 
 if __name__ == '__main__':

@@ -48,17 +48,46 @@ _NAME = re.compile(r'</?\s*([\w:.-]+)')
 # descendant may set visibility:visible again. Font size is never a hiding rule: it is inherited and reset by children, so a
 # font-size:0 wrapper hides nothing, and 1pt text is still rendered.
 BLOCK = set('p div br tr td th table li ul ol h1 h2 h3 h4 h5 h6 section article header footer blockquote pre dd dt dl hr '
-            'caption thead tbody tfoot body html center form address'.split())
+            'caption thead tbody tfoot body html center form address '
+            'aside details dialog dir fieldset figcaption figure hgroup legend listing main menu nav optgroup option plaintext search summary xmp'.split())  # the elements the browser starts on a line of their own (its own sheet); the last line from a sweep of every element of the HTML Standard's index in Chrome (R17)
 VOID = set('br img hr input meta link col area base wbr source track embed param'.split())
-FOREIGN = {'svg', 'math'}  # foreign content (HTML tree construction): a self-closing tag closes its element; SVG reads presentation attributes (HTML inside <foreignObject> is not followed)
-UA_HIDDEN = set('datalist noembed noframes rp'.split())  # hidden by the browser's own sheet unless the author sets a display (HTML Standard, Rendering: hidden elements); the rest of that list is void or skipped as raw text
-_PRESENTATION = ('display', 'visibility', 'opacity')  # the hiding properties as SVG presentation attributes: declarations the style attribute beats
-_UNIT = '(?:px|pt|pc|in|cm|mm|q|em|rem|ex|ch|vw|vh|vmin|vmax|%)'  # CSS length units this scanner reads, and the percentage
-_ZERO = re.compile(r'[+-]?(?:0+\.?0*|\.0+)' + _UNIT + '?')  # a zero length, with or without a unit
-_SIZE = re.compile(r'\+?(?:\d+(?:\.\d+)?|\.\d+)' + _UNIT + '|' + _ZERO.pattern + '|auto|initial|unset|revert|revert-layer|min-content|max-content|fit-content')  # a CSS width/height this scanner reads: a length, a percentage, zero, a sizing keyword; anything else (calc(), var(), inherit, a bare or negative number the browser drops) is not evaluated
-_LIMITS = {'min-width', 'max-width', 'min-height', 'max-height'}  # declarations that override a width or height: not evaluated
-_SIZE_RULE = re.compile(r'\b(?:width|height)\s*:', re.I)  # a stylesheet rule that may size an element (min-/max- included)
+UNMODELLED = set('svg math template audio video canvas meter progress select object'.split())  # content the page does not flow as its text and this scanner does not model: foreign content (its own rendering, the tags that break out of it), a template's fragment, the fallback content of embedded elements and controls — a file holding any is uncertain (Codex R17-C4; Chrome sweep)
+UA_HIDDEN = set('datalist rp'.split())  # hidden by the browser's own sheet unless the author sets a display (HTML Standard, Rendering: hidden elements); the rest of that list is void, raw text or skipped whole
+SHOWN_BY_DISPLAY = set('script style title noframes'.split())  # raw text never read because the browser's own sheet hides the element: a `display` the author gives it shows the literal text (Chrome) — uncertain then. <iframe>, <noembed> and <noscript> stay unshown whatever their display
+_RAW_OPEN = re.compile(r'<(textarea|title|xmp|iframe|noembed|noframes|noscript|plaintext|script|style)(?=[\s/>])', re.I)  # elements whose content is literal text, never child tags (HTML tokenization: RCDATA, RAWTEXT, script data, PLAINTEXT; <noscript> where scripts run, the reading this scanner states)
+_HEAD_SAFE = re.compile(r'<!--.*?-->|<(title|style|script)\b[^>]*>.*?</\1\s*>|<(?:meta|link|base)\b(?:[^>"\']|"[^"]*"|\'[^\']*\')*>', re.S | re.I)  # what a <head> may hold and never show: comments, closed title/style/script elements, metadata tags
+_ENTITY_TEXT = re.compile(r'&#?\w+;|[^&]+|&')  # the text of an RCDATA element: references and literal runs
+_TABLE = ('table', 'thead', 'tbody', 'tfoot', 'tr')  # a table and the parts that hold its rows: what stands directly inside one is a part of the table, or markup the parser moves out of it
+_PARTS = ('caption', 'colgroup', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th')  # the parts of a table that hold content
 STRUCK = set('del s strike'.split())  # removed or struck text is read apart from its neighbours (redlines): a boundary like a block's
+
+
+def text_reference(token):
+    """One character reference as the HTML parser decodes it. html.unescape keeps the standard's named, C1, null and surrogate rules but deletes
+    references to control characters and non-characters, which the parser keeps (`&#2;` is U+0002): only its empty result is restored. One token,
+    so an escaped ampersand is never decoded twice (Codex R17-C2; the helper is his)."""
+    value = html.unescape(token)
+    if value or not token.startswith('&#'): return value
+    digits = token[2:].rstrip(';')
+    return chr(int(digits[1:], 16) if digits[:1].lower() == 'x' else int(digits))
+
+
+def html_tokens(s):
+    """The tokens of an HTML source as (text, kind, literal), every source character once. `kind` names what is no text: an element taken whole
+    ('script', 'style', 'head', 'title', 'template') or the body of a raw-text element the page never renders ('iframe', 'noembed', 'noframes',
+    'noscript', an unclosed 'script', 'style' or 'title'). `literal` 1 is literal text — no tag, no reference (<xmp>, <plaintext>); 2 the text of a <textarea>
+    (references decoded, no tags). The content of a raw-text element is never child tags (Codex R17-C4; the tokenizer is his worktree's)."""
+    pos = 0
+    while pos < len(s):
+        m = _TOKEN.match(s, pos); t = m.group(); pos = m.end()
+        yield t, (m.group(1) or '').lower(), 0
+        raw = None if m.group(1) else _RAW_OPEN.match(t)
+        if raw:
+            tag = raw.group(1).lower()
+            end = None if tag == 'plaintext' else re.compile('</' + tag + r'(?=[\s/>])[^>]*>', re.I).search(s, pos)
+            body = s[pos:end.start() if end else len(s)]; pos += len(body)
+            if tag == 'textarea': yield from ((x.group(), '', 2) for x in _ENTITY_TEXT.finditer(body))
+            elif body: yield body, '' if tag in ('xmp', 'plaintext') else tag, 1
 
 
 def norm(s):
@@ -174,14 +203,14 @@ def xml_chars(raw, chars, starts, ends):
 
 
 def stylesheets(tokens):
-    """The <style> elements and stylesheet links among these tokens, each as its CSS, or None for a sheet this scanner cannot read. A comment's
-    content is no token, so a commented-out sheet applies nothing, inside <head> too; the CSS of a <style> keeps its own <!-- -->, which CSS
-    ignores (Codex R16-3)."""
+    """The <style> elements and stylesheet links among these tokens (`html_tokens`), each as its CSS, or None for a sheet this scanner cannot read. A
+    comment's content is no token, so a commented-out sheet applies nothing, inside <head> too; the CSS of a <style> keeps its own <!-- -->, which
+    CSS ignores (Codex R16-3); the body of a <style> that is never closed is CSS to the end of the source."""
     out = []
-    for m in tokens:
-        t, kind = m.group(), (m.group(1) or '').lower()
-        if kind == 'head': out += stylesheets(_TOKEN.finditer(t[t.index('>') + 1:t.rindex('<')]))
-        elif kind == 'style' or (not kind and t[:5].lower() == '<link'): out += [None if x.group(1) is None else _COMMENT.sub(' ', unescape_css(x.group(1))) for x in _STYLE.finditer(t)]
+    for t, kind, literal in tokens:
+        if kind == 'head': out += stylesheets(html_tokens(t[t.index('>') + 1:t.rindex('<')]))
+        elif kind == 'style' and literal: out.append(_COMMENT.sub(' ', unescape_css(t)))
+        elif kind == 'style' or (not kind and not literal and t[:5].lower() == '<link'): out += [None if x.group(1) is None else _COMMENT.sub(' ', unescape_css(x.group(1))) for x in _STYLE.finditer(t)]
     return out
 
 
@@ -198,7 +227,9 @@ def resolve(decls, prop, valid):
 
 
 class Visible:
-    """Characters a reader sees (hidden subtrees, head, scripts, styles and comments removed), each with its byte span."""
+    """Characters a reader sees (hidden subtrees, head, scripts, styles and comments removed), each with its byte span. `certain` is False where
+    the source holds something this scanner knows it does not follow — a value it does not evaluate, a stylesheet rule on a hiding property,
+    content it does not model, markup the parser would move: nothing is certified from the reading then."""
 
     def __init__(self, raw, xml=False):
         try:
@@ -210,27 +241,32 @@ class Visible:
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
-        self.pictures = []  # (start, end, shown) of the <img>/<svg> opening tags in subtrees the reader sees: the grader's picture inventory, from the same visibility state as the text (Codex R15-4); shown True, False with a zero width or height, None when its size is not known (R16-3)
+        self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
         style_cache, sheet_tokens = {}, []
+        def read(tag, name):  # a tag's attributes (first occurrence wins, entities decoded) and the literal declarations of its style string, parsed once; inheritance is still evaluated per element
+            attrs = {}
+            for am in _ATTR.finditer(tag[len(name) + 2 if tag.startswith('</') else len(name) + 1:]): attrs.setdefault(am.group(1).lower(), html.unescape(am.group(2) or am.group(3) or am.group(4) or ''))
+            style = attrs.get('style', '')
+            if style not in style_cache: style_cache[style] = tuple(declarations(style))
+            return attrs, style_cache[style]
+        changes = lambda i: (stack[i][1:3] != (stack[i - 1][1:3] if i else (False, False)), stack[i][4] != (stack[i - 1][4] if i else False))  # does this open element itself change what is hidden, and what is struck
         if xml:  # XML: character data by the strict standard parser (CDATA literal, references decoded, attributes not text); no CSS, nothing hidden
             computed = not xml_chars(raw, chars, starts, ends); struck_chars.extend([0] * len(chars))
-        for m in () if xml else _TOKEN.finditer(s):
-            t = m.group(); start = pos; pos += blen(t)
-            if t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
+        for t, kind, literal in () if xml else html_tokens(s):
+            start = pos; pos += blen(t)
+            if kind in ('style', 'head') or t[:5].lower() == '<link': sheet_tokens.append((t, kind, literal))  # read for stylesheets after the scan: a comment is never one
+            if kind:  # an element taken whole, or a raw body the page never renders: certain only while nothing can show it or move it — no template, no `display` from the author, a head that holds nothing the parser would move into the body (R17, Chrome)
+                if not literal and (kind == 'template' or resolve(read(t[:t.index('>') + 1], kind)[1], 'display', _DISPLAY.__contains__) not in (None, 'none')
+                                    or (kind == 'head' and _HEAD_SAFE.sub('', t[t.index('>') + 1:t.rindex('<')]).strip())): computed = True
+                continue
+            if not literal and t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
                 name = _NAME.match(t)
-                if name and name.group(1).lower() in ('style', 'head', 'link'): sheet_tokens.append(m)  # read for stylesheets after the scan: a comment is never one
-                if not name or t.startswith('<!') or t.startswith('<?') or (m.re.groups and m.group(1)): continue
+                if not name or t.startswith('<!') or t.startswith('<?'): continue
                 name, was_hidden = name.group(1).lower(), hidden
-                attrs = {}
-                for am in _ATTR.finditer(t[len(name) + 2 if t.startswith('</') else len(name) + 1:]):  # the tag's attributes, first occurrence wins, entities decoded
-                    attrs.setdefault(am.group(1).lower(), html.unescape(am.group(2) or am.group(3) or am.group(4) or ''))
-                style = attrs.get('style', '')
-                if style not in style_cache: style_cache[style] = tuple(declarations(style))  # the literal declarations of one style string, parsed once; inheritance is still evaluated per element
-                decls = style_cache[style]
-                foreign = (t.endswith('/>') or not attrs.keys().isdisjoint(_PRESENTATION)) and (name in FOREIGN or any(fr[0] in FOREIGN for fr in stack))  # SVG/MathML content: its own tag rules
-                if foreign: decls = tuple((p, attrs[p].strip().lower(), False) for p in _PRESENTATION if p in attrs) + decls  # presentation attributes come first, so the style attribute beats them (R16-3)
-                disp, v, op = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number)
-                if UNKNOWN in (disp, v, op): computed = True; disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
+                attrs, decls = read(t, name)
+                disp, v, op, cv = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number), resolve(decls, 'content-visibility', 'visible'.__eq__)
+                if UNKNOWN in (disp, v, op, cv) or name in UNMODELLED or (name in SHOWN_BY_DISPLAY and disp not in (None, 'none')): computed = True  # beyond this scanner, so nothing is certified: an unevaluated value, a content-visibility other than visible, content that is not modelled, an element the browser's own sheet hides and the author displays (its literal text then shows) (Codex R17-C4)
+                disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
                 deco, strong = None, False  # the decoration in force: the last valid text-decoration / text-decoration-line declaration wins, !important beats a later plain one
                 for n, val, important in decls:
                     if n in ('text-decoration', 'text-decoration-line') and (important or not strong):
@@ -243,7 +279,7 @@ class Visible:
                 atomic = disp in ('inline-block', 'inline-table', 'inline-flex', 'inline-grid') or last(decls, 'float') in ('left', 'right') or last(decls, 'position') in ('absolute', 'fixed')  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                 block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or struck
                 ua_hidden = 'hidden' in attrs or name in UA_HIDDEN or (name == 'dialog' and 'open' not in attrs)  # not shown by the browser's own sheet; an author display shows it again
-                gone = disp == 'none' or (op is not None and _zero(op)) or (ua_hidden and not disp) or name in ('ix:hidden', 'noscript')  # <noscript>: never shown where scripts run, as in the browser
+                gone = disp == 'none' or (op is not None and _zero(op)) or (ua_hidden and not disp) or name == 'ix:hidden'
                 if name == 'details' and 'open' not in attrs and not t.startswith('</'): computed = True  # a closed <details> shows its summary only: not followed here
                 shown = False  # does this tag's own element show (it is the element whose boundary may separate words)
                 if t.startswith('</'):
@@ -252,6 +288,7 @@ class Visible:
                             fr = stack.pop()
                             if fr[0] == name: block, shown = fr[3], not (fr[1] or fr[2]); break  # the element's own display decides its closing separator too
                             if fr[0] in STRUCK: struck_computed = True  # an unclosed <s>/<del>/<strike>: the browser reopens it in the next block (formatting elements); not followed here
+                    elif name in ('p', 'br'): shown = not hidden  # the parser reads a </p> that closes no paragraph as an empty paragraph and a </br> as <br>: a break either way (HTML tree construction; Chrome)
                 else:
                     if True:  # HTML's implied end tags: a new <p>, <li>, <td>, <tr> ... closes the open one, as the browser builds the tree
                         for by, closes, stop in _IMPLIED:
@@ -263,30 +300,30 @@ class Visible:
                             if lowest is not None:
                                 if any(fr[1] or fr[2] for fr in stack[lowest + 1:] if fr[0] not in closes): computed = True  # unclosed hiding inline elements inside: the browser rebuilds them around the new block
                                 if any(fr[0] in STRUCK for fr in stack[lowest:]): struck_computed = True  # an unclosed <s>/<del>/<strike> the browser would reopen in the new block
+                                if name == 'table': h, k = changes(lowest); computed |= h; struck_computed |= k  # outside standards mode (a file with no doctype) the parser keeps the paragraph open around the table: what the paragraph itself hides or strikes then reaches the table — not followed
                                 del stack[lowest:]
-                    void = name in VOID or (foreign and t.endswith('/>'))  # a self-closing tag in SVG/MathML content closes its element (R16-3)
-                    if not void:  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block, struck in effect, own line)
+                    if name in _PARTS and not (stack and stack[-1][0] in _TABLE) and not any(fr[0] == 'table' for fr in stack): computed = True  # a table part with no open table: the parser drops its tags (the text then runs on)
+                    if name not in VOID:  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block, struck in effect, own line)
                         blocked, vis = stack[-1][1:3] if stack else (False, False)
                         # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
                         stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block, (stack[-1][4] if stack and not atomic else False) or struck, struck))
+                        if len(stack) > 1 and stack[-2][0] in _TABLE and name not in _PARTS: h, k = changes(len(stack) - 1); computed |= h; struck_computed |= k  # no part of a table, directly inside one: the parser moves the element out and leaves the rows behind — what it hides or strikes does not reach them
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
                 if not t.startswith('</'):  # an opening element shows when nothing above it is gone and neither it nor an ancestor hides it; a void element was not pushed, so its own visibility is read here
                     own = True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else bool(stack) and stack[-1][2]
-                    shown = (not gone and not (bool(stack) and stack[-1][1]) and not own) if void else not hidden
-                    if shown and name in ('img', 'svg'):  # a picture with a zero width or height shows nothing (False); a size this scanner does not evaluate, or one a min-/max- declaration overrides, leaves it unknown (None)
-                        hints = tuple((d, x + 'px' if x.replace('.', '', 1).isdigit() else x, False) for d in ('width', 'height') for x in [attrs.get(d, '').strip().lower()] if x)  # the size attributes: a plain number is pixels; declarations the style attribute beats
-                        size = [resolve(hints + decls, d, _SIZE.fullmatch) for d in ('width', 'height')]
-                        self.pictures.append((start, pos, None if UNKNOWN in size or any(n in _LIMITS for n, *_ in decls) else not any(x and _ZERO.fullmatch(x) for x in size)))
+                    shown = (not gone and not (bool(stack) and stack[-1][1]) and not own) if name in VOID else not hidden
+                    if shown and name in ('img', 'svg'): self.pictures.append((start, pos))
                 if shown and block: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0)  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
                 continue
             st = 1 if stack and stack[-1][4] else 0
-            if stack and stack[-1][0] in ('table', 'thead', 'tbody', 'tfoot', 'tr') and not _WS.fullmatch(html.unescape(t) if t.startswith('&') else t): computed = True  # the browser moves such text before the table
+            ref = literal != 1 and t.startswith('&') and len(t) > 1  # a character reference: decoded as the parser decodes it, never inside literal text
+            if stack and stack[-1][0] in _TABLE and not _WS.fullmatch(text_reference(t) if ref else t): computed = True  # the browser moves such text before the table
             if hidden:
-                if not t.startswith('&') or len(t) == 1: self.hidden_chars += len(_WS.sub('', t))
-                elif not _WS.match(html.unescape(t)): self.hidden_chars += 1
+                if not ref: self.hidden_chars += len(_WS.sub('', t))
+                elif not _WS.match(text_reference(t)): self.hidden_chars += 1
                 continue
-            if t.startswith('&') and len(t) > 1:
-                for c in html.unescape(t): chars.append(c); starts.append(start); ends.append(pos); struck_chars.append(st)
+            if ref:
+                for c in text_reference(t): chars.append(c); starts.append(start); ends.append(pos); struck_chars.append(st)
             elif t.isascii() or blen is len:
                 chars.extend(t); starts.extend(range(start, start + len(t))); ends.extend(range(start + 1, start + len(t) + 1)); struck_chars.extend([st] * len(t))
             else:
@@ -294,7 +331,6 @@ class Visible:
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); struck_chars.append(st); off += n
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
         sheets = stylesheets(sheet_tokens)
-        if any(x is None or _SIZE_RULE.search(x) for x in sheets): self.pictures = [(a, b, None) for a, b, _ in self.pictures]  # a stylesheet may size a picture (its rule beats the size attributes): no picture's size is known then
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
         external = any(x is None or '@import' in x.lower() for x in sheets)
