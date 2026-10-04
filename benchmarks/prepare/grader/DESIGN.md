@@ -994,3 +994,70 @@ same 13 route folders): **0 verdict flips, 0 field-row changes**; one detail cha
 counting unplaced cells); gates: `unplaced` 1–29 in seven HTML files of the Docling routes (textless pictures in empty gaps, formerly skipped), the
 PDF route's one zero-width box dishonest and its order breaks 434 → 433; round-7 grader: 0 passes lost. Package-3 preview on the same saved
 outputs: 0 verdict flips, 0 field-row changes, the same gate changes. Mutation checks 43/43; tracer: every changed line executed by the suite.
+
+## 40. Round 16 (2026-10-04 11:55, Codex's `CODEX_REVIEW_R15.md` on 9e6919f4b; package 3 still approved, still staged) — three classes, all reproduced, each closed with the siblings an own audit found
+
+**Method.** As round 15: an audit of my own from his three headlines before his file was opened (`grader_review_codex_20261003/R16_SELF_AUDIT.md`, hashed
+12:02; probes `codex_probes_live/r16_self_audit_probes.py`), his three probe scripts re-run live, a ledger (`R16_LEDGER.md`), every new control red on
+9e6919f4b (throwaway worktree) and green after, a mutation run on a copy (`r16_mutations.py`: the round-15 conditions still in the code and every
+round-16 condition, 115 of 115 red), the tracer over the suite, the 13 saved routes regraded with every gate value, file row, target and result row
+compared, and browser facts for every HTML rule this round relies on (`codex_probes_live/r16/r16_browser_facts.py/.json`: local headless Chrome, every
+request aborted). The audit found his three mechanisms and seven siblings (one of them a control he recorded without promoting it); of his own cases
+it missed the commented-out stylesheet and had the zero-area picture by size attribute only. Two more siblings came out of the third pass (a byte span
+alone in a PDF, a sign before a currency symbol).
+
+**What Codex found (all reproduced).** R16-1 `contains` cut only inside the digit token, so `10 million` was printed in `-10 million`, `−10 million`,
+`+10 million`, and `5 million` in `.5 million`, `-.5 million`: a mapped continuation passed with the wrong sign or value. R16-2 `possible` admitted a
+page box with no page, or a null one, also where the route declares its pages: the unit stayed placed and supplied a table title by text, while the
+same box on an undeclared page did not. R16-3 `picture_at` answered False wherever visibility is uncertain, so an exact reading of a shown picture
+was compared with the empty text layer and counted `dishonest` once any stylesheet stood in the file — even a commented-out one, because the sheets
+were searched in the raw bytes; and a picture with no area (`width:0;height:0`, a zero SVG viewport) kept the picture exemption for invented text.
+
+**A number is printed with its sign and its point (`number_spans`, `cut_points`, and every place that cuts text).** One primitive names the positions
+strictly inside a number as printed: the digits with their separators, a leading point (`.5`; a point glued to a word is the word's: `No.5`), and a
+sign before them — `-`/`+`, glyphs folded, glued or spaced (the spacing rule moves whitespace around a sign, so `- 10` is `-10`), with a currency
+symbol (Unicode class) between sign and digits (`-$10`) — unless a word or number is glued before the sign (`COVID-19`, `5-10`) or a number stands
+before it (`5 - 10`, a range). Nothing may begin or end there: a contained stretch (`contains`: `10` is not printed in `-10`, nor `5` in `.5`, nor
+`$10` in `-$10`; a stretch that itself begins with a sign or a point must begin a number of the text, so `-10` is not printed in `5-10`), a deleted
+footnote mark (`without_marks`, `minus_marks_anywhere`, `minus_markers`: the mark `1` is not cut out of `215`; before, `Revenue 215` read as the key's
+`Revenue 25`), a removed own piece (`same`: `2015` is not removed from `12015`). The lead-in's own containment regex is gone: it reads `contains`
+(`250 million` was found in `1,250 million`). A comma group of the record's own marks is marks (moved into the primitive). Deliberately unchanged, and
+tested as such: an unsigned number and its symbol are separate pieces (`10` in `10%`, `10 million` in `$10 million`: the key itself splits printed and
+display values; Codex's probe records them as contract questions, not defects); parentheses stay separable (a year, a mark and an accounting negative
+look alike in prose; cell values are compared exactly elsewhere); the gate still strips a mark the route reports apart from a number (`10.67` + `4`
+over `10.67⁴` is honest characters; whether the split is right is the value check's question, `marker_glued`). Stated consequence: a spaced dash
+before a number reads as its sign, so an unsigned key phrase that begins at that number is not contained — a visible fail, never a pass.
+
+**The source's format fixes the kind of position (`RouteFile.possible`, the gate).** A box names its canvas: in a PDF a positive integer page (one of
+the declared pages when the route declares any), also when the place carries byte fields; elsewhere a picture file (`{file, region}`, the contract's
+third kind) and no page. A PDF is addressed by page boxes: a byte span alone is no place in one (it dodged every box check, stood as placed evidence,
+and the gate called the file measured and clean). Bytes in a source with no text layer are certified by nothing: the file's anchors are not measured.
+
+**A picture is shown, may be shown, or is not there (`Visible.pictures`, `picture_at`, the gate).** The inventory holds `(start, end, shown)` for every
+`img`/`svg` in a subtree the reader sees: `True`; `False` when its width or height is zero (size attributes read as declarations the style attribute
+beats); `None` when its size is not known — a value this scanner does not evaluate (`calc()`, `inherit`, a bare or negative CSS number, an unknown
+unit, a malformed attribute), a `min-`/`max-` declaration, or any stylesheet that may size it (an unreadable sheet, a `width`/`height` rule: a sheet
+rule beats the size attributes). `picture_at`: text the reader sees at the bytes → `False`; a picture tag touching the bytes (not only starting inside
+them) → `True` when the file's visibility is certain and the picture is shown, `None` when either is unknown, `False` for none or one with no area.
+The gate skips a reading of a picture that is or may be shown, and for `None` reports the file's anchors not measured — uncertainty is never a
+mismatch and never a certificate; a tag that is certainly no picture is compared as text, as before. `pictures` counts the pictures shown or possibly
+shown. Stylesheets are read from the scanner's own tokens (a comment's content is none; inside `<head>` too), keeping a `<style>`'s own `<!-- -->`,
+which CSS ignores. Read from the same browser evidence: SVG presentation attributes (`display`, `visibility`, `opacity`; the style beats them; an HTML
+element has none), a self-closing tag in SVG/MathML content closes its element (before, `<svg …/>` hid everything after it), and the elements the
+browser's own sheet never shows (`datalist`, `noembed`, `noframes`, `rp`, a `dialog` without `open` — an author `display` shows them again;
+`noscript` never, where scripts run); a closed `<details>` shows its summary only and is not followed: the file is uncertain.
+
+**Limits kept, stated.** Hiding by other CSS (clipping, off-screen positions, transforms, zero-size ancestors) is outside the model for text and
+pictures alike; pictures carried by `object`, `embed`, `input type=image`, CSS backgrounds or `canvas` are not in the inventory (EDGAR documents use
+`img`); HTML inside `<foreignObject>` is not followed; the order between a picture-file box and bytes is undefined by the contract (no saved route
+emits file boxes: a question for the picture lane). `Visible.pictures` changed shape (two fields → three): adapters outside this folder that read it
+must follow.
+
+**Verification.** 225 tests (three new, one changed; exactly those four red on 9e6919f4b, 221 green on both). Codex's three scripts on the fixed code:
+containment 5/5 required cases now fail as he requires (47/50; the other three are his percent and currency probes), pages missing/null/undeclared/
+zero refused and the declared page passes, pictures: unknown visibility not measured and clean, zero area and zero viewport compared as text, the
+commented-out sheet certain, every hidden/comment/script/attribute control as before. His round-15 scripts (deep, browser and siblings, boundary,
+follow-up) give byte-identical output. Mutations 115/115 red. Tracer: every changed line executed (grade.py 46 of 46 executable, anchor.py 32 of 32).
+48/48 originals. Run 34d (package 2, the same 13 route folders): **0 verdict flips, 0 field-row changes, 0 changes in any gate value, file row or
+result row**; package-3 preview (5 routes): the same; round-7 guard identical; grading time unchanged (2 min 05 s for the 13 routes). The development
+sources hold no stylesheet, no zero-size picture and no SVG (60 files, 732 pictures, 724 with both sizes), so the picture rules change nothing measured.

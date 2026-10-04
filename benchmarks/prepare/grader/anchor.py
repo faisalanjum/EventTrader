@@ -50,6 +50,14 @@ _NAME = re.compile(r'</?\s*([\w:.-]+)')
 BLOCK = set('p div br tr td th table li ul ol h1 h2 h3 h4 h5 h6 section article header footer blockquote pre dd dt dl hr '
             'caption thead tbody tfoot body html center form address'.split())
 VOID = set('br img hr input meta link col area base wbr source track embed param'.split())
+FOREIGN = {'svg', 'math'}  # foreign content (HTML tree construction): a self-closing tag closes its element; SVG reads presentation attributes (HTML inside <foreignObject> is not followed)
+UA_HIDDEN = set('datalist noembed noframes rp'.split())  # hidden by the browser's own sheet unless the author sets a display (HTML Standard, Rendering: hidden elements); the rest of that list is void or skipped as raw text
+_PRESENTATION = ('display', 'visibility', 'opacity')  # the hiding properties as SVG presentation attributes: declarations the style attribute beats
+_UNIT = '(?:px|pt|pc|in|cm|mm|q|em|rem|ex|ch|vw|vh|vmin|vmax|%)'  # CSS length units this scanner reads, and the percentage
+_ZERO = re.compile(r'[+-]?(?:0+\.?0*|\.0+)' + _UNIT + '?')  # a zero length, with or without a unit
+_SIZE = re.compile(r'\+?(?:\d+(?:\.\d+)?|\.\d+)' + _UNIT + '|' + _ZERO.pattern + '|auto|initial|unset|revert|revert-layer|min-content|max-content|fit-content')  # a CSS width/height this scanner reads: a length, a percentage, zero, a sizing keyword; anything else (calc(), var(), inherit, a bare or negative number the browser drops) is not evaluated
+_LIMITS = {'min-width', 'max-width', 'min-height', 'max-height'}  # declarations that override a width or height: not evaluated
+_SIZE_RULE = re.compile(r'\b(?:width|height)\s*:', re.I)  # a stylesheet rule that may size an element (min-/max- included)
 STRUCK = set('del s strike'.split())  # removed or struck text is read apart from its neighbours (redlines): a boundary like a block's
 
 
@@ -165,6 +173,18 @@ def xml_chars(raw, chars, starts, ends):
     return True
 
 
+def stylesheets(tokens):
+    """The <style> elements and stylesheet links among these tokens, each as its CSS, or None for a sheet this scanner cannot read. A comment's
+    content is no token, so a commented-out sheet applies nothing, inside <head> too; the CSS of a <style> keeps its own <!-- -->, which CSS
+    ignores (Codex R16-3)."""
+    out = []
+    for m in tokens:
+        t, kind = m.group(), (m.group(1) or '').lower()
+        if kind == 'head': out += stylesheets(_TOKEN.finditer(t[t.index('>') + 1:t.rindex('<')]))
+        elif kind == 'style' or (not kind and t[:5].lower() == '<link'): out += [None if x.group(1) is None else _COMMENT.sub(' ', unescape_css(x.group(1))) for x in _STYLE.finditer(t)]
+    return out
+
+
 def resolve(decls, prop, valid):
     """The value in force for one property: the last declaration wins and an `!important` one beats a later plain one (the cascade
     inside one attribute). A value outside the forms this scanner evaluates — an unknown keyword, var(), calc(), an escape — gives
@@ -190,14 +210,15 @@ class Visible:
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
-        self.pictures = []  # byte spans of the <img>/<svg> opening tags the reader sees: the grader's picture inventory, from the same visibility state as the text (Codex R15-4)
-        style_cache = {}
+        self.pictures = []  # (start, end, shown) of the <img>/<svg> opening tags in subtrees the reader sees: the grader's picture inventory, from the same visibility state as the text (Codex R15-4); shown True, False with a zero width or height, None when its size is not known (R16-3)
+        style_cache, sheet_tokens = {}, []
         if xml:  # XML: character data by the strict standard parser (CDATA literal, references decoded, attributes not text); no CSS, nothing hidden
             computed = not xml_chars(raw, chars, starts, ends); struck_chars.extend([0] * len(chars))
         for m in () if xml else _TOKEN.finditer(s):
             t = m.group(); start = pos; pos += blen(t)
             if t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
                 name = _NAME.match(t)
+                if name and name.group(1).lower() in ('style', 'head', 'link'): sheet_tokens.append(m)  # read for stylesheets after the scan: a comment is never one
                 if not name or t.startswith('<!') or t.startswith('<?') or (m.re.groups and m.group(1)): continue
                 name, was_hidden = name.group(1).lower(), hidden
                 attrs = {}
@@ -206,6 +227,8 @@ class Visible:
                 style = attrs.get('style', '')
                 if style not in style_cache: style_cache[style] = tuple(declarations(style))  # the literal declarations of one style string, parsed once; inheritance is still evaluated per element
                 decls = style_cache[style]
+                foreign = (t.endswith('/>') or not attrs.keys().isdisjoint(_PRESENTATION)) and (name in FOREIGN or any(fr[0] in FOREIGN for fr in stack))  # SVG/MathML content: its own tag rules
+                if foreign: decls = tuple((p, attrs[p].strip().lower(), False) for p in _PRESENTATION if p in attrs) + decls  # presentation attributes come first, so the style attribute beats them (R16-3)
                 disp, v, op = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number)
                 if UNKNOWN in (disp, v, op): computed = True; disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
                 deco, strong = None, False  # the decoration in force: the last valid text-decoration / text-decoration-line declaration wins, !important beats a later plain one
@@ -219,7 +242,9 @@ class Visible:
                 struck = (name in STRUCK) if deco in (None, 'default') else deco  # an <s>/<del>/<strike> that declares none or underline is not struck by the tag; revert restores the tag's default
                 atomic = disp in ('inline-block', 'inline-table', 'inline-flex', 'inline-grid') or last(decls, 'float') in ('left', 'right') or last(decls, 'position') in ('absolute', 'fixed')  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                 block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or struck
-                gone = disp == 'none' or (op is not None and _zero(op)) or ('hidden' in attrs and not disp) or name == 'ix:hidden'
+                ua_hidden = 'hidden' in attrs or name in UA_HIDDEN or (name == 'dialog' and 'open' not in attrs)  # not shown by the browser's own sheet; an author display shows it again
+                gone = disp == 'none' or (op is not None and _zero(op)) or (ua_hidden and not disp) or name in ('ix:hidden', 'noscript')  # <noscript>: never shown where scripts run, as in the browser
+                if name == 'details' and 'open' not in attrs and not t.startswith('</'): computed = True  # a closed <details> shows its summary only: not followed here
                 shown = False  # does this tag's own element show (it is the element whose boundary may separate words)
                 if t.startswith('</'):
                     if any(fr[0] == name for fr in reversed(stack)):
@@ -239,15 +264,19 @@ class Visible:
                                 if any(fr[1] or fr[2] for fr in stack[lowest + 1:] if fr[0] not in closes): computed = True  # unclosed hiding inline elements inside: the browser rebuilds them around the new block
                                 if any(fr[0] in STRUCK for fr in stack[lowest:]): struck_computed = True  # an unclosed <s>/<del>/<strike> the browser would reopen in the new block
                                 del stack[lowest:]
-                    if name not in VOID:  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block, struck in effect, own line)
+                    void = name in VOID or (foreign and t.endswith('/>'))  # a self-closing tag in SVG/MathML content closes its element (R16-3)
+                    if not void:  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block, struck in effect, own line)
                         blocked, vis = stack[-1][1:3] if stack else (False, False)
                         # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
                         stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block, (stack[-1][4] if stack and not atomic else False) or struck, struck))
                 hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
                 if not t.startswith('</'):  # an opening element shows when nothing above it is gone and neither it nor an ancestor hides it; a void element was not pushed, so its own visibility is read here
                     own = True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else bool(stack) and stack[-1][2]
-                    shown = (not gone and not (bool(stack) and stack[-1][1]) and not own) if name in VOID else not hidden
-                    if shown and name in ('img', 'svg'): self.pictures.append((start, pos))
+                    shown = (not gone and not (bool(stack) and stack[-1][1]) and not own) if void else not hidden
+                    if shown and name in ('img', 'svg'):  # a picture with a zero width or height shows nothing (False); a size this scanner does not evaluate, or one a min-/max- declaration overrides, leaves it unknown (None)
+                        hints = tuple((d, x + 'px' if x.replace('.', '', 1).isdigit() else x, False) for d in ('width', 'height') for x in [attrs.get(d, '').strip().lower()] if x)  # the size attributes: a plain number is pixels; declarations the style attribute beats
+                        size = [resolve(hints + decls, d, _SIZE.fullmatch) for d in ('width', 'height')]
+                        self.pictures.append((start, pos, None if UNKNOWN in size or any(n in _LIMITS for n, *_ in decls) else not any(x and _ZERO.fullmatch(x) for x in size)))
                 if shown and block: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0)  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
                 continue
             st = 1 if stack and stack[-1][4] else 0
@@ -264,7 +293,8 @@ class Visible:
                 off = start
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); struck_chars.append(st); off += n
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
-        sheets = [] if xml else [None if m.group(1) is None else _COMMENT.sub(' ', unescape_css(m.group(1))) for m in _STYLE.finditer(s)]
+        sheets = stylesheets(sheet_tokens)
+        if any(x is None or _SIZE_RULE.search(x) for x in sheets): self.pictures = [(a, b, None) for a, b, _ in self.pictures]  # a stylesheet may size a picture (its rule beats the size attributes): no picture's size is known then
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
         external = any(x is None or '@import' in x.lower() for x in sheets)
