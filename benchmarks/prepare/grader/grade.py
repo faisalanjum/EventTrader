@@ -301,19 +301,17 @@ def without_marks(got, want, markers):
     if g == w: return True
     if not marks or len(g) <= len(w) or not any(m in g for m in marks): return False  # cheap exits: nothing to delete
     if not any(m in w for m in marks) and squash(minus_marks_anywhere(g, markers)) != squash(w): return False  # when no mark string is part of the key text, deleting them all must leave exactly the key text
-    from functools import lru_cache
-    @lru_cache(None)
-    def ok(i, j, gap):  # gap: the previous character of `got` was deleted (a mark or its separator)
-        if i == len(g): return j == len(w)
-        for m in marks:
-            if g.startswith(m, i):
-                k = i + len(m)
-                if ok(k, j, True): return True
-                for sep in (', ', ',', ' '):  # the next mark of a group
-                    if g.startswith(sep, k) and any(g.startswith(m2, k + len(sep)) for m2 in marks) and ok(k + len(sep), j, True): return True
-        if g[i] == ' ' and (any(g.startswith(m, i + 1) for m in marks) or (gap and (j == len(w) or w[j] != ' '))) and ok(i + 1, j, gap): return True
-        return j < len(w) and g[i] == w[j] and ok(i + 1, j + 1, False)
-    return ok(0, 0, False)
+    at = {0: {(0, False)}}  # positions of `got` reached → (position in `want`, gap: the previous character of `got` was deleted — a mark or its separator); forward, no recursion
+    for i in range(len(g)):
+        for j, gap in at.pop(i, ()):
+            for m in marks:
+                if g.startswith(m, i):
+                    k = i + len(m); at.setdefault(k, set()).add((j, True))
+                    for sep in (', ', ',', ' '):  # the next mark of a group
+                        if g.startswith(sep, k) and any(g.startswith(m2, k + len(sep)) for m2 in marks): at.setdefault(k + len(sep), set()).add((j, True))
+            if g[i] == ' ' and (any(g.startswith(m, i + 1) for m in marks) or (gap and (j == len(w) or w[j] != ' '))): at.setdefault(i + 1, set()).add((j, gap))
+            if j < len(w) and g[i] == w[j]: at.setdefault(i + 1, set()).add((j + 1, False))
+    return any(j == len(w) for j, gap in at.get(len(g), ()))
 
 
 def same(got, want, markers=(), own=()):
@@ -367,30 +365,35 @@ def tokens(text):
     return _TOKEN_WORDS.findall(norm(text))
 
 
-def reads_glued(left, right, wants):
-    """Does the key print no space where these two touching route pieces meet? Judged on the characters around the join (up to six a side)
-    inside the key texts `wants`: "Sum" + "mary" under "Summary" reads glued; "Section 1.01" + "Defined Terms" under "Section 1.01 Defined
-    Terms" does not. The key, read from the rendered page, is the authority on spacing (E12); touching bytes prove only that the tool inserted
-    nothing (CSS can still space them apart). A piece with no characters is never glued."""
-    a, b = squash(norm(left))[-6:], squash(norm(right))[:6]
-    if not a or not b: return False
-    keys = []
-    for w in wants:
-        nw = norm(w); idx = [i for i, c in enumerate(nw) if not c.isspace()]; keys.append((idx, ''.join(nw[i] for i in idx)))
-    for la, lb in sorted(((la, lb) for la in range(1, len(a) + 1) for lb in range(1, len(b) + 1)), key=lambda x: (-(x[0] + x[1]), -x[0])):
-        joint, found, glued = a[-la:] + b[:lb], False, False  # the longest context the key holds decides (the key may end or start inside a piece)
-        for idx, sq in keys:
-            p = sq.find(joint)
-            while p != -1:
-                found = True; glued = glued or idx[p + la] == idx[p + la - 1] + 1; p = sq.find(joint, p + 1)
-        if found: return glued
-    return False
-
-
 def boundary_equal(got, want):
     """Same characters and the same words and numbers: whitespace may move around punctuation and symbols (E12 reflow), but a
     boundary inside a word or a number may not appear or disappear."""
     return squash(got) == squash(want) and tokens(got) == tokens(want)
+
+
+def spaced(item):
+    """The item's text with a space at every join where touching pieces were read as one. Not a second reading that may pass: the comparison
+    uses it only to tell a word boundary the page alone could show (CSS spacing of touching bytes — unresolved) from a real mismatch (fail)."""
+    text, joins = item.get('text', ''), item.get('joins') or []
+    if not joins: return text
+    idx = [i for i, c in enumerate(text) if not c.isspace()]; out, last = [], 0
+    for j in joins:
+        cut = idx[j] if j < len(idx) else len(text); out.append(text[last:cut]); last = cut
+    out.append(text[last:]); return ' '.join(out)
+
+
+def contains(text, want):
+    """Is `want` printed inside `text`? By the boundary rule on the matching stretch: whitespace may move around punctuation and symbols,
+    never inside a word or a number."""
+    nt, nw = norm(text), norm(want)
+    if nw in nt: return True
+    idx = [i for i, c in enumerate(nt) if not c.isspace()]; st = ''.join(nt[i] for i in idx); sw = squash(nw)
+    if not sw: return True
+    p = st.find(sw)
+    while p != -1:
+        if boundary_equal(nt[idx[p]:idx[p + len(sw) - 1] + 1], nw): return True
+        p = st.find(sw, p + 1)
+    return False
 
 
 def fused(texts, want):
@@ -461,8 +464,8 @@ def anchor_of(k):
 
 
 def heading_eq(a, b):
-    """E2: "X (continued)" is X, on either side."""
-    return _CONTINUED.sub('', norm(a)).strip() == _CONTINUED.sub('', norm(b)).strip()
+    """E2: "X (continued)" is X, on either side; spacing by the boundary rule (reflow at punctuation and symbols)."""
+    return boundary_equal(_CONTINUED.sub('', norm(a)), _CONTINUED.sub('', norm(b)))
 
 
 def wer(a, b):
@@ -509,7 +512,7 @@ class Grader:
         verdict, reason, detail = results[-1] if results[-1][0] == 'pass' else results[0]
         if verdict == 'pass':  # struck words the key marks must still be struck where the route carries them
             alt, value = alts[len(results) - 1]; anchors = anchors_of(self.t, name, alt)
-            items = [c for a in anchors for c in self.rf.cells_at(a)] + [c for a in anchors for u in self.rf.units_at(a, exclude=('clutter',)) for c in (self.rf.cells_in(u) if u.get('kind') == 'table' else [u])] if anchors else (self.rf.cells_in(self.tb) if getattr(self, 'tb', None) else [])
+            items = [c for a in anchors for c in self.rf.cells_at(a)] + [c for a in anchors for u in self.rf.units_at(a, exclude=('clutter',)) for c in ([x for x in self.rf.cells_in(u) if any(overlap(x.get('anchor'), b) for b in anchors)] if u.get('kind') == 'table' else [u])] if anchors else (self.rf.cells_in(self.tb) if getattr(self, 'tb', None) else [])  # a table at the anchor contributes only the cells at this field's support, never another row's strikes
             items = list({id(x): x for x in items}.values())
             if not struck_kept(strings_in(value), items): verdict, reason, detail = 'fail', 'struck', None
         self.row(name, verdict, reason, detail)
@@ -550,7 +553,7 @@ class Grader:
                 found += [(None, None, u) for u in self.rf.units_at(a)]
         else:
             want = [norm(p) for p in pieces]
-            hit = (lambda s: any(self.same(s, w)[0] for w in want)) if equal else (lambda s: any(w in norm(s) for w in want))
+            hit = (lambda s: any(self.same(s, w)[0] for w in want)) if equal else (lambda s: any(contains(s, w) for w in want))
             found += [(tb, c, None) for c in (self.rf.cells_in(tb) if tb else []) if hit(c.get('text', ''))]
             found += [(None, None, u) for u in self.rf.units if u.get('kind') not in ('table', 'clutter') and hit(u.get('text', ''))]
         out, seen = [], set()
@@ -561,23 +564,23 @@ class Grader:
             out.append({'text': (cell or unit).get('text', ''), 'order': (table or unit)['_order'], 'table': table, 'cell': cell, 'unit': unit,
                         'anchor': (cell or unit).get('anchor')})
         out = sorted(out, key=lambda k: (k['order'], k['cell']['r'] if k['cell'] else -1, k['cell']['c'] if k['cell'] else -1, order_key(k['anchor'])))
-        merged = []  # pieces that touch in the source — cells at one grid position, or text units — are one carrier where the key reads them glued (E12); the first piece's object is kept
+        merged = []  # pieces that touch in the source — cells at one grid position, or text units — are one carrier (E12: the source proves nothing between them); a piece with no characters is never glued; the first piece's object is kept
         for k in out:
             p = merged[-1] if merged else None
             same_place = p is not None and ((k['cell'] is not None and p['cell'] is not None and p['table'] is k['table'] and (p['cell']['r'], p['cell']['c']) == (k['cell']['r'], k['cell']['c']))
                                             or (k['cell'] is None and p['cell'] is None))
-            if same_place and self.adjacent(p['anchor'], k['anchor']) and reads_glued(p['text'], k['text'], pieces): merged[-1] = dict(p, text=p['text'] + k['text'], anchor=spans(p['anchor']) + spans(k['anchor']))
+            if same_place and squash(p['text']) and squash(k['text']) and self.adjacent(p['anchor'], k['anchor']): merged[-1] = dict(p, text=p['text'] + k['text'], anchor=spans(p['anchor']) + spans(k['anchor']), joins=(p.get('joins') or []) + [len(squash(p['text']))])
             else: merged.append(k)
         return merged
 
-    def merged_units(self, units, texts=()):
-        """Text units in order; consecutive units whose anchors touch in the source (span-level output) are read as one where the key text
-        reads them glued; others stay apart."""
+    def merged_units(self, units):
+        """Text units in order; consecutive units whose anchors touch in the source (span-level output) are read as one; others stay apart;
+        a unit with no characters is never glued."""
         out = []
         for u in sorted(units, key=lambda u: (u.get('_order', 0), order_key(u.get('anchor')))):
             p = out[-1] if out else None
-            if p is not None and u.get('kind') != 'table' and p.get('kind') != 'table' and self.adjacent(p.get('anchor'), u.get('anchor')) and reads_glued(p.get('text', ''), u.get('text', ''), texts):
-                out[-1] = dict(p, text=p.get('text', '') + u.get('text', ''), anchor=spans(p.get('anchor')) + spans(u.get('anchor')), struck=(p.get('struck') or []) + (u.get('struck') or []), links=(p.get('links') or []) + (u.get('links') or []))
+            if p is not None and u.get('kind') != 'table' and p.get('kind') != 'table' and squash(p.get('text', '')) and squash(u.get('text', '')) and self.adjacent(p.get('anchor'), u.get('anchor')):
+                out[-1] = dict(p, text=p.get('text', '') + u.get('text', ''), anchor=spans(p.get('anchor')) + spans(u.get('anchor')), struck=(p.get('struck') or []) + (u.get('struck') or []), links=(p.get('links') or []) + (u.get('links') or []), joins=(p.get('joins') or []) + [len(squash(p.get('text', '')))])
             else: out.append(u)
         return out
 
@@ -588,7 +591,7 @@ class Grader:
         for c in sorted(cells, key=lambda c: (c['r'], c['c'], order_key(c.get('anchor')))):
             p = out[-1] if out else None
             if p is not None and (p['r'], p['c']) == (c['r'], c['c']) and self.adjacent(p.get('anchor'), c.get('anchor')):
-                out[-1] = dict(p, text=p.get('text', '') + c.get('text', ''), anchor=spans(p.get('anchor')) + spans(c.get('anchor')), markers=(p.get('markers') or []) + (c.get('markers') or []), struck=(p.get('struck') or []) + (c.get('struck') or []))
+                out[-1] = dict(p, text=p.get('text', '') + c.get('text', ''), anchor=spans(p.get('anchor')) + spans(c.get('anchor')), markers=(p.get('markers') or []) + (c.get('markers') or []), struck=(p.get('struck') or []) + (c.get('struck') or []), joins=(p.get('joins') or []) + [len(squash(p.get('text', '')))])
             else: out.append(c)
         return out
 
@@ -600,12 +603,13 @@ class Grader:
         return end <= start and self.rf.vis.at(end, start) == ''
 
     def pieces_match(self, texts, want, anchors=None, cells=None):
-        """Do these route pieces, in order, spell the key text `want`? Spacing inside a piece must match the key's. A piece boundary
-        inside a word of the key is a fault, unless the pieces' own anchors prove they are adjacent in the source with no inserted
-        separator (E12: span-level output; counted as `fragmented`) — and, for table cells, unless both pieces sit at one grid position:
-        two cells show two words whatever the bytes say. Returns (ok, reason, fragments)."""
+        """Do these route pieces, in order, spell the key text `want`? Joins are read from the source alone: pieces whose anchors touch read
+        as one, every other join as a space. A piece boundary inside a word of the key is a fault unless the pieces touch in the source
+        (E12: span-level output; counted as `fragmented`) — and, for table cells, unless both pieces sit at one grid position: two cells
+        show two words whatever the bytes say. Where touching pieces meet inside what the key prints as two words, the page may space them
+        (CSS): reported unresolved, never pass or fail. Returns (ok, reason, fragments); ok None = unresolved."""
         nw = norm(want); idx = [i for i, c in enumerate(nw) if not c.isspace()]; sq = ''.join(nw[i] for i in idx); pos = frag = 0; prev = None
-        out, pending = '', False  # the pieces as the reader meets them: a proven touching join reads as nothing, every other join as a space
+        out, pending, ambiguous = '', False, False  # the pieces as the source prints them: a proven touching join reads as nothing, every other join as a space
         for n_, tx in enumerate(texts):
             n = len(squash(tx)); end = pos + n
             if not n: continue
@@ -618,11 +622,13 @@ class Grader:
                 if glue and touching: frag += 1
                 elif glue and not apart and bool(anchors) and all(any('region' in x for x in spans(anchors[i])) for i in (prev, n_)): pending = True  # boxes cannot prove the join
                 elif glue and nw[idx[pos]].isalnum() and nw[idx[pos - 1]].isalnum(): return False, 'word_split', frag  # a word or number split without proof
+                elif touching: ambiguous = ambiguous or (nw[idx[pos]].isalnum() and nw[idx[pos - 1]].isalnum())  # the bytes touch where the page prints a space: CSS may space them; a word boundary only the page shows cannot be certified from the output
                 else: sep = ' '
             out += sep + norm(tx); pos, prev = end, n_
         if pos != len(sq): return False, 'text', frag
         if pending: return None, 'adjacency', frag
-        return (True, None, frag) if boundary_equal(out, nw) else (False, 'spacing', frag)
+        if boundary_equal(out, nw): return True, None, frag
+        return (None, 'adjacency', frag) if ambiguous and spacing_only(out, nw) else (False, 'spacing', frag)
 
     def in_order(self, k, tb, vr):
         """A carrier inside the value's table keeps the source order of rows; outside, it comes before the table."""
@@ -663,11 +669,13 @@ class Grader:
         pool = self.merged(self.rf.cells_in(tb))
         for item in value:
             cells = [c for c in pool if row_hit(c, vr) and self.same(c.get('text', ''), item['text'])[0]]  # a row may print the same text twice: the one under the named header is meant
-            if not cells: return 'fail', 'row', item['text']
+            if not cells: return ('unresolved', 'adjacency', item['text']) if any(row_hit(c, vr) and c.get('joins') and self.same(spaced(c), item['text'])[0] for c in pool) else ('fail', 'row', item['text'])
             if item.get('header') and item['header'] != 'position':
                 heads = [c for c in pool if c['r'] < vr] + [k['cell'] for k in self.carriers(anchors_of(self.t, 'row_context', alt), [item['header']])
                                                                            if k['cell'] is not None and k['table'] is not tb and k['order'] < tb['_order']]  # or printed in the first part of a continued table (E1, addendum C5)
-                if not any(col_hit(h, c['c']) and self.same(h.get('text', ''), item['header'])[0] for c in cells for h in heads): return 'fail', 'header', item['header']
+                if not any(col_hit(h, c['c']) and self.same(h.get('text', ''), item['header'])[0] for c in cells for h in heads):
+                    if any(col_hit(h, c['c']) and h.get('joins') and self.same(spaced(h), item['header'])[0] for c in cells for h in heads): return 'unresolved', 'adjacency', item['header']
+                    return 'fail', 'header', item['header']
         return 'pass', None, None
 
     def header_path(self, value, alt, tb, vr, vcols):
@@ -683,7 +691,9 @@ class Grader:
                 for k in cands: nearest[norm(k['text'])] = k
                 cands = sorted((k for k in cands if norm(k['text']) not in once or nearest[norm(k['text'])] is k), key=lambda k: (k['order'], k['cell']['r'], k['cell']['c']))
             ok, f = match_pieces([k['text'] for k in cands], pieces, self.markers, self.own + self.table_context)
-            if not ok: continue
+            if not ok:
+                if any(k.get('joins') for k in cands) and match_pieces([spaced(k) for k in cands], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', None
+                continue
             if any(not col_hit(k['cell'], vcols) for k in cands): return 'fail', 'column', None
             self.ctx_orders.update(k['order'] for k in cands)
             return 'pass', None, flag or f or ('anchor_unknown' if not anchors else None)
@@ -698,6 +708,7 @@ class Grader:
         if not usable: return ('fail', 'placement', None) if cars else ('fail', 'missing', None)
         ok, flag = match_pieces([k['text'] for k in usable], pieces, self.markers, self.own + self.table_context)
         got = ' '.join(k['text'] for k in usable)
+        if not ok and any(k.get('joins') for k in usable) and match_pieces([spaced(k) for k in usable], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', norm(got)
         if not ok: return 'fail', 'spacing' if spacing_only(got, ' '.join(pieces)) else 'text', norm(got)
         orders = {k['order'] for k in usable}
         if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] for u in self.rf.units): return 'fail', 'placement', None
@@ -709,17 +720,19 @@ class Grader:
         if not cars: return 'fail', 'missing', None
         ok, flag = match_pieces([k['text'] for k in cars], [value], self.markers, self.own + self.table_context)
         if ok: self.ctx_orders.update(k['order'] for k in cars)
+        if not ok and any(k.get('joins') for k in cars) and match_pieces([spaced(k) for k in cars], [value], self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', None
         return ('pass', None, flag) if ok else ('fail', 'text', ' '.join(k['text'] for k in cars))
 
     def lead_in(self, value, alt, tb, vr):
         cars = [k for k in self.carriers(anchors_of(self.t, 'lead_in', alt), [value], tb) if self.in_order(k, tb, vr) and (k['table'] is not tb or k['cell']['r'] < vr)]
         if not cars: return 'fail', 'missing', None
-        hit = next((k for k in cars if norm(k['text']) == norm(value)), None)
+        hit = next((k for k in cars if boundary_equal(k['text'], value)), None)
         if hit is None and self.pieces_match([k['text'] for k in cars], value, [anchor_of(k) for k in cars])[0]: hit = cars[-1]
         flag = None
         if hit is None:
             got = norm(' '.join(k['text'] for k in cars))
             if re.search(r'(?<!\w)' + re.escape(norm(value)) + r'(?!\w)', got): hit, flag = cars[-1], 'contained'  # whole and in order inside the carriers (addendum C6)
+            elif any(k.get('joins') for k in cars) and (any(boundary_equal(spaced(k), value) for k in cars) or re.search(r'(?<!\w)' + re.escape(norm(value)) + r'(?!\w)', norm(' '.join(spaced(k) for k in cars)))): return 'unresolved', 'adjacency', None
             else: return 'fail', 'spacing' if any(spacing_only(k['text'], value) for k in cars) or spacing_only(got, value) else 'text', got
         if hit['table'] is tb: return 'pass', None, flag
         between = [u for u in self.rf.units if hit['order'] < u['_order'] < tb['_order'] and u.get('kind') not in ('clutter', 'image') and u['_order'] not in self.ctx_orders
@@ -733,12 +746,15 @@ class Grader:
         while i < len(pieces):
             hit = next((k for k in cars if heading_eq(k['text'], pieces[i])), None)
             if hit is None:  # a heading laid out as adjacent cells or pieces, however many (E12), until the window outgrows the heading
-                goal = len(squash(_CONTINUED.sub('', pieces[i])))
+                goal, open_ = len(squash(_CONTINUED.sub('', pieces[i]))), False
                 for a in range(len(cars)):
                     for b in range(a + 2, len(cars) + 1):
                         if sum(len(squash(_CONTINUED.sub('', k['text']))) for k in cars[a:b]) > goal: break
-                        if self.pieces_match([_CONTINUED.sub('', k['text']) for k in cars[a:b]], _CONTINUED.sub('', pieces[i]), [anchor_of(k) for k in cars[a:b]])[0]: hit = cars[b - 1]; break
+                        ok = self.pieces_match([_CONTINUED.sub('', k['text']) for k in cars[a:b]], _CONTINUED.sub('', pieces[i]), [anchor_of(k) for k in cars[a:b]])[0]
+                        if ok: hit = cars[b - 1]; break
+                        if ok is None: open_ = True  # the pieces touch where the heading prints a space: the page may space them
                     if hit: break
+                if hit is None and open_: return 'unresolved', 'adjacency', pieces[i]
             if hit is None and i + 1 < len(pieces):  # E9: two levels printed on one line
                 hit2 = next((k for k in cars if heading_eq(k['text'], pieces[i] + ' ' + pieces[i + 1])), None)
                 if hit2 is not None: found.append(hit2); i += 2; continue
@@ -747,6 +763,7 @@ class Grader:
                 hit = next((k for k in cars if norm(k['text']).startswith(want) and len(norm(k['text'])) > len(want)), None)
                 if hit is not None: run_in = True
             if hit is None:
+                if any(k.get('joins') and heading_eq(spaced(k), pieces[i]) for k in cars): return 'unresolved', 'adjacency', pieces[i]  # the pieces touch where the heading prints a space: the page may space them
                 near = next((k for k in cars if spacing_only(k['text'], pieces[i])), None)
                 return ('fail', 'spacing', pieces[i]) if near else ('fail', 'missing', pieces[i])
             found.append(hit); i += 1
@@ -759,8 +776,9 @@ class Grader:
         for phrase in pieces_of(value):
             want = norm(phrase)
             at = self.carriers(anchors, [phrase], tb, equal=False)
-            holds = lambda text: want in norm(text) or want in norm(minus_marks_anywhere(text, self.markers))  # the phrase, with the record's own marks printed into it
+            holds = lambda text: contains(text, want) or contains(minus_marks_anywhere(text, self.markers), want)  # the phrase, with the record's own marks printed into it; spacing by the boundary rule
             cars = [k for k in at if holds(k['text'])] or ([at[0]] if at and holds(' '.join(k['text'] for k in at)) else [])
+            if not cars and any(k.get('joins') for k in at) and (any(holds(spaced(k)) for k in at) or holds(' '.join(spaced(k) for k in at))): return 'unresolved', 'adjacency', phrase
             if not cars: return 'fail', 'missing', phrase
             if not any(self.in_order(k, tb, vr) or k['table'] is None or k['table'] is not tb for k in cars): return 'fail', 'placement', phrase
         return 'pass', None, None if anchors else 'anchor_unknown'
@@ -774,6 +792,7 @@ class Grader:
             if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', None
             return 'pass', None, None
         if squash(value) and squash(value) in squash(''.join(c.get('text', '') for c in V)): return 'pass', None, 'in_value_cell'
+        if any(k.get('joins') and self.same(spaced(k), value)[0] for k in cars): return 'unresolved', 'adjacency', None
         return ('fail', 'text', ' '.join(k['text'] for k in cars)) if cars else ('fail', 'missing', None)
 
     def periods(self, value, alt, tb, vr, vcols):
@@ -783,7 +802,9 @@ class Grader:
                 want, a = norm(part['text']), part.get('anchor')
                 cells = self.merged(self.rf.cells_at(a, tb)) if a else []
                 if cells:
-                    if not self.same(joined(cells), want)[0] and not any(want in norm(c.get('text', '')) for c in cells): return 'fail', 'text', part['text']
+                    if not self.same(joined(cells), want)[0] and not any(contains(c.get('text', ''), want) for c in cells):
+                        if any(c.get('joins') for c in cells) and (self.same(norm(' '.join(spaced(c) for c in sorted(cells, key=lambda c: (c['r'], c['c'])))), want)[0] or any(contains(spaced(c), want) for c in cells)): return 'unresolved', 'adjacency', part['text']
+                        return 'fail', 'text', part['text']
                     label_col = min([c['c'] for c in self.rf.cells_in(tb) if row_hit(c, vr)] or [0])
                     free = [c for c in cells if c['r'] != vr and not col_hit(c, vcols)]  # neither on the value's row nor over its column
                     if any(c['c'] > label_col for c in free):
@@ -798,7 +819,9 @@ class Grader:
                             return 'fail', 'scope', part['text']  # a row the route placed in this group comes from elsewhere in the source
                     continue
                 cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.units if u.get('kind') not in ('table', 'clutter')]
-                if not any(want in norm(k['text']) or (k.get('unit') and want == local(k['unit'].get('name', ''))) for k in cars) and want not in norm(' '.join(k['text'] for k in cars)): return 'fail', 'missing', part['text']
+                if not any(contains(k['text'], want) or (k.get('unit') and want == local(k['unit'].get('name', ''))) for k in cars) and not contains(' '.join(k['text'] for k in cars), want):
+                    if any(k.get('joins') for k in cars) and contains(' '.join(spaced(k) for k in cars), want): return 'unresolved', 'adjacency', part['text']
+                    return 'fail', 'missing', part['text']
         return 'pass', None, None
 
     def same_group(self, cell, tb, vcols, periods):
@@ -825,8 +848,8 @@ class Grader:
                 # pieces, or inside a "Notes:" block that holds several notes
                 body = norm(minus_markers(m.get('note_text') or '', [mark]))
                 at_note = self.carriers([m['note_anchor']], [m.get('note_text') or ''], tb)
-                notes = [k for k in at_note if body and body in norm(minus_markers(k['text'], [mark]))] or ([at_note[0]] if at_note and body and body in norm(' '.join(k['text'] for k in at_note)) else [])
-                if not notes: return 'fail', 'missing_note', mark
+                notes = [k for k in at_note if body and contains(minus_markers(k['text'], [mark]), body)] or ([at_note[0]] if at_note and body and contains(' '.join(k['text'] for k in at_note), body) else [])
+                if not notes: return ('unresolved', 'adjacency', mark) if any(k.get('joins') and contains(minus_markers(spaced(k), [mark]), body) for k in at_note) else ('fail', 'missing_note', mark)
                 k = notes[0]
                 declared = (k['unit'] or {}).get('marker')
                 if declared and norm(declared) != norm(mark): return 'fail', 'wrong_note_link', mark  # an explicit wrong mark-to-note assignment
@@ -848,8 +871,10 @@ class Grader:
             pending = not exact and spelt is None  # association proven, join not: unresolved unless something below fails
         else: pending = False
         for ev in value.get('evidence') or []:
-            hits = self.merged(self.rf.cells_at(ev['anchor'], tb)) + self.merged_units(self.rf.units_at(ev['anchor']), [ev['text']])
-            if not any(norm(ev['text']) in norm(h.get('text', '')) for h in hits): return 'fail', 'evidence', ev['text']
+            hits = self.merged(self.rf.cells_at(ev['anchor'], tb)) + self.merged_units(self.rf.units_at(ev['anchor']))
+            if not any(contains(h.get('text', ''), ev['text']) for h in hits):
+                if any(h.get('joins') and contains(spaced(h), ev['text']) for h in hits): pending = True; continue  # evidence split where the page alone could show the space
+                return 'fail', 'evidence', ev['text']
         return ('unresolved', 'adjacency', None) if pending else ('pass', None, None)
 
     # ---- XML
@@ -897,11 +922,12 @@ class Grader:
             if u.get('kind') != 'table': return u.get('text', '')
             cells = [c for c in u.get('cells') or [] if overlap(c.get('anchor'), t['anchor'])] or u.get('cells') or []
             return ' '.join(c.get('text', '') for c in self.merged(cells))
-        want = norm(f.get('printed_text') or ''); got = norm(' '.join(text_of(u) for u in self.merged_units(units, [want])))  # touching pieces read as the key prints them; the reference phrase and the WER see the block as printed
+        want = norm(f.get('printed_text') or ''); got = norm(' '.join(text_of(u) for u in self.merged_units(units)))  # touching pieces read as one; the reference phrase and the WER see the block as printed
+        self.block_spaced = norm(' '.join(spaced(u) if u.get('kind') != 'table' else text_of(u) for u in self.merged_units(units)))  # the other reading, for the unresolved verdict only
         if 'printed_text' in t['excluded']: self.row('printed_text', 'excluded'); ok = True
         else:
             ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
-            bearing = [c for u in units for c in ([x for x in u.get('cells') or [] if overlap(x.get('anchor'), t['anchor'])] or u.get('cells') or [] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells
+            bearing = [c for u in units for c in ([x for x in u.get('cells') or [] if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
             if ok and not struck_kept([f.get('printed_text') or ''], bearing): ok, why = False, 'struck'  # the words survive but a cancelled word became active, or the wrong one was cancelled
             self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, {'fragmented': frag} if ok and frag else None if ok else {'wer': wer(got, want)})
         main = next((u for u in units if u.get('kind') != 'table'), units[0])
@@ -924,7 +950,7 @@ class Grader:
                 if not dest: failure = failure or ('fail', 'destination', ref['printed_text'])
                 elif explicit and not all(self.rf.by_id.get(l.get('to')) in dest for l in explicit):  # E6: any contradictory destination is wrong, not merely unlinked
                     failure = failure or ('fail', 'wrong_link', ref['printed_text'])
-            if norm(ref['printed_text']) not in block_text: failure = failure or ('fail', 'phrase', ref['printed_text'])
+            if norm(ref['printed_text']) not in block_text: failure = failure or (('unresolved', 'adjacency', ref['printed_text']) if norm(ref['printed_text']) in getattr(self, 'block_spaced', '') else ('fail', 'phrase', ref['printed_text']))
             elif ref.get('href') and not any(l.get('href') == ref['href'] for l in links): failure = failure or ('fail', 'href', ref['href'])
         if linked: self.row('reference_linked', 'pass' if all(linked) else 'fail')
         return failure or ('pass', None, None)

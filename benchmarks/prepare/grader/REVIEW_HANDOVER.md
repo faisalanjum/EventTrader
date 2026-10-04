@@ -11,7 +11,7 @@ are reported `not_t1`).
 
 ## Run it (repo root, python 3.10+, no extra packages for the grader itself)
 ```
-python3 -B -m unittest discover -s benchmarks/prepare/grader/tests -t .        # 183 tests, ~1.5 s
+python3 -B -m unittest discover -s benchmarks/prepare/grader/tests -t .        # 186 tests, ~1.5 s
 python3 -B -m benchmarks.prepare.grader.checks.real_pairs                       # 48 real-original variants, ~20 s
 python3 -B -m benchmarks.prepare.grader.grade --route <run>/route --out <run>/graded   # grade one route (key defaults to golden/PACKAGE.json)
 python3 -B -m benchmarks.prepare.grader.checks.why <run>/graded [check:reason]  # explain failures: key value vs what the route carried
@@ -27,7 +27,7 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 ## Where the proof comes from
 | Proof | What it shows | Where |
 |---|---|---|
-| 182 unit tests on one fixture (HTML table + text + picture, XML form, native PDF) | every check passes on a correct route; each planted fault (changed digit, dropped cell, value under the next column / next row, lost parentheses, glued footnote digit, dropped note, dropped heading, dropped paragraph, reordered blocks, wrong link, XML value moved to another person, PDF value under another column or on a missing page, dishonest anchor, changed source bytes…) fails with the named reason | `tests/test_grade.py`, `tests/test_anchor.py`, `tests/test_adapters.py` |
+| 186 unit tests on one fixture (HTML table + text + picture, XML form, native PDF) | every check passes on a correct route; each planted fault (changed digit, dropped cell, value under the next column / next row, lost parentheses, glued footnote digit, dropped note, dropped heading, dropped paragraph, reordered blocks, wrong link, XML value moved to another person, PDF value under another column or on a missing page, dishonest anchor, changed source bytes…) fails with the named reason | `tests/test_grade.py`, `tests/test_anchor.py`, `tests/test_adapters.py` |
 | 48 real-original variants | controls built from the originals (never from a tool): the 7 contract pairs and the 8 regression cases of the key package, plus the six development faults from Codex's review; every valid representation passes, every damaged copy fails for the stated reason | `checks/real_pairs.py`, `checks/RESULTS.json` |
 | 7 route variants × 69 development files | generality: no crash, gates computed, every failure explainable with `checks/why.py`; numbers below | `/home/faisal/prepare_work/grader_runs/*/graded/summary.md` |
 
@@ -55,9 +55,9 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 
 ## Known limits (stated, not hidden)
 - E15: time scope is checked from the source mapping (rows between the time heading and the value must lie between them in the source); a route with dishonest anchors is caught by the anchor gate instead.
-- E12: adjacency can be proved only from byte anchors; a within-word split on page-region anchors is reported **unresolved**, never a pass or a fail. Touching bytes prove only that the tool inserted nothing: pieces that touch are read glued only where the key prints them glued (CSS can space touching bytes apart, and the key is read from the rendered page).
+- E12: joins are read from the output's mapping and the source alone — pieces whose anchors touch (cells at one grid position, text units) read as one, every other join as a space; the key never chooses a join. A within-word split on page-region anchors, and touching bytes where the key prints two words (CSS may space them; the output cannot say), are reported **unresolved**, never a pass or a fail; spacing beside punctuation and symbols is reflow.
 - E14: the grid is the declared representation; geometry is the separately declared screen-span route; an explicit association field is not built until a tool offers one.
-- Visibility: a stated supported subset — inline `display`/`visibility`/`opacity` with keywords or numbers (declarations split outside quotes and parentheses before escapes are decoded, so an escaped `;` stays inside its value; `!important` honoured; a declaration is one complete `name: value`), HTML implied end tags (`p`, `li`, `dt`/`dd`, `td`/`th`, `tr`, table sections, `option` — every open element of those kinds down to the boundary closes, so a new `<tr>` closes the open `<td>` and the open `<tr>`), a slash on a non-void HTML tag closes nothing, a word boundary comes only from an element that itself shows (a hidden block or a hidden `<br>` breaks nothing); checked against headless Chrome on Codex's rounds 4 to 8 cases. The same pass records struck-through runs (`<s>`/`<del>`/`<strike>`, CSS `line-through`, inherited by descendants) for the source-formatting step. Outside the subset the file is **uncertain**: stylesheet rules on hiding properties (escapes decoded), imported sheets, unevaluated values, an implied end tag that drops unclosed hiding inline elements (the browser rebuilds them around the new block), and text written directly inside a table skeleton (the browser moves it before the table). A document whose stylesheet rules can hide text, or whose inline `display`/`visibility`/`opacity` carries a value this scanner does not evaluate (a keyword outside the CSS lists, `var()`, `calc()`, escapes), is reported **uncertain** (coverage and anchor honesty not measured); on the 116 HTML key sources this happens to none. `<noscript>` content is read as visible.
+- Visibility: a stated supported subset — inline `display`/`visibility`/`opacity` with keywords or numbers (declarations split outside quotes and parentheses before escapes are decoded, so an escaped `;` stays inside its value; `!important` honoured; a declaration is one complete `name: value`), HTML implied end tags (`p`, `li`, `dt`/`dd`, `td`/`th`, `tr`, table sections, `option` — every open element of those kinds down to the boundary closes, so a new `<tr>` closes the open `<td>` and the open `<tr>`), a slash on a non-void HTML tag closes nothing, a `<` opens a tag only before a letter or a slash (`Cost < 1%` is text), a word boundary comes only from an element that itself shows (a hidden block or a hidden `<br>` breaks nothing); checked against headless Chrome on Codex's rounds 4 to 9 cases. The same pass records struck-through runs for the source-formatting step: `<s>`/`<del>`/`<strike>` and CSS `text-decoration(-line): line-through` — the last declaration in force (`!important` first), a tag's default yielding to its own declaration, propagated to in-flow descendants but not into atomic inline-level or out-of-flow boxes, a child's `none` not cancelling; a stylesheet rule that strikes or forces a decoration, an unevaluated value, or an `<s>` left open across a block makes struck text **uncertain** (`struck_certain`), and the step then leaves the converter's own claims (0 of 116 key sources); checked against headless Chrome on 20 shapes and Codex's 12. Outside the subset the file is **uncertain**: stylesheet rules on hiding properties (escapes decoded), imported sheets, unevaluated values, an implied end tag that drops unclosed hiding inline elements (the browser rebuilds them around the new block), and text written directly inside a table skeleton (the browser moves it before the table). A document whose stylesheet rules can hide text, or whose inline `display`/`visibility`/`opacity` carries a value this scanner does not evaluate (a keyword outside the CSS lists, `var()`, `calc()`, escapes), is reported **uncertain** (coverage and anchor honesty not measured); on the 116 HTML key sources this happens to none. `<noscript>` content is read as visible.
 - Coverage measures **visible source text**; picture content is never measured by it — the `nothing_lost` gate says so and lists the files' picture counts (`pictures_not_measured`). Coverage and anchor honesty are **not measured** for files without a text layer (PDF/images) unless the route declares page sizes (bounds only); a gate with any unmeasured file does not pass.
 - Heading recognition, note links, reference links and `kind` are **structure counts**, not pass rules.
 - The linker places long texts in order and short texts between anchored neighbours; a fallback placement is flagged `out_of_order`, a picture's gap anchor is flagged `gap` and never counts as coverage. Approximate alignment (`pieced`) is anchor chaining — 20-grams unique on both sides, the longest order-consistent chain, maximal extension — never a full character diff; within 1 % of difflib's matched characters on the worst file at 500× the speed, and it never claims text the source lacks (what it misses counts as insertion).
@@ -68,7 +68,7 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 - Table context (E13): admitted only when the key declares it with `byte_ranges` that each read the phrase and lie inside the table or its title block (between the declared title and the table's end); any other declaration stops the run as a key defect. Package 2 declares the SL Green lines (the title block is a separate layout table that precedes the data table). The three change-column records keep their `value`/`comparison` roles: Codex found the direction stated in the surrounding text. A compared column's heading must belong to the value's group (C2 after Codex's reproducer).
 - Review history: Codex's eight rounds and the package-2 verdict (`prepare_work/grader_review_codex_20261003/`) and the changes they caused are in `DESIGN.md` §21–§28; every probe script was re-run against this code (`FABLE_RESPONSE*.md` there, `codex_probes_live/`).
 
-## Results on the development split (package 2, grader after Codex's rounds 1–8 and the first two tool tests; run 23 of 2026-10-03 22:00 — HTML routes carry the source-formatting step, screen routes rebuilt from them)
+## Results on the development split (package 2, grader after Codex's rounds 1–9 and the first two tool tests; run 24 of 2026-10-03 22:49 — raw converter routes re-linked from cached tool output, the formatting step and the screen step in their own route folders)
 Development split only: 171 HTML cells, 60 HTML blocks, 9 XML cells, 9 PDF blocks (plus supplement PDF cells on the PDF route).
 XML and PDF targets no HTML route claims are counted as not converted (E17), never hidden. Headings / notes / refs / kind are structure
 counts, not pass rules. The screen-span step and the heading pre-step are separate declared routes (E14). Gate columns: "unanchored" =
@@ -81,23 +81,29 @@ reports `verified: true`; the 37 consumed packets and the key files are verified
 
 | route | HTML cells | HTML blocks | PDF targets | headings recognised | unanchored | boundary | inserted chars | uncovered chars (files) | reading-order breaks (files) | anchors not measured |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Docling HTML | 145/171 | 45/60 | - | 0/156 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
-| Docling HTML + screen | 151/171 | 45/60 | - | 0/156 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
-| Docling HTML + headings | 147/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
-| Docling HTML + headings + screen | 153/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
-| edgartools HTML | 155/171 | 40/55 | - | 35/166 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
-| edgartools HTML + screen | 163/171 | 40/55 | - | 35/166 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
-| Docling HTML, browser render (no screen step) | 163/171 | 49/60 | - | 0/170 | 696 | 329 | 209 | 13,418 (10) | 0 (0) | 0 of 60 graded files |
-| Docling PDF route (14 files) | 15/46 | 1/7 | 4/9 | 13/24 | 3179 | 97 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |
+| Docling HTML (converter alone) | 144/171 | 45/60 | - | 0/156 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + formatting | 145/171 | 45/60 | - | 0/156 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + formatting + screen | 151/171 | 45/60 | - | 0/156 | 1058 | 637 | 209 | 13,591 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + headings pre-step (alone) | 147/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
+| Docling HTML + headings + formatting | 147/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
+| Docling HTML + headings + formatting + screen | 153/171 | 39/60 | - | 104/150 | 1215 | 662 | 364 | 19,263 (21) | 29 (8) | 0 of 60 graded files |
+| edgartools HTML (converter alone) | 154/171 | 42/55 | - | 35/168 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| edgartools HTML + formatting | 155/171 | 42/55 | - | 35/168 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| edgartools HTML + formatting + screen | 163/171 | 42/55 | - | 35/168 | 180 | 929 | 22,494 | 30,585 (41) | 15 (6) | 0 of 60 graded files |
+| Docling browser render (alone) | 162/171 | 49/60 | - | 0/170 | 696 | 329 | 209 | 13,418 (10) | 0 (0) | 0 of 60 graded files |
+| Docling browser render + formatting | 163/171 | 49/60 | - | 0/170 | 696 | 329 | 209 | 13,418 (10) | 0 (0) | 0 of 60 graded files |
+| Docling PDF route (14 files) | 15/46 | 1/7 | 4/9 | 14/25 | 3179 | 97 | 1,782 | 46,391 (7) | 374 (16) | 9 of 17 graded files |
 
-Against run 18 (round 7) every HTML route only gained: the committed round-7 grader re-run on these same route files, compared target by target with
-this one, shows pass gains only — Docling routes +7 to +8 targets, EdgarTools +4, browser render +10 — and no pass lost (DESIGN §28). The gains are the
-round-8 rules (text-unit fragments read as the key prints them, exact struck text, the innermost group row), the record's own footnote marks set aside
-wherever they stand (tool test 1: a grader gap, not a tool fault), and the source-formatting step that writes the source's own line-through onto the
-routes (tool test 2: the three redlines' struck words are struck again; `struck` failures 0 on every route). Of 231 HTML development targets the best
-single route passes 212 (browser render), the best pick per target 213, no route 18: pictures 8, contract-exhibit headings 8, and two key-side items
-for the next package — a unit line "(in millions)" printed inside a header cell while the key records "$" (0001617406 T03), and Aflac's "Adjusted"
-spanning the EPS columns only, in the source and in Chrome, while the key's path reads the implied group over "Growth" (0000004977 T02).
+"Converter alone" rows are the tools' own output re-linked from cached tool output; "+ formatting" rows add the declared source-formatting step
+(the source's own strike-through written as `struck`; it adds exactly one cell per route — the redlines' struck words — and changes nothing else);
+"+ screen" rows add the Chrome cell-geometry step. Against run 18 (round 7) every HTML route only gained: the committed round-7 grader re-run on these
+same 12 route folders, compared target by target with this one, shows pass gains only — Docling +8 targets, the pre-step routes +7, EdgarTools +6, browser
+render +10 — no pass lost and no new unresolved verdict (DESIGN §28–§29). The gains are the round-8 and round-9 rules (fragments read from the source alone,
+exact struck text at the field's own cells, the innermost group row), the record's own footnote marks set aside wherever they stand (tool test 1: a grader
+gap, not a tool fault), and the formatting step (tool test 2). Of 231 HTML development targets the best single route passes 212 (browser render +
+formatting), the best pick per target 213, no route 18: pictures 8, contract-exhibit headings 8, and two key-side items for the next package — a unit line
+"(in millions)" printed inside a header cell while the key records "$" (0001617406 T03), and Aflac's "Adjusted" spanning the EPS columns only, in the source
+and in Chrome, while the key's path reads the implied group over "Growth" (0000004977 T02).
 
 What the numbers are for here: the grader ran on every development file of both tools without a crash; every gate is computed; every
 failure is explainable with `checks/why.py`. They are **not** a tool ranking (that waits for the controls and the held-out split after
@@ -107,8 +113,8 @@ characters — 11k of them in one Dominion exhibit whose notes it emits as 8k–
 Content s") and drops page numbers; both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
 (a key-side question).
 
-Proof state at hand-over: 183 unit tests, 48/48 real-original variants on package 2, package check `golden/check_package.py` passes; Codex's rounds
-1–8 scripts and the package-2 reproducers re-run against this code behave as they expected (adapter audits over all 60 saved outputs: 0 cells lost, 0 tables shifted), except the differences stated in
+Proof state at hand-over: 186 unit tests, 48/48 real-original variants on package 2, package check `golden/check_package.py` passes; Codex's rounds
+1–9 scripts and the package-2 reproducers re-run against this code behave as they expected (adapter audits over all 60 saved outputs: 0 cells lost, 0 tables shifted), except the differences stated in
 `prepare_work/grader_review_codex_20261003/FABLE_RESPONSE_R3.md` (digits split across 22 cells → False; "3.7 %" → pass) and
 `FABLE_RESPONSE_R4.md` (a packet name in two folders is refused as ambiguous; an invalid table-context declaration stops the run; the
 probe's control is accepted but unverified because its synthetic manifest pins no catalog).

@@ -480,6 +480,12 @@ class PlantedFaultTests(GraderFixture):
         self.assertFalse(grade.without_marks('Phase trial', 'Phase 1 trial', ['1']))   # nothing may be invented
         for got, want in (('Living benefit/GMDB features(1):', 'Living benefit/GMDB features:'), ('Unsecured Notes Covenants (1)', 'Unsecured Notes Covenants'), ('EPS (1) Growth', 'EPS Growth')):
             self.assertEqual(grade.minus_marks_anywhere(got, ['(1)']), grade.norm(want))  # the space a mark leaves behind closes up (basis containment)
+        for n in (50, 500, 1000, 2000):  # Codex R9-3: no recursion, whatever the length; marks at the end or in the middle; a mark that is text; a changed word
+            label = ('word ' * (n // 5)).strip()
+            self.assertEqual(grade.same(label + ' (1)', label, ['(1)']), (True, 'marker_in_text'), n)
+            self.assertEqual(grade.same(label[:n // 2] + '(1)' + label[n // 2:], label, ['(1)']), (True, 'marker_in_text'), n)
+            self.assertEqual(grade.same(label + ' 1', label + ' 1', ['1']), (True, None), n)
+            self.assertFalse(grade.same(label.replace('word', 'ward', 1) + ' (1)', label, ['(1)'])[0], n)
         # basis containment and a heading printed twice above the value
         res = self.run_grader(lambda r: self.cell(r, 'l2').update(text='Free cash flow(1)'))
         self.assertEqual(self.check(res, 'pkt/T02', 'row_label')['verdict'], 'pass')
@@ -541,6 +547,21 @@ class PlantedFaultTests(GraderFixture):
                 g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
                 self.assertEqual(next(r['verdict'] for r in g.rows if r['check'] == field), 'pass', (field, n))
 
+    def test_another_rows_strike_does_not_fail_a_correctly_struck_label(self):
+        # Codex R9-2B: the struck check reads the cells at this field's own support, never every cell of the containing table
+        raw = b'<table><tr><td><s>Obsolete</s></td><td>10</td></tr><tr><td><s>Cancelled</s></td><td>20</td></tr></table>'
+        span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
+        tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': [
+            {'r': 0, 'c': 0, 'text': 'Obsolete', 'anchor': span(b'Obsolete'), 'struck': ['Obsolete']}, {'r': 0, 'c': 1, 'text': '10', 'anchor': span(b'10')},
+            {'r': 1, 'c': 0, 'text': 'Cancelled', 'anchor': span(b'Cancelled'), 'struck': ['Cancelled']}, {'r': 1, 'c': 1, 'text': '20', 'anchor': span(b'20')}]}
+        t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'10'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
+             'support': {'row_label': {'anchors': [span(b'Obsolete')]}}, 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': '~~Obsolete~~'}}
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
+        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'row_label'), ('pass', None))
+        tb['cells'][0]['struck'] = []  # the label's own strike lost: still a failure
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
+        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'row_label'), ('fail', 'struck'))
+
     def test_a_two_line_heading_whose_second_line_says_continued_is_read_as_pieces(self):
         # E2 inside E12: the window that reads a heading's pieces measures them without "(continued)", so the piece carrying it is not skipped
         raw = b'<p>Consolidated</p><p>Summary (continued)</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'
@@ -553,9 +574,10 @@ class PlantedFaultTests(GraderFixture):
         g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
         self.assertEqual([(r['check'], r['verdict']) for r in g.rows if r['check'] in ('section_path', 'heading_recognised')], [('heading_recognised', 'pass'), ('section_path', 'pass')])
 
-    def test_touching_pieces_are_read_as_the_key_prints_them(self):
-        # pieces that touch in the source are glued only where the key (read from the rendered page) prints them glued: "Section 1.01" + "Defined Terms"
-        # under "Section 1.01 Defined Terms" stay two pieces (CSS spacing), an empty picture unit never swallows the heading after it, a bullet beside a word is reflow
+    def test_touching_pieces_are_read_as_the_source_prints_them_and_a_page_only_space_is_unresolved(self):
+        # Codex R9-1: joins come from the output's mapping and the source alone, never from the key. Touching pieces read as one; a digit-letter or symbol join
+        # the key spaces is reflow (boundary rule); two words the key spaces but the bytes glue cannot be settled from the output: unresolved, never pass or fail;
+        # an empty picture unit never swallows the heading after it
         def graded(raw, units, field, value):
             span = lambda text: {'byte_start': raw.index(text), 'byte_end_exclusive': raw.index(text) + len(text)}
             evidence = {'byte_start': 0, 'byte_end_exclusive': raw.index(b'<table>')}
@@ -574,7 +596,12 @@ class PlantedFaultTests(GraderFixture):
         rows = graded(b'<p><span>Sum</span><span>mary</span></p>' + table, [{'id': 'h1', 'kind': 'heading', 'text': 'Sum', 'anchor': b'Sum'}, {'id': 'h2', 'kind': 'heading', 'text': 'mary', 'anchor': b'mary'}], 'section_path', ['Summary'])
         self.assertEqual((rows['section_path'], rows['heading_recognised']), ('pass', 'pass'))  # a within-word split the key reads glued still is (E12)
         rows = graded(b'<p><span>written (the "</span><span>Effective Date</span><span>") when:</span></p>' + table, [{'id': 'a', 'kind': 'text', 'text': 'written (the "', 'anchor': b'written (the "'}, {'id': 'b', 'kind': 'text', 'text': 'Effective Date', 'anchor': b'Effective Date'}, {'id': 'c', 'kind': 'text', 'text': '") when:', 'anchor': b'") when:'}], 'segment_or_basis', ['(the "Effective Date")'])
-        self.assertEqual(rows['segment_or_basis'], 'pass')  # the key phrase ends two characters into the last piece: glued where the key reads it glued
+        self.assertEqual(rows['segment_or_basis'], 'pass')  # the key phrase ends two characters into the last piece: the glued reading contains it
+        for key, verdict in (('Cashflow', 'pass'), ('Cash flow', 'unresolved')):  # the same output reads 'Cashflow' whatever the key says; only the verdict depends on the key
+            rows = graded(b'<p><span>Cash</span><span>flow</span></p>' + table, [{'id': 'a', 'kind': 'heading', 'text': 'Cash', 'anchor': b'Cash'}, {'id': 'b', 'kind': 'heading', 'text': 'flow', 'anchor': b'flow'}], 'section_path', [key])
+            self.assertEqual(rows['section_path'], verdict, key)
+        rows = graded(b'<p><span>Cash</span> <span>flow</span></p>' + table, [{'id': 'a', 'kind': 'heading', 'text': 'Cash', 'anchor': b'Cash'}, {'id': 'b', 'kind': 'heading', 'text': 'flow', 'anchor': b'flow'}], 'section_path', ['Cashflow'])
+        self.assertEqual(rows['section_path'], 'fail')  # a real space in the source: the output's two words cannot spell the key's one
 
     def test_a_pieced_unit_is_judged_from_its_blocks_never_from_its_own_counts(self):
         # Codex R4-1: the gate derives the insertion from the blocks, checks each block's boundaries and refuses malformed pieces

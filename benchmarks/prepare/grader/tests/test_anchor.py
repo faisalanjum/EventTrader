@@ -355,6 +355,34 @@ class LinkTests(unittest.TestCase):
         self.assertIsNone(out['units'][2]['anchor']); self.assertEqual(out['units'][2]['link_error'], 'empty')
         self.assertEqual(out['uncovered'], [])
 
+    def test_a_literal_less_than_sign_is_text_and_keeps_the_arrays_aligned(self):
+        # Codex R9-4 (Chrome): a < opens a tag only before a letter or a slash; `Cost < 1% and margin > 5%.` is text, so is a trailing <
+        for raw, text in ((b'<p>Cost < 1% and margin > 5%.</p>', ' Cost < 1% and margin > 5%. '), (b'<p>Cost <1% and >5%.</p>', ' Cost <1% and >5%. '),
+                          (b'<p>Cost &lt; 1% and margin &gt; 5%.</p>', ' Cost < 1% and margin > 5%. '), (b'<p>A <', ' A <'), (b'<p><s>A</s> <', '  A  <'), (b'<p>1 << 2</p><p>x</p>', ' 1 << 2  x ')):
+            v = anchor.Visible(raw)
+            self.assertEqual((v.text, v.certain), (text, True), raw)
+            runs = [v.at(a, b) for a, b in v.struck_runs()]  # the strike flags stay aligned with the characters on every path
+            self.assertEqual(runs, ['A'] if b'<s>' in raw else [], raw)
+        self.assertEqual(anchor.Visible(b'<p>a</p><b>bold</b> <br/>x').text, ' a bold  x')  # real tags still are tags
+
+    def test_struck_text_follows_the_cascade_and_the_propagation_rules_chrome_observed(self):
+        # Codex R9-2A with headless Chrome: the last declaration wins, a tag's default yields to its own declaration, atomic boxes are not reached,
+        # a child's `none` does not cancel a parent's strike; stylesheet rules and reopened formatting elements make struck text uncertain
+        struck = lambda raw: ([anchor.Visible(raw).at(a, b) for a, b in anchor.Visible(raw).struck_runs()], anchor.Visible(raw).struck_certain)
+        self.assertEqual(struck(b'<s>struck words</s> plain'), (['struck words'], True))
+        self.assertEqual(struck(b'<span style="text-decoration: line-through; text-decoration: none">plain</span>'), ([], True))
+        self.assertEqual(struck(b'<span style="text-decoration: line-through; text-decoration-line: none">plain</span>'), ([], True))
+        self.assertEqual(struck(b'<s style="text-decoration:none">plain</s>'), ([], True))
+        self.assertEqual(struck(b'<s><span style="text-decoration: none">still struck</span></s>'), (['still struck'], True))
+        self.assertEqual(struck(b'<s>x <span style="display:inline-block">atomic</span></s>'), (['x'], True))
+        self.assertEqual(struck(b'<s>x <span style="float:left">floated</span></s>'), (['x'], True))
+        self.assertEqual(struck(b'<table style="text-decoration:line-through"><tr><td>cell words</td></tr></table>'), (['cell words'], True))
+        self.assertEqual(struck(b'<span style="TEXT-DECORATION: LINE-THROUGH !important">loud</span>'), (['loud'], True))
+        self.assertEqual(struck(b'<style>.gone{text-decoration:line-through}</style><span class="gone">by class</span>')[1], False)
+        self.assertEqual(struck(b'<style>a{text-decoration:none}</style><s>x</s>'), (['x'], True))  # a sheet rule that cannot strike or force anything changes nothing
+        self.assertEqual(struck(b'<p><s>a b</p><p>next</p>')[1], False)  # the browser reopens the <s> in the next paragraph
+        self.assertEqual(struck(b'<s style="text-decoration: var(--d)">x</s>')[1], False)
+
     def test_whitespace_quotes_dashes_and_brackets_come_from_unicode_categories_not_hand_lists(self):
         import unicodedata
         cf = [chr(i) for i in range(0x2000, 0x2070) if unicodedata.category(chr(i)) == 'Cf']  # zero-width/format marks
