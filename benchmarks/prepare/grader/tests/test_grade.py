@@ -222,11 +222,22 @@ class GraderFixture(unittest.TestCase):
         rows = [r for r in res['results'] if r['key_id'] == key_id and r['check'] == check]
         self.assertEqual(len(rows), 1, (key_id, check, rows)); return rows[0]
 
+    def declare(self, exclusions=(), kinds=('image',)):
+        """The package names its declarations in the frozen manifest, pinned like every other input (package 3, contract R4)."""
+        decl = {'decisions': [{'rule': 'E10', 'policy': {'approximate_kinds': list(kinds)}}, {'rule': 'E10', 'exclusions': list(exclusions)}]}
+        (self.pkg / 'CONTRACT_DECISIONS_R4.json').write_text(json.dumps(decl))
+        pins = {rel: sha((self.pkg / rel).read_bytes()) for rel in grade.KEY_FILES + ('CONTRACT_DECISIONS_R4.json',)}
+        (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps({'evidence_root': '..', 'contract_declarations': 'CONTRACT_DECISIONS_R4.json', 'files_sha256': pins,
+                                                                   'packets_sha256': {'packets/pkt': {'targets_sha256': sha((self.pkt / 'targets.json').read_bytes())}}}))
+
     def verdict(self, res, key_id):
         return res['targets'][key_id]['verdict']
 
     def html(self, route):
         return route[HTM_ID]['units']
+
+    def unit(self, r, id_):
+        return next(u for u in self.html(r) if u['id'] == id_)
 
     def cells(self, route, unit='u3'):
         return next(u for u in self.html(route) if u['id'] == unit)['cells']
@@ -264,34 +275,86 @@ class CorrectOutputTests(GraderFixture):
     def test_package_declarations_exclude_targets_and_report_pictures_approximately(self):
         # package 3 (owner decisions (a) and (d), Codex R13 E10 R4): the manifest names the declarations; a declared page-number target is EXCLUDED (never a pass,
         # counted apart); a block the key declares an image is APPROXIMATE with its word error rate and aligned critical tokens; a declaration that does not match the key stops the run
-        def declare(anchor):  # the package names its declarations in the frozen manifest, pinned like every other input
-            decl = {'decisions': [{'rule': 'E10', 'policy': {'approximate_kinds': ['image']}}, {'rule': 'E10', 'exclusions': [{'key_id': 'pkt/S02', 'role': 'page_number', 'file_id': HTM_ID, 'sha256': sha(HTML), 'anchor': anchor}]}]}
-            (self.pkg / 'CONTRACT_DECISIONS_R4.json').write_text(json.dumps(decl))
-            pins = {rel: sha((self.pkg / rel).read_bytes()) for rel in grade.KEY_FILES + ('CONTRACT_DECISIONS_R4.json',)}
-            (self.pkg / 'FINAL_MANIFEST.json').write_text(json.dumps({'evidence_root': '..', 'contract_declarations': 'CONTRACT_DECISIONS_R4.json', 'files_sha256': pins,
-                                                                       'packets_sha256': {'packets/pkt': {'targets_sha256': sha((self.pkt / 'targets.json').read_bytes())}}}))
+        declare = lambda anchor: self.declare([{'key_id': 'pkt/S02', 'role': 'page_number', 'file_id': HTM_ID, 'sha256': sha(HTML), 'anchor': anchor}])
         declare(elem('h2'))
         res = self.run_grader(); self.assertEqual(res['run_facts']['contract_declarations'], 'CONTRACT_DECISIONS_R4.json')
         self.assertEqual((self.verdict(res, 'pkt/S02'), self.check(res, 'pkt/S02', 'target')['reason']), ('EXCLUDED', 'page_number'))
         self.assertEqual(sum(1 for r in res['results'] if r['key_id'] == 'pkt/S02'), 1)  # nothing of it is graded
         self.assertEqual(self.verdict(res, 'pkt/S03'), 'APPROXIMATE')
-        self.assertEqual(self.check(res, 'pkt/S03', 'printed_text')['detail'], {'word_error_rate': 0.0, 'critical_tokens': {'missing': [], 'extra': [], 'reference_numbers': 0}})  # exact OCR is still not a pass
+        d = self.check(res, 'pkt/S03', 'printed_text')['detail']  # exact OCR is still not a pass; the reading is described in full
+        self.assertEqual((d['word_error_rate'], d['words'], d['critical'], d['other'], d['edits']), (0.0, {'reference': 6, 'recovered': 6, 'substituted': 0, 'deleted': 0, 'inserted': 0}, {'missing': [], 'extra': []}, {'missing': [], 'extra': []}, []))
         self.assertEqual({k: res['summary']['by_split_format']['development']['structure/htm'][k] for k in ('PASS', 'EXCLUDED', 'APPROXIMATE', 'FAIL')}, {'PASS': 2, 'EXCLUDED': 1, 'APPROXIMATE': 1, 'FAIL': 0})
+        self.assertIn('| printed_text | 2 | 0 | 0 | 1 | 0 | 0 | 0 |', (self.root / 'out' / 'summary.md').read_text())  # the per-check table shows approximate readings (Codex R14-5): two blocks pass, one excluded, one approximate
         def garble(route): next(u for u in self.html(route) if u['id'] == 'u8')['text'] = 'Picture words one. Picture words 2.'
         row = self.check(self.run_grader(garble), 'pkt/S03', 'printed_text')
-        self.assertEqual((row['verdict'], row['detail']['critical_tokens']['extra']), ('approximate', ['2']))
+        self.assertEqual((row['verdict'], row['detail']['critical']['extra'], row['detail']['edits']), ('approximate', ['2'], [{'op': 'replace', 'reference': ['two'], 'output': ['2']}]))
         dropped = lambda route: self.html(route).remove(next(u for u in self.html(route) if u['id'] == 'u8'))
         self.assertEqual(self.verdict(self.run_grader(dropped), 'pkt/S03'), 'UNRESOLVED')  # a dropped picture is not approximate
         declare(elem('lead'))
         with self.assertRaises(ValueError): self.run_grader()  # the declared anchor is not the target's
 
-    def test_critical_tokens_are_compared_by_ordered_alignment(self):
-        # Codex R13: unordered multisets missed swapped values, a dropped Unicode minus and a negation moved to another action
-        self.assertEqual(grade.critical('Revenue 20. Profit 10.', 'Revenue 10. Profit 20.'), {'missing': ['10', '20'], 'extra': ['20', '10'], 'reference_numbers': 2})
-        self.assertEqual(grade.critical('Earnings 20', 'Earnings −20')['missing'], ['-20'])
-        c = grade.critical('Buy and do not sell', 'Do not buy and sell'); self.assertEqual((c['missing'], c['extra']), (['not buy'], ['not sell']))  # a negation is read with the word it governs
-        self.assertEqual(grade.critical("We don't expect growth", "We don't expect growth")['missing'], [])
-        self.assertEqual(grade.critical('Sales rose 5% to $1.2 million in 2024', 'Sales rose 5% to $1.2 million in 2024'), {'missing': [], 'extra': [], 'reference_numbers': 3})
+    def test_an_approximate_reading_replaces_only_the_transcription_comparison(self):
+        # Codex R14-3: the same reading labelled text gets the same verdict and gate; a label exempts no text from the source; an impossible anchor locates nothing and is
+        # dishonest; an empty reading is zero recovery; a block moved out of order fails whatever its reading
+        self.declare(); im = lambda r: next(u for u in self.html(r) if u['id'] == 'u8')
+        base = self.run_grader(); self.assertEqual((self.verdict(base, 'pkt/S03'), base['gates']['honest_anchors']['dishonest']), ('APPROXIMATE', {}))
+        as_text = self.run_grader(lambda r: im(r).update(kind='text'))
+        self.assertEqual((self.verdict(as_text, 'pkt/S03'), as_text['gates']['honest_anchors']['dishonest']), ('APPROXIMATE', {}))  # the source shows a picture there: the same outcome
+        wrong = self.run_grader(lambda r: self.unit(r, 'u9').update(kind='image', text='Invented words'))
+        self.assertEqual(wrong['gates']['honest_anchors']['dishonest'], {HTM_ID: 1})  # ordinary source text relabelled image: still certified against the bytes
+        bad = self.run_grader(lambda r: im(r).update(anchor={'byte_start': -1, 'byte_end_exclusive': len(HTML) + 1}))
+        self.assertEqual((self.verdict(bad, 'pkt/S03'), bad['gates']['honest_anchors']['dishonest']), ('UNRESOLVED', {HTM_ID: 1}))  # a position that cannot be true locates nothing
+        empty = self.run_grader(lambda r: im(r).update(text='')); d = self.check(empty, 'pkt/S03', 'printed_text')['detail']
+        self.assertEqual((self.verdict(empty, 'pkt/S03'), d['word_error_rate'], d['words']['recovered'], d['words']['deleted']), ('APPROXIMATE', 1.0, 0, 6))  # zero recovery, stated as such
+        def moved(r): u = im(r); self.html(r).remove(u); self.html(r).insert(3, u)
+        res = self.run_grader(moved); self.assertEqual((self.verdict(res, 'pkt/S03'), res['targets']['pkt/S03']['failed']), ('FAIL', ['order']))  # a strict failure outranks the approximate reading
+
+    def test_a_declared_page_number_left_out_is_not_required_content_loss(self):
+        # Codex R14-4: coverage subtracts the declared exclusion's own bytes only and counts them apart; an undeclared footer or any other text left out stays a loss
+        key = json.loads((self.pkg / 'CLAUDE_ANSWER_KEY.json').read_text()); next(t for t in key if t['key_id'] == 'pkt/S02')['fields'].update(printed_text='4', kind='page_footer', section_path=[])
+        (self.pkg / 'CLAUDE_ANSWER_KEY.json').write_text(json.dumps(key))
+        targets = json.loads((self.pkt / 'targets.json').read_text()); next(t for t in targets['targets'] if t['id'] == 'S02')['block_anchor'] = elem('pg'); (self.pkt / 'targets.json').write_text(json.dumps(targets))
+        drop = lambda uid: (lambda r: self.html(r).remove(self.unit(r, uid)))
+        self.declare([{'key_id': 'pkt/S02', 'role': 'page_number', 'file_id': HTM_ID, 'sha256': sha(HTML), 'anchor': elem('pg')}])
+        res = self.run_grader(drop('u7')); nl = res['gates']['nothing_lost']
+        self.assertEqual((self.verdict(res, 'pkt/S02'), nl['measured_pass'], nl['uncovered'], nl['excluded_chars']), ('EXCLUDED', True, {}, {HTM_ID: 1}))
+        nl = self.run_grader(drop('u9'))['gates']['nothing_lost']; self.assertEqual((nl['measured_pass'], nl['excluded_chars']), (False, {}))  # other text left out is still a loss
+        self.declare([]); self.assertFalse(self.run_grader(drop('u7'))['gates']['nothing_lost']['measured_pass'])  # undeclared: a loss, as before
+
+    def test_an_xml_field_is_the_innermost_at_the_keys_position_never_the_prose_around_it(self):
+        # Codex R14-2: prose with a field inside emits both; the field owns the position; a missing child does not fall back silently; the same bytes claimed twice is ambiguous
+        from benchmarks.prepare.grader.adapters import xml_fields as xf
+        def rows(raw, units=None, nth=0):
+            at = [m.start() for m in re.finditer(b'10', raw)][nth]; units = xf.units_of(raw) if units is None else units
+            t = {'key_id': 'syn/X3', 'file_id': 'syn/x.xml', 'format': 'cell/xml', 'type': 'cell', 'split': 'development', 'anchor': {'byte_start': at, 'byte_end_exclusive': at + 2}, 'alternatives': {}, 'excluded': set(), 'support': {},
+                 'fields': {'printed_value': '10', 'display_value': '10', 'row_label': 'amount', 'header_path': ['r', 'p']}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/x.xml', 'units': units}, raw, 'xml')); u = g.grade_cell()
+            return (u or {}).get('name'), {r['check']: (r['verdict'], r.get('reason')) for r in g.rows if r['check'] in ('value', 'row_label', 'header_path')}
+        plain, mixed = b'<r><p><amount>10</amount></p></r>', b'<r><p>Balance: <amount>10</amount> shares.</p></r>'
+        allpass = {'value': ('pass', None), 'row_label': ('pass', None), 'header_path': ('pass', None)}
+        self.assertEqual(rows(plain), ('amount', allpass)); self.assertEqual(rows(mixed), ('amount', allpass))  # the field inside the prose, not the prose
+        name, r = rows(mixed, [u for u in xf.units_of(mixed) if u['name'] != 'amount']); self.assertEqual((name, r['value'][0], r['row_label']), ('p', 'fail', ('fail', 'name')))  # the child missing: the prose is judged as what it is, never a silent stand-in
+        two = b'<r><p><amount>10</amount></p><p>Balance: <amount>10</amount> shares.</p></r>'
+        self.assertEqual(rows(two, nth=1), ('amount', allpass))  # the second occurrence: the field of the second paragraph
+        twin = xf.units_of(plain); twin.append(dict(twin[0], id='dup'))
+        self.assertEqual(rows(plain, twin)[1]['value'], ('unresolved', 'ambiguous'))  # the same bytes claimed by two fields
+
+    def test_critical_differences_are_read_in_order_with_their_context_and_nothing_is_dropped(self):
+        # Codex R13 + R14-5: unordered multisets missed swapped values, a dropped Unicode minus and a moved negation; a unit, a currency symbol or a scale word beside a
+        # number is critical too; every other difference is kept for review, never declared harmless; the word counts come from the same edit table as the rate
+        c = grade.critical
+        self.assertEqual(c('Revenue 20. Profit 10.', 'Revenue 10. Profit 20.')['critical'], {'missing': ['10', '20'], 'extra': ['20', '10']})
+        self.assertEqual(c('Earnings 20', 'Earnings −20')['critical']['missing'], ['-20'])
+        self.assertEqual(c('Buy and do not sell', 'Do not buy and sell')['critical'], {'missing': ['not buy'], 'extra': ['not sell']})  # a negation is read with the word it governs
+        self.assertEqual(c('10 barrels', '10 shares')['critical'], {'missing': ['10 shares'], 'extra': ['10 barrels']})  # a number with the word it governs
+        self.assertEqual(c('£20', '€20')['critical'], {'missing': ['€20'], 'extra': ['£20']})  # a currency symbol by its Unicode class, no list
+        self.assertEqual(c('20 million', '20 billion')['critical'], {'missing': ['20 billion'], 'extra': ['20 million']})
+        d = c('Sales rose sharply', 'Sales fell sharply')
+        self.assertEqual((d['critical'], d['other'], d['edits']), ({'missing': [], 'extra': []}, {'missing': ['fell'], 'extra': ['rose']}, [{'op': 'replace', 'reference': ['fell'], 'output': ['rose']}]))  # not critical, still reported
+        same = c('Sales rose 5% to $1.2 million in 2024', 'Sales rose 5% to $1.2 million in 2024'); self.assertEqual((same['edits'], same['reference_numbers']), ([], 3))
+        self.assertEqual(c("We don't expect growth", "We don't expect growth")['edits'], [])
+        self.assertEqual(grade.wer_counts('revenue was flat elsewhere rose', 'revenue rose'), {'reference': 2, 'recovered': 2, 'substituted': 0, 'deleted': 0, 'inserted': 3, 'rate': 1.5})
+        self.assertEqual(grade.wer_counts('', 'three words here'), {'reference': 3, 'recovered': 0, 'substituted': 0, 'deleted': 3, 'inserted': 0, 'rate': 1.0})  # an empty reading: zero recovery
 
     def test_structure_recognition_is_counted_separately(self):
         res = self.run_grader()
@@ -478,7 +541,7 @@ class PlantedFaultTests(GraderFixture):
             exclude(kid, field)(self); res = self.run_grader()
             self.assertEqual(self.check(res, kid, check)['verdict'], 'excluded', (kid, field))
         self.assertEqual(res['summary']['excluded_fields'], base + 3)  # every exclusion counted, the meaning field included
-        self.assertEqual(res['gates']['nothing_lost']['measures'], 'visible source text; picture content is not measured')
+        self.assertEqual(res['gates']['nothing_lost']['measures'], 'visible source text; declared exclusions counted apart; picture content is not measured')
         self.assertIn(HTM_ID, res['gates']['nothing_lost']['pictures_not_measured'])  # the fixture has one picture: its content is not what the text map measures
 
     def test_a_compared_columns_heading_must_belong_to_the_values_group(self):
@@ -807,7 +870,7 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(self.check(self.run_grader(fragments(c2=3)), 'pkt/T01', 'value')['reason'], 'spacing')  # two cells show two numbers
         def apart(r):  # the same two pieces whose own anchors do not touch in the source: a boundary the tool made
             v = self.cell(r, 'v1'); cells = self.cells(r); i = cells.index(v)
-            cells[i:i + 1] = [dict(v, text='76', anchor=self.sub('v1', '76')), dict(v, text='9', anchor=dict(self.sub('v1', '9'), byte_start=self.sub('v1', '9')['byte_start'] + 1))]
+            nine = self.sub('v1', '9'); cells[i:i + 1] = [dict(v, text='76', anchor=self.sub('v1', '76')), dict(v, text='9', anchor=dict(nine, byte_start=nine['byte_start'] + 1, byte_end_exclusive=nine['byte_end_exclusive'] + 1))]  # one byte later: the '9' itself lies between the pieces (an empty span would be no position at all)
         self.assertEqual(self.check(self.run_grader(apart), 'pkt/T01', 'value')['reason'], 'spacing')
         t = {'key_id': 'syn/P', 'file_id': 'x/deck.pdf', 'format': 'cell/pdf', 'type': 'cell', 'split': 'development', 'anchor': {'page': 1, 'region': [100, 100, 200, 120]},
              'table_anchor': {'page': 1, 'region': [0, 0, 600, 400]}, 'fields': {'printed_value': '1234', 'row_label': 'Revenue'}, 'alternatives': {}, 'excluded': set(), 'support': {}}
@@ -1012,9 +1075,6 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(grade.match_pieces(['Three Months Ended', 'December 28, 2024'], ['Three Months Ended', 'December 28, 2024'], []), (True, None))
         self.assertEqual(grade.match_pieces(['Months Ended', 'December 28, 2024'], ['Three Months Ended', 'December 28, 2024'], []), (False, None))
         self.assertEqual(grade.match_pieces(['Three Months Ended', 'December 28, 2024', 'Extra'], ['Three Months Ended', 'December 28, 2024'], []), (False, None))
-
-    def unit(self, r, id_):
-        return next(u for u in self.html(r) if u['id'] == id_)
 
     def test_footnote_mark_inside_a_paragraph_and_note_as_paragraph_pass(self):
         res = self.run_grader()
@@ -1566,19 +1626,30 @@ class PlantedFaultTests(GraderFixture):
 
     def test_a_paragraph_read_whole_across_a_page_break_carries_the_block_on_its_page(self):
         # owner decision (e), 2026-10-04: a genuinely continuous paragraph is accepted when the target text is preserved in order and mapped to the correct source page
-        def block_row(unit, want='Start of three. More words.'):
-            t = {'key_id': 'syn/B1', 'file_id': 'syn/f.pdf', 'format': 'structure/pdf', 'type': 'structure', 'split': 'development', 'anchor': {'page': 3, 'region': [0, 0, 100, 20]},
-                 'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_text': want, 'kind': 'paragraph'}}
+        def block_row(unit, want='Start of three. More words.', region=(0, 0, 100, 20), approximate=False):
+            t = {'key_id': 'syn/B1', 'file_id': 'syn/f.pdf', 'format': 'structure/pdf', 'type': 'structure', 'split': 'development', 'anchor': {'page': 3, 'region': list(region)},
+                 'alternatives': {}, 'excluded': set(), 'support': {}, 'fields': {'printed_text': want, 'kind': 'image' if approximate else 'paragraph'}, **({'approximate': True} if approximate else {})}
             g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [unit], 'pages': {2: [612, 792], 3: [612, 792]}}, None, 'pdf')); g.grade_structure()
             r = next(r for r in g.rows if r['check'] == 'printed_text'); return r['verdict'], r.get('reason'), r.get('detail')
         across = {'id': 'p', 'kind': 'text', 'text': 'End of two. Start of three. More words.', 'anchor': [{'page': 2, 'region': [0, 700, 100, 792], 'charspan': [0, 11]}, {'page': 3, 'region': [0, 0, 100, 20], 'charspan': [12, 39]}]}
         self.assertEqual(block_row(across), ('pass', None, {'continued': True}))  # the block is the part of the paragraph the route maps to page 3
-        self.assertEqual(block_row(dict(across, text='End of two. More words. Start of three.'))[0], 'fail')  # not in order
-        self.assertEqual(block_row(across, want='End of two.')[0], 'fail')  # Codex R13 C2: the words the key wants on page 3 are mapped to page 2
+        self.assertEqual(block_row(dict(across, text='End of two. More words. Start of three.'))[:2], ('fail', 'text'))  # not in order
+        self.assertEqual(block_row(across, want='End of two.')[:2], ('fail', 'page'))  # Codex R13 C2: the words the key wants on page 3 are mapped to page 2 — a contradiction, named as such
         unmapped = lambda spans_: [{k: v for k, v in a.items() if k != 'charspan'} for a in spans_]
         self.assertEqual(block_row(dict(across, anchor=unmapped(across['anchor'])))[:2], ('unresolved', 'page_map'))  # pages listed, no character mapping: which page holds the words is unknown
+        self.assertEqual(block_row(dict(across, anchor=unmapped(across['anchor'])), want='End of two. Start of three. More words.')[:2], ('unresolved', 'page_map'))  # even when the whole text is the key's: the mapping comes before any acceptance (Codex R14-1)
         self.assertEqual(block_row(dict(across, anchor=[across['anchor'][0], dict(across['anchor'][1], charspan=[12, 99])]))[:2], ('unresolved', 'page_map'))  # a span outside the text maps nothing
-        self.assertEqual(block_row(dict(across, anchor={'page': 3, 'region': [0, 0, 100, 20]}))[0], 'fail')  # one page only: extra text is a boundary fault, as before
+        self.assertEqual(block_row(dict(across, anchor={'page': 3, 'region': [0, 0, 100, 20]}))[:2], ('fail', 'text'))  # one page only: extra text is a boundary fault, as before
+        exact = dict(across, text='Start of three. More words.', anchor=[{'page': 2, 'region': [0, 700, 100, 792], 'charspan': [0, 26]}, {'page': 3, 'region': [0, 0, 100, 20], 'charspan': [26, 27]}])
+        self.assertEqual(block_row(exact)[:2], ('fail', 'page'))  # Codex R14-1: the text is exactly the key's, but the route maps all of it except the final period to page 2
+        two = dict(across, text='Other. Wrong. Start of three. More words.', anchor=[{'page': 2, 'region': [0, 700, 100, 792], 'charspan': [0, 6]}, {'page': 3, 'region': [0, 0, 100, 20], 'charspan': [7, 13]}, {'page': 3, 'region': [0, 200, 100, 220], 'charspan': [14, 41]}])
+        self.assertEqual(block_row(two)[:2], ('fail', 'page'))  # Codex R14-1: the key's region holds 'Wrong.'; the key's words sit in another region of the same page
+        self.assertEqual(block_row(two, region=(0, 200, 100, 220)), ('pass', None, {'continued': True}))  # the key's own region
+        self.assertEqual(block_row(two, want='Wrong.')[:2], ('pass', None))
+        boxes = dict(across, anchor=[{'page': 3, 'region': [0, 0, 100, 20]}, {'page': 3, 'region': [0, 30, 100, 50]}])
+        self.assertEqual(block_row(boxes, want='End of two. Start of three. More words.', region=(0, 0, 100, 50))[:2], ('pass', None))  # the key covers every box of the unit: the whole text, no mapping needed
+        self.assertEqual(block_row(exact, approximate=True)[:2], ('fail', 'page'))  # Codex R14-3: a picture's words mapped to another place are no approximate reading
+        self.assertEqual(block_row(dict(across, text='End of two. Start of three. More wordz.'), approximate=True)[0], 'approximate')  # a transcription difference is
 
     def test_wer_counts_insertions_substitutions_and_deletions_over_the_reference(self):
         # Codex N3: the old figure was a similarity distance — three inserted words scored zero

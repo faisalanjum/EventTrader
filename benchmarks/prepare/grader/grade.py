@@ -236,16 +236,18 @@ class RouteFile:
         self.vis = Visible(raw, xml=ext == '.xml') if raw is not None and ext in ('.htm', '.html', '.xml', '.txt') else None  # PDFs/pictures: geometry only
         self.raw, self.raw_len = raw, (len(raw) if raw is not None else None)
         self.pages = {int(k): v for k, v in (data.get('pages') or {}).items()}  # page sizes [width, height] declared by the route, if any
+        for x in [*self.units, *(c for _, c in self.cells)]:  # a byte anchor outside the source, or malformed, is a position that cannot be true: it locates nothing and the gate counts it dishonest (Codex R14-3)
+            if any('byte_start' in a and not (type(a.get('byte_start')) is int and type(a.get('byte_end_exclusive')) is int and 0 <= a['byte_start'] < a['byte_end_exclusive'] <= (self.raw_len if self.raw_len is not None else a['byte_end_exclusive'])) for a in spans(x.get('anchor'))): x['_bad_anchor'] = True
         # byte index: cells sorted by first byte, with the longest span, so a lookup scans a small window
         byte_cells = [(min(a['byte_start'] for a in sp), max(a['byte_end_exclusive'] for a in sp), u, c)
-                      for u, c in self.cells for sp in [[a for a in spans(c.get('anchor')) if 'byte_start' in a]] if sp]
+                      for u, c in self.cells if not c.get('_bad_anchor') for sp in [[a for a in spans(c.get('anchor')) if 'byte_start' in a]] if sp]
         byte_cells.sort(key=lambda x: x[0])
         self._starts, self._byte_cells = [x[0] for x in byte_cells], byte_cells
         self._max_len = max([e - b for b, e, _, _ in byte_cells], default=0)
         self._box_cells = [(u, c) for u, c in self.cells if any('region' in a for a in spans(c.get('anchor')))]
 
     def units_at(self, anchor, kinds=None, exclude=('table', 'clutter')):
-        return [u for u in self.units if u.get('kind') not in exclude and (kinds is None or u.get('kind') in kinds) and overlap(u.get('anchor'), anchor)]
+        return [u for u in self.units if u.get('kind') not in exclude and (kinds is None or u.get('kind') in kinds) and not u.get('_bad_anchor') and overlap(u.get('anchor'), anchor)]
 
     def cells_at(self, anchor, table=None):
         """Cells overlapping an anchor, from one table or any. Touching PDF boxes: only the best-overlapping cells."""
@@ -360,17 +362,29 @@ def strings_in(value):
     return []
 
 
-def continuous(unit, anchor, want):
-    """Is the key's text the part of this unit that the route maps to the key's page? The unit is one block read across a page break (its anchor
-    lists several pages, the key's among them) and the route's per-page character spans (`charspan`) put `want` inside the key's page (owner
-    decision (e), 2026-10-04; Codex R13 C2). None when the route maps no characters to that page: the split is unknown, the verdict unresolved.
-    False when the mapping puts the text elsewhere, or the unit is not such a block."""
-    spans_ = unit.get('anchor') if isinstance(unit.get('anchor'), list) else []
-    pages = {a.get('page') for a in spans_ if isinstance(a, dict) and 'page' in a}
-    if not (len(pages) > 1 and isinstance(anchor, dict) and anchor.get('page') in pages): return False
-    text, own = unit.get('text', ''), [a.get('charspan') for a in spans_ if isinstance(a, dict) and a.get('page') == anchor.get('page')]
-    if not all(isinstance(c, list) and len(c) == 2 and 0 <= c[0] <= c[1] <= len(text) for c in own): return None
-    return any(contains(text[a:b], want) for a, b in own)
+def mapped_part(unit, anchor):
+    """The part of a unit's text that lies at the key's anchor, from the route's own mapping (owner decision (e); Codex R13 C2, R14-1). A unit at
+    one place, a unit whose places the key's anchor all overlaps, a table (its cells carry their own places) or a unit placed by bytes (the gate
+    certifies its text block by block): its whole text, 'whole'. A unit over several page places (a block across a page break, several boxes)
+    of which the key overlaps some: the characters the route maps to those places — `charspan` per place, validated here again: integer bounds
+    inside the text, in order, none reaching back — 'mapped'; with no valid mapping, None, 'unmapped': which words lie at the key's place is
+    unknown. The key never chooses the split."""
+    spans_ = spans(unit.get('anchor')); text = unit.get('text', ''); own = [a for a in spans_ if overlap(a, anchor)]
+    if len(spans_) < 2 or len(own) == len(spans_) or unit.get('kind') == 'table' or not all('region' in a for a in spans_): return text, 'whole'
+    cs = [a.get('charspan') for a in spans_]
+    if not (all(isinstance(c, list) and len(c) == 2 and all(type(v) is int for v in c) and 0 <= c[0] <= c[1] <= len(text) for c in cs) and all(cs[i][0] >= cs[i - 1][1] for i in range(1, len(cs)))): return None, 'unmapped'
+    part, end = '', None
+    for a in own:
+        s, e = a['charspan']; part += ('' if end is None or s == end else ' ') + text[s:e]; end = e
+    return part, 'mapped'
+
+
+def owners(units):
+    """Of the field units at one source position, the innermost: those inside which no other of them lies (the field inside prose, not the prose).
+    Several innermost units — the same bytes claimed twice — are an ambiguity to report, never a choice by the wanted value (Codex R14-2)."""
+    first = lambda u: (spans(u.get('anchor')) or [{}])[0]
+    inside = lambda a, b: 'byte_start' in a and 'byte_start' in b and (a['byte_start'], a['byte_end_exclusive']) != (b['byte_start'], b['byte_end_exclusive']) and b['byte_start'] <= a['byte_start'] and a['byte_end_exclusive'] <= b['byte_end_exclusive']
+    return [u for u in units if not any(o is not u and inside(first(o), first(u)) for o in units)]
 
 
 def struck_kept(key_texts, items, anchors=(), vis=None, markers=()):
@@ -569,37 +583,61 @@ def heading_eq(a, b):
     return boundary_equal(_CONTINUED.sub('', norm(a)), _CONTINUED.sub('', norm(b)))
 
 
-NEG = {'not', 'no', 'never', 'none', 'nor', 'without', 'cannot'}  # the critical token classes of an approximate text (E10 R4): negation words ...
-UNIT = {'thousand', 'thousands', 'million', 'millions', 'billion', 'billions', 'percent', 'bps'}  # ... unit words; numbers and dates by their digits
-_TOKEN = re.compile(r"[(\-+]?\$?\d(?:[\d,]|[./:-](?=\d))*%?\)?|[A-Za-z']+|[^\sA-Za-z\d]")  # a number keeps its sign, parentheses, currency, percent, and separators between digits only
+NEG = {'not', 'no', 'never', 'none', 'nor', 'without', 'cannot'}  # negation: a closed grammatical class, read with the word it governs (E10 R4)
+_TOKEN = re.compile(r"[(\-+]?\d(?:[\d,]|[./:-](?=\d))*%?\)?|[^\W\d_]+(?:'[^\W\d_]+)*|\S")  # a number with sign, parentheses, percent and separators between digits; a word; any other symbol alone
+_digit = lambda w: any(c.isdigit() for c in w)
+_symbol = lambda w: len(w) == 1 and unicodedata.category(w) in ('Sc', 'Sm')  # a currency or mathematical sign, by Unicode class, no list of ours
+_neg = lambda w: w.lower() in NEG or w.lower().endswith("n't")
+
+
+def reading_units(s):
+    """Reading units of an approximate text: a currency or sign symbol joined to its number ('€20', '20%'), a number joined to the word that follows
+    it — its unit or qualifier ('10 shares', '20 million'; deliberately also an ordinary word, so a changed word beside a number counts as critical),
+    a negation joined to the word it governs ('not buy'); other words and symbols alone."""
+    out = []
+    for w in _TOKEN.findall(norm(s).replace('−', '-')):
+        last = out[-1] if out else None
+        if last is not None and ' ' not in last and ((_symbol(last) and _digit(w)) or (_digit(last) and (_symbol(w) or w[:1].isalpha())) or (_neg(last) and w[:1].isalpha())):
+            out[-1] = last + ('' if _symbol(last) or _symbol(w) else ' ') + w
+        else: out.append(w)
+    return out
 
 
 def critical(got, want):
-    """The critical tokens that differ between an approximate (OCR) text and its reference, by ordered alignment, never multisets (Codex R13): numbers
-    with their sign, parentheses, currency and percent; other tokens holding digits (dates); unit words; negation words. A swapped pair of values,
-    a dropped minus and a negation moved to another clause all show. {'missing': from the reference, 'extra': in the output, 'reference_numbers'}."""
-    neg = lambda w: w.lower() in NEG or w.lower().endswith("n't")
-    def tok(s):
-        words, out = _TOKEN.findall(norm(s).replace('−', '-')), []
-        for w in words: out[-1:] = [out[-1] + ' ' + w] if out and neg(out[-1].split()[0]) and ' ' not in out[-1] else out[-1:] + [w]  # a negation is read with the word it governs: 'not buy' and 'not sell' are different facts
-        return out
-    crit = lambda w: any(c.isdigit() for c in w) or neg(w.split()[0]) or w.lower() in UNIT
-    a, b = tok(want), tok(got); ca, cb = [w for w in a if crit(w)], [w for w in b if crit(w)]; missing, extra = [], []
-    if len(ca) == len(cb) and ca != cb: missing, extra = [x for x, y in zip(ca, cb) if x != y], [y for x, y in zip(ca, cb) if x != y]  # as many critical tokens, read in order: every changed place (two swapped values both show; an aligner may pair one of them elsewhere)
-    else:  # otherwise the whole text aligned: a critical token outside a matching stretch is missing or extra (a negation moved to another clause shows)
-        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
-            if op != 'equal': missing += [w for w in a[i1:i2] if crit(w)]; extra += [w for w in b[j1:j2] if crit(w)]
-    return {'missing': missing, 'extra': extra, 'reference_numbers': sum(1 for w in a if any(c.isdigit() for c in w))}
+    """Every ordered difference between an approximate (OCR) text and its reference, and which of them touch critical facts (E10 R4; Codex R13,
+    R14-5). `edits`: the aligned spans that differ (reference tokens → output tokens), nothing filtered. `critical`: among them the tokens holding a
+    digit, a currency or sign symbol, or a negation — compared position by position when both texts hold as many such tokens (two swapped values
+    both show), by the alignment otherwise. `other`: the remaining differences, kept for review, never declared harmless."""
+    crit = lambda w: _digit(w) or any(unicodedata.category(c) in ('Sc', 'Sm') for c in w) or _neg(w.split()[0])
+    a, b = reading_units(want), reading_units(got); ca, cb = [w for w in a if crit(w)], [w for w in b if crit(w)]
+    ops = [(op, a[i1:i2], b[j1:j2]) for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes() if op != 'equal']
+    miss, extra = [w for _, x, _ in ops for w in x], [w for _, _, y in ops for w in y]
+    if len(ca) == len(cb) and ca != cb: cm, ce = [x for x, y in zip(ca, cb) if x != y], [y for x, y in zip(ca, cb) if x != y]
+    else: cm, ce = [w for w in miss if crit(w)], [w for w in extra if crit(w)]
+    return {'edits': [{'op': op, 'reference': x, 'output': y} for op, x, y in ops], 'critical': {'missing': cm, 'extra': ce},
+            'other': {'missing': [w for w in miss if not crit(w)], 'extra': [w for w in extra if not crit(w)]}, 'reference_numbers': sum(1 for w in a if _digit(w))}
+
+
+def wer_counts(got, want):
+    """Word error rate with its parts: the substitutions, deletions and insertions of one minimal edit script that turns the output's words into
+    the reference's, over the reference's words; `recovered` = reference words read as they are (0 for an empty output: zero recovery)."""
+    x, y = norm(want).split(), norm(got).split(); n, m = len(x), len(y)
+    d = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1): d[i][0] = i
+    for j in range(1, m + 1): d[0][j] = j
+    for i in range(1, n + 1):
+        for j in range(1, m + 1): d[i][j] = min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (x[i - 1] != y[j - 1]))
+    s = dl = ins = 0; i, j = n, m
+    while i or j:  # back along one minimal path: a match or substitution first, then a deletion, then an insertion
+        if i and j and d[i][j] == d[i - 1][j - 1] + (x[i - 1] != y[j - 1]): s += x[i - 1] != y[j - 1]; i -= 1; j -= 1
+        elif i and d[i][j] == d[i - 1][j] + 1: dl += 1; i -= 1
+        else: ins += 1; j -= 1
+    return {'reference': n, 'recovered': n - s - dl, 'substituted': s, 'deleted': dl, 'inserted': ins, 'rate': round((s + dl + ins) / max(1, n), 3)}
 
 
 def wer(got, want):
     """Word error rate: the substitutions, deletions and insertions that turn the output's words into the reference's, over the reference's words."""
-    x, y = norm(want).split(), norm(got).split()
-    d = list(range(len(y) + 1))
-    for i, a in enumerate(x, 1):
-        prev, d[0] = d[0], i
-        for j, b in enumerate(y, 1): prev, d[j] = d[j], min(d[j] + 1, d[j - 1] + 1, prev + (a != b))
-    return round(d[-1] / max(1, len(x)), 3)
+    return wer_counts(got, want)['rate']
 
 
 # ------------------------------------------------------------------------------------------------- grading one
@@ -1033,8 +1071,9 @@ class Grader:
     # ---- XML
     def grade_xml(self):
         t, rf = self.t, self.rf
-        V = rf.units_at(t['anchor'], kinds=('field',), exclude=())
+        V = owners(rf.units_at(t['anchor'], kinds=('field',), exclude=()))  # the field that owns the key's position: the innermost there, never the first in the list nor one picked by the wanted value (Codex R14-2)
         if not V: return None
+        if len(V) > 1: self.row('value', 'unresolved', 'ambiguous'); self.row('row_label', 'unresolved', 'ambiguous'); return V[0]  # the same bytes claimed by several fields
         v = V[0]; f = t['fields']; printed = f.get('printed_value') or ''
         here = xml_element_at(rf.raw, t['anchor']['byte_start'])  # the element whose text the key points at, by its expanded name
         if here is None: self.row('value', 'unresolved', 'input_invalid'); self.row('row_label', 'unresolved', 'input_invalid'); return v
@@ -1060,9 +1099,12 @@ class Grader:
             carries = lambda u: norm(f['unit_printed']) in norm(u.get('text', '')) or norm(f['unit_printed']) == norm(local(u.get('name', '')))  # an XML unit may be a printed text (a security title) or the element's own name (percentOfClass, anchored on its tag)
             declared, fields = (t['support'].get('unit_printed') or {}).get('anchors') or [], [u for u in rf.units if u.get('kind') == 'field']
             if 'unit_printed' in ex: self.row('unit_printed', 'excluded')
-            elif declared:  # the key names the unit's source place: the field read there must carry it, no other field stands in (Codex R13 C3)
-                at = [u for u in fields if any(overlap(u.get('anchor'), a) for a in declared)]; hit = any(carries(u) for u in at)
-                self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing' if not at else 'text')
+            elif declared:  # the key names the unit's source place: the field that owns that place must carry it, no other field stands in (Codex R13 C3, R14-2)
+                found = [owners([u for u in fields if overlap(u.get('anchor'), a)]) for a in declared]
+                if any(len(o) > 1 for o in found): self.row('unit_printed', 'unresolved', 'ambiguous')
+                else:
+                    at = [o[0] for o in found if o]; hit = any(carries(u) for u in at)
+                    self.row('unit_printed', 'pass' if hit else 'fail', None if hit else 'missing' if not at else 'text')
             else:  # no declared place: the word in this instance proves no association with the value (unresolved), the word elsewhere none at all
                 near = any(carries(u) for u in fields if (u.get('group') or {}).get('at') == group.get('at'))
                 self.row('unit_printed', 'unresolved' if near else 'fail', 'support' if near else 'missing', 'anchor_unknown')
@@ -1079,26 +1121,27 @@ class Grader:
         carries = lambda u: u.get('kind') != 'table' or any(overlap(c.get('anchor'), t['anchor']) for c in u.get('cells') or [])  # a table whose span covers the block but whose cells lie elsewhere (a flattened nested table) does not carry it
         units = [u for u in units if carries(u)] or units
         if not units: return None
+        parts = {id(u): mapped_part(u, t['anchor']) for u in units}  # each unit's text at the key's place, by the route's own mapping — applied before any comparison (Codex R14-1)
         def text_of(u):
-            if u.get('kind') != 'table': return u.get('text', '')
+            if u.get('kind') != 'table': return parts.get(id(u), (u.get('text', ''), 'whole'))[0] or ''
             cells = [c for c in u.get('cells') or [] if overlap(c.get('anchor'), t['anchor'])] or u.get('cells') or []
             return ' '.join(c.get('text', '') for c in self.merged(cells))
+        mapped, unmapped = any(parts[id(u)][1] == 'mapped' for u in units), any(parts[id(u)][1] == 'unmapped' for u in units)
         want = norm(f.get('printed_text') or ''); got = norm(' '.join(text_of(u) for u in self.merged_units(units)))  # touching pieces read as one; the reference phrase and the WER see the block as printed
-        self.block_spaced = norm(' '.join(spaced(u) if u.get('kind') != 'table' else text_of(u) for u in self.merged_units(units)))  # the other reading, for the unresolved verdict only
+        self.block_spaced = norm(' '.join(spaced(dict(u, text=text_of(u))) if u.get('kind') != 'table' else text_of(u) for u in self.merged_units(units)))  # the other reading, for the unresolved verdict only
         if 'printed_text' in t['excluded']: self.row('printed_text', 'excluded'); ok = True
+        elif unmapped: self.row('printed_text', 'unresolved', 'page_map', {'wer': wer(got, want)}); ok = None  # a unit over several places with no character mapping: which words lie at the key's place is unknown
         else:
             ok, why, frag = self.pieces_match([text_of(u) for u in units], want, [u.get('anchor') for u in units])
-            continued = False
-            if ok is False and len(units) == 1 and contains(text_of(units[0]), want):  # owner 2026-10-04 (e): a paragraph the route reads whole across a page break carries the block when its mapping puts the text on the key's page
-                cont = continuous(units[0], t['anchor'], want)
-                if cont: ok, why, continued = True, None, True
-                elif cont is None: ok, why = None, 'page_map'  # several pages, no character mapping: which page holds the text is unknown
+            if ok is False and len(units) == 1 and mapped and contains(text_of(units[0]), want): ok, why = True, None  # owner 2026-10-04 (e): the block is the part of a paragraph the route read whole across a page break; the part mapped to the key's place holds the key's text in order
+            elif ok is False and why == 'text' and len(units) == 1 and mapped and contains(units[0].get('text', ''), want): why = 'page'  # the words exist in the unit, but the route maps them to another place: a contradiction, not a transcription difference
+            continued = bool(mapped) and ok is True  # the block is the part of a unit the route read across several places, taken by the route's own mapping
             bearing = [c for u in units for c in ([x for x in u.get('cells') or [] if overlap(x.get('anchor'), t['anchor'])] or [u] if u.get('kind') == 'table' else [u])]  # the text-bearing items: a block laid out in a table is its cells at the target's anchor, never the whole table
             if ok:  # the words survive, but a cancelled word may have become active, or the wrong one cancelled
                 kept = struck_kept([f.get('printed_text') or ''], bearing, [t['anchor']], rf.vis, self.markers)
                 if kept is not True: ok, why = kept, 'struck'
-            if t.get('approximate') and ok is not None:  # a picture's text is approximate evidence (owner decision (a), E10 R4): its word error rate and the critical tokens that differ, never a pass
-                self.row('printed_text', 'approximate', None, {'word_error_rate': wer(got, want), 'critical_tokens': critical(got, want)})
+            if t.get('approximate') and (ok is True or (ok is False and why in ('text', 'word_split'))):  # a picture's text is approximate evidence (owner decision (a), E10 R4): the transcription differences are reported, never a pass; a wrong place, a strike or an unknown mapping stays what it is (Codex R14-3)
+                w = wer_counts(got, want); self.row('printed_text', 'approximate', None, {'word_error_rate': w['rate'], 'words': {k: w[k] for k in ('reference', 'recovered', 'substituted', 'deleted', 'inserted')}, **critical(got, want)})
             else: self.row('printed_text', 'pass' if ok else 'unresolved' if ok is None else 'fail', None if ok else why, ({'continued': True} if continued else {'fragmented': frag} if frag else None) if ok else {'wer': wer(got, want)})
         main = next((u for u in units if u.get('kind') != 'table'), units[0])
         if f.get('kind') in LOOSE_KINDS: self.row('kind', 'na', None, main.get('kind'))
@@ -1127,9 +1170,20 @@ class Grader:
 
 
 # --------------------------------------------------------------------------------------------------------- gates
-def gates_for_file(rf, status):
+_IMG = re.compile(rb'<(?:img|svg)\b', re.I)  # the picture elements of HTML: an image reference or an inline drawing
+
+
+def picture_at(rf, byte):
+    """Does the source show a picture and no text at these bytes? Then a unit's text there is a reading of the picture — approximate evidence the
+    bytes cannot certify — whatever the route calls the unit: the source decides, never the output kind (Codex R14-3)."""
+    return not squash(rf.vis.at_any(byte)) and any(_IMG.search(rf.raw[a['byte_start']:a['byte_end_exclusive']]) for a in byte)
+
+
+def gates_for_file(rf, status, excluded=()):
     """Per-file P14 facts: dishonest or missing anchors, duplicate ids, order breaks, uncovered visible text. A check that cannot be
-    made (no text layer, no page sizes, stylesheet-dependent visibility, a PARTIAL route) is reported as None = not measured."""
+    made (no text layer, no page sizes, stylesheet-dependent visibility, a PARTIAL route) is reported as None = not measured. `excluded`: the
+    anchors of targets the package declares out of scoring (page numbers): their characters are subtracted from required-content coverage only,
+    and counted apart (Codex R14-4)."""
     g = {'dishonest': 0, 'unanchored': 0, 'boundary': 0, 'inserted_chars': 0, 'bounds_inconsistent': 0, 'dup_ids': 0, 'order_breaks': 0, 'uncovered': None, 'anchors_measured': True,
          'hidden_chars': rf.vis.hidden_chars if rf.vis else None}
     ids = [u.get('id') for u in rf.units]; g['dup_ids'] = len(ids) - len(set(ids))
@@ -1144,14 +1198,13 @@ def gates_for_file(rf, status):
         items = rf.cells_in(u) if u.get('kind') == 'table' else [u]
         for x in items:
             parts = spans(x.get('anchor'))
-            if u.get('kind') == 'image' or x.get('link_flag') == 'gap': continue  # pictures carry no text to certify
+            if x.get('link_flag') == 'gap': continue  # a derived location between neighbours: it places a picture, certifies nothing, covers nothing
             if not parts:
-                if squash(x.get('text', '')): g['unanchored'] += 1  # text claimed without a source position
+                if squash(x.get('text', '')): g['unanchored'] += 1  # text claimed without a source position, whatever the route calls the unit
                 continue
+            if x.get('_bad_anchor'): g['dishonest'] += 1; continue  # outside the source or malformed (RouteFile): a position that cannot be true, for every kind of unit
             for a in parts:
-                if 'byte_start' in a:
-                    if not (0 <= a['byte_start'] < a['byte_end_exclusive'] <= (rf.raw_len or 0)): g['dishonest'] += 1; break
-                elif 'region' in a:  # no independent page geometry: a region is never certified; its consistency with the route's own sizes is reported
+                if 'region' in a and 'byte_start' not in a:  # no independent page geometry: a region is never certified; its consistency with the route's own sizes is reported
                     g['anchors_measured'] = False; size = rf.pages.get(a.get('page'))
                     if size is not None:
                         x0, y0, x1, y1 = a['region']
@@ -1161,6 +1214,7 @@ def gates_for_file(rf, status):
                 byte = [a for a in parts if 'byte_start' in a]
                 if byte and rf.vis is not None:
                     ranges.extend((a['byte_start'], a['byte_end_exclusive']) for a in byte)
+                    if picture_at(rf, byte): continue  # the source shows a picture and no text here: the unit's text is a reading of the picture, counted under pictures, certified by nothing
                     seen = squash(rf.vis.at_any(byte))
                     if x.get('link_flag') == 'pieced':  # each anchor must read its block of the text; the characters outside the blocks are the tool's insertion
                         nt = norm(x.get('text', '')); idx = [i for i, c in enumerate(nt) if c != ' ']; sq = nt.replace(' ', '')
@@ -1182,7 +1236,10 @@ def gates_for_file(rf, status):
                     if seen != squash(x.get('text', '')): g['dishonest'] += 1
                     elif not boundary_equal(marks_off(rf.vis.at_any(byte), x.get('markers') or []), x.get('text', '')): g['boundary'] += 1  # same characters, a word or number boundary lost or added
     if rf.vis is not None and not rf.vis.certain: g['anchors_measured'] = False  # visibility depends on stylesheet rules this scanner does not read
-    if rf.vis is not None and rf.vis.certain and status == 'OK': g['uncovered'] = rf.vis.uncovered(ranges)
+    if rf.vis is not None and rf.vis.certain and status == 'OK':
+        excl = [(a['byte_start'], a['byte_end_exclusive']) for e in excluded for a in spans(e) if 'byte_start' in a]  # the declared exclusions' own bytes, nothing wider
+        raw_loss, g['uncovered'] = rf.vis.uncovered(ranges), rf.vis.uncovered(ranges + excl)  # raw coverage kept; required-content coverage subtracts the declared bytes only
+        g['excluded_chars'] = sum(len(squash(x['text'])) for x in raw_loss) - sum(len(squash(x['text'])) for x in g['uncovered'])
     g['pictures'] = rf.raw.count(b'<img') if rf.vis is not None and rf.raw is not None else None  # picture content is never measured by the text map
     return g
 
@@ -1208,7 +1265,7 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         files[fid] = {'status': status, 'route_status': (data or {}).get('status'), 'error': (data or {}).get('error'), 'seconds': (data or {}).get('seconds'), 'not_read': (data or {}).get('not_read')}
         routes[fid] = (data or {}).get('route')
         rf = RouteFile(data, raw, mine[0]['format'].split('/')[-1]) if status == 'OK' else None
-        if rf: per_file[fid] = gates_for_file(rf, data.get('status'))
+        if rf: per_file[fid] = gates_for_file(rf, data.get('status'), [t['anchor'] for t in mine if t.get('excluded_target')])
         structure_units = []
         for t in mine:
             if t.get('excluded_target'):  # declared out of scoring by the package (page numbers): reported apart, never a pass
@@ -1227,7 +1284,7 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
             rows.append({'key_id': kid, 'file_id': fid, 'split': next(t['split'] for t in mine if t['key_id'] == kid),
                          'format': next(t['format'] for t in mine if t['key_id'] == kid), 'check': 'order', 'verdict': 'fail' if bad else 'pass',
                          'reason': 'order' if bad else None, 'detail': None})
-            if bad and verdicts[kid] == 'PASS': verdicts[kid] = 'FAIL'
+            if bad and verdicts[kid] in ('PASS', 'APPROXIMATE'): verdicts[kid] = 'FAIL'  # a strict failure outranks an approximate reading (Codex R14-3)
     hidden_files = set() if heldout_detail else {t['file_id'] for t in targets if t['split'] == 'heldout'}
     public = {t['file_id'] for t in targets} - hidden_files  # a file with any held-out target shows counts only
     uncovered = {fid: (g['uncovered'] if fid in public else {'spans': len(g['uncovered']), 'chars': sum(len(squash(x['text'])) for x in g['uncovered'])})
@@ -1247,7 +1304,8 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         'reading_order': {'pass': not ungraded and sum(g['order_breaks'] for g in per_file.values()) == 0, 'breaks': {f: g['order_breaks'] for f, g in per_file.items() if g['order_breaks']}, 'not_measured': ungraded},
         'markers_apart': {'pass': not ungraded and marker_glued == 0, 'glued': marker_glued, 'not_measured': ungraded},
         'nothing_lost': {'pass': not uncovered and not cov_unmeasured, 'measured_pass': not uncovered, 'uncovered': uncovered, 'not_measured': cov_unmeasured,
-                         'measures': 'visible source text; picture content is not measured', 'pictures_not_measured': {f: g['pictures'] for f, g in per_file.items() if g.get('pictures')}},
+                         'excluded_chars': {f: g['excluded_chars'] for f, g in per_file.items() if g.get('excluded_chars')},  # characters of declared exclusions (page numbers) no unit covers: counted apart, never required loss
+                         'measures': 'visible source text; declared exclusions counted apart; picture content is not measured', 'pictures_not_measured': {f: g['pictures'] for f, g in per_file.items() if g.get('pictures')}},
     }
     shown = [t for t in targets if heldout_detail or t['split'] != 'heldout']
     report = {
@@ -1301,9 +1359,9 @@ def markdown(report):
     for split, fmts in s['by_split_format'].items():
         for fmt, c in fmts.items(): out.append(line(split, fmt, c))
     out.append(line('supplement', 'cell', s['supplement']))
-    out += ['', f"Excluded fields (not scored, counted): {s['excluded_fields']}", '', '| check | pass | fail | unresolved | na | excluded | not_t1 |', '|---|---:|---:|---:|---:|---:|---:|']
+    out += ['', f"Excluded fields (not scored, counted): {s['excluded_fields']}", '', '| check | pass | fail | unresolved | approximate | na | excluded | not_t1 |', '|---|---:|---:|---:|---:|---:|---:|---:|']
     for f, c in s['by_field'].items():
-        out.append(f"| {f} | {c.get('pass', 0)} | {c.get('fail', 0)} | {c.get('unresolved', 0)} | {c.get('na', 0)} | {c.get('excluded', 0)} | {c.get('not_t1', 0)} |")
+        out.append(f"| {f} | {c.get('pass', 0)} | {c.get('fail', 0)} | {c.get('unresolved', 0)} | {c.get('approximate', 0)} | {c.get('na', 0)} | {c.get('excluded', 0)} | {c.get('not_t1', 0)} |")
     out += ['', '| failed check | reason | count |', '|---|---|---:|'] + [f'| {c} | {r} | {n} |' for c, d in s['failures_by_reason'].items() for r, n in d.items()]
     if s['unresolved']: out += ['', 'Unresolved (not found at its spot): ' + ', '.join(s['unresolved'])]
     out += ['', '| structure | pass | total |', '|---|---:|---:|'] + [f"| {k} | {v['pass']} | {v['total']} |" for k, v in s['structure'].items()]

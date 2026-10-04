@@ -47,7 +47,7 @@ Tool outputs will change shape (owner, 2026-10-03). The grader therefore reads *
 ```
 
 - **Required** per unit: `id` (unique, stable for the same input), `kind`, `anchor`, and `text` (tables: `cells`, each with `r c rs cs text anchor`, row-major). Units in reading order.
-- **Optional** (reported as "structure" when present): `level`, `header`, `caption`, `markers` (footnote marks kept apart from the number), `notes`, `marker`, `links`/`to`, `struck`, `name`/`path`/`group` (XML).
+- **Optional** (reported as "structure" when present): `level`, `header`, `caption`, `markers` (footnote marks kept apart from the number), `notes`, `marker`, `links`/`to`, `struck`, `name`/`path`/`group`/`siblings`/`mixed`/`within` (XML: the containing instance, the element's own place, prose around child fields, the prose unit a field stands within). An `anchor` is one place or a list of places (a unit over several pages or boxes, a cell pieced from several spans); a page place is `{page, region}` and may carry `charspan: [start, end)` — the characters of the unit's text that lie at that place (Docling's `prov.charspan`), the only way the grader learns which words sit on which page (§37–§38). A page group converted again marks a unit that still straddles it `incomplete` (§36).
 - **Kinds:** `heading text list_item caption footnote table image field clutter other`. `clutter` = dropped on purpose (page numbers, running banners); it counts as accounted for, not lost. A `clutter` unit counts only for the nothing-lost gate; it never satisfies any check in §5.
 - **Anchors:** HTML/XML `{byte_start, byte_end_exclusive}` in the original's bytes; PDF `{page, region: [x0,y0,x1,y1]}` in points, 1-based page, top-left origin; picture files `{file, region}` in pixels, top-left origin. Same conventions as the key. A unit or cell that sits in several source places (a merged stacked header, a prose block printed over several lines) may carry a **list** of anchors.
 - **Status:** `FAILED` (tool error) and `UNSUPPORTED` (format the route does not handle) count every target of that file as not converted; `PARTIAL` marks hand-made fixtures that cover only part of a file (the "nothing lost" gate is skipped for them).
@@ -856,3 +856,61 @@ declaration must name the key target, its file, the file's bytes and the target'
 currency and percent, tokens holding digits, unit words, and a negation read with the word it governs — compared position by position when both texts hold
 as many critical tokens (two swapped values both show) and by ordered alignment otherwise; exact OCR is still not a pass; a dropped picture stays
 unresolved; the other checks of the block (section path, references) stay strict. Package 2 declares nothing and grades as before.
+
+## 38. Round 14 (2026-10-04 06:23, Codex's `ROUND14_CODEX.md` on 625fec468; package 3 approved) — five grading gaps, all reproduced, all closed by class
+
+**Method this round (owner, 06:30: no rushing, think independently, three line-by-line iterations at least, test every item).** Every claim and demand of the
+review went into a ledger (`grader_review_codex_20261003/R14_LEDGER.md`) before any edit; his 18 boundary cases were reproduced on the live code
+first (`codex_probes_live/r14_boundary_probes.py <repo-root>`); each finding was traced to the assumption behind it and every other place that
+assumption lives was changed with it; every new control was shown to fail on 625fec468 (a throwaway worktree) and pass after; the saved outputs were
+regraded on package 2 and previewed on package 3 and every changed number explained against frozen copies of the previous outputs; three self-review
+passes over the full touched functions (false pass; false fail or unresolved; docs ↔ code ↔ tests ↔ numbers).
+
+**What Codex found (all reproduced).** R14-1 the page-break rule was applied only as a rescue after an exact match failed, so a unit whose text was
+exactly the key's passed although its mapping put the words on another page; and it searched every span on the key's page, not the span at the key's
+region. R14-2 `grade_xml` took the first field overlapping the key's position — with units in source order that is the prose parent, so a value inside
+prose failed value, label and path. R14-3 the approximate branch swallowed a wrong-page mapping; an order fault left a picture `APPROXIMATE`; the gate
+trusted the route's `image` label (bounds unchecked, text uncertified) while a `text` unit with the same reading counted dishonest. R14-4 a declared
+page-number block left out counted as required-content loss. R14-5 `critical` kept `$` only and a short unit list, so a changed unit word or currency
+symbol beside a number reported no critical difference; S/D/I counts were missing; the Markdown table had no `approximate` column.
+
+**Mapping before acceptance (`grade.py::mapped_part`, `grade_structure`).** For every unit at the key's anchor, the text the grader compares is the
+part the route maps to the key's place — page and region — taken before any comparison: a unit at one place, or one whose places the key's anchor all
+overlaps, a table (its cells carry their own places) or a unit placed by bytes (the gate certifies its text block by block) contributes its whole text;
+a unit over several page places of which the key overlaps some contributes the characters its `charspan`s map there (validated again in the grader:
+integer bounds inside the text, in order, none reaching back); with no valid mapping the block is **unresolved** (`page_map`) whatever the text says.
+The owner's rule (e) is then: the mapped part holds the key's text in order (`continued`). Words that exist in the unit but are mapped elsewhere fail
+with their own reason, `page` — a contradiction, not a transcription difference. The reference phrase and the word error rate read the mapped parts too.
+
+**The field that owns the position (`owners`; `grade_xml`, `unit_printed`).** Among the field units at the key's position, the innermost — a unit inside
+which no other of them lies — is the one graded; the same bytes claimed by several fields is an ambiguity reported `unresolved`, never a choice by the
+wanted value; a missing child leaves its prose parent to be judged as what it is (value, label and path fail — no silent stand-in). Declared
+`unit_printed` anchors resolve through the same rule.
+
+**Leniency replaces only the transcription comparison (`grade_structure`, the verdict loop, `RouteFile`, `picture_at`, `gates_for_file`).** A declared
+image block is `APPROXIMATE` only when the comparison failed on the words themselves (`text`, `word_split`) or passed; a wrong place (`page`), a strike,
+an unknown mapping, references, section path and order keep their strict outcome, and an order failure now outranks `APPROXIMATE` in the target
+verdict. A byte anchor outside the source or malformed is marked in `RouteFile`: it locates nothing (the unit carries no target) and the gate counts it
+dishonest, for every kind of unit. The gate decides what a picture is from the source — `<img` or `<svg` at the anchor and no visible text there — never
+from the route's label: the same reading as a `text` unit gets the same verdict and the same gate; ordinary source text relabelled `image` is still
+certified against the bytes; picture text without any position counts unanchored. An empty reading is `APPROXIMATE` with zero words recovered, stated
+as such; a missing unit stays unresolved.
+
+**Declared exclusions apart (`gates_for_file(…, excluded)`).** Raw coverage is kept; required-content coverage subtracts only the declared exclusions'
+own bytes; the characters so subtracted are reported per file as `excluded_chars`. An undeclared footer or any other text left out remains a loss.
+
+**The reading, described in full (`reading_units`, `critical`, `wer_counts`).** Reading units of an OCR text: a currency or sign symbol joined to its
+number (`€20`, `20%`), a number joined to the word that follows it — its unit or qualifier (`10 shares`, `20 million`; deliberately also an ordinary
+word, so a changed word beside a number counts as critical), a negation joined to the word it governs (`not buy`). `critical` returns every aligned
+edit span (`edits`: reference tokens → output tokens, nothing filtered), the critical differences (tokens holding a digit, a Unicode currency or sign
+character, or a negation; position by position when both texts hold as many, by the alignment otherwise) and the other differences, kept for review
+and never declared harmless; the unit-name list is gone. `wer_counts` gives reference words, recovered, substituted, deleted and inserted from one
+minimal edit table (the rate is unchanged in value); the approximate row carries all of it; the per-check Markdown table shows `approximate`.
+
+**Verification.** 214 tests (six new controls fail on 625fec468, pass now; the adjacency test's '9' piece moved one byte later, an empty span being no
+position at all). Codex's r4–r14 scripts: 38/38 as expected; his 18 boundary cases: every one as he required (wrong page `fail page`, right region
+`pass continued`, mixed XML child all pass, picture controls `APPROXIMATE`, bad bounds `UNRESOLVED` + dishonest, reversed order `FAIL ['order']`, the
+dropped footer `measured_pass` with `excluded_chars` 1, every critical case flagged with its edit). 48/48 original-document variants. Run 34b (package
+2, regrade of the same 13 route folders): **0 verdict flips, every gate number identical** to run 34 (the only summary difference: the two zero-valued
+verdict keys the declarations added after run 34); round-7 grader: 0 passes lost. Package-3 preview on the same saved outputs: 0 verdict flips; the
+three page-number files now report `excluded_chars` 1, 2 and 2 and their required loss drops by exactly that.
