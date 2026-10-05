@@ -6,7 +6,7 @@ in several source places (a merged stacked header) must come from the adapter wi
 never guesses such a split."""
 from array import array
 from bisect import bisect_left
-from collections import namedtuple
+from collections import Counter, defaultdict, namedtuple
 import html
 from html.entities import html5
 import xml.parsers.expat as expat
@@ -314,6 +314,7 @@ class Visible:
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
         style_cache, sheet_tokens = {}, []
+        self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
         lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
         line = seen = 0; after = fresh = eat = dimmed = False  # where the current line starts in `chars` (after the last break), where its last word ends, and whether a box that must have its line to itself ended on it; `fresh`: the last thing read was a tag, so white space alone after it may be a text of its own; `eat`: the last thing read was a start tag after which the parser drops a line feed; `dimmed`: the file holds a zero opacity
 
@@ -337,6 +338,10 @@ class Visible:
         def leave(k):
             """The open elements from k on end here. Returns whether a visible block ends (a break) and whether a box ends that must have its line to itself."""
             nonlocal veil, touch, struck_computed
+            for d in range(len(stack) - 1, k - 1, -1):  # the tables, rows and cells that end here, innermost first
+                if d in spans: spans.pop(d)[1] = start
+                if stack[d].name == 'table': grid.pop()
+                elif grid and stack[d].name == 'tr': grid[-1][1] = None
             ended = stack[k:]; del stack[k:]
             if any(f.name in _FORMATTING and f.loose for f in ended[1:]): struck_computed = True  # a formatting element left open under a spacing or a containment: the browser opens it again for what follows (after a paragraph, a list item, a table), and struck text there may stand under it — which text is not followed
             apart.extend((len(chars), start, pos) for f in ended if f.strikes and not f.block and f.disp is None and not (f.gone or f.unseen))  # where an element set apart for its strike ends
@@ -451,6 +456,10 @@ class Visible:
                         pre = white in _KEPT or (white in (None, 'inherit', 'unset') and ((white is None and name in _PRE) or (bool(top) and top.pre and name != 'table')))  # outside standards mode the browser's own sheet resets white-space at a table: what a table inherits is not taken as kept
                         stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre, (bool(top) and top.loose) or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                         if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
+                        if name == 'table': self.tables.append([]); grid.append([self.tables[-1], None])
+                        elif grid and name in ('tr', 'thead', 'tbody', 'tfoot'): grid[-1][1] = None  # a row or a group of rows starts: the row before it has ended
+                        if grid and name in ('tr', 'td', 'th') and grid[-1][1] is None: grid[-1][1] = []; grid[-1][0].append(grid[-1][1])
+                        if grid and name in ('td', 'th'): spans[len(stack) - 1] = [start, len(raw)]; grid[-1][1].append(spans[len(stack) - 1])
                         if inside in _TABLE and name not in _PARTS and name != 'table': f = stack[-1]; computed |= f.declares or f.pre != top.pre or (name in _FORMATTING and bool(f.block or f.edge)); struck_computed |= f.struck != top.struck  # no part of a table, standing in one outside any cell: the parser moves the element out and leaves the rows behind — what it hides, strikes or keeps of white space does not reach them, and a formatting element it opens again inside the cells: one with a box of its own is not followed
                 hidden = bool(stack) and (stack[-1].gone or stack[-1].unseen)
                 if brk: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0); line, after = len(chars), False  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
@@ -566,6 +575,39 @@ def chain(pairs):
     return out[::-1]
 
 
+def table_places(vis, items, keys):
+    """Where the cells of a tool's table may stand when that table is one table of the source — the same texts, each as often, in exactly one table on either side:
+    {id(cell): (places in `vis.flat`, the first, the last)}, and those places by text — kept for these cells: no other item may take one (a text the tool lists before
+    its table would take a cell's place and leave the cell none; Codex G2-C1). A cell may stand where a source cell of the table reads as it does; where the tool kept the table's rows
+    (the same rows by their texts) and a row's texts single it out, only in that row — a text the row holds twice in the row's order — so that a repeated label stays
+    with its values when the tool moves rows (Codex's worktree, test_table_sources). Texts are evidence, never the order of tables: of two tables that read alike none is tied."""
+    holds = lambda texts: tuple(sorted(Counter(t for t in texts if t).items()))  # the texts of a table or of a row, each with its number, in no order
+    mine, alike, source, out, reserved = defaultdict(list), defaultdict(list), defaultdict(list), {}, defaultdict(set)
+    for (u, c), key in zip(items, keys):
+        if c is not u: mine[id(u)].append((key, c))
+    for cells in mine.values(): alike[holds(key for key, _ in cells)].append(cells)
+    for table in vis.tables if mine else ():
+        rows = [[(vis.flat[a:b], a) for a, b in ((bisect_left(vis.s, x), bisect_left(vis.s, y)) for x, y in row)] for row in table]
+        source[holds(text for row in rows for text, _ in row)].append(rows)
+    for texts, tables in alike.items():
+        if len(tables) != 1 or len(source.get(texts, ())) != 1: continue
+        theirs, ours, anywhere = defaultdict(list), defaultdict(list), defaultdict(set)
+        for row in source[texts][0]:
+            theirs[holds(text for text, _ in row)].append(row)
+            for text, at in row: anywhere[text].add(at)
+        anywhere = {text: (at, min(at), max(at)) for text, at in anywhere.items() if text}
+        for text, (at, _, _) in anywhere.items(): reserved[text] |= at
+        for key, c in tables[0]: ours[c.get('r')].append((key, c))
+        ours = [(holds(key for key, _ in row), row) for row in ours.values()]
+        kept = Counter(h for h, _ in ours if h) == Counter({h: len(v) for h, v in theirs.items() if h})  # the tool's rows are the source's rows
+        for h, row in ours:
+            own = defaultdict(list)  # a row that is one row of the source: each text's places in it, in the source's order — the n-th cell that reads so is the n-th there
+            for text, at in theirs[h][0] if kept and len(theirs[h]) == 1 else (): own[text].append(at)
+            for key, c in row:
+                if key: out[id(c)] = ({own[key][0]}, own[key][0], own[key].pop(0)) if own else anywhere[key]
+    return out, reserved
+
+
 def link(raw, units, xml=False):
     """Give every unit and cell a byte anchor from the visible stream. Long texts are placed in order first; short ones
     only between their anchored neighbours; pictures and empty units take the gap between neighbours.
@@ -575,32 +617,34 @@ def link(raw, units, xml=False):
     keys = [squash(c.get('text', '')) if u.get('kind') != 'image' else '' for u, c in items]
     same_text = {}  # the items that carry each text, found once: asking every item again for each placement took time with the square of their number (Codex's worktree)
     for k, key in enumerate(keys): same_text.setdefault(key, []).append(k)
+    (allowed, reserved), anywhere = table_places(vis, items, keys), (None, 0, len(vis.flat))
 
     def place(i, lo, hi, forward_only):
         """Anchor item i inside flat[lo:hi]; forward search first, else the nearest earlier occurrence (flagged)."""
         obj, n = items[i][1], keys[i]
         marks = [squash(m) for m in obj.get('markers') or () if squash(m)]; allm = ''.join(marks)
+        ok, first, final = allowed.get(id(obj), anywhere); lo, hi = max(lo, first - len(allm)), min(hi, final + len(n) + len(allm))  # a cell of a table that is one table of the source: only at its places there
+        free = ok.__contains__ if ok else lambda j, held=reserved.get(n, ()): j not in held  # any other item: never at a place kept for such a cell
         taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i}  # copies of this text other units already hold
         found = []
         for k in ([allm + n, n + allm] if marks else []) + [n]:
             off = len(allm) if marks and k == allm + n else 0; j = vis.flat.find(k, lo, hi)
-            while j >= 0 and j + off in taken: j = vis.flat.find(k, j + 1, hi)
+            while j >= 0 and (j + off in taken or not free(j + off)): j = vis.flat.find(k, j + 1, hi)
             if j >= 0: found.append((j, -len(k), k))
         j, _, key = min(found) if found else (-1, 0, n)  # marks kept apart sit right before or right after the text; the earliest start wins,
         flag = None                                      # because a mark that follows may belong to the next cell
         if j < 0 and not forward_only:
-            key, j, flag = n, vis.flat.rfind(n, 0, lo + len(n)), 'out_of_order'  # found only before the window: the tool moved it
-            while j >= 0 and j in taken: j = vis.flat.rfind(n, 0, j)
+            key, j, flag = n, vis.flat.rfind(n, first, min(lo, final) + len(n)), 'out_of_order'  # found only before the window: the tool moved it
+            while j >= 0 and (j in taken or not free(j)): j = vis.flat.rfind(n, first, j)
         if j < 0: obj['anchor'] = None; obj['link_error'] = 'not_in_source'; return None
         left, end, used = j, j + len(key), set(range(len(marks))) if key != n else set()
         for k in reversed(range(len(marks))):  # marks not covered by the key: right before the text (inside this window) ...
             if k not in used and left - len(marks[k]) >= lo and vis.flat.startswith(marks[k], left - len(marks[k])): left -= len(marks[k]); used.add(k)
         for k in range(len(marks)):  # ... or right after it
             if k not in used and vis.flat.startswith(marks[k], end): end += len(marks[k]); used.add(k)
-        j = left
         if flag: obj['link_flag'] = flag
         obj.pop('link_error', None)
-        obj['anchor'] = {'byte_start': vis.s[j], 'byte_end_exclusive': vis.e[end - 1]}
+        obj['anchor'] = {'byte_start': vis.s[left], 'byte_end_exclusive': vis.e[end - 1]}  # the anchor takes the marks in; the position given back stays the text's own — given as the first mark's, a second unit that reads the same took the same copy (Codex G2-R2)
         ranges.append((obj['anchor']['byte_start'], obj['anchor']['byte_end_exclusive']))
         return (j + (len(key) - len(n) if key == allm + n and allm else 0), end)  # the text's own start: one copy, one unit
 
@@ -613,7 +657,7 @@ def link(raw, units, xml=False):
         The blocks become a list anchor; the text's characters outside them are the tool's insertions (`inserted_chars`); the source's
         characters between them stay uncovered."""
         obj, n = items[i][1], keys[i]
-        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i}
+        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i} | reserved.get(n, set())  # (and no place kept for a table's cell that reads so)
         j = vis.flat.find(n[:SHORT], lo, hi)
         while j >= 0 and j in taken: j = vis.flat.find(n[:SHORT], j + 1, hi)
         if j < 0: return None
@@ -643,14 +687,16 @@ def link(raw, units, xml=False):
         """A copy of this text that no unit with the same text holds yet, anywhere in the source: a tool that lists repeated
         blocks out of order still gets one unit per copy. Flagged, because it was not where its neighbours said."""
         n = keys[i]; taken = {pos[k][0] for k in same_text[n] if pos[k]}; m = sum(len(squash(x)) for x in items[i][1].get('markers') or ())
-        j = vis.flat.find(n)
+        ok, first, final = allowed.get(id(items[i][1]), anywhere); held = reserved.get(n, ()); j = vis.flat.find(n, first)
         while j >= 0:
-            if j not in taken:
+            if j not in taken and (j in ok if ok else j not in held):
                 hit = place(i, max(0, j - m), j + len(n) + m, forward_only=True)
                 if hit: items[i][1]['link_flag'] = 'out_of_order'
                 return hit
-            j = vis.flat.find(n, j + 1)
+            j = vis.flat.find(n, j + 1, final + len(n))
         return None
+    for i in range(len(items)):  # first, the cells with one place they may stand at — unambiguous, whatever order the tool lists its cells in
+        if len(allowed.get(id(items[i][1]), anywhere)[0] or ()) == 1: pos[i] = place(i, 0, len(vis.flat), forward_only=True)
     for i, n in enumerate(keys):  # pass 1: long texts that occur exactly once in the source — unambiguous, whatever order the tool used
         if len(n) < SHORT: continue
         j = vis.flat.find(n)
@@ -660,9 +706,10 @@ def link(raw, units, xml=False):
         lo, hi = window(i)
         pos[i] = place(i, lo, hi, forward_only=True) or unclaimed(i) or piece(i, lo, hi) or place(i, lo, hi, forward_only=False)
     for i, n in enumerate(keys):  # pass 3: short texts, only between their anchored neighbours, never far ahead by elimination
-        if not n or len(n) >= SHORT: continue
+        if not n or len(n) >= SHORT or pos[i]: continue
         lo, hi = window(i)
         pos[i] = place(i, lo, hi, forward_only=False)  # not in its window: the nearest earlier occurrence, flagged
+        if not pos[i] and id(items[i][1]) in allowed: pos[i] = unclaimed(i)  # a cell whose places are known stands at one of them: the first that is free (elimination is no guess here)
     last = -1
     for i in range(len(items)):  # a unit placed before the one the tool listed ahead of it: the tool moved it
         if not pos[i] or items[i][1].get('link_flag'): continue

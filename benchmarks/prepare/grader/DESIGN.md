@@ -1474,3 +1474,87 @@ must be `APPROXIMATE` and the approximate row must report the planted damage (no
 reading-order test asked only that the gate was not passed, which a one-file route never does (the other files are not measured): it now asks for a break in the damaged
 file itself and for none in every valid control (Codex's patch; with the order detector switched off the test fails). 48/48 under package 3 and under package 2.
 
+## 45. The worktree merge, groups 1 and 2 (2026-10-05; Codex's six groups of `CODEX_RUN35_VERDICT.md`; Fable implements, Codex reviews each; run 35 stays the baseline)
+
+Codex's worktree (`prepare_work/tool_selection_20261004/code`, 38 changed files) is merged group by group; nothing is copied whole, and each piece is measured on the
+saved development routes before it is kept. The worktree itself is only read.
+
+**Group 1 — the linker finds the items that carry a text once (`0d10d0256`; `CODEX_MERGE_G1_VERDICT.md`: APPROVE).** `anchor.link` asked every item again, at each
+placement, whether it carries the same text (time with the square of the items); the index `same_text` is built once. All 660 development route files of run 35 link to
+the same bytes, the 13 routes regrade to the 39 graded files of run 35, 4,000 repeated-text cases read alike; link time on two 60-file routes 280.0 s → 72.2 s and
+263.8 s → 68.6 s, peak memory unchanged.
+
+**Group 2 — a table is placed in its own table, a row in its own row.** *The defect.* The linker placed a short text between its anchored neighbours wherever those
+words stood next. A table cell that reads like a cell of another table, or of another row, was then tied to the wrong one whenever the tool's order and the source's
+differ (a header row the tool lists first, a moved row, a repeated label). On the EdgarTools development route 224 of 73,366 table rows had their cells in several rows
+of the source, 50 tables had cells in another table, 172 cells had no place at all; the steps that read the links inherit it — the screen step set those cells in the
+wrong row or column. Two failures of run 35 were this, not the tool: Carnival's header years 2017–2022 stood linked in the twin table before theirs
+(`bundle-015/0000815097-23-000012:T05`, the one failing cell of the best route), Levi's repeated period labels in reverse column order (`bundle-009/0000094845-24-000045:T01`, `T02`).
+
+*The rule (`anchor.table_places`).* A table of the tool is tied to a table of the source when both hold the same texts, each as often, and no other table on either side
+does. Its cells are then placed only where a cell of that source table reads as they do. Where the tool kept the table's rows — the same rows by their texts — a row whose
+texts single it out is tied to its source row: its cells stand in that row, a text the row holds twice in the row's order. Such cells have one place and are placed first,
+whatever order the tool lists them in; the others are placed as before, between their neighbours, but only at their table's cells; one left without a place takes the first
+of its places that is free. The places of a tied table are kept for its cells: no other item takes one — a paragraph the tool lists before its table took a cell's
+place, and the cell, left with none, was pieced together on the paragraph, outside its table (Codex G2-C1). So every cell of a tied table that has text stands exactly
+at one of its places: on 20,000 random sources (186,463 such cells, `g2_fuzz_tied.py`) none is lost, pieced, doubled or displaced by another unit — the first
+candidate lost 621 and pieced 30; a guard on the piecing alone turns those 30 into losses. Texts are the only evidence: two tables that read alike, two rows that read alike, are not told apart and are taken in order as before; a table
+whose cells the tool changed, merged or dropped is not tied and is placed as before. No name, number or word of any document stands in the rule.
+
+*The source's tables are the scanner's own record (`Visible.tables`)*: every table in order, its rows, each row the byte spans of its own cells — a nested table is a
+table of its own, a cell outside any row stands in the row the parser makes for it, comments, scripts, quoted attributes and raw text hold no cell (the worktree's
+tokenizer cases, asked of the scanner). The scanner reads nothing differently: on 22,483 real HTML documents and 4,377 XML documents its whole reading (certainties,
+text, byte spans, struck characters) is the same as before. The record is the worktree's own reader's (an `HTMLParser` pass) and a plain search for cell tags on all
+22,423 documents of the rehearsal download (440,294 tables, 9,449,984 cells), and Chrome's own tree on the 60 development originals (951,927 cells: table, row, text).
+A second reader of HTML was not taken over.
+
+*A position that was a mark's* (Codex G2-R2; in main since the marks were added). `place` gave back, as an item's position, the start of a mark it had found before a
+text found alone; the check that a copy is already held looks at the text's own start, so a second unit that reads the same was given the same copy and the
+other copy stayed uncovered — for any unit with marks on both sides, in a table or not. The anchor still takes the marks in; the position given back is the
+text's own. On 20,000 random sources with marks raised inside cells, in cells beside them and on paragraphs (`g2_fuzz_marks.py`; 96,723 units declaring marks): 83
+anchors held by two units and 25 places by two cells before, none after; no saved route changes.
+
+*The screen step reads the same record* (`adapters/screen_grid.py`; Codex G2-C3, his proposal): its plain search for cell tags ended a cell that has no end tag at the
+next cell tag anywhere — a paragraph after the table lay in the table's last cell — and lost the outer cell after a table inside it. `tag_cells` marks and bounds the
+scanner's cells; `apply` walks from an inner cell to the cell it stands in (the worktree's seven consumer cases, kept as written). No saved route changes by it (all
+route files of the 11 routes: the same bytes); the step reads the source once more — `tag_cells` on the 60 originals 1.6 s → 48.9 s, about 0.8 s a file — which a
+pipeline that scans a file once for linking, formatting and the screen does not pay.
+
+*What the worktree's rule did that this one does not.* It tied a row of the tool to a row of the source when the source held one such row — whatever the tool's other
+rows were: on the saved screen route 20 cells lost the place they had; and it tied two tables of the tool to one table of the source. Both are tests now
+(`test_rows_the_tool_did_not_keep…`, `test_two_tables_of_the_tool…`), with the row order of a text held twice (`test_a_text_twice_in_a_row…`).
+
+*Measured on the development routes* (the candidate against run 35; the 11 HTML routes built again from the four base routes — links, then the formatting step, then the
+screen step in local Chrome with every request aborted; the same rebuild with main's code and the saved links gives run 35's folders back, file for file):
+
+| | EdgarTools (base route) | EdgarTools + formatting + screen | Docling (base route) |
+|---|---|---|---|
+| table cells without a place | 172 → 0 | 172 → 0 | 511 → 504 |
+| rows of the tool with cells in several rows of the browser's tree | 224 → 12 | 65 → 0 | 19 → 12 |
+| tables of the tool with cells in several tables | 50 → 0 | 50 → 0 | 6 → 0 |
+| rows in one browser row, not in the tool's column order | 51 → 47 | 3 → 3 | 47 → 47 |
+
+Every changed record (3,204 over the 11 routes, by unit and cell number) was checked against Chrome's tree by a checker that takes nothing from the linker
+(`g2_oracle2.py`, after Codex G2-C2): cell bounds from another reader, each confirmed against what Chrome shows for the cell (951,927 of 951,927), every piece of an
+anchor whole inside its cell and reading the cell's text there, and the row judged by the browser rows that *read* as the tool's row — not by where the candidate put
+the row's other cells; an anchor over several cells must have every visible character in a bounded cell of one table, and a pieced one must read the parts of the text it
+declares, in order (Codex G2-R2: both were accepted too easily; neither occurs in the saved routes — the corrected checker classifies every record as before). Of the 2,952 changed cell records none stands worse than before: 1,955 moved or placed, 997 the same place with another flag; the 234 changed
+table envelopes are the span of their cells. On the EdgarTools route, cells in a browser row that does not read as their row: 292 → 7, outside every cell 17 → 0
+(with the screen step 17 → 0 and 17 → 0); the 7 are in two tables the rule does not tie, unchanged since run 35 and flagged. One Docling cell, a page number set as
+a table of one cell, is doubtful before and after (now in no cell at all). No cell lost a place. Of the EdgarTools route's 10,162 tables with cells 9,137 are tied, 1,004 read like another source table (not told apart), 21 read like none; of their
+342,465 cells 324,150 have one place. Grades: three targets `FAIL → PASS` (ten check rows: the two failures above) and nothing else in 13 routes — the best route's
+cells 170/171 → 171/171 on this development sample, which proves nothing about other documents; the PDF and XML routes regrade to the same bytes. Link time +1 to 6 %
+over three measurements (the last: 72.4 s → 73.3 s, 69.2 s → 70.7 s on 60 files), peak memory +31 to 33 MB. Run 35 remains the official baseline: these numbers are the evidence for the change, not a new run.
+
+*Stated, not hidden.* (1) Equal texts in exactly one table on either side are evidence, not proof: a tool that drops one of two tables and changes the other to read
+exactly as the dropped one would be tied to the wrong table. (2) Tables, rows and cells that read alike are taken in order, as before (5,461 of 329,611 cells in tied
+tables). (3) Cells of tables the rule does not tie are placed as before: 7 (EdgarTools) and 12 (Docling) stand in a row that does not read as theirs, as in run 35. (4) The `out_of_order` flag — read by no grading rule — moves with the places: 784 records lose it at the same place, 384 gain it; a cell can still get it from
+a neighbour the tool lists after it and the source prints before it, as before this change. (5) A short text the tool lists before a table and that reads as one of its cells
+never takes the cell's place; if its own place lies beyond its window it stays without one (`not_in_source`), where the two were swapped before. (6) A table inside a
+table stands in none of the 3,297 real filing documents looked at (only in the SEC's viewer pages): the screen step's handling of it rests on its tests. (7) The route
+files get no new field: the worktree's `source_table` had no reader (Codex: omit).
+
+Tests: 281 (37 new: `tests/test_table_sources.py`, `tests/test_screen_grid_tokenizer.py`). Mutations of every condition on a changed line: 111, 103 red; the eight
+green ones change no result (the pass for short texts re-asking a long one it would fail again; the first pass's search direction for a cell with one place; in the
+piecing, an item asked whether it is itself before it has a place; in the screen step, a cell counted as standing in the cell that ends where it begins, and two
+bounds of the walk that the test after it repeats).

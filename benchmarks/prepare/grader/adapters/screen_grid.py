@@ -13,19 +13,19 @@ from bisect import bisect_right
 from pathlib import Path
 
 from benchmarks.prepare.grader import grade
+from benchmarks.prepare.grader.anchor import Visible
 
-_CELL = re.compile(rb'(?i)<t([dh])\b')
+_CELL_END = re.compile(rb'(?i)</t[dh]\s*>')
 TOL = 2  # pixels: edges closer than this are the same column edge
 
 
 def tag_cells(raw):
     """A copy with data-g="n" on every <td>/<th> (document order) and the byte span of each cell in the original."""
-    out, spans, pos = [], [], 0
-    for n, m in enumerate(_CELL.finditer(raw)):
-        close = re.compile(rb'(?i)</t' + m.group(1) + rb'\s*>').search(raw, m.end())
-        nxt = _CELL.search(raw, m.end())
-        end = close.end() if close and (nxt is None or close.start() < nxt.start()) else (nxt.start() if nxt else len(raw))
-        spans.append((m.start(), end)); out.append(raw[pos:m.end()]); out.append(b' data-g="%d"' % n); pos = m.end()
+    spans = sorted((a, b) for table in Visible(raw).tables for row in table for a, b in row)  # the scanner's cells: the parser's own, where a plain search for the tags ran a cell with no end tag on to the next cell anywhere (Codex G2-C3)
+    out, pos = [], 0
+    for n, (start, end) in enumerate(spans):
+        close = _CELL_END.match(raw, end); spans[n] = (start, close.end() if close else end)  # with its own end tag, where it has one
+        out.append(raw[pos:start + 3]); out.append(b' data-g="%d"' % n); pos = start + 3
     out.append(raw[pos:])
     return b''.join(out), spans
 
@@ -47,6 +47,10 @@ def screen_grid(cells):
 def apply(units, spans, measured_by_table):
     """Re-grid the route's table cells whose byte anchors fall in a measured cell; returns how many changed."""
     starts = [s for s, _ in spans]; by_g = {}
+    parents, stack = [], []  # the cell each cell stands in (a table inside a cell): text after the inner table is the outer cell's again (Codex's worktree)
+    for g, (start, end) in enumerate(spans):
+        while stack and spans[stack[-1]][1] <= start: stack.pop()
+        parents.append(stack[-1] if stack else -1); stack.append(g)
     for table_cells in measured_by_table.values():
         for g, (r, c, cs) in screen_grid(table_cells).items(): by_g[g] = (r, c, cs)
     n = 0
@@ -56,6 +60,7 @@ def apply(units, spans, measured_by_table):
             a = cell.get('anchor'); a = a[0] if isinstance(a, list) else a
             if not isinstance(a, dict) or 'byte_start' not in a: continue
             g = bisect_right(starts, a['byte_start']) - 1
+            while g >= 0 and a['byte_start'] >= spans[g][1]: g = parents[g]
             if g < 0 or not (spans[g][0] <= a['byte_start'] < spans[g][1]) or g not in by_g: continue
             r, c, cs = by_g[g]
             if (cell['r'], cell['c'], cell.get('cs', 1)) != (r, c, cs): cell.update(r=r, c=c, cs=cs); n += 1
