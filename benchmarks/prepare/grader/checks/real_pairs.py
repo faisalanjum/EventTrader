@@ -351,7 +351,8 @@ def main():
                 check, reports = check; good = verdict == expect and reports(next(r['detail'] for r in rows if r['check'] == 'printed_text' and r['verdict'] == 'approximate'))
             else: good = verdict == expect and (check is None or check in fired + structure)
             if expect == 'PASS' and check is None: good = good and not fired
-            if gate: good = good and not rep['gates'][gate]['pass']
+            if gate: good = good and rep['gates'][gate]['breaks'].get(route['file_id'], 0) > 0
+            if label.startswith('valid:'): good = good and not rep['gates']['reading_order']['breaks'].get(route['file_id'], 0)
             ok &= good
             results.append({'case': name, 'key_id': kid, 'variant': label, 'expected': expect, 'expected_check': check, 'expected_gate_fail': gate,
                             'verdict': verdict, 'failed_checks': fired, 'structure_misses': structure, 'reasons': reasons, 'ok': good})

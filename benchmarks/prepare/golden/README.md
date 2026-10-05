@@ -1,7 +1,7 @@
 # Golden set — the frozen key the Prepare benchmark grades against
 
-**What it is.** 457 reviewed answer records (Step 3 of Prepare) over 249 development + 90 held-out
-targets, with accepted alternatives, 5 excluded fields, source anchors into the original filings, and the scoring contract
+**What it is.** 457 reviewed answer records (Step 3 of Prepare): 249 development + 118 stratified control + 90 held-out
+targets (eight supplemental targets are separate), with accepted alternatives, 5 excluded fields, source anchors into the original filings, and the scoring contract
 (rules E1–E17). Reviewed by two independent reviewers; package **1134** was reviewed as final (`CODEX_ROUND2_UPDATE_20261003.md` inside it); **package 2 (`FINAL_KEY_FOR_CODEX_20261003_2014`)** supersedes it with the same 457 answers: SL Green table-context declarations in the support map, the split catalog pinned, and the contract addendum `CONTRACT_DECISIONS_R3.json` (six clarifications, proposed for Codex's check). **Package 3 (`FINAL_KEY_FOR_CODEX_20261004_0557`) is the active package since 2026-10-05**: three header-path corrections under the owner's decision (c), Park's reviewed header support, and the contract addendum `CONTRACT_DECISIONS_R4.json` (picture text approximate with critical-token flags, three declared page-number exclusions, continuous paragraphs by page mapping, the XML-route exception, the OCR adoption rule); the three changed records re-verified and stamped, everything else byte-identical to package 2. Codex approved it in round 14; the pointer was switched after his gate on the grader's round 19.
 
 **Where it lives (outside the repo, on purpose).** `/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261004_0557` — the answers, the originals (`bundled/packets/*/sources`) and the

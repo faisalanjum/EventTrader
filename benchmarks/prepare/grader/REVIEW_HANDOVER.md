@@ -73,7 +73,52 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 - What is not certified, added in round 19 (`DESIGN.md` §43). **Uncertain page:** one that carries a script (a `<script>` of any type, an event attribute, a framed document with a `src` or `srcdoc`: nothing is run, so no reading of the page is vouched for); a `<meta>` content security policy (it turns style attributes off) or refresh (it sends the browser to another page); a character reference in a link's `rel`, an `http-equiv` or the `align` of an element it floats (the parser decodes it, the scanner only in a style string); a writing mode on an element in the line or in a sheet (under `-webkit-` and `-epub-` too: an inline in another writing mode is a box of its own lines; on a block it changes nothing). **Strike certificates withdrawn:** an element with `display:contents` and a strike of its own; a `color`, `text-decoration-color` or `-webkit-text-fill-color` anywhere in the file that may paint nothing (`transparent`, an alpha that is not the literal 1, a form not evaluated: a line takes its element's text colour unless given its own); struck text under a negative `letter-spacing` or a `contain` (on its element or above it; on the page's own elements, in a sheet, or on a formatting element left open that the browser opens again: anywhere): its line may have no length — a table floated by `align` is a float, its parent's strike does not reach it. Stated, not followed: text clipped by several declarations together is still text, and so is its strike. **XML:** a reading is certified only complete and byte for byte, by one parser setting for the scanner and the cell grader (parameter entities are read as declared): an external subset or entity, a reference the parser passes over, an encoding it does not know, or text beyond ASCII that is not UTF-8 leave it uncertain and read as nothing, and the cell grader then leaves `value` and `row_label` `unresolved` (`source_reading`). None of these forms stands in a certified document of the 22,483 HTML and 4,377 XML documents of the completed census.
 - Review history: Codex's nineteen rounds and the package-2 verdict (`prepare_work/grader_review_codex_20261003/`) and the changes they caused are in `DESIGN.md` §21–§43; every probe script was re-run against this code (`FABLE_RESPONSE*.md` there, `codex_probes_live/`).
 
-## Results on the development split (package 2, grader after Codex's rounds 1–17, tool tests 1–3 and the owner's decision (e); the code of rounds 18 and 19 regrades the same 13 route folders to the same verdicts and result rows (trials, not official runs: `DESIGN.md` §42, §43); run 34f of 2026-10-04 16:50 — round 17, the final code: regrade only of the same 13 route folders, 0 verdict flips and 0 result-row changes against run 34d (run 34e of 15:21, this round before its final pass, is byte-identical in every graded file); the uncovered-characters column rises by 15,305 in every HTML route, all in one file (`a9912025-09x10arrowheadc.htm`: the scanner now reads its 15,498 referenced control characters, which the saved routes' units, linked by the old scanner, do not cover); run 34d of 13:40 — round 16: identical to run 34c in every verdict, field row and gate value; run 34c of 08:03 — round 15: 0 verdict flips, 0 field-row changes against runs 34 and 34b; the only table change is the PDF route's reading-order breaks 434 → 433 (one zero-width box, now no position); seven Docling HTML files report 1–29 `unplaced` textless pictures that were silently skipped before; every HTML number is identical to run 29 (the EdgarTools re-conversion of 2026-10-04 00:47); DESIGN §36–§41)
+## Results on the development split — current: package 3, official run 35 (2026-10-05)
+
+Golden set: 457 reviewed targets = 249 development + 118 stratified control + 90 held-out; eight supplemental targets are separate. **Package 3**
+(`FINAL_KEY_FOR_CODEX_20261004_0557`, active since `9ccfd7c19`) is package 2 with the owner's decisions of 2026-10-04: three page-number blocks are **excluded**
+(not graded, counted apart, their characters subtracted from required coverage as `excluded_chars`), a picture's text is **approximate** evidence (reported with its
+word error rate and its critical differences; never a pass), three header paths are corrected. Run 35 graded the same 13 saved development route folders against
+it with the grader of round 19 (`c96ec20bd`; Codex's gates `CODEX_GATE_R19.md`, `CODEX_RUN35_VERDICT.md`). Everything of the run is in
+`prepare_work/grader_runs/run35_20261005/` (`RUN35.json`: commits, package hashes, per route the hashes of its route folder and graded files); the older route and
+graded folders are untouched.
+
+Before the run, **one file's previously unmapped text was linked**: in the 11 HTML routes the Arrowhead exhibit (`a9912025-09x10arrowheadc.htm`) was linked again by
+the round-19 scanner. The converters' text did not change — every tool field is identical; only the link fields of that one file were recomputed (uncovered text
+24,059 characters → 0 on the EdgarTools routes, → 232 on the Docling routes). A sweep of all 660 route files confirmed no other file's links change.
+
+What changed against run 34f (package 2), told apart by two control regrades (`grader_next/round19/`): the re-link alone changes no verdict and no check row;
+the package alone changes 80 target verdicts and 256 check rows (verdict or reason), all of them its declared changes — 39 exclusions, 19 pictures
+`FAIL → APPROXIMATE`, 22 corrected-header passes. Eight more rows change their explanation only, their passing verdict unchanged (Carnival's corrected printed
+header now matches directly instead of through `joined_with_own_pieces`).
+
+In the table EXCLUDED targets leave the denominator; APPROXIMATE, UNRESOLVED and not-converted targets stay in it and are never passes. The gate columns are as
+explained under the historical table below.
+
+| route | HTML cells | HTML blocks | PDF blocks | XML cells | headings recognised | unanchored | boundary | inserted chars | uncovered chars (files) | reading-order breaks (files) | anchors not measured |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Docling HTML (converter alone) | 147/171 (24 fail) | 45/57 (10 fail, 2 approximate); 3 excluded | - | - | 0/164 | 1050 | 637 | 528 | 5,069 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + formatting | 149/171 (22 fail) | 46/57 (9 fail, 2 approximate); 3 excluded | - | - | 0/164 | 1050 | 637 | 528 | 5,069 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + formatting + screen | 155/171 (16 fail) | 46/57 (9 fail, 2 approximate); 3 excluded | - | - | 0/164 | 1050 | 637 | 528 | 5,069 (12) | 9 (2) | 0 of 60 graded files |
+| Docling HTML + headings (alone) | 150/171 (21 fail) | 39/57 (16 fail, 2 approximate); 3 excluded | - | - | 104/158 | 1207 | 662 | 683 | 10,741 (21) | 29 (8) | 0 of 60 graded files |
+| Docling HTML + headings + formatting | 151/171 (20 fail) | 40/57 (15 fail, 2 approximate); 3 excluded | - | - | 104/158 | 1207 | 662 | 683 | 10,741 (21) | 29 (8) | 0 of 60 graded files |
+| Docling HTML + headings + formatting + screen | 157/171 (14 fail) | 40/57 (15 fail, 2 approximate); 3 excluded | - | - | 104/158 | 1207 | 662 | 683 | 10,741 (21) | 29 (8) | 0 of 60 graded files |
+| EdgarTools HTML (converter alone) | 157/171 (14 fail) | 48/57 (1 fail, 8 unresolved); 3 excluded | - | - | 35/178 | 172 | 923 | 0 | 13,271 (40) | 16 (6) | 0 of 60 graded files |
+| EdgarTools HTML + formatting | 162/171 (9 fail) | 49/57 (8 unresolved); 3 excluded | - | - | 35/178 | 172 | 923 | 0 | 13,271 (40) | 16 (6) | 0 of 60 graded files |
+| EdgarTools HTML + formatting + screen | 170/171 (1 fail) | 49/57 (8 unresolved); 3 excluded | - | - | 35/178 | 172 | 923 | 0 | 13,271 (40) | 16 (6) | 0 of 60 graded files |
+| Docling render (printed PDF) | 165/171 (6 fail) | 48/57 (7 fail, 2 approximate); 3 excluded | - | - | 0/178 | 688 | 329 | 528 | 4,896 (10) | 0 (0) | 0 of 60 graded files |
+| Docling render + formatting | 167/171 (4 fail) | 49/57 (6 fail, 2 approximate); 3 excluded | - | - | 0/178 | 688 | 329 | 528 | 4,896 (10) | 0 (0) | 0 of 60 graded files |
+| Docling native PDF | 17/56 (34 fail, 5 unresolved, 115 not converted) | 4/8 (3 fail, 1 approximate, 49 not converted); 3 excluded | 5/9 (2 fail, 2 approximate) | - | 20/31 | 3519 | 136 | 2,390 | 57,214 (9) | 433 (17) | 9 of 19 graded files |
+| XML fields | - | - | - | 9/9 | 0/0 | 0 | 0 | 0 | 0 (0) | 0 (0) | 0 of 3 graded files |
+
+Of the 228 graded HTML development targets (231 less the 3 excluded) the best single route, EdgarTools + formatting + screen, passes 219 (cells 170/171, blocks
+49/57); the best pick per target 220; no route passes 8 — the eight HTML picture blocks, all declared approximate (unresolved on the EdgarTools routes, which emit
+nothing at their place; approximate or failed on the Docling routes). XML fields: 9/9 cells — a sampled result. Native PDF: 5 of 9 blocks. These are measured
+results on saved development routes, **not** a tool ranking and not a claim of complete conversion: the controls and the held-out split have not been run; source
+text no unit covers (the "uncovered" column), pictures whose content is not measured, and PDF and image positions that are not certified remain as stated under
+"Known limits".
+
+## Historical results — package 2 (run 34f and earlier; superseded by run 35 above, kept for the record) (package 2, grader after Codex's rounds 1–17, tool tests 1–3 and the owner's decision (e); the code of rounds 18 and 19 regrades the same 13 route folders to the same verdicts and result rows (trials, not official runs: `DESIGN.md` §42, §43); run 34f of 2026-10-04 16:50 — round 17, the final code: regrade only of the same 13 route folders, 0 verdict flips and 0 result-row changes against run 34d (run 34e of 15:21, this round before its final pass, is byte-identical in every graded file); the uncovered-characters column rises by 15,305 in every HTML route, all in one file (`a9912025-09x10arrowheadc.htm`: the scanner now reads its 15,498 referenced control characters, which the saved routes' units, linked by the old scanner, do not cover); run 34d of 13:40 — round 16: identical to run 34c in every verdict, field row and gate value; run 34c of 08:03 — round 15: 0 verdict flips, 0 field-row changes against runs 34 and 34b; the only table change is the PDF route's reading-order breaks 434 → 433 (one zero-width box, now no position); seven Docling HTML files report 1–29 `unplaced` textless pictures that were silently skipped before; every HTML number is identical to run 29 (the EdgarTools re-conversion of 2026-10-04 00:47); DESIGN §36–§41)
 Development split only: 171 HTML cells, 60 HTML blocks, 9 XML cells (the XML route `xml_fields` passes 9/9 with honest anchors, run `grader_runs/xml_fields_dev_20261004`), 9 PDF blocks (plus supplement PDF cells on the PDF route).
 XML and PDF targets no HTML route claims are counted as not converted (E17), never hidden. Headings / notes / refs / kind are structure
 counts, not pass rules. The screen-span step and the heading pre-step are separate declared routes (E14). Gate columns: "unanchored" =
@@ -119,7 +164,7 @@ giant units, since fixed), flattens some tables into prose, splits a few words (
 (11 of its 60 blocks come back unresolved: nothing is emitted at their place — 3 page numbers, 8 pictures); both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
 (a key-side question).
 
-Proof state at hand-over: 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 2, package check `golden/check_package.py` passes; Codex's rounds
+Proof state at hand-over: 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 3 (and on package 2, as a control), package check `golden/check_package.py` passes; Codex's rounds
 1–18 scripts and the package-2 reproducers re-run against this code behave as they expected (adapter audits over all 60 saved outputs: 0 cells lost, 0 tables shifted), except the differences stated in
 `prepare_work/grader_review_codex_20261003/FABLE_RESPONSE_R3.md` (digits split across 22 cells → False; "3.7 %" → pass) and
 `FABLE_RESPONSE_R4.md` (a packet name in two folders is refused as ambiguous; an invalid table-context declaration stops the run; the

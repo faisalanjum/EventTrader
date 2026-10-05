@@ -1450,3 +1450,27 @@ methods. The reviews' probes of round 18: as then (48 of 51 with the 3 by design
 unchanged). 48/48 real-original variants. The independent review of this round (`scratch19/review_r19/`): five findings (three fixed, the
 real 10-K kept certified, scripts guarded since); clean on about 70 XML cases, 453 declared encodings, 30,000 random XML documents, chunk edges
 of the parser, 252 `display:contents` strike claims, twelve properties beside the writing mode, and 1,138 further real HTML files (on the version of 08:50).
+
+## 44. Package 3 active; run 35, the official baseline (2026-10-05; Codex: `CODEX_GATE_R19.md` and `CODEX_RUN35_VERDICT.md`, both APPROVE)
+
+**The pointer.** `golden/PACKAGE.json` names package 3 (`FINAL_KEY_FOR_CODEX_20261004_0557`: key 41d5c68db597e48c, manifest 39a5df74a1176ce1, contract addendum R4), the
+package approved in round 14 and unchanged since (`9ccfd7c19`; `golden/check_package.py`: 21 recorded files, 5 verbatim copies, 457 stamps current). The grader's code is
+round 19's (`c96ec20bd`), byte for byte.
+
+**One file linked again, in a tree of its own.** The scanner of round 18 reads 15,498 referenced control characters of the Arrowhead exhibit that the saved routes, linked
+by the older scanner, did not cover. All 13 saved route folders were copied to `prepare_work/grader_runs/run35_20261005/`; in the 11 HTML routes that one file's five link
+fields were stripped and `anchor.link` run again by a pinned export of `c96ec20bd` — every tool field asserted identical, the other 71 files of each route byte copies,
+the old folders and their graded results untouched (hashes; `ROUTE_PROVENANCE.json` per route, `RUN35.json` for the run). Uncovered text of that file: 24,059
+characters → 0 (EdgarTools routes), → 232 (Docling routes). Linking every HTML file of the 11 routes again changes this file only (660 files × routes).
+
+**Run 35 and its causes.** The 13 route folders graded against package 3, and two controls: package 2 with the new routes (0 verdict flips, 0 check rows — the re-link
+alone changes no grade) and package 3 with the old routes (80 flips, 256 rows — the same as run 35). The 80 are the package's declared changes: 39 exclusions (three
+page-number blocks), 19 pictures `FAIL → APPROXIMATE`, 22 corrected-header passes; 8 further rows change their explanation only. The numbers are in
+`REVIEW_HANDOVER.md` ("current: package 3, official run 35"); the earlier ones there are history.
+
+**The real-original check reads the active package** (`checks/real_pairs.py`), so two of its expectations were made to hold under any package: (1) its scanned-page
+case expected a pass or a failure of the words of a block package 3 declares a picture's text — it now follows the key's declaration: declared approximate, the verdict
+must be `APPROXIMATE` and the approximate row must report the planted damage (none; the deleted words; the critical "not"; the disorder); strict otherwise. (2) Its
+reading-order test asked only that the gate was not passed, which a one-file route never does (the other files are not measured): it now asks for a break in the damaged
+file itself and for none in every valid control (Codex's patch; with the order detector switched off the test fails). 48/48 under package 3 and under package 2.
+
