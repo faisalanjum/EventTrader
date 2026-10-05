@@ -1,4 +1,6 @@
 """Visible text of an original with byte spans, and the linker that places tool output back in it (anchor.py)."""
+import json
+from pathlib import Path
 import time
 import unittest
 
@@ -183,7 +185,7 @@ class InvisibleStyleTests(unittest.TestCase):
                  ('<div style="display:none"/>Secret.</div><p>Visible.</p>', 'Visible.', True),
                  ('<span>12<br hidden>34</span>', '1234', True),
                  ('<span>12<br>34</span>', '12 34', True),
-                 ('<p style="d\\69 splay:none">Secret.</p><p>Visible.</p>', 'Visible.', True),
+                 ('<p style="d\\69 splay:none">Secret.</p><p>Visible.</p>', 'Visible.', False),  # read as Chrome reads it, but a style string that holds a backslash is no longer certified (R18: CSS escapes follow rules of their own)
                  # a block opened inside an unclosed hidden inline element: the browser closes the <p> and rebuilds the hidden span around the block — not certifiable here
                  ('<p>Shown.<span style="display:none">HIDDEN <div>deep</div> text</span></p>', None, False),
                  # Codex round 8 (Chrome): a new <tr> closes the open <td> and <tr>; a block boundary after a hidden element still separates words;
@@ -193,7 +195,7 @@ class InvisibleStyleTests(unittest.TestCase):
                  ('<table><thead style="display:none"><tr><td>Secret.<tbody><tr><td>Visible.</table>', 'Visible.', True),
                  ('<span>Before</span><p hidden>Secret.</p><p>After</p>', 'Before After', True),
                  ('<span>Before</span><p hidden>Secret.<p>After</p>', 'Before After', True),
-                 ('<p style="--note:a\\;display:none">Visible.</p>', 'Visible.', True),
+                 ('<p style="--note:a\\;display:none">Visible.</p>', 'Visible.', False),
                  ('<table>stray<tr><td>Cell</td></tr></table>', None, False)]
         for src, text, certain in cases:
             v = anchor.Visible(src.encode())
@@ -372,12 +374,25 @@ class LinkTests(unittest.TestCase):
         # a child's `none` does not cancel a parent's strike; stylesheet rules and reopened formatting elements make struck text uncertain
         struck = lambda raw: ([anchor.Visible(raw).at(a, b) for a, b in anchor.Visible(raw).struck_runs()], anchor.Visible(raw).struck_certain)
         self.assertEqual(struck(b'<s>struck words</s> plain'), (['struck words'], True))
+        self.assertEqual([struck(b'<p>x<%s>a</%s>y</p>' % (n, n)) for n in (b'strike', b'del', b's')], [(['a'], True)] * 3)
+        # Round 18: struck text is set apart from its neighbours — a boundary at each end of the element, only next to a struck character, and no line break of the page
+        # (Chrome's text of each page beside it, and its text once invisible in place for the zero opacity; codex_probes_live/r18/r18_grid3_facts.py, r18_targeted_facts.py)
+        read = lambda raw: (anchor.norm(anchor.Visible(raw).text), anchor.Visible(raw).certain)
+        self.assertEqual([read(b'<p>x<s>a</s>y</p>'), read(b'<p>x<s>a</s><s>b</s>y</p>'), read(b'<p>x<s></s>y</p>'), read(b'<p>x<s><span style="visibility:hidden">q</span></s>y</p>'), read(b'<p>x<img src="x.png" style="text-decoration:line-through">y</p>')],
+                         [('x a y', True), ('x a b y', True), ('xy', True), ('xy', True), ('xy', True)])  # Chrome: xay, xaby, xy, xy, xy
+        self.assertEqual([read(b'<p>x<s><span style="display:inline-block">.</span>q</s>y</p>'), read(b'<p>x<s>q<span style="display:inline-block">.</span></s>y</p>')], [('x.q y', True), ('x q.y', True)])  # Chrome: x.qy, xq.y — an inline box is not struck
+        self.assertEqual([read(b'<div>x.<s> <div style="visibility:hidden"></div></s>y</div>')[1], read(b'<div>x.<s> <div style="opacity:0"></div></s>y</div>')[1]], [False, False])  # Chrome: x.y — the invisible block has no line to itself; it had one while the strike was read as a line break
+        self.assertEqual([read(b'<p>x<s>a<s style="visibility:hidden">q</s>b</s>y</p>'), read(b'<p>x<s>a<span style="display:none"><s>q</s></span>b</s>y</p>')], [('x ab y', True)] * 2)  # an element that shows nothing sets nothing apart inside a struck run
+        self.assertEqual([anchor.Visible(raw).struck_certain for raw in (b'<p>x<s style="visibility:hidden">a<span style="visibility:visible">b</span></s>y</p>', b'<p>x<span style="visibility:hidden">a<span style="visibility:visible">b</span></span>y</p>', b'<p>x<s style="visibility:hidden">a<b>q</b></s>y</p>')], [False, True, True])  # shown again inside invisible struck text: its strike is not certified (what stays invisible there changes nothing)
+        self.assertEqual([anchor.Visible(raw).certain for raw in (b'<style a="b"c>p{color:red}</style><p>x</p>', b'<span style="display:inline-flex"> <b>a</b></span>')], [False, True])  # a sheet behind a tag that is not plain is not read (and stops nothing); white space alone before any character
+        v = anchor.Visible(b'<p>x<s>a</s>y</p>'); raw = b'<p>x<s>a</s>y</p>'; self.assertEqual([raw[v.starts[i]:v.ends[i]] for i, c in enumerate(v.text) if c == ' ' and 0 < i < len(v.text) - 1 and v.text[i - 1] != ' ' and v.text[i + 1] != ' '], [b'<s>', b'</s>'])  # each boundary stands for its tag's bytes
         self.assertEqual(struck(b'<span style="text-decoration: line-through; text-decoration: none">plain</span>'), ([], True))
         self.assertEqual(struck(b'<span style="text-decoration: line-through; text-decoration-line: none">plain</span>'), ([], True))
         self.assertEqual(struck(b'<s style="text-decoration:none">plain</s>'), ([], True))
         self.assertEqual(struck(b'<s><span style="text-decoration: none">still struck</span></s>'), (['still struck'], True))
         self.assertEqual(struck(b'<s>x <span style="display:inline-block">atomic</span></s>'), (['x'], True))
-        self.assertEqual(struck(b'<s>x <span style="float:left">floated</span></s>'), (['x'], True))
+        self.assertEqual(struck(b'<s>x<br><span style="float:left">floated</span></s>'), (['x'], True))  # a float on a line of its own
+        self.assertEqual(struck(b'<s>x <span style="float:left">floated</span></s>'), (['x'], False))  # beside a word on its line the page sets it by its offsets: nothing is certified from that reading (R18)
         self.assertEqual(struck(b'<table style="text-decoration:line-through"><tr><td>cell words</td></tr></table>'), (['cell words'], True))
         self.assertEqual(struck(b'<span style="TEXT-DECORATION: LINE-THROUGH !important">loud</span>'), (['loud'], True))
         self.assertEqual(struck(b'<style>.gone{text-decoration:line-through}</style><span class="gone">by class</span>')[1], False)
@@ -426,6 +441,78 @@ class LinkTests(unittest.TestCase):
         self.assertEqual(anchor.norm('x \u2015 y \u2e3a z'), 'x - y - z')              # horizontal bar, two-em dash: Pd
         self.assertEqual(anchor.norm('\u201e q \u201f \u2039 s \u203a "d" \u2018e\u2019 6" 6\u2032'), '"q" \'s\' "d" \'e\' 6" 6\u2032'.replace('"q"', '" q "').replace("'s'", "' s '"))  # same class folds together; single stays single, double stays double, primes untouched
         self.assertEqual(anchor.squash('\u2212 3'), '-3')                                   # minus sign
+
+    def test_pages_the_browser_printed_are_read_as_it_printed_them_or_not_certified(self):
+        # Round 18 mutation check: the scanner's layout rules and lists were held only by browser facts kept outside the repository. These pages were printed by
+        # local offline Chrome (fixtures/browser_pages_r18.json: its text, white space folded); each tells the scanner from a one-change variant of it. A page marked
+        # certain must be certified and read as Chrome's text (beside an inline table: Chrome's text with the table set as a block; with a zero opacity, a textarea or
+        # ix:hidden: Chrome's text of the page rewritten in the browser to the agreed meaning); on the others a variant certified a text Chrome did not print, so the
+        # scanner must say it is not sure
+        facts = json.loads((Path(__file__).with_name('fixtures') / 'browser_pages_r18.json').read_text(encoding='utf-8'))
+        self.assertGreater(len(facts['cases']), 100)
+        for c in facts['cases']:
+            with self.subTest(source=c['source']):
+                v = anchor.Visible(c['source'].encode('utf-8')); self.assertIs(v.certain, c['certain'])
+                if c['certain']: self.assertIn(anchor.norm(v.text), (c['browser'], c.get('browser_block_tables')))
+
+    def test_strike_certainty_and_byte_offsets_stand_where_the_page_facts_cannot_show_them(self):
+        # Round 18 mutation check: a page's printed text shows neither which bytes a character came from nor whether "struck" / "not struck" is certified
+        V = anchor.Visible
+        for raw in (b'<p>ab;</p>', b'<p>&;x</p>', b'<p>x &amp</p>'):  # only a complete reference shares its bytes among its characters: text that ends with ';' or holds a lone '&' is read byte by byte
+            v = V(raw); self.assertEqual([raw[s:e].decode() for c, s, e in zip(v.text, v.starts, v.ends) if c.strip()], [c for c in v.text if c.strip()], raw)
+        v = V(b'<p>a&amp;b</p>'); self.assertEqual([raw for raw in (b'<p>a&amp;b</p>'[s:e] for c, s, e in zip(v.text, v.starts, v.ends) if c == '&')], [b'&amp;'])
+        flags = lambda raw: (V(raw).certain, V(raw).struck_certain, V(raw).plain_certain)
+        self.assertEqual(flags(b'<body>x</body>'), (True, True, True))
+        for style in ('line-through', 'inherit', 'underline line-through'):  # a decoration on the document's own elements is not followed: struck text is then not certified either way, the reading is
+            self.assertEqual(flags(b'<body style="text-decoration:%s">x</body>' % style.encode()), (True, False, False), style)
+            self.assertEqual(flags(b'<html style="text-decoration:%s"><body>x</body></html>' % style.encode()), (True, False, False), style)
+        self.assertEqual((flags(b'<body style="text-decoration:none">x</body>'), flags(b'<body style="text-decoration:underline">x</body>')), ((True, True, True), (True, True, True)))  # one that strikes nothing changes nothing
+        self.assertEqual(flags(b'x</body style="text-decoration:line-through">y'), (True, True, True))  # a closing tag's attributes mean nothing
+        self.assertEqual(flags(b'<table><tr><td><s>a</td><td>b</td></tr></table>'), (True, False, False))  # a cell that ends with a strike element still open: the reading stands, what is struck after it is not certified
+        self.assertEqual(flags(b'<table><s><tr><td>a</td></tr></s></table>'), (True, False, False))  # a strike element the parser moves out of a table
+        self.assertEqual(flags(b'<p style="display:var(--x)">a</p><p><s>b</s></p>'), (False, False, False))  # an uncertain reading certifies nothing about strikes, either way
+        self.assertEqual(flags(b'<style>s{text-decoration:none}</style><p><s>b</s></p>'), (True, False, True))  # a sheet rule on decorations that cannot add a strike: "struck" is not certified, "not struck" is
+        self.assertEqual(flags(b'<style>p{text-decoration:line-through}</style><p>b</p>'), (True, False, False))
+        v = V(b'<div style="text-decoration:inherit">x</div>'); self.assertEqual((v.struck_certain, list(v.struck_chars)), (True, [0] * len(v.text)))  # inherit with nothing above to inherit from strikes nothing
+
+    def test_the_line_feed_the_parser_drops_after_a_start_tag_is_not_read(self):
+        # Round 18 (random documents, wide:3:8852): the parser ignores a line feed that is the first thing after <pre>, <listing> or <textarea> (HTML tree construction).
+        # A <textarea>'s text is not in the browser's page text: these are Chrome's own texts of the element (document.querySelector('textarea').textContent, 2026-10-04)
+        V = anchor.Visible; inside = lambda body: V(b'<body>a<textarea>' + body + b'</textarea>b</body>').text[1:-1]
+        for body, dom in ((b'\nx', 'x'), (b'\n\nx', '\nx'), (b'\r\nx', 'x'), (b'&#10;x', 'x'), (b'&#13;x', '\rx'), (b' \nx', ' \nx'), (b'x\n', 'x\n'), (b'\n', ''), (b'&NewLine;&amp;', '&')):
+            self.assertEqual(inside(body), dom, body)
+        for raw, at in ((b'<pre>\nxy</pre>', 6), (b'<pre>\r\nxy</pre>', 7), (b'<pre>&#10;xy</pre>', 10), (b'<listing>\rxy</listing>', 10)):  # what follows the dropped character keeps its own bytes
+            v = V(raw); i = v.text.index('x'); self.assertEqual((v.starts[i], v.ends[i], v.starts[i + 1], v.text.strip(' ')), (at, at + 1, at + 1, 'xy'), raw)
+
+    def test_bytes_beyond_ascii_are_certified_only_as_plain_utf8(self):
+        # Round 18, independent review of the scanner (W10): the scanner decodes UTF-8, else windows-1252; the browser decodes by the byte-order mark, the <meta>, or a guess
+        # of its own. Certified, and read as Chrome reads the same bytes from a local file (2026-10-04, document.characterSet beside each): ASCII whatever is declared,
+        # and bytes that are UTF-8 with nothing declared against it. Every one of 22,483 real filing documents is ASCII (r18_census_encoding.py)
+        u = '\u00e9t\u00e9 \u2014 \u00a7 x'.encode('utf-8'); V = anchor.Visible
+        for raw, certain in ((b'<p>' + u + b'</p>', True),  # Chrome: UTF-8
+                             (b'<p>\xc3\xa9</p>', True), (b'<p>' + b'word ' * 1000 + u + b'</p>', True), (b'<p>a\xc2\xa0b</p>', True),  # UTF-8 however short, however late
+                             (b'<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"><p>' + u + b'</p>', True), (b'<meta charset="utf-8"><p>' + u + b'</p>', True), (b"<meta charset = ' utf8'><p>" + u, True),
+                             (b'<meta charset="windows-1252"><p>plain</p>', True),  # ASCII: every decoding is the same
+                             (b'<p>caf\xe9 \x97 \xa7 x</p>', False),  # not UTF-8 (Chrome: windows-1252, as read here — its guess)
+                             (b'\xef\xbb\xbf<p>' + u + b'</p>', False),  # a byte-order mark
+                             (b'<meta charset="windows-1252"><p>' + u + b'</p>', False),  # Chrome: windows-1252 — other letters than these
+                             (b'<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><p>' + u + b'</p>', False), (b'<meta charset=""><p>' + u, False),
+                             (b'<meta charset="utf-8"><p>caf\xe9 x</p>', False), (b'\xef\xbb\xbf<p>a\xe9b</p>', False)):  # Chrome: UTF-8 with U+FFFD for the bad byte
+            self.assertIs(V(raw).certain, certain, raw[:80])
+        self.assertEqual(anchor.norm(V(b'<p>' + u + b'</p>').text), anchor.norm(u.decode('utf-8')))
+
+    def test_a_reference_of_any_length_is_read_and_what_never_ends_is_one_token(self):
+        # Round 18, independent review of the scanner (W9, C1, P1): a numeric reference is its digits only (`&#1a;` is U+0001 and then `a;`: not certified, never one reference);
+        # one with more digits than Python converts crashed the scan; a tag or a raw-text element that never ends was looked for again from every later `<` (minutes for 100 KB)
+        V = anchor.Visible
+        for raw, chrome in ((b'<p>x&#1a;y</p>', 'x\x01a;y'), (b'<p>x&#127z;y</p>', 'x\x7fz;y'), (b'<p>x&#x1g;y</p>', 'x\x01g;y')):  # Chrome's text beside each
+            v = V(raw); self.assertTrue(not v.certain or v.text.strip() == chrome, raw)
+        self.assertEqual([anchor.text_reference(t) for t in ('&#' + '1' * 5000 + ';', '&#' + '0' * 4299 + '65;', '&#x' + '0' * 5000 + '41;', '&#x' + 'f' * 5000 + ';', '&#0;', '&amp;')], ['\ufffd', 'A', 'A', '\ufffd', '\ufffd', '&'])
+        for raw in (b'<p>&#' + b'1' * 5000 + b';</p>', b'<p>&#' + b'1' * 5000 + b' x</p>', b'<p><span style="color:&#' + b'1' * 5000 + b';">x</span></p>', b'<textarea>&#' + b'1' * 5000 + b';</textarea>'): V(raw)  # no crash
+        self.assertEqual(V(b'<p>a&#' + b'0' * 4299 + b'65;b</p>').text.strip(), 'aAb')
+        for source, tokens in (('<p>' + '<a' * 16000, 2), ('<p>' + '<a "x" ' * 16000, 2), ('<p>' + '<template>' * 16000, 2), ('<p>x<script>' + 'var a;<script>' * 9, 3), ('<p>x<a title="y>z', 4)):
+            self.assertEqual(len(list(anchor.html_tokens(source))), tokens, source[:30])  # the rest of the source is one token: nothing after it is looked for (the last: a `>` stands inside the open quote, so the text goes on — uncertain either way)
+        self.assertEqual([(V(('<p>x' + rest).encode()).text.strip(), V(('<p>x' + rest).encode()).certain) for rest in ('<a href="y', '<script>var a;', '<template>t')], [('x', False), ('x', True), ('x', False)])
 
 
 if __name__ == '__main__':

@@ -1365,8 +1365,8 @@ class PlantedFaultTests(GraderFixture):
         # an XML <title> is an ordinary element, never the HTML document title the scanner skips
         xml = b'<r xmlns="urn:main"><p><percentOfClass>2.4</percentOfClass><title>Chair</title></p></r>'
         i = xml.index(b'>2.4<') + 1; a = {'byte_start': i, 'byte_end_exclusive': i + 3}
-        units = [{'id': 'x', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<percentOfClass>'), 'byte_end_exclusive': i + 3}, 'name': '{urn:main}percentOfClass', 'path': ['{urn:main}r', '{urn:main}p'], 'text': '2.4', 'group': {'index': 1, 'count': 1}},
-                 {'id': 'y', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<title>'), 'byte_end_exclusive': xml.index(b'</title>')}, 'name': '{urn:main}title', 'path': ['{urn:main}r', '{urn:main}p'], 'text': 'Chair', 'group': {'index': 1, 'count': 1}}]
+        units = [{'id': 'x', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<percentOfClass>'), 'byte_end_exclusive': i + 3}, 'name': '{urn:main}percentOfClass', 'path': ['{urn:main}r', '{urn:main}p'], 'text': '2.4', 'group': {'index': 1, 'count': 1, 'at': xml.index(b'<p>')}},
+                 {'id': 'y', 'kind': 'field', 'anchor': {'byte_start': xml.index(b'<title>'), 'byte_end_exclusive': xml.index(b'</title>')}, 'name': '{urn:main}title', 'path': ['{urn:main}r', '{urn:main}p'], 'text': 'Chair', 'group': {'index': 1, 'count': 1, 'at': xml.index(b'<p>')}}]
         at = lambda b: {'byte_start': xml.index(b), 'byte_end_exclusive': xml.index(b) + len(b)}
         for unit, declared, want in (('percentOfClass', at(b'<percentOfClass>'), 'pass'), ('Chair', at(b'Chair'), 'pass'), ('shares', at(b'Chair'), 'fail'), ('percentOfClass', None, 'unresolved')):  # Codex R13 C3: the key's declared place decides; none declared is no association
             t = {'key_id': 'syn/X2', 'file_id': 'syn/form.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': a, 'table_anchor': a, 'alternatives': {}, 'excluded': set(),
@@ -1517,13 +1517,13 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(self.verdict(res, 'pkt/T01'), 'PASS')
 
     # ---- Codex round 11: the strike check over the field's own run, every matched carrier, the value's own cells; XML instances; word error rate
-    def synthetic_cell(self, raw, units, fields, support, tb=None, value=b'1234'):
+    def synthetic_cell(self, raw, units, fields, support, tb=None, value=b'1234', alternatives=None):
         """One synthetic cell target over `raw`: the check rows of a grader run as {check: (verdict, reason)}."""
         span = lambda text, after=0: {'byte_start': raw.index(text, after), 'byte_end_exclusive': raw.index(text, after) + len(text)}
         tb = tb or {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': raw.index(b'</table>') + 8},
                     'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': span(b'Revenue')}, {'r': 0, 'c': 1, 'text': value.decode(), 'anchor': span(value)}]}
         t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(value), 'table_anchor': tb['anchor'],
-             'alternatives': {}, 'excluded': set(), 'support': support, 'fields': {'printed_value': value.decode(), 'display_value': value.decode(), **fields}}
+             'alternatives': alternatives or {}, 'excluded': set(), 'support': support, 'fields': {'printed_value': value.decode(), 'display_value': value.decode(), **fields}}
         g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
         return {r['check']: (r['verdict'], r.get('reason')) for r in g.rows}
 
@@ -1865,8 +1865,8 @@ class PlantedFaultTests(GraderFixture):
         for place, ok in (({'page': 3, 'region': box}, True), ({'region': box}, False), ({'page': None, 'region': box}, False), ({'page': 1, 'region': [0, 0, float('inf'), 10]}, False), ({'page': 1, 'region': [0, 0, 80]}, False)):
             self.assertEqual(bare.possible(place), ok, place)
         for pages in ({'1': None}, {'1': []}, {'1': ['100', '100']}, {'1': 'big'}, {'1': {'width': 100, 'height': 100}}, {'bad': [100, 100]}, {'1.0': [100, 100]}, {'\u00b2': [100, 100]}, {'0': [100, 100]},
-                      {'1': [float('inf'), 100]}, {'1': [100, float('inf')]}, {'1': [float('nan'), 100]}, {'1': [True, 100]}, {'1': [0, 100]}, {'1': [-100, 100]}, [[100, 100]], 'x', 7):
-            rf = grade.RouteFile({'file_id': 'syn/f.pdf', 'pages': pages, 'units': []}, None, 'pdf')  # Codex R17-C1: a declaration that is unusable never reads as no declaration (and never stops the run: a list, a string, a key that is no number)
+                      {'1': [float('inf'), 100]}, {'1': [100, float('inf')]}, {'1': [float('nan'), 100]}, {'1': [True, 100]}, {'1': [0, 100]}, {'1': [-100, 100]}, [[100, 100]], 'x', 7, [], False, 0, ''):
+            rf = grade.RouteFile({'file_id': 'syn/f.pdf', 'pages': pages, 'units': []}, None, 'pdf')  # Codex R17-C1, R18-C4: a declaration that is unusable never reads as no declaration (and never stops the run: a list, a string, a key that is no number) — an empty list, a false, a zero or an empty string included
             self.assertEqual((rf.possible({'page': 1, 'region': box}), rf.possible({'page': 99, 'region': box})), (False, False), pages)
         for data in ({}, {'pages': {}}, {'pages': None}):
             self.assertTrue(grade.RouteFile({'file_id': 'syn/f.pdf', 'units': [], **data}, None, 'pdf').possible({'page': 3, 'region': box}), data)  # a route that declares no sizes stays as it was: located, never measured
@@ -1891,20 +1891,20 @@ class PlantedFaultTests(GraderFixture):
             rf = grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 'u', 'kind': 'image', 'text': text, 'anchor': a}]}, raw, 'htm'); g = grade.gates_for_file(rf, 'OK')
             return grade.picture_at(rf, [a]), g['dishonest'], g['anchors_measured']
         img = b'<img width="200" height="40" src="scan.png">'
-        for html in (img, b'<!-- <style>img{opacity:0}</style> -->' + img, b'<style>p{color:red}</style>' + img, b'<dialog open>' + img + b'</dialog>',
+        for html in (img, b'<!-- <style>img{opacity:0}</style> -->' + img, b'<style>p{color:red}</style>' + img,
                      b'<img width="0" height="40" src="scan.png">', b'<img src="scan.png" style="width:0px;height:0px;border:0;padding:0">', b'<img style="inline-size:0;block-size:0" src="scan.png">',
                      b'<img style="clip-path:inset(100%)" src="scan.png">', b'<div style="transform:scale(0)">' + img + b'</div>', b'<div style="width:0;height:0;overflow:hidden">' + img + b'</div>',
                      b'<style>img{opacity:1}</style>' + img, b'<link rel="stylesheet" href="unavailable.css">' + img, img + b'<style><!-- p{display:none} --></style>'):
             self.assertEqual(gate(html), (True, 0, False), html)  # a picture element in a subtree the hiding rules leave shown: whether it paints — its size, clipping, transforms, a stylesheet — is beyond the scanner, so its reading is not measured: never a mismatch, never a certificate
         self.assertEqual(gate(img, text=''), (True, 0, True))  # a unit that claims no text at a picture leaves nothing unmeasured
-        for html in (b'<noscript>' + img + b'</noscript>', b'<dialog>' + img + b'</dialog>', b'<div style="display:none">' + img + b'</div>', b'<textarea>' + img + b'</textarea>', b'<xmp>' + img + b'</xmp>',
+        for html in (b'<noscript>' + img + b'</noscript>', b'<div style="display:none">' + img + b'</div>', b'<textarea>' + img + b'</textarea>', b'<xmp>' + img + b'</xmp>',
                      b'<plaintext>' + img, b'<iframe>' + img + b'</iframe>', b'<noembed>' + img + b'</noembed>', b'<noframes>' + img + b'</noframes>'):
             self.assertEqual(gate(html), (False, 1, True), html)  # no picture element there — a hidden subtree, or an apparent tag that is literal text of a raw-text element: the claimed text is compared as text
         self.assertEqual(gate(img, at=b'src=', end=lambda raw: raw.index(b'>', raw.index(b'src=')) + 1), (False, 1, True))  # a span inside the tag is not at the picture (as round 15)
         self.assertEqual(gate(b'<p>Caption</p>' + img, text='Invented', at=b'<p>', end=lambda raw: raw.index(b'scan.png">') + 10), (False, 1, True))  # text the reader sees at the span: no picture-only place
         for html, text, certain, pictures in ((b'<textarea><img src="x">Revenue &amp; 10</textarea>', '<img src="x">Revenue & 10', True, 0), (b'<xmp><img src="x">Revenue &amp; 10</xmp><p>z</p>', '<img src="x">Revenue &amp; 10 z', True, 0),
                                               (b'<p>a</p><plaintext><img src="x"></p>', 'a <img src="x"></p>', True, 0), (b'<iframe><img src="x">Revenue</iframe><p>After</p>', 'After', True, 0),
-                                              (b'<noembed style="display:block"><img src="x">Revenue</noembed><p>After</p>', 'After', True, 0), (b'<noframes><img src="x">Revenue</noframes><p>After</p>', 'After', True, 0),
+                                              (b'<noembed style="display:block"><img src="x">Revenue</noembed><p>After</p>', 'After', False, 0), (b'<noframes><img src="x">Revenue</noframes><p>After</p>', 'After', True, 0),
                                               (b'<noframes style="display:block">Revenue</noframes><p>After</p>', 'After', False, 0), (b'<noembed><script></noembed><img src="x"><p>After</p>', 'After', True, 1),
                                               (b'<p>a</p><style>p{display:none}', 'a', False, 0), (b'<p>a</p><title>b', 'a', True, 0), (b'<p>a</p><script>b', 'a', True, 0),
                                               (b'<plaintext>a</plaintext>b', 'a</plaintext>b', True, 0), (b'<XMP><IMG SRC="x"></XMP><p>z</p>', '<IMG SRC="x"> z', True, 0), (b'<p>x</p><textarea hidden><img src="y"></textarea>', 'x', True, 0), (b'<xmp>&amp; 10</xmp>', '&amp; 10', True, 0)):
@@ -1917,8 +1917,8 @@ class PlantedFaultTests(GraderFixture):
             g = grade.gates_for_file(grade.RouteFile({'file_id': 'syn/f.htm', 'units': [unit]}, raw, 'htm'), 'OK')
             self.assertEqual((g['dishonest'], g['boundary'], g['anchors_measured'], g['uncovered']), (dishonest, 0, False, None), unit)  # under an uncertain reading no mismatch and no omission is proven; a position that cannot be true is counted independently
         for html, text, certain in ((b'<datalist><p>Revenue</p></datalist><p>After</p>', 'After', True), (b'<datalist style="display:block"><p>Revenue</p></datalist><p>After</p>', 'Revenue After', True),
-                                    (b'<noscript><p>Revenue</p></noscript><p>After</p>', 'After', True), (b'<ruby>kan<rp>(</rp><rt>ji</rt><rp>)</rp></ruby>', 'kanji', True), (b'<dialog><p>Revenue</p></dialog><p>After</p>', 'After', True),
-                                    (b'<dialog open><p>Revenue</p></dialog><p>After</p>', 'Revenue After', True), (b'<details open><summary>Sum</summary><p>Revenue</p></details>', 'Sum Revenue', True),
+                                    (b'<noscript><p>Revenue</p></noscript><p>After</p>', 'After', True),
+                                    (b'<details open><summary>Sum</summary><p>Revenue</p></details>', 'Sum Revenue', True),
                                     (b'<details><summary>Sum</summary><p>Revenue</p></details>', 'Sum Revenue', False), (b'<div display="none">Revenue</div>', 'Revenue', True)):
             v = anchor.Visible(html); self.assertEqual((' '.join(v.text.split()), v.certain), (text, certain), html)  # what the browser's own sheet never shows is not read (Chrome: r16_browser_facts); a closed <details> is not followed: uncertain
         pics = lambda html: grade.gates_for_file(grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, html, 'htm'), 'OK')['pictures']
@@ -1931,23 +1931,24 @@ class PlantedFaultTests(GraderFixture):
         # the fallback content of embedded elements, on block elements read as inline, on a </p> that closes nothing, on cells with no table
         read = lambda html: (lambda v: (' '.join(v.text.split()), v.certain, len(v.pictures)))(anchor.Visible(html))
         for html, expect in ((b'<p>A</p><noscript><!-- </noscript><p>shown 10</p> --><p>B</p>', ('A shown 10 --> B', True, 0)), (b'<p>A</p><noscript><a title="</noscript>">N 10</a></noscript><p>B</p>', ('A ">N 10 B', True, 0)),
-                             (b'<p>A</p><noscript style="display:block">N <b>10</b></noscript><p>B</p>', ('A B', True, 0)), (b'<p>A</p><noscript><img src="x.png"></noscript><img src="y.png"><p>B</p>', ('A B', True, 1)), (b'<p>A</p><noscript>N <p>10', ('A', True, 0))):
+                             (b'<p>A</p><noscript style="display:block">N <b>10</b></noscript><p>B</p>', ('A B', False, 0)), (b'<p>A</p><noscript><img src="x.png"></noscript><img src="y.png"><p>B</p>', ('A B', True, 1)), (b'<p>A</p><noscript>N <p>10', ('A', True, 0))):
             self.assertEqual(read(html), expect, html)  # where scripts run — the reading this scanner states — a <noscript> holds raw text to its first closing tag and is never shown
         for html, certain in ((b'<p>A</p><script style="display:block">var x = 10;</script><p>B</p>', False), (b'<p>A</p><style style="display:block">.a{color:red}</style><p>B</p>', False), (b'<p>A</p><title style="display:block">T10</title><p>B</p>', False),
                               (b'<p>A</p><script style="display:inline">var x = 10;', False), (b'<p>A</p><style style="display:block">p{color:red}', False), (b'<p>A</p><title style="display:block">T10', False),
                               (b'<p>A</p><noframes style="display:none">N 10</noframes><p>B</p>', True), (b'<p>A</p><script style="d\\69 splay:block">x</script><p>B</p>', False), (b'<p>A</p><script style="display:var(--d)">x</script><p>B</p>', False),
                               (b'<html><head style="display:block"><title style="display:block">T10</title></head><body><p>B</p></body></html>', False), (b'<p>A</p><script style="display:none">var x = 10;</script><p>B</p>', True),
-                              (b'<p>A</p><script style="color:red">var x = 10;</script><p>B</p>', True), (b'<html><head><title style="display:block">T10</title></head><body><p>B</p></body></html>', True), (b'<p>A</p><iframe style="display:block">I 10</iframe><p>B</p>', True)):
-            self.assertEqual(read(html)[1], certain, html)  # the browser's own sheet hides them; a display from the author shows their literal text (script, style, title, noframes; inside a head only when the head is displayed too) — uncertain then. An <iframe> or <noembed> stays unshown
-        for head, certain in ((b'Hello<title>T</title>', False), (b'<title>T</title><p>Hello 10</p>', False), (b'<title>T</title><img src="x.png">', False), (b'<meta charset="utf-8"/><title/>', False), (b'<title>My doc', False), (b'<noscript><p>N</p></noscript>', False),
-                              (b'\n<!-- c --><meta name="a" content="x > y"><base href="/"><title>T</title><style>p{color:red}</style><script>var a;</script>\n', True), (b'<link rel="icon" href="x.ico">', True), (b'', True)):
-            self.assertEqual(read(b'<html><head>' + head + b'</head><body><p>B</p></body></html>')[:2], ('B', certain), head)  # a head is skipped whole; what the parser would move into the body, or read to the end of the source (a <title/>), is not followed: uncertain
-        for name in 'audio video canvas meter progress select object template svg math'.split():
+                              (b'<p>A</p><script style="color:red">var x = 10;</script><p>B</p>', True), (b'<html><head><title style="display:block">T10</title></head><body><p>B</p></body></html>', False), (b'<p>A</p><iframe style="display:block">I 10</iframe><p>B</p>', False)):
+            self.assertEqual(read(html)[1], certain, html)  # the browser's own sheet hides them; a display from the author shows their literal text (script, style, title, noframes) — uncertain then, wherever the element stands (inside a head it shows only when the head is displayed too: not followed, R18); so for <noscript>, <noembed> and <iframe>, which Chrome shows under some displays (contents) and not under others
+        for head, expect in ((b'Hello<title>T</title>', ('Hello B', True, 0)), (b'<title>T</title><p>Hello 10</p>', ('Hello 10 B', True, 0)), (b'<title>T</title><img src="x.png">', ('B', True, 1)), (b'<meta charset="utf-8"/><title/>', ('', True, 0)),
+                             (b'<title>My doc', ('', True, 0)), (b'<noscript><p>N</p></noscript>', ('B', True, 0)), (b'<link rel="icon" href="x.ico">', ('B', True, 0)), (b'', ('B', True, 0)),
+                             (b'\n<!-- c --><meta name="a" content="x > y"><base href="/"><title>T</title><style>p{color:red}</style><script>var a;</script>\n', ('B', True, 0))):
+            self.assertEqual(read(b'<html><head>' + head + b'</head><body><p>B</p></body></html>'), expect, head)  # the tags of <html>, <head> and <body> open nothing here (R18): a head's content is read like any other — what the parser moves into the body is text of the page, a title that never ends takes the rest of the source (Chrome: codex_probes_live/r18/chrome_say.json)
+        for name in 'audio video canvas meter progress select object template svg math option optgroup ruby rb rt rtc rp image frameset button marquee applet dialog legend wbr'.split():
             self.assertEqual(read(f'<p>A</p><{name}>F 10</{name}><p>B</p>'.encode())[1], False, name)  # content the page does not flow as its text, not modelled here
-        self.assertEqual((read(b'<p>A</p><template><p>T</p>')[1], read(b'<p>A</p><button>F 10</button><label>G</label><p>B</p>')[:2]), (False, ('A F 10G B', True)))  # a template never closed, too; ordinary elements stay certain
-        for name in 'aside dir fieldset figcaption figure hgroup legend listing main menu nav optgroup option search summary xmp'.split():
+        self.assertEqual((read(b'<p>A</p><template><p>T</p>')[1], read(b'<p>A</p><label>F 10</label><label>G</label><p>B</p>')[:2]), (False, ('A F 10G B', True)))  # a template never closed, too; ordinary elements stay certain
+        for name in 'aside dir fieldset figcaption figure hgroup listing main menu nav search summary xmp'.split():
             self.assertEqual(read(f'x<{name}>F</{name}>y'.encode())[:2], ('x F y', True), name)  # elements the browser starts on a line of their own: a word boundary (sweep of every element of the HTML Standard's index)
-        for html, expect in ((b'x<details open>F</details>y', ('x F y', True)), (b'x<dialog open>F</dialog>y', ('x F y', True)), (b'x<plaintext>F', ('x F', True)), (b'x<span>F</span>y', ('xFy', True)), (b'x<font size="2">F</font>y', ('xFy', True)),
+        for html, expect in ((b'x<details open>F</details>y', ('x F y', True)), (b'x<plaintext>F', ('x F', True)), (b'x<span>F</span>y', ('xFy', True)), (b'x<font size="2">F</font>y', ('xFy', True)),
                              (b'x</p>y', ('x y', True)), (b'x</br>y', ('x y', True)), (b'x</div>y', ('xy', True)), (b'x</span>y', ('xy', True)), (b'a<span style="display:none">x</p>y</span>b', ('ab', True)), (b'<p>x</p></p>y', ('x y', True)),
                              (b'x<td>F</td>y', ('x F y', False)), (b'x<tr><td>F</td></tr>y', ('x F y', False)), (b'x<tbody><tr><td>F</td></tr></tbody>y', ('x F y', False)),
                              (b'<table><td>F</td><td>G</td></table>', ('F G', True)), (b'<table><tr><div><td>F</td></div></tr></table>', ('F', True)), (b'<table><caption>C</caption><tr><td>F</td></tr></table>', ('C F', True)),
@@ -1956,12 +1957,13 @@ class PlantedFaultTests(GraderFixture):
         for part in ('caption', 'colgroup', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th'):
             self.assertEqual((read(f'x<{part}></{part}>y'.encode())[1], read(f'<table><{part}></{part}></table><p>y</p>'.encode())[1]), (False, True), part)  # each part: dropped with no table (Chrome prints xy on one line), a part of its table inside one
         state = lambda html: (lambda v: (v.certain, v.struck_certain))(anchor.Visible(html))
-        for html, expect in ((b'<p style="display:none">x<table><tr><td>y</td></tr></table>z', (False, True)), (b'<p style="visibility:hidden">x<table><tr><td>y</td></tr></table>z', (False, True)),
-                             (b'<p style="text-decoration:line-through">x<table><tr><td>y</td></tr></table>z', (True, False)), (b'<p>x<table><tr><td>y</td></tr></table>z', (True, True)),
-                             (b'<div style="display:none"><p>x<table><tr><td>y</td></tr></table></div>z', (True, True)), (b'<p style="display:none">x<div>y</div>z', (True, True))):
-            self.assertEqual(state(html), expect, html)  # a file with no doctype is read in quirks mode, where a table does not close the open paragraph: what the paragraph itself hides or strikes then reaches the table (Chrome; 58 of the 60 development originals carry no doctype) — the reading depends on the mode: uncertain
-        for html, expect in ((b'<table><font style="display:none"><tr><td>y</td></tr></font></table>', (False, True)), (b'<table><tr><span style="visibility:hidden"><td>y</td></span></tr></table>', (False, True)),
-                             (b'<table><form style="display:none"><tr><td>y</td></tr></form></table>', (False, True)), (b'<table><s><tr><td>y</td></tr></s></table>', (True, False)),
+        for html, expect in ((b'<p style="display:none">x<table><tr><td>y</td></tr></table>z', (False, False)), (b'<p style="visibility:hidden">x<table><tr><td>y</td></tr></table>z', (False, False)),
+                             (b'<p style="text-decoration:line-through">x<table><tr><td>y</td></tr></table>z', (False, False)), (b'<p>x<table><tr><td>y</td></tr></table>z', (False, False)),
+                             (b'<p>x<table style="display:none"><tr><td>y</td></tr></table>z', (False, False)), (b'<div style="display:none"><p>x<table><tr><td>y</td></tr></table></div>z', (False, False)),
+                             (b'<p>x</p><table><tr><td>y</td></tr></table>z', (True, True)), (b'<p style="display:none">x<div>y</div>z', (True, True))):
+            self.assertEqual(state(html), expect, html)  # a file with no doctype is read in quirks mode, where a table does not close the open paragraph (Chrome; 58 of the 60 development originals carry no doctype): what the paragraph hides, strikes or ends then depends on the mode — a table that closes an open paragraph is not followed (R18: `<p>x<table hidden>z` prints xz in one mode and x z in the other; 1 such table in 22,483 real documents). A strike is never certified from an uncertain reading (Codex R18-C1.3)
+        for html, expect in ((b'<table><font style="display:none"><tr><td>y</td></tr></font></table>', (False, False)), (b'<table><tr><span style="visibility:hidden"><td>y</td></span></tr></table>', (False, False)),
+                             (b'<table><form style="display:none"><tr><td>y</td></tr></form></table>', (False, False)), (b'<table><s><tr><td>y</td></tr></s></table>', (True, False)),
                              (b'<table><font size="2"><tr><td>y</td></tr></font></table>', (True, True)), (b'<table><tbody style="display:none"><tr><td>y</td></tr></tbody></table>z', (True, True)),
                              (b'<table><tr style="display:none"><td>y</td></tr><tr><td>z</td></tr></table>', (True, True)), (b'<table><tr><td><font style="display:none">a</font>y</td></tr></table>', (True, True)),
                              (b'<div style="display:none"><table><font color="red"><tr><td>y</td></tr></font></table></div>z', (True, True))):
@@ -2034,13 +2036,400 @@ class PlantedFaultTests(GraderFixture):
                  'support': {'unit_printed': {'anchors': [xs(declared)]}}, 'alternatives': {}, 'excluded': set()}
             g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': copy.deepcopy(fields)}, xml, 'xml')); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'unit_printed')
         g = grade.Grader({'key_id': 'syn/X', 'file_id': 'syn/a.xml', 'fields': {}, 'alternatives': {}, 'support': {}, 'excluded': set()}, grade.RouteFile({'file_id': 'syn/a.xml', 'units': []}, xml, 'xml'))
-        self.assertEqual((g.printed(['x - 10 units', 'of 10 units'], '10 units'), g.boundary, g.printed(['x - 10 units'], '10 units'), g.boundary), (True, False, True, True))  # among several texts a plain match settles it; only an undecided one leaves the question open
+        self.assertEqual((g.printed(['x - 10 units', 'of 10 units'], '10 units'), g.undecided, g.printed(['x - 10 units'], '10 units'), g.undecided), (True, False, False, True))  # among several texts a plain match settles it; an undecided one alone proves nothing (strict reading) and is noted
+        g.lenient, g.undecided = True, False; self.assertEqual((g.printed(['x - 10 units'], '10 units'), g.undecided), (True, False))  # read leniently it is printed: the caller then knows its pass needed an open question
         self.assertEqual((xml_unit(b'5 shares'), xml_unit(b'Series B - 5 shares')), (('pass', None), ('unresolved', 'numeric_boundary')))  # an XML unit, the same way: the key's own span decides, a wider one cannot
         raw4 = b'<table><tr><td>Revenue</td><td>10</td><td><span>up</span><span>to</span></td><td>20</td></tr></table>'; s4 = lambda x: {'byte_start': raw4.index(x), 'byte_end_exclusive': raw4.index(x) + len(x)}
         tb4 = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw4)}, 'cells': [{'r': 0, 'c': 0, 'text': 'Revenue', 'anchor': s4(b'Revenue')}, {'r': 0, 'c': 1, 'text': '10', 'anchor': s4(b'10')},
               {'r': 0, 'c': 2, 'text': 'up', 'anchor': s4(b'up')}, {'r': 0, 'c': 2, 'text': 'to', 'anchor': s4(b'to')}, {'r': 0, 'c': 3, 'text': '20', 'anchor': s4(b'20')}]}
         rows = self.synthetic_cell(raw4, [], {'range': {'partner': {'printed_value': '20', 'anchor': s4(b'20')}, 'evidence': [{'text': 'up to', 'anchor': s4(b'<span>up</span><span>to</span>')}]}}, {}, tb4, value=b'10')
         self.assertEqual(rows['range'], ('unresolved', 'adjacency'))  # range evidence read through the same method: pieces that touch where the key prints a space stay unresolved, as before
+
+    def test_a_reading_the_scanner_has_not_modelled_is_never_certified(self):
+        # Codex R18-C1, and the same class from an own Chrome audit (codex_probes_live/r18): the scanner was certain and wrong where an opening tag held a > inside a quoted
+        # attribute (a displayed script read as hidden: text omitted and nothing reported missing), where a reference had no semicolon, where a closing tag crossed a table
+        # cell (hidden text reported missing), where the source held a null character
+        read = lambda html: (lambda v: (' '.join(v.text.split()), v.certain))(anchor.Visible(html))
+        for tag in ('script', 'title', 'style'):
+            for q in ('"', "'"):
+                self.assertFalse(anchor.Visible(f'<{tag} data-x={q}>{q} type="text/plain" style="display:block">Revenue 10</{tag}><p>After 20</p>'.encode()).certain, (tag, q))  # the opening tag ends after the quoted value: the element is displayed and Chrome prints its text
+                self.assertEqual(read(f'<{tag} data-x={q}>{q} type="text/plain" style="display:none">Revenue 10</{tag}><p>After 20</p>'.encode()), ('After 20', True), (tag, q))  # one that stays hidden is read with certainty
+        doc = lambda head, attrs=b'': b'<html><head' + attrs + b'>' + head + b'</head><body><p>x</p></body></html>'
+        self.assertEqual([anchor.Visible(x).certain for x in (b'<script data-x=">var a = 1;</script><p>x</p>', doc(b'<title>T</title>', b' data-x="a>b" style="display:block"'), doc(b'<title>T</title>', b' data-x="a>b"'))], [False, True, True])  # an opening tag whose quote never closes is not read; a head the author displays shows nothing by itself — its title keeps the browser's own display (Chrome: chrome_say.json)
+        self.assertEqual([anchor.Visible(doc(x)).certain for x in (b'<style data-x="a>b">p{display:none}</style>', b'<style data-x="a>b">p{color:red}</style>', b'<style data-x="a>display:none">p{color:red}</style>',
+                                                                   b'<link title="a>b" rel="stylesheet" href="x.css">', b'<link title="a>b" rel="icon" href="x.ico">')], [False, True, True, False, True])  # a sheet and a stylesheet link are read past it too: the sheet is what follows the opening tag, never a piece of an attribute
+        gate = lambda raw, text, a, b: grade.gates_for_file(grade.RouteFile({'file_id': 'syn/a.htm', 'units': [{'id': 't', 'kind': 'text', 'text': text, 'anchor': {'byte_start': a, 'byte_end_exclusive': b}}]}, raw, 'htm'), 'OK')
+        raw = b'<script data-x=">" type="text/plain" style="display:block">Revenue 10</script><p>After 20</p>'; g = gate(raw, 'After 20', raw.index(b'After'), raw.index(b'After') + 8)
+        self.assertEqual((g['anchors_measured'], g['uncovered']), (False, None))  # his integration case: a route that omits the displayed text is no longer measured complete
+        for ref in ('&#150 ', '&#x96 ', '&nbsp ', '&notes', '&amp ', '&#2 ', '&#xFFFF ', '&copy 2024', '&#x2014B'):
+            self.assertFalse(anchor.Visible(('<p>A' + ref + 'B</p>').encode()).certain, ref)  # the browser decodes these without their semicolon; the scanner reads them literally and says so
+        for ref, text in (('&#150;', 'A–B'), ('&amp;', 'A&B'), ('&NoSuchEntity;', 'A&NoSuchEntity;B'), ('&amp;#2;', 'A&#2;B'), ('&T ', 'A&T B'), (' & ', 'A & B'), ('&#; ', 'A&#; B'), ('&hellip ', 'A&hellip B')):
+            self.assertEqual(read(('<p>A' + ref + 'B</p>').encode()), (text, True), ref)  # a reference with its semicolon, and an ampersand that begins none (AT&T), are read as before
+        v = anchor.Visible(b'<p>AT&T Corp</p>'); self.assertEqual((v.at(5, 7), v.at(6, 7), v.certain), ('&T', 'T', True))  # each character at its own bytes
+        self.assertEqual([anchor.Visible(x).certain for x in (b'<p>x</p><textarea>A&nbsp B</textarea>', b'<xmp>A&nbsp B</xmp>')], [False, True])  # in a text box too; in literal text nothing is a reference
+        self.assertEqual([anchor.Visible(x).certain for x in (b'<span>Reve\x00nue 10</span>', b'<span>Revenue 10</span>', b'<p>A&#0;B</p>')], [False, True, True])  # a literal null: the parser drops it; a reference to it is the replacement character
+        for html, certain in ((b'<div style="display:none"><table><tr><td>A</div>Revenue 10</td></tr></table>', False), (b'<div style="visibility:hidden"><table><tr><td>A</div>Revenue 10</td></tr></table>', False),
+                              (b'<div><table><tr><td>A</div>Revenue 10</td></tr></table>', False), (b'<table><tr><td>o<table><tbody></tr></table>i</td></tr></table>', False), (b'<table><tr><td>a<table><tr></td></tr></table>', False),
+                              (b'<table><caption>c<div>d</caption></table>', True), (b'<table><caption><div>c</caption><tr><td>a</div>b</td></tr></table>', True),
+                              (b'<ul><li style="display:none">x<ul><li>y</li>z</li>w</ul>', False), (b'<ul><li>x<ul><li>y</li>z</li>w</ul>', False), (b'<p style="display:none">x<button>y</p>z</button>w', False),
+                              (b'<form>x<div>y</form>z</div>w', False), (b'<h1 style="display:none">x</h2>y', False), (b'<h1>x<h2>y</h1>z', False), (b'<div style="display:none">x<marquee>y</div>z</marquee>w', False), (b'<div>x<applet>y</div>z</applet>w', False),
+                              (b'<span style="display:none">x<p>y</span>z</p>w', False), (b'<a style="display:none">x<div>y</a>z</div>w', False), (b'<span style="visibility:hidden">x<div>y</span>z</div>w', False),
+                              (b'<b>x<i style="display:none">y</b>z</i>w', False), (b'<div>x<font style="display:none">y</div>z', False),
+                              (b'<div><table><tr><td>Revenue 10</td></tr></table></div>', True), (b'<table><tr><td>a<td>b</tr><tr><td>c</table>', True), (b'<table><tr><td style="display:none">a</tr><tr><td>c</td></tr></table>', True),
+                              (b'<table><tbody><tr><td>a</tbody></table>', True), (b'<table><tr><td><font style="display:none">a</td><td>b</td></tr></table>', True), (b'<table><tr><td><ix:x style="display:none"><ix:y>a</td><td>b</td></tr></table>', True),
+                              (b'<table><tr><td><ul><li>a</td></tr></table>b', True), (b'<div><ix:hidden><ix:y name="n">a</ix:hidden>b</div>', True), (b'<div style="display:none"><p>a</div>b', True), (b'<div><span>a</div>b', True),
+                              (b'<ul><li>x<li>y</ul>z', True), (b'<dl><dt>a<dd>b</dl>c', True), (b'<ul><li><p>a</li></ul>b', True), (b'<p>x<span>y</p>z', True), (b'<span>x<ix:n/>y</span>z', True), (b'<span>x<b>y</span>z', True),
+                              (b'<form>x</form>y', False), (b'<h2>x</h2>y', True), (b'<div><p style="display:none">a</div>b', True), (b'<div><ul><li>a</div>b', False), (b'<section><div style="display:none">a</section>b', False), (b'<div>x<span style="display:block">y</div>z', False),
+                              (b'<font>x<p>y</font>z</p>w', False), (b'<span>x<div>y</span>z</div>w', False), (b'<b>x<p>y</b>z</p>w', False), (b'<span style="text-decoration:line-through">x<div>y</span>z</div>w', False)):
+            self.assertEqual(anchor.Visible(html).certain, certain, html)  # followed: a table part's own closing tag (26,603 </tr> over an open cell in the development originals), a special element's closing tag over the paragraphs and list items left open inside it (the standard's implied end tags), any closing tag over open inline elements (inline-XBRL endings). Not followed: a closing tag across a nested table, any other tag across an open special element (the parser ignores it, or moves the block out), a block's tag across another open block, a </form>, an element closed on the way that itself hides or strikes (a formatting element is opened again) — Chrome: scratch18/chrome_grid, codex_probes_live/r18/r18_extra_facts
+        for html, text in ((b'<div><ix:hidden><ix:y name="n">a</ix:hidden>b</div>', 'b'), (b'<table><tr><td>a<td>b</tr><tr><td>c</table>', 'a b c'), (b'<div style="display:none">x</body>y', ''), (b'<div>x</body>y</div>z', 'xy z'),
+                           (b'x<body class="q">y', 'xy'), (b'x<head>y</head>z', 'xyz'), (b'<table><tr><td><font style="display:none">a</td><td>b</td></tr></table>', 'b'), (b'<div style="display:inline">x<p>y</div>z', 'x y z'),
+                           (b'<p>x<div style="display:none">y</div>z', 'x z'), (b'<p>x<div style="display:inline">y</div>z', 'x yz'), (b'<ul><li style="display:none">a<blockquote>b<li>c</li></blockquote></li></ul>d', 'd'), (b'<p style="display:none">a<li>b</li>c', 'b c')):
+            self.assertEqual(read(html), (text, True), html)  # read as Chrome reads them: the tags of <html>, <head> and <body> open, close and break nothing; a visible block that ends — closed by a tag or by the next block — ends its line; a new list item does not close one across a block; a list item closes an open paragraph
+        for html, certain in ((b'<table><tr><td>a</td></tr><b>X</b><tr><td>c</td></tr></table>', False), (b'<table><tr><td>a</td><span>X</span><td>c</td></tr></table>', False), (b'<table><tr><td>a</td></tr><font size=2><b>X</b></font><tr><td>c</td></tr></table>', False),
+                              (b'<table><font size="2"><tr><td>a <b>X</b></td></tr></font></table>', True), (b'<table><tr><td>a <b>X</b></td><td>c</td></tr></table>', True), (b'<table><font><b style="display:none"><tr><td>y</td></tr></b></font></table>', False)):
+            self.assertEqual(anchor.Visible(html).certain, certain, html)  # text inside an element the parser moves out of a table is printed before the table (Chrome): the page's order is not the source's; text in a cell is where it stands
+        for html, expect in ((b'<div popover>x</div>y', ('y', True)), (b'<div popover="manual">x</div>y', ('y', True)), (b'<div popover style="display:block">x</div>y', ('x y', True)), (b'a<span popover>x</span>b', ('ab', True))):
+            self.assertEqual(read(html), expect, html)  # hidden by the browser's own sheet until shown, like `hidden`
+
+    def test_a_join_the_source_cannot_settle_is_neither_proved_nor_disproved(self):
+        # Codex R18-C2: with an uncertain reading (a stylesheet may hide the <br> or set a <span> on its own line) two correctly anchored pieces 'oper' + 'ating' failed
+        # as a split word: the scanner's guessed space was taken for proof
+        def rows(raw, units, want, anchor_=None):
+            t = {'key_id': 'syn/S', 'file_id': 'syn/a.htm', 'type': 'structure', 'format': 'structure/htm', 'split': 'development', 'anchor': anchor_ or {'byte_start': 0, 'byte_end_exclusive': len(raw)},
+                 'fields': {'printed_text': want, 'kind': 'paragraph'}, 'support': {}, 'alternatives': {}, 'excluded': set()}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.htm', 'units': units}, raw, 'htm')); g.grade_structure()
+            return {r['check']: (r['verdict'], r['reason']) for r in g.rows}
+        at = lambda raw, x, after=0: {'byte_start': raw.index(x, after), 'byte_end_exclusive': raw.index(x, after) + len(x)}
+        pieces = lambda raw, texts: [{'id': str(i), 'kind': 'text', 'text': x, 'anchor': at(raw, x.encode())} for i, x in enumerate(texts)]
+        for style, gap in (('br{display:none}', '<br>'), ('div{display:inline}', '<div></div>'), ('span{display:block}', ''), ('i{display:none}', '<i>x</i>')):
+            raw = f'<style>{style}</style><span>oper</span>{gap}<span>ating</span>'.encode()
+            self.assertEqual(rows(raw, pieces(raw, ['oper', 'ating']), 'operating')['printed_text'], ('unresolved', 'adjacency'), style)  # the join is unknown: not a split word
+            self.assertEqual(rows(raw, pieces(raw, ['oper', 'ating']), 'oper ating')['printed_text'], ('unresolved', 'adjacency'), style)  # and not a proved space either
+            self.assertEqual(rows(raw, pieces(raw, ['oper', 'atinX'.replace('X', 'g')])[:1] + [dict(pieces(raw, ['ating'])[0], text='atinX')], 'operating')['printed_text'], ('fail', 'text'), style)  # a text that is wrong under either reading still fails
+            self.assertEqual(rows(raw, pieces(raw, ['oper']), 'oper', at(raw, b'oper'))['printed_text'], ('pass', None), style)  # a check that needs no join keeps its verdict in the same uncertain file
+        self.assertEqual(rows(b'<span>oper</span><span>ating</span>', pieces(b'<span>oper</span><span>ating</span>', ['oper', 'ating']), 'operating')['printed_text'], ('pass', None))  # proved touching
+        self.assertEqual(rows(b'<span>oper</span> <span>ating</span>', pieces(b'<span>oper</span> <span>ating</span>', ['oper', 'ating']), 'operating')['printed_text'], ('fail', 'word_split'))  # proved apart
+        for head, expect in ((b'', ('pass', None)), (b'<style>br{display:none}</style>', ('unresolved', 'adjacency'))):  # the same through the cells of a table: a label in two pieces at one grid position
+            raw = head + b'<table><tr><td><span>Reve</span><span>nue</span></td><td>1234</td></tr></table>'
+            tb = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)},
+                  'cells': [{'r': 0, 'c': 0, 'text': 'Reve', 'anchor': at(raw, b'Reve')}, {'r': 0, 'c': 0, 'text': 'nue', 'anchor': at(raw, b'nue')}, {'r': 0, 'c': 1, 'text': '1234', 'anchor': at(raw, b'1234')}]}
+            got = self.synthetic_cell(raw, [], {'row_label': 'Revenue'}, {'row_label': {'anchors': [{'byte_start': raw.index(b'<span>Reve'), 'byte_end_exclusive': raw.index(b'</td>')}]}}, tb)
+            self.assertEqual((got['row_label'], got['value']), (expect, ('pass', None)), head)  # the value's own check needs no join: untouched
+        for head, expect in ((b'', ('pass', None)), (b'<style>p{display:block}</style>', ('unresolved', 'struck'))):  # a strike only the source's map can place (the struck word is printed twice, once outside the field): an uncertain map places nothing
+            raw = head + b'<p><s>old</s> price and old cost</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'
+            unit = lambda struck: [{'id': 'u', 'kind': 'text', 'text': 'old price and old cost', 'struck': struck, 'anchor': {'byte_start': raw.index(b'<s>'), 'byte_end_exclusive': raw.index(b'</p>')}}]
+            support = {'segment_or_basis': {'anchors': [{'byte_start': raw.index(b'<s>'), 'byte_end_exclusive': raw.index(b' and old')}]}}
+            got = [self.synthetic_cell(raw, unit(x), {'segment_or_basis': ['~~old~~ price']}, support)['segment_or_basis'] for x in (['old'], [])]
+            self.assertEqual(got, [expect, ('fail', 'struck')], head)  # and a strike the route does not report at all fails either way
+        raw = b'<style>br{display:none}</style><table><tr><td>Revenue</td><td>1234</td></tr></table>'
+        t = {'key_id': 'syn/T', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': at(raw, b'1234'), 'table_anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)}, 'alternatives': {}, 'excluded': set(),
+             'fields': {'printed_value': '1234'}, 'support': {'table_context': {'pieces': [{'text': 'Sales', 'byte_ranges': [[raw.index(b'Revenue'), raw.index(b'Revenue') + 7]]}]}}}
+        self.assertEqual(grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, raw, 'htm')).table_context, ['Sales'])  # nor does an uncertain reading prove a defect of the key: its declared context is not compared with a text nobody is sure of
+        with self.assertRaises(ValueError): grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, raw[raw.index(b'<table>'):], 'htm'))  # (anchors shift without the sheet: the certain reading still finds the defect)
+
+    def test_a_proved_match_beats_an_open_one_and_an_open_one_is_never_a_failure(self):
+        # Codex R18-C3: two carriers at the key's places, 'Type - 10 shares' (the dash leaves it open) and 'Ordinary 10 shares' (proved): the open question of the first survived the
+        # proof by the second and the field came out unresolved, in either order
+        def basis(phrases, wanted=('10 shares',)):
+            raw = (''.join('<p>' + p + '</p>' for p in phrases) + '<table><tr><td>Revenue</td><td>1234</td></tr></table>').encode()
+            at = lambda x: {'byte_start': raw.index(x.encode()), 'byte_end_exclusive': raw.index(x.encode()) + len(x.encode())}
+            return self.synthetic_cell(raw, [{'id': str(i), 'kind': 'text', 'text': p, 'anchor': at(p)} for i, p in enumerate(phrases)], {'segment_or_basis': list(wanted)}, {'segment_or_basis': {'anchors': [at(p) for p in phrases]}})['segment_or_basis']
+        for phrases in (('Type - 10 shares', 'Ordinary 10 shares'), ('Ordinary 10 shares', 'Type - 10 shares')):
+            self.assertEqual(basis(phrases), ('pass', None), phrases)  # proved by one carrier: the other's open dash decides nothing
+        self.assertEqual((basis(['Ordinary 10 shares']), basis(['Type - 10 shares']), basis(['Ordinary 11 shares'])[0]), (('pass', None), ('unresolved', 'numeric_boundary'), 'fail'))  # proved alone; open alone; wrong
+        self.assertEqual(basis(['Ordinary 10 shares', 'Type - 20 shares'], ['10 shares', '20 shares']), ('unresolved', 'numeric_boundary'))  # a second required phrase that only an open dash supports keeps the field open
+        xml = b'<r><holding><title>Series B - 5 shares</title><note>each of 5 shares</note><qty>10</qty></holding></r>'; xs = lambda x: {'byte_start': xml.index(x), 'byte_end_exclusive': xml.index(x) + len(x)}
+        fields = [{'id': n, 'kind': 'field', 'name': n, 'text': x.decode(), 'anchor': xs(x), 'path': ['r', 'holding'], 'group': {'index': 1, 'count': 1, 'at': xml.index(b'<holding>')}} for n, x in (('title', b'Series B - 5 shares'), ('note', b'each of 5 shares'), ('qty', b'10'))]
+        def xml_unit(*declared):
+            t = {'key_id': 'syn/X', 'file_id': 'syn/a.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': xs(b'10'), 'fields': {'printed_value': '10', 'row_label': 'qty', 'unit_printed': '5 shares'},
+                 'support': {'unit_printed': {'anchors': [xs(d) for d in declared]}} if declared else {}, 'alternatives': {}, 'excluded': set()}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': copy.deepcopy(fields)}, xml, 'xml')); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'unit_printed')
+        self.assertEqual((xml_unit(b'Series B - 5 shares', b'each of 5 shares'), xml_unit(b'each of 5 shares', b'Series B - 5 shares'), xml_unit(b'Series B - 5 shares')), (('pass', None), ('pass', None), ('unresolved', 'numeric_boundary')))  # an XML unit, the same way, in either order
+        fields = [x for x in fields if x['id'] != 'note']; self.assertEqual(xml_unit(), ('unresolved', 'support'))  # with no declared place, an open dash in the same instance is no proof of absence either
+        t = {'key_id': 'syn/F', 'file_id': 'syn/f.htm', 'split': 'development', 'format': 'cell/htm', 'fields': {'lead_in': 'x'}, 'alternatives': {}, 'support': {}, 'excluded': set()}
+        def verdict(strict, lenient):  # the two readings of one field, combined: what the strict reading proves stands; a pass that needs the open reading is open; a failure needs both
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': []}, b'<p>x</p>', 'htm'))
+            def fn(value, alt):
+                g.row('side', 'pass')  # a check may write a row of its own (reference_linked): written once, whichever reading decides
+                if g.lenient: return lenient
+                g.undecided = True; return strict
+            g.field('lead_in', fn); self.assertEqual([r['check'] for r in g.rows], ['side', 'lead_in']); return g.rows[-1]['verdict'], g.rows[-1]['reason']
+        P, F, U = ('pass', None, None), ('fail', 'text', None), ('unresolved', 'adjacency', None)
+        self.assertEqual([verdict(*x) for x in ((P, F), (F, P), (F, F), (F, U), (U, F), (U, P), (F, ('fail', 'placement', None)))],
+                         [('pass', None), ('unresolved', 'numeric_boundary'), ('fail', 'text'), ('unresolved', 'adjacency'), ('unresolved', 'adjacency'), ('unresolved', 'numeric_boundary'), ('fail', 'placement')])
+
+    def test_only_a_judgment_that_reads_text_across_an_unknown_join_is_left_open(self):
+        # two independent reviews of round 18 (D1, D2, D3, breadth, the key's say): under the two readings of an unknown join every two units at the key's places were glued —
+        # with the route's own paragraphs between them, with characters between that no markup wraps — so fields that read nothing across a join came out unresolved in any
+        # uncertain file; a first repair let the key's pieces decide which joins to read, and failed a correct phrase; a text wrong under both readings came out unresolved
+        # when the readings named it differently; a field right only when one join is closed and the next open failed; a recognition row left open made its target unresolved
+        SHEET, TABLE = b'<style>.x{display:none}</style>', b'<table><tr><td>Revenue</td><td>1234</td></tr></table>'  # a sheet that names no element of the page: the page prints the same, the reading is uncertain
+        at = lambda raw, x, after=0: {'byte_start': raw.index(x, after), 'byte_end_exclusive': raw.index(x, after) + len(x)}
+        U = lambda raw, texts, kind='text': [{'id': 'u%d' % i, 'kind': kind, 'text': x, 'anchor': at(raw, x.encode())} for i, x in enumerate(texts)]
+        all_of = lambda raw, a, b: {'byte_start': raw.index(a), 'byte_end_exclusive': raw.index(b)}
+        def table(raw, pieces):  # a label printed as several pieces at one grid position
+            return {'id': 't', 'kind': 'table', 'anchor': {'byte_start': raw.index(b'<table>'), 'byte_end_exclusive': len(raw)},
+                    'cells': [{'r': 0, 'c': 0, 'text': x, 'anchor': at(raw, x.encode())} for x in pieces] + [{'r': 0, 'c': 1, 'text': '1234', 'anchor': at(raw, b'1234')}]}
+        def block(raw, units, want, anchor_=None):
+            t = {'key_id': 'syn/S', 'file_id': 'syn/a.htm', 'type': 'structure', 'format': 'structure/htm', 'split': 'development', 'anchor': anchor_ or {'byte_start': 0, 'byte_end_exclusive': len(raw)},
+                 'fields': {'printed_text': want, 'kind': 'paragraph'}, 'support': {}, 'alternatives': {}, 'excluded': set()}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.htm', 'units': units}, raw, 'htm')); g.grade_structure(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'printed_text')
+        P, OPEN = ('pass', None), ('unresolved', 'adjacency')
+        for head in (b'', SHEET):
+            # under an uncertain reading one fact that needs no reading still proves two pieces apart: characters between them that no markup wraps. The route's own text between them
+            # proves nothing (second review of round 18): a route that keeps text the page hides would be failed for pieces that touch on the page
+            raw = head + b'<h1>Item 7. Discussion</h1><p>Words between.</p><h2>Liquidity</h2>' + TABLE; self.assertIs(anchor.Visible(raw).certain, not head)
+            h1, h2 = U(raw, ['Item 7. Discussion', 'Liquidity'], 'heading'); par = dict(U(raw, ['Words between.'])[0], id='par')
+            path = lambda units: self.synthetic_cell(raw, units, {'section_path': ['Item 7. Discussion', 'Liquidity']}, {'section_path': {'anchors': [h1['anchor'], h2['anchor']]}})['section_path']
+            upto = dict(par, anchor=all_of(raw, b'<p>Words', b'Liquidity'))  # the same paragraph with a place that runs up to the second heading's first letter: still between the two
+            self.assertEqual((path([h1, par, h2]), path([h1, upto, h2]), path([h1, h2])), (OPEN,) * 3 if head else (P,) * 3, head)  # with the route's paragraph between the two headings or without it: only markup the sheet may change stands between them
+            raw = head + b'<div>Free Cash Flow</div>\n<div>Three Months Ended</div>' + TABLE; whole = [all_of(raw, b'<div>Free', b'\n<div>Three'), all_of(raw, b'<div>Three', b'<table>')]  # places that span the whole elements: a line feed stands between them
+            units = [{'id': 'a', 'kind': 'text', 'text': 'Free Cash Flow', 'anchor': whole[0]}, {'id': 'b', 'kind': 'text', 'text': 'Three Months Ended', 'anchor': whole[1]}]
+            self.assertEqual(self.synthetic_cell(raw, units, {'table_title': ['Free Cash Flow', 'Three Months Ended']}, {'table_title': {'anchors': whole}})['table_title'], P, head)
+            raw = head + b'<p>oper ating</p>'  # the space of one text run stands between the two pieces, whatever a sheet says; so does a character written as a reference
+            self.assertEqual((block(raw, U(raw, ['oper', 'ating']), 'operating'), block(raw, U(raw, ['oper', 'ating']), 'oper ating')), (('fail', 'word_split'), P), head)
+            raw = head + b'<p>oper&nbsp;ating</p>'; self.assertEqual(block(raw, U(raw, ['oper', 'ating']), 'operating'), ('fail', 'word_split'), head)
+            raw = b'<p>oper\x00ating</p>'; self.assertEqual((anchor.Visible(raw).certain, block(raw, U(raw, ['oper', 'ating']), 'operating')), (False, OPEN))  # a null byte is no character between them: the parser drops it (Chrome prints 'operating')
+            raw = head + b'<p>operating</p>'; two = [{'id': 'a', 'kind': 'text', 'text': 'oper', 'anchor': at(raw, b'oper')}, {'id': 'b', 'kind': 'text', 'text': 'ating', 'anchor': at(raw, b'ating')}]
+            self.assertEqual(block(raw, two, 'operating'), P, head)  # and two pieces that meet inside one run of text touch, whatever a sheet says
+            raw = head + b'<span>oper</span><span>ating</span>'; whole = [{'id': 'a', 'kind': 'text', 'text': 'oper', 'anchor': all_of(raw, b'<span>oper', b'<span>ating')}, {'id': 'b', 'kind': 'text', 'text': 'ating', 'anchor': {'byte_start': raw.index(b'<span>ating'), 'byte_end_exclusive': len(raw)}}]
+            self.assertEqual(block(raw, whole, 'operating'), OPEN if head else P, head)  # places that meet at a tag are no such proof: the sheet may set the second <span> on its own line
+            for raw, first, second in ((head + b'<p>oper<span>ating</span></p>', b'oper', b'<span>ating</span>'), (head + b'<p><span>oper</span>ating</p>', b'<span>oper</span>', b'ating')):  # nor places with a tag at one edge only
+                self.assertEqual(block(raw, [{'id': 'a', 'kind': 'text', 'text': 'oper', 'anchor': at(raw, first)}, {'id': 'b', 'kind': 'text', 'text': 'ating', 'anchor': at(raw, second)}], 'operating'), OPEN if head else P, (head, first))
+            # two pieces of the key in two units with nothing but markup between them: the key has no say in how their join is read (Codex R9-1) — proved apart in the
+            # certain file; unknown in the other, where read as touching they would be one text (as the last case of this test shows for a proved touching join)
+            raw = head + b'<p>Free Cash Flow</p><p>Three Months Ended</p>' + TABLE
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['Free Cash Flow', 'Three Months Ended']), {'table_title': ['Free Cash Flow', 'Three Months Ended']}, {'table_title': {'anchors': [at(raw, b'Free Cash Flow'), at(raw, b'Three Months Ended')]}})['table_title'], OPEN if head else P, head)
+            raw = head + b'<p><span>Unaudited, in mil</span><span>lions, except per share</span></p>' + TABLE  # each unit holds a whole phrase of the key and the join runs through a third: proved touching, or unknown — never a failure
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['Unaudited, in mil', 'lions, except per share']), {'segment_or_basis': ['Unaudited', 'millions', 'except per share']}, {'segment_or_basis': {'anchors': [all_of(raw, b'<span>Unaudited', b'</p>')]}})['segment_or_basis'], OPEN if head else P, head)
+            raw = head + b'<table><tr><td><span>Net sales</span><br><span>Total</span></td><td>1234</td></tr></table>'
+            self.assertEqual(self.synthetic_cell(raw, [], {'row_label': 'Net sales | Total'}, {'row_label': {'anchors': [all_of(raw, b'<span>Net', b'</td>')]}}, table(raw, ['Net sales', 'Total']))['row_label'], OPEN if head else P, head)
+            # second review of round 18: a check that looks for ONE carrier equal to the key's text (a heading of the path, the unit, a run-in heading) where a neighbour stands at
+            # the key's place too. Read all touching, the neighbour is glued in; read all apart, the word is split: neither reading passes, yet the true one — the certain
+            # twin — does. Open, never a failure
+            raw = head + b'<h2><span>1.</span> <span>Busi</span><span>ness</span></h2>' + TABLE
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['1.', 'Busi', 'ness'], 'heading'), {'section_path': ['Business']}, {'section_path': {'anchors': [all_of(raw, b'<span>1.', b'</h2>')]}})['section_path'], OPEN if head else P, head)
+            raw = head + b'<p><span>sha</span><span>res</span> <span>authorized</span></p>' + TABLE
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['sha', 'res', 'authorized']), {'unit_printed': 'shares'}, {'unit_printed': {'anchors': [all_of(raw, b'<span>sha', b'</p>')]}})['unit_printed'], OPEN if head else P, head)
+            raw = head + b'<p><span>1.</span> <span>Busi</span><span>ness overview of the year.</span></p>' + TABLE  # a run-in heading: its block starts with it, after the neighbour
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['1.', 'Busi', 'ness overview of the year.']), {'section_path': ['Business']}, {'section_path': {'anchors': [all_of(raw, b'<span>1.', b'</p>')]}})['section_path'], OPEN if head else P, head)
+            # one piece of the key put together from two route pieces: there the join is read — proved apart in the certain file, unknown in the other
+            raw = head + b'<p>Free Cash</p><p>Flow</p>' + TABLE
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['Free Cash', 'Flow']), {'table_title': ['Free Cash Flow']}, {'table_title': {'anchors': [at(raw, b'Free Cash'), at(raw, b'Flow')]}})['table_title'], OPEN if head else P, head)
+            raw = head + b'<table><tr><td><span>Net</span><br><span>sales</span></td><td>1234</td></tr></table>'
+            self.assertEqual(self.synthetic_cell(raw, [], {'row_label': 'Net sales'}, {'row_label': {'anchors': [all_of(raw, b'<span>Net', b'</td>')]}}, table(raw, ['Net', 'sales']))['row_label'], OPEN if head else P, head)
+            # a text wrong under every reading of its joins fails, whatever each reading calls the fault (D1): a space the tool put inside a piece
+            raw = head + b'<span>oper</span><br><span>ating</span><br><span>in come</span>'
+            self.assertEqual(block(raw, U(raw, ['oper', 'ating', 'in come']), 'operating income')[0], 'fail', head)
+            raw = head + b'<table><tr><td><span>Net</span><br><span>sa les</span></td><td>1234</td></tr></table>'
+            self.assertEqual(self.synthetic_cell(raw, [], {'row_label': 'Net sales'}, {'row_label': {'anchors': [all_of(raw, b'<span>Net', b'</td>')]}}, table(raw, ['Net', 'sa les']))['row_label'][0], 'fail', head)
+            raw = head + b'<span>ating</span><span>oper</span>'
+            self.assertEqual(block(raw, U(raw, ['oper', 'ating']), 'operating')[0], 'fail', head)  # and pieces the route maps in the reverse order are no join in any file
+            # three pieces, the first join inside a word and the second between two words (D2): right under one reading only, the first closed and the second open — never
+            # a failure; and never a pass: in the certain file the bytes prove both joins closed, the key's space is the page's alone
+            raw = head + b'<p><span>oper</span><span>ating</span><span>income</span></p>' + TABLE; par = {'anchors': [all_of(raw, b'<span>oper', b'</p>')]}
+            for field, value in (('lead_in', 'operating income'), ('table_title', ['operating income']), ('segment_or_basis', ['operating income'])):
+                self.assertEqual(self.synthetic_cell(raw, U(raw, ['oper', 'ating', 'income']), {field: value}, {field: par})[field], OPEN, (head, field))
+            self.assertEqual(block(raw, U(raw, ['oper', 'ating', 'income']), 'operating income', par['anchors'][0]), OPEN, head)
+            raw = head + b'<table><tr><td><span>oper</span><span>ating</span><span>income</span></td><td>1234</td></tr></table>'
+            self.assertEqual(self.synthetic_cell(raw, [], {'row_label': 'operating income'}, {'row_label': {'anchors': [all_of(raw, b'<span>oper', b'</td>')]}}, table(raw, ['oper', 'ating', 'income']))['row_label'], OPEN, head)
+        raw = b'<span>Free Cash Flow</span><span>Three Months Ended</span>' + TABLE  # two whole pieces the certain source proves touching are read as one text, as before: the key's break between them is the page's alone
+        self.assertEqual(self.synthetic_cell(raw, U(raw, ['Free Cash Flow', 'Three Months Ended']), {'table_title': ['Free Cash Flow', 'Three Months Ended']}, {'table_title': {'anchors': [at(raw, b'Free Cash Flow'), at(raw, b'Three Months Ended')]}})['table_title'], OPEN)
+        # the fixture's correct route over the same page with such a sheet (same length: every anchor stays): no target and no check row changes
+        styled = HTML.replace(b'td{padding:2px}', b'x{display:none}'); self.assertEqual((len(styled), anchor.Visible(styled).certain, anchor.Visible(styled).text), (len(HTML), False, anchor.Visible(HTML).text))
+        plain = self.run_grader(); (self.pkt / 'sources' / HTM_ID).write_bytes(styled)
+        for path, text in ((self.pkt / 'targets.json', json.dumps(TARGETS)), (self.pkg / 'converter_checks' / 'REGRESSION_CASES.json', json.dumps(SUPPLEMENT)), (self.root / 'case_catalog.csv', (self.root / 'case_catalog.csv').read_text())):
+            self.assertIn(sha(HTML), text); path.write_text(text.replace(sha(HTML), sha(styled)))
+        res = self.run_grader(lambda r: r[HTM_ID].update(sha256=sha(styled))); rows = lambda x: sorted((r['key_id'], r['check'], r['verdict'], r['reason']) for r in x['results'])
+        self.assertEqual(({k: v['verdict'] for k, v in res['targets'].items()}, rows(res)), ({k: v['verdict'] for k, v in plain['targets'].items()}, rows(plain)))
+        self.assertEqual(set(v['verdict'] for v in plain['targets'].values()), {'PASS'})
+        # a recognition row the two readings judge differently is left open and decides nothing (D3): the heading 'Item 7.' + 'Management's Discussion' in two units, the
+        # first called a heading, the second text — read as one it is a heading, read apart its last piece is not
+        raw = b'<style>br{display:none}</style><div><span>Item 7.</span><br><span>Management\'s Discussion</span></div><p>Revenue rose.</p>'
+        units = [dict(u, kind=k) for u, k in zip(U(raw, ['Item 7.', "Management's Discussion", 'Revenue rose.']), ('heading', 'text', 'text'))]
+        t = {'key_id': 'syn/H', 'file_id': 'syn/a.htm', 'type': 'structure', 'format': 'structure/htm', 'split': 'development', 'anchor': at(raw, b'Revenue rose.'), 'alternatives': {}, 'excluded': set(),
+             'fields': {'printed_text': 'Revenue rose.', 'kind': 'paragraph', 'section_path': ["Item 7. Management's Discussion"]}, 'support': {'section_path': {'anchors': [all_of(raw, b'Item 7.', b'</span></div>')]}}}
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.htm', 'units': units}, raw, 'htm')); g.grade_structure(); got = {r['check']: (r['verdict'], r['reason']) for r in g.rows}
+        self.assertEqual((got['heading_recognised'], got['section_path'], got['printed_text'], grade.verdict_of(g.rows)), (OPEN, P, P, 'PASS'))
+        row = lambda check, verdict: {'check': check, 'verdict': verdict}
+        self.assertEqual([grade.verdict_of([row('value', 'pass'), row(c, v)]) for c, v in (('note_linked', 'unresolved'), ('kind', 'fail'), ('row_label', 'unresolved'), ('row_label', 'fail'), ('printed_text', 'approximate'), ('row_label', 'na'))],
+                         ['PASS', 'PASS', 'UNRESOLVED', 'FAIL', 'APPROXIMATE', 'PASS'])
+        self.assertEqual(grade.verdict_of([row('a', 'unresolved'), row('b', 'fail'), row('c', 'approximate')]), 'FAIL')  # a failure outranks an open check, an open check an approximate one
+        self.assertEqual(grade.verdict_of([row('a', 'approximate'), row('b', 'unresolved')]), 'UNRESOLVED')
+
+    def test_every_accepted_value_is_judged_whole_and_a_dash_is_settled_at_its_own_place(self):
+        # independent review of round 18 (D4, D5, D6; older than the round): with two accepted values the first's failure was reported although the second was open; a pass
+        # that needed an open dash skipped the struck check; a dash the source prints at one of a field's places certified a dash the route invented at another
+        TABLE = b'<table><tr><td>Revenue</td><td>1234</td></tr></table>'; OPEN = ('unresolved', 'numeric_boundary')
+        at = lambda raw, x, after=0: {'byte_start': raw.index(x, after), 'byte_end_exclusive': raw.index(x, after) + len(x)}
+        raw = b'<p>Type - 10 shares</p>' + TABLE; unit = {'id': 'u', 'kind': 'text', 'text': 'Type - 10 shares', 'anchor': at(raw, b'Type - 10 shares')}; sup = {'segment_or_basis': {'anchors': [unit['anchor']]}}
+        basis = lambda alts=None, key=None, struck=(): self.synthetic_cell(raw, [dict(unit, struck=list(struck))], {'segment_or_basis': key} if key else {}, sup, alternatives={'segment_or_basis': alts} if alts else None)['segment_or_basis']
+        self.assertEqual([basis(alts) for alts in ([['5 shares'], ['10 shares']], [['10 shares'], ['5 shares']])], [OPEN, OPEN])  # a value that may hold is no failure, in either order
+        self.assertEqual((basis([['10 shares'], ['Type']]), basis([['5 shares'], ['6 shares']])), (('pass', None), ('fail', 'missing')))  # a proved value beats an open one; with none open the first failure stands
+        self.assertEqual([basis(key=k, struck=s) for k, s in ((['10 shares'], []), (['10 shares'], ['shares']), (['10 ~~shares~~'], []), (['10 ~~shares~~'], ['shares']))],
+                         [OPEN, ('fail', 'struck'), ('fail', 'struck'), OPEN])  # a strike invented or lost fails under either reading of the dash; kept, the dash alone leaves the value open
+        def two(src1, src2, out1, out2, field='segment_or_basis', value=('10 shares',), whole2=False):  # two paragraphs at the field's places; the key pins the phrase where a paragraph prints it
+            raw = b'<p>' + src1 + b'</p><p>' + src2 + b'</p>' + TABLE; a1, a2 = at(raw, src1), at(raw, src2)
+            pins = [at(raw, b'10 shares')] + ([a2 if whole2 else at(raw, b'10 shares', a2['byte_start'])] if b'10 shares' in src2 else [])
+            units = [{'id': 'u1', 'kind': 'text', 'text': out1, 'anchor': a1}, {'id': 'u2', 'kind': 'text', 'text': out2, 'anchor': a2}]
+            return self.synthetic_cell(raw, units, {field: list(value) if field != 'lead_in' else value[0]}, {field: {'anchors': pins}})[field]
+        self.assertEqual(two(b'Type - 10 shares', b'Ordinary 10 shares', 'Type - shares', 'Ordinary - 10 shares'), ('fail', 'missing'))  # the source's dash at place 1 certifies none at place 2, where the source prints none
+        self.assertEqual(two(b'Type 10 shares', b'Ordinary - 10 shares', 'Type 11 shares', 'Ordinary - 10 shares', whole2=True), OPEN)  # nor does place 1, where the route is wrong, answer for the open dash of place 2
+        self.assertEqual((two(b'Type - 10 shares', b'Ordinary 12 shares', 'Type - 10 shares', 'Ordinary 12 shares'), two(b'Type 10 shares', b'Ordinary 12 shares', 'Type - 10 shares', 'Ordinary 12 shares')), (('pass', None), ('fail', 'missing')))  # at its own place the source decides, both ways
+        self.assertEqual((two(b'Note - 10 shares', b'Also 10 shares', 'Note - shares', 'Also - 10 shares', 'lead_in')[0], two(b'Note - 10 shares', b'Also 12 shares', 'Note - 10 shares', 'Also 12 shares', 'lead_in')), ('fail', ('pass', None)))  # a lead-in, the same way
+        raw = b'<p>Net - 10 kg</p><table><tr><td>Revenue</td><td>A - 10 kg</td></tr></table>'  # the unit read inside the value's own cell: the dash the source prints before it in another paragraph settles nothing in the cell
+        self.assertEqual(self.synthetic_cell(raw, [], {'unit_printed': '10 kg'}, {'unit_printed': {'anchors': [at(raw, b'10 kg')]}}, value=b'A - 10 kg')['unit_printed'], OPEN)
+        xml = b'<r><holding><title>Series B - 5 shares</title><note>each of 5 shares</note><qty>10</qty></holding></r>'; xs = lambda x, k=0: {'byte_start': xml.index(x, k), 'byte_end_exclusive': xml.index(x, k) + len(x)}
+        def xml_unit(title, note, pin_note=True):  # an XML unit: the key pins the phrase in the title (a dash before it) and in the note (none)
+            fields = [{'id': n, 'kind': 'field', 'name': n, 'text': x, 'anchor': xs(src), 'path': ['r', 'holding'], 'group': {'index': 1, 'count': 1, 'at': xml.index(b'<holding>')}} for n, x, src in (('title', title, b'Series B - 5 shares'), ('note', note, b'each of 5 shares'), ('qty', '10', b'10'))]
+            t = {'key_id': 'syn/X', 'file_id': 'syn/a.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': xs(b'10'), 'fields': {'printed_value': '10', 'row_label': 'qty', 'unit_printed': '5 shares'}, 'alternatives': {}, 'excluded': set(),
+                 'support': {'unit_printed': {'anchors': [xs(b'5 shares'), xs(b'5 shares', xml.index(b'<note>')) if pin_note else xs(b'each of 5 shares')]}}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': fields}, xml, 'xml')); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'unit_printed')
+        self.assertEqual((xml_unit('Series B - shares', 'each of - 5 shares'), xml_unit('Series B - 5 shares', 'each of 6 shares')), (('fail', 'text'), ('pass', None)))  # the title's dash certifies none the route invents in the note; kept in the title, it is proved there
+
+    def test_an_absent_value_is_never_an_agreement(self):
+        # independent review of round 18 (G1, S3; the class of Codex R18-C4): XML fields that name no instance compared equal (None == None), so a name from another reporting
+        # person passed once the route dropped its groups; a run-facts block that is a string naming the three words passed the gate
+        xml = b'<r><p><name>Alpha</name><qty>1</qty></p><p><name>Beta</name><qty>2</qty></p></r>'; xs = lambda x: {'byte_start': xml.index(x), 'byte_end_exclusive': xml.index(x) + len(x)}
+        P1, P2 = xml.index(b'<p>'), xml.index(b'<p>', 5); G = lambda i, a: {'index': i, 'count': 2, 'at': a}
+        def context(groups):  # the value '2' of the second person; the key names its instance by the name 'Beta'
+            fields = [{'id': 'f%d' % i, 'kind': 'field', 'name': n, 'text': x.decode(), 'anchor': xs(x), 'path': ['r', 'p'], **({'group': g} if g else {})} for i, ((n, x), g) in enumerate(zip((('name', b'Alpha'), ('qty', b'1'), ('name', b'Beta'), ('qty', b'2')), groups))]
+            t = {'key_id': 'syn/X', 'file_id': 'syn/a.xml', 'type': 'cell', 'format': 'cell/xml', 'split': 'development', 'anchor': xs(b'2'), 'support': {}, 'alternatives': {}, 'excluded': set(),
+                 'fields': {'printed_value': '2', 'row_label': 'qty', 'row_context': [{'header': 'name', 'text': 'Beta'}], 'unit_printed': 'Beta'}}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.xml', 'units': fields}, xml, 'xml')); g.grade_cell(); return [next((r['verdict'], r['reason']) for r in g.rows if r['check'] == c) for c in ('row_context', 'unit_printed')]
+        self.assertEqual(context([G(1, P1), G(1, P1), G(2, P2), G(2, P2)]), [('pass', None), ('unresolved', 'support')])  # the same instance: the name is this person's (and a unit with no declared place is near, never proved)
+        self.assertEqual(context([G(2, P2), G(1, P1), G(1, P1), G(2, P2)]), [('fail', 'group'), ('fail', 'missing')])  # the names swapped between the persons
+        for none in ([None] * 4, [{'index': 1, 'count': 2}, {'index': 1, 'count': 2}, {'index': 2, 'count': 2}, {'index': 2, 'count': 2}]):
+            self.assertEqual(context(none), [('fail', 'group'), ('fail', 'missing')], none)  # no instance named, or named without its place: no association, never one shared by all
+        for block, ok in (({'tool': 't', 'version': '1', 'settings': {}}, True), ('tool version settings', False), (['tool', 'version', 'settings'], False), ({}, False), (None, False)):
+            self.assertIs(self.run_grader(lambda r: r[HTM_ID].update(route=block))['gates']['ids_and_run_facts']['pass'], ok, block)
+
+    def test_spaced_reads_the_joins_the_way_nearest_the_key(self):
+        # independent review of round 18 (D2): the other reading of a glued run put a space at every join; the reading that could give the key's text closes the joins the key closes
+        S = lambda item, want: grade.norm(grade.spaced(item, want))
+        self.assertEqual(S({'text': 'operatingincome', 'joins': [4, 9]}, 'operating income'), 'operating income')  # the first join closed, the second open
+        self.assertEqual(S({'text': 'Netsales', 'joins': [3]}, 'Net sales'), 'Net sales')
+        # second review of round 18: a mark the key does not print stood among its characters and every join was opened ('Fl ow(1)'); the joins are read by the key's characters
+        # around them all the same — closed inside a word, open between two, open where the key's characters end
+        self.assertEqual(S({'text': 'Free Cash Flow(1)Reconciliation', 'joins': [12, 17]}, 'Free Cash Flow Reconciliation'), 'Free Cash Flow(1) Reconciliation')
+        self.assertEqual(S({'text': 'Total revenues(1)and other', 'joins': [10, 17]}, 'Total revenues and other'), 'Total revenues(1) and other')
+        self.assertEqual(S({'text': 'Net sa(1)lesX', 'joins': [6, 12]}, 'Net sales'), 'Net sa(1)les X')
+        self.assertEqual((grade.spaced({'text': '1.Business', 'joins': [2, 6]}, 'Business', True), grade.runs({'text': '1.Business', 'joins': [2, 6]}, 'Business')), (['1.', 'Business'], ['1.', '1. Business', 'Business']))  # the parts, and every run of them
+        self.assertEqual(S({'text': 'in thousandsexcept in thousands', 'joins': [6, 12, 25]}, 'in thousands'), 'in thousands except in thousands')  # the key's text inside the item's, at every place it stands; a join outside it is open
+        self.assertEqual(S({'text': 'ating in', 'joins': [5]}, 'operating income'), 'ating in')  # the item's text inside the key's
+        self.assertEqual(S({'text': 'abcd', 'joins': [2]}, 'xyz'), 'ab cd')  # no place in the key: every join open
+        self.assertEqual(S([{'text': 'oper'}, {'text': 'ating in', 'joins': [5]}, {'text': 'come', 'joins': []}], 'oper ating income'), 'oper ating in come')  # several items: a space between them, their joins counted on
+        self.assertEqual(S({'text': 'Total', 'joins': []}, 'x'), 'Total')
+        self.assertEqual((S({'text': 'operat', 'joins': [4]}, 'operating income'), S({'text': 'ab', 'joins': [1]}, 'xyzw')), ('operat', 'a b'))  # inside the key's text a join the key closes stays closed; shorter than the key and not in it: open
+
+    def test_touching_pieces_are_read_the_same_way_at_every_field(self):
+        # mutation check of round 18: the other reading of touching pieces (the page may space them: unresolved when that gives the key's text, a failure when it does not)
+        # was tested at four fields; it stands at fourteen places. Two pieces 'Net' + 'sales' whose bytes touch, the key printing 'Net sales'
+        at = lambda raw, x, after=0: {'byte_start': raw.index(x, after), 'byte_end_exclusive': raw.index(x, after) + len(x)}
+        span = lambda raw, a, b: {'byte_start': raw.index(a), 'byte_end_exclusive': raw.index(b)}
+        C = lambda r, c, text, a: {'r': r, 'c': c, 'text': text, 'anchor': a}; OPEN, TWO = ('unresolved', 'adjacency'), b'<span>Net</span><span>sales</span>'
+        def cell(raw, units, fields, support, cells): return self.synthetic_cell(raw, units, fields, support, {'id': 't', 'kind': 'table', 'anchor': span(raw, b'<table>', b'</table>'), 'cells': cells})
+        def block(raw, units, want, where, **fields):
+            t = {'key_id': 'syn/S', 'file_id': 'syn/a.htm', 'type': 'structure', 'format': 'structure/htm', 'split': 'development', 'anchor': where, 'fields': {'printed_text': want, 'kind': 'paragraph', **fields}, 'support': {}, 'alternatives': {}, 'excluded': set()}
+            g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.htm', 'units': units}, raw, 'htm')); g.grade_structure(); return {r['check']: (r['verdict'], r['reason']) for r in g.rows}
+        for second, want in (('sales', OPEN), ('sa les', 'fail')):  # the tool's second piece right; then with a space put inside it — no reading of the join gives the key's text
+            got = {}; P = lambda raw: [('Net', at(raw, b'Net')), (second, at(raw, b'sales'))]
+            U = lambda raw, kind='text': [{'id': 'p%d' % i, 'kind': kind, 'text': x, 'anchor': a} for i, (x, a) in enumerate(P(raw))]
+            raw = b'<table><tr><td>Revenue</td><td>' + TWO + b'</td><td>1234</td></tr></table>'
+            got['row_context text'] = cell(raw, [], {'row_context': [{'header': 'position', 'text': 'Net sales'}]}, {}, [C(0, 0, 'Revenue', at(raw, b'Revenue'))] + [C(0, 1, x, a) for x, a in P(raw)] + [C(0, 2, '1234', at(raw, b'1234'))])['row_context']
+            raw = b'<table><tr><td>Label</td><td>' + TWO + b'</td><td>Other</td></tr><tr><td>Revenue</td><td>X</td><td>1234</td></tr></table>'
+            cells = [C(0, 0, 'Label', at(raw, b'Label'))] + [C(0, 1, x, a) for x, a in P(raw)] + [C(0, 2, 'Other', at(raw, b'Other')), C(1, 0, 'Revenue', at(raw, b'Revenue')), C(1, 1, 'X', at(raw, b'X')), C(1, 2, '1234', at(raw, b'1234'))]
+            got['row_context header'] = cell(raw, [], {'row_context': [{'header': 'Net sales', 'text': 'X'}]}, {}, cells)['row_context']
+            raw = b'<table><tr><td>Label</td><td>' + TWO + b'</td></tr><tr><td>Revenue</td><td>1234</td></tr></table>'; head = span(raw, b'<span>Net', b'</td></tr><tr>')
+            cells = [C(0, 0, 'Label', at(raw, b'Label'))] + [C(0, 1, x, a) for x, a in P(raw)] + [C(1, 0, 'Revenue', at(raw, b'Revenue')), C(1, 1, '1234', at(raw, b'1234'))]
+            got['header_path'] = cell(raw, [], {'header_path': ['Net sales']}, {'header_path': {'anchors': [head]}}, cells)['header_path']
+            got['periods in cells'] = cell(raw, [], {'periods': [{'role': 'value', 'type': 'instant', 'parts': [{'text': 'Net sales', 'anchor': head}]}]}, {}, cells)['periods']
+            raw = b'<table><tr><td>' + TWO + b'</td><td>Head</td></tr><tr><td>Revenue</td><td>1234</td></tr></table>'
+            cells = [C(0, 0, x, a) for x, a in P(raw)] + [C(0, 1, 'Head', at(raw, b'Head')), C(1, 0, 'Revenue', at(raw, b'Revenue')), C(1, 1, '1234', at(raw, b'1234'))]
+            got['corner_text'] = cell(raw, [], {'corner_text': 'Net sales'}, {'corner_text': {'anchors': [span(raw, b'<span>Net', b'</td><td>Head')]}}, cells)['corner_text']
+            raw = b'<p>' + TWO + b'</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; par = span(raw, b'<span>Net', b'</p>'); cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]
+            got['unit_printed'] = cell(raw, U(raw), {'unit_printed': 'Net sales'}, {'unit_printed': {'anchors': [par]}}, cells)['unit_printed']
+            got['periods in units'] = cell(raw, U(raw), {'periods': [{'role': 'value', 'type': 'instant', 'parts': [{'text': 'Net sales', 'anchor': par}]}]}, {}, cells)['periods']
+            got['range evidence'] = cell(raw, U(raw), {'range': {'evidence': [{'text': 'Net sales', 'anchor': par}]}}, {}, cells)['range']
+            got['section_path'] = cell(raw, U(raw, 'heading'), {'section_path': ['Net sales']}, {'section_path': {'anchors': [par]}}, cells)['section_path']
+            raw = b'<table><tr><td>Revenue<sup>(1)</sup></td><td>1234</td></tr></table><p><span>(1)</span> ' + TWO + b'</p>'
+            cells = [dict(C(0, 0, 'Revenue', span(raw, b'Revenue', b'</td><td>1234')), markers=['(1)']), C(0, 1, '1234', at(raw, b'1234'))]
+            units = [{'id': 'm', 'kind': 'footnote', 'marker': '(1)', 'text': '(1)', 'anchor': at(raw, b'(1)', raw.index(b'<p>'))}] + U(raw, 'footnote')
+            got['footnote note'] = cell(raw, units, {'footnote_markers': [{'marker_text': '(1)', 'anchor': at(raw, b'<sup>(1)</sup>'), 'note_anchor': span(raw, b'<span>(1)', b'</p>'), 'note_text': '(1) Net sales'}]}, {}, cells)['footnote_markers']
+            self.assertEqual({k: v if want == OPEN else v[0] for k, v in got.items()}, dict.fromkeys(got, want), second); self.assertEqual(len(got), 10)
+        raw = b'<table><tr><td>Other</td><td>' + TWO + b'</td><td>5678</td></tr><tr><td>Revenue</td><td>X</td><td>1234</td></tr></table>'  # the touching pieces on another row are not this row's context under any reading
+        cells = [C(0, 0, 'Other', at(raw, b'Other')), C(0, 1, 'Net', at(raw, b'Net')), C(0, 1, 'sales', at(raw, b'sales')), C(0, 2, '5678', at(raw, b'5678')), C(1, 0, 'Revenue', at(raw, b'Revenue')), C(1, 1, 'X', at(raw, b'X')), C(1, 2, '1234', at(raw, b'1234'))]
+        self.assertEqual(cell(raw, [], {'row_context': [{'header': 'position', 'text': 'Net sales'}]}, {}, cells)['row_context'], ('fail', 'row'))
+        # a period's text may be the cells at its place read together, or stand inside one of them: each has its other reading
+        raw = b'<table><tr><td>Label</td><td>' + TWO + b'</td><td>total</td></tr><tr><td>Revenue</td><td>1234</td><td>9</td></tr></table>'; head = span(raw, b'<span>Net', b'</td></tr><tr>')
+        cells = [C(0, 0, 'Label', at(raw, b'Label')), C(0, 1, 'Net', at(raw, b'Net')), C(0, 1, 'sales', at(raw, b'sales')), C(0, 2, 'total', at(raw, b'total')), C(1, 0, 'Revenue', at(raw, b'Revenue')), C(1, 1, '1234', at(raw, b'1234')), C(1, 2, '9', at(raw, b'9'))]
+        period = lambda text: cell(raw, [], {'periods': [{'role': 'value', 'type': 'instant', 'parts': [{'text': text, 'anchor': head}]}]}, {}, cells)['periods']
+        self.assertEqual((period('Net sales total'), period('Net sales'), period('Net sale')[0]), (OPEN, OPEN, 'fail'))
+        raw = b'<p><span>See Note</span><span>5 for more.</span></p>'; par = span(raw, b'<span>See', b'</p>')  # a reference phrase across two touching pieces of its block
+        for texts, want in ((['See Note', '5 for more.'], OPEN), (['See No te', '5 for more.'], ('fail', 'phrase'))):
+            units = [{'id': 'u%d' % i, 'kind': 'text', 'text': x, 'anchor': a} for i, (x, a) in enumerate(zip(texts, (at(raw, b'See Note'), at(raw, b'5 for more.'))))]
+            self.assertEqual(block(raw, units, 'See Note 5 for more.', par, references=[{'printed_text': 'Note 5', 'anchor': par, 'relation': 'mention', 'status': 'UNRESOLVED'}])['references'], want, texts)
+        raw = b'<p><span>Net</span><span>sales</span> <span>total</span></p>'; par = span(raw, b'<span>Net', b'</p>')  # a touching join, then a space the source prints: only the first is the page's to decide
+        units = [{'id': 'u%d' % i, 'kind': 'text', 'text': x, 'anchor': at(raw, x.encode())} for i, x in enumerate(['Net', 'sales', 'total'])]
+        self.assertEqual((block(raw, units, 'Net sales total', par)['printed_text'], block(raw, [dict(u, text='to tal') if u['text'] == 'total' else u for u in units], 'Net sales total', par)['printed_text'][0]), (OPEN, 'fail'))
+        raw = b'<table><tr><td>' + TWO + b'</td><td>1234</td></tr></table>'  # the same two pieces given as two grid cells are two words, whatever the bytes say
+        cells = [C(0, 0, 'Net', at(raw, b'Net')), C(0, 1, 'sales', at(raw, b'sales')), C(0, 2, '1234', at(raw, b'1234'))]
+        self.assertEqual(cell(raw, [], {'row_label': 'Net sales'}, {'row_label': {'anchors': [span(raw, b'<span>Net', b'</td><td>1234')]}}, cells)['row_label'], ('pass', None))
+        # an unknown join with a whole piece of the key on one side only is still read: the pieces 'Total' and 'Total assets' from the units 'Total', 'Total', 'assets' —
+        # the second piece is put together across the last join
+        for head, want in ((b'', ('pass', None)), (b'<style>.x{display:none}</style>', OPEN)):
+            raw = head + b'<p>Total</p><p>Total</p><p>assets</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; a1 = at(raw, b'Total'); places = [a1, at(raw, b'Total', a1['byte_end_exclusive']), at(raw, b'assets')]
+            units = [{'id': 'u%d' % i, 'kind': 'text', 'text': x, 'anchor': a} for i, (x, a) in enumerate(zip(('Total', 'Total', 'assets'), places))]
+            self.assertEqual(cell(raw, units, {'table_title': ['Total', 'Total assets']}, {'table_title': {'anchors': places}}, [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))])['table_title'], want, head)
+            raw = head + b'<p>Net</p><p>sales</p><p>sales</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; a2 = at(raw, b'sales'); places = [at(raw, b'Net'), a2, at(raw, b'sales', a2['byte_end_exclusive'])]  # the whole piece on the right of the join this time
+            units = [{'id': 'u%d' % i, 'kind': 'text', 'text': x, 'anchor': a} for i, (x, a) in enumerate(zip(('Net', 'sales', 'sales'), places))]
+            self.assertEqual(cell(raw, units, {'table_title': ['Net sales', 'sales']}, {'table_title': {'anchors': places}}, [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))])['table_title'], want, head)
+        # a field found by its text (no anchors in the key): a title is carried by the unit that IS it, a qualifier by a unit that holds it; a unit the route calls clutter carries nothing
+        raw = b'<p>Free Cash Flow</p><p>Our Free Cash Flow rose</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]
+        u1, u2 = ({'id': i, 'kind': 'text', 'text': x, 'anchor': at(raw, x.encode())} for i, x in (('a', 'Free Cash Flow'), ('b', 'Our Free Cash Flow rose')))
+        by_text = lambda units, field: cell(raw, units, {field: ['Free Cash Flow']}, {}, cells)[field][:2]
+        self.assertEqual([by_text([u1, u2], 'table_title'), by_text([u2], 'table_title'), by_text([dict(u1, kind='clutter'), u2], 'table_title'), by_text([u2], 'segment_or_basis'), by_text([dict(u2, kind='clutter')], 'segment_or_basis')],
+                         [('pass', None), ('fail', 'missing'), ('fail', 'missing'), ('pass', None), ('fail', 'missing')])
+        # the dash arbiter: a place of the phrase the source proves stands whatever another place says, in either order; and nothing before the phrase is no dash
+        raw = b'<p>A - 10 shares</p><p>B 10 shares</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]
+        pins = [at(raw, b'10 shares'), at(raw, b'10 shares', raw.index(b'B 10'))]; basis = lambda units, p: cell(raw, units, {'segment_or_basis': ['10 shares']}, {'segment_or_basis': {'anchors': p}}, cells)['segment_or_basis']
+        two = [{'id': 'u1', 'kind': 'text', 'text': 'A - 10 shares', 'anchor': at(raw, b'A - 10 shares')}, {'id': 'u2', 'kind': 'text', 'text': 'B - 10 shares', 'anchor': at(raw, b'B 10 shares')}]  # the source's dash kept at the first place, one invented at the second
+        self.assertEqual([basis(two, p) for p in (pins, pins[::-1])], [('pass', None)] * 2)
+        self.assertEqual([cell(raw, two, {'lead_in': '10 shares'}, {'lead_in': {'anchors': p}}, cells)['lead_in'] for p in (pins, pins[::-1])], [('pass', None)] * 2)  # and where a field reads its carriers as one text: whichever place is asked last
+        # second review of round 18: ONE text that lies at a place the source signs and at one it does not decides nothing — which of its dashes stands where is not known (the
+        # source's kept and a second invented, or the number dropped at the first place and a dash invented at the second, which used to pass): open, never a pass, never a guessed failure
+        for text in ('A - 10 shares B - 10 shares', 'A - shares B - 10 shares'):
+            one = [{'id': 'u', 'kind': 'text', 'text': text, 'anchor': span(raw, b'A - 10', b'</p><table>')}]
+            self.assertEqual([basis(one, p) for p in (pins, pins[::-1])], [('unresolved', 'numeric_boundary')] * 2, text)
+        self.assertEqual(basis([{'id': 'u', 'kind': 'text', 'text': 'A - 10 shares B 10 shares', 'anchor': span(raw, b'A - 10', b'</p><table>')}], pins), ('pass', None))  # the source's own text prints the phrase plainly at the second place
+        # a route that keeps the source's text and cuts it right at the dash prints the phrase: the place asked runs from the source's dash through the phrase (it used to fail);
+        # a dash the route puts there itself is its own; and a place where the route is plainly wrong answers nothing for another place that is open
+        for dash, want in ((b' -', ('pass', None)), (b'', ('fail', 'text'))):
+            raw = b'<p><span>Stock' + dash + b'</span> <span>10 shares authorized. Other.</span></p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]
+            cut = [{'id': 'a', 'kind': 'text', 'text': 'Stock -', 'anchor': at(raw, b'Stock' + dash)}, {'id': 'b', 'kind': 'text', 'text': '10 shares authorized. Other.', 'anchor': at(raw, b'10 shares authorized. Other.')}]
+            self.assertEqual(cell(raw, cut, {'lead_in': '10 shares authorized.'}, {'lead_in': {'anchors': [span(raw, b'<span>Stock', b'</p>'), at(raw, b'10 shares authorized.')]}}, cells)['lead_in'], want, dash)
+        raw = b'<p>Type 10 shares</p><p>Ordinary - 10 shares</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]
+        wrong = [{'id': 'u1', 'kind': 'text', 'text': 'Type 11 shares', 'anchor': at(raw, b'Type 10 shares')}, {'id': 'u2', 'kind': 'text', 'text': 'Ordinary - 10 shares', 'anchor': at(raw, b'Ordinary - 10 shares')}]
+        self.assertEqual(cell(raw, wrong, {'lead_in': '10 shares'}, {'lead_in': {'anchors': [at(raw, b'10 shares'), at(raw, b'Ordinary - 10 shares')]}}, cells)['lead_in'], ('unresolved', 'numeric_boundary'))
+        # only a carrier that holds the phrase is asked about its place: a cell the tool put in the wrong row is not excused by another unit at the key's places (mutation check, second pass)
+        raw = b'<p>Amounts shown</p><table><tr><td>in thousands</td><td></td></tr><tr><td>Revenue</td><td>1234</td></tr></table>'
+        swapped = [C(1, 0, 'in thousands', at(raw, b'in thousands')), C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]; shown = [{'id': 'u', 'kind': 'text', 'text': 'Amounts shown', 'anchor': at(raw, b'Amounts shown')}]
+        self.assertEqual(cell(raw, shown, {'segment_or_basis': ['in thousands']}, {'segment_or_basis': {'anchors': [at(raw, b'in thousands'), at(raw, b'Amounts shown')]}}, swapped)['segment_or_basis'], ('fail', 'placement'))
+        # a check only one of the two readings writes was judged differently too (second review): a heading recognised only when the pieces are read apart stays open with its path
+        raw = b'<style>.x{display:none}</style><h2><span>Liquidity and</span><span>Capital</span></h2><p>Revenue rose.</p>'
+        t = {'key_id': 'syn/S', 'file_id': 'syn/a.htm', 'type': 'structure', 'format': 'structure/htm', 'split': 'development', 'anchor': at(raw, b'Revenue rose.'), 'fields': {'printed_text': 'Revenue rose.', 'kind': 'paragraph', 'section_path': ['Liquidity and Capital']},
+             'support': {'section_path': {'anchors': [span(raw, b'Liquidity', b'</span></h2>')]}}, 'alternatives': {}, 'excluded': set()}
+        units = [{'id': 'h1', 'kind': 'heading', 'text': 'Liquidity and', 'anchor': at(raw, b'Liquidity and')}, {'id': 'h2', 'kind': 'heading', 'text': 'Capital', 'anchor': at(raw, b'Capital')}, {'id': 'p', 'kind': 'text', 'text': 'Revenue rose.', 'anchor': at(raw, b'Revenue rose.')}]
+        g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/a.htm', 'units': units}, raw, 'htm')); g.grade_structure(); got = {r['check']: (r['verdict'], r['reason']) for r in g.rows}
+        self.assertEqual((got['section_path'], got.get('heading_recognised')), (OPEN, OPEN))
+        raw = b'- 10 shares<table><tr><td>Revenue</td><td>1234</td></tr></table>'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]; self.assertEqual(anchor.Visible(raw).text[0], '-')
+        self.assertEqual(cell(raw, [{'id': 'u', 'kind': 'text', 'text': '- 10 shares', 'anchor': at(raw, b'- 10 shares')}], {'segment_or_basis': ['10 shares']}, {'segment_or_basis': {'anchors': [at(raw, b'10 shares')]}}, cells)['segment_or_basis'], ('pass', None))  # the source's dash is the page's very first character: still the source's
+        raw = b'<span>-</span> <span>10 shares authorized. Other.</span><table><tr><td>Revenue</td><td>1234</td></tr></table>'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]; self.assertEqual(anchor.Visible(raw).text[0], '-')
+        cut = [{'id': 'a', 'kind': 'text', 'text': 'Note -', 'anchor': at(raw, b'-')}, {'id': 'b', 'kind': 'text', 'text': '10 shares authorized. Other.', 'anchor': at(raw, b'10 shares authorized. Other.')}]  # (a word of the tool's own before the dash keeps the question open)
+        self.assertEqual(cell(raw, cut, {'lead_in': '10 shares authorized.'}, {'lead_in': {'anchors': [span(raw, b'<span>-', b'<table>'), at(raw, b'10 shares authorized.')]}}, cells)['lead_in'], ('pass', None))  # and when the route cuts its text right there
+        raw = b'<p>10 shares</p><table><tr><td>Revenue</td><td>1234</td></tr></table>end -'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]; self.assertEqual(anchor.Visible(raw).text[-1], '-')
+        self.assertEqual(cell(raw, [{'id': 'u', 'kind': 'text', 'text': '- 10 shares', 'anchor': at(raw, b'10 shares')}], {'segment_or_basis': ['10 shares']}, {'segment_or_basis': {'anchors': [at(raw, b'10 shares')]}}, cells)['segment_or_basis'], ('fail', 'missing'))  # the phrase opens the page: the dash the route put before it is its own, though the page's last character is one
 
 
 if __name__ == '__main__':

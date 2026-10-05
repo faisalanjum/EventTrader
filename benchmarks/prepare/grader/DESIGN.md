@@ -1174,3 +1174,142 @@ changed none of them. Mutations 242 of 242 red (51 earlier conditions still in t
 gate value changes in the eleven HTML routes — the Arrowhead file's uncovered text, 3 spans and 8,754 characters → 10 spans and 24,059, the
 characters the scanner now sees there and no saved unit covers; run 34e (this round before the final pass) and run 34f are byte-identical in
 every graded file; the package-3 preview shows the same; round-7 guard identical; grading time 2 min 13 s (2 min 05 s before).
+
+## 42. Round 18 (2026-10-05 02:57, Codex's `CODEX_REVIEW_R17.md` on 3cd06bcaf; package 3 still approved, still staged) — four classes, all reproduced, all closed; the scanner's reading rebuilt against the browser, exhaustively, and against real filings; three independent reviews of this round's own changes closed too
+
+**Method.** As rounds 15–17 — an audit of my own before his file was opened (`grader_review_codex_20261003/R18_SELF_AUDIT.md`), his file, his 13
+regression methods run against this code (22 failing sub-cases on 3cd06bcaf, none after) — and, because the owner asked that this be the last round,
+instruments that do not depend on anybody's list of examples:
+1. *The browser, at random and exhaustively.* Local Chrome (every request aborted) prints documents nobody chose; a page passes when the scanner's
+   words are the browser's or the scanner says uncertain. Six random generators (`codex_probes_live/r18/r18_fuzz*_facts.py`: broken markup;
+   well-formed trees of the elements and styles filings use; runs of white-space and line atoms; a wider vocabulary; the document's own
+   html/head/body scaffolding; the CSS of a style string, of a sheet, and half-finished character references) — 1,180,000 pages. Random pages kept
+   finding one more fault where three rare things met, so three instruments are exhaustive instead: every pair of 20 boxes, nested and side by
+   side, with every white-space text around them (`r18_grid2_facts.py`, 1,152,000 pages); **every CSS property Chrome lists** (694), with every
+   value of a wide vocabulary it accepts (11,308 pairs), on an element in 26 roles, inline and as a sheet rule, and every attribute of the HTML
+   standard and of the old presentational set with 25 values on 16 kinds of element (`r18_props_facts.py`, 586,635 pages); and one page per word
+   of every list in the scanner (`r18_words_facts.py`). With the grids of chosen shapes and the pages aimed at single conditions
+   (`r18_targeted_facts.py`): 2,931,643 pages, graded by `run_all_facts.sh` in a minute.
+2. *The agreed differences, checked by the browser too* (below, C1): `r18_grid3_facts.py` (794,880 pages), `r18_agreed_print.py`,
+   `r18_explain_differences.py`.
+3. *Real filings.* 22,483 HTML documents of 1,003 saved filings (no held-out filing among them) were counted for every construct a rule is about
+   (`r18_census_*.py`; their bytes: every one is ASCII, `r18_census_encoding.py`), read by the committed scanner and by the new one
+   (`r18_real_certainty.py`), and — the 60 development originals and the real documents the two scanners read differently — compared with Chrome
+   word by word. The censuses decided the scope: exact where real filings need it, "uncertain" for what none of them holds.
+4. *Every earlier finding.* Each issue of rounds 2–17 (146) replayed against the final code (`scratch18/all_rounds_*/replay_*.py`).
+5. *Three independent reviews of this round's own changes* by a second model with its own probes: of `grade.py` (`scratch18/grade_review/`, nine
+   findings, four of them introduced by the first version of this round's C2 fix), and of the later code — the scanner
+   (`scratch18/review_scanner_2/rerun_current.py`: 40 pages in ten classes, a crash, a quadratic time) and `grade.py` again
+   (`scratch18/review_grade_2/`, 17 probe files). All closed below, or stated.
+6. *A mechanical mutation check.* Every condition on a changed line altered one at a time on the syntax tree (`r18_mutate_ast.py`); the survivors
+   were closed with tests whose expectations are the browser's (`tests/fixtures/browser_pages_r18.json`) or the rules', or argued one by one.
+
+**C1 — a reading the scanner has not modelled is never certified (`anchor.py`).** His four forms (a quoted `>` in the opening tag of a displayed
+raw-text element, a reference without its semicolon, a closing tag crossing a cell, a null byte) are four faces of one fault: the scanner certified
+readings of markup it did not follow. The rule now: **certain means the browser's text; anything else says uncertain** — and the browser decides
+which is which, not a list of examples.
+*Tokens.* A tag is followed only in the plain form every tokenizer cuts the same way (`_TAG`); a comment ends as the standard says; an element
+taken whole (`script`, `style`, `title`, `template`) is certain only with a plain opening tag, a plain style and no author `display`, and one never
+closed runs to the end as one token, like a tag that never ends (the parser drops the rest; looking for its end from every later `<` took minutes
+on 100 KB); a null character, a reference the browser decodes without its semicolon: uncertain. A numeric reference is its digits only (`&#1a;`
+is U+0001 and `a;`), of any length (`text_reference` no longer crashes on more digits than Python converts: U+FFFD, leading zeros set aside).
+The line feed the parser drops right after `<pre>`, `<listing>` and `<textarea>` is not read.
+*The tree.* `html`, `head` and `body` tags open and close nothing; one that hides, strikes, is given a display other than block or a `hidden`
+attribute (a repeated `<body>` hands its attributes over one by one) is not followed. A closing tag that passes other open elements is followed
+only where the parser simply closes them. Opening tags close what the standard says they close (`_IMPLIED`); an element opened inside its like and
+a table that would close a paragraph: uncertain. An element the parser moves out of a table: uncertain when it hides, changes kept white space, or
+is a formatting element with a box of its own (the parser opens those again inside the cells, `_FORMATTING`). A `<form>` (the parser keeps a
+pointer of its own for it), a `<slot>`: not modelled. 26,603 `</tr>` over an open `td` in the development originals stay certain — his control.
+*Styles.* A style string is read only when it is plain (`_PLAIN`: printable ASCII, no backslash, bracket, brace or `@`, every quote a string that
+ends on its line, parentheses closed and not nested, every `&` a complete known reference); a comment is a token boundary, runs to the end when
+never closed, and a string or `url()` holds none. `display`, `visibility`, `opacity`, `content-visibility`, `position`, `float` and `white-space`
+are evaluated (not `pre-line`); a value outside the known keywords, or a declaration of a property that changes the text without being evaluated
+(`_UNREAD`: `all`, `content`, `appearance`, `-webkit-text-security`, `white-space-collapse`, `-webkit-opacity` — what was left when every
+property Chrome lists was tried), is uncertain. A sheet rule on any of these is uncertain; a sheet is read twice, comments set aside and kept, so
+neither a rule a comment splits nor one inside what only looks like a comment is missed. The `align` attribute floats a picture or a frame; a
+popover an author's display shows is out of the flow.
+*Layout that changes the words.* Children of a flex or grid container are lines of their own; an inline box stands in its line, and white space
+the browser drops at its edges is not certified; a box out of the flow, an author's table box or a paragraph given an inline display is a line of
+its own, certified only when it has that line to itself; an invisible block keeps its line; text after invisible text that ended with white space
+or with a kept line feed, and kept white space, follow the browser; what is removed (`display:none`) ends no line and keeps no white space
+apart; a `</p>` or `</br>` that closes nothing is the empty paragraph or the break the parser makes of it; white space alone between the children
+of a flex, grid or table box is not shown.
+*Bytes.* Beyond ASCII the reading is certified only as plain UTF-8 — no byte-order mark, no `<meta>` naming another encoding, no fallback to
+windows-1252 — the cases where Chrome, opening the same bytes as a local file, decodes as the scanner does (13 situations tried).
+*Left unmodelled on purpose* (`UNMODELLED`, says uncertain): SVG, MathML, templates, media and form controls with fallback content, ruby, `button`,
+`dialog`, `legend`, `marquee`, `wbr`, `slot`, `form`.
+*The readings that differ from `innerText` on purpose — now each checked by the browser.* Each has a meaning Chrome itself can print, made inside
+the browser on the parsed page (`AGREED_JS`): a `<textarea>` is the inline box of its text that the browser's own sheet says it is (one the author
+gives a display: uncertain); **a zero opacity hides in place** — everything under it invisible, every box where it was, like
+`visibility:hidden` (it used to be read as removed, which glued the words around an invisible block); `<ix:hidden>` is removed (contract); text
+beside an inline table keeps its break (Chrome's text with the table set as a block); letter case under `text-transform` is not read. **Struck
+text is read apart from its neighbours, and no longer by a line break:** an element that strikes used to be a block for every layout rule — so an
+invisible block or an inline box inside it was thought to have a line to itself — and its boundary stood even where it struck nothing it showed.
+Its two boundaries are now recorded during the scan and set in after it (`apart`), only next to a struck character; the layout rules never see
+them. The check (`r18_explain_differences.py`): a certified page's letters are those of Chrome's agreed text, and its word breaks differ only
+next to a character the scanner marks as struck. On the grid of these six boxes with the 20 others (794,880 pages) and on every certified page of
+the other families that differs from Chrome's plain text (2,343): no exception.
+*Cost on real filings.* Of 3,351 real documents the committed scanner certified, 19 are now uncertain (14 by the layout rules — a word on the
+line of a box that must have it to itself, mostly `display:table-cell` rows; 2 backslash font names; 2 tags written `"alt=`; 1 table closing a
+paragraph) and 3,332 stay certain; none is newly certified; all 60 development originals and all 35 stratified-control originals stay certain.
+Nothing added after the first comparison with Chrome (the exhaustive grids, the property sweep, the reviews' findings) changed the text read
+from one real document (all 22,483); two documents came back to certain when three conditions no page needed were taken out, and read exactly
+as Chrome prints them (`r18_two_docs_vs_chrome_pass13.json`).
+*Less code where the evidence allowed.* The mutation check named conditions no page needed; each was taken out and all 3.7 million pages run
+again (none certified wrongly; 13,669 more of the same 2,930,187 pages certified): a void element out of the flow, a picture or field after an inline box, the line an
+inline box stands in, white space after a whole element, and four redundant operands.
+
+**C2 — a join the source cannot settle is neither proved nor disproved (`Grader.adjacent`, `both`, `spaced`, `runs`, `pieces_match`,
+`struck_kept`; consumers `carriers`, `merged`, `merged_units`, run-in `section_path`).** `adjacent` has three answers. A certain reading proves
+touching or apart. Under an uncertain reading only what needs no reading is proved: where no tag (and no null byte) stands between two pieces
+their bytes settle it — characters between them: apart; the two meeting inside one run of text: touching. Every other join is unknown, and a
+target that meets one is graded under both readings (`both`): a check the two judge alike stands; one they judge differently — or only one of
+them writes — is `unresolved` (`adjacency`).
+*The key has no say (round 9, R9-1), and neither has the route.* A first version let two units that were each a whole piece of the key stay apart
+without asking: the same output passed in an uncertain file and was unresolved where the source proved the pieces touching. Withdrawn. A second
+let the route's own text between two pieces prove them apart: a route that keeps text the page hides was then failed for pieces that touch on the
+page, where the certain twin of the same file passes. Withdrawn too. Consequence, stated: in an uncertain file two pieces of a key in two units
+with markup between them are `unresolved` — read as touching they are one text. (Every development and stratified-control original is certain;
+2 of 21 held-out HTML originals are not.)
+*One join closed and the next open.* The other reading of a glued run used to put a space at every join. `spaced(items, want)` closes the joins
+the key prints closed — the key's characters located in the text, at every place they stand whole, or, where a mark the key does not print
+stands among them, by the longest runs the two share; it only tells `unresolved` from `fail`, it never passes. Where a check looks for one
+carrier equal to the key's text (`section_path`, `unit_printed`), every run of its parts is asked (`runs`): read the other way, a piece that
+touches it is a carrier of its own (`1.` beside `Busi` + `ness`). `pieces_match` got the same exactness.
+*Recognition rows.* A structure count the two readings judge differently is left open and never decides a target (`verdict_of`).
+Strike placement that only the source's map could settle is `unresolved`/`struck` under an uncertain map (`struck_kept`).
+
+**C3 — proved > open > failed (`Grader.printed`, `field`, `basis`, XML `unit_printed`).** An open dash proves nothing: read strictly it is not
+printed, so a carrier that proves the phrase wins; only when nothing is proved is the field read leniently, and a pass that needs that is
+`unresolved` (`numeric_boundary`). From the reviews: the same order among accepted values; a strike lost or invented fails under either reading
+of the dash; and the source arbitrates a dash only over the route's text at that place (`at_place`) — the place running from what the source
+prints before the phrase through the phrase, so a route that cuts its text right at the dash still prints it; a text that is plainly wrong at a
+place answers nothing for another that is open; and texts that lie both at a place the source signs and at one it does not decide nothing
+(inside one unit no place can be told from another): open, never a pass.
+
+**C4 — an absent value is never an agreement.** Page declarations: absent, `null` and `{}` declare nothing; every other value is a declaration
+and must validate (`pages_declared`). The same class elsewhere: an XML field that names no instance (`group.at`) is in none; the run-facts block
+must be an object.
+
+**Known, not changed (reported to Codex).** (1) In an uncertain file, consecutive whole pieces of a key with markup between them are
+`unresolved` (R9-1 kept; three probes of the first review ask for a pass). (2) One unit that prints the phrase at a signed and at an unsigned
+place of the key with a dash of its own is `unresolved`, not `fail` (the second review asks for a failure: nothing in a unit tells its places
+apart). (3) The scan takes time with the square of the nesting depth (16,000 open `<div>`: 8 s; real filings nest tens deep). (4) Whether a
+character the scanner marks as struck is painted struck is not re-checked here beyond round 9's Chrome cases.
+
+**Verification (on the final code: `anchor.py` f5cabd79a823a52c, `grade.py` 05c078edf8605972 (the copy every run measured, 2c7dc6c4c818ca6e, differs in one docstring only: same syntax tree)).** 242 unit tests, with 250 pages local Chrome
+printed as sub-tests (`tests/fixtures/browser_pages_r18.json`: 162 the scanner must certify and read as Chrome does, 88 it must not certify — each
+tells the scanner from a one-change variant of it). The scanner against Chrome: 2,931,643 pages in 14 families, no crash, 1,575,759 certified,
+2,343 of them different from Chrome's plain text and every one equal to Chrome's agreed text (struck 244 + 51, textarea 1,238, zero opacity
+741, letter case 58, ix:hidden 11); the grid of agreed differences: 794,880 pages, 439,630 certified, 0 exceptions. Real filings: above. His 13
+regression methods: 13/13. C2/C3 probes in their strict mode: 27/27 methods. Every issue of rounds 2–17 replayed (`scratch18/final_runs/`):
+129 hold, 11 changed by a later rule (quoted there), 6 not code or not checkable without the key; 0 regressed. The first review's probes: 48 of 51
+as required (3 by design, above); the second's: all but the one-unit dash (by design); the scanner review's 40 pages: every one read as Chrome
+reads it or not certified. 48/48 real-original variants. Mutations, mechanical (`r18_mutate_ast_final.json`): 1,288 on every changed line of
+the two files, 1,198 red; the other 90 are classed one by one in `R18_MUTATION_RESIDUE.md` (31 words of lists copied whole from the HTML
+standard, guards and resets of earlier rounds, and 9 scanner conditions no page of 1.1 million could tell from their variant). Regrade of the 13
+saved route folders by a frozen copy of this code against run 34f (`scratch18/regrade_final/`): 0 verdict flips, 0 result-row changes, every
+graded file byte-identical but one summary, where 23 snippets of uncovered text differ in white space only (positioned `%` signs are lines of
+their own now). Re-link sweep (60 HTML files x 11 routes, `scratch18/relink_pass12/`): only the Arrowhead file's links change; dry run of its
+re-link: the uncovered text falls from 24,059 characters to 0 (edgartools routes) and 232 (docling routes), units without a place from 8–9 to
+0–1; the official re-link is made from the commit, so that its provenance names it.

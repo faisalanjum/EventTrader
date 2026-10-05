@@ -6,7 +6,9 @@ in several source places (a merged stacked header) must come from the adapter wi
 never guesses such a split."""
 from array import array
 from bisect import bisect_left
+from collections import namedtuple
 import html
+from html.entities import html5
 import xml.parsers.expat as expat
 import re
 import unicodedata
@@ -19,72 +21,118 @@ _CF = ''.join(chr(i) for i in range(0x110000) if unicodedata.category(chr(i)) ==
 _WS = re.compile('[\\s' + re.escape(_CF) + ']+')
 _FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), '') or chr(i) == '"') else "'") for i in range(0x110000) if 'QUOTATION MARK' in unicodedata.name(chr(i), '')},
                        **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
-_TOKEN = re.compile(r'<!--.*?-->|<(script|style|head|title|template)\b[^>]*>.*?</\1\s*>|<[!?][^>]*>|<(?=[A-Za-z/])(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#?\w+;|[^<&]+|[<&]', re.S | re.I)
-_ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''')  # one attribute: name, quoted or bare value
+# The tokens of an HTML source (HTML Standard, tokenization): a comment — to `-->` or `--!>`, at once for `<!-->` and `<!--->`, to the end of the source when it never
+# ends; an element taken whole up to its closing tag, or to the end of the source when it has none (group 1); a declaration or processing instruction; a tag (a `>` inside a
+# quoted attribute value is no end); a character reference (a numeric one is its digits); text; a `<` that begins none of these (text); `&`; and (group 2) a `<` that begins a tag
+# or a declaration which never ends — with the rest of the source when no `>` follows at all: the parser drops it, and nothing is looked for in it again
+_TOKEN = re.compile(r'<!--(?:-?>|.*?--!?>|.*)|<(script|style|title|template)(?=[ \t\n\f\r/>])[^>]*>.*?(?=</\1[ \t\n\f\r/>]|\Z)|<[!?][^>]*>|<(?=[A-Za-z/])(?:[^>"\']|"[^"]*"|\'[^\']*\')*>|&#[xX][0-9a-fA-F]+;?|&#[0-9]+;?|&\w+;?|[^<&]+|<(?![A-Za-z/!?])|&|(<(?:[^>]*\Z)?)', re.S | re.I)
+# A tag in the plain form, which every tokenizer cuts the same way: an ASCII name, attributes set apart by HTML white space, each value quoted or free of quotes, `=`, `<`, `>`
+# and backticks. A tag written otherwise (a quote or `=` astray, other white space, `</` before no name) the HTML tokenizer cuts by rules this scanner does not follow: the
+# reading is then not certified (Codex R18-C1). 2 of 22,483 real filing documents hold such a tag (codex_probes_live/r18/r18_census_real_markup)
+_TAG = re.compile(r'</?[A-Za-z][-\w:.]*(?:[ \t\n\f\r]+[A-Za-z_:][-\w:.]*(?:[ \t\n\f\r]*=[ \t\n\f\r]*(?:"[^"]*"|\'[^\']*\'|[^\s"\'=<>`]+))?)*[ \t\n\f\r]*/?>', re.A)
+_ATTR = re.compile(r'''([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?''', re.A)  # one attribute: name, quoted or bare value (ASCII white space, as in HTML)
+_REF = re.compile(r'&(?:#[0-9]+|#[xX][0-9a-fA-F]+|([A-Za-z0-9]+));')  # a complete character reference; group 1 is a name
+_CSS_CHAR, _CSS_STR = r'[\t\n\f\r !#-&*-?A-Z^-z|~]', r'"[^"\\\n]*"|\'[^\'\\\n]*\''
+_PLAIN = re.compile(f'(?:{_CSS_CHAR}|{_CSS_STR}|\\((?:{_CSS_CHAR}|{_CSS_STR})*\\))*')  # a style string this scanner reads as CSS does: printable ASCII and CSS white space; no backslash (CSS has its own white space, letter case and escapes), no bracket, brace or `@` (CSS reads blocks whole), every quote the start of a string that ends on its line, every parenthesis closed with none inside it (an unquoted url( ends at the first `)`); comments set aside first
 _DECL = re.compile(r'\s*([-\w]+)\s*:(.*)', re.S)  # one complete declaration: property name, colon, value (anything else the browser drops)
 _NUM = re.compile(r'[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?%?')  # a CSS <number> or <percentage> (no trailing dot); nothing else is a number to CSS
 _CSS_ESC = re.compile(r'\\([0-9a-fA-F]{1,6})\s?|\\(.)', re.S)  # CSS escapes: \69 is i
-_COMMENT = re.compile(r'/\*.*?\*/', re.S)  # a CSS comment is a token boundary, not part of a declaration
+_COMMENT = re.compile(r'("(?:[^"\\\n]|\\.)*"|\'(?:[^\'\\\n]|\\.)*\'|url\((?:[^)\\]|\\.)*\))|/\*.*?(?:\*/|\Z)', re.S | re.I)  # a CSS comment is a token boundary, not part of a declaration; one never closed runs to the end; a string or a url() (group 1) holds none
+uncomment = lambda css: _COMMENT.sub(lambda m: m.group(1) or ' ', css)
 _DISPLAY = set('none block inline inline-block flex inline-flex grid inline-grid table inline-table table-row table-cell table-row-group table-header-group '
-               'table-footer-group table-column table-column-group table-caption list-item flow flow-root contents ruby ruby-base ruby-text run-in'.split())  # CSS Display Module keywords
+               'table-footer-group table-caption list-item flow flow-root contents'.split())  # the CSS display keywords this scanner follows (the ruby values, run-in and the column boxes are not: Chrome sweep, codex_probes_live/r18/r18_display_facts)
+_TABLE_BOX = set('table-row table-cell table-row-group table-header-group table-footer-group table-caption'.split())  # the inner boxes of a table (CSS Display: the table values of <display-internal>), as a display an author gives
+_ITEMS = {'flex', 'inline-flex', 'grid', 'inline-grid'}  # containers whose child elements are boxes of their own lines, whatever their display says (CSS Flexbox 4, CSS Grid 6)
+_SHED = _ITEMS | {'table', 'inline-table'} | _TABLE_BOX - {'table-cell', 'table-caption'}  # the boxes that show none of their own white-space-only text: those containers, a table, and the row boxes of one (CSS 2 17.2.1; Chrome)
+_SPACE = ' \t\n\r\f'  # the white space CSS collapses
+_WHITE = set('normal nowrap pre pre-wrap break-spaces inherit initial unset'.split())  # the white-space keywords this scanner follows (not pre-line: an invisible line feed under it takes the space before it away; in no real filing)
+_KEPT = ('pre', 'pre-wrap', 'break-spaces')  # white-space values under which no white space is dropped
+_PRE = set('pre listing xmp plaintext textarea'.split())  # elements in which the browser's own sheet keeps white space
+_EATS = {'pre', 'listing', 'textarea'}  # the start tags after which the parser drops a line feed that comes first (HTML tree construction: "newlines at the start of pre blocks are ignored"; Chrome)
+# An open element of the scan. `gone`: removed for good (display:none, hidden by the browser's own sheet, ix:hidden — its own or an ancestor's); `unseen`:
+# invisible in its place — visibility hidden (inherited; a child may show again) or a zero opacity (no child shows again); `block`: its edges break the line; `struck`: the strike in effect inside it, `strikes`: its own decoration
+# line; `inside`: the innermost table, row group, row or cell it stands in; `edge`: 'own' for a box the page sets by rules of its own, 'atomic' for an inline box that
+# holds lines of its own; `disp`: the display its author declares (a <textarea>: the browser's); `start`: where its content starts among the scan's characters; `declares`: it hides or sets visibility
+# itself; `pre`: white space is kept in it
+Open = namedtuple('Open', 'name gone unseen block struck strikes inside edge disp start declares pre')
 _VISIBILITY = set('visible hidden collapse inherit initial unset revert revert-layer'.split())  # CSS visibility values and the CSS-wide keywords
+_POSITION, _FLOAT = set('static relative absolute fixed sticky'.split()), set('none left right'.split())  # the position and float keywords this scanner evaluates
 UNKNOWN = 'unknown'  # a value this scanner does not evaluate: the file's visibility is then reported uncertain
 _IMPORTANT = re.compile(r'\s*!\s*important\s*$')
-_INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby'}  # CSS display values that keep text in the line
-_STYLE = re.compile(r'<style\b[^>]*>(.*?)</style\s*>|<link\b[^>]*\bstylesheet\b', re.I | re.S)  # stylesheets: this scanner does not apply them
-_PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:|@import\b', re.I)
+_INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents'}  # CSS display values that keep text in the line
+_ALIGNED = {'img', 'input', 'embed', 'iframe'}  # the boxes in the line an `align` of left or right floats
+_ATOMIC = {'inline-block', 'inline-flex', 'inline-grid', 'inline-table'}  # inline boxes that hold lines of their own
+_SHEET_LINK = re.compile(r'<link\b.*\bstylesheet\b', re.I | re.S)  # a stylesheet link: this scanner does not fetch or apply it
+_UNREAD = set('all content appearance -webkit-appearance -webkit-text-security white-space-collapse -webkit-opacity'.split())  # properties that change the page's text, or hide it, and are not evaluated here: a declaration of one is not followed. The list is what was left when every property Chrome lists was tried with every value it accepts (r18_props_facts.py)
+_PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:|(?<![\w-])(?:position|float|white-space|' + '|'.join(sorted(_UNREAD)) + r')\s*:|@import\b', re.I)  # a sheet rule on a property that hides or lays out: which elements it reaches is not followed
 _DECO_RULE = re.compile(r'\btext-decoration(?:-line)?\s*:([^;}]*)', re.I)  # a stylesheet rule on a decoration, with its value: can it add a strike?
 _DECO_LINES, _DECO_STYLES = {'none', 'underline', 'overline', 'line-through', 'blink'}, {'solid', 'double', 'dotted', 'dashed', 'wavy'}  # text-decoration-line and text-decoration-style keywords (CSS Text Decoration)
 INVALID = 'invalid'  # a declaration the grammar proves the browser drops (it keeps the one before it): no uncertainty
+_TABLE = ('table', 'thead', 'tbody', 'tfoot', 'tr', 'colgroup')  # a table and the parts that hold only its rows, cells or columns: what stands directly inside one is a part of the table, or markup the parser moves out of it
+_PARTS = ('caption', 'colgroup', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th')  # the parts of a table that hold content
+_HEADINGS = frozenset('h1 h2 h3 h4 h5 h6'.split())
+# The HTML Standard's "special" elements (tree construction, the stack of open elements) that can stand open here — void ones never do, and html, head and body are no open elements to this scanner
+_SPECIAL = frozenset('address applet article aside blockquote button caption center colgroup dd details dir div dl dt fieldset figcaption figure footer form frameset h1 h2 h3 h4 h5 h6 header hgroup iframe li listing '
+                     'main marquee menu nav noembed noframes noscript object ol p plaintext pre script search section select style summary table tbody td template textarea tfoot th thead title tr ul xmp'.split())
+_ENDED = frozenset('p li dd dt'.split())  # the elements a special element's closing tag ends on its way (the standard's implied end tags, those modelled here)
+_ONCE = _HEADINGS | frozenset('a nobr'.split())  # elements the parser never opens inside their like: it closes the open one first (a link, a <nobr>, a heading it stands in)
 # HTML tree construction: an opening tag of a kind in `by` closes an open element of a kind in `closes` unless an element in `stop` lies above it
-_P_CLOSERS = set('address article aside blockquote details dialog div dl fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 header hgroup hr main menu nav ol p pre section table ul'.split())
-_IMPLIED = [(_P_CLOSERS, {'p'}, {'table', 'td', 'th', 'caption', 'body', 'html'}), ({'li'}, {'li'}, {'ul', 'ol', 'menu', 'table', 'td', 'th', 'body'}),
-            ({'dt', 'dd'}, {'dt', 'dd'}, {'dl', 'table', 'td', 'th', 'body'}), ({'td', 'th'}, {'td', 'th'}, {'tr', 'table', 'body'}),
-            ({'tr'}, {'tr', 'td', 'th'}, {'table', 'body'}), ({'tbody', 'thead', 'tfoot'}, {'tbody', 'thead', 'tfoot', 'tr', 'td', 'th'}, {'table', 'body'}), ({'option'}, {'option'}, {'select', 'body'})]
+_P_CLOSERS = set('address article aside blockquote center details dialog dir div dl fieldset figcaption figure footer header hgroup main menu nav ol p search section summary ul '
+                 'h1 h2 h3 h4 h5 h6 pre listing form li dd dt plaintext table hr xmp'.split())  # the start tags that close an open <p> (the standard's "in body" rules, every one)
+_IMPLIED = [(_P_CLOSERS, {'p'}, {'table'}),  # "a p element in button scope" (the other scope elements are not modelled at all)
+            ({'li'}, {'li'}, _SPECIAL - {'address', 'div', 'p', 'li'}), ({'dd', 'dt'}, {'dd', 'dt'}, _SPECIAL - {'address', 'div', 'p', 'dd', 'dt'}),  # up to the first special element other than address, div and p
+            (set(_PARTS) | {'col'}, {'caption'}, {'table'}), (set(_PARTS), {'colgroup'}, {'table'}),  # a caption ends at any table part, a column group at any but a <col>
+            ({'td', 'th'}, {'td', 'th'}, {'tr', 'table'}), ({'tr'}, {'tr', 'td', 'th'}, {'table'}),
+            ({'tbody', 'thead', 'tfoot', 'caption', 'colgroup', 'col'}, {'tbody', 'thead', 'tfoot', 'tr', 'td', 'th'}, {'table'}),
+            ({'table'}, {'table'}, {'td', 'th', 'caption'})]  # a table opened in a table outside any cell and caption ends the open one first
 _NAME = re.compile(r'</?\s*([\w:.-]+)')
 # CSS that removes an element from view (the medium's own rules, guide 2.2 "the screen is the truth"): not shown at all,
 # or shown at a size no reader can see (1pt text printed behind slide pictures)
-# Hidden subtrees (E16). display:none, opacity:0 and inline-XBRL <ix:hidden> hide every descendant; visibility is inherited but a
-# descendant may set visibility:visible again. Font size is never a hiding rule: it is inherited and reset by children, so a
+# Hidden subtrees (E16). display:none, opacity:0 and inline-XBRL <ix:hidden> hide every descendant (what opacity hides keeps its place in the
+# page, like invisible text); visibility is inherited but a descendant may set visibility:visible again. Font size is never a hiding rule: it is inherited and reset by children, so a
 # font-size:0 wrapper hides nothing, and 1pt text is still rendered.
 BLOCK = set('p div br tr td th table li ul ol h1 h2 h3 h4 h5 h6 section article header footer blockquote pre dd dt dl hr '
-            'caption thead tbody tfoot body html center form address '
-            'aside details dialog dir fieldset figcaption figure hgroup legend listing main menu nav optgroup option plaintext search summary xmp'.split())  # the elements the browser starts on a line of their own (its own sheet); the last line from a sweep of every element of the HTML Standard's index in Chrome (R17)
-VOID = set('br img hr input meta link col area base wbr source track embed param'.split())
-UNMODELLED = set('svg math template audio video canvas meter progress select object'.split())  # content the page does not flow as its text and this scanner does not model: foreign content (its own rendering, the tags that break out of it), a template's fragment, the fallback content of embedded elements and controls — a file holding any is uncertain (Codex R17-C4; Chrome sweep)
-UA_HIDDEN = set('datalist rp'.split())  # hidden by the browser's own sheet unless the author sets a display (HTML Standard, Rendering: hidden elements); the rest of that list is void, raw text or skipped whole
-SHOWN_BY_DISPLAY = set('script style title noframes'.split())  # raw text never read because the browser's own sheet hides the element: a `display` the author gives it shows the literal text (Chrome) — uncertain then. <iframe>, <noembed> and <noscript> stay unshown whatever their display
-_RAW_OPEN = re.compile(r'<(textarea|title|xmp|iframe|noembed|noframes|noscript|plaintext|script|style)(?=[\s/>])', re.I)  # elements whose content is literal text, never child tags (HTML tokenization: RCDATA, RAWTEXT, script data, PLAINTEXT; <noscript> where scripts run, the reading this scanner states)
-_HEAD_SAFE = re.compile(r'<!--.*?-->|<(title|style|script)\b[^>]*>.*?</\1\s*>|<(?:meta|link|base)\b(?:[^>"\']|"[^"]*"|\'[^\']*\')*>', re.S | re.I)  # what a <head> may hold and never show: comments, closed title/style/script elements, metadata tags
-_ENTITY_TEXT = re.compile(r'&#?\w+;|[^&]+|&')  # the text of an RCDATA element: references and literal runs
-_TABLE = ('table', 'thead', 'tbody', 'tfoot', 'tr')  # a table and the parts that hold its rows: what stands directly inside one is a part of the table, or markup the parser moves out of it
-_PARTS = ('caption', 'colgroup', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th')  # the parts of a table that hold content
-STRUCK = set('del s strike'.split())  # removed or struck text is read apart from its neighbours (redlines): a boundary like a block's
+            'caption thead tbody tfoot center form address '
+            'aside details dir fieldset figcaption figure hgroup listing main menu nav plaintext search summary xmp'.split())  # the elements the browser starts on a line of their own (its own sheet); the last line from a sweep of every element of the HTML Standard's index in Chrome (R17)
+VOID = set('br img hr input meta link col area base wbr source track embed param basefont bgsound frame keygen'.split())  # the elements the parser inserts and closes at once (HTML tree construction)
+UNMODELLED = set('svg math template audio video canvas meter progress select object option optgroup ruby rb rt rtc rp image frameset button marquee applet dialog legend wbr slot form'.split())  # content the page does not flow as its text and this scanner does not model: foreign content (its own rendering, the tags that break out of it), a template's fragment, the fallback content of embedded elements and controls, options and ruby text (their own implied endings and line rules), <image> (the parser reads <img>), a frameset, and elements whose box the browser sets by rules of its own (a button, a marquee, an applet, a dialog, a legend, a <wbr>, after which it drops white space), a <slot> (its children are laid out as its parent's) and a <form> (the parser keeps a pointer of its own for it and drops a second one) — a file holding any is uncertain (Codex R17-C4, R18-C1; Chrome sweeps). None stands in 22,483 real filing documents
+UA_HIDDEN = {'datalist'}  # hidden by the browser's own sheet unless the author sets a display (HTML Standard, Rendering: hidden elements); the rest of that list is void, raw text, skipped whole or not modelled
+SHOWN_BY_DISPLAY = set('noframes noscript noembed iframe'.split())  # raw text never read because the browser's own sheet hides the element: a `display` the author gives it can show the literal text (Chrome: block for some, contents for others) — uncertain then
+_RAW_OPEN = re.compile(r'<(textarea|title|xmp|iframe|noembed|noframes|noscript|plaintext|script|style)(?=[ \t\n\f\r/>])', re.I)  # elements whose content is literal text, never child tags (HTML tokenization: RCDATA, RAWTEXT, script data, PLAINTEXT; <noscript> where scripts run, the reading this scanner states)
+_ENTITY_TEXT = re.compile(r'&#[xX][0-9a-fA-F]+;?|&#[0-9]+;?|&\w+;?|[^&]+|&')  # the text of an RCDATA element: references and literal runs
+_META = re.compile(rb'<meta[^>]*charset\s*=(?!\s*["\']?\s*utf-?8)', re.I)  # a <meta> that declares an encoding other than UTF-8
+_ZEROS = re.compile(r'^(&#[xX]?)0+(?=[0-9a-fA-F])')  # the leading zeros of a numeric reference
+_FORMATTING = frozenset('a b big code em font i nobr s small strike strong tt u'.split())  # the formatting elements (HTML tree construction): one the parser moves out of a table it opens again inside the cells
+STRUCK = set('del s strike'.split())  # removed or struck text is read apart from its neighbours (redlines): a boundary where the element begins and ends
 
 
 def text_reference(token):
     """One character reference as the HTML parser decodes it. html.unescape keeps the standard's named, C1, null and surrogate rules but deletes
     references to control characters and non-characters, which the parser keeps (`&#2;` is U+0002): only its empty result is restored. One token,
     so an escaped ampersand is never decoded twice (Codex R17-C2; the helper is his)."""
-    value = html.unescape(token)
+    token = _ZEROS.sub(r'\1', token)
+    try: value = html.unescape(token)
+    except ValueError: return '\ufffd'  # more digits than Python converts: far beyond the last code point, which the parser reads as U+FFFD
     if value or not token.startswith('&#'): return value
     digits = token[2:].rstrip(';')
     return chr(int(digits[1:], 16) if digits[:1].lower() == 'x' else int(digits))
 
 
 def html_tokens(s):
-    """The tokens of an HTML source as (text, kind, literal), every source character once. `kind` names what is no text: an element taken whole
-    ('script', 'style', 'head', 'title', 'template') or the body of a raw-text element the page never renders ('iframe', 'noembed', 'noframes',
-    'noscript', an unclosed 'script', 'style' or 'title'). `literal` 1 is literal text — no tag, no reference (<xmp>, <plaintext>); 2 the text of a <textarea>
-    (references decoded, no tags). The content of a raw-text element is never child tags (Codex R17-C4; the tokenizer is his worktree's)."""
+    """The tokens of an HTML source as (text, kind, literal), every source character once. `kind` names what is no text: an element taken whole up to
+    its closing tag ('script', 'style', 'title', 'template'), the body of a raw-text element the page never renders ('iframe', 'noembed', 'noframes',
+    'noscript', an unclosed 'script', 'style' or 'title'), or 'open' for a `<` that begins a tag or a declaration which never ends (the parser drops
+    the rest of the source with it). `literal` 1 is literal text — no tag, no reference (<xmp>, <plaintext>); 2 the text of a <textarea> (references
+    decoded, no tags). The content of a raw-text element is never child tags; it ends at `</name` before white space, `/` or `>`, as in the
+    tokenizer (Codex R17-C4, R18-C1; the tokenizer is his worktree's)."""
     pos = 0
     while pos < len(s):
         m = _TOKEN.match(s, pos); t = m.group(); pos = m.end()
-        yield t, (m.group(1) or '').lower(), 0
-        raw = None if m.group(1) else _RAW_OPEN.match(t)
+        yield t, (m.group(1) or '').lower() or ('open' if m.group(2) else ''), 0
+        raw = _RAW_OPEN.match(t)  # (for an element taken whole the body found below is empty)
         if raw:
             tag = raw.group(1).lower()
-            end = None if tag == 'plaintext' else re.compile('</' + tag + r'(?=[\s/>])[^>]*>', re.I).search(s, pos)
+            end = None if tag == 'plaintext' else re.compile('</' + tag + r'(?=[ \t\n\f\r/>])', re.I).search(s, pos)
             body = s[pos:end.start() if end else len(s)]; pos += len(body)
             if tag == 'textarea': yield from ((x.group(), '', 2) for x in _ENTITY_TEXT.finditer(body))
             elif body: yield body, '' if tag in ('xmp', 'plaintext') else tag, 1
@@ -134,7 +182,7 @@ def declarations(style):
     """The declarations of a style attribute, in order: (name, value, important), names and values lower-cased, escapes decoded,
     comments read as token boundaries (a comment inside a name or a value breaks it, as in the browser)."""
     out = []
-    for part in split_declarations(_COMMENT.sub(' ', style)):  # split first: an escaped `;` inside a value is not a separator
+    for part in split_declarations(uncomment(style)):  # split first: an escaped `;` inside a value is not a separator
         m = _DECL.fullmatch(unescape_css(part))
         if not m: continue  # not one complete `name: value` declaration — the browser drops it, so does this
         name, value = m.group(1).lower(), m.group(2).strip().lower()
@@ -204,13 +252,13 @@ def xml_chars(raw, chars, starts, ends):
 
 def stylesheets(tokens):
     """The <style> elements and stylesheet links among these tokens (`html_tokens`), each as its CSS, or None for a sheet this scanner cannot read. A
-    comment's content is no token, so a commented-out sheet applies nothing, inside <head> too; the CSS of a <style> keeps its own <!-- -->, which
-    CSS ignores (Codex R16-3); the body of a <style> that is never closed is CSS to the end of the source."""
+    comment's content is no token, so a commented-out sheet applies nothing; the CSS of a <style> keeps its own <!-- -->, which CSS ignores
+    (Codex R16-3); the body of a <style> that is never closed is CSS to the end of the source."""
     out = []
     for t, kind, literal in tokens:
-        if kind == 'head': out += stylesheets(html_tokens(t[t.index('>') + 1:t.rindex('<')]))
-        elif kind == 'style' and literal: out.append(_COMMENT.sub(' ', unescape_css(t)))
-        elif kind == 'style' or (not kind and not literal and t[:5].lower() == '<link'): out += [None if x.group(1) is None else _COMMENT.sub(' ', unescape_css(x.group(1))) for x in _STYLE.finditer(t)]
+        m = _TAG.match(t)  # an element taken whole: its content starts where its plain opening tag ends; an opening tag in another form bounds nothing
+        if kind == 'style': css = t if literal else t[m.end():] if m else None; out.append(css and unescape_css(uncomment(css) + ' ' + css))  # read twice, comments set aside and kept: a rule a comment splits and a rule inside what only looks like a comment are both seen (the callers only ask whether a property is named)
+        elif not literal and _SHEET_LINK.match(t): out.append(None)
     return out
 
 
@@ -238,34 +286,65 @@ class Visible:
             s, blen = raw.decode('cp1252', 'replace'), len
         chars, starts, ends, stack, hidden, pos = [], array('Q'), array('Q'), [], False, 0  # byte offsets tracked per token, not per source byte
         struck_chars = array('b')  # per visible character: printed struck through (an <s>/<del>/<strike> ancestor or CSS line-through)
+        apart = []  # (place in `chars`, byte span of the tag) where an element that strikes, and is no block otherwise, begins or ends: struck text is read apart from its neighbours (the contract's redline rule). The page has no line break there, so the layout rules below never see one — the boundary is set in after the scan
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
-        computed = False  # a hiding property was given a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes)
+        computed = '\x00' in s or (not raw.isascii() and (blen is len or raw.startswith(b'\xef\xbb\xbf') or _META.search(raw) is not None))  # the reading cannot be certified: a hiding property with a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes), markup it does not follow — a null character, which the parser drops or replaces by where it stands (Codex R18-C1) — or bytes beyond ASCII that are not plainly UTF-8: the browser decodes them by the mark, the <meta> or a guess of its own (every one of 22,483 real documents is ASCII)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
         style_cache, sheet_tokens = {}, []
-        def read(tag, name):  # a tag's attributes (first occurrence wins, entities decoded) and the literal declarations of its style string, parsed once; inheritance is still evaluated per element
+        lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
+        line = seen = 0; after = fresh = eat = dimmed = False  # where the current line starts in `chars` (after the last break), where its last word ends, and whether a box that must have its line to itself ended on it; `fresh`: the last thing read was a tag, so white space alone after it may be a text of its own; `eat`: the last thing read was a start tag after which the parser drops a line feed; `dimmed`: the file holds a zero opacity
+
+        def read(tag, name):
+            """A tag's attributes as written (first occurrence wins), the declarations of its style string (parsed once; inheritance is still evaluated
+            per element) and whether that string is plain: every `&` in it begins a complete reference the standard knows — the parser decodes a cut
+            one in an attribute by a rule of its own — and, decoded, it is printable ASCII with no backslash and declares no property that changes the
+            text without being evaluated here (`_UNREAD`)."""
             attrs = {}
-            for am in _ATTR.finditer(tag[len(name) + 2 if tag.startswith('</') else len(name) + 1:]): attrs.setdefault(am.group(1).lower(), html.unescape(am.group(2) or am.group(3) or am.group(4) or ''))
-            style = attrs.get('style', '')
-            if style not in style_cache: style_cache[style] = tuple(declarations(style))
-            return attrs, style_cache[style]
-        changes = lambda i: (stack[i][1:3] != (stack[i - 1][1:3] if i else (False, False)), stack[i][4] != (stack[i - 1][4] if i else False))  # does this open element itself change what is hidden, and what is struck
+            for am in _ATTR.finditer(tag[len(name) + 2 if tag.startswith('</') else len(name) + 1:]): attrs.setdefault(am.group(1).lower(), am.group(2) or am.group(3) or am.group(4) or '')
+            raw = attrs.get('style', '')
+            if raw not in style_cache:
+                known = lambda m: m.group(1) is None or m.group(1) + ';' in html5
+                style = _REF.sub(lambda m: text_reference(m.group()) if known(m) else m.group(), raw)
+                decls = tuple(declarations(style))
+                style_cache[raw] = decls, '&' not in _REF.sub(lambda m: '' if known(m) else m.group(), raw) and _PLAIN.fullmatch(uncomment(style)) is not None and not any(d[0] in _UNREAD for d in decls)
+            return (attrs, *style_cache[raw])
+
+        simple = lambda i: not (stack[i].block or stack[i].edge or stack[i].declares or stack[i].strikes)  # an inline element in the line that neither hides, strikes nor forms a box of its own: the same wherever the browser opens it again
+
+        def leave(k):
+            """The open elements from k on end here. Returns whether a visible block ends (a break) and whether a box ends that must have its line to itself."""
+            nonlocal veil, touch
+            ended = stack[k:]; del stack[k:]
+            apart.extend((len(chars), start, pos) for f in ended if f.strikes and not f.block and f.disp is None and not (f.gone or f.unseen))  # where an element set apart for its strike ends
+            if any(f.block and not f.gone for f in ended): veil = None  # a line ends here, seen or not — unless the block is removed: what is not there ends nothing
+            if ended[0].edge == 'atomic' and tail == len(chars) > ended[0].start: touch = len(chars)  # white space at the end of an inline box's content: the browser drops it, so a word right after the box touches its last word
+            return any(f.block and not (f.gone or f.unseen) for f in ended), any(f.block and not f.gone and (f.unseen or f.edge == 'own') for f in ended)
+
         if xml:  # XML: character data by the strict standard parser (CDATA literal, references decoded, attributes not text); no CSS, nothing hidden
             computed = not xml_chars(raw, chars, starts, ends); struck_chars.extend([0] * len(chars))
         for t, kind, literal in () if xml else html_tokens(s):
-            start = pos; pos += blen(t)
-            if kind in ('style', 'head') or t[:5].lower() == '<link': sheet_tokens.append((t, kind, literal))  # read for stylesheets after the scan: a comment is never one
-            if kind:  # an element taken whole, or a raw body the page never renders: certain only while nothing can show it or move it — no template, no `display` from the author, a head that holds nothing the parser would move into the body (R17, Chrome)
-                if not literal and (kind == 'template' or resolve(read(t[:t.index('>') + 1], kind)[1], 'display', _DISPLAY.__contains__) not in (None, 'none')
-                                    or (kind == 'head' and _HEAD_SAFE.sub('', t[t.index('>') + 1:t.rindex('<')]).strip())): computed = True
+            start = pos; pos += blen(t); eaten, eat = eat, False  # eaten: the token before this one was a start tag that eats a first line feed
+            if kind == 'style' or t[:5].lower() == '<link': sheet_tokens.append((t, kind, literal))  # read for stylesheets after the scan: a comment is never one
+            if kind:  # an element taken whole, a raw body the page never renders, or a construct that never ends: certain only while nothing can show it or move it — a plain opening tag, a plain style, no template, no `display` from the author (R17, R18-C1, Chrome)
+                if not literal:
+                    m = _TAG.match(t); decls, plain = read(m.group(), kind)[1:] if m else ((), False)
+                    if not plain or kind == 'template' or resolve(decls, 'display', _DISPLAY.__contains__) not in (None, 'none'): computed = True
+                if kind == 'script' and '<!--' in t: computed = True  # a script that holds `<!--` may run past its first closing tag (the tokenizer's escaped states): not followed
                 continue
             if not literal and t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
+                if t[1] in '!?': continue  # a comment or a declaration
+                fresh = True
+                if not _TAG.fullmatch(t): computed = True  # a tag outside the plain form: the tokenizer may cut it elsewhere — not followed
                 name = _NAME.match(t)
-                if not name or t.startswith('<!') or t.startswith('<?'): continue
-                name, was_hidden = name.group(1).lower(), hidden
-                attrs, decls = read(t, name)
+                if not name: continue
+                name, brk, lone = name.group(1).lower(), False, False  # brk: this tag breaks the line (a visible block starts or ends at it); lone: a box ends at it that must have its line to itself
+                attrs, decls, plain = read(t, name)
                 disp, v, op, cv = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number), resolve(decls, 'content-visibility', 'visible'.__eq__)
-                if UNKNOWN in (disp, v, op, cv) or name in UNMODELLED or (name in SHOWN_BY_DISPLAY and disp not in (None, 'none')): computed = True  # beyond this scanner, so nothing is certified: an unevaluated value, a content-visibility other than visible, content that is not modelled, an element the browser's own sheet hides and the author displays (its literal text then shows) (Codex R17-C4)
+                place, flo, white = resolve(decls, 'position', _POSITION.__contains__), resolve(decls, 'float', _FLOAT.__contains__), resolve(decls, 'white-space', _WHITE.__contains__)
+                if place is None and 'popover' in attrs: place = 'fixed'  # the browser's own sheet takes a popover out of the flow (HTML rendering): shown by an author's display it is a box of its own
+                if flo is None and name in _ALIGNED and attrs.get('align', '').strip().lower() in ('left', 'right'): flo = 'left'  # the old way to float a picture (HTML rendering: attributes for embedded content and images; Chrome)
+                if not plain or UNKNOWN in (disp, v, op, cv, place, flo, white) or name in UNMODELLED or (name in SHOWN_BY_DISPLAY and disp not in (None, 'none')) or attrs.get('hidden') or (name == 'textarea' and disp not in (None, 'none')): computed = True  # beyond this scanner, so nothing is certified: a style string it does not read as CSS does, an unevaluated value, a content-visibility other than visible, content that is not modelled, an element the browser's own sheet hides and the author displays (its literal text then shows), a `hidden` attribute with a value (until-found hides by another rule) (Codex R17-C4, R18-C1)
                 disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
                 deco, strong = None, False  # the decoration in force: the last valid text-decoration / text-decoration-line declaration wins, !important beats a later plain one
                 for n, val, important in decls:
@@ -273,69 +352,115 @@ class Visible:
                         d = decoration(val, n)
                         if d == INVALID: continue  # the grammar proves the browser drops this declaration and keeps the one before it
                         if d == UNKNOWN: struck_computed = True; continue  # not evaluated: struck text in this file is uncertain, the declaration is skipped as the browser would skip an invalid one
-                        if d == 'inherit': d = stack[-1][5] if stack else False  # the parent's own computed line, whatever propagation would have done
                         deco, strong = d, important
-                struck = (name in STRUCK) if deco in (None, 'default') else deco  # an <s>/<del>/<strike> that declares none or underline is not struck by the tag; revert restores the tag's default
-                atomic = disp in ('inline-block', 'inline-table', 'inline-flex', 'inline-grid') or last(decls, 'float') in ('left', 'right') or last(decls, 'position') in ('absolute', 'fixed')  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
-                block = (disp not in _INLINE_DISPLAY) if disp and disp != 'none' else name in BLOCK or struck
-                ua_hidden = 'hidden' in attrs or name in UA_HIDDEN or (name == 'dialog' and 'open' not in attrs)  # not shown by the browser's own sheet; an author display shows it again
-                gone = disp == 'none' or (op is not None and _zero(op)) or (ua_hidden and not disp) or name == 'ix:hidden'
+                ua_hidden = 'hidden' in attrs or 'popover' in attrs or name in UA_HIDDEN  # not shown by the browser's own sheet; an author display shows it again
+                dim = op is not None and _zero(op); dimmed = dimmed or dim  # a zero opacity: nothing inside shows, whatever a descendant declares, and every box keeps its place — invisible like visibility:hidden, not removed
+                gone = disp == 'none' or (ua_hidden and not disp) or name == 'ix:hidden'
+                if disp is None and name == 'textarea': disp = 'inline-block'  # the browser's own sheet: a <textarea> is an inline box that holds its text (HTML rendering, form controls); one the author gives a display is not followed (as `contents` it is not rendered at all)
                 if name == 'details' and 'open' not in attrs and not t.startswith('</'): computed = True  # a closed <details> shows its summary only: not followed here
-                shown = False  # does this tag's own element show (it is the element whose boundary may separate words)
+                if name in ('html', 'head', 'body'):  # the document's own elements: the parser keeps one of each wherever their tags stand, and merges a repeated tag's attributes into the first — none opens, closes or breaks anything here, and one that hides, strikes or is given a display other than block is not followed
+                    if not t.startswith('</') and (dim or ua_hidden or v in ('hidden', 'collapse') or disp not in (None, 'block')): computed = True  # (a body laid out as a flex row or a table sets its children as that box does; a repeated tag's `hidden` is merged without its style)
+                    if not t.startswith('</') and (name in STRUCK if deco in (None, 'default') else deco): struck_computed = True
+                    continue
                 if t.startswith('</'):
-                    if any(fr[0] == name for fr in reversed(stack)):
-                        while True:
-                            fr = stack.pop()
-                            if fr[0] == name: block, shown = fr[3], not (fr[1] or fr[2]); break  # the element's own display decides its closing separator too
-                            if fr[0] in STRUCK: struck_computed = True  # an unclosed <s>/<del>/<strike>: the browser reopens it in the next block (formatting elements); not followed here
-                    elif name in ('p', 'br'): shown = not hidden  # the parser reads a </p> that closes no paragraph as an empty paragraph and a </br> as <br>: a break either way (HTML tree construction; Chrome)
+                    i = next((k for k in range(len(stack) - 1, -1, -1) if stack[k].name == name), None)
+                    if i is None:
+                        if name in ('p', 'br') and not (stack and stack[-1].gone):  # the parser reads a </p> that closes no paragraph as an empty paragraph and a </br> as <br> (HTML tree construction; Chrome): a break — where nothing shows (visibility) an invisible line of its own, not followed; inside what is removed, nothing at all
+                            computed |= hidden; brk, veil = not hidden, None
+                        elif (name in _HEADINGS and any(f.name in _HEADINGS for f in stack)) or (name in ('tr', 'tbody', 'thead', 'tfoot') and stack and stack[-1].inside in ('td', 'th', 'tr')): computed = True  # a heading closed by another level's tag: the parser closes it; a row's or row group's closing tag with none open, inside a row or a cell: the parser closes the row or the body it implied — not followed
+                    else:
+                        if i < len(stack) - 1:  # the tag closes other open elements on its way: followed only where the parser simply closes them too (Codex R18-C1)
+                            part = name in _PARTS or name == 'table'  # a table part's own closing tag ends the rows and cells inside it, whatever stands open in them
+                            barrier = {'table'} if part else _SPECIAL - _ENDED if name in _SPECIAL else _SPECIAL  # a special element's closing tag ends the paragraphs and list items left open inside it (the standard's implied end tags); no other tag simply crosses an open special element — the parser ignores it, or moves the block out of the element
+                            if any(f.name in barrier for f in stack[i + 1:]): computed = True  # across a nested table, an open block, list or cell, or a </form>, which closes nothing inside it: not followed
+                            elif not part and not all(stack[j].name in _ENDED or simple(j) for j in range(i + 1, len(stack))): computed = True  # an element closed on the way that hides, strikes or forms a box of its own: the browser opens a formatting element again for what follows — which ones is not followed (a paragraph or list item ended on the way stays ended)
+                            if any(f.name in STRUCK for f in stack[i + 1:]): struck_computed = True  # an unclosed <s>/<del>/<strike>: the browser reopens it in the next block (formatting elements); not followed here
+                        brk, lone = leave(i)
                 else:
-                    if True:  # HTML's implied end tags: a new <p>, <li>, <td>, <tr> ... closes the open one, as the browser builds the tree
-                        for by, closes, stop in _IMPLIED:
-                            if name not in by: continue
-                            lowest = None
-                            for i in range(len(stack) - 1, -1, -1):  # every open element of those kinds down to the boundary closes (a new <tr> closes the open <td> and the open <tr>)
-                                if stack[i][0] in stop: break
-                                if stack[i][0] in closes: lowest = i
-                            if lowest is not None:
-                                if any(fr[1] or fr[2] for fr in stack[lowest + 1:] if fr[0] not in closes): computed = True  # unclosed hiding inline elements inside: the browser rebuilds them around the new block
-                                if any(fr[0] in STRUCK for fr in stack[lowest:]): struck_computed = True  # an unclosed <s>/<del>/<strike> the browser would reopen in the new block
-                                if name == 'table': h, k = changes(lowest); computed |= h; struck_computed |= k  # outside standards mode (a file with no doctype) the parser keeps the paragraph open around the table: what the paragraph itself hides or strikes then reaches the table — not followed
-                                del stack[lowest:]
-                    if name in _PARTS and not (stack and stack[-1][0] in _TABLE) and not any(fr[0] == 'table' for fr in stack): computed = True  # a table part with no open table: the parser drops its tags (the text then runs on)
-                    if name not in VOID:  # a slash on a non-void HTML tag closes nothing; open elements: (name, blocked for good, visibility hidden, block, struck in effect, own line)
-                        blocked, vis = stack[-1][1:3] if stack else (False, False)
-                        # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
-                        stack.append((name, blocked or gone, True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else vis, block, (stack[-1][4] if stack and not atomic else False) or struck, struck))
-                        if len(stack) > 1 and stack[-2][0] in _TABLE and name not in _PARTS: h, k = changes(len(stack) - 1); computed |= h; struck_computed |= k  # no part of a table, directly inside one: the parser moves the element out and leaves the rows behind — what it hides or strikes does not reach them
-                hidden = bool(stack) and (stack[-1][1] or stack[-1][2])
-                if not t.startswith('</'):  # an opening element shows when nothing above it is gone and neither it nor an ancestor hides it; a void element was not pushed, so its own visibility is read here
-                    own = True if v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else bool(stack) and stack[-1][2]
-                    shown = (not gone and not (bool(stack) and stack[-1][1]) and not own) if name in VOID else not hidden
+                    eat = name in _EATS
+                    if name in _ONCE and any(f.name in (_HEADINGS if name in _HEADINGS else (name,)) for f in stack): computed = True  # opened inside its like: the parser closes the open one first, or drops the tag — not followed
+                    for by, closes, stop in _IMPLIED:  # HTML's implied end tags: a new <p>, <li>, <td>, <tr> ... closes the open one, as the browser builds the tree
+                        if name not in by: continue
+                        lowest = None
+                        for i in range(len(stack) - 1, -1, -1):  # every open element of those kinds down to the boundary closes (a new <tr> closes the open <td> and the open <tr>)
+                            if stack[i].name in stop: break
+                            if stack[i].name in closes: lowest = i
+                        if lowest is not None:
+                            if not all(stack[j].name in closes or simple(j) for j in range(lowest + 1, len(stack))): computed = True  # unclosed elements inside that hide, strike or form a box of their own: the browser rebuilds formatting elements around the new block
+                            if name == 'table' and closes == {'p'}: computed = True  # outside standards mode (a file with no doctype) the parser keeps the paragraph open around the table: the tree, and with it what the paragraph hides, strikes or ends, depends on the mode — not followed (1 such table in 22,483 real documents)
+                            b, e = leave(lowest); brk, lone = brk or b, lone or e  # a visible block closed here ends its line, whether or not the new element starts one
+                    if name in _PARTS and not any(f.name == 'table' for f in stack): computed = True  # a table part with no open table: the parser drops its tags (the text then runs on)
+                    top = stack[-1] if stack else None  # the element this one stands in, once the implied endings are made
+                    struck = (name in STRUCK) if deco in (None, 'default') else (top.strikes if top else False) if deco == 'inherit' else deco  # an <s>/<del>/<strike> that declares none or underline is not struck by the tag; revert restores the tag's default; inherit takes the parent's own line
+                    item = bool(top) and top.disp in _ITEMS  # a child of a flex or grid container: a box of its own line whatever its display says
+                    out = (place in ('absolute', 'fixed') or flo in ('left', 'right')) and disp != 'contents'  # a box taken out of the flow: a line of its own in the page's text whatever its display says (CSS 2 section 9.7; Chrome), and a parent's decoration does not reach into it
+                    block = (disp not in _INLINE_DISPLAY) if disp else name in BLOCK  # (of a removed element nothing is asked)
+                    # A box the page sets by rules of its own — an inline box out of the flow (printed where its offsets put it), an inner table box an author declares (set in a table the
+                    # browser makes up), a paragraph given an inline display (the browser still prints it on its own line): read as a line of its own, and certified only when it has that
+                    # line to itself (R18; `(232,724<font style="position:absolute">)</font>` in a real filing; alone in its cell it is certain, as in real 8-K tables). An inline box that
+                    # holds lines of its own is `atomic`: read in the line
+                    edge = None if item else 'own' if (out and not block) or disp in _TABLE_BOX or (name == 'p' and disp in _INLINE_DISPLAY and disp != 'contents') else 'atomic' if disp in _ATOMIC else None
+                    block = block or item or edge == 'own'
+                    if (item and disp == 'contents') or (name in VOID and name not in ('hr', 'img', 'input') and disp not in (None, 'none')) or (name in _PARTS and disp not in (None, 'none')) or (name == 'table' and disp not in (None, 'none', 'table', 'inline-table')): computed = True  # not followed: an item that hands its children to the container, a void element other than a rule, a picture or a field given a box of its own (the browser keeps a <br> a break and prints nothing for the others), a part of a table given another display
+                    off = gone or (bool(top) and top.gone)
+                    unseen = True if dim or v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else bool(top) and top.unseen  # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
+                    if dimmed and not unseen and bool(top) and top.unseen: computed = True  # shown again under an invisible parent in a file that holds a zero opacity: under that one nothing shows again — which parent it is, is not followed
+                    if not unseen and bool(top) and top.unseen and top.struck: struck_computed = True  # shown again inside invisible struck text: whether the invisible element's line is painted on it is not followed
+                    shown = not (off or unseen)  # an opening element shows when nothing above it is gone and neither it nor an ancestor hides it
+                    if block and not off: veil = None  # a line starts here, seen or not (a removed one starts nothing)
+                    alone = block and not off and (unseen or edge == 'own')  # a box that must have its line to itself: one the page sets by its own rules, or an invisible one — the page keeps its line, the browser's text glues what stands around it (visibility, not display)
+                    if alone and (seen > line or (after and shown)): computed = True  # a word before it on its line, or — for one that shows — another such box (invisible ones follow each other freely: the cells of a hidden row)
+                    if shown and edge == 'atomic' and (after or touch == len(chars)): computed = True  # an inline box on the line of a box that must have it to itself, or right after an inline box that ended with white space (dropped by the browser: the two boxes touch); a picture or a field there holds no word, so what follows it is asked instead
                     if shown and name in ('img', 'svg'): self.pictures.append((start, pos))
-                if shown and block: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0)  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
+                    if shown and edge == 'atomic' and chars and not _WS.fullmatch(chars[-1]): lead = len(chars)  # white space at the start of an inline box's content: the browser drops it, so the word before the box touches its first word
+                    brk = brk or (shown and block)
+                    if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing
+                        inside = name if name in _PARTS or name == 'table' else top.inside if top else None  # the innermost table, row group, row or cell this element stands in
+                        pre = white in _KEPT or (white in (None, 'inherit', 'unset') and ((white is None and name in _PRE) or (bool(top) and top.pre and name != 'table')))  # outside standards mode the browser's own sheet resets white-space at a table: what a table inherits is not taken as kept
+                        stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
+                        if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
+                        if inside in _TABLE and name not in _PARTS and name != 'table': f = stack[-1]; computed |= f.declares or f.pre != top.pre or (name in _FORMATTING and bool(f.block or f.edge)); struck_computed |= f.struck != top.struck  # no part of a table, standing in one outside any cell: the parser moves the element out and leaves the rows behind — what it hides, strikes or keeps of white space does not reach them, and a formatting element it opens again inside the cells: one with a box of its own is not followed
+                hidden = bool(stack) and (stack[-1].gone or stack[-1].unseen)
+                if brk: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0); line, after = len(chars), False  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
+                after = after or lone
                 continue
-            st = 1 if stack and stack[-1][4] else 0
-            ref = literal != 1 and t.startswith('&') and len(t) > 1  # a character reference: decoded as the parser decodes it, never inside literal text
-            if stack and stack[-1][0] in _TABLE and not _WS.fullmatch(text_reference(t) if ref else t): computed = True  # the browser moves such text before the table
+            top = stack[-1] if stack else None
+            st, keeps = 1 if top and top.struck else 0, bool(top) and top.pre  # keeps: white space is kept here, never dropped
+            ref = literal != 1 and t[0] == '&' and t[-1] == ';'  # a character reference: decoded as the parser decodes it, never inside literal text
+            if eaten and (text_reference(t) == '\n' if ref else t[0] in '\r\n'):  # the line feed the parser drops: one written as a reference, or the first of this text (a CR or a CR LF in the source is one line feed)
+                n = len(t) if ref else 2 if t[:2] == '\r\n' else 1; start += n; t = t[n:]
+                if not t: continue
+            if literal != 1 and not ref and text_reference(t) != t: computed = True  # a reference without its semicolon that the browser decodes ('&#150 ', '&nbsp ', '&notes'): read literally here, so not certified (Codex R18-C1)
+            text = text_reference(t) if ref else t; word = not _WS.fullmatch(text)
+            if top and top.inside in _TABLE and word: computed = True  # text in a table outside any cell — directly, or inside an element the parser moves out: the browser prints it before the table
             if hidden:
                 if not ref: self.hidden_chars += len(_WS.sub('', t))
-                elif not _WS.match(text_reference(t)): self.hidden_chars += 1
+                elif not _WS.match(text): self.hidden_chars += 1
+                if not top.gone: veil = len(chars) if text[-1] in ('\r\n' if keeps else _SPACE) or (veil == len(chars) and not word) else None  # invisible text that ends with collapsible white space, or with a kept line feed (the line it starts drops the white space that follows) — and kept white space after either leaves it so; removed text is not there at all and changes nothing
                 continue
+            if (after and word) or (touch == len(chars) and not _WS.match(text)) or (not keeps and text[0] in _SPACE and len(chars) in (lead, veil)) or (fresh and bool(top) and top.disp in _SHED and not text.strip(_SPACE) and bool(chars) and not _WS.fullmatch(chars[-1])): computed = True  # a word on the line of a box that must have it to itself; white space the browser drops — at the edge of an inline box between two words, after invisible text that ended with white space, or alone between a word and a tag in a flex, grid or table box, which shows none of its white space that stands alone between its children (CSS Flexbox 4, CSS 2 17.2.1; what follows is not looked at)
+            fresh = False
             if ref:
-                for c in text_reference(t): chars.append(c); starts.append(start); ends.append(pos); struck_chars.append(st)
+                for c in text: chars.append(c); starts.append(start); ends.append(pos); struck_chars.append(st)
             elif t.isascii() or blen is len:
                 chars.extend(t); starts.extend(range(start, start + len(t))); ends.extend(range(start + 1, start + len(t) + 1)); struck_chars.extend([st] * len(t))
             else:
                 off = start
                 for c in t: n = blen(c); chars.append(c); starts.append(off); ends.append(off + n); struck_chars.append(st); off += n
+            if not keeps and chars[-1] in _SPACE: tail = len(chars)
+            if word: seen = len(chars)
+        keep = [m for m in apart if (m[0] and struck_chars[m[0] - 1]) or (m[0] < len(chars) and struck_chars[m[0]])]  # a boundary only next to a struck character: an element that strikes nothing it shows (it is empty, or begins or ends with a box its line does not reach into) sets nothing apart there
+        def spliced(seq, fill):
+            out, prev = seq[:0], 0
+            for (i, _, _), x in zip(keep, fill): out += seq[prev:i]; out.append(x); prev = i
+            return out + seq[prev:]
+        if keep: chars, starts, ends, struck_chars = spliced(chars, ' ' * len(keep)), spliced(starts, [m[1] for m in keep]), spliced(ends, [m[2] for m in keep]), spliced(struck_chars, [0] * len(keep))
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
         sheets = stylesheets(sheet_tokens)
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
-        external = any(x is None or '@import' in x.lower() for x in sheets)
-        self.struck_certain = not struck_computed and not external and not any(_DECO_RULE.search(x) for x in sheets if x)  # a struck run is certified only when no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
-        self.plain_certain = not struck_computed and not external and not any(sheet_can_strike(x) for x in sheets if x)  # "nothing struck here" needs that no sheet rule can add or force a strike (line-through, inherit, revert, a function, !important or any token this scanner does not know)
+        self.struck_certain = self.certain and not struck_computed and not any(_DECO_RULE.search(x) for x in sheets)  # a struck run is certified only when the reading is, no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
+        self.plain_certain = self.certain and not struck_computed and not any(sheet_can_strike(x) for x in sheets)  # "nothing struck here" needs, besides, that no sheet rule can add or force a strike (line-through, inherit, revert, a function, !important or any token this scanner does not know)
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))

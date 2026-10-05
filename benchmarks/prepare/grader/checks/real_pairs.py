@@ -176,8 +176,9 @@ def pdf_cell_control(t, pages):
 
 
 def xml_fields(raw):
-    """Every text-bearing element as a field unit: expanded name, parent path, position among same-name siblings;
-    the anchor spans the whole element (its name is checked by name, its text as text)."""
+    """Every text-bearing element as a field unit: expanded name, parent path, its parent as the instance it stands in (position among same-name
+    siblings, and the byte of the parent's start tag: the instance's identity); the anchor spans the whole element (its name is checked by name, its
+    text as text)."""
     units, stack, counts, text, start = [], [], [{}], [], [None, None]
     p = xml.parsers.expat.ParserCreate(namespace_separator='}')
     fix = lambda n: '{' + n if '}' in n else n
@@ -189,7 +190,7 @@ def xml_fields(raw):
         full = ''.join(text); kids = counts.pop(); me, pos, begin = stack.pop()
         if full.strip() and not kids:
             end = raw.index(b'>', p.CurrentByteIndex) + 1
-            units.append({'id': f'x{len(units)}', 'kind': 'field', 'name': me, 'path': [n for n, _, _ in stack], 'group': {'index': stack[-1][1] if stack else 1, 'count': None},
+            units.append({'id': f'x{len(units)}', 'kind': 'field', 'name': me, 'path': [n for n, _, _ in stack], 'group': {'index': stack[-1][1] if stack else 1, 'count': None, 'at': stack[-1][2] if stack else begin},
                           'text': norm(full), 'anchor': {'byte_start': begin, 'byte_end_exclusive': end}, '_parent_key': tuple(n for n, _, _ in stack)})
         text.clear()
     p.StartElementHandler, p.CharacterDataHandler, p.EndElementHandler = s, ch, e
