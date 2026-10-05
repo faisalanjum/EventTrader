@@ -296,11 +296,14 @@ def cases(targets):
         u = next(u for u in r['units'] if ' not ' in u['text']); u['text'] = u['text'].replace(' not ', ' ', 1)
     def reorder(r):
         i = next(i for i, u in enumerate(r['units']) if u['id'] == 'b1'); r['units'][i], r['units'][i + 1] = r['units'][i + 1], r['units'][i]
+    # Where the package declares the block a picture's text (R4, package 3: `approximate`), its words are approximate evidence: never a pass or a failure of the
+    # words — the grader must report the differences instead (none; the words deleted; the critical one; the disorder). Under a strict key the same variants pass or fail
+    strict = lambda verdict, check: (verdict, check) if not t.get('approximate') else None
     out.append(('Carnival scanned page T01', t['key_id'], [
-        ('valid: page text split into ordered blocks', ctl, 'PASS', None),
-        ('damaged: one block omitted', damage(ctl, lambda r: r['units'].remove(next(u for u in r['units'] if u['id'] == 'b2'))), 'FAIL', 'printed_text'),
-        ('damaged: one "not" omitted', damage(ctl, drop_not), 'FAIL', 'printed_text'),
-        ('damaged: blocks out of order', damage(ctl, reorder), 'FAIL', 'printed_text', 'reading_order')]))
+        ('valid: page text split into ordered blocks', ctl, *(strict('PASS', None) or ('APPROXIMATE', ('no difference reported', lambda d: d['word_error_rate'] == 0 and not d['edits'])))),
+        ('damaged: one block omitted', damage(ctl, lambda r: r['units'].remove(next(u for u in r['units'] if u['id'] == 'b2'))), *(strict('FAIL', 'printed_text') or ('APPROXIMATE', ('deleted words reported', lambda d: d['words']['deleted'] > 1)))),
+        ('damaged: one "not" omitted', damage(ctl, drop_not), *(strict('FAIL', 'printed_text') or ('APPROXIMATE', ('a critical difference reported', lambda d: any('not' in x.split() for x in d['critical']['missing']))))),
+        ('damaged: blocks out of order', damage(ctl, reorder), *(strict('FAIL', 'printed_text') or ('APPROXIMATE', ('differences in order reported', lambda d: d['word_error_rate'] > 0 and d['words']['substituted'] > 0))), 'reading_order')]))
 
     # 6. Alpha Units XML T01
     t = T['0000950170-24-139133/T01']; ctl, units = xml_control(t)
@@ -344,7 +347,9 @@ def main():
             fired = sorted({r['check'] for r in rows if r['verdict'] == 'fail' and r['check'] not in grade.STRUCTURE})
             structure = sorted({r['check'] for r in rows if r['verdict'] == 'fail' and r['check'] in grade.STRUCTURE})
             reasons = {r['check']: r['reason'] for r in rows if r['verdict'] == 'fail'}
-            good = verdict == expect and (check is None or check in fired + structure)
+            if isinstance(check, tuple):  # (what the approximate row must report, a test of its detail)
+                check, reports = check; good = verdict == expect and reports(next(r['detail'] for r in rows if r['check'] == 'printed_text' and r['verdict'] == 'approximate'))
+            else: good = verdict == expect and (check is None or check in fired + structure)
             if expect == 'PASS' and check is None: good = good and not fired
             if gate: good = good and not rep['gates'][gate]['pass']
             ok &= good

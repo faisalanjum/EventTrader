@@ -1,0 +1,101 @@
+{
+ "what": "Addendum R4 (package 3, 2026-10-04) to CONTRACT_DECISIONS_R2/R3: the owner's decisions (a)-(e) of 2026-10-04 in Codex's round-13 wording, the three page-number exclusions declared with their reviewed source anchors, the picture-text policy, the continuous-paragraph rule and the recorded XML-route exception. Written by Fable; verdict PROPOSED until Codex's independent check of this package. Nothing in R2 or R3 is changed; answers are changed only by decision_batches_package3.json (three header_path values).",
+ "owner_decisions_20261004": {
+  "a": "Yes. Report word recovery for picture blocks, separately flagging errors in numbers, signs and negation. Keep the image as evidence.",
+  "b": "Yes, measured first. Trial one local OCR alternative. Adopt only if accuracy improves, critical errors don't increase, and speed/memory remain acceptable.",
+  "c": "Yes. Apply all three verified corrections through the next frozen package.",
+  "d": "No, page numbers aren't needed as reader blocks. Exclude them from scoring, but preserve page references. Exclusions aren't passes.",
+  "e": "Yes. Accept genuinely continuous paragraphs when the target text is preserved in order and mapped to the correct source page."
+ },
+ "decisions": [
+  {
+   "item": "C1",
+   "rule": "E10",
+   "topic": "picture text",
+   "verdict": "PROPOSED",
+   "text": "For a source block declared `image` by the frozen key, the original image/page region remains the evidence. Its reviewed key transcription remains the comparison reference; the route's OCR text is approximate. Report word error rate, with substitutions, deletions and insertions, and separately report aligned critical-token differences, including numbers, signs, dates, units and negation. Apply this to the declared source block regardless of whether a tool outputs one picture or several text/table units. `APPROXIMATE` is reported separately and is not a pass or certification of a fact. Missing conversion remains not converted; missing or ambiguous source mapping remains unresolved. Existing association, order, reference and provenance requirements still apply. Other text blocks retain strict comparison.",
+   "reason": "Owner decision (a); Codex round 13. Development split: 11 declared image blocks (8 HTML, 3 PDF), the same rule for every tool.",
+   "policy": {
+    "approximate_kinds": [
+     "image"
+    ],
+    "report": [
+     "word_error_rate",
+     "critical_tokens"
+    ],
+    "critical_tokens": "aligned differences in numbers (with signs and parentheses), dates, units and negation words; ordered alignment, never multisets",
+    "evidence_kept": "the original image or page region"
+   }
+  },
+  {
+   "item": "C2",
+   "rule": "E10",
+   "topic": "page numbers",
+   "verdict": "PROPOSED",
+   "text": "Only page-number targets explicitly declared by reviewed source anchors in this package are excluded. Report them as `EXCLUDED`, separately from passes and errors, and preserve source page references on retained content. This does not exclude headers, logos, notes or other furniture. Raw coverage may still show these characters, but required-content coverage must distinguish declared exclusions from lost content.",
+   "reason": "Owner decision (d); Codex round 13 checked all three originals: page footers 12, 9 and 12.",
+   "exclusions": [
+    {
+     "key_id": "0000093751-26-000184/T05",
+     "role": "page_number",
+     "file_id": "0000093751-26-000184/exhibit992-1q26earningsrel.htm",
+     "sha256": "41f59e9759c6534ed61b9d24121185fa8d094afbbad343121944e3a16e004974",
+     "anchor": {
+      "byte_start": 1511870,
+      "byte_end_exclusive": 1512201
+     },
+     "printed_text": "12",
+     "evidence": "page footer in the original (Codex round12/PAGE_NUMBER_EVIDENCE.json; Fable ledger §16)"
+    },
+    {
+     "key_id": "bundle-004/0000093751-26-000008:T07",
+     "role": "page_number",
+     "file_id": "0000093751-26-000008/exhibit992-4q25earningsrel.htm",
+     "sha256": "34a21dcda357676e1fc8716d4436e93c76676fd6f8ba6feba4d36a090bff77da",
+     "anchor": {
+      "byte_start": 1616785,
+      "byte_end_exclusive": 1617115
+     },
+     "printed_text": "9",
+     "evidence": "page footer in the original (Codex round12/PAGE_NUMBER_EVIDENCE.json; Fable ledger §16)"
+    },
+    {
+     "key_id": "bundle-021/0001104659-23-034474:T01",
+     "role": "page_number",
+     "file_id": "0001104659-23-034474/tm239655d2_ex3-1.htm",
+     "sha256": "304d66dd7623708286afda180b3774219d5f987eb5b3cdfbbcbdf797a6469412",
+     "anchor": {
+      "byte_start": 129630,
+      "byte_end_exclusive": 129803
+     },
+     "printed_text": "12",
+     "evidence": "page footer in the original (Codex round12/PAGE_NUMBER_EVIDENCE.json; Fable ledger §16)"
+    }
+   ]
+  },
+  {
+   "item": "C3",
+   "rule": "E12",
+   "topic": "continuous paragraphs",
+   "verdict": "PROPOSED",
+   "text": "A genuinely continuous paragraph may span pages. Accept the target's ordered text within it only when the output's source mapping places that text on the target's page and scope. A list of page numbers alone is insufficient. Missing or ambiguous mapping remains unresolved; wrong mapping fails. Do not join unrelated paragraphs or infer the split from the key.",
+   "reason": "Owner decision (e); Codex round 13 C2: the mapping condition is required, a page list alone is not enough."
+  },
+  {
+   "item": "C4",
+   "rule": "E17",
+   "topic": "XML route",
+   "verdict": "PROPOSED",
+   "text": "The minimal standard-library XML route (the strict expat parser; one field unit per element that carries text; no field list) is the approved exception to \"no custom XML converter\" (agreement point 4, 2026-10-03). It does not waive XML source association or mixed-content requirements.",
+   "reason": "Already approved on 2026-10-03; recorded here because the frozen E17 wording still says \"no custom XML converter\"."
+  },
+  {
+   "item": "C5",
+   "rule": "adoption",
+   "topic": "OCR engine",
+   "verdict": "PROPOSED",
+   "text": "RapidOCR (Docling default) is retained. Another OCR engine is adopted only when measured on the same blocks: accuracy improves, critical errors do not increase, speed and memory stay acceptable.",
+   "reason": "Owner decision (b); the EasyOCR trial of 2026-10-04 was worse on all five difficult blocks (ledger §22) and is not adopted."
+  }
+ ]
+}

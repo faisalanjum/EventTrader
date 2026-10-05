@@ -1,5 +1,5 @@
 {
- "key": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261003_2014",
+ "key": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261004_0557",
  "all_ok": true,
  "results": [
   {
@@ -575,10 +575,10 @@
    "case": "Carnival scanned page T01",
    "key_id": "bundle-030/0000815097-26-000037:T01",
    "variant": "valid: page text split into ordered blocks",
-   "expected": "PASS",
-   "expected_check": null,
+   "expected": "APPROXIMATE",
+   "expected_check": "no difference reported",
    "expected_gate_fail": null,
-   "verdict": "PASS",
+   "verdict": "APPROXIMATE",
    "failed_checks": [],
    "structure_misses": [],
    "reasons": {},
@@ -588,51 +588,39 @@
    "case": "Carnival scanned page T01",
    "key_id": "bundle-030/0000815097-26-000037:T01",
    "variant": "damaged: one block omitted",
-   "expected": "FAIL",
-   "expected_check": "printed_text",
+   "expected": "APPROXIMATE",
+   "expected_check": "deleted words reported",
    "expected_gate_fail": null,
-   "verdict": "FAIL",
-   "failed_checks": [
-    "printed_text"
-   ],
+   "verdict": "APPROXIMATE",
+   "failed_checks": [],
    "structure_misses": [],
-   "reasons": {
-    "printed_text": "text"
-   },
+   "reasons": {},
    "ok": true
   },
   {
    "case": "Carnival scanned page T01",
    "key_id": "bundle-030/0000815097-26-000037:T01",
    "variant": "damaged: one \"not\" omitted",
-   "expected": "FAIL",
-   "expected_check": "printed_text",
+   "expected": "APPROXIMATE",
+   "expected_check": "a critical difference reported",
    "expected_gate_fail": null,
-   "verdict": "FAIL",
-   "failed_checks": [
-    "printed_text"
-   ],
+   "verdict": "APPROXIMATE",
+   "failed_checks": [],
    "structure_misses": [],
-   "reasons": {
-    "printed_text": "text"
-   },
+   "reasons": {},
    "ok": true
   },
   {
    "case": "Carnival scanned page T01",
    "key_id": "bundle-030/0000815097-26-000037:T01",
    "variant": "damaged: blocks out of order",
-   "expected": "FAIL",
-   "expected_check": "printed_text",
+   "expected": "APPROXIMATE",
+   "expected_check": "differences in order reported",
    "expected_gate_fail": "reading_order",
-   "verdict": "FAIL",
-   "failed_checks": [
-    "printed_text"
-   ],
+   "verdict": "APPROXIMATE",
+   "failed_checks": [],
    "structure_misses": [],
-   "reasons": {
-    "printed_text": "text"
-   },
+   "reasons": {},
    "ok": true
   },
   {
