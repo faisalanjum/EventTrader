@@ -573,12 +573,14 @@ def link(raw, units, xml=False):
     vis, ranges = Visible(raw, xml), []
     items = [(u, c) for u in units for c in (u.get('cells') or [u])]  # reading order; cells row-major inside their table
     keys = [squash(c.get('text', '')) if u.get('kind') != 'image' else '' for u, c in items]
+    same_text = {}  # the items that carry each text, found once: asking every item again for each placement took time with the square of their number (Codex's worktree)
+    for k, key in enumerate(keys): same_text.setdefault(key, []).append(k)
 
     def place(i, lo, hi, forward_only):
         """Anchor item i inside flat[lo:hi]; forward search first, else the nearest earlier occurrence (flagged)."""
         obj, n = items[i][1], keys[i]
         marks = [squash(m) for m in obj.get('markers') or () if squash(m)]; allm = ''.join(marks)
-        taken = {pos[k][0] for k in range(len(items)) if pos[k] and keys[k] == n and k != i}  # copies of this text other units already hold
+        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i}  # copies of this text other units already hold
         found = []
         for k in ([allm + n, n + allm] if marks else []) + [n]:
             off = len(allm) if marks and k == allm + n else 0; j = vis.flat.find(k, lo, hi)
@@ -611,7 +613,7 @@ def link(raw, units, xml=False):
         The blocks become a list anchor; the text's characters outside them are the tool's insertions (`inserted_chars`); the source's
         characters between them stay uncovered."""
         obj, n = items[i][1], keys[i]
-        taken = {pos[k][0] for k in range(len(items)) if pos[k] and keys[k] == n and k != i}
+        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i}
         j = vis.flat.find(n[:SHORT], lo, hi)
         while j >= 0 and j in taken: j = vis.flat.find(n[:SHORT], j + 1, hi)
         if j < 0: return None
@@ -640,7 +642,7 @@ def link(raw, units, xml=False):
     def unclaimed(i):
         """A copy of this text that no unit with the same text holds yet, anywhere in the source: a tool that lists repeated
         blocks out of order still gets one unit per copy. Flagged, because it was not where its neighbours said."""
-        n = keys[i]; taken = {pos[k][0] for k in range(len(items)) if pos[k] and keys[k] == n}; m = sum(len(squash(x)) for x in items[i][1].get('markers') or ())
+        n = keys[i]; taken = {pos[k][0] for k in same_text[n] if pos[k]}; m = sum(len(squash(x)) for x in items[i][1].get('markers') or ())
         j = vis.flat.find(n)
         while j >= 0:
             if j not in taken:
