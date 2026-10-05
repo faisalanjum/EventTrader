@@ -124,6 +124,11 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         raw2 = b'<style>s{text-decoration:none}</style><p><s>maybe</s> plain words.</p>'  # Codex R10-1: a sheet rule can remove the tag's strike: the converter's own claim stands, nothing is written or dropped where the scanner saw a run
         units2 = an.link(raw2, [{'id': 'u', 'kind': 'text', 'text': 'maybe plain words.', 'struck': ['maybe']}, {'id': 'v', 'kind': 'text', 'text': 'absent'}])['units']
         self.assertEqual(sf.apply(raw2, units2), 0); self.assertEqual(units2[0].get('struck'), ['maybe'])
+        for tag, dec in (('s', ''), ('span', ';text-decoration:line-through'), ('del', ''), ('strike', ';text-decoration:line-through')):  # Codex R18 N2: an element with no box paints no line of its own, so no strike is written from it
+            raw3 = f'<div><{tag} style="display:contents{dec}">net</{tag}></div>'.encode(); u3 = {'id': 'u', 'kind': 'text', 'text': 'net', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw3)}}
+            sf.apply(raw3, [u3]); self.assertNotIn('struck', u3, tag)
+        raw4 = b'<p>x <s style="text-decoration-color:transparent">net</s> y</p>'; u4 = {'id': 'u', 'kind': 'text', 'text': 'x net y', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw4)}}
+        sf.apply(raw4, [u4]); self.assertNotIn('struck', u4)  # round 19: a line in a colour that paints nothing is no strike to write
         raw3 = b'<style>.x{text-decoration:line-through}</style><p>plain words here.</p>'  # a sheet rule could add a strike: nothing is certified either way
         units3 = an.link(raw3, [{'id': 'u', 'kind': 'text', 'text': 'plain words here.', 'struck': ['plain']}])['units']
         self.assertIsNone(sf.apply(raw3, units3)); self.assertEqual(units3[0].get('struck'), ['plain'])

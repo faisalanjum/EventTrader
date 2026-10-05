@@ -512,7 +512,117 @@ class LinkTests(unittest.TestCase):
         self.assertEqual(V(b'<p>a&#' + b'0' * 4299 + b'65;b</p>').text.strip(), 'aAb')
         for source, tokens in (('<p>' + '<a' * 16000, 2), ('<p>' + '<a "x" ' * 16000, 2), ('<p>' + '<template>' * 16000, 2), ('<p>x<script>' + 'var a;<script>' * 9, 3), ('<p>x<a title="y>z', 4)):
             self.assertEqual(len(list(anchor.html_tokens(source))), tokens, source[:30])  # the rest of the source is one token: nothing after it is looked for (the last: a `>` stands inside the open quote, so the text goes on — uncertain either way)
-        self.assertEqual([(V(('<p>x' + rest).encode()).text.strip(), V(('<p>x' + rest).encode()).certain) for rest in ('<a href="y', '<script>var a;', '<template>t')], [('x', False), ('x', True), ('x', False)])
+        self.assertEqual([(V(('<p>x' + rest).encode()).text.strip(), V(('<p>x' + rest).encode()).certain) for rest in ('<a href="y', '<script>var a;', '<title>var a;', '<template>t')], [('x', False), ('x', False), ('x', True), ('x', False)])  # (a script's page is not certified since round 19; an unclosed title shows the same reading certified)
+
+
+    def test_an_attribute_the_scanner_does_not_decode_and_a_box_it_does_not_follow_are_not_certified(self):
+        # Round 19 (Codex R18 N1, N2, and the page shape his strike finding led to). Chrome's text or paint beside each (local, offline, 2026-10-05)
+        V = anchor.Visible
+        for rel in ('&#115;tylesheet', 'style&#115;heet', 'style&#x73;heet', 'style&#115heet'):  # N1: the parser decodes a reference in an attribute, this scanner only in `style`: the link loads a sheet (Chrome prints operafter)
+            v = V(f'<link rel="{rel}" href="data:text/css,p%7Bdisplay:none%7D"><span>oper</span><p>ating</p><span>after</span>'.encode()); self.assertEqual((v.certain, v.struck_certain, v.plain_certain), (False, False, False), rel)
+        for tag, chrome in (('img', 'A B'), ('iframe', 'A B'), ('embed', 'A B'), ('input', 'AB')):
+            for align in ('&#108;eft', 'l&#101;ft', '&#x72;ight'): v = V(f'A<{tag} align="{align}" width="10" height="10">B'.encode()); self.assertTrue(not v.certain or anchor.norm(v.text) == chrome, (tag, align))
+        for raw in (b'<link rel="stylesheet" href="x.css"><p>A</p>', b'<link rel="StyleSheet" href="x.css"><p>A</p>'): self.assertFalse(V(raw).certain, raw)
+        for raw in (b'<p>A</p>', b'<span style="display:n&#111;ne">X</span>A', b'<p title="A &amp; B">A</p>', b'<link rel="icon" href="x.png"><p>A</p>', b'<a rel="no&amp;follow">A</a>', b'<table><tr><td align="&#108;eft">A</td></tr></table>'):  # the guard is on the two attributes read, nowhere else
+            v = V(raw); self.assertEqual((v.certain, anchor.norm(v.text)), (True, 'A'), raw)
+        for tag in ('s', 'span', 'del', 'strike'):  # N2: an element with no box of its own paints no line of its own (Chrome's picture of each: plain)
+            for dec in ('', ';text-decoration:line-through'):
+                v = V(f'<div><{tag} style="display:contents{dec}">net</{tag}></div>'.encode()); self.assertFalse(v.struck_certain and any(v.struck_chars), (tag, dec)); self.assertTrue(v.certain)
+        for raw, struck in ((b'<s>net</s>', True), (b'<s style="display:inline">net</s>', True), (b'<s><span style="display:contents">net</span></s>', True),  # painted struck: the line is its parent's
+                            (b'<span style="display:contents">net</span>', False), (b'<s style="text-decoration:none">net</s>', False), (b'<s style="display:contents;text-decoration:none">net</s>', False)):
+            v = V(raw); self.assertEqual((v.certain, v.struck_certain, v.plain_certain, any(v.struck_chars)), (True, True, True, struck), raw)
+        # a writing mode other than its parent's makes an inline a box of its own lines: Chrome drops the white space inside its edges (xnety, where the plain inline prints x net y)
+        # and paints none of its parent's strike on it. Not followed, inline or in a sheet, under any of the three names Chrome accepts (it does not list the -epub- one)
+        for decl in ('writing-mode:vertical-rl', 'writing-mode:sideways-lr', 'writing-mode:tb-rl', 'writing-mode:horizontal-tb', '-webkit-writing-mode:vertical-lr', '-epub-writing-mode:vertical-rl', 'WRITING-MODE:VERTICAL-RL'):
+            self.assertFalse(V(f'<p>x<span style="{decl}"> net </span>y</p>'.encode()).certain, decl); self.assertFalse(V(f'<style>span{{{decl}}}</style><p>x<span> net </span>y</p>'.encode()).certain, decl)
+        for decl in ('text-orientation:upright', 'direction:rtl', 'font-family:writing-mode'): v = V(f'<p>x<span style="{decl}"> net </span>y</p>'.encode()); self.assertEqual((v.certain, anchor.norm(v.text)), (True, 'x net y'), decl)  # Chrome: x net y
+        for raw, chrome in ((b'<div>x<div style="writing-mode:vertical-rl"> net </div>y</div>', 'x net y'), (b'<div style="writing-mode:vertical-rl">x<span> net </span>y</div>', 'x net y'), (b'<table><tr><td style="writing-mode:vertical-rl">a b</td><td>c</td></tr></table>', 'a b c'),
+                            (b'<table><tr><td><div style="rotate:180deg;writing-mode:vertical-rl;width:100%"><p style="margin:0">Total net</p></div></td><td>x</td></tr></table>', 'Total net x')):  # a block reads the same in any writing mode (the last: how a real 10-K turns its table headings)
+            v = V(raw); self.assertEqual((v.certain, anchor.norm(v.text)), (True, chrome), raw)
+        # a table floated by `align` (the old way, as a picture): Chrome paints none of its parent's strike on it, as on any float
+        struck = lambda raw: (lambda v: (v.struck_certain, bool(v.struck_chars[v.text.index('net')])))(V(raw))
+        for raw, want in ((b'<s>a <table align="left"><tr><td>net</td></tr></table> b</s>', False), (b'<del>a <table align="RIGHT"><tr><td>net</td></tr></table></del>', False), (b'<s>a <table style="float:left"><tr><td>net</td></tr></table> b</s>', False),
+                          (b'<s>a <table align="center"><tr><td>net</td></tr></table> b</s>', True), (b'<s>a <table><tr><td align="left">net</td></tr></table> b</s>', True), (b'<s>a <div align="left">net</div> b</s>', True)):
+            self.assertEqual(struck(raw), (True, want), raw)
+        self.assertFalse(V(b'<s>a <table align="&#108;eft"><tr><td>net</td></tr></table> b</s>').certain)
+        # an instruction a <meta> hands the browser: a content security policy turns style attributes off (Chrome prints abc), a refresh sends it to another page (Chrome then prints
+        # that page: 10 becomes 20 — Codex R19 N3; each page in a tab of its own). Neither is followed. The others change no reading (Chrome prints ac under each) and withdraw nothing
+        for equiv, content, certain in (('Content-Security-Policy', "style-src 'none'", False), ('content-security-polic&#121;', "style-src 'none'", False), ('CONTENT-SECURITY-POLICY', "default-src 'none'", False),
+                                        ('refresh', '0;url=https://review.invalid/new', False), ('Refresh', '100', False), ('re&#102;resh', '0;url=x.htm', False),
+                                        ('Content-Security-Policy-Report-Only', "style-src 'none'", True), ('default-style', 'x', True), ('Content-Language', 'en-us', True), ('Content-Style-Type', 'text/css', True),
+                                        ('X-UA-Compatible', 'IE=edge', True), ('Pragma', 'no-cache', True), ('Content-Type', 'text/html; charset=utf-8', True), ('content-type', 'text/html;charset=utf-8', True)):
+            self.assertIs(V(f'<html><head><meta http-equiv="{equiv}" content="{content}"></head><body><p>a<span style="display:none">b</span>c</p></body></html>'.encode()).certain, certain, equiv)
+        self.assertTrue(V(b'<meta name="viewport" content="width=device-width"><meta charset="utf-8"><p>a</p>').certain)
+        # a script is not run (Chrome, each page in a tab of its own: the number 10 is printed 99; document.write adds zz; an onerror, an onload and a document set into the page rewrite it):
+        # the page that carries one — a script element, an event attribute, a framed document — is not certified
+        for raw in (b'<p>Revenue <span id="n">10</span></p><script>document.getElementById("n").textContent="99"</script>', b'<p>a</p><script>document.write("<p>zz</p>")</script><p>b</p>', b'<p>a</p><SCRIPT LANGUAGE="JavaScript">x()</SCRIPT>',
+                    b'<p>a<img src="x.png" onerror="this.parentNode.textContent=\'gone\'">b</p>', b'<body onload="document.body.textContent=\'z\'"><p>a</p></body>', b'<div ONCLICK="x()">a</div>',
+                    b'<p>a</p><iframe srcdoc="<script>parent.document.body.append(\'zz\')</script>"></iframe>', b'<p>a</p><iframe src="x.html"></iframe>', b'<p>a</p><embed src="x.html">', b'<p>a</p><script type="application/ld+json">{"x": 1}</script>'):
+            self.assertFalse(V(raw).certain, raw)
+        for raw, chrome in ((b'<p>a</p><iframe></iframe><p>b</p>', 'a b'), (b'<p><a href="javascript:void(0)">a</a> b</p>', 'a b'), (b'<p data-on="x" id="only" title="onclick=1">a</p>', 'a'), (b'<p>a</p><noscript>n</noscript><p>b</p>', 'a b')):  # nothing runs here when the page loads
+            v = V(raw); self.assertEqual((v.certain, anchor.norm(v.text)), (True, chrome), raw)
+        # a strike that may not be seen (Codex R19 N2; Chrome's picture of each page in the first list is the same with the strike and without). Its colour: a strike takes its own, else
+        # its element's text colour (the fill colour where one is given), and the letters inside may be coloured again — a colour that may paint nothing, anywhere in the file, inline or
+        # in a sheet, withdraws the strike certificates: `transparent`, an alpha that is not the literal 1 (Chrome reads -1, 0e0, 1e-999 as none), a form not evaluated.
+        # Its length: struck letters set on one spot by a negative letter-spacing, or in a box `contain` gives no size, have no line — where struck text stands under such a declaration
+        flags = lambda raw: (lambda v: (v.certain, v.struck_certain, v.plain_certain))(V(raw))
+        for raw in (b'<p>x <s style="text-decoration-color:transparent">net</s> y</p>', b'<p>x <s style="color:transparent"><span style="color:#000">net</span></s> y</p>', b'<div style="color:rgba(0,0,0,0)">x <s><b style="color:#000">net</b></s> y</div>',
+                    b'<p>x <s style="text-decoration-color:rgba(255,0,0,0)">net</s> y</p>', b'<p>x <s style="text-decoration-color:#0000">net</s> y</p>', b'<p>x <s style="text-decoration-color:rgb(0 0 0 / 0)">net</s> y</p>', b'<p>x <s style="COLOR: Transparent">net</s> y</p>',
+                    b'<p>x <s style="color:hsla(0,0%,0%,0)"><b style="color:#000">net</b></s> y</p>', b'<p>x <s style="color:rgba(0,0,0,0.5)">net</s> y</p>', b'<div style="text-decoration-color:transparent"><s style="text-decoration-color:inherit">net</s></div>',
+                    b'<p>x <s style="-webkit-text-fill-color:transparent"><span style="-webkit-text-fill-color:#000">net</span></s> y</p>', b'<p style="-webkit-text-fill-color:rgba(0,0,0,0)">x <s><span style="-webkit-text-fill-color:black">net</span></s> y</p>',
+                    b'<style>s{color:transparent}</style><p>x <s><span style="color:#000">net</span></s> y</p>', b'<style>s{text-decoration-color:transparent}</style><p>x <s>net</s> y</p>', b'<style>s{-webkit-text-fill-color:transparent}</style><p>x <s>net</s> y</p>',
+                    b'<p>x <s style="letter-spacing:-1em">net</s> y</p>', b'<div style="letter-spacing:-1em"><s>net</s></div>', b'<p>x <s><span style="letter-spacing:-1em">net</span></s> y</p>', b'<p style="letter-spacing:-9999px">x <s>net</s> y</p>',
+                    b'<p>x <s style="font-size:1pt;letter-spacing:-0.6pt">net</s> y</p>', b'<p style="letter-spacing:-1em">x <s><span style="letter-spacing:inherit">net</span></s> y</p>', b'<s><div style="contain:strict">net</div></s>',
+                    b'<div style="contain:strict">x <s>net</s> y</div>', b'<style>s{letter-spacing:-1em}</style><s>net</s>', b'<style>s{contain:strict}</style><s>net</s>'):
+            self.assertEqual(flags(raw), (True, False, False), raw)
+        for alpha in ('-1', '-20%', '-0', '+0', '0e0', '0.0e+2', '1e-999', '0', '0.0', '.0', '0%', '0.001'):  # Chrome paints none of these (his list, and the forms of zero)
+            for prop in ('color', 'text-decoration-color'): self.assertEqual(flags(f'<s style="{prop}:rgba(0,0,0,{alpha})"><b style="color:black">net</b></s>'.encode()), (True, False, False), (prop, alpha))
+        for raw in (b'<p>x <s style="text-decoration-color:#000000">net</s> y</p>', b'<p>x <s style="color:red">net</s> y</p>', b'<p>x <s style="color:rgba(255,0,0,1)">net</s> y</p>', b'<p>x <s style="color:rgb(255, 0, 0)">net</s> y</p>',
+                    b'<p>x <s style="text-decoration-color:currentcolor">net</s> y</p>', b'<p>x <s style="text-decoration-color:initial;color:#0563c1">net</s> y</p>', b'<style>p{color:#333}</style><p>x <s>net</s> y</p>', b'<p style="background-color:transparent">x <s>net</s> y</p>',
+                    b'<p>x <span style="text-decoration:line-through;color:#FF0000">net</span> y</p>', b'<p>x <s style="-webkit-text-fill-color:red">net</s> y</p>',  # the colours filings write: painted, certified
+                    b'<p>x <s>net</s> <span style="letter-spacing:-1em">y</span></p>', b'<p style="letter-spacing:-.1pt">a</p><p>x <s>net</s> y</p>', b'<p>x <s style="letter-spacing:0.2em">net</s> y</p>', b'<p>x <s style="letter-spacing:normal">net</s> y</p>',
+                    b'<div>x <s>net</s> y</div><div style="contain:strict">z</div>', b'<style>p{letter-spacing:.05pt}</style><p>x <s>net</s> y</p>', b'<p>x <s style="word-spacing:-9999px">net</s> y</p>'):  # a spacing that takes no room, or one that does not reach the struck letters (a real redline tightens other runs by a tenth of a point): painted, certified
+            self.assertEqual(flags(raw), (True, True, True), raw)
+        # where the spacing reaches struck text by a way the open elements do not show (Codex's quick follow-up to R19; Chrome paints no line on `net` in any page of the first list):
+        # declared on the page's own elements, which open nothing here; or on a formatting element left open at the end of a paragraph, a list item or a table — the browser
+        # opens it again for what follows. The strike certificates go; the text is read as before
+        for raw in [f'<{root} style="{style}"><p><s>net</s></p></{root}>' for root in ('html', 'body') for style in ('font-size:60px;letter-spacing:-1em', 'contain:strict')] + \
+                   [f'<p><{tag} style="letter-spacing:-1em">one{closing}<s>net</s></p>' for closing in ('</p><p>', '<p>') for tag in ('b', 'i', 'font')] + \
+                   [f'<table><{tag} style="letter-spacing:-1em"><tr><td>one</td></tr></table><s>net</s>' for tag in ('b', 'i', 'font')] + \
+                   ['<body><p>x <s>net</s> y</p><body style="letter-spacing:-1em">', '<ul><li><font style="letter-spacing:-1em">a<li>x <s>net</s> y</ul>', '<h3><em style="letter-spacing:-1em">a</h3><p>x <s>net</s> y</p>',
+                    '<div><a style="letter-spacing:-1em" href="#">a</div><div>x <s>net</s> y</div>']:
+            v = V(raw.encode()); self.assertEqual((v.struck_certain, v.plain_certain), (False, False), raw)
+        for raw in ('<p><b style="letter-spacing:-1em">one</p><p><s>net</s></p>', '<ul><li><font style="letter-spacing:-1em">a<li>x <s>net</s> y</ul>', '<body style="letter-spacing:-1em"><p>x <s>net</s> y</p></body>'):
+            self.assertTrue(V(raw.encode()).certain, raw)  # the words are not in doubt: only the strike is
+        for raw in ('<body style="letter-spacing:0.2em"><s>net</s></body>', '<body style="letter-spacing:normal"><p>x <s>net</s> y</p></body>', '<body style="margin:0;font-size:10pt;color:#000"><p>x <s>net</s> y</p></body>', '<p style="letter-spacing:-1em">other</p><p><s>net</s></p>', '<p><b style="letter-spacing:-1em">other</b></p><p><s>net</s></p>',
+                    '<div style="contain:strict">other</div><p><s>net</s></p>', '<p><b>one</p><p><s>net</s></p>', '<style>s{letter-spacing:0.2em}</style><p><s>net</s></p>',
+                    '<p><span style="letter-spacing:-1em">a</p><p>x <s>net</s> y</p>', '<p><font style="letter-spacing:.1pt">a</p><p>x <s>net</s> y</p>', '<p>x <s>net</s> y</p></body style="letter-spacing:-1em">'):  # Chrome paints the line: a spacing that reaches no struck text, takes no room, ends with its element — or stands on an element the browser does not open again (a span), or on a closing tag
+            v = V(raw.encode()); self.assertEqual((v.certain, v.struck_certain, v.plain_certain), (True, True, True), raw)
+
+    def test_an_xml_reading_is_certified_only_complete_and_byte_for_byte(self):
+        # Round 19 (Codex R18 N3 and its siblings): the XML reader certified a reading that lacked what an unread external declaration stands for, characters at
+        # no bytes at all, characters of a UTF-16 or windows-1252 text at bytes that are not theirs, and crashed on an encoding the parser does not know
+        X = lambda raw: anchor.Visible(raw, xml=True)
+        for raw in (b'<!DOCTYPE r [<!ENTITY e SYSTEM "file:///not-fetched">]><r>&e;</r>', b'<!DOCTYPE r SYSTEM "https://invalid.example/not-fetched"><r>10</r>', b'<!DOCTYPE r PUBLIC "-//x" "x.dtd"><r>10</r>', b'<!DOCTYPE r SYSTEM ""><r>10</r>', b'<!DOCTYPE r PUBLIC "-//x" ""><r>10</r>',  # nothing external is ever fetched
+                    b'<!DOCTYPE r [<!ENTITY x SYSTEM "file:///x"><!ENTITY e "a&x;b">]><r>&e;</r>',
+                    b'<!DOCTYPE r [<!ENTITY % p SYSTEM "x.dtd"> %p;]><r>a&e;b</r>', b'<!DOCTYPE r [<!ENTITY % p SYSTEM "x.dtd"> %p; <!ENTITY e "v">]><r>a&e;b</r>', b'<!DOCTYPE r [<!ENTITY % p SYSTEM "x.dtd"> %p;]><r>ab</r>',  # an external parameter entity: left unread, the parser passed over `&e;` in silence (it read "ab")
+                    b'<!DOCTYPE r [<!ENTITY % p ""> %p;]><r>a&x;b</r>',  # an entity nothing declares, passed over where the document has parameter entities
+                    b'<?xml version="1.0" standalone="yes"?><!DOCTYPE a [<!ENTITY % p "<!ENTITY e \'A\'>"> %p; <!ENTITY e "B">]><a>&e;</a>',  # the parser left `%p;` unread and certified "B"; a parser that reads it prints "A" (libxml2). Read, the parser stops at it (a standalone document may not declare so)
+                    b'<!DOCTYPE r [<!ENTITY e "two\nlines">]><r>&e;</r>', b'<!DOCTYPE r [<!ENTITY e "<h>5</h>">]><r>&e;</r>', b'<!DOCTYPE r [<!ENTITY e "a&#38;#10;b">]><r>&e;</r>', b'<!DOCTYPE r [<!ENTITY a "1"><!ENTITY e "x&a;y">]><r>&e;</r>',  # an expansion in several pieces, all at the reference's first byte
+                    b'<!DOCTYPE r [<!ENTITY e "">]><r>a&e;b</r>',  # one that expands to nothing: the character before it would be given its bytes too
+                    b'<?xml version="1.0" encoding="not-a-real-encoding"?><r>10</r>', b'<?xml version="1.0" encoding="UTF-32"?><r>10</r>', b'<?xml version="1.0" encoding="UTF-7"?><r>10</r>',
+                    '<?xml version="1.0" encoding="windows-1252"?><r>€a</r>'.encode('cp1252'), '<?xml version="1.0" encoding="ISO-8859-1"?><r>café</r>'.encode('latin-1')):
+            self.assertEqual((X(raw).certain, X(raw).text), (False, ''), raw)
+        for enc in ('utf-16-le', 'utf-16-be'):
+            for value in ('€a', 'a€', '€1', 'a€b€', '中2', 'ab', 'a'): self.assertFalse(X(f'<?xml version="1.0" encoding="{enc.upper().replace("-LE", "LE").replace("-BE", "BE")}"?><r>{value}</r>'.encode(enc)).certain, (enc, value))
+        for raw, text in ((b'<r>10</r>', '10'), (b'<r>1&amp;2</r>', '1&2'), (b'<r><![CDATA[1<2]]></r>', '1<2'), (b'<!DOCTYPE r [<!ENTITY e "shares">]><r>&e; 5 &e;</r>', 'shares 5 shares'), (b'<r xmlns="urn:example"><v>10</v></r>', '10'),
+                          (b'<r>a\r\nb\rc\nd&#10;e</r>', 'a\nb\nc\nd\ne'), ('<r>a€b中\U0001f600</r>'.encode('utf-8'), 'a€b中\U0001f600'), (b'\xef\xbb\xbf<r>a\xe2\x82\xac</r>', 'a€'),
+                          (b'<?xml version="1.0" encoding="ISO-8859-1"?><r>ab cd</r>', 'ab cd'), (b'<?xml version="1.0" encoding="US-ASCII"?><r>ab</r>', 'ab'),  # ASCII under any declared encoding is its own bytes
+                          (b'<!DOCTYPE a [<!ENTITY % p "<!ENTITY e \'A\'>"> %p; <!ENTITY e "B">]><a>&e;</a>', 'A'),  # a parameter entity inside the document is read where it stands: the first declaration of a name binds
+                          (b'<!DOCTYPE r [<!ENTITY e SYSTEM "file:///x">]><r>ab</r>', 'ab'), (b'<!DOCTYPE r><r>ab</r>', 'ab')):  # an external entity that is declared and never referred to takes nothing away
+            v = X(raw); self.assertEqual((v.certain, v.text), (True, text), raw)
+            for c, a, b in zip(v.text, v.starts, v.ends):  # every character is read back from its own bytes, or shares one reference or one line ending
+                self.assertTrue(a < b and (raw[a:b] == c.encode('utf-8') or (raw[a:b][:1] == b'&' and raw[a:b][-1:] == b';' and raw[a:b].count(b'&') == 1) or (c == '\n' and raw[a:b] in (b'\r\n', b'\r'))), (raw, c, raw[a:b]))
 
 
 if __name__ == '__main__':

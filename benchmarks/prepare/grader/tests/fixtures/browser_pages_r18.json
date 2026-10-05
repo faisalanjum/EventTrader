@@ -293,7 +293,7 @@
 "certain": true
 },
 {
-"source": "x <s><p>1x</p></s><s><b>.x</b>&amp;<pre>1</pre></s><script>var v;</script>",
+"source": "x <s><p>1x</p></s><s><b>.x</b>&amp;<pre>1</pre></s>",
 "browser": "x 1x .x& 1",
 "certain": true
 },

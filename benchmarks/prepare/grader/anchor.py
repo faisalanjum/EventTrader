@@ -54,17 +54,23 @@ _EATS = {'pre', 'listing', 'textarea'}  # the start tags after which the parser 
 # line; `inside`: the innermost table, row group, row or cell it stands in; `edge`: 'own' for a box the page sets by rules of its own, 'atomic' for an inline box that
 # holds lines of its own; `disp`: the display its author declares (a <textarea>: the browser's); `start`: where its content starts among the scan's characters; `declares`: it hides or sets visibility
 # itself; `pre`: white space is kept in it
-Open = namedtuple('Open', 'name gone unseen block struck strikes inside edge disp start declares pre')
+Open = namedtuple('Open', 'name gone unseen block struck strikes inside edge disp start declares pre loose')
 _VISIBILITY = set('visible hidden collapse inherit initial unset revert revert-layer'.split())  # CSS visibility values and the CSS-wide keywords
 _POSITION, _FLOAT = set('static relative absolute fixed sticky'.split()), set('none left right'.split())  # the position and float keywords this scanner evaluates
 UNKNOWN = 'unknown'  # a value this scanner does not evaluate: the file's visibility is then reported uncertain
 _IMPORTANT = re.compile(r'\s*!\s*important\s*$')
 _INLINE_DISPLAY = {'inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents'}  # CSS display values that keep text in the line
-_ALIGNED = {'img', 'input', 'embed', 'iframe'}  # the boxes in the line an `align` of left or right floats
+_ALIGNED = {'img', 'input', 'embed', 'iframe', 'table'}  # the boxes an `align` of left or right floats: those in the line, and a table (a float is a block either way; a parent's strike does not reach into it)
 _ATOMIC = {'inline-block', 'inline-flex', 'inline-grid', 'inline-table'}  # inline boxes that hold lines of their own
 _SHEET_LINK = re.compile(r'<link\b.*\bstylesheet\b', re.I | re.S)  # a stylesheet link: this scanner does not fetch or apply it
 _UNREAD = set('all content appearance -webkit-appearance -webkit-text-security white-space-collapse -webkit-opacity'.split())  # properties that change the page's text, or hide it, and are not evaluated here: a declaration of one is not followed. The list is what was left when every property Chrome lists was tried with every value it accepts (r18_props_facts.py)
-_PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:|(?<![\w-])(?:position|float|white-space|' + '|'.join(sorted(_UNREAD)) + r')\s*:|@import\b', re.I)  # a sheet rule on a property that hides or lays out: which elements it reaches is not followed
+_MODE = {'writing-mode', '-webkit-writing-mode', '-epub-writing-mode'}  # the writing mode, under the three names Chrome accepts (the last it does not list): one other than its parent's makes an element in the line a box of its own lines — the white space inside its edges is dropped, a parent's strike does not reach it (r19_edges_facts.py, r19_hidden_facts.py); a block reads the same in any mode (a real 10-K turns its table headings so)
+_PROP = re.compile(r'\b(?:display|visibility|opacity)\s*:|(?<![\w-])(?:position|float|white-space|' + '|'.join(sorted(_UNREAD | _MODE)) + r')\s*:|@import\b', re.I)  # a sheet rule on a property that hides or lays out: which elements it reaches is not followed
+_SEEN = re.compile(r'(?!transparent$)[a-z]+|#[0-9a-f]{3}(?:[0-9a-f]{3})?|(?:rgb|hsl)a?\((?:[^(),/]+,){2}[^(),/]+(?:,\s*1\s*)?\)')  # a colour that surely paints: a name, three or six hex digits, rgb()/hsl() in the comma form with no alpha or a literal full alpha of 1 — the forms filings write. `transparent`, any other alpha (Chrome reads -1, 0e0, 1e-999 as none) and what is not evaluated (other functions, the space form) may paint nothing
+_ROOMY = re.compile(r'normal|\+?(?:\d+\.?\d*|\.\d+)[a-z%]*')  # a letter-spacing that takes no room from the letters: none, or a length that is not negative
+_LINE, _ROOM = {'color', 'text-decoration-color', '-webkit-text-fill-color'}, {'letter-spacing', 'contain'}  # what colours a strike (its own colour, else its element's text colour — the fill colour where one is given), and what may leave struck letters no room to be struck in (a negative spacing sets them on one spot; `contain` may give their box no size)
+_PAINT = re.compile(r'(?<![\w-])(' + '|'.join(sorted(_LINE | _ROOM)) + r')\s*:\s*([^;}!]*)', re.I)  # a sheet rule on one of them: which elements it reaches is not followed
+unpaints = lambda name, value: name == 'contain' or not (_ROOMY if name == 'letter-spacing' else _SEEN).fullmatch(value.strip().lower())  # may this declaration leave a strike with nothing to see?
 _DECO_RULE = re.compile(r'\btext-decoration(?:-line)?\s*:([^;}]*)', re.I)  # a stylesheet rule on a decoration, with its value: can it add a strike?
 _DECO_LINES, _DECO_STYLES = {'none', 'underline', 'overline', 'line-through', 'blink'}, {'solid', 'double', 'dotted', 'dashed', 'wavy'}  # text-decoration-line and text-decoration-style keywords (CSS Text Decoration)
 INVALID = 'invalid'  # a declaration the grammar proves the browser drops (it keeps the one before it): no uncertainty
@@ -227,26 +233,42 @@ def sheet_can_strike(sheet):
     return any('!' in m.group(1) or '(' in m.group(1) or not m.group(1).split() or any(t not in harmless for t in m.group(1).lower().split()) for m in _DECO_RULE.finditer(sheet))
 
 
+_XML_SHARED = re.compile(rb'&[^;]*;|\r\n?')  # the bytes several characters, or a character of another length, may share: one reference, or one line ending the parser reads as a line feed
+
+
+def xml_parser(**how):
+    """The strict standard XML parser as every reader of the grader sets it, so that all read one document: the declarations are read as written — a
+    parameter entity is expanded where it stands (left unread, the parser keeps a later declaration of the same name, or loses an attribute's
+    default: another text, another element name) — and whatever stands outside the document (its external subset, an external parameter or general
+    entity) is asked for and refused: nothing external is fetched, and without it the reading is not complete."""
+    p = expat.ParserCreate(**how); p.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS); p.ExternalEntityRefHandler = lambda *args: 0
+    return p
+
+
 def xml_chars(raw, chars, starts, ends):
     """Character data of an XML document by the strict standard parser, each character with its byte span: a CDATA section is literal text,
     an entity or character reference decodes to its replacement (every character of it shares the reference's bytes), attributes are not
-    text, an element boundary adds no character (`<note>1<b>2</b>3</note>` reads 123). False when the bytes are not a complete well-formed document (nothing is certified then)."""
-    p = expat.ParserCreate(); events = []  # (byte index, kind, text), in document order; every construct is an event so each span ends where the next begins
+    text, an element boundary adds no character (`<note>1<b>2</b>3</note>` reads 123). False when the bytes are not a complete well-formed document, when a part of
+    it stands outside (nothing external is fetched), or when a character cannot be placed at its own bytes (nothing is certified then)."""
+    p = xml_parser(); events = []  # (byte index, kind, text), in document order; every construct is an event so each span ends where the next begins
     p.CharacterDataHandler = lambda t: events.append((p.CurrentByteIndex, 'text', t))
     p.StartElementHandler = lambda n, a: events.append((p.CurrentByteIndex, 'tag', None))
     p.EndElementHandler = lambda n: events.append((p.CurrentByteIndex, 'tag', None))
     p.StartCdataSectionHandler = lambda: events.append((p.CurrentByteIndex, 'mark', None))
     p.EndCdataSectionHandler = lambda: events.append((p.CurrentByteIndex, 'mark', None))
     p.DefaultHandlerExpand = lambda d: events.append((p.CurrentByteIndex, 'mark', None))
+    p.SkippedEntityHandler = lambda name, is_parameter: events.append((p.CurrentByteIndex, 'skipped', None))  # a reference to an entity no declaration names, which the parser passes over where the document has parameter entities: its text is missing
     try: p.Parse(raw, True)
-    except expat.ExpatError: return False
+    except (expat.ExpatError, LookupError, ValueError): return False
     events.append((len(raw), 'mark', None))
     for (b0, kind, t), (b1, _, _) in zip(events, events[1:]):
+        if kind == 'skipped': return False
         if kind == 'text':  # a tag adds nothing: XML text is the character data alone; element boundaries are structure the route reports apart
-            if b1 - b0 == len(t.encode('utf-8')):
+            if raw[b0:b1] == t.encode('utf-8'):
                 for c in t: n = len(c.encode('utf-8')); chars.append(c); starts.append(b0); ends.append(b0 + n); b0 += n
-            else:
+            elif _XML_SHARED.fullmatch(raw, b0, b1):
                 for c in t: chars.append(c); starts.append(b0); ends.append(b1)
+            else: return False  # no bytes at all (an expanded entity gives several events at its one place), bytes of another encoding, or more than the chunk's own (a reference that expands to nothing follows it): no character is placed by a guess
     return True
 
 
@@ -314,15 +336,18 @@ class Visible:
 
         def leave(k):
             """The open elements from k on end here. Returns whether a visible block ends (a break) and whether a box ends that must have its line to itself."""
-            nonlocal veil, touch
+            nonlocal veil, touch, struck_computed
             ended = stack[k:]; del stack[k:]
+            if any(f.name in _FORMATTING and f.loose for f in ended[1:]): struck_computed = True  # a formatting element left open under a spacing or a containment: the browser opens it again for what follows (after a paragraph, a list item, a table), and struck text there may stand under it — which text is not followed
             apart.extend((len(chars), start, pos) for f in ended if f.strikes and not f.block and f.disp is None and not (f.gone or f.unseen))  # where an element set apart for its strike ends
             if any(f.block and not f.gone for f in ended): veil = None  # a line ends here, seen or not — unless the block is removed: what is not there ends nothing
             if ended[0].edge == 'atomic' and tail == len(chars) > ended[0].start: touch = len(chars)  # white space at the end of an inline box's content: the browser drops it, so a word right after the box touches its last word
             return any(f.block and not (f.gone or f.unseen) for f in ended), any(f.block and not f.gone and (f.unseen or f.edge == 'own') for f in ended)
 
         if xml:  # XML: character data by the strict standard parser (CDATA literal, references decoded, attributes not text); no CSS, nothing hidden
-            computed = not xml_chars(raw, chars, starts, ends); struck_chars.extend([0] * len(chars))
+            computed = not xml_chars(raw, chars, starts, ends)
+            if computed: del chars[:], starts[:], ends[:]  # refused part-way: half a reading is none
+            struck_chars.extend([0] * len(chars))
         for t, kind, literal in () if xml else html_tokens(s):
             start = pos; pos += blen(t); eaten, eat = eat, False  # eaten: the token before this one was a start tag that eats a first line feed
             if kind == 'style' or t[:5].lower() == '<link': sheet_tokens.append((t, kind, literal))  # read for stylesheets after the scan: a comment is never one
@@ -330,7 +355,7 @@ class Visible:
                 if not literal:
                     m = _TAG.match(t); decls, plain = read(m.group(), kind)[1:] if m else ((), False)
                     if not plain or kind == 'template' or resolve(decls, 'display', _DISPLAY.__contains__) not in (None, 'none'): computed = True
-                if kind == 'script' and '<!--' in t: computed = True  # a script that holds `<!--` may run past its first closing tag (the tokenizer's escaped states): not followed
+                if kind == 'script': computed = True  # a script is not run: what it would write into the page or change in it is not followed
                 continue
             if not literal and t.startswith('<') and len(t) > 1:  # a lone < is text and takes the text path below (visibility, hidden count, positions, strike flag)
                 if t[1] in '!?': continue  # a comment or a declaration
@@ -340,6 +365,9 @@ class Visible:
                 if not name: continue
                 name, brk, lone = name.group(1).lower(), False, False  # brk: this tag breaks the line (a visible block starts or ends at it); lone: a box ends at it that must have its line to itself
                 attrs, decls, plain = read(t, name)
+                if (name == 'link' and '&' in attrs.get('rel', '')) or (name in _ALIGNED and '&' in attrs.get('align', '')): computed = True  # these layout attributes are not entity-decoded here
+                if any(a.startswith('on') or a == 'srcdoc' for a in attrs) or (name in ('iframe', 'embed') and 'src' in attrs): computed = True  # the script of an event attribute, or a document set into the page (it can script its parent): not run, not followed
+                if '&' in attrs.get('http-equiv', '') or attrs.get('http-equiv', '').strip().lower() in ('content-security-policy', 'refresh'): computed = True  # a <meta> that hands the browser a content security policy (it can turn the style attributes and sheets off: what they hide shows) or sends it to another page (Chrome then prints that page), or whose instruction is written with a reference: not followed. The other instructions change no reading (Chrome)
                 disp, v, op, cv = resolve(decls, 'display', _DISPLAY.__contains__), resolve(decls, 'visibility', _VISIBILITY.__contains__), resolve(decls, 'opacity', _number), resolve(decls, 'content-visibility', 'visible'.__eq__)
                 place, flo, white = resolve(decls, 'position', _POSITION.__contains__), resolve(decls, 'float', _FLOAT.__contains__), resolve(decls, 'white-space', _WHITE.__contains__)
                 if place is None and 'popover' in attrs: place = 'fixed'  # the browser's own sheet takes a popover out of the flow (HTML rendering): shown by an author's display it is a box of its own
@@ -348,6 +376,7 @@ class Visible:
                 disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
                 deco, strong = None, False  # the decoration in force: the last valid text-decoration / text-decoration-line declaration wins, !important beats a later plain one
                 for n, val, important in decls:
+                    if n in _LINE and unpaints(n, val): struck_computed = True  # a line in this colour may not be seen, and letters inside may be coloured again: no strike is certified in this file
                     if n in ('text-decoration', 'text-decoration-line') and (important or not strong):
                         d = decoration(val, n)
                         if d == INVALID: continue  # the grammar proves the browser drops this declaration and keeps the one before it
@@ -361,6 +390,7 @@ class Visible:
                 if name in ('html', 'head', 'body'):  # the document's own elements: the parser keeps one of each wherever their tags stand, and merges a repeated tag's attributes into the first — none opens, closes or breaks anything here, and one that hides, strikes or is given a display other than block is not followed
                     if not t.startswith('</') and (dim or ua_hidden or v in ('hidden', 'collapse') or disp not in (None, 'block')): computed = True  # (a body laid out as a flex row or a table sets its children as that box does; a repeated tag's `hidden` is merged without its style)
                     if not t.startswith('</') and (name in STRUCK if deco in (None, 'default') else deco): struck_computed = True
+                    if not t.startswith('</') and any(n in _ROOM and unpaints(n, val) for n, val, _ in decls): struck_computed = True  # root styles reach descendants; roots are not held on this stack
                     continue
                 if t.startswith('</'):
                     i = next((k for k in range(len(stack) - 1, -1, -1) if stack[k].name == name), None)
@@ -392,6 +422,7 @@ class Visible:
                     if name in _PARTS and not any(f.name == 'table' for f in stack): computed = True  # a table part with no open table: the parser drops its tags (the text then runs on)
                     top = stack[-1] if stack else None  # the element this one stands in, once the implied endings are made
                     struck = (name in STRUCK) if deco in (None, 'default') else (top.strikes if top else False) if deco == 'inherit' else deco  # an <s>/<del>/<strike> that declares none or underline is not struck by the tag; revert restores the tag's default; inherit takes the parent's own line
+                    if disp == 'contents' and struck: struck_computed = True  # no principal box: the element's own decoration may not paint
                     item = bool(top) and top.disp in _ITEMS  # a child of a flex or grid container: a box of its own line whatever its display says
                     out = (place in ('absolute', 'fixed') or flo in ('left', 'right')) and disp != 'contents'  # a box taken out of the flow: a line of its own in the page's text whatever its display says (CSS 2 section 9.7; Chrome), and a parent's decoration does not reach into it
                     block = (disp not in _INLINE_DISPLAY) if disp else name in BLOCK  # (of a removed element nothing is asked)
@@ -401,6 +432,7 @@ class Visible:
                     # holds lines of its own is `atomic`: read in the line
                     edge = None if item else 'own' if (out and not block) or disp in _TABLE_BOX or (name == 'p' and disp in _INLINE_DISPLAY and disp != 'contents') else 'atomic' if disp in _ATOMIC else None
                     block = block or item or edge == 'own'
+                    if not block and any(n in _MODE for n, _, _ in decls): computed = True  # a writing mode on an element in the line: whether it is its parent's is not followed
                     if (item and disp == 'contents') or (name in VOID and name not in ('hr', 'img', 'input') and disp not in (None, 'none')) or (name in _PARTS and disp not in (None, 'none')) or (name == 'table' and disp not in (None, 'none', 'table', 'inline-table')): computed = True  # not followed: an item that hands its children to the container, a void element other than a rule, a picture or a field given a box of its own (the browser keeps a <br> a break and prints nothing for the others), a part of a table given another display
                     off = gone or (bool(top) and top.gone)
                     unseen = True if dim or v in ('hidden', 'collapse') else False if v in ('visible', 'initial') else bool(top) and top.unseen  # CSS visibility: hidden/collapse hide, visible/initial show; inherit, unset, revert, revert-layer or absent keep the parent's (it is inherited)
@@ -417,7 +449,7 @@ class Visible:
                     if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing
                         inside = name if name in _PARTS or name == 'table' else top.inside if top else None  # the innermost table, row group, row or cell this element stands in
                         pre = white in _KEPT or (white in (None, 'inherit', 'unset') and ((white is None and name in _PRE) or (bool(top) and top.pre and name != 'table')))  # outside standards mode the browser's own sheet resets white-space at a table: what a table inherits is not taken as kept
-                        stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
+                        stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre, (bool(top) and top.loose) or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                         if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
                         if inside in _TABLE and name not in _PARTS and name != 'table': f = stack[-1]; computed |= f.declares or f.pre != top.pre or (name in _FORMATTING and bool(f.block or f.edge)); struck_computed |= f.struck != top.struck  # no part of a table, standing in one outside any cell: the parser moves the element out and leaves the rows behind — what it hides, strikes or keeps of white space does not reach them, and a formatting element it opens again inside the cells: one with a box of its own is not followed
                 hidden = bool(stack) and (stack[-1].gone or stack[-1].unseen)
@@ -440,6 +472,7 @@ class Visible:
                 continue
             if (after and word) or (touch == len(chars) and not _WS.match(text)) or (not keeps and text[0] in _SPACE and len(chars) in (lead, veil)) or (fresh and bool(top) and top.disp in _SHED and not text.strip(_SPACE) and bool(chars) and not _WS.fullmatch(chars[-1])): computed = True  # a word on the line of a box that must have it to itself; white space the browser drops — at the edge of an inline box between two words, after invisible text that ended with white space, or alone between a word and a tag in a flex, grid or table box, which shows none of its white space that stands alone between its children (CSS Flexbox 4, CSS 2 17.2.1; what follows is not looked at)
             fresh = False
+            if st and top.loose: struck_computed = True  # struck letters that may have no room (a spacing or a containment declared on their element or above it): the line may have no length — not certified
             if ref:
                 for c in text: chars.append(c); starts.append(start); ends.append(pos); struck_chars.append(st)
             elif t.isascii() or blen is len:
@@ -459,6 +492,7 @@ class Visible:
         sheets = stylesheets(sheet_tokens)
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
+        struck_computed = struck_computed or any(unpaints(m.group(1).lower(), m.group(2)) for x in sheets if x for m in _PAINT.finditer(x))  # a sheet may colour a line so that it is not seen, or leave struck letters no room
         self.struck_certain = self.certain and not struck_computed and not any(_DECO_RULE.search(x) for x in sheets)  # a struck run is certified only when the reading is, no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
         self.plain_certain = self.certain and not struck_computed and not any(sheet_can_strike(x) for x in sheets)  # "nothing struck here" needs, besides, that no sheet rule can add or force a strike (line-through, inherit, revert, a function, !important or any token this scanner does not know)
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character

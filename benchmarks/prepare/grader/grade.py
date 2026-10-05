@@ -20,7 +20,7 @@ import re
 import unicodedata
 import xml.etree.ElementTree as ET
 
-from benchmarks.prepare.grader.anchor import Visible, norm, squash
+from benchmarks.prepare.grader.anchor import Visible, norm, squash, xml_parser
 
 T4 = ('value_kind', 'sign', 'marker_meaning', 'measure', 'unit_interpretation')  # meaning: Step 8, not graded here
 KIND = {'heading': 'heading', 'title': 'heading', 'list_item': 'list_item', 'footnote': 'footnote', 'caption': 'caption',
@@ -656,7 +656,7 @@ def xml_element_at(raw, byte_offset):
     None when the source does not parse. Expat reports byte positions, so the occurrence is exact, not a sibling with the same
     name; a data chunk ends where the next parser event starts, so entities inside the text do not shift it."""
     import xml.parsers.expat as expat
-    p = expat.ParserCreate(namespace_separator='}'); stack, open_chunk, found = [], [], []
+    p = xml_parser(namespace_separator='}'); stack, open_chunk, found = [], [], []  # the parser the source's reading was certified with: the same declarations (an attribute default a parameter entity declares names the namespace)
     def close(end):
         if open_chunk and open_chunk[0] <= byte_offset < end: found.append(open_chunk[1])
         open_chunk.clear()
@@ -1246,6 +1246,8 @@ class Grader:
         if not V: return None
         if len(V) > 1: self.row('value', 'unresolved', 'ambiguous'); self.row('row_label', 'unresolved', 'ambiguous'); return V[0]  # the same bytes claimed by several fields
         v = V[0]; f = t['fields']; printed = f.get('printed_value') or ''
+        if rf.vis is None or not rf.vis.certain:
+            self.row('value', 'unresolved', 'source_reading'); self.row('row_label', 'unresolved', 'source_reading'); return v
         here = xml_element_at(rf.raw, t['anchor']['byte_start'])  # the element whose text the key points at, by its expanded name
         if here is None: self.row('value', 'unresolved', 'input_invalid'); self.row('row_label', 'unresolved', 'input_invalid'); return v
         ex = t['excluded']

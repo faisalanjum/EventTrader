@@ -1313,3 +1313,140 @@ graded file byte-identical but one summary, where 23 snippets of uncovered text 
 their own now). Re-link sweep (60 HTML files x 11 routes, `scratch18/relink_pass12/`): only the Arrowhead file's links change; dry run of its
 re-link: the uncovered text falls from 24,059 characters to 0 (edgartools routes) and 232 (docling routes), units without a place from 8–9 to
 0–1; the official re-link is made from the commit, so that its provenance names it.
+
+## 43. Round 19 (2026-10-05 11:36, Codex's `CODEX_REVIEW_R18.md` on 27c49c6ea, and his `CODEX_REVIEW_R19.md` and `CODEX_REVIEW_R19_QUICK_FOLLOWUP.md` on the versions of this fix; round 18's four corrections pass and its three judgment calls are approved; package 3 still approved, still staged) — three remaining gaps, all reproduced, closed with his patch; the siblings an own sweep, its checks and an independent review found closed with them
+
+**Method.** As before: an audit of my own before his file was opened (the hint was one sentence: a CSS setting makes Chrome show plain text the
+scanner certifies as struck), his file, his 13 new regression methods run against this code (`round18_codex/probes/regressions.py`: 10 methods,
+45 sub-cases failing or crashing on 27c49c6ea, none after), each of his guards looked at as a class, an independent review of the result (a second
+model, its own probes), and everything that passed before run again. Built and proved in a copy (`grader_review_codex_20261003/scratch19/`), the
+served code untouched until it was whole.
+
+**N1 — an attribute the parser decodes and the scanner read as written.** `rel="style&#115;heet"` loads a sheet: the scanner's link test read
+the raw tag, so a page whose sheet hides text was certified as unstyled, and "nothing struck" was certified under a sheet that strikes;
+`align="&#108;eft"` floats a picture the scanner read in the line. As he wrote it: an `&` in a link's `rel`, or in the `align` of an element
+it floats, makes the file uncertain. The class is these two: the style string was and stays decoded, `hidden` with any value is uncertain
+already, `popover` and `open` are read by presence, no other attribute's value is read — but for the one below.
+*Its sibling, from the review:* a `<meta http-equiv>` instructs the browser, and two instructions change what it shows: a content security
+policy turns the style attributes and sheets off (Chrome prints the text a `display:none` hides; each page in a tab of its own, for a policy
+stays with its tab), and a refresh sends it to another page (Chrome then prints that page: 10 becomes 20 — Codex R19 N3, reproduced with the
+destination served from memory; a version of this round had let the refresh through on a test whose content was no working refresh). A page
+that carries either, or writes its `http-equiv` with a reference, is uncertain. Every other instruction — default-style, content-language, the
+cache and compatibility ones old filings carry — changes nothing Chrome prints and withdraws nothing (all 973 documents of the census that carry one say
+`Content-Type`).
+
+**N2 — a line the element cannot paint.** `<s style="display:contents">` has no box of its own and paints no line; the scanner certified a strike.
+As he wrote it: such an element with a strike of its own withdraws the file's strike certificates (a `contents` child of struck text is struck by
+its parent's line: certified, as Chrome paints it).
+*Its sibling, from the review:* `<table align="left">` is a float (the old way, as for a picture), and a parent's line does not reach into a
+float: the text of such a table inside struck text was certified struck. A table joins the elements an `align` floats (4 real documents float a
+table so, none inside struck text: every reading is unchanged).
+
+**N3 — the XML reader.** It certified a reading without the text of an external entity it never read; characters at no bytes (an expanded
+entity arrives as several events at the reference's first byte); characters of a UTF-16 or windows-1252 text at bytes that are not theirs (equal
+*length* was taken for equal bytes); and it crashed on an encoding the parser does not know — so did the cell grader, which asks the same parser
+for the element's name. His guards are in: an external entity reference or an unknown encoding refuses the document; a chunk is placed byte by
+byte only when its bytes *are* its UTF-8; the cell grader leaves `value` and `row_label` `unresolved` (`source_reading`) when the reading is not
+certified. Differences from his patch, each found by probing the same class, each stricter:
+1. *Parameter entities are read as declared* (`xml_parser`: `SetParamEntityParsing`), by both of the grader's readers — the scanner and the
+   cell grader's `xml_element_at`, which read one document with two settings: a default a parameter entity declares (`<!ATTLIST v xmlns CDATA
+   'urn:a'>`) names an element's namespace, and the cell grader, leaving it unread, took `v` for `{urn:a}v` (Codex, on the first version of
+   this round). Left unread — the parser's default — it skipped `%p;` in silence and
+   bound a later declaration of the same name: `<!ENTITY % p "<!ENTITY e 'A'>"> %p; <!ENTITY e "B">` in a standalone document read "B",
+   certified, where a parser that reads the declarations prints "A" (the review; libxml2). Read, an internal one is expanded where it stands, and
+   everything outside the document — the external subset, an external parameter entity — is asked for by the same handler as an external
+   general entity, and refused. His separate test of the DOCTYPE is thereby unneeded and gone.
+2. *A reference the parser passes over* (`SkippedEntityHandler`): where a document has parameter entities, a reference to an entity nothing
+   declares is no error to the parser; it left the text out in silence. Refused.
+3. *One rule for a chunk that is not its own bytes:* it is exactly one reference, or one line ending the parser reads as a line feed — else
+   nothing is certified. His two lines (no empty span; several characters must begin at an `&`) let one character before a reference that
+   expands to nothing take the reference's bytes as its own. Under the rule his empty-span line can decide nothing (the mutation check showed
+   it), so it is gone.
+4. *A refused document reads as nothing:* the characters read before the refusal were left in the text.
+
+*Changed on purpose, his rule against his own earlier one:* XML text beyond ASCII in ISO-8859-1 or UTF-16 was certified — the right words,
+at bytes that were not their characters' (his round-12 probe R12-6a asked for the words, certified). It is not certified now: the rule HTML has
+had since round 18 (beyond ASCII, only UTF-8). ASCII text under any single-byte declaration stays certified. Every one of 4,377 real XML
+documents is ASCII, declared UTF-8 or US-ASCII; none has a DOCTYPE (`r19_real_census.py`).
+
+**What the own audit found** — the strike's *paint* (`codex_probes_live/r18/r18_strike_paint_facts.py`: every property Chrome lists x every value
+it accepts on the striking element, a child, a block child, the parent, and beside a CSS line-through; Chrome paints each page with and without
+the strike; 68,146 pages), read before his file:
+- `display:contents` on the striking element — his N2.
+- *`writing-mode` on a child of struck text: no line on it.* The cause is not paint. A writing mode other than its parent's makes an element in
+  the line a box of its own lines (an inline-block), a parent's line does not reach into such a box — and the box drops the white space inside
+  its edges: `x<span style="writing-mode:vertical-rl"> net </span>y` prints `xnety`; the scanner certified `x net y`. The every-property sweep
+  of round 18 could not see it: none of its 25 page shapes had white space inside an element's edges and none outside. `r19_edges_facts.py`
+  adds 8 such shapes (every property x value, inline with and without a doctype, and as a sheet rule: 271,392 pages): the writing mode, under
+  its two listed names, is the only property that reads differently, and only on an element in the line. And Chrome accepts names it does not
+  list on the style object the sweeps took their names from: `r19_hidden_facts.py` asks it for every listed name under 13 prefixes — nine
+  `-epub-` aliases, `-epub-writing-mode` among them (82 pairs on all 33 shapes: 7,544 pages; no other of the nine changes a reading beyond
+  letter case). The rule (`_MODE`): a writing mode declared on an element in the line, or by a sheet rule (which elements it reaches is not
+  followed), makes the file uncertain; on a block it changes nothing and nothing is withdrawn — a first version refused every declaration, and
+  the review brought a real 10-K (Workiva) that turns its table headings with `writing-mode:vertical-rl` on a block: read as Chrome prints it,
+  certified before and after. None of the 22,483 documents of the rehearsal download declares one.
+- *A strike that may not be seen* (Codex R19 N2: the formatting step would write a strike nobody sees, and an active term would read as
+  cancelled). After the fixes above 47 pages of the 68,146 showed a certified strike where the picture does not change when the strike is
+  removed. A second method (`r19_strike_second.py`: the line painted red) finds the line on 42 of them — the first method is blind where line
+  and background are one colour, or the word is pushed out of the window. The other 5 are two classes, both guarded now; the sweep is left with
+  no certified strike that neither method sees.
+  *Its colour.* A strike takes its own colour, else its element's text colour — the fill colour where one is given
+  (`-webkit-text-fill-color`: found here, Chrome's picture) — and the letters inside may be coloured again
+  (`<s style="color:transparent"><span style="color:#000">`). So a `color`, `text-decoration-color` or `-webkit-text-fill-color` that may paint
+  nothing, declared anywhere in the file, inline or in a sheet, withdraws its strike certificates (`_SEEN`, `_LINE`). What surely paints is what
+  filings write: a colour name, three or six hex digits, `rgb()`/`rgba()` in the comma form with no alpha or the literal alpha 1. Any other
+  alpha is not evaluated (his list: Chrome reads `-1`, `-20%`, `0e0`, `1e-999` as none; a first version tested for a written zero). All 47
+  real documents with struck text keep their certificates (5 of them write `rgba(…,1)`).
+  *Its length.* Struck letters a negative `letter-spacing` sets on one spot have a line of no length, and a box `contain` gives no size paints
+  nothing in it. Certificates are withdrawn where struck text stands under such a declaration — on its element or on one above it, the only
+  ways either reaches it (`_ROOM`, the `loose` flag of an open element; a spacing that is `normal` or not negative takes no room; a sheet rule
+  on either reaches who knows what and withdraws them for the file). **This differs from his patch**, which withdraws them for any file that
+  declares a `letter-spacing` or a `contain` anywhere: that takes the certificates of 6 key originals (3 development, 3 held-out by count) whose
+  strikes Chrome paints — one a development redline with 130 struck characters, where other runs are tightened by a tenth of a point. Under
+  the rule here every key original reads as before, and all 67 of his focused checks pass. He took the rule (`CODEX_REVIEW_R19_QUICK_FOLLOWUP.md`)
+  and showed two ways the spacing reaches struck text that the open elements do not show — both reproduced here in Chrome before his fix was
+  read: declared on the page's own elements (`<body style="letter-spacing:-1em">`: html, head and body open nothing in this scanner), and on
+  a formatting element left open at the end of a paragraph, a list item or a table, which the browser opens again for what follows
+  (`<p><b style="letter-spacing:-1em">one</p><p><s>net</s></p>`). The first is closed with his line (a root with such a declaration withdraws
+  the file's strike certificates). The second with one line where elements end (`leave`): a formatting element dropped unclosed while under
+  such a declaration withdraws them — **not his two lines**, which made the whole file's *text* uncertain for any element so dropped (its
+  words are not in doubt, and Chrome opens only formatting elements again: after `<p><span style="letter-spacing:-1em">a</p>` the next strike
+  is painted) and withdrew the certificates for an element the parser moves out of a table whether or not it stays open. His 4 new methods
+  (13 sub-cases failing before) pass; every key original and every real document that names a spacing reads as before under either version.
+  He read this line too and accepted both narrower rules (`CODEX_GATE_R19.md`: APPROVE on the hashes below).
+  *Stated, not followed:* text clipped by several declarations together (a fixed height with `overflow:hidden`, a `clip-path`) is read as
+  text — the browser's own text — and its strike with it.
+- *Scripts.* A script changes the page after it is read (`<span id="n">10</span>` with a script that writes 99: Chrome prints 99, the scanner
+  certified 10 — Codex). Not run, and since no reading of the page can then be vouched for, a page that carries one is uncertain: a `<script>`
+  element of any type, an event attribute (`on…`), a document set into the page (`srcdoc`, an `iframe` or `embed` with a `src`: it can script
+  its parent). Six rows of earlier tests that certified a page with a script were turned (a twin without the script keeps each test's point),
+  and one saved browser page was printed again without its script. No certified real document and no key original carries one; the 587 of
+  695 further real files that do are pages of EDGAR's own viewer, uncertain before.
+
+**Known, not changed.** Clipping, above. The XML route's adapter (`adapters/xml_fields.py`) reports a document that is not well-formed as
+FAILED but would stop on an encoding the parser does not know, and reads parameter entities the parser's own way (a converter's faults, for the
+grader to report, not grading faults; no such file exists; the adapter is not changed in this gate, as his review of round 18 says).
+
+**Verification (on the final code: `anchor.py` bfd03f71ff96f7f5, `grade.py` 1ae1490aa6d6c6c3; a frozen copy, `scratch19/frozen_final`, by one script, `scratch19/final_evidence.sh`).** 244 unit tests (two new methods and rows in seven old ones: his 13 methods of round 18 and the cases of his three round-19 probe files and his quick follow-up ported, the
+siblings and the review's findings beside them); his own files, run from a copy: 13 methods of round 18, 67 focused methods of round 19, 4 of the
+quick follow-up, 13 of round 17 — all pass. Mutations, mechanical (`r18_mutate_ast.py`, every condition on a changed line): 133, 133 red —
+earlier passes left 5 green, and each was a finding: two code lines of N3 (his empty-span line; a DOCTYPE test that read an empty system identifier as none), a
+needless condition, and two missing tests (a cell graded with no source at all; a root with a harmless style). The scanner against the saved Chrome pages of round 18:
+2,931,643 pages — the same text on the same 2,521,306, no crash, and no page newly certified; 1,573,152 certified, 2,607 fewer: 2,113 that
+carry a script, an event attribute or a framed document and 494 that declare a writing mode on an element in the line or in a sheet; the
+certified differences fall from 2,343 to 2,212 (131 were script pages), each equal to Chrome's agreed text; the grid of agreed differences:
+794,880 pages, 0 exceptions. The new sweeps: 278,936 pages, 229 certified and different, all of them letter case under `text-transform` (and
+its `-epub-` name) or a zero opacity. Strike paint: 68,146 pages, no certified strike that neither method sees; floated tables in struck
+text, 31 pages, 18 pages of lines that may not be seen and 31 of spacing on roots and reopened elements: no certified strike Chrome does
+not paint. Real filings, the committed scanner beside
+this one (`r19_real_census.py`): 22,483 HTML documents — the whole reading identical in every one (the 3,332 certified, both strike
+certificates, the text, every byte span, every struck character; 47 documents hold struck text); 4,377 XML documents — all certified before
+and after, every character and byte span identical; the 126 HTML and XML originals of the key, held-out by count only, on the final code
+(`scratch19/evidence/key_originals_final.txt`): the whole reading
+identical in every one. Regrade of the 13 saved route folders by the frozen copy against run 34f (`scratch19/regrade_final/`): 0 verdict
+flips, 0 result-row changes, and all 39 graded files byte-identical to round 18's regrade. Every issue of rounds 2–17 replayed: 128 hold, 12
+changed by a later rule (the twelfth is R12-6a above), 6 not code or not checkable without the key; 0 regressed. C2/C3 probes, strict: 27/27
+methods. The reviews' probes of round 18: as then (48 of 51 with the 3 by design; the second review's rows and the scanner review's 40 pages
+unchanged). 48/48 real-original variants. The independent review of this round (`scratch19/review_r19/`): five findings (three fixed, the
+real 10-K kept certified, scripts guarded since); clean on about 70 XML cases, 453 declared encodings, 30,000 random XML documents, chunk edges
+of the parser, 252 `display:contents` strike claims, twelve properties beside the writing mode, and 1,138 further real HTML files (on the version of 08:50).
