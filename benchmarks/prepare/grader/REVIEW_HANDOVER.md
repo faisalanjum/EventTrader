@@ -11,7 +11,7 @@ are reported `not_t1`).
 
 ## Run it (repo root, python 3.10+, no extra packages for the grader itself)
 ```
-python3 -B -m unittest discover -s benchmarks/prepare/grader/tests -t .        # 316 tests, ~4 s
+python3 -B -m unittest discover -s benchmarks/prepare/grader/tests -t .        # 347 tests, ~4 s
 python3 -B -m benchmarks.prepare.grader.checks.real_pairs                       # 48 real-original variants, ~20 s
 python3 -B -m benchmarks.prepare.grader.grade --route <run>/route --out <run>/graded   # grade one route (key defaults to golden/PACKAGE.json)
 python3 -B -m benchmarks.prepare.grader.checks.why <run>/graded [check:reason]  # explain failures: key value vs what the route carried
@@ -146,7 +146,7 @@ reports `verified: true`; the 37 consumed packets and the key files are verified
 | Docling PDF route (19 route files: 9 native PDFs and 5 HTML files printed to PDF converted in run 32, plus 5 printed files of the 2026-10-03 experiment left as they were; the 9 native-PDF blocks are the "PDF targets" column) | 17/56 (5 unresolved) | 4/10 (1 unresolved) | 5/9 | 20/31 | 3519 | 136 | 2,390 | 57,215 (9) | 433 (17) | 9 of 19 graded files |
 
 "Converter alone" rows are the tools' own output re-linked from cached tool output; "+ formatting" rows add the declared source-formatting step
-(the source's own strike-through written as `struck`); "+ screen" rows add the Chrome cell-geometry step. Against run 18 (round 7) every HTML route only
+(the source's own strike-through written as `struck`, its exact places as `struck_at` since §47); "+ screen" rows add the Chrome cell-geometry step. Against run 18 (round 7) every HTML route only
 gained: the committed round-7 grader re-run on these same 12 route folders, compared target by target with this one, shows pass gains only — no pass lost
 and no new unresolved verdict (DESIGN §28–§31); round 10 changed no corpus verdict — it removed wrong strike certainties (2 of 116 key sources
 carry stylesheet decoration rules and keep the converter's own strike claims) and made an invented cancellation fail. The gains are the round-8 and round-9 rules (fragments read from the source alone, exact struck text at the
@@ -165,7 +165,7 @@ giant units, since fixed), flattens some tables into prose, splits a few words (
 (11 of its 60 blocks come back unresolved: nothing is emitted at their place — 3 page numbers, 8 pictures); both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
 (a key-side question).
 
-Proof state at hand-over (run 35; since then the worktree merge, `DESIGN.md` §45–§46, with 316 tests): 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 3 (and on package 2, as a control), package check `golden/check_package.py` passes; Codex's rounds
+Proof state at hand-over (run 35; since then the worktree merge, `DESIGN.md` §45–§47, with 347 tests): 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 3 (and on package 2, as a control), package check `golden/check_package.py` passes; Codex's rounds
 1–18 scripts and the package-2 reproducers re-run against this code behave as they expected (adapter audits over all 60 saved outputs: 0 cells lost, 0 tables shifted), except the differences stated in
 `prepare_work/grader_review_codex_20261003/FABLE_RESPONSE_R3.md` (digits split across 22 cells → False; "3.7 %" → pass) and
 `FABLE_RESPONSE_R4.md` (a packet name in two folders is refused as ambiguous; an invalid table-context declaration stops the run; the

@@ -47,7 +47,7 @@ Tool outputs will change shape (owner, 2026-10-03). The grader therefore reads *
 ```
 
 - **Required** per unit: `id` (unique, stable for the same input), `kind`, `anchor`, and `text` (tables: `cells`, each with `r c rs cs text anchor`, row-major). Units in reading order.
-- **Optional** (reported as "structure" when present): `level`, `header`, `caption`, `markers` (footnote marks kept apart from the number), `notes`, `marker`, `links`/`to`, `struck`, `name`/`path`/`group`/`siblings`/`mixed`/`within` (XML: the containing instance, the element's own place, prose around child fields, the prose unit a field stands within). An `anchor` is one place or a list of places (a unit over several pages or boxes, a cell pieced from several spans); a page place is `{page, region}` and may carry `charspan: [start, end)` — the characters of the unit's text that lie at that place (Docling's `prov.charspan`), the only way the grader learns which words sit on which page (§37–§38). A page group converted again marks a unit that still straddles it `incomplete` (§36).
+- **Optional** (reported as "structure" when present): `level`, `header`, `caption`, `markers` (footnote marks kept apart from the number), `notes`, `marker`, `links`/`to`, `struck`, `struck_at` (where in `text` the source strikes, `[[start, end), …]`; the formatting step writes it where exact, §47), `name`/`path`/`group`/`siblings`/`mixed`/`within` (XML: the containing instance, the element's own place, prose around child fields, the prose unit a field stands within). An `anchor` is one place or a list of places (a unit over several pages or boxes, a cell pieced from several spans); a page place is `{page, region}` and may carry `charspan: [start, end)` — the characters of the unit's text that lie at that place (Docling's `prov.charspan`), the only way the grader learns which words sit on which page (§37–§38). A page group converted again marks a unit that still straddles it `incomplete` (§36).
 - **Kinds:** `heading text list_item caption footnote table image field clutter other`. `clutter` = dropped on purpose (page numbers, running banners); it counts as accounted for, not lost. A `clutter` unit counts only for the nothing-lost gate; it never satisfies any check in §5.
 - **Anchors:** HTML/XML `{byte_start, byte_end_exclusive}` in the original's bytes; PDF `{page, region: [x0,y0,x1,y1]}` in points, 1-based page, top-left origin; picture files `{file, region}` in pixels, top-left origin. Same conventions as the key. A unit or cell that sits in several source places (a merged stacked header, a prose block printed over several lines) may carry a **list** of anchors.
 - **Status:** `FAILED` (tool error) and `UNSUPPORTED` (format the route does not handle) count every target of that file as not converted; `PARTIAL` marks hand-made fixtures that cover only part of a file (the "nothing lost" gate is skipped for them).
@@ -1617,10 +1617,61 @@ nowhere — no name and no neighbour decides for a unit of this route, so a hidd
 linking; the linker reads the source once for both (`link(vis=…)`). Codex's 64 + 140 placements (hidden and shown copies of one resource, both orders, either
 unit alone, with and without neighbours, template pictures, a name shaped like a code, repeated shown resources): every shown picture at its own tag, every
 other unit unplaced. Of 5,973 picture names in 22,483 real
-documents none was touched by the tool's rules (letters, digits, `.`, `_`, `-`, no capital): the 60-file route is byte-identical. A reader of pictures takes the
-name from the source tag.
+documents none was touched by the tool's rules (letters, digits, `.`, `_`, `-`, no capital): the 60-file route's files are the same apart from the recorded
+seconds and the settings label. A reader of pictures takes the name from the source tag.
 
 Tests: 316 (35 new: the name protection and the tag's identity (10), the worktree's `test_edgar_images.py`, `test_image_sources.py` — one case rewritten for this scanner after asking Chrome: a raw-text opening tag
 that ends inside a quoted attribute is not followed, and a `<head>` written so shows both pictures —, its heading cases of `test_edgar_metadata.py`, one case for
 each condition of the picture rule and of the heading rule, and the attribute cases). Mutations of every condition on a changed line: 82, 79 red; green: the two
 labels of the saved parse's settings, and the picture test on units listed after a picture, which have no place yet.
+
+## 47. The worktree merge, group 5 — the exact places of struck text; the redline join in the boundary gate; what stays parked, with its measure (2026-10-05; Codex's `CODEX_MERGE_G3_G4_REPLY.md`, item 5)
+
+**Measured first (the 13 routes of §46, development files only).** No graded target of the best route (EdgarTools + formatting + screen: cells 171/171, the six
+failing blocks pictures) fails for spacing, struck text or hidden text, so the worktree's five pieces of this group were measured against the document-wide gates:
+
+| What the gates count | best route | Docling's best |
+|---|---:|---:|
+| word-boundary faults (`honest_anchors.boundary`: the source's characters, a word or number boundary lost or added) | 921 items in 22 files, 1,385 faulty gaps | 662 in 38 |
+| … struck text printed glued to its neighbour: the scanner reads a redline apart (§36), the tool prints the page (`TheExcept`) | 1,234 gaps, 6 redline exhibits | 0 |
+| … a space the tool adds inside a word or a number across inline markup (`CORP ORATION` over an `ix:` tag; `no t`) | 136 gaps in 16 files, 7 inside numbers | 1,128 |
+| … a real space the tool drops | 15 | 1 |
+| text printed with no place in the visible source | 0 of 400,943 items | 42 items of hidden text (475 characters), 1,140 found nowhere as one run (picture names, drawn text) |
+| items with struck phrases (`struck`) | 1,629 in 8 files — in 639 the phrase stands more than once in the item's text | 2,219 |
+
+**Ported: the exact places — `grade.struck_at`, written by the formatting step as `struck_at`.** Ranges `[start, end)` of the item's text (code points) the
+source prints struck through, from the scanner's own maps: the search form at the item's places (`flat`, `s`, `e`) against the text's search form, the struck flag of
+each character (`Visible.struck_flat`, a derived map made on first use); a run of struck characters is one range per word (white space is never covered). Written
+only where the decoration is certified (`struck_certain` — which the scanner gives only where `plain_certain` holds, since `sheet_can_strike` runs over the same
+decoration rules; a test guards the implication), every place of the item is a byte span, the places do not overlap, and the text is the source's text at its
+places in the comparison form; else the field is absent and the phrases stay as the wider claim. A converter's own `struck_at` is dropped where the source shows
+otherwise, kept only where nothing can be certified (as `struck`). **The boundary gate** no longer counts a join the source's own strike-through delimits
+(`redline_apart`): when the item's `struck_at` equals the scanner's answer and the text read apart at those places gives the source's words and numbers, the two
+runs are two words — a forged, shifted or subdivided claim is simply not the answer and excuses nothing; spacing inside a run still counts. Nothing else of the
+grader reads the field: no verdict, key or strike comparison changes (`struck_kept` places a repeated phrase by the source already).
+
+Why this and not the worktree's shape (`source_richtext.exact_struck_ranges`, `decorated_boundary`; its tests carried, re-aimed at this field): (1) one reading
+instead of two — the gate's twenty lines of validation become "equals the scanner's answer"; (2) the comparison form aligns the text, not the literal characters —
+Docling folds quotes and dashes: 2,218 of its 2,219 struck items get places, 1,909 by literal characters; (3) `struck_certain` alone, proved sufficient;
+(4) a list of pairs: no status strings, no second copy of the byte spans (the item's anchor and the scanner give them), an absent field where no exact answer exists.
+
+**Checked.** Chrome 147 on the 8 real files with struck text (scripts off, no request): 5,517,935 characters identical to Chrome's text, 92,393 struck on both
+sides, 0 disagreements (`g5_browser_struck.py`). Two computations, one answer: on every item of every HTML route the places and the phrases name the same
+characters in the same order (1,629 / 2,218 / 2,219 / 3,015 items; 18,107–18,422 ranges, none over white space). Grades of the 13 routes against §46: **0 target
+flips, 0 field rows changed**; `honest_anchors.boundary` on the best route 921 → **136** (in 21 files: clf 147 → 0, pfgc 208 → 10, lesl 153 → 2 and 25 → 2,
+tm2312962d1 ex10-2 115 → 8 and ex10-3 158 → 6, ss3397139 8 → 1), Docling render + formatting 329 → 250, the Docling HTML routes unchanged (637, 662: Docling
+reads redlines apart itself). Route files: the EdgarTools formatting route 78 MB → 78 MB. Codex's review of the candidate (`CODEX_MERGE_G356_VERDICT.md`) found two
+slips, both reproduced and taken as he wrote them: the text's positions were counted character by character while the comparison form drops the key's
+`~~` marks as pairs — a text printing `~~old~~new` got `[0, 3)` (`~~o`), now `[2, 5)` (the map is built with the same pair removal); and a claim's ends were
+accepted by equality, which in Python makes `[True, 3]` and `[1.0, 3.0]` equal to `[1, 3]` — now only integers are the answer. No saved route prints the marks
+with a `struck_at`; no saved claim had such ends. Mutations of every condition on a changed line: 44, 43 red; green: the cache of the text's positions
+(`own or …`, made once per item). Tests 347 (31 new: this field's 13, the worktree's `test_r15_boundaries.py` 13 — one case adapted:
+a page with an `<svg>` or a `<script>` is not certified since §43, its picture count not measured, nothing on it counted dishonest — and
+`test_source_numeric_references.py` 3, as written).
+
+**Parked, with the evidence (the return point: the step that fixes production text, with a browser pass it already pays for).** `source_boundaries` — a space the
+tool added removed on browser proof (same line, touching glyphs, nothing between in the DOM): 136 gaps on the best route, 1,128 on Docling's; it needs a DOM-to-byte
+map and a browser pass (the worktree: parse5 + Chrome), which this merge does not add (Codex, group 4). The 15 spaces the tool drops no step restores.
+`source_visibility` — hidden text cut from the source before the tool parses it: nothing to cut on the best route (EdgarTools prints none of the 2,522,773 hidden
+characters of the 60 files), 42 small items on Docling's; parked with the Docling route. Their tests (`test_source_boundaries.py` 4, `test_source_visibility.py` 2)
+with them. `source_formatting.py` of the worktree and `source_richtext.py`: merged in substance, above.

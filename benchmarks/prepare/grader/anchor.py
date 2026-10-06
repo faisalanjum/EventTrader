@@ -7,6 +7,7 @@ never guesses such a split."""
 from array import array
 from bisect import bisect_left
 from collections import Counter, defaultdict, namedtuple
+from functools import cached_property
 import html
 from html.entities import html5
 import xml.parsers.expat as expat
@@ -545,6 +546,11 @@ class Visible:
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
         self.s = array('Q', (starts[i] for i in self.idx)); self.e = array('Q', (ends[i] for i in self.idx))
         self.raw_len = len(raw)
+
+    @cached_property
+    def struck_flat(self):
+        """The struck flag of each character of the search form (`flat`), as bytes; made on first use."""
+        return bytes(self.struck_chars[i] for i in self.idx)
 
     def struck_runs(self):
         """Byte ranges the source prints struck through, each a run of consecutive visible characters."""

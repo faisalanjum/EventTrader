@@ -558,6 +558,37 @@ def boundary_equal(got, want):
     return squash(got) == squash(want) and tokens(got) == tokens(want)
 
 
+def struck_at(vis, item):
+    """Where the source strikes the item's text: ranges [start, end) of the text's characters (code points) the source prints struck through, [] when
+    none is — or None when that cannot be said exactly: the decoration is not certified (`struck_certain`, which the scanner gives only where
+    `plain_certain` holds too), a place of the item is no byte span or its places overlap, or its text is not the source's text at its places (same
+    characters in the comparison form, so a reported mark or an inserted character leaves the places unsaid). A range never covers white space: a
+    struck run of words is one range per word."""
+    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
+    if not vis.struck_certain or len(byte) != len(spans(item.get('anchor'))) or any(a['byte_end_exclusive'] > b['byte_start'] for a, b in zip(byte, byte[1:])): return None
+    piece, flags = [], []
+    for a in byte:
+        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
+        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return None  # a character whose bytes run past the place's end: the place is no whole reading
+        piece.append(vis.flat[lo:hi]); flags.append(vis.struck_flat[lo:hi])
+    text = item.get('text', ''); own, out = None, []
+    if ''.join(piece) != squash(text): return None
+    for m in re.finditer(b'\x01+', b''.join(flags)):  # each run of struck characters, split where the text puts white space between them
+        own = own or [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]  # the text's own position of each search-form character, made only where something is struck
+        for i in (own[j] for j in range(m.start(), m.end())): out[-1].__setitem__(1, i + 1) if out and out[-1][1] == i else out.append([i, i + 1])
+    return out
+
+
+def redline_apart(item, vis, byte):
+    """A word or number boundary the source's own strike-through delimits — a redline printed as one run (`TheExcept`, struck `The`): no boundary
+    fault when the item's `struck_at` is the scanner's own answer and the text read apart at those places gives the source's words and numbers."""
+    at, text = item.get('struck_at'), item.get('text', '')
+    if not at or at != struck_at(vis, item): return False
+    if any(type(i) is not int for pair in at for i in pair): return False
+    cuts = {i for a, b in at for i in (a, b)}
+    return boundary_equal(vis.at_any(byte), ''.join((' ' if i in cuts else '') + c for i, c in enumerate(text)))
+
+
 def objects(carriers):
     """The route objects (cells or units, every piece of a glued run) behind these carriers."""
     return [o for k in carriers for o in (k.get('parts') or [k['cell'] if k.get('cell') is not None else k.get('unit')])]
@@ -1414,7 +1445,7 @@ def gates_for_file(rf, status, excluded=()):
                         if mm and seen.startswith(mm): seen = seen[len(mm):]
                         elif mm and seen.endswith(mm): seen = seen[:-len(mm)]
                     if seen != squash(x.get('text', '')): g['dishonest'] += 1
-                    elif not boundary_equal(marks_off(rf.vis.at_any(byte), x.get('markers') or []), x.get('text', '')): g['boundary'] += 1  # same characters, a word or number boundary lost or added
+                    elif not boundary_equal(marks_off(rf.vis.at_any(byte), x.get('markers') or []), x.get('text', '')) and not redline_apart(x, rf.vis, byte): g['boundary'] += 1  # same characters, a word or number boundary lost or added — unless the source's own strike-through delimits it and the item says where
     if rf.vis is not None and not rf.vis.certain: g['anchors_measured'] = False  # visibility depends on stylesheet rules this scanner does not read
     if rf.vis is not None and rf.vis.certain and status == 'OK':
         excl = [(a['byte_start'], a['byte_end_exclusive']) for e in excluded for a in spans(e) if 'byte_start' in a]  # the declared exclusions' own bytes, nothing wider
