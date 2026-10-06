@@ -1675,3 +1675,33 @@ map and a browser pass (the worktree: parse5 + Chrome), which this merge does no
 `source_visibility` — hidden text cut from the source before the tool parses it: nothing to cut on the best route (EdgarTools prints none of the 2,522,773 hidden
 characters of the 60 files), 42 small items on Docling's; parked with the Docling route. Their tests (`test_source_boundaries.py` 4, `test_source_visibility.py` 2)
 with them. `source_formatting.py` of the worktree and `source_richtext.py`: merged in substance, above.
+
+## 48. The worktree merge, group 6 — the XML route reads with the grader's own parser (2026-10-05; Codex's `CODEX_MERGE_G3_G4_REPLY.md`, item 5)
+
+**Measured first.** The key's XML sources are forms (schedule 13D/G primary documents): the 3 development files hold 975 elements and **0 attributes**, no DOCTYPE,
+no entity declaration. The 4,377 real XML documents of the §43 census hold 8,811,964 attributes — all in the XBRL companion files (`_lab`, `_pre`, `_def`, `_cal`,
+`_htm.xml`, `FilingSummary.xml`: `type`, `label`, `id`, `href`, `contextRef`, `unitRef`, `decimals` …), whose data the project already keeps structured; no DOCTYPE, no
+entity declaration, no external reference, one CDATA section among them (`g6_xml_census.py`).
+
+**What was wrong, found by the worktree's cases and reproduced:** the route adapter built its own parser (`expat.ParserCreate`), not the grader's (`anchor.xml_parser`,
+§43: "one parser setting for both readers") — so a document that needs something outside itself (an external subset, an external general or parameter entity) was
+read **silently without it** (`<r>1&e;</r>` with `e` external → the field `1`, status OK) where the scanner refuses to certify; and an element the parser makes from
+an entity's text (`<!ENTITY e "<b>2</b>">`) got the position `{44, 44}` — a span of no bytes, a claim of a place that is none.
+
+**Ported (`adapters/xml_fields.py`, 3 lines):** the route's parser is `xml_parser(namespace_separator='}')` — nothing external is fetched, and the document is
+FAILED with the parser's own message when it would be needed; an element whose end stands at or before its start tag (markup from an entity) fails the document
+("has no source position") rather than being placed. The same reading as before on every real document: the 3 development route files byte-identical to run 35's
+(seconds aside); the 4,374 real XML documents of the census give the same units before and after (`g6_route_census.py`), 0 failures either way.
+
+**Carried tests** (`test_xml_route_reading.py`, 5, the worktree's `test_xml_evidence.py` re-aimed at this adapter, and Codex's batch case): external content refused; internal entities and
+CDATA read as written; markup from an entity refused and an empty element shown to be no such case; a UTF-16 source — the worktree asked for its positions; since
+§42 a character is placed at its own bytes or not at all: the route still reads it, the scanner certifies none of it, and a UTF-8 source places each character.
+Mutations on the changed lines: 2, 2 red. Tests 352.
+
+**Parked, with the evidence (the return point: a Prepare step that reads an XML type carrying attributes).** The worktree's `xml_elements` — the ordered element tree
+with attributes and namespace declarations beside the units, and its test case: nothing to keep in the key's forms (0 attributes), and the attribute-bearing XML of
+the corpus is XBRL the project holds elsewhere. The route keeps saying what it leaves unread (`not_read`); the attribute census covers the 4,377 XML documents of the
+saved rehearsal download, not the whole collection, and whether every attribute value already stands in the database was not checked. **The worktree's wider
+exception set was right and is taken** (Codex G6-1, reproduced): an unsupported encoding — `utf-7`, `shift_jis`, `UTF-32`, an unknown name — makes the parser
+raise `ValueError` or `LookupError`, not `ExpatError`, and the route's loop caught only the latter: one such file stopped the whole batch. Now the file is FAILED
+("XML parse failed: …") and the next is read; four bad-first/good-second cases.

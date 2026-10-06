@@ -5,7 +5,9 @@ own place among its siblings, its text, and the byte span from its start tag to 
 own text stands around child elements is read whole as prose (`mixed`) and its children stay fields of their own, each naming the prose unit it
 stands `within`: the reading stream is the units held by no other, each source character once; field lookups see every unit (Codex R13 C4).
 Attribute values are not read; their count is reported as `not_read` so the omission is visible. No field list, nothing inferred, nothing
-repaired: a document that does not parse is reported FAILED with the parser's own message.
+repaired: a document that does not parse is reported FAILED with the parser's own message. The parser is the grader's own (`anchor.xml_parser`):
+what stands outside the document is refused, so a reading that would need it fails instead of going on without it; an element the parser
+makes from an entity's text has no bytes of its own, and the document is refused rather than given a position that is none.
 
     python3 -m benchmarks.prepare.grader.adapters.xml_fields --key <key package> --split development --out <run dir> [--catalog CSV]"""
 import argparse
@@ -15,6 +17,7 @@ import xml.parsers.expat as expat
 from pathlib import Path
 
 from benchmarks.prepare.grader import grade
+from benchmarks.prepare.grader.anchor import xml_parser
 
 NAME = 'xml-fields'
 
@@ -24,9 +27,9 @@ def clark(name):
 
 
 def units_of(raw, facts=None):
-    """Field units of one XML document; raises expat.ExpatError when the bytes are not a complete, well-formed document. `facts`, when
+    """Field units of one XML document; raises ExpatError, ValueError or LookupError for invalid XML or an unsupported encoding. `facts`, when
     given, receives what the route does not read (`attribute_values`)."""
-    p = expat.ParserCreate(namespace_separator='}'); stack, leaves, root_counts, attrs = [], [], {}, 0
+    p = xml_parser(namespace_separator='}'); stack, leaves, root_counts, attrs = [], [], {}, 0
     def start(name, a):
         nonlocal attrs; attrs += sum(1 for v in a.values() if v.strip())
         parent = stack[-1]['counts'] if stack else root_counts; parent[name] = parent.get(name, 0) + 1
@@ -35,6 +38,7 @@ def units_of(raw, facts=None):
         fr = stack[-1]; fr['own'].append(text); fr['parts'].append(text)
     def end(name):
         fr = stack.pop(); text = ''.join(fr['parts'])
+        if p.CurrentByteIndex <= fr['start_tag']: raise expat.ExpatError('an element with no bytes of its own (markup from an entity) has no source position')
         if stack: stack[-1]['parts'].append(text)  # a parent that is prose sees its children's text in place
         if not ''.join(fr['own']).strip(): return  # no text of its own: a container of elements, or empty
         leaf = {'name': fr['name'], 'index': fr['index'], 'siblings': fr['parent_counts'], 'ancestors': [(a['name'], a['index'], a['parent_counts'], a['start_tag']) for a in stack], 'mixed': len(leaves) > fr['mark'],
@@ -68,7 +72,7 @@ def main(argv=None):
         try:
             unread = {}; doc['units'] = units_of(raw, unread)  # the per-file unread count, apart from the run's facts
             if unread.get('attribute_values'): doc['not_read'] = unread  # what the route leaves unread, stated rather than silent
-        except expat.ExpatError as e: doc['status'], doc['error'] = 'FAILED', f'not a complete well-formed XML document: {e}'
+        except (expat.ExpatError, ValueError, LookupError) as e: doc['status'], doc['error'] = 'FAILED', f'XML parse failed: {e}'
         doc['seconds'] = round(time.time() - t0, 3); dst.write_text(json.dumps(doc, ensure_ascii=False)); facts[fid] = {'status': doc['status'], 'fields': len(doc['units']), 'seconds': doc['seconds']}
         print(fid, facts[fid], flush=True)
     (out / 'facts.json').write_text(json.dumps({'route': route, 'files': facts}, indent=1))
