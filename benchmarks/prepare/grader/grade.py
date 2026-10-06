@@ -616,7 +616,9 @@ def tool_spaces(vis, item):
     for p, (i, j) in enumerate(zip(own, own[1:])):
         k, l = src[p], src[p + 1]
         if not text[i + 1:j].isspace() or vis.idx[l] != vis.idx[k] + 1: continue  # the text has no white space there (nothing, or something else), or the source itself puts something between the two
-        if len(_TOKEN_WORDS.findall(vis.flat[k] + ' ' + vis.flat[l])) != 2: continue  # a space there cuts no word or number in two (reflow at punctuation and symbols is allowed, E12)
+        a = vis.flat[k - 1:k + 1] if k and vis.idx[k - 1] + 1 == vis.idx[k] else vis.flat[k]  # each side with the neighbour the source prints touching it:
+        b = vis.flat[l:l + 2] if l + 1 < len(vis.flat) and vis.idx[l + 1] == vis.idx[l] + 1 else vis.flat[l]  # a number's own separator belongs to the number ("0.|69"), as the gate's tokens read it
+        if len(_TOKEN_WORDS.findall(vis.flat[k] + ' ' + vis.flat[l])) != 2 and _TOKEN_WORDS.findall(a + b) == _TOKEN_WORDS.findall(a + ' ' + b): continue  # a space there cuts no word or number in two (reflow at punctuation and symbols is allowed, E12)
         out.append((i + 1, j, k, l))
     return out
 

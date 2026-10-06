@@ -2032,3 +2032,16 @@ differ, a smaller font on the same baseline. Measured in Chrome: small capitals 
 not taken). Key documents: 0 joins changed (development 140, control 6, released 77), every route byte-identical, 0 target and 0 field changes. Corpus
 (every flagged document, formatting then the screen step, offline): 2,285 base flags in 168 documents → **131 after the screen step** (`f83117fbf`: 2,315 in 175 → 249; no document has more than before; joins 970 → 1,207; 0 errors, 0 requests) — 77 of the 118 fewer by the baseline join alone, 41 by the `<br>` split. The 131 left, each recorded at the gate (`boundary_detail.py`, `classify_flags.py`): 68 a space after the period of a number ("$0. 69": the period in a `<font>` of its own; the gap finder judges a space from its two characters only, so it never measures these — a separate, older class), 45 a list glyph the source glues to its item ("oThe": the tool's space is the reader's), 13 a space the source shows that the tool lost (older), 3 a raised mark kept apart, 2 other. Tests: the old rule's "another top" case now joins; a Chrome case
 with small capitals, a raised and a lowered mark (two failures under the old rule).
+
+## 58. The screen step measures a space beside a number's own separator (2026-10-06; the corpus's remaining flags, §56)
+
+Of the 131 word-boundary flags the corpus kept after the screen step, 68 (17 documents) were one class: a space the tool printed beside the period or
+comma inside a number — "$0. 69" for "$0.69", the period set in a `<font>` of its own. `tool_spaces` judged a space from its two characters alone:
+"." and "6" look like reflow at punctuation, so the screen step never measured it, while the gate's tokens read "0.69" as one number and flagged it.
+Now each side is read with the neighbour the source prints touching it (no white space between, by the scanner's own text positions): a space is
+measured when it cuts a token of that window as the gate's tokens read it, or when its two characters are a word's or a number's, as before — nothing
+measured before stops being measured. Chrome still decides every join (one baseline, touching), so a separator the page sets apart — a list number
+with a margin, "2. 4.650% Notes" — keeps its space. A first version read the neighbours across the source's white space ("57." and the "3" of the next
+sentence as "57.3") and joined spaces before a sentence's period: harmless, but not this rule — not taken. Key documents: 0 target, 0 field changes,
+the same joins (one more space measured in the released set, not joined). Corpus (the 168 flagged documents, formatting then the screen step, offline): flags left 131 → 75, no document worse; joins 1,207 → 1,288; 55 of the 68 joined; the 13 kept are a list number the page sets apart ("2. 4.650% Senior Notes") or a raised mark after a period ("2024.¹") — the reader's space. Tests: the finder on separators, a digit-letter pair and
+reflow at punctuation; Chrome on the 10-K's own markup (joined) and a list number set apart (kept) — three failures under the old rule.

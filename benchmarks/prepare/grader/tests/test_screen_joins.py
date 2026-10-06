@@ -36,6 +36,11 @@ class ToolSpaces(unittest.TestCase):
         self.assertEqual(grade.tool_spaces(vis, {'text': '', 'anchor': {'byte_start': 0, 'byte_end_exclusive': 3}}), [])  # a place holding no character
         self.assertEqual(len(grade.tool_spaces(vis, {'text': 'CORP ORATION a&b', 'anchor': {'byte_start': 3, 'byte_end_exclusive': raw.index(b'</p>')}})), 1)  # a place ending exactly where its last character ends
 
+    def test_a_space_beside_a_numbers_own_separator_is_found(self):  # the gate reads "0.69" and "1,234" as one number each: a space beside the separator cuts it
+        raw = b'<p>EPS was $0<b>.</b>69, up 1<i>,</i>234 and Co.<b>Inc</b> in the 10<sup>th</sup></p>'; text = 'EPS was $0. 69, up 1, 234 and Co. Inc in the 10 th'
+        found = grade.tool_spaces(Visible(raw), unit(raw, text))
+        self.assertEqual([text[a - 1:b + 1] for a, b, _, _ in found], ['. 6', ', 2', '0 t'])  # the two separators' spaces, the digit-letter one as before; "Co. Inc" stays reflow at punctuation
+
     def test_the_keys_marks_do_not_shift_the_places(self):
         raw = b'<p><s>old</s>new CORP<i>ORATION</i></p>'
         self.assertEqual([(a, b) for a, b, _, _ in grade.tool_spaces(Visible(raw), unit(raw, '~~old~~new CORP ORATION'))], [(15, 16)])  # the text's own position, the marks counted
@@ -104,6 +109,13 @@ class Measuring(unittest.TestCase):
         self.assertEqual(boxes['0.1'], boxes['1.0'])  # the one character, measured once for each gap
         self.assertAlmostEqual(boxes['0.1']['x'], boxes['0.0']['r'], places=3); self.assertAlmostEqual(boxes['1.1']['x'], boxes['1.0']['r'], places=3)  # touching: both joined
         self.assertEqual(sg.join(gaps, boxes), 2); self.assertEqual(gaps[0][0]['text'], 'Policy')
+
+    def test_a_numbers_separator_set_in_its_own_run_is_joined_and_a_list_number_set_apart_keeps_its_space(self):
+        for raw, text, want in ((b'<p style="font-family:Calibri,sans-serif;font-size:11pt">was $0<font style="font-weight:bold">.</font>69, a year</p>', 'was $0. 69, a year', 'was $0.69, a year'),
+                                (b'<p style="font-size:10pt">2.<span style="margin-left:24px">4.650% Notes</span></p>', '2. 4.650% Notes', '2. 4.650% Notes')):
+            with self.subTest(text=text):
+                vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, text, start=0)]); self.assertTrue(gaps)
+                boxes = self.boxes(sg.tag_cells(raw, vis, gaps)[0]); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
 
     def test_small_capitals_are_joined_and_raised_or_lowered_marks_keep_their_space(self):  # one baseline, a smaller font: tops differ, bottoms agree; a mark is raised or lowered
         for raw, text, want in ((b'<p style="font-family:serif;font-weight:700"><span style="font-size:10pt">S</span><span style="font-size:8pt">IGNIFICANT</span></p>', 'S IGNIFICANT', 'SIGNIFICANT'),
