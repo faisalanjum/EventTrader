@@ -1932,3 +1932,38 @@ text — two; a unit line printed in a header cell the record does not own — o
 staged for the next key package, package 3 untouched. Five `section_path` misses are headings with no element of their own (lines between `<br>`s, a styled
 span after breaks, a slide's text layer, a title inside a picture): the structure gap, unchanged. Notes and references: not built. One press release is
 pictures only. One file is uncertain to the scanner, which records no reason: a diagnostic field is wanted for the corpus checks.
+
+## 55. Every picture the source shows stands in the output (the OCR review's image-delivery gap, r12; 2026-10-06)
+
+The OCR review (`ocr_real336_development_review_20261006/r12/FABLE_IMAGE_DELIVERY.md`) counted, in the 120 documents its pictures come from, **1,508
+shown picture occurrences and 386 with no unit in the EdgarTools route — 385 inside table cells, one inline in a span**; reproduced (its `image_audit.py`
+on `c02e5351e`). The cause is the tool's, before our dump: its table strategy reads a cell's text and does not descend into it for pictures, and a run it
+handles as text only keeps no picture either — the 15 occurrences of the review's selected files are already absent from `root.walk()`'s ImageNodes.
+
+Fixed at the adapter boundary, not in the tool's traversal: `with_every_picture(units, vis)` (called by `route_for` after linking) gives every shown
+picture tag that no unit stands at a unit of its own from the scanner's inventory — `vis.pictures`, the same visibility state as the text: a hidden copy
+gets none and lends no identity — with the tag's own name, an anchor on the tag, `from: source`, and inserted **before the first unit that starts after
+the tag**: the tool's units keep their order, ids and content (proved below), a picture in a cell follows (or, in the table's first rows, precedes) the
+table unit whose text starts at its first text cell, an inline picture follows its paragraph. The cell it stands in: the scanner's innermost cell span,
+the table unit that holds a cell of the same source table, and the row and column of that unit's cell in the picture's own cell where there is one. The
+same bytes shown twice are two occurrences, two units; the OCR stream fills them by file name, one reading reused. Route settings record `pictures:
+every shown tag`; the tool's cached parse is unchanged (its settings are not touched).
+
+Measured (`prepare_work/image_delivery_20261006/`):
+| | OCR review's 120 documents | the key's 116 HTML documents (development, control, released held-out) |
+|---|---:|---:|
+| shown picture occurrences | 1,508 | 1,529 |
+| … standing at the tool's own unit | 1,122 | 1,312 |
+| … added from the source | **386** (385 in cells) | **217** (208 in cells) |
+| … in cells tied to their table unit / to a route cell | 332 / 23 | 205 / 18 |
+| tool picture units with no place (double-count risk) | 0 | 0 |
+| every shown tag exactly once | 120 of 120 | 116 of 116 |
+| the committed units (ids, kinds, texts, anchors, order) changed | 0 documents | 0 documents |
+The review's own audit on the candidate: **1,508 of 1,508 delivered, 0 missing** (was 386); its 15 selected missing occurrences delivered. The OCR
+handoff consumer rerun on the review's five cases against routes made by this adapter: **6 occurrences, 0 delivery failures** (was 5 and AMG's chart);
+the repeated bytes in two documents still read once and placed twice with two contexts.
+
+Stated: a picture keeps the tool's reading order around it, so a logo in a table's first row stands before the table unit and a picture beside a value
+after it — the cell span says where it is; a tool picture unit naming a hidden tag stays unplaced as before (none in the 236 documents). Tests 379 (the
+picture-name helper now checks the completion on every one of its cases; `tests/test_every_picture.py`: an image-only cell, a picture among a cell's
+text, nested inline markup, a hidden copy, the same bytes shown twice, nested tables, the document's first cell, the tool's own units unchanged, nothing to add).

@@ -6,6 +6,7 @@ without the package. Shape rules only, no document-specific logic.
     <edgartools python> -m benchmarks.prepare.grader.adapters.edgartools_html --key <key package> --split development --out <run dir> [--catalog CSV]"""
 import argparse
 import json
+from bisect import bisect_right
 import re
 from dataclasses import asdict
 import time
@@ -132,9 +133,51 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
     vis = anchor.Visible(raw) if vis is None else vis; known = codes(raw, vis); linked = anchor.link(raw, to_units(tree, known), vis=vis)
     for u in linked['units']:
         if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own
+    units = with_every_picture(linked['units'], vis)
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
-            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': settings or {'parse_html': 'defaults'}, 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
-                      'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': linked['units'], 'uncovered': linked['uncovered']}
+            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag'), 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
+                      'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': units, 'uncovered': linked['uncovered']}
+
+
+def with_every_picture(units, vis):
+    """Every picture the source shows stands in the output at its own tag. The tool reads a table's cells as text only and an inline run as text only, so
+    a picture there got no unit (386 of 1,508 occurrences in the OCR review's 120 documents, 385 of them in cells; r12). A shown picture tag no unit
+    stands at gets one from the scanner's inventory (`vis.pictures`: the same visibility state as the text, so a hidden copy gets none and lends no
+    identity), with its own name, inserted before the first unit that starts after the tag — the tool's units keep their order, ids and content — and
+    with the cell it stands in: the scanner's innermost cell span, the table unit that holds a cell of the same source table and, where a cell of that
+    unit stands in the picture's own cell, its row and column. The same bytes shown twice are two occurrences, two units. `from: source` records it as
+    the adapter's work, not the tool's."""
+    at = {u['anchor']['byte_start'] for u in units if u.get('kind') == 'image' and isinstance(u.get('anchor'), dict)}
+    todo = [(a, b) for a, b in vis.pictures if a not in at]
+    if not todo: return units
+    def start(x):
+        x = x[0] if isinstance(x, list) and x else x
+        return x['byte_start'] if isinstance(x, dict) and 'byte_start' in x else None
+    spans = sorted((a, b, k) for k, table in enumerate(vis.tables) for row in table for a, b in row); starts = [a for a, _, _ in spans]
+    def cell_of(x):  # the innermost source cell holding byte x (the one that starts last among those that do), or -1
+        i = bisect_right(starts, x) - 1
+        while i >= 0 and not spans[i][0] <= x < spans[i][1]: i -= 1
+        return i
+    unit_table, route_cell = {}, {}  # source table -> the table unit holding one of its cells; source cell -> (row, column) of the unit's cell in it
+    for t in units:
+        for c in (t.get('cells') or []) if t.get('kind') == 'table' else []:
+            i = cell_of(start(c.get('anchor'))) if start(c.get('anchor')) is not None else -1
+            if i >= 0: unit_table.setdefault(spans[i][2], t['id']); route_cell.setdefault(i, (c['r'], c['c']))
+    added = []
+    for a, b in todo:
+        u = {'id': f'p{a}', 'kind': 'image', 'text': '', 'src': vis.picture_sources.get(a), 'anchor': {'byte_start': a, 'byte_end_exclusive': b}, 'from': 'source'}
+        i = cell_of(a)
+        if i >= 0:
+            u['cell'] = {'byte_start': spans[i][0], 'byte_end_exclusive': spans[i][1]}
+            if spans[i][2] in unit_table: u['cell']['table'] = unit_table[spans[i][2]]
+            if i in route_cell: u['cell']['r'], u['cell']['c'] = route_cell[i]
+        added.append(u)
+    out = []
+    for u in units:
+        s0 = start(u.get('anchor'))
+        while added and s0 is not None and added[0]['anchor']['byte_start'] < s0: out.append(added.pop(0))
+        out.append(u)
+    return out + added
 
 
 def unsupported(file_id, sha256, version, status='UNSUPPORTED', error='not an HTML file'):

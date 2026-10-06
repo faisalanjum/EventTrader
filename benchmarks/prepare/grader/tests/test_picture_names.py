@@ -22,10 +22,14 @@ def tool(given, keep=None, rewrite=lambda s: s):
 
 
 def placed(raw, keep=None, rewrite=lambda s: s):
-    """The adapter's own path: the reading, the coded source to the tool, the units back, linked. Returns [(name, the tag's bytes or the link error)]."""
+    """The adapter's own path: the reading, the coded source to the tool, the units back, linked. Returns [(name, the tag's bytes or the link error)] of the
+    tool's own picture units — and checks the adapter's completion on every case: each picture the source shows stands exactly once, the tool's unit or one
+    the adapter adds from the source (`from: source`), at its own tag; a hidden or template copy gets none (r12)."""
     vis = anchor.Visible(raw); given = adapter.named(raw, vis, adapter.codes(raw, vis))
     units = adapter.route_for(tool(given, keep, rewrite), raw, 'f.htm', 'sha', 0, 'v', vis=vis)['units']
-    return [(u['src'], raw[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']] if u.get('anchor') else u.get('link_error')) for u in units if u['kind'] == 'image']
+    at = sorted(u['anchor']['byte_start'] for u in units if u['kind'] == 'image' and u.get('anchor'))
+    assert at == sorted(a for a, _ in vis.pictures), (at, vis.pictures)
+    return [(u['src'], raw[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']] if u.get('anchor') else u.get('link_error')) for u in units if u['kind'] == 'image' and u.get('from') != 'source']
 
 
 class PictureNames(unittest.TestCase):
