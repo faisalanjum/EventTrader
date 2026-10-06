@@ -6,6 +6,7 @@ without the package. Shape rules only, no document-specific logic.
     <edgartools python> -m benchmarks.prepare.grader.adapters.edgartools_html --key <key package> --split development --out <run dir> [--catalog CSV]"""
 import argparse
 import json
+import re
 from dataclasses import asdict
 import time
 from pathlib import Path
@@ -68,12 +69,17 @@ def codes(raw, vis):
     return {sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()}
 
 
+_EMPTY_ANCHOR = re.compile(rb'<a\b[^>]*>(?:<!--.*?-->)*</a>', re.I | re.S)  # an <a> with no content at all (comments aside): it renders nothing; white space inside is content and stays
+
+
 def named(raw, vis, codes):
-    """The source as the tool gets it: each picture's name replaced by its code; nothing else changes."""
+    """The source as the tool gets it: each picture's name replaced by its code, and the anchors that hold nothing removed — the tool reads a <div> it takes
+    for a heading only up to its first inline element, so `Item 1A. <a name="x"></a>Risk Factors` came back as `Item 1A.` (run 36's coverage check: one title
+    lost in 60 files; the class reproduced on named anchors, empty links, with and without a comment inside). Nothing else changes."""
     out, at = [], 0
     for code, (start, _) in sorted(codes.items(), key=lambda kv: kv[1]):
         (a, b), _ = vis.picture_names[start]; out += [raw[at:a], code.encode()]; at = b
-    return b''.join(out) + raw[at:]
+    return _EMPTY_ANCHOR.sub(b'', b''.join(out) + raw[at:])
 
 
 def to_units(tree, codes=None):
@@ -146,7 +152,7 @@ def main(argv=None):
     files = {}
     for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
         if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
-    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
+    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'empty_anchors': 'removed'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if path.suffix.lower() not in ('.htm', '.html'):

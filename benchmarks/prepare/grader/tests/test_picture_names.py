@@ -39,6 +39,11 @@ class PictureNames(unittest.TestCase):
         self.assertIsNone(vis.picture_sources[raw.index(b'<img alt=')])
         cp = b'<p>\xe9</p><img src="z.png">'; v = anchor.Visible(cp); (x, y), _ = v.picture_names[cp.index(b'<img')]; self.assertEqual(cp[x:y], b'z.png')  # a cp1252 source: one byte per character
 
+    def test_the_tool_is_not_shown_an_anchor_that_holds_nothing(self):  # EdgarTools reads a heading-like <div> only to its first inline element: the title after a named anchor was lost
+        raw = b'<div>Item 1A. <a name="ra"></a>Risk Factors</div><div>Item 6. <A id="x"><!--Anchor--></A>Exhibits <a href="#x"></a></div><p>See <a href="#n3">Note 3</a>, <a id="k"> </a>and the <a title="a>b"></a>rest.</p><img src="x.png">'
+        vis = anchor.Visible(raw); given = adapter.named(raw, vis, adapter.codes(raw, vis))
+        self.assertEqual(re.sub(rb'src="[^"]*"', b'src=""', given), b'<div>Item 1A. Risk Factors</div><div>Item 6. Exhibits </div><p>See <a href="#n3">Note 3</a>, <a id="k"> </a>and the <a title="a>b"></a>rest.</p><img src="">')  # a link with text, an anchor holding white space, and a tag with a > in its attribute stay
+
     def test_the_codes_are_this_sources_own_and_the_tool_gets_nothing_but_them_changed(self):
         raw = b'<p>Before.</p><img src="chart.JPG"><p>Middle.</p><img src="a&amp;b.png"><p>After.</p>'
         vis = anchor.Visible(raw); codes = adapter.codes(raw, vis); given = adapter.named(raw, vis, codes)
