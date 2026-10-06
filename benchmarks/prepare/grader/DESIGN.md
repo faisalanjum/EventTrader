@@ -1967,3 +1967,68 @@ Stated: a picture keeps the tool's reading order around it, so a logo in a table
 after it — the cell span says where it is; a tool picture unit naming a hidden tag stays unplaced as before (none in the 236 documents). Tests 379 (the
 picture-name helper now checks the completion on every one of its cases; `tests/test_every_picture.py`: an image-only cell, a picture among a cell's
 text, nested inline markup, a hidden copy, the same bytes shown twice, nested tables, the document's first cell, the tool's own units unchanged, nothing to add).
+
+## 56. Codex's independent review of §54 (`CODEX_HELDOUT_R1_VERDICT.md`): his tested patch, integrated onto §55; my counts corrected (2026-10-06)
+
+Codex reviewed `c02e5351e` independently and found two of its rules unsafe; his tested patch (`prepare_work/heldout_independent_20261006/CODEX_CANDIDATE.patch`,
+against `c02e5351e`) is applied here unchanged for `anchor.py`, `grade.py`, `adapters/screen_grid.py` and his two test files, and merged by hand into the
+§55 adapter (`split_lines` after linking, before `with_every_picture`; his inline-fact reading inside `whole_headings`). Each finding was reproduced first:
+- **`anchor.decoration`**: my §54 rule set aside any word `_SEEN` accepts — any lower-case word — so `line-through garbage`, which Chrome drops as a whole,
+  was certified as a strike, and `none garbage` could cancel a real `<s>` (checked in Chrome: `line-through garbage` paints no line). Now only one valid
+  opaque hex colour is set aside; names stay unevaluated (no colour-name list). Added here: hex digits in either case (`#ABC`, which Chrome strikes).
+- **`Grader.row_context`**: my stacked-header join could borrow a header word from a body row; the single-cell branch had the same weakness. Now header
+  cells must lie on the field's declared support, in source and table order, and the cancellation check reads the header and value that matched. His three
+  tests fail on `c02e5351e`, pass here.
+- **`Grader.value` / the period group**: a unit letter in the next column, anchored by the record as its own unit (`0.9` | `x`), joins without a space
+  (reflow); a period sharing its cell with the record's own anchored measure is that period's heading, not a competing group (EEFT's 2023 stays).
+- **`struck_kept`, `basis`, `anchors_of`**: exact struck places are used when they equal the source's and the claimed struck text; a basis phrase's
+  association is proved at its governing occurrence, preservation still at every listed one.
+- **The adapter**: `split_lines` splits a unit at source-certified `<br>` breaks only (certain reading, text equal to the source run, no tables, pictures,
+  links or referenced units; strikes and joins re-read downstream) — three section boundaries were hidden in one unit; no text becomes a heading. And the
+  tool's reading of an inline-XBRL text fact (`ix:nonNumeric`, `ix:continuation`) holding inline children reads them whole: **two cybersecurity paragraphs
+  of the SPG 10-K (778 characters) were lost** (reproduced; recovered); a fact holding blocks, tables, pictures or links keeps the tool's traversal.
+- **The screen step and `Grader.adjacent`**: in an uncertain file only, each unit's first and last character is measured in the render already made
+  (`endpoints_of`, `screen_endpoints`); `screen_boundary` takes visible boxes apart on one line, or on different lines, as proof of separation — touching,
+  hidden, transparent or impossible boxes prove nothing. Added here: `measure()` aborts every request of its page itself (the harnesses did it so far;
+  the exam runner called the step directly — no document in the key or the corpus sample holds an absolute URL a page would load, 0 requests seen).
+- **`grade_structure`**: every declared `printed_text` alternative goes through the check: a picture target's text existed only in alternatives, and
+  the empty field compared with the empty picture unit as zero error — **my §54 inventory called that block "WER > 0, no critical word lost"; it was an
+  empty comparison** (now: 11 reference words missing, still approximate).
+
+**My counts corrected.** The released set converted again by `c02e5351e` read **51/64 cells and 17/21 blocks**, not "50, unchanged as targets": AEP T02
+passes — `heading_recognised` is informative, never a target gate (§54's handoff and the inventory said otherwise; the commit message of `c02e5351e` too).
+And "85 % of real HTML documents uncertain" counted EDGAR's own XBRL viewer pages (`R1.htm`…: 19,480 of 22,833 HTML documents in the local sample, all
+with scripts); the filer's own documents are 3,353, **3,328 (99.3 %) read with certainty**.
+
+**Results (`prepare_work/heldout_r2_20261006/`):** the 11 saved Docling, PDF and XML routes and the 3 control routes regraded or rebuilt: 0 target, 0
+field changes; development EdgarTools routes rebuilt: 0 target, 0 field changes (best route: one exhibit's 10 boundary flags gone; four base-route flags
+the screen step joins); released set (24 documents, development evidence since §54): **frozen key 54/64 cells, blocks 18 / 2 / 1; with the ten reviewed
+key corrections applied in memory 64/64 cells, blocks 18 pass, 2 fail, 1 approximate** (the three picture-related blocks) — Codex's figures exactly;
+pictures: the OCR review's 120 documents still 1,508 of 1,508 at their own tag. The ten corrections go into the next key package through the decision log
+and support builder; package 3 and the exam stay as they are.
+
+**Package 4** (`FINAL_KEY_FOR_CODEX_20261006_1753`, built by `prepare_work/package4_20261006/package4_build.py`; manifest `554a41d6…`, key `3c6d68cf…`): the
+ten corrections through the normal mechanisms, each checked against its original first (`check_corrections.py`: file hashes, the scanner's text at every
+anchor — "0.9" + "x", "(in millions)", "Category" + "4.", the NXST cell "Third Amendment Effective Date Term B-5 Loans"): two `segment_or_basis` decisions
+(`claude_decide.py`; exactly those two records changed, one item each), eight reviewed support declarations (`claude_support_map.py`: exactly those slots
+moved, plus the two decided fields' own search support), the two changed records verified again and stamped (457 of 457 current), the R4 contract
+declarations carried forward, the manifest last, `VERIFY_PACKAGE.py` clean, the overrides' own test 11/11. Graded with it, the released set gives the
+in-memory replay's 1,335 rows exactly: 64/64 cells, blocks 18 / 2 / 1. The repository's pointer stays on package 3 until Codex's gate.
+
+**The corpus check of the merged code** (`prepare_work/corpus_checks_20261006/`: the 1,016 local filings, 3,353 filer HTML documents, EDGAR's own pages
+apart), against `f83117fbf`: cells, pictures (5,762 shown, 799 added, 0 unplaced), dishonest, inserted, duplicate ids and order breaks unchanged; uncovered
+text 69,762 → 68,198 characters — four documents gain a paragraph lost inside a nested inline fact (SPG's 10-K, two 8-K/A amendment paragraphs, an RH
+10-Q); unanchored units 3 → 2; units +1,127, diffed unit by unit on 59 documents: 189 splits at certified `<br>` (233 units → 551, kinds kept), 179 merges
+(560 → 208: a sentence no longer broken at its inline facts — 44 of them had a false heading in the middle, "As of | March 31, 2023, | and …"), 18 kind
+changes (note titles inside a text block now headings, cover-page facts now text), 7 text changes (the recoveries). Base-route word-boundary flags
+2,315 → 2,285: 19 documents fewer (a line break the tool glued, "ARTICLE IDefinitions", now two lines), 13 more — the tool's inline reader space-joins the
+parts of a fact by its own design (its preprocessor strips the white space next to tags): "S IGNIFICANT", "i n", "CO 2". The screen step joins them where
+Chrome shows the two characters touching — except where the two boxes' tops differed: small capitals (a 10 pt "S" beside an 8 pt "IGNIFICANT") stayed apart,
+15 in one 10-K.
+
+**`screen_grid.join`: one baseline, not one box height.** Two characters stand on one line when their boxes' bottoms agree within a pixel; their tops may
+differ, a smaller font on the same baseline. Measured in Chrome: small capitals 10/8 pt — tops 3 px apart, bottoms 1; a raised mark ($5¹) — bottoms
+6.4 px apart; a lowered one (CO₂) — 2.7 px: both keep their space (a rule "one box inside the other" would have joined a small raised mark into "$51":
+not taken). Key documents: 0 joins changed (development 140, control 6, released 77), every route byte-identical, 0 target and 0 field changes. Corpus
+(every flagged document, formatting then the screen step, offline): 2,285 base flags in 168 documents → **131 after the screen step** (`f83117fbf`: 2,315 in 175 → 249; no document has more than before; joins 970 → 1,207; 0 errors, 0 requests) — 77 of the 118 fewer by the baseline join alone, 41 by the `<br>` split. The 131 left, each recorded at the gate (`boundary_detail.py`, `classify_flags.py`): 68 a space after the period of a number ("$0. 69": the period in a `<font>` of its own; the gap finder judges a space from its two characters only, so it never measures these — a separate, older class), 45 a list glyph the source glues to its item ("oThe": the tool's space is the reader's), 13 a space the source shows that the tool lost (older), 3 a raised mark kept apart, 2 other. Tests: the old rule's "another top" case now joins; a Chrome case
+with small capitals, a raised and a lowered mark (two failures under the old rule).

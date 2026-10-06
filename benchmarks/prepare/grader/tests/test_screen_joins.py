@@ -1,5 +1,5 @@
 """A word or number the tool printed in two (a space the source does not have, across inline markup) is joined by the screen step when Chrome shows the two
-characters touching on one line — never on the text alone (the page's styles may space them), never where the source itself spaces or breaks them."""
+characters touching on one baseline — never on the text alone (the page's styles may space them), never where the source itself spaces or breaks them."""
 import re
 import unittest
 
@@ -71,11 +71,11 @@ class Joining(unittest.TestCase):
 
     def test_a_gap_the_page_shows_or_another_line_or_a_missing_box_keeps_the_space(self):
         L, R = dict(x=10, r=18, t=0, b=12), dict(x=18, r=26, t=0, b=12)
-        for why, left, right in (('a gap of the page', L, dict(R, x=21)), ('an overlap past the tolerance', L, dict(R, x=16)), ('another line', L, dict(R, t=14, b=26)), ('another top', L, dict(R, t=2)), ('another bottom', L, dict(R, b=14)),
+        for why, left, right in (('a gap of the page', L, dict(R, x=21)), ('an overlap past the tolerance', L, dict(R, x=16)), ('another line', L, dict(R, t=14, b=26)), ('another bottom: a raised mark', L, dict(R, t=-3, b=6)), ('another bottom: a lowered mark', L, dict(R, t=5, b=14)),
                                  ('no left box', None, R), ('no right box', L, None)):
             gaps = self.gaps(); boxes = {k: v for k, v in (('0.0', left), ('0.1', right)) if v}
             with self.subTest(why=why): self.assertEqual(sg.join(gaps, boxes), 0); self.assertEqual(self.item['text'], 'CORP ORATION and 1,2 34'); self.assertNotIn('joins', self.item)
-        for dt, db in ((1, 0), (0, 1), (-1, -1)):  # one line still: tops or bottoms a pixel apart
+        for dt, db in ((1, 0), (0, 1), (-1, -1), (3, -1), (3, 0)):  # one baseline still: bottoms a pixel apart at most, the tops free (a smaller font: small capitals)
             gaps = self.gaps(); self.assertEqual(sg.join(gaps, {'0.0': L, '0.1': dict(R, t=dt, b=12 + db)}), 1)
         for gap in (0.75, -0.75, 0):  # within the tolerance, either way: joined
             gaps = self.gaps(); self.assertEqual(sg.join(gaps, {'0.0': L, '0.1': dict(R, x=18 + gap)}), 1); self.assertEqual(self.item['text'], 'CORPORATION and 1,2 34')
@@ -104,6 +104,14 @@ class Measuring(unittest.TestCase):
         self.assertEqual(boxes['0.1'], boxes['1.0'])  # the one character, measured once for each gap
         self.assertAlmostEqual(boxes['0.1']['x'], boxes['0.0']['r'], places=3); self.assertAlmostEqual(boxes['1.1']['x'], boxes['1.0']['r'], places=3)  # touching: both joined
         self.assertEqual(sg.join(gaps, boxes), 2); self.assertEqual(gaps[0][0]['text'], 'Policy')
+
+    def test_small_capitals_are_joined_and_raised_or_lowered_marks_keep_their_space(self):  # one baseline, a smaller font: tops differ, bottoms agree; a mark is raised or lowered
+        for raw, text, want in ((b'<p style="font-family:serif;font-weight:700"><span style="font-size:10pt">S</span><span style="font-size:8pt">IGNIFICANT</span></p>', 'S IGNIFICANT', 'SIGNIFICANT'),
+                                (b'<p style="font-size:10pt">$5<sup>1</sup> million</p>', '$5 1 million', '$5 1 million'),
+                                (b'<p style="font-size:10pt">CO<sub>2</sub> and NO<sub>x</sub></p>', 'CO 2 and NO x', 'CO 2 and NO x')):
+            with self.subTest(text=text):
+                vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, text, start=0)]); self.assertTrue(gaps)
+                boxes = self.boxes(sg.tag_cells(raw, vis, gaps)[0]); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
 
 
 if __name__ == '__main__':

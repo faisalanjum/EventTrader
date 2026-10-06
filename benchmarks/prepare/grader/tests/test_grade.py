@@ -493,12 +493,92 @@ class PlantedFaultTests(GraderFixture):
         t = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': cells}; rf = grade.RouteFile({'file_id': 'syn/f.htm', 'units': [t]}, raw, 'htm')
         def rows(ctx):
             k = {'key_id': 'syn/R2', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'10.0%'), 'table_anchor': t['anchor'],
-                 'fields': {'printed_value': '10.0%', 'row_context': ctx}, 'alternatives': {}, 'excluded': set(), 'support': {'row_context': {'how': 'reviewed', 'anchors': [span(b'Filing'), span(b'August 2025')]}}}
+                 'fields': {'printed_value': '10.0%', 'row_context': ctx}, 'alternatives': {}, 'excluded': set(), 'support': {'row_context': {'how': 'reviewed', 'anchors': [span(b'Filing'), span(b'Date'), span(b'August 2025')]}}}
             g = grade.Grader(k, rf); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'row_context')
         self.assertEqual(rows([{'header': 'Filing Date', 'text': 'August 2025'}]), ('pass', None))   # the two stacked cells, joined, name the column
         self.assertEqual(rows([{'header': 'Filing', 'text': 'August 2025'}]), ('pass', None))        # one of them alone still does, as before
         self.assertEqual(rows([{'header': 'Date Filing', 'text': 'August 2025'}]), ('fail', 'header'))  # not in the printed order
         self.assertEqual(rows([{'header': 'Filing Rate', 'text': 'August 2025'}]), ('fail', 'header'))  # another column's cell is never joined in
+
+    def test_stacked_row_header_never_borrows_a_missing_word_from_data_or_reorders_rows(self):
+        raw = b'<table><tr><td>Company</td><td>Filing</td><td>Rate</td></tr><tr><td></td><td>Date</td><td></td></tr><tr><td>Date</td><td>July 2025</td><td>9.0%</td></tr><tr><td>Kentucky</td><td>August 2025</td><td>10.0%</td></tr></table>'
+        def span(text, start=0):
+            p = raw.index(text.encode(), start); return {'byte_start': p, 'byte_end_exclusive': p + len(text)}
+        cells = [{'r': r, 'c': c, 'text': tx, 'anchor': span(tx, start)} for r, c, tx, start in
+                 ((0, 0, 'Company', 0), (0, 1, 'Filing', 0), (0, 2, 'Rate', 0), (1, 1, 'Date', 0), (2, 0, 'Date', raw.index(b'Date') + 1),
+                  (2, 1, 'July 2025', 0), (2, 2, '9.0%', 0), (3, 0, 'Kentucky', 0), (3, 1, 'August 2025', 0), (3, 2, '10.0%', 0))]
+        ta = {'byte_start': 0, 'byte_end_exclusive': len(raw)}
+        key = {'key_id': 'syn/R2', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span('10.0%'), 'table_anchor': ta,
+               'fields': {'printed_value': '10.0%', 'row_context': [{'header': 'Filing Date', 'text': 'August 2025'}]}, 'alternatives': {}, 'excluded': set(),
+               'support': {'row_context': {'how': 'reviewed', 'anchors': [span('Filing'), span('Date'), span('August 2025')]}}}
+        def rows(cs):
+            rf = grade.RouteFile({'file_id': 'syn/f.htm', 'units': [{'id': 't', 'kind': 'table', 'anchor': ta, 'cells': cs}]}, raw, 'htm')
+            g = grade.Grader(key, rf); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'row_context')
+        self.assertEqual(rows(copy.deepcopy(cells)), ('pass', None))
+        for col, width in ((1, 1), (0, 2)):
+            broken = copy.deepcopy(cells); del broken[3]; broken[3].update(c=col, cs=width); del broken[4]
+            self.assertEqual(rows(broken), ('fail', 'header'))  # Date's real header is gone; a body word with another source anchor cannot replace it, even through a claimed span
+        broken = copy.deepcopy(cells); broken[3]['r'] = 2
+        for c in broken[4:7]: c['r'] = 1
+        broken[5]['c'] = 2
+        self.assertEqual(rows(broken), ('fail', 'header'))  # the data row is moved between the header's words; no cell remains in its context column
+        spacer = copy.deepcopy(cells)
+        for c in spacer:
+            if c['r'] >= 1: c['r'] += 1
+        self.assertEqual(rows(spacer), ('pass', None))  # a blank spacer carries no reordered data
+
+    def test_single_row_context_header_uses_the_same_field_support_as_a_stacked_header(self):
+        raw = b'<table><tr><td>Filing Date</td><td>Rate</td></tr><tr><td>Filing Date</td><td>8%</td></tr><tr><td>August</td><td>9%</td></tr></table>'
+        def span(tx, start=0):
+            i = raw.index(tx.encode(), start); return {'byte_start': i, 'byte_end_exclusive': i + len(tx)}
+        cells = [{'r': r, 'c': c, 'text': tx, 'anchor': span(tx, off)} for r, c, tx, off in
+                 ((0, 0, 'Filing Date', 0), (0, 1, 'Rate', 0), (1, 0, 'Filing Date', raw.index(b'Filing Date') + 1), (1, 1, '8%', 0), (2, 0, 'August', 0), (2, 1, '9%', 0))]
+        ta = {'byte_start': 0, 'byte_end_exclusive': len(raw)}
+        key = {'key_id': 'syn/one', 'file_id': 'syn/one.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span('9%'), 'table_anchor': ta,
+               'fields': {'printed_value': '9%', 'row_context': [{'header': 'Filing Date', 'text': 'August'}]}, 'alternatives': {}, 'excluded': set(),
+               'support': {'row_context': {'how': 'reviewed', 'anchors': [span('Filing Date'), span('August')]}}}
+        for cs, expected in ((cells, ('pass', None)), (cells[1:], ('fail', 'header'))):
+            rf = grade.RouteFile({'file_id': 'syn/one.htm', 'units': [{'id': 't', 'kind': 'table', 'anchor': ta, 'cells': copy.deepcopy(cs)}]}, raw, 'htm')
+            g = grade.Grader(key, rf); g.grade_cell()
+            self.assertEqual(next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'row_context'), expected)
+
+    def test_row_context_checks_only_the_matching_header_and_value_cancellations(self):
+        def fixture(header_struck,value_struck,stacked):
+            pieces=['Filing','Date'] if stacked else ['Filing Date']
+            seq=[]; content='<table>'
+            def append(r,c,tx,struck=False):
+                nonlocal content
+                content+='<td>'+('<s>' if struck else ''); off=len(content)
+                content+=tx+('</s>' if struck else '')+'</td>'
+                seq.append({'r':r,'c':c,'text':tx,'anchor':{'byte_start':off,'byte_end_exclusive':off+len(tx)},'struck':[tx] if struck else []})
+            for r,tx in enumerate(pieces):
+                content+='<tr>'; append(r,0,tx,header_struck); append(r,1,tx,not header_struck); append(r,2,'Rate'+str(r)); content+='</tr>'
+            r=len(pieces); content+='<tr>'; append(r,0,'August',value_struck); append(r,1,'Elsewhere'); append(r,2,'10.0%'); content+='</tr></table>'
+            raw=content.encode(); ta={'byte_start':0,'byte_end_exclusive':len(raw)}
+            own=[c for c in seq if c['c']==0]; val=seq[-1]
+            key={'key_id':'syn/strike','file_id':'syn/strike.htm','format':'cell/htm','type':'cell','split':'development','anchor':val['anchor'],'table_anchor':ta,
+                 'fields':{'printed_value':'10.0%','row_context':[{'header':('~~Filing Date~~' if header_struck else 'Filing Date'),'text':('~~August~~' if value_struck else 'August')}]},
+                 'alternatives':{},'excluded':set(),'support':{'row_context':{'how':'reviewed','anchors':[c['anchor'] for c in own]}}}
+            table={'id':'t','kind':'table','anchor':ta,'cells':seq}
+            return raw,key,table
+
+        for h, v, stack in ((h, v, stack) for h in (False, True) for v in (False, True) for stack in (False, True)):
+            raw,key,table=fixture(h,v,stack)
+            variants=[('control',lambda t:None,'pass')]
+            def toggle_header(t):
+                for c in t['cells']:
+                    if c['c']==0 and c['r']<len(t['cells'])//3-1: c['struck']=[] if h else [c['text']]
+            def toggle_value(t):
+                c=t['cells'][-3]; c['struck']=[] if v else [c['text']]
+            def toggle_unrelated(t):
+                for c in t['cells']:
+                    if c['c']==1: c['struck']=[] if c.get('struck') else [c['text']]
+            variants += [('header_mark_missing' if h else 'header_mark_extra',toggle_header,'fail'),('value_mark_missing' if v else 'value_mark_extra',toggle_value,'fail'),('unrelated_marks_changed',toggle_unrelated,'pass')]
+            for name,mutate,expect in variants:
+                t=copy.deepcopy(table); mutate(t)
+                rf=grade.RouteFile({'file_id':'syn/strike.htm','units':[t]},raw,'htm'); g=grade.Grader(key,rf); g.grade_cell()
+                got=next(r for r in g.rows if r['check']=='row_context')
+                self.assertEqual(got['verdict'], expect, (h, v, stack, name, got))
 
     def test_lead_in_keeps_its_place_across_the_sources_own_page_furniture_and_counts_when_kept_whole_inside_a_unit(self):
         # addendum C6: '94 Table of Contents' printed between the lead-in and its table is the source's own layout, not a displacement

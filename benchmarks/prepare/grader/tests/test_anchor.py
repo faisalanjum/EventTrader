@@ -424,10 +424,15 @@ class LinkTests(unittest.TestCase):
         self.assertEqual(struck(b'<p><span style="display:inline-block;text-decoration:inherit">not</span></p>'), ([], True, True))
         self.assertEqual(struck(b'<style>.x{text-decoration:inherit}</style><p style="text-decoration:line-through"><span class="x" style="display:inline-block">not</span></p>')[1:], (False, False))
         self.assertEqual(struck(b'<style>.u{text-decoration:underline dotted}</style><p>y</p>')[1:], (False, True))  # that rule cannot add a strike
-        self.assertEqual(struck(b'<p style="text-decoration:line-through red">x</p>'), (['x'], True, True))  # the shorthand's colour, one that surely paints: evaluated as the longhand text-decoration-color is (a redline exhibit with `underline double #0000ff` on every insertion had its 440 struck runs uncertified: the held-out exam)
+        self.assertEqual(struck(b'<p style="text-decoration:line-through #abc">x</p>'), (['x'], True, True))  # an opaque hex colour has a valid grammar independent of line/style keywords
+        self.assertEqual(struck(b'<p style="text-decoration:line-through #ABC">x</p>'), (['x'], True, True))  # hex digits in either case (Chrome strikes it)
         self.assertEqual(struck(b'<p style="text-decoration:underline double #0000ff">x</p><p style="text-decoration:underline solid #ff0000">y</p>'), ([], True, True))  # no line-through, whatever the colour
         self.assertEqual(struck(b'<p style="text-decoration:line-through transparent">x</p>')[1:], (False, False))  # a colour that may not paint: uncertain either way
         self.assertEqual(struck(b'<p style="text-decoration:line-through #abc #def">x</p>')[1:], (False, False))  # two colours: not the grammar; not evaluated
+        for colour in ('red', 'garbage', 'inherit', 'initial', 'unset', 'revert'):
+            self.assertEqual(struck(f'<p style="text-decoration:line-through {colour}">x</p>'.encode())[1:], (False, False))  # names stay unevaluated: an arbitrary word is not proof of a valid colour
+            self.assertEqual(struck(f'<s style="text-decoration:none {colour}">x</s>'.encode())[1:], (False, False))  # Chrome drops invalid shorthands and keeps the tag's strike
+            self.assertEqual(struck(f'<p style="text-decoration:line-through;text-decoration:none {colour}">x</p>'.encode())[1:], (False, False))  # or keeps an earlier valid declaration
 
     def test_xml_text_is_the_strict_parsers_character_data(self):
         # Codex N1: CDATA is literal, references decode to their replacement (sharing the reference's bytes), attributes are not hiding instructions, a broken document certifies nothing

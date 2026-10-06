@@ -6,7 +6,7 @@ without the package. Shape rules only, no document-specific logic.
     <edgartools python> -m benchmarks.prepare.grader.adapters.edgartools_html --key <key package> --split development --out <run dir> [--catalog CSV]"""
 import argparse
 import json
-from bisect import bisect_right
+from bisect import bisect_left, bisect_right
 import re
 from dataclasses import asdict
 import time
@@ -129,13 +129,50 @@ def to_units(tree, codes=None):
     return units
 
 
+_BR = re.compile(rb'</?br(?=[\s/>])', re.I)
+
+
+def split_lines(raw, units, vis=None):
+    vis = anchor.Visible(raw) if vis is None else vis
+    if not vis.certain: return units
+    # Scanner-emitted spaces whose original token is <br>: hidden tags,
+    # comments and attribute strings never enter this inventory.
+    breaks = sorted({s for c, s, e in zip(vis.text, vis.starts, vis.ends)
+                     if c == ' ' and e - s > 1 and _BR.match(raw, s)})
+    referenced = {ref for u in units for ref in u.get('notes') or []}
+    referenced |= {link['to'] for u in units for link in u.get('links') or [] if link.get('to')}
+    out = []
+    for unit in units:
+        a, text = unit.get('anchor'), unit.get('text', '')
+        if unit.get('kind') in ('table', 'image') or unit.get('id') in referenced or unit.get('links') or not text or not isinstance(a, dict) or 'byte_start' not in a:
+            out.append(unit); continue
+        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
+        if anchor.squash(text) != vis.flat[lo:hi]:
+            out.append(unit); continue
+        left, right = bisect_left(breaks, a['byte_start']), bisect_left(breaks, a['byte_end_exclusive'])
+        cuts = sorted({bisect_left(vis.s, b) for b in breaks[left:right]} - {lo, hi})
+        if not cuts:
+            out.append(unit); continue
+        idx = [i for i, c in enumerate(text) if not anchor._WS.match(c)]
+        for n, (start, end) in enumerate(zip([lo] + cuts, cuts + [hi])):
+            piece = dict(unit, id=unit['id'] + '_line_' + str(n),
+                         text=text[idx[start-lo]:idx[end-lo-1]+1],
+                         anchor={'byte_start':vis.s[start], 'byte_end_exclusive':vis.e[end-1]})
+            # Every removed field is indexed into the old text; existing downstream
+            # steps recompute them from this slice and its unchanged source bytes.
+            for key in ('struck', 'struck_at', 'joins', '_order'): piece.pop(key, None)
+            out.append(piece)
+    return out
+
+
 def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=None):
     vis = anchor.Visible(raw) if vis is None else vis; known = codes(raw, vis); linked = anchor.link(raw, to_units(tree, known), vis=vis)
+    linked['units'] = split_lines(raw, linked['units'], vis)
     for u in linked['units']:
         if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own
     units = with_every_picture(linked['units'], vis)
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
-            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag'), 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
+            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
                       'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': units, 'uncovered': linked['uncovered']}
 
 
@@ -215,6 +252,14 @@ def whole_headings():
         if isinstance(node, HeadingNode) and line(self, element, style): node.content = whole(self, element)  # (b): every heading the tool made from a block, read whole
         return node
     def reading(self, element):
+        # The tool treats inline XBRL as terminal text but its reader only walks
+        # descendants for inline HTML tags. Reuse that reader for inline facts;
+        # containers with blocks, pictures, or links keep the tool's traversal.
+        if isinstance(element.tag, str) and element.tag.lower() in ('ix:nonnumeric', 'ix:continuation') and len(element) and not any(
+                isinstance(d.tag, str) and d.tag.lower() in self.BLOCK_ELEMENTS | {'table', 'img', 'a'} for d in element.iterdescendants()):
+            kept, element.tag = element.tag, 'span'
+            try: return read(self, element)
+            finally: element.tag = kept
         made = getattr(self, '_making', None)
         return whole(self, element) if made and made[0] is element else read(self, element)  # (a)
     db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text, db.DocumentBuilder._whole_headings = creating, reading, True
@@ -233,7 +278,7 @@ def main(argv=None):
     files = {}
     for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
         if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
-    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
+    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if path.suffix.lower() not in ('.htm', '.html'):

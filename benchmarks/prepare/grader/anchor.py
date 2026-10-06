@@ -246,14 +246,14 @@ def decoration(value, prop='text-decoration'):
     """What one text-decoration / text-decoration-line declaration says about striking: True (line-through), False (no line), 'default'
     (revert: the tag's own default), 'inherit' (the parent's own line), INVALID when the grammar proves the browser drops the declaration
     (a style keyword in the line longhand, two styles, a repeated or a `none`-plus-other line keyword), or UNKNOWN for anything this scanner
-    does not evaluate — colours, lengths, functions, escapes — which the browser may honour or drop."""
+    does not evaluate — colours other than opaque hex, lengths, functions, escapes — which the browser may honour or drop."""
     toks = _IMPORTANT.sub('', value).split()
     if toks in (['initial'], ['unset']): return False  # text-decoration is not inherited: unset is initial, none
     if toks in (['revert'], ['revert-layer']): return 'default'
     if toks == ['inherit']: return 'inherit'
     known = _DECO_LINES | (_DECO_STYLES if prop == 'text-decoration' else set())
-    colour = [t for t in toks if t not in known and _SEEN.fullmatch(t)] if prop == 'text-decoration' else []
-    if len(colour) == 1 and '(' not in value: toks = [t for t in toks if t != colour[0]]  # the shorthand's colour, one that surely paints (CSS Text Decoration 3: <line> || <style> || <color>): a line in it is seen, no line stays none — `underline double #0000ff` struck a whole redline exhibit off the certified list (held-out exam, 2026-10-06)
+    colour = [t for t in toks if t.startswith('#') and _SEEN.fullmatch(t.lower())] if prop == 'text-decoration' else []  # hex digits are case-insensitive (Chrome strikes `line-through #ABC`)
+    if len(colour) == 1 and '(' not in value: toks = [t for t in toks if t != colour[0]]  # one valid opaque hex colour; _SEEN's arbitrary names are safe only in a longhand, where an invalid name drops that declaration
     if not toks or '(' in value or '\\' in value or any(t not in known for t in toks):
         return INVALID if toks and '(' not in value and '\\' not in value and all(t in _DECO_LINES | _DECO_STYLES for t in toks) else UNKNOWN  # a style keyword can never be a line
     lines = [t for t in toks if t in _DECO_LINES]

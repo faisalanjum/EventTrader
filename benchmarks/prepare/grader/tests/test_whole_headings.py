@@ -43,5 +43,15 @@ class WholeHeadings(unittest.TestCase):
         self.assertIn('Section 2.11(m), or Section 2.13(d)(i) or amounts under Section 2.14(a) relative', ' '.join(t for _, t in self.units(inline) if t))  # an underlined run inside a sentence that the tool takes for a heading keeps the space before it: not re-read (a first version glued 331 words in the legal exhibits)
 
 
+    def test_nested_inline_facts_are_read_whole(self):  # Codex's held-out review: the tool read an inline-XBRL text fact only to its first child; two cybersecurity paragraphs were lost
+        text = lambda body: ' '.join(' '.join(u.get('text', '') for u in adapter.to_units(adapter.dump(self.parse('<html><body>' + body + '</body></html>').root))).split())
+        self.assertEqual(text('<p><ix:nonNumeric>Our <ix:nonNumeric>Chief Financial Officer</ix:nonNumeric> oversees our team.</ix:nonNumeric></p>'), 'Our Chief Financial Officer oversees our team.')
+        self.assertEqual(text('<p><ix:continuation>The <ix:nonNumeric>CSIRT</ix:nonNumeric> is responsible for all risks.</ix:continuation></p>'), 'The CSIRT is responsible for all risks.')
+        self.assertEqual(text('<p><ix:nonNumeric>No significant incidents.</ix:nonNumeric></p>'), 'No significant incidents.')  # a plain fact, as before
+        self.assertEqual(text('<p>ordinary <span>whole</span> text.</p>'), 'ordinary whole text.')
+        units = adapter.to_units(adapter.dump(self.parse('<html><body><ix:nonNumeric><p>Amounts</p><table><tr><td>Revenue</td><td>100</td></tr><tr><td>Costs</td><td>50</td></tr></table></ix:nonNumeric></body></html>').root))
+        self.assertEqual([[c['text'] for c in u['cells']] for u in units if u['kind'] == 'table'], [['Revenue', '100', 'Costs', '50']])  # a fact holding blocks and a table keeps the tool's own traversal
+
+
 if __name__ == '__main__':
     unittest.main()

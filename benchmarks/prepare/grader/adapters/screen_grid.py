@@ -3,7 +3,7 @@ when the value sits inside the header's span ON SCREEN (guide 3.5 rule 3). DOM c
 (spacer columns, hidden cells), and every HTML tool inherits the DOM grid. This step renders the original in headless
 Chrome, measures every table cell's box, derives screen columns from the pixel edges, and re-grids a route's table
 cells by their byte anchors, and joins a word or number the tool printed with a space the source does not have where Chrome shows its two
-characters touching on one line (a space the tool adds across inline markup: `CORP ORATION` over an iXBRL tag; the page alone can tell that from
+characters touching on one baseline (a space the tool adds across inline markup: `CORP ORATION` over an iXBRL tag; the page alone can tell that from
 a gap its styles make). It changes no anchor; the joined text records where its spaces were. Rules are geometric only.
 
     <python with playwright> -m benchmarks.prepare.grader.adapters.screen_grid --key <key package> --route <route dir> --out <route dir> [--catalog CSV]"""
@@ -11,7 +11,7 @@ import argparse
 import json
 import re
 import time
-from bisect import bisect_right
+from bisect import bisect_left, bisect_right
 from pathlib import Path
 
 from benchmarks.prepare.grader import grade
@@ -24,6 +24,20 @@ TOL = 2  # pixels: edges closer than this are the same column edge
 def gaps_of(vis, units):
     """Every space the tool added inside a word or number, per item: [(item, text start, text end, search-form index before, after)] (grade.tool_spaces)."""
     return [(x, a, b, k, l) for u in units for x in ((u.get('cells') or []) if u.get('kind') == 'table' else [u]) for a, b, k, l in grade.tool_spaces(vis, x)]
+
+
+def endpoints_of(vis, units):
+    gaps=[]
+    for item in units:
+        if item.get('kind') in ('image','table') or not item.get('text'): continue
+        aa=grade.spans(item.get('anchor'))
+        if not aa or not all('byte_start' in a for a in aa):continue
+        start,end=min(a['byte_start'] for a in aa),max(a['byte_end_exclusive'] for a in aa)
+        k,l=bisect_left(vis.s,start),bisect_left(vis.e,end)
+        if k>=len(vis.s) or l>=len(vis.e) or vis.s[k]!=start or vis.e[l]!=end:continue
+        if (k + 1 < len(vis.s) and vis.s[k + 1] == start) or (l + 1 < len(vis.e) and vis.e[l + 1] == end): continue
+        gaps.append(({'start':start,'end':end},0,0,k,l))
+    return gaps
 
 
 def tag_cells(raw, vis=None, gaps=()):
@@ -45,13 +59,13 @@ def tag_cells(raw, vis=None, gaps=()):
 
 
 def join(gaps, boxes, vis=None, tol=0.75):
-    """Remove from each item's text the added spaces whose two characters Chrome lays out on one line, touching (the right box begins where the left one ends,
-    within `tol` pixels); returns how many. Each item keeps `joins`: [[start, end, gap in pixels]] in the text as it was; its struck places, which count the
+    """Remove from each item's text the added spaces whose two characters Chrome lays out on one baseline, touching (the boxes' bottoms within a pixel — their
+    tops may differ, a smaller font on the same baseline as small capitals print; the right box begins where the left one ends, within `tol` pixels); returns how many. Each item keeps `joins`: [[start, end, gap in pixels]] in the text as it was; its struck places, which count the
     text's characters, are read again from the source (`vis`; Codex C3) — or dropped where that cannot be done."""
     by_item, n = {}, 0
     for g, (x, a, b, k, l) in enumerate(gaps):
         left, right = boxes.get('%d.0' % g), boxes.get('%d.1' % g)
-        if not left or not right or abs(left['t'] - right['t']) > 1 or abs(left['b'] - right['b']) > 1: continue  # not one line
+        if not left or not right or abs(left['b'] - right['b']) > 1: continue  # not one baseline: another line, or a raised or lowered mark ($5¹, CO₂ stay apart)
         gap = right['x'] - left['r']
         if not -tol <= gap <= tol: continue  # the page spaces them (its styles), or lays them apart: no join
         by_item.setdefault(id(x), (x, []))[1].append((a, b, round(gap, 2)))
@@ -109,14 +123,17 @@ JS = """() => { const tables = Array.from(document.querySelectorAll('table')); c
     out.push({g: +el.dataset.g, table: tables.indexOf(t), row: el.parentElement ? el.parentElement.rowIndex : -1, x: r.left, w: r.width}); }
   const boxes = {}; const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
   for (let c = w.nextNode(); c; c = w.nextNode()) { const m = /^j:(\\d+\\.[01])$/.exec(c.data); if (!m) continue; let t = c.nextSibling; while (t && t.nodeType === Node.COMMENT_NODE) t = t.nextSibling;  // one character can end one gap and begin the next: its two marks stand side by side
-    if (!t || t.nodeType !== Node.TEXT_NODE || !t.data.length) continue; const r = document.createRange(); r.setStart(t, 0); r.setEnd(t, 1); const rs = r.getClientRects();
-    if (rs.length === 1) boxes[m[1]] = {x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom}; }
+    if (!t || t.nodeType !== Node.TEXT_NODE || !t.data.length) continue;
+    let shown = getComputedStyle(t.parentElement).visibility === 'visible';
+    for (let el = t.parentElement; el && shown; el = el.parentElement) if (+getComputedStyle(el).opacity === 0) shown = false;
+    const r = document.createRange(); r.setStart(t, 0); r.setEnd(t, 1); const rs = r.getClientRects();
+    if (rs.length === 1) boxes[m[1]] = {shown, x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom}; }
   return {cells: out, boxes}; }"""
 
 
 def measure(marked_html, browser):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window)."""
-    page = browser.new_page(viewport={'width': 1400, 'height': 1000})
+    page = browser.new_page(viewport={'width': 1400, 'height': 1000}); page.route('**/*', lambda route: route.abort())  # offline: a document's own references are never fetched (EDGAR forbids external ones; the step must not depend on that)
     try:
         page.set_content(marked_html.decode('utf-8', 'replace'), wait_until='load'); got = page.evaluate(JS)
     finally:
@@ -139,10 +156,12 @@ def main(argv=None):
         for rp in sorted(src.rglob('*.json')):
             d = json.loads(rp.read_text()); fid = d.get('file_id'); dest = out / rp.relative_to(src); dest.parent.mkdir(parents=True, exist_ok=True)
             if d.get('status') != 'OK' or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue  # another step's facts file is copied through
-            t0 = time.time(); raw = paths[fid].read_bytes(); vis = Visible(raw); gaps = gaps_of(vis, d['units']); marked, spans = tag_cells(raw, vis, gaps)
+            t0 = time.time(); raw = paths[fid].read_bytes(); vis = Visible(raw); gaps = gaps_of(vis, d['units']); endpoints = endpoints_of(vis, d['units']) if not vis.certain else []; marked, spans = tag_cells(raw, vis, gaps + endpoints)
             try: measured, boxes = measure(marked, browser)
             except Exception as e: facts[fid] = {'error': repr(e)[:200]}; dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True); continue
-            n = apply(d['units'], spans, measured); j = join(gaps, boxes, vis); d['route'] = dict(d['route'], name=d['route']['name'] + '+screen', settings=dict(d['route'].get('settings') or {}, screen_grid=True, joins='touching on one line'))
+            if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
+                d['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
+            n = apply(d['units'], spans, measured); j = join(gaps, boxes, vis); d['route'] = dict(d['route'], name=d['route']['name'] + '+screen', settings=dict(d['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline'))
             facts[fid] = {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': len(gaps), 'joined': j, 'seconds': round(time.time() - t0, 1)}
             dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True)
         browser.close()
