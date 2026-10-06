@@ -306,6 +306,18 @@ def alternatives(t, field):
     return [(None, t['fields'].get(field))] if field in t['fields'] else []
 
 
+def continued(earlier, table):
+    """Is `table` the continuation of `earlier` (one table printed over a page break: the next part repeats the header row)? The first row of each,
+    as texts in column order, must be the same and not empty."""
+    first = lambda t: [norm(c.get('text', '')) for c in sorted((c for c in t['cells'] if c['r'] == min(x['r'] for x in t['cells'])), key=lambda c: c['c'])] if t.get('cells') else []
+    return bool(first(table)) and first(earlier) == first(table)
+
+
+def carried(cell, r, table):
+    """Does a stub cell above row `r` still label row `r` — nothing stands in its columns in any row between (a block's label printed once, no rowspan)?"""
+    return cell['r'] < r and not any(cell['r'] < x['r'] <= r and col_hit(x, (cell['c'], cell['c'] + cell.get('cs', 1))) for x in table.get('cells') or [])
+
+
 def row_hit(cell, r):
     return cell['r'] <= r < cell['r'] + cell.get('rs', 1)
 
@@ -1050,13 +1062,13 @@ class Grader:
     def row_label(self, value, alt, tb, vr):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'row_label', alt)
         cands = [c for a in anchors for c in self.rf.cells_at(a, tb)] if anchors else \
-            [c for c in self.rf.cells_in(tb) if abs(c['r'] - vr) <= 1 and norm(c.get('text', '')) in {norm(p) for p in pieces}]
+            [c for c in self.rf.cells_in(tb) if (abs(c['r'] - vr) <= 1 or carried(c, vr, tb)) and norm(c.get('text', '')) in {norm(p) for p in pieces}]
         cands = self.merged({id(c): c for c in cands}.values())
         if not cands: return 'fail', 'missing', None
         ok, flag = self.same(joined(cands), ' '.join(pieces))
         if not ok and self.same(spaced(sorted(cands, key=lambda c: (c['r'], c['c'])), ' '.join(pieces)), ' '.join(pieces))[0]: return 'unresolved', 'adjacency', joined(cands)
         if not ok: return 'fail', 'text', joined(cands)
-        if not any(row_hit(c, vr) for c in cands) or any(abs(c['r'] - vr) > 1 for c in cands): return 'fail', 'row', None
+        if not any(row_hit(c, vr) for c in cands) or any(abs(c['r'] - vr) > 1 and not carried(c, vr, tb) for c in cands): return 'fail', 'row', None  # a piece from above the row only when carried down to it
         self.matched = list(cands)  # merged cells carry their pieces' strikes
         return 'pass', None, 'marker_in_label' if flag == 'marker_in_text' else flag or ('anchor_unknown' if not anchors else None)
 
@@ -1107,16 +1119,17 @@ class Grader:
         if not ok and match_pieces([spaced(k, ' '.join(pieces)) for k in usable], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', norm(got)
         if not ok: return 'fail', 'spacing' if spacing_only(got, ' '.join(pieces)) else 'text', norm(got)
         orders = {k['order'] for k in usable}
-        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] for u in self.rf.units): return 'fail', 'placement', None
+        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not continued(u, tb) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break)
         self.ctx_orders.update(orders); self.matched = objects(usable)
         return 'pass', None, flag or ('anchor_unknown' if not anchors else None)
 
     def corner_text(self, value, alt, tb, vr):
-        cars = [k for k in self.carriers(anchors_of(self.t, 'corner_text', alt), [value], tb) if k['cell'] is not None and self.in_order(k, tb, vr) and k['cell']['r'] != vr]
+        pieces = pieces_of(value)  # one stub column's head, or several joined by the key's ' | '
+        cars = [k for k in self.carriers(anchors_of(self.t, 'corner_text', alt), pieces, tb) if k['cell'] is not None and self.in_order(k, tb, vr) and k['cell']['r'] != vr]
         if not cars: return 'fail', 'missing', None
-        ok, flag = match_pieces([k['text'] for k in cars], [value], self.markers, self.own + self.table_context)
+        ok, flag = match_pieces([k['text'] for k in cars], pieces, self.markers, self.own + self.table_context)
         if ok: self.ctx_orders.update(k['order'] for k in cars); self.matched = objects(cars)
-        if not ok and match_pieces([spaced(k, value) for k in cars], [value], self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', None
+        if not ok and match_pieces([spaced(k, value) for k in cars], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', None
         return ('pass', None, flag) if ok else ('fail', 'text', ' '.join(k['text'] for k in cars))
 
     def lead_in(self, value, alt, tb, vr):

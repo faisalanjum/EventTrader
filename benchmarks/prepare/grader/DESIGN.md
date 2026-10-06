@@ -1759,3 +1759,66 @@ the tagging beside the cell marks, the join and every way it declines); mutation
 
 **Still open, stated:** 20 flags on the best route (above); the cover-page facts of a heading-like `<div>` (the tool); 4,741 runs of furniture reported as
 uncovered, by design; the tool-dropped spaces (15) no step restores. Next (Codex's order): the stratified-control targets, never converted; then one held-out run.
+
+## 51. Codex's review of §50 (`CODEX_COVERAGE_CONTROL_VERDICT.md`): four corrections, the uncovered text re-audited by its source, and the control sample's classes (2026-10-06)
+
+**C1 — an anchor is empty by the tokenizer's word.** The regex of §50 could take real text between two comments for emptiness (`<a><!--one-->10 million<!--two--></a>`
+lost "10 million"). Now `without_empty_anchors` walks the scanner's own tokens (`anchor._TOKEN`): an `<a>` start tag in the plain form, comment tokens only,
+then `</a>` — and nothing else — is removed; a comment ends at its own `-->`; an anchor written inside a script, a title or a quoted attribute is no tag to the
+tokenizer and stays; so does one with a quote astray, which the scanner does not follow either. The source the tool is given is returned decoded (`named`).
+
+**C2 — the gap characters are marked with comments, and the page's own ranges are measured.** A wrapping `<span>`, however unstyled, is an element: a page rule
+such as `span:first-child{margin-right:-12px}` moved the measured boxes (Codex's reproduction: a 12 px gap read as 0 and joined). Now the screen step puts
+`<!--j:n.0-->` / `<!--j:n.1-->` right before the two characters — a comment is no element, no stylesheet rule or structural selector sees it — and Chrome
+measures a `Range` over the character that follows each comment. The same reproduction keeps its 12 px; touching letters still join; the cell marks stay
+attributes on the cells. One character can end one gap and begin the next (a letter-spaced heading: `Pol<font>i</font>cy`): its two marks stand side by side,
+and the script steps over marks to the text (a first version took the next mark for the text and measured nothing — 100 of Docling's joins and one
+target lost against the first joins build; `tests/test_screen_joins.py::Measuring`, in Chrome, offline; skipped where playwright is not installed).
+
+**C3 — a joined item's struck places are read again.** `join(gaps, boxes, vis)` calls `grade.struck_at` on every item whose text it changed, and drops a
+`struck_at` it cannot re-read (no reading given) rather than leave a place pointing at another character; 50 saved items across three routes had stale
+places. `joins` stays the record of the text as it was.
+
+**C4 — the uncovered text, re-audited by its actual source occurrence, and two causes found at their owners.** Codex read six of the "table cell" runs in Chrome:
+financial cells of one exhibit, not furniture. The audit now classes each run by the scanner's own cell spans (`prepare_work/coverage_20261005/fix/uncovered_audit.py`):
+of 4,744 runs, 3,844 stand in page-break blocks, 221 in other blocks, 669 in table cells — 663 of those in one-text tables (the page-number footers of two
+exhibits, each a table of its own) and **6 in data tables**, all in `exhibit992-4q25earningsrel.htm`. Traced: (a) "10.8" was placed at bytes reading
+"10.1 | 0.82" — the linker's flat search had matched a short text across two cells. **The linker never places a text across cells now** except as whole cells
+(`cell`, `edge`, `same`, `whole` in `link()`): a value cell and its sign cell the tool merged ("10.7 %") may stand together; a part of one cell and the start of the
+next may not; a pieced block stops at a cell's edge. (b) The five dashes were taken by copies: the exhibit hides a "%" beside each value for alignment
+(`visibility:hidden`), the tool printed it ("8.2 %"), and its visible "%" cell became a copy placed out of order — 646 cells of that table were out of order.
+**The scanner records the byte spans of hidden text (`Visible.hidden`) and the adapter leaves it out of what the tool is shown** when the reading is certain:
+0 out-of-order cells there now, all six runs covered. The reading is unchanged (22,483 HTML + 4,377 XML real documents, identical). The earlier claim that the
+tool prints no hidden text was wrong: it prints it inside units it can still place.
+
+**The inline-XBRL wrappers are left out of what the tool is shown.** The two cover facts the tool lost (§50: the inline element that cuts a heading-like
+`<div>` short was the fact's own `ix:` tag) are back; the wrappers present nothing (iXBRL: inline, no presentation of their own) and the tool's XBRL extraction
+is not used here (§46, decision 3). On the 60 files: 0 target changes, boundary flags 918 → 902 on the base route, 0 unanchored. One structure row moved:
+`bundle-020 T01`'s `kind` (a paragraph the tool now opens with a "contextual" heading — that paragraph holds none of the constructs touched; the tool's
+heading heuristic reads the document as a whole); the text is intact and the target's verdict unchanged. Stated, not hidden.
+
+**Results, the corrected candidate (all 13 routes rebuilt; `prepare_work/control_20261006/build_all` + `build_screen4`):** against run 36, 17 Docling targets
+`FAIL → PASS` (the joins; the same 17 as the first joins build) and the one `kind` row above, nothing else; against the first joins build 0 target flips.
+Best route: cells 171/171, blocks 49/2/6/3, `boundary` **18** in 4 files — 3 spaces the page shows (superscript marks), 15 spaces the tool dropped or
+changed in two exhibits (its own paragraph text; stated) —, `inserted_chars` 0, `unanchored` 0; the tool's added spaces 135, joined 115 (Docling 883 of 982,
+1,090 of 1,193); every joined item's `struck_at` re-read exact (0 stale of 193); uncovered 4,735 runs / 11,015 characters, none in a data table, none text;
+no pieced block crosses a cell edge (0 of 400 in the 11 HTML routes). Tests 370; mutations of every condition on a changed line 157, 133 red (green: the
+settings labels, the CLI's `settings or {}` guard, pre-existing operands of touched grader lines, two conditions of the block-extension loop, `b >= 0` in
+`whole` (unreachable: a ≤ b), and the backward extension's cell check, whose forward twin is red — a case that reaches it alone is contrived; a 20-character
+match across a cell edge is accepted as the match's own evidence, stated).
+
+**The control sample (§FABLE_CONTROL: 35 HTML documents, 6 XML; first conversion 58 of 65 cells, 34 of 35 blocks + 1 approximate, 18 of 18 XML values), its seven
+failing cells read against the originals, four classes:**
+1. *A table continued over a page break* (elf ×2): the second `<table>` carries the same heading and lead-in; the grader's title rule counted the first part as
+   "another table between". `continued()`: an intervening table whose header row repeats the target's is the same table's earlier part; a table unit with no
+   cells counts for nothing. A grading defect: the output was the page's.
+2. *A table unit with no cells* (shak): 764 such units in the 60 development files (spacer tables), one standing between a title and its table. The adapter
+   emits no table unit without a cell with text.
+3. *A corner of several stub columns* (indi ×2): the key writes it as its pieces (`Name | Type of Benefit`); `corner_text` now takes the pieces like
+   `row_label` does.
+4. *A row label carried down a block* (indi): a stub cell printed once for several rows, no rowspan; `carried()`: a stub above the row still labels it when
+   nothing stands in its columns in any row between. Both with the key's anchors and by text.
+Not changed, stated: mur T05 (a header with its footnote marks "2,3" and a unit line "(in thousands)" the record does not own: the grader's E13 rule and the
+record, not the route) and twst T02 (a "%" column the key reads as 2025's while the printed "2025" header spans only the amount columns: the key reads past
+the printed header). **Control after: 63 of 65 cells, 34 of 35 blocks + 1 approximate, 18 of 18.** These control documents are regression cases now; the
+held-out set is the untouched exam. Development: no target lost.
