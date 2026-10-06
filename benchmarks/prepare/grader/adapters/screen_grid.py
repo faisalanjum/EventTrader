@@ -2,7 +2,9 @@
 when the value sits inside the header's span ON SCREEN (guide 3.5 rule 3). DOM colspans can disagree with the screen
 (spacer columns, hidden cells), and every HTML tool inherits the DOM grid. This step renders the original in headless
 Chrome, measures every table cell's box, derives screen columns from the pixel edges, and re-grids a route's table
-cells by their byte anchors. It changes no text and no anchor. Rules are geometric only.
+cells by their byte anchors, and joins a word or number the tool printed with a space the source does not have where Chrome shows its two
+characters touching on one line (a space the tool adds across inline markup: `CORP ORATION` over an iXBRL tag; the page alone can tell that from
+a gap its styles make). It changes no anchor; the joined text records where its spaces were. Rules are geometric only.
 
     <python with playwright> -m benchmarks.prepare.grader.adapters.screen_grid --key <key package> --route <route dir> --out <route dir> [--catalog CSV]"""
 import argparse
@@ -19,15 +21,43 @@ _CELL_END = re.compile(rb'(?i)</t[dh]\s*>')
 TOL = 2  # pixels: edges closer than this are the same column edge
 
 
-def tag_cells(raw):
-    """A copy with data-g="n" on every <td>/<th> (document order) and the byte span of each cell in the original."""
-    spans = sorted((a, b) for table in Visible(raw).tables for row in table for a, b in row)  # the scanner's cells: the parser's own, where a plain search for the tags ran a cell with no end tag on to the next cell anywhere (Codex G2-C3)
-    out, pos = [], 0
+def gaps_of(vis, units):
+    """Every space the tool added inside a word or number, per item: [(item, text start, text end, search-form index before, after)] (grade.tool_spaces)."""
+    return [(x, a, b, k, l) for u in units for x in ((u.get('cells') or []) if u.get('kind') == 'table' else [u]) for a, b, k, l in grade.tool_spaces(vis, x)]
+
+
+def tag_cells(raw, vis=None, gaps=()):
+    """A copy with data-g="n" on every <td>/<th> (document order) and the byte span of each cell in the original; and, for each gap, the character before
+    and after it wrapped in <span data-j="n.0"> / <span data-j="n.1"> (an inline box of its own, no style: the page's layout does not move)."""
+    vis = Visible(raw) if vis is None else vis
+    spans = sorted((a, b) for table in vis.tables for row in table for a, b in row)  # the scanner's cells: the parser's own, where a plain search for the tags ran a cell with no end tag on to the next cell anywhere (Codex G2-C3)
+    edits = []
     for n, (start, end) in enumerate(spans):
         close = _CELL_END.match(raw, end); spans[n] = (start, close.end() if close else end)  # with its own end tag, where it has one
-        out.append(raw[pos:start + 3]); out.append(b' data-g="%d"' % n); pos = start + 3
+        edits.append((start + 3, b' data-g="%d"' % n))
+    for n, (_, _, _, k, l) in enumerate(gaps):
+        for side, c in ((0, k), (1, l)): edits += [(vis.s[c], b'<span data-j="%d.%d">' % (n, side)), (vis.e[c], b'</span>')]
+    out, pos = [], 0
+    for at, piece in sorted(edits, key=lambda e: e[0]): out += [raw[pos:at], piece]; pos = at
     out.append(raw[pos:])
     return b''.join(out), spans
+
+
+def join(gaps, boxes, tol=0.75):
+    """Remove from each item's text the added spaces whose two characters Chrome lays out on one line, touching (the right box begins where the left one ends,
+    within `tol` pixels); returns how many. Each item keeps `joins`: [[start, end, gap in pixels]] in the text as it was."""
+    by_item, n = {}, 0
+    for g, (x, a, b, k, l) in enumerate(gaps):
+        left, right = boxes.get('%d.0' % g), boxes.get('%d.1' % g)
+        if not left or not right or abs(left['t'] - right['t']) > 1 or abs(left['b'] - right['b']) > 1: continue  # not one line
+        gap = right['x'] - left['r']
+        if not -tol <= gap <= tol: continue  # the page spaces them (its styles), or lays them apart: no join
+        by_item.setdefault(id(x), (x, []))[1].append((a, b, round(gap, 2)))
+    for x, runs in by_item.values():
+        text = x['text']
+        for a, b, _ in sorted(runs, reverse=True): text = text[:a] + text[b:]
+        x['text'], x['joins'] = text, [list(r) for r in sorted(runs)]; n += len(runs)
+    return n
 
 
 def screen_grid(cells):
@@ -71,19 +101,21 @@ def apply(units, spans, measured_by_table):
 JS = """() => { const tables = Array.from(document.querySelectorAll('table')); const out = [];
   for (const el of document.querySelectorAll('[data-g]')) { const r = el.getBoundingClientRect(); const t = el.closest('table');
     out.push({g: +el.dataset.g, table: tables.indexOf(t), row: el.parentElement ? el.parentElement.rowIndex : -1, x: r.left, w: r.width}); }
-  return out; }"""
+  const boxes = {};
+  for (const el of document.querySelectorAll('[data-j]')) { const rs = el.getClientRects(); if (rs.length === 1) boxes[el.dataset.j] = {x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom}; }
+  return {cells: out, boxes}; }"""
 
 
 def measure(marked_html, browser):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window)."""
     page = browser.new_page(viewport={'width': 1400, 'height': 1000})
     try:
-        page.set_content(marked_html.decode('utf-8', 'replace'), wait_until='load'); rows = page.evaluate(JS)
+        page.set_content(marked_html.decode('utf-8', 'replace'), wait_until='load'); got = page.evaluate(JS)
     finally:
         page.close()
     by_table = {}
-    for c in rows: by_table.setdefault(c['table'], []).append(c)
-    return by_table
+    for c in got['cells']: by_table.setdefault(c['table'], []).append(c)
+    return by_table, got['boxes']
 
 
 def main(argv=None):
@@ -99,11 +131,11 @@ def main(argv=None):
         for rp in sorted(src.rglob('*.json')):
             d = json.loads(rp.read_text()); fid = d.get('file_id'); dest = out / rp.relative_to(src); dest.parent.mkdir(parents=True, exist_ok=True)
             if d.get('status') != 'OK' or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue  # another step's facts file is copied through
-            t0 = time.time(); marked, spans = tag_cells(paths[fid].read_bytes())
-            try: measured = measure(marked, browser)
+            t0 = time.time(); raw = paths[fid].read_bytes(); vis = Visible(raw); gaps = gaps_of(vis, d['units']); marked, spans = tag_cells(raw, vis, gaps)
+            try: measured, boxes = measure(marked, browser)
             except Exception as e: facts[fid] = {'error': repr(e)[:200]}; dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True); continue
-            n = apply(d['units'], spans, measured); d['route'] = dict(d['route'], name=d['route']['name'] + '+screen', settings=dict(d['route'].get('settings') or {}, screen_grid=True))
-            facts[fid] = {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'seconds': round(time.time() - t0, 1)}
+            n = apply(d['units'], spans, measured); j = join(gaps, boxes); d['route'] = dict(d['route'], name=d['route']['name'] + '+screen', settings=dict(d['route'].get('settings') or {}, screen_grid=True, joins='touching on one line'))
+            facts[fid] = {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': len(gaps), 'joined': j, 'seconds': round(time.time() - t0, 1)}
             dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True)
         browser.close()
     (out / 'screen_facts.json').write_text(json.dumps(facts, indent=1))

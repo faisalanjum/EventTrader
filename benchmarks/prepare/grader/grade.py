@@ -579,6 +579,28 @@ def struck_at(vis, item):
     return out
 
 
+def tool_spaces(vis, item):
+    """Where the item's text puts white space between two characters the source prints touching as one word or number — a space the tool added:
+    [(start, end) of each such run in the text, with the search-form index of the character before and after] — or [] where the text is not the source's
+    text at its places. The page may still space the two (CSS): that is for a step with the page to decide; the gate's boundary rule stays as it is."""
+    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
+    if len(byte) != len(spans(item.get('anchor'))): return []
+    src = []
+    for a in byte:
+        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
+        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return []  # a character whose bytes run past the place's end: the place is no whole reading
+        src += range(lo, hi)
+    text = item.get('text', ''); own = [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]
+    if ''.join(vis.flat[k] for k in src) != squash(text): return []
+    out = []
+    for p, (i, j) in enumerate(zip(own, own[1:])):
+        k, l = src[p], src[p + 1]
+        if not text[i + 1:j].isspace() or vis.idx[l] != vis.idx[k] + 1: continue  # the text has no white space there (nothing, or something else), or the source itself puts something between the two
+        if len(_TOKEN_WORDS.findall(vis.flat[k] + ' ' + vis.flat[l])) != 2: continue  # a space there cuts no word or number in two (reflow at punctuation and symbols is allowed, E12)
+        out.append((i + 1, j, k, l))
+    return out
+
+
 def redline_apart(item, vis, byte):
     """A word or number boundary the source's own strike-through delimits — a redline printed as one run (`TheExcept`, struck `The`): no boundary
     fault when the item's `struck_at` is the scanner's own answer and the text read apart at those places gives the source's words and numbers."""

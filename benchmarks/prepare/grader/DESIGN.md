@@ -1724,3 +1724,38 @@ exclusion at its proven place or restored — never all called facts, never all 
 word across inline markup (129) or a number (7), to be fixed generically where a source-backed join proves it, reusing the screen pass; (3) the stratified-control
 targets, never converted (65 HTML cells, 35 HTML blocks, 18 XML values), scored apart, with full preparation time and peak memory; (4) then one held-out run on
 a frozen candidate; (5) corpus-wide automatic checks, a supplement to the original-backed ones. Picture text, PDF and the deferred links stay explicit and apart.
+
+## 50. After run 36 — the uncovered text and the word-boundary flags, checked against the originals (2026-10-06; Codex's `CODEX_RUN36_VERDICT.md`, item 3)
+
+**The uncovered text, run by run** (`prepare_work/coverage_20261005/`; best route, 38 files, 4,744 runs, 11,192 characters): 4,586 runs are digits standing
+at a page break, 47 roman numerals there, 8 "Table of Contents" footer links, 72 digits the crude context test put in a table cell but which stand at page breaks
+too (duk, etr, met: the page-number spans of those filers), 29 digits elsewhere — **4,741 runs of page furniture EdgarTools drops on purpose, and three runs of
+text** (`form10q.htm`: the cover page's period-end date and file number, the word "Exhibits" of "Item 6. Exhibits"). The furniture stays counted, not exempted:
+the key's approved exclusions (three page-number blocks) are applied at their places and nothing else is called a page number; a reader needs none of it.
+
+**The three runs are one defect of the tool, reproduced:** a `<div>` EdgarTools takes for a heading is read only up to its first inline element — `Item 1A.
+<a name="x"></a>Risk Factors` comes back as `Item 1A.`, `Note 3. <a id="x"></a>Debt and …` as `Note 3.`, `For the quarterly period ended <ix:nonNumeric …>December
+28, 2024</ix:nonNumeric>` as `For the quarterly period ended`; inside a `<p>`, or with the text in spans, nothing is lost. One of the 60 files writes its titles
+so; the form is common in filings. **Fixed at the boundary for anchors (`named`):** the source the tool is given has its anchors that hold nothing removed — an
+`<a>` with no content renders nothing (white space inside is content and stays; a link with text stays; a tag with a `>` in a quoted attribute is left as it
+is). Measured on the 60 files: the title back, 0 target changes, boundary flags 921 → 919, nothing else moves; the tool's own `links` are untouched (an empty link
+has no text). The two cover-page facts stay lost: the inline element there is the fact's own tag, which cannot be removed; they stand in the database's XBRL;
+the defect goes to the tool. Settings `empty_anchors: removed` (older caches refused).
+
+**The 136 word-boundary flags** (`BOUNDARY_CASES.json`): every one a space the tool's own paragraph text puts inside a word or number across inline markup — 81
+in one file's "Table of Contents" footer links split by `<a>` tags, the rest over `<font>`, `<i>`, `<u>`, `<sup>` and `ix:` tags in contract exhibits and iXBRL
+prose (`CORP ORATION`, `no t material`, `October 2 4, 2024`); 7 inside numbers. **Fixed where the page proves it (the screen step, which already renders every
+file):** `grade.tool_spaces` names, per item, each white-space run the text puts between two characters the source prints touching as one word or number
+(the text is the source's at its places, no white space and no break between the two in the scanner's reading, a space there would cut one token in two); the
+step wraps the two characters in inline spans of their own (`data-j`), beside the cell marks, and asks Chrome for their boxes; a space is removed only when the
+two boxes stand on one line (tops and bottoms within a pixel) and touch (the right box begins where the left one ends, within 0.75 px) — a gap the page's styles
+make, another line, a missing box, keep the space. The item records `joins` (`[[start, end, gap]]` in the text as it was). Results on the 60 files: EdgarTools
+best route 154 added spaces found, **134 joined**, boundary flags **136 → 20** in 7 files (3 superscript footnote digits the page raises — rightly kept —,
+the rest redline-adjacent), uncovered unchanged; Docling best route 1,193 found, 1,090 joined, flags 662 → 110; **17 Docling targets `FAIL → PASS`**
+(section paths the split headings had failed on, `bundle-010`, `bundle-018`, `bundle-023`), 0 changes in any other route, no target lost; the whole stack
+against run 35: 68 changes = the 51 of §49 + these 17. The screen step's time over 60 files 123.8 → 144.1 s. Tests 360 (+7: the finder's places and refusals,
+the tagging beside the cell marks, the join and every way it declines); mutations on the changed lines 47, 41 red (green: the settings labels, the CLI's
+`settings or {}` guard).
+
+**Still open, stated:** 20 flags on the best route (above); the cover-page facts of a heading-like `<div>` (the tool); 4,741 runs of furniture reported as
+uncovered, by design; the tool-dropped spaces (15) no step restores. Next (Codex's order): the stratified-control targets, never converted; then one held-out run.
