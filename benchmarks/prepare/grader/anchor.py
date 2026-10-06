@@ -252,6 +252,8 @@ def decoration(value, prop='text-decoration'):
     if toks in (['revert'], ['revert-layer']): return 'default'
     if toks == ['inherit']: return 'inherit'
     known = _DECO_LINES | (_DECO_STYLES if prop == 'text-decoration' else set())
+    colour = [t for t in toks if t not in known and _SEEN.fullmatch(t)] if prop == 'text-decoration' else []
+    if len(colour) == 1 and '(' not in value: toks = [t for t in toks if t != colour[0]]  # the shorthand's colour, one that surely paints (CSS Text Decoration 3: <line> || <style> || <color>): a line in it is seen, no line stays none — `underline double #0000ff` struck a whole redline exhibit off the certified list (held-out exam, 2026-10-06)
     if not toks or '(' in value or '\\' in value or any(t not in known for t in toks):
         return INVALID if toks and '(' not in value and '\\' not in value and all(t in _DECO_LINES | _DECO_STYLES for t in toks) else UNKNOWN  # a style keyword can never be a line
     lines = [t for t in toks if t in _DECO_LINES]

@@ -424,7 +424,10 @@ class LinkTests(unittest.TestCase):
         self.assertEqual(struck(b'<p><span style="display:inline-block;text-decoration:inherit">not</span></p>'), ([], True, True))
         self.assertEqual(struck(b'<style>.x{text-decoration:inherit}</style><p style="text-decoration:line-through"><span class="x" style="display:inline-block">not</span></p>')[1:], (False, False))
         self.assertEqual(struck(b'<style>.u{text-decoration:underline dotted}</style><p>y</p>')[1:], (False, True))  # that rule cannot add a strike
-        self.assertEqual(struck(b'<p style="text-decoration:line-through red">x</p>')[1:], (False, False))  # a colour: not evaluated, uncertain either way
+        self.assertEqual(struck(b'<p style="text-decoration:line-through red">x</p>'), (['x'], True, True))  # the shorthand's colour, one that surely paints: evaluated as the longhand text-decoration-color is (a redline exhibit with `underline double #0000ff` on every insertion had its 440 struck runs uncertified: the held-out exam)
+        self.assertEqual(struck(b'<p style="text-decoration:underline double #0000ff">x</p><p style="text-decoration:underline solid #ff0000">y</p>'), ([], True, True))  # no line-through, whatever the colour
+        self.assertEqual(struck(b'<p style="text-decoration:line-through transparent">x</p>')[1:], (False, False))  # a colour that may not paint: uncertain either way
+        self.assertEqual(struck(b'<p style="text-decoration:line-through #abc #def">x</p>')[1:], (False, False))  # two colours: not the grammar; not evaluated
 
     def test_xml_text_is_the_strict_parsers_character_data(self):
         # Codex N1: CDATA is literal, references decode to their replacement (sharing the reference's bytes), attributes are not hiding instructions, a broken document certifies nothing

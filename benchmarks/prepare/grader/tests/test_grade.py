@@ -484,6 +484,22 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(rows(span(b'105'), p2, [{'header': 'Type', 'text': 'NJ'}], [span(b'Type'), span(b'NJ')]), ('fail', 'header'))     # wrong header stays wrong
         self.assertEqual(rows(span(b'$39'), n, [{'header': 'Payee', 'text': 'Scotts'}], [span(b'Payee'), span(b'Scotts', raw.index(b'Scotts') + 1)]), ('pass', None))
 
+    def test_row_context_header_printed_over_two_rows_is_read_joined(self):  # held-out exam 2026-10-06: "Filing" over "Date" named the column; row_context read one cell at a time
+        raw = b'<table id="t"><tr><td>Company</td><td>Filing</td><td>Rate</td></tr><tr><td></td><td>Date</td><td></td></tr><tr><td>Ohio</td><td>July 2025</td><td>9.0%</td></tr><tr><td>Kentucky</td><td>August 2025</td><td>10.0%</td></tr></table>'
+        span = lambda text, start=0: {'byte_start': raw.index(text, start), 'byte_end_exclusive': raw.index(text, start) + len(text)}
+        cells = [{'r': 0, 'c': 0, 'text': 'Company', 'anchor': span(b'Company')}, {'r': 0, 'c': 1, 'text': 'Filing', 'anchor': span(b'Filing')}, {'r': 0, 'c': 2, 'text': 'Rate', 'anchor': span(b'Rate')},
+                 {'r': 1, 'c': 1, 'text': 'Date', 'anchor': span(b'Date')}, {'r': 2, 'c': 0, 'text': 'Ohio', 'anchor': span(b'Ohio')}, {'r': 2, 'c': 1, 'text': 'July 2025', 'anchor': span(b'July 2025')}, {'r': 2, 'c': 2, 'text': '9.0%', 'anchor': span(b'9.0%')},
+                 {'r': 3, 'c': 0, 'text': 'Kentucky', 'anchor': span(b'Kentucky')}, {'r': 3, 'c': 1, 'text': 'August 2025', 'anchor': span(b'August 2025')}, {'r': 3, 'c': 2, 'text': '10.0%', 'anchor': span(b'10.0%')}]  # another entry's row stands between the header and the value's row
+        t = {'id': 't', 'kind': 'table', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(raw)}, 'cells': cells}; rf = grade.RouteFile({'file_id': 'syn/f.htm', 'units': [t]}, raw, 'htm')
+        def rows(ctx):
+            k = {'key_id': 'syn/R2', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span(b'10.0%'), 'table_anchor': t['anchor'],
+                 'fields': {'printed_value': '10.0%', 'row_context': ctx}, 'alternatives': {}, 'excluded': set(), 'support': {'row_context': {'how': 'reviewed', 'anchors': [span(b'Filing'), span(b'August 2025')]}}}
+            g = grade.Grader(k, rf); g.grade_cell(); return next((r['verdict'], r['reason']) for r in g.rows if r['check'] == 'row_context')
+        self.assertEqual(rows([{'header': 'Filing Date', 'text': 'August 2025'}]), ('pass', None))   # the two stacked cells, joined, name the column
+        self.assertEqual(rows([{'header': 'Filing', 'text': 'August 2025'}]), ('pass', None))        # one of them alone still does, as before
+        self.assertEqual(rows([{'header': 'Date Filing', 'text': 'August 2025'}]), ('fail', 'header'))  # not in the printed order
+        self.assertEqual(rows([{'header': 'Filing Rate', 'text': 'August 2025'}]), ('fail', 'header'))  # another column's cell is never joined in
+
     def test_lead_in_keeps_its_place_across_the_sources_own_page_furniture_and_counts_when_kept_whole_inside_a_unit(self):
         # addendum C6: '94 Table of Contents' printed between the lead-in and its table is the source's own layout, not a displacement
         raw = b'<p>The following table presents the totals.</p><p>94 Table of Contents</p><p>Elsewhere.</p><table id="t"><tr><td>Total</td><td>5</td></tr></table>'

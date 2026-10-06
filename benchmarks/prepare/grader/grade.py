@@ -1082,7 +1082,10 @@ class Grader:
             if item.get('header') and item['header'] != 'position':
                 heads = [c for c in pool if c['r'] < vr] + [k['cell'] for k in self.carriers(anchors_of(self.t, 'row_context', alt), [item['header']])
                                                                            if k['cell'] is not None and k['table'] is not tb and k['order'] < tb['_order']]  # or printed in the first part of a continued table (E1, addendum C5)
-                if not any(col_hit(h, c['c']) and self.same(h.get('text', ''), item['header'])[0] for c in cells for h in heads):
+                def stacked(c):  # the column's cells above the row, top down: a header printed over two rows ("Filing" / "Date") is read as a run of them, as header_path reads it (held-out exam, 2026-10-06); the rows of other entries between never join in
+                    col = [h.get('text', '') for h in sorted((h for h in heads if col_hit(h, c['c'])), key=lambda h: (h['r'], h['c']))]
+                    return (' '.join(col[i:j]) for i in range(len(col)) for j in range(i + 2, len(col) + 1))
+                if not any(col_hit(h, c['c']) and self.same(h.get('text', ''), item['header'])[0] for c in cells for h in heads) and not any(self.same(run, item['header'])[0] for c in cells for run in stacked(c)):
                     if any(col_hit(h, c['c']) and self.same(spaced(h, item['header']), item['header'])[0] for c in cells for h in heads): return 'unresolved', 'adjacency', item['header']
                     return 'fail', 'header', item['header']
         return 'pass', None, None

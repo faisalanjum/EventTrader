@@ -1907,3 +1907,28 @@ claim refuses; the installed tools' versions, Chromium's, and every frozen file'
 aggregate (`summary.by_split_format[split]`). Smoke-tested in a separate root on the control split (the development sequence end to end: 63 of 65, 18 of
 18, nonempty aggregate), with one and with two prior folders (refused), and with two simultaneous launches (one claim, one refusal). Settings label
 `headings: detected blocks read whole`; `empty_anchors` gone — a raw parse saved under the old settings is not reused.
+
+## 54. After the first held-out exam: the released set's failure classes, two fixes at their owners (2026-10-06)
+
+The exam (`prepare_work/heldout_exam/exam_20261006_1340_ed79cbcc7`, commit `ed79cbcc7`, key package 3): HTML cells 50 PASS / 13 FAIL / 1 UNRESOLVED of
+64, blocks 16 / 4 / 1 of 21, XML 3 of 3; its scores do not change and it is not rerun. The owner released its 24 documents for diagnosis
+(`heldout_exam/RELEASE_20261006.md`) and a fresh untouched set was reserved first (`NEXT_EXAM_RESERVATION.md`: 30 documents, 28 unused issuers). The
+inventory (`heldout_exam/diagnosis_20261006/FAILURE_INVENTORY.md`) accounts for every one of the 19 targets in twelve classes; two were defects of this code:
+
+**The scanner withheld a redline's strikes (`anchor.decoration`).** A credit-agreement amendment writes its insertions `text-decoration: underline double
+#0000ff` and `underline solid #ff0000`. The shorthand's colour was "a value this scanner does not evaluate" → UNKNOWN → `struck_certain` False for the file →
+the formatting step wrote no `struck` → every struck field of five targets failed and 117 boundary flags stood. Now a colour that surely paints (`_SEEN`,
+the test the longhand `text-decoration-color` already passes through) is set aside and the lines are read: no `line-through` means no strike whatever the
+colour; `line-through red` is a strike that paints; `line-through transparent`, two colours, functions stay unknown (CSS Text Decoration 3: the shorthand is
+`<line> || <style> || <color>`). One target FAIL → PASS, 16 field rows pass, the file's flags 117 → 1. The only file of the whole key with such a shorthand;
+development and control unchanged. The earlier test line that fixed `line-through red` as "uncertain either way" is replaced: the design choice changed.
+
+**`row_context` read a stacked header one cell at a time (grader).** A column headed `Filing` over `Date`: the key names it `Filing Date`; `header_path`
+reads stacked cells joined, `row_context` did not. Now the column's header cells, top down, are also compared joined; one cell alone still counts; another
+column's cell is never joined in. One target FAIL → PASS. A reproduced contract defect, versioned here; the exam's score stands.
+
+The other ten classes: nine targets are the key's (a display anchor over the unit cell only — six; a space the record drops between struck and inserted
+text — two; a unit line printed in a header cell the record does not own — one, Murphy's class; a period read across the printed span — one, Twist's class):
+staged for the next key package, package 3 untouched. Five `section_path` misses are headings with no element of their own (lines between `<br>`s, a styled
+span after breaks, a slide's text layer, a title inside a picture): the structure gap, unchanged. Notes and references: not built. One press release is
+pictures only. One file is uncertain to the scanner, which records no reason: a diagnostic field is wanted for the corpus checks.
