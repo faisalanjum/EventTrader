@@ -124,6 +124,38 @@ def text_reference(token):
     return chr(int(digits[1:], 16) if digits[:1].lower() == 'x' else int(digits))
 
 
+_ATTRIBUTE_REF = re.compile(r'&(?:#[xX][0-9a-fA-F]+;?|#[0-9]+;?|[A-Za-z][A-Za-z0-9]*;?)')
+_NAME_MAX = max(map(len, html5))
+
+
+def attribute_span(tag, name, attr):
+    """Where, in a start tag's text, the first value written for an attribute stands (inside its quotes when quoted); None when the tag writes no such
+    attribute or no value for it. The first occurrence, as the parser keeps it."""
+    for am in _ATTR.finditer(tag[len(name) + 1:]):
+        if am.group(1).lower() == attr:
+            g = next((g for g in (2, 3, 4) if am.group(g) is not None), None)
+            return (am.start(g) + len(name) + 1, am.end(g) + len(name) + 1) if g else None
+    return None
+
+
+def attribute_value(value):
+    """An attribute's value as the HTML parser reads it, decoded once (HTML Standard, character references in attributes; Codex G3-C1, the function is his): a
+    numeric reference always, a named one unless it lacks its semicolon and a letter, a digit or `=` follows — `&notit;` and `&not=1` stay as written —, an `&` that begins
+    none as it stands; line ends and nulls as the input stream gives them, before any reference is read (a decoded carriage return stays one)."""
+    def replace(m):
+        token = m.group()
+        if token.startswith('&#'): return text_reference(token)
+        tail = token[1:]
+        for n in range(min(len(tail), _NAME_MAX), 0, -1):
+            name = tail[:n]
+            if name not in html5: continue
+            following = m.string[m.start() + 1 + n:m.start() + 2 + n]
+            if not name.endswith(';') and following and following in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=': return token
+            return html5[name] + tail[n:]
+        return token
+    return _ATTRIBUTE_REF.sub(replace, value.replace('\r\n', '\n').replace('\r', '\n').replace('\x00', '\ufffd'))
+
+
 def html_tokens(s):
     """The tokens of an HTML source as (text, kind, literal), every source character once. `kind` names what is no text: an element taken whole up to
     its closing tag ('script', 'style', 'title', 'template'), the body of a raw-text element the page never renders ('iframe', 'noembed', 'noframes',
@@ -313,6 +345,8 @@ class Visible:
         computed = '\x00' in s or (not raw.isascii() and (blen is len or raw.startswith(b'\xef\xbb\xbf') or _META.search(raw) is not None))  # the reading cannot be certified: a hiding property with a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes), markup it does not follow — a null character, which the parser drops or replaces by where it stands (Codex R18-C1) — or bytes beyond ASCII that are not plainly UTF-8: the browser decodes them by the mark, the <meta> or a guess of its own (every one of 22,483 real documents is ASCII)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
+        self.picture_names = {}  # every <img>/<svg> opening tag that writes a `src`, shown or hidden: its first byte -> (the byte span of the value as written, the name as the parser reads it) — for an adapter that hands a tool the source with a name it cannot alter
+        self.picture_sources = {}  # the `src` of each of those tags as the parser reads it (references decoded once), by the tag's first byte: which picture a tool's unit is, where the tool names its resource (Codex's worktree)
         style_cache, sheet_tokens = {}, []
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
         lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
@@ -448,7 +482,10 @@ class Visible:
                     alone = block and not off and (unseen or edge == 'own')  # a box that must have its line to itself: one the page sets by its own rules, or an invisible one — the page keeps its line, the browser's text glues what stands around it (visibility, not display)
                     if alone and (seen > line or (after and shown)): computed = True  # a word before it on its line, or — for one that shows — another such box (invisible ones follow each other freely: the cells of a hidden row)
                     if shown and edge == 'atomic' and (after or touch == len(chars)): computed = True  # an inline box on the line of a box that must have it to itself, or right after an inline box that ended with white space (dropped by the browser: the two boxes touch); a picture or a field there holds no word, so what follows it is asked instead
-                    if shown and name in ('img', 'svg'): self.pictures.append((start, pos))
+                    if name in ('img', 'svg'):
+                        span = attribute_span(t, name, 'src')
+                        if span is not None: self.picture_names[start] = ((start + blen(t[:span[0]]), start + blen(t[:span[1]])), attribute_value(attrs['src']))
+                        if shown: self.pictures.append((start, pos)); self.picture_sources[start] = self.picture_names[start][1] if start in self.picture_names else None
                     if shown and edge == 'atomic' and chars and not _WS.fullmatch(chars[-1]): lead = len(chars)  # white space at the start of an inline box's content: the browser drops it, so the word before the box touches its first word
                     brk = brk or (shown and block)
                     if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing
@@ -608,11 +645,13 @@ def table_places(vis, items, keys):
     return out, reserved
 
 
-def link(raw, units, xml=False):
+def link(raw, units, xml=False, vis=None):
     """Give every unit and cell a byte anchor from the visible stream. Long texts are placed in order first; short ones
-    only between their anchored neighbours; pictures and empty units take the gap between neighbours.
-    Returns {'units': units (anchored in place), 'uncovered': spans of source text no unit covers}."""
-    vis, ranges = Visible(raw, xml), []
+    only between their anchored neighbours; a picture stands at a picture tag of the source that is its own — the tag the adapter names for it (`tag`: a code
+    it alone gave the tool, edgartools_html.codes; shown, or no place at all), else by the resource it names, or the only one between its anchored
+    neighbours — and has no place otherwise; an empty unit has none.
+    Returns {'units': units (anchored in place), 'uncovered': spans of source text no unit covers}. `vis`: the source's reading when the caller has it."""
+    vis, ranges = Visible(raw, xml) if vis is None else vis, []
     items = [(u, c) for u in units for c in (u.get('cells') or [u])]  # reading order; cells row-major inside their table
     keys = [squash(c.get('text', '')) if u.get('kind') != 'image' else '' for u, c in items]
     same_text = {}  # the items that carry each text, found once: asking every item again for each placement took time with the square of their number (Codex's worktree)
@@ -719,15 +758,22 @@ def link(raw, units, xml=False):
         if u.get('kind') == 'table':
             got = [x for c in u.get('cells', []) if c.get('anchor') for x in (c['anchor'] if isinstance(c['anchor'], list) else [c['anchor']])]
             u['anchor'] = {'byte_start': min(a['byte_start'] for a in got), 'byte_end_exclusive': max(a['byte_end_exclusive'] for a in got)} if got else None  # cells cover, the envelope does not
-        elif u.get('kind') == 'image':
-            u['anchor'] = 'gap'  # pictures: the source gap between their anchored neighbours
+        elif u.get('kind') == 'image': u['anchor'] = None  # a picture's place is its own tag in the source, found below — never the gap its neighbours leave
         elif not isinstance(u.get('anchor'), (dict, list)): u['anchor'], u['link_error'] = None, u.get('link_error', 'empty')  # nothing to find: no anchor, no gap
     first = lambda a: a[0] if isinstance(a, list) else a
     last = lambda a: a[-1] if isinstance(a, list) else a
-    for i, u in enumerate(units):
-        if u.get('anchor') != 'gap': continue
-        before = [last(x['anchor'])['byte_end_exclusive'] for x in units[:i] if isinstance(x.get('anchor'), (dict, list))]
-        after = [first(x['anchor'])['byte_start'] for x in units[i + 1:] if isinstance(x.get('anchor'), (dict, list))]
-        u['anchor'] = {'byte_start': before[-1] if before else 0, 'byte_end_exclusive': after[0] if after else vis.raw_len}
-        u['link_flag'] = 'gap'  # a derived location: it places the picture, it never certifies coverage of the bytes between
+    claimed = set()
+    for i, u in enumerate(units):  # a picture: the one shown picture tag the tool names by its resource, or the only one between the unit's anchored neighbours; pictures that cannot be told apart are placed nowhere — as many tags as units is no identity (Codex's worktree and decision; test_image_sources)
+        if u.get('kind') != 'image': continue
+        if 'tag' in u: tag = u.pop('tag'); candidates = [(a, b) for a, b in vis.pictures if a == tag]  # the adapter says which tag the unit came from: that tag if shown, else nowhere — no name, no neighbour decides for it
+        else:
+            before = [last(x['anchor'])['byte_end_exclusive'] for x in units[:i] if x.get('kind') != 'image' and isinstance(x.get('anchor'), (dict, list))]
+            after = [first(x['anchor'])['byte_start'] for x in units[i + 1:] if x.get('kind') != 'image' and isinstance(x.get('anchor'), (dict, list))]
+            lo, hi = (before[-1] if before else 0), (after[0] if after else vis.raw_len)
+            candidates = [(a, b) for a, b in vis.pictures if not u.get('src') or vis.picture_sources[a] == u['src']]
+            if not u.get('src') or len(candidates) != 1: candidates = [(a, b) for a, b in candidates if lo <= a and b <= hi]
+        if len(candidates) != 1 or candidates[0][0] in claimed: u['link_error'] = 'ambiguous_image_location'; continue
+        a, b = candidates[0]; claimed.add(a)
+        u['anchor'] = {'byte_start': a, 'byte_end_exclusive': b}; u['link_flag'] = 'source_picture'
+        u.pop('link_error', None)
     return {'units': units, 'uncovered': vis.uncovered(ranges)}

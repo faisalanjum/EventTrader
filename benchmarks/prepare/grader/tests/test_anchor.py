@@ -287,11 +287,13 @@ class LinkTests(unittest.TestCase):
         self.assertEqual(out['units'][1].get('link_flag'), 'out_of_order')
         self.assertEqual(out['uncovered'], [])
 
-    def test_image_unit_without_text_is_anchored_to_the_gap_between_its_neighbours(self):
+    def test_a_picture_unit_stands_at_a_picture_tag_or_nowhere_never_in_the_gap_its_neighbours_leave(self):
         units = UNITS[:2] + [{'id': 'img', 'kind': 'image', 'text': 'words read from the picture'}] + UNITS[2:]
-        out = linked(units); img = out['units'][2]
-        self.assertEqual(img['anchor']['byte_start'], out['units'][1]['anchor']['byte_end_exclusive'])
-        self.assertEqual(img['anchor']['byte_end_exclusive'], out['units'][3]['cells'][0]['anchor']['byte_start'])
+        img = linked(units)['units'][2]  # the source shows no picture between these neighbours: no place is made up for the unit (it was given the bytes between them)
+        self.assertEqual((img['anchor'], img['link_error']), (None, 'ambiguous_image_location'))
+        a, b = HTML.index(b'<table'), HTML.index(b'<table') + len(b'<img src="chart.png">'); raw = HTML[:HTML.index(b'<table')] + b'<img src="chart.png">' + HTML[HTML.index(b'<table'):]
+        img = linked(units, raw)['units'][2]  # the same units over a source that shows one there: its tag, whatever words the unit carries
+        self.assertEqual((img['anchor'], img['link_flag']), ({'byte_start': a, 'byte_end_exclusive': b}, 'source_picture'))
 
     def test_text_absent_from_the_source_is_never_guessed_from_scattered_words(self):
         raw = b'<table><tr><td>Change</td><td>Years</td></tr><tr><td>Excluding</td><td>2019</td></tr><tr><td>Impact</td><td>2020</td></tr></table>'

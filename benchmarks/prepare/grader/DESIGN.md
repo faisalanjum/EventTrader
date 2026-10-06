@@ -1558,3 +1558,69 @@ Tests: 281 (37 new: `tests/test_table_sources.py`, `tests/test_screen_grid_token
 green ones change no result (the pass for short texts re-asking a long one it would fail again; the first pass's search direction for a cell with one place; in the
 piecing, an item asked whether it is itself before it has a place; in the screen step, a cell counted as standing in the cell that ends where it begins, and two
 bounds of the walk that the test after it repeats).
+
+## 46. The worktree merge, group 3 — pictures kept and placed; the tool's heading evidence (2026-10-05; Codex's `CODEX_MERGE_G3_DECISIONS.md`)
+
+**The defect.** 26 of the 60 development originals show pictures: 732 picture tags. The EdgarTools routes carried none of them: the adapter read a paragraph as one run
+of text, and a picture inside it — no text to add to the run — was dropped with the paragraph's structure (0 image units in the saved routes, 0 picture nodes in the
+saved parses). The Docling routes carried 622 picture units, each "placed" in the whole gap between its neighbours — a place that certifies nothing, shared by every
+picture of a scanned document.
+
+**The adapter** (`adapters/edgartools_html.py`; the worktree's lines). A picture node makes its paragraph a branch, like any block, and becomes a unit with the `src`
+the tool gives: 615 units in 23 files. Nothing else moves: in all 60 files every other unit — text, cells, anchors, flags — is as before, its number in the list aside.
+The tool's own evidence for a heading (how it found it, its confidence, its style) travels with the heading unit as `native_heading`: a claim, read by no grading rule
+(8,040 heading units, 4.2 MB). The saved parse records what it keeps (`retain_pictures`, `retain_native_heading_evidence`): a parse saved before pictures were kept
+answers to other settings and is refused (all 60 old parses, tried). **Not taken: the tool's inline-XBRL fields** — 79,664 fields in 19 files, 215 MB, the route
+folder 3.9 times its size, because a text-block field carries its whole note a second time, detached from its bytes; nothing reads them, the source's own `ix:` tags
+keep them with exact bytes (Codex's decision 3; where preparation uses numeric tags it keeps their metadata and source associations once per source — not done here).
+
+**The scanner** keeps, for each picture tag it lists as shown, its `src` as the parser reads the attribute (`Visible.picture_sources`, `attribute_value`): character
+references decoded once, by the attribute rules of the HTML Standard — a named one without its semicolon stays as written before a letter, a digit or `=`. Compared as
+written, `a&amp;b.png` was not the tool's `a&b.png`: the picture stayed without a place, or stood at another tag that spelled the name plainly (Codex G3-C1; his
+function). It reads 27,869 spellings as Chrome does; none of the 732 real names holds an `&`, and no route changes by it.
+
+**The linker: a picture unit stands at its own picture tag, or nowhere** (the worktree's rule as written; Codex's decision 1). The tag the unit names by its `src`, when
+one shown tag carries it; among several that carry it, or for a unit that names none, the only one between the unit's anchored neighbours; and no tag twice. Anything
+else has no place (`ambiguous_image_location`): as many tags as units between the same neighbours is no identity, and no picture is given the next free tag. The gap
+between neighbours is no longer an anchor. EdgarTools: 615 of 615 units at their tag (613 named by a `src` that occurs once, 2 by `src` and neighbours), every tag
+carrying the named `src`, none held twice. Docling names no resource (its HTML reader gives none under any option of the benchmark's version — Codex's test): 539 of
+622 placed, 83 without a place, 77 of them the pages of scanned documents.
+
+**All 732 accounted for** (`PICTURE_INVENTORY_*.json`, from every source, also one with no picture unit): EdgarTools 615 held by one unit each, **117 held by none**
+(107 in files that have picture units; 10 in three files that have none: `amgq12023ex991.htm` 4, `tm2312962d1_ex10-3.htm` 5, `duk-20240331.htm` 1); Docling 539 and
+193. A picture no unit holds is a line of the inventory, never a unit.
+
+**Grades against group 2, 13 routes: only the picture blocks move.** EdgarTools (3 routes): the 8 picture targets `UNRESOLVED` → 2 `APPROXIMATE`, 6 `FAIL` — the picture
+is there and nothing reads it (`printed_text` approximate with every word missing; `references: phrase`; three also `section_path: missing`). Docling (8 routes): 3
+picture targets `FAIL → UNRESOLVED` — their units have no place. No cell and no text block changes; the PDF and XML routes regrade to the same bytes; the count of
+textless items at a place that cannot be true (pictures in an empty gap) falls to none.
+
+**Not here: the pictures' text.** Reading pictures is a separate tool, built only on the owner's go (`DriversFinal/PrepareTools.md`, "Image OCR (Oct 5)"); it fills
+picture units by file name. The earlier picture-reading run is not restarted; its saved work stays as evidence. Until then the six failures above are failures.
+
+**Parked with the PDF stage:** the worktree's Docling list-marker and margin lines (`docling_html.py`, two test files). Docling's HTML output holds no margin label and
+no marker the rule would restore (171,369 texts); all their effect is on PDF (442 page headers, 1,070 footers, 239 markers).
+
+*Stated.* (1) The linker places by the scanner's inventory also where the scanner's reading is uncertain (a tag it does not follow); the grader certifies no picture
+count there. (2) An unnamed picture the tool lists away from where the source shows it has no place, even when it is the source's only picture. (3) The grader's rules
+for a route's own `gap` flag stay: a route may still carry one; the linker makes none. (4) Route files +5.9 % (EdgarTools). Times of the one fresh conversion beside the control's, 60 files: the tool 51.71 s → 53.21 s, the adapter with its
+linking 72.10 s → 79.41 s — single runs on a shared machine, neither a measured slowdown nor a proof of none. (5) The name was the tool's claim, compared with the source's — and EdgarTools
+rewrites the file's text before it parses it (runs of spaces, a space before a point, a space added after a point before a capital letter, `&amp;amp;`, zero-width
+characters), so a name it changed found no tag, or the tag of another picture that bore the changed name: with and without text neighbours, with and without
+the other picture's unit, 24 wrong placements in 64 (Codex G3-C2; his cases). **The tool no longer sees a name, and the tag decides the place.** The scanner
+records where every picture tag writes its `src`, shown or hidden (`Visible.picture_names`: the value's byte span and the name as the parser reads it); the
+adapter hands the tool the source with each name replaced by a code it cannot alter and no written name can impersonate — the source's own SHA-256 prefix and
+the tag's first byte (`codes`, `named`) —; each picture unit names the tag its code stands for (`tag`) and the linker places it there if that tag is shown, else
+nowhere — no name and no neighbour decides for a unit of this route, so a hidden tag that names a shown tag's resource stands for nothing, and a unit whose
+`src` is no code of this source (a tag the scanner does not list, inside `<template>`; a name the tool made up) is placed nowhere and keeps the tool's name
+(Codex's follow-up: the restored name alone let a hidden picture take the shown tag, and a template picture its name). The name is given back after the
+linking; the linker reads the source once for both (`link(vis=…)`). Codex's 64 + 140 placements (hidden and shown copies of one resource, both orders, either
+unit alone, with and without neighbours, template pictures, a name shaped like a code, repeated shown resources): every shown picture at its own tag, every
+other unit unplaced. Of 5,973 picture names in 22,483 real
+documents none was touched by the tool's rules (letters, digits, `.`, `_`, `-`, no capital): the 60-file route is byte-identical. A reader of pictures takes the
+name from the source tag.
+
+Tests: 316 (35 new: the name protection and the tag's identity (10), the worktree's `test_edgar_images.py`, `test_image_sources.py` — one case rewritten for this scanner after asking Chrome: a raw-text opening tag
+that ends inside a quoted attribute is not followed, and a `<head>` written so shows both pictures —, its heading cases of `test_edgar_metadata.py`, one case for
+each condition of the picture rule and of the heading rule, and the attribute cases). Mutations of every condition on a changed line: 82, 79 red; green: the two
+labels of the saved parse's settings, and the picture test on units listed after a picture, which have no place yet.

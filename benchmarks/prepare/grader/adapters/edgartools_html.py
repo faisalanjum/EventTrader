@@ -6,6 +6,7 @@ without the package. Shape rules only, no document-specific logic.
     <edgartools python> -m benchmarks.prepare.grader.adapters.edgartools_html --key <key package> --split development --out <run dir> [--catalog CSV]"""
 import argparse
 import json
+from dataclasses import asdict
 import time
 from pathlib import Path
 
@@ -15,13 +16,20 @@ from benchmarks.prepare.grader.adapters import cache
 NAME = 'edgartools-html'  # the tool's heading nodes nested inside paragraphs are kept as headings
 KIND = {'HeadingNode': 'heading', 'ParagraphNode': 'text', 'TextNode': 'text', 'ListItemNode': 'list_item', 'ImageNode': 'image'}
 BRANCH = ('DocumentNode', 'ContainerNode', 'SectionNode', 'ListNode')
-BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode')  # children that make their parent a branch
+BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode', 'ImageNode')  # children that make their parent a branch; a picture has no text to merge into a run: flattened with its paragraph it was lost (Codex's worktree)
 
 
 def dump(node):
     """Plain-dict copy of an edgartools node tree (run under the edgartools environment)."""
     kind = type(node).__name__
     d = {'type': kind}
+    if kind == 'HeadingNode':  # the tool's own evidence for its heading claim, kept as a claim: a style or a confidence certifies no heading (Codex's worktree)
+        native = {'metadata': dict(getattr(node, 'metadata', None) or {})}
+        if getattr(node, 'style', None) is not None: native['style'] = asdict(node.style)
+        for key in ('semantic_type', 'semantic_role'):
+            value = getattr(node, key, None)
+            if value is not None: native[key] = getattr(value, 'value', value)
+        d['native'] = native
     if kind == 'TableNode':
         rows = list(node.headers or []) + [getattr(r, 'cells', r) for r in node.rows or []]
         d['caption'] = node.caption
@@ -40,8 +48,8 @@ def dump(node):
     heads = [k for k in kids if type(k).__name__ == 'HeadingNode']
     if heads:  # the tool's heading claim inside a paragraph: kept when its text is the paragraph's start or end (the parser's own text, no new joins)
         ht = (heads[0].text() or '').strip(); pt = (text or '').strip()
-        if ht and pt.startswith(ht): d['heading'] = {'text': ht, 'level': getattr(heads[0], 'level', None)}; d['rest'] = pt[len(ht):].strip(); d['order'] = 'head_first'
-        elif ht and pt.endswith(ht): d['heading'] = {'text': ht, 'level': getattr(heads[0], 'level', None)}; d['rest'] = pt[:-len(ht)].strip(); d['order'] = 'head_last'
+        if ht and pt.startswith(ht): d['heading'] = dict(dump(heads[0]), text=ht); d['rest'] = pt[len(ht):].strip(); d['order'] = 'head_first'
+        elif ht and pt.endswith(ht): d['heading'] = dict(dump(heads[0]), text=ht); d['rest'] = pt[:-len(ht)].strip(); d['order'] = 'head_last'
     d['text'] = text or ''
     for k in ('level', 'src', 'href'):
         if getattr(node, k, None) is not None: d[k] = getattr(node, k)
@@ -50,7 +58,27 @@ def dump(node):
     return d
 
 
-def to_units(tree):
+def codes(raw, vis):
+    """One code for every picture tag that writes a `src`, shown or hidden: the source's own SHA-256 (its first 16 hex digits) and the tag's first byte — letters
+    and digits the tool's cleaning cannot touch, and nothing a name written in any source can impersonate — with what it stands for: {code: (tag start, the name
+    as the parser reads it)}. EdgarTools rewrites the file's text before it parses it (runs of spaces, a space after a point before a capital, `&amp;amp;`,
+    zero-width characters), and a name that reached the linker changed stood at another picture's tag; two tags that name one resource, one of them hidden,
+    stood for each other (Codex G3-C2)."""
+    sha = grade.sha256(raw)[:16]
+    return {sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()}
+
+
+def named(raw, vis, codes):
+    """The source as the tool gets it: each picture's name replaced by its code; nothing else changes."""
+    out, at = [], 0
+    for code, (start, _) in sorted(codes.items(), key=lambda kv: kv[1]):
+        (a, b), _ = vis.picture_names[start]; out += [raw[at:a], code.encode()]; at = b
+    return b''.join(out) + raw[at:]
+
+
+def to_units(tree, codes=None):
+    """The units of the tool's tree. With `codes` (this source's, from `codes`), every picture names the tag it came from (`tag`, for the linker: a `src` that is no
+    code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back."""
     units = []
 
     def table_unit(t):
@@ -78,20 +106,24 @@ def to_units(tree):
                 if not anchor.squash(text2): continue
                 u = {'id': f'u{len(units)}', 'kind': kind2, 'text': text2}
                 if level is not None: u['level'] = level
+                if kind2 == 'heading' and n['heading'].get('native') is not None: u['native_heading'] = n['heading']['native']
                 units.append(u)
-        elif kind == 'ImageNode': units.append({'id': f'u{len(units)}', 'kind': 'image', 'text': ''})
+        elif kind == 'ImageNode': units.append({'id': f'u{len(units)}', 'kind': 'image', 'text': '', 'src': n.get('src'), **({'tag': codes.get(n.get('src'), (None,))[0]} if codes is not None else {})})
         else:
             if not anchor.squash(n.get('text') or ''): return  # whitespace or control characters only: not a block
             u = {'id': f'u{len(units)}', 'kind': KIND.get(kind, 'other'), 'text': n.get('text') or ''}
             if n.get('level') is not None: u['level'] = n['level']
+            if n.get('native') is not None: u['native_heading'] = n['native']  # (only a heading's dump carries it)
             if n.get('links'): u['links'] = [{'text': l['text'], 'href': l['href'], 'to': None} for l in n['links']]
             units.append(u)
     walk(tree)
     return units
 
 
-def route_for(tree, raw, file_id, sha256, seconds, version, settings=None):
-    linked = anchor.link(raw, to_units(tree))
+def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=None):
+    vis = anchor.Visible(raw) if vis is None else vis; known = codes(raw, vis); linked = anchor.link(raw, to_units(tree, known), vis=vis)
+    for u in linked['units']:
+        if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': settings or {'parse_html': 'defaults'}, 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
                       'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': linked['units'], 'uncovered': linked['uncovered']}
@@ -114,12 +146,12 @@ def main(argv=None):
     files = {}
     for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
         if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
-    facts, settings = {}, {'parse_html': 'defaults'}
+    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if path.suffix.lower() not in ('.htm', '.html'):
             (out / 'route' / (fid + '.json')).write_text(json.dumps(unsupported(fid, sha, version))); facts[fid] = {'status': 'UNSUPPORTED'}; continue
-        raw = path.read_bytes(); t0 = time.time(); rawjson = out / 'raw' / (fid + '.edgartools.json'); metajson = out / 'raw' / (fid + '.meta.json'); ver = version
+        raw = path.read_bytes(); t0 = time.time(); vis = anchor.Visible(raw); scanned = time.time() - t0; t0 = time.time(); rawjson = out / 'raw' / (fid + '.edgartools.json'); metajson = out / 'raw' / (fid + '.meta.json'); ver = version
         try:
             if a.reuse_raw and rawjson.exists():  # a saved parse is reused only whole: its record names the source bytes, settings, producing version and output (adapters/cache.py; Codex R13 C1, R15-5)
                 meta = cache.reuse(metajson, sha, settings)
@@ -127,16 +159,17 @@ def main(argv=None):
                 tree, dt, ver = json.loads(rawjson.read_text()), meta.get('tool_seconds', 0), meta['version']
             else:
                 cache.begin(metajson)  # from here the old record vouches for nothing: a crash below leaves no record
-                try: text = raw.decode('utf-8')
-                except UnicodeDecodeError: text = raw.decode('cp1252', 'replace')
+                given = named(raw, vis, codes(raw, vis))  # the tool reads the source with the pictures' names as codes
+                try: text = given.decode('utf-8')
+                except UnicodeDecodeError: text = given.decode('cp1252', 'replace')
                 tree = dump(parse_html(text).root); dt = time.time() - t0
                 rawjson.write_text(json.dumps(tree, ensure_ascii=False)); cache.save(metajson, [rawjson], sha256=sha, version=version, settings=settings, status='OK', tool_seconds=round(dt, 2))
         except Exception as e:  # a tool crash is a result, never a stop
             facts[fid] = {'status': 'FAILED', 'error': repr(e)[:300], 'seconds': round(time.time() - t0, 2)}
             (out / 'route' / (fid + '.json')).write_text(json.dumps(unsupported(fid, sha, version, 'FAILED', repr(e)[:300]))); continue
-        t1 = time.time(); route = route_for(tree, raw, fid, sha, round(dt, 2), ver, settings)
+        t1 = time.time(); route = route_for(tree, raw, fid, sha, round(dt, 2), ver, settings, vis)
         flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
-        facts[fid] = {'status': 'OK', 'version': ver, 'tool_seconds': round(dt, 2), 'adapter_seconds': round(time.time() - t1, 2), 'items': len(flat),
+        facts[fid] = {'status': 'OK', 'version': ver, 'tool_seconds': round(dt, 2), 'adapter_seconds': round(time.time() - t1 + scanned, 2), 'items': len(flat),
                       'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
                       'uncovered_chars': sum(len(anchor.squash(s['text'])) for s in route['uncovered'])}
         (out / 'route' / (fid + '.json')).write_text(json.dumps(route, ensure_ascii=False))

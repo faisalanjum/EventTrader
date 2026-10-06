@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from benchmarks.prepare.grader.adapters import docling_html as dh
+from benchmarks.prepare.grader.anchor import Visible
 from benchmarks.prepare.grader.adapters import edgartools_html as eh
 
 DOC = {  # the DoclingDocument JSON shape that matters: reading order in body, texts, tables with rich cells, groups, pictures
@@ -249,9 +250,11 @@ class EdgartoolsHtmlAdapterTests(unittest.TestCase):
         raw = (b'<p>Item 2. Overview</p><p>Free cash flow is not GAAP<sup>(1)</sup>. See <a href="#tbl">the table</a>.</p><table><tr><td colspan="2">Title</td></tr>'
                b'<tr><td rowspan="2"></td><td colspan="3">Three Months Ended</td></tr><tr><td>Free cash flow<sup>(1)</sup></td><td>$</td><td>(506</td><td>)</td></tr></table>'
                b'<ul><li>First point</li></ul><img src="x.jpg"><p>(1) Note text.</p>')
-        route = eh.route_for(TREE, raw, 'acc/f.htm', 'sha', seconds=0.1, version='5.60.0')
+        tree = copy.deepcopy(TREE); tree['children'][4]['src'], = eh.codes(raw, Visible(raw))  # the tool is given the source with the picture's name as its code, and returns the code (test_picture_names)
+        route = eh.route_for(tree, raw, 'acc/f.htm', 'sha', seconds=0.1, version='5.60.0')
         self.assertEqual(route['route']['tool'], 'edgartools')
         self.assertTrue(all(x.get('anchor') for u in route['units'] for x in (u.get('cells') or [u])))
+        self.assertEqual(route['units'][-2]['src'], 'x.jpg')  # and the name is given back
 
 
 from benchmarks.prepare.grader.adapters import docling_pdf as dp
