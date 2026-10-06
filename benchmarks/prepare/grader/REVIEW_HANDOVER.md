@@ -76,6 +76,9 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 
 ## Results on the development split — current: package 3, official run 35 (2026-10-05)
 
+**Current baseline: run 36 (`b18f3743d`, 2026-10-05; `DESIGN.md` §49; `prepare_work/grader_runs/run36_20261005/`)** — run 35 plus the worktree merge: the same
+scores but for 3 cells now passing and the 48 picture blocks now placed (unread). The paragraphs below describe run 35, which run 36 supersedes as the baseline.
+
 Golden set: 457 reviewed targets = 249 development + 118 stratified control + 90 held-out; eight supplemental targets are separate. **Package 3**
 (`FINAL_KEY_FOR_CODEX_20261004_0557`, active since `9ccfd7c19`) is package 2 with the owner's decisions of 2026-10-04: three page-number blocks are **excluded**
 (not graded, counted apart, their characters subtracted from required coverage as `excluded_chars`), a picture's text is **approximate** evidence (reported with its
@@ -165,7 +168,7 @@ giant units, since fixed), flattens some tables into prose, splits a few words (
 (11 of its 60 blocks come back unresolved: nothing is emitted at their place — 3 page numbers, 8 pictures); both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
 (a key-side question).
 
-Proof state at hand-over (run 35; since then the worktree merge, `DESIGN.md` §45–§48, with 352 tests): 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 3 (and on package 2, as a control), package check `golden/check_package.py` passes; Codex's rounds
+Proof state at hand-over (run 36 = run 35 + the worktree merge, `DESIGN.md` §45–§49, with 352 tests): 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 3 (and on package 2, as a control), package check `golden/check_package.py` passes; Codex's rounds
 1–18 scripts and the package-2 reproducers re-run against this code behave as they expected (adapter audits over all 60 saved outputs: 0 cells lost, 0 tables shifted), except the differences stated in
 `prepare_work/grader_review_codex_20261003/FABLE_RESPONSE_R3.md` (digits split across 22 cells → False; "3.7 %" → pass) and
 `FABLE_RESPONSE_R4.md` (a packet name in two folders is refused as ambiguous; an invalid table-context declaration stops the run; the

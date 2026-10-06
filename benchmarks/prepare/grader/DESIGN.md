@@ -1705,3 +1705,22 @@ saved rehearsal download, not the whole collection, and whether every attribute 
 exception set was right and is taken** (Codex G6-1, reproduced): an unsupported encoding — `utf-7`, `shift_jis`, `UTF-32`, an unknown name — makes the parser
 raise `ValueError` or `LookupError`, not `ExpatError`, and the route's loop caught only the latter: one such file stopped the whole batch. Now the file is FAILED
 ("XML parse failed: …") and the next is read; four bad-first/good-second cases.
+
+## 49. Run 36 — the consolidated baseline after the worktree merge (2026-10-05; Codex: `CODEX_MERGE_G356_VERDICT.md`, `CODEX_RUN36_VERDICT.md`, both APPROVE)
+
+**What it is.** Commit `b18f3743d` (groups 1, 2, 3, 5, 6 of the worktree merged, §45–§48; group 4 — links — deferred to Prepare Step 5), package 3
+(`FINAL_KEY_FOR_CODEX_20261004_0557`), the 13 routes built afresh by a frozen copy of that commit's code and graded by it:
+`prepare_work/grader_runs/run36_20261005/` (`RUN36.json`; `code_b18f3743d/`; `graded/` = the frozen grades every later comparison starts from;
+`DIFF_run35_vs_run36.txt`). Run 35 and every earlier run tree are untouched. Codex's audit: `grader_review_codex_20261003/run36_codex_20261005/`.
+
+**Against run 35:** 51 target changes and nothing else in 13 routes — 3 cells `FAIL → PASS` (group 2), 48 picture blocks (group 3: 24 `FAIL → UNRESOLVED`,
+6 `UNRESOLVED → APPROXIMATE`, 18 `UNRESOLVED → FAIL` — pictures preserved and placed at their own tag, their text still unread). Development scores, best HTML
+route (EdgarTools + formatting + screen): **cells 171/171**; blocks 49 pass, 2 approximate, 6 fail (pictures), 3 excluded (page numbers, package 3); XML 9/9.
+Document-wide on that route: `honest_anchors.boundary` 136 items in 21 files (921 in run 35), `inserted_chars` 0, `unanchored` 0, `reading_order` breaks 0.
+
+**What it does not say** (the next work, in order): (1) uncovered source text in 38 files — 4,744 runs, 11,192 characters, of which 4,682 runs are digits only
+and most of the rest roman-numeral page numbers and "Table of Contents" footers: each to be checked against its original and either covered by an approved
+exclusion at its proven place or restored — never all called facts, never all called furniture; (2) the 136 word-boundary flags — a space the tool adds inside a
+word across inline markup (129) or a number (7), to be fixed generically where a source-backed join proves it, reusing the screen pass; (3) the stratified-control
+targets, never converted (65 HTML cells, 35 HTML blocks, 18 XML values), scored apart, with full preparation time and peak memory; (4) then one held-out run on
+a frozen candidate; (5) corpus-wide automatic checks, a supplement to the original-backed ones. Picture text, PDF and the deferred links stay explicit and apart.
