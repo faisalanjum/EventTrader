@@ -69,39 +69,17 @@ def codes(raw, vis):
     return {sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()}
 
 
-_A_OPEN, _A_CLOSE = re.compile(r'<a(?=[\s/>])', re.I), re.compile(r'</a\s*>', re.I)
-
-
-def without_empty_anchors(text):
-    """The text without its anchors that hold nothing — an <a> start tag, comments only, then </a> — by the scanner's own tokens (anchor._TOKEN): a tag is a tag
-    only where the tokenizer makes one (not inside a script, a title or a quoted attribute), and a comment ends at its own `-->`, so no text between two
-    comments can be taken for emptiness (Codex C1). White space inside is content and stays; so does every other anchor. Such an anchor presents nothing;
-    left in, the tool breaks the heading's word around it (`Be<a id="x"><!--Anchor--></a>rry` read as `Be` / `rry` on two lines: one file of 60, the
-    screen step joins it on the best route; R3 measurement) — so it is kept from the tool's sight."""
-    toks = [m.group() for m in anchor._TOKEN.finditer(text)]; out, i = [], 0
-    while i < len(toks):
-        if _A_OPEN.match(toks[i]) and anchor._TAG.fullmatch(toks[i]):
-            j = i + 1
-            while j < len(toks) and toks[j].startswith('<!--'): j += 1
-            if j < len(toks) and _A_CLOSE.fullmatch(toks[j]): i = j + 1; continue
-        out.append(toks[i]); i += 1
-    return ''.join(out)
-
-
 def named(raw, vis, codes):
-    """The source as the tool gets it, decoded: each picture's name replaced by its code, the text the page hides left out (where the scanner's reading is
-    certain), and the anchors that hold nothing removed (`without_empty_anchors`). Every other tag the source has, the tool sees: a tag may carry
-    presentation (Codex R2-C1: an inline-XBRL wrapper with `display:block` breaks the line); the block the tool takes for a heading is read whole by
-    `whole_headings`, not by taking its inline children away. Nothing else changes."""
+    """The source as the tool gets it, decoded: each picture's name replaced by its code, and the text the page hides left out (where the scanner's reading
+    is certain). Every tag the source has, the tool sees — an empty anchor too: it may be laid out as a block and break the line (Codex R3-A)."""
     edits = [(vis.picture_names[start][0], code.encode()) for code, (start, _) in codes.items()]
     if vis.certain: edits += [(span, b'') for span in vis.hidden]  # text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
     out, at = [], 0
     for (a, b), piece in sorted(edits):
         out += [raw[at:a], piece]; at = b
     given = b''.join(out) + raw[at:]
-    try: text = given.decode('utf-8')
-    except UnicodeDecodeError: text = given.decode('cp1252', 'replace')
-    return without_empty_anchors(text)
+    try: return given.decode('utf-8')
+    except UnicodeDecodeError: return given.decode('cp1252', 'replace')
 
 
 def to_units(tree, codes=None):
@@ -165,23 +143,38 @@ def unsupported(file_id, sha256, version, status='UNSUPPORTED', error='not an HT
 
 
 def whole_headings():
-    """A block the tool takes for a heading is read whole — every descendant's text, as the tool reads <h1>–<h6> and as the browser shows it. The tool's
-    `DocumentBuilder._get_element_text` reads a block only to its first child element, and a HeadingNode is terminal: `For the quarterly period ended
-    <ix:nonNumeric …>December 28, 2024</ix:nonNumeric>` lost its date, `Commission File Number <ix:nonNumeric …>001-35672</ix:nonNumeric>` its number
-    (run 36's coverage check: two cover facts lost in 60 files). Fixed at that boundary in the tool's own traversal, for the tool's own heading decision
-    (Codex R2-C1); recorded here, never in the environment. Idempotent."""
+    """A block the tool takes for a heading is read whole — every descendant's text, as the tool reads <h1>–<h6> and as the browser shows it. Its
+    `DocumentBuilder._get_element_text` reads a block only to its first child element, and a `HeadingNode` is terminal: `<div><a id="x"></a>Item 1A. Risk
+    Factors</div>` read nothing and fell through to a paragraph (seven section headings of one file), `For the quarterly period ended <ix:nonNumeric …>December
+    28, 2024</ix:nonNumeric>` lost its date. Two moments, both the tool's own decision and its own <h1> reader: (a) as it reads the block it is deciding on —
+    only a block of inline runs (its own `_is_text_only_container`), laid out as a block, no table part or list, no table or picture inside: a container of
+    blocks keeps its own segmentation, a row is never a line; (b) a heading it made from a block's leading text, when that block holds blocks (an inline-laid
+    <div> with the file number): read whole after the fact, again unless a table or picture is inside — the tool's terminal heading would swallow them (stated,
+    the tool's). An inline run it takes for a heading (a bold <font> inside a sentence) keeps the tool's own reading. Codex R2-C1, R3-A; recorded here, never in
+    the environment. Idempotent."""
     try: from edgar.documents.nodes import HeadingNode; from edgar.documents.strategies import document_builder as db
-    except ImportError: return  # a stand-in for the tool (the tests') has no builder: nothing to fix there; the tool itself has both (tests/test_whole_headings.py, under its environment)
+    except ImportError: return  # a stand-in for the tool (the tests') has no builder: nothing to fix there; the tool itself has one (tests/test_whole_headings.py, under its environment)
     if getattr(db.DocumentBuilder, '_whole_headings', False): return
-    original = db.DocumentBuilder._create_node_for_element
-    def create(self, element, style):
-        node = original(self, element, style)
-        if isinstance(node, HeadingNode) and isinstance(element.tag, str) and element.tag.lower() not in ('h1', 'h2', 'h3', 'h4', 'h5', 'h6') and element.tag.lower() not in self.INLINE_ELEMENTS:  # a block only: an inline run the tool takes for a heading (a bold <font> inside a sentence) is already read whole, with its white space — re-read as a block it lost the space before it (R3 measurement: 331 words glued)
-            tag, element.tag = element.tag, 'h1'  # the tool reads an <h1> whole: the same reading for the block it took for one
-            try: node.content = self._get_element_text(element)
-            finally: element.tag = tag
+    H, PARTS = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'), {'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col', 'ul', 'ol', 'li', 'dl', 'dt', 'dd'}
+    create, read = db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text
+    def line(self, element, style):  # a block the tool may take for one line of heading: not inline by tag, not laid out inline, not a table or list part, nothing but inline runs in it, no table or picture under it
+        tag = element.tag.lower() if isinstance(element.tag, str) else ''
+        return tag and tag not in H and tag not in self.INLINE_ELEMENTS and tag not in PARTS and not tag.startswith(('ix:', '{')) and getattr(style, 'display', None) not in ('inline', 'inline-block') \
+            and not any(isinstance(d.tag, str) and d.tag.lower() in ('table', 'img') for d in element.iterdescendants())
+    def whole(self, element):
+        kept, element.tag = element.tag, 'h1'  # the tool reads an <h1> whole: the same reading for the block it takes for one
+        try: return read(self, element)
+        finally: element.tag = kept
+    def creating(self, element, style):
+        self._making = (element, style) if line(self, element, style) and self._is_text_only_container(element) and not (element.text or '').strip() and len(element) and not (element[0].text_content() or '').strip() else None  # (a): only where the block's text begins after an element holding nothing — the branch the tool's reader loses
+        try: node = create(self, element, style)
+        finally: self._making = None
+        if isinstance(node, HeadingNode) and line(self, element, style): node.content = whole(self, element)  # (b): every heading the tool made from a block, read whole
         return node
-    db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._whole_headings = create, True
+    def reading(self, element):
+        made = getattr(self, '_making', None)
+        return whole(self, element) if made and made[0] is element else read(self, element)  # (a)
+    db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text, db.DocumentBuilder._whole_headings = creating, reading, True
 
 
 def main(argv=None):
@@ -197,7 +190,7 @@ def main(argv=None):
     files = {}
     for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
         if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
-    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'empty_anchors': 'removed', 'hidden_text': 'left out', 'headings': 'read whole'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
+    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if path.suffix.lower() not in ('.htm', '.html'):

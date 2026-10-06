@@ -1866,3 +1866,44 @@ dispositioned the failure stays visible; the year is not removed from the output
 Tests 374 (+4: the chain and its two mirrors — a block ending inside a cell, a seed over two cell ends —, the displaced title and a same-header table listed
 between but placed after, the caption, the composition; `tests/test_whole_headings.py`, under the tool's environment, covers the block heading, the inline run
 kept whole with its space, the anchor and the `<h2>` controls; skipped without the tool).
+
+## 53. Codex's gate of §52 (`CODEX_COVERAGE_R3_VERDICT.md`): the anchors stay, the heading is read at the tool's own construction; the exam runner (2026-10-06)
+
+**A — the empty-anchor removal is withdrawn; the heading fix moves to its cause.** Codex: an empty `<a>` can be laid out as a block (`style="display:block"`,
+a stylesheet) and break the line — removed, `10` / `20` glued into `1020`; and §52's "one file, one broken word" was incomplete: with the anchors left in,
+**seven section headings** of that file (Items 2, 3, 4; Part II Items 1, 1A, 2, 5) became ordinary text. Both reproduced. The cause: for a block whose text
+begins after an element holding nothing (`<div><a id="Item3"><!--Anchor--></a>Item 3. …</div>`), the tool's detector recognises the heading, its node factory
+reads the block's direct text, finds none, and falls through to a paragraph; §52's `whole_headings` acted only after a `HeadingNode` existed. Now the tool's
+own `<h1>` reader is applied at two moments, both the tool's own decisions: **(a)** as the tool reads the block it is deciding on — only a block of inline runs
+(its own `_is_text_only_container`), laid out as a block, not a table or list part, no table or picture inside, **and only where its text begins after an
+element holding nothing**; **(b)** a heading the tool made from a block's leading text, read whole after the fact (as §52), again not where a table or picture
+stands inside. An inline run the tool takes for a heading and a block laid out inline keep the tool's reading.
+
+Measured on the 95 development + control originals against §52's candidate (`prepare_work/coverage_20261005/r3/ACCOUNT_r6.txt`, every unit by kind and text):
+**71 of 72 development files and all 41 control files identical**; in `form10q` the seven headings are headings again and the four company-name lines carry
+the tool's break at the anchor inside the word (`Be` / `rry`; 2 base-route boundary flags, joined by the screen step: best route unchanged at 18). Tables
+10,162 = 10,162, pictures 615 = 615, cells equal; 0 target flips in the three EdgarTools routes; control 63 of 65, structure counts unchanged.
+
+**A wider rule, measured and not taken:** (a) without its "text begins after an element holding nothing" condition honours the tool's detector on every
+bold block made of runs (`<div><font>Aflac Japan</font></div>`): 3,723 text units of the 60 files and 1,355 of the control become headings, `heading_recognised`
+35 → 48 of 178 and 32 → 45 of 90, `kind` 18 → 19 of 35 — and 2 base-route targets flip in the letter-spaced file (the screen step repairs them), best-route
+boundary flags 18 → 30, "Table of Contents" page-top links and "See accompanying Notes…" lines become headings. The tool's own decisions, a larger change to
+what the reader is told is a heading: a separate decision (`r3/build_r5`, `ctl_r5`, `ACCOUNT_r5.txt`), not this one. A first wide version without the
+table-part guard had read table rows as headings (542 tables lost in 60 files): caught by the unit accounting, never a candidate.
+
+Stated: the tool breaks a word at an inline empty anchor (`Be` / `rry`); the stylesheet-driven block anchor reads `10` / `20` in the tool whatever the
+stylesheet says (it holds `a` inline), which here agrees with the browser; the tool's own terminal heading over a block that holds a table (`Totals` over a
+one-row table) swallows the table before and after — not made worse, not fixed. Chrome controls in `tests/test_whole_headings.py` (the tool's environment):
+the leading anchor, the anchor after the number, the cover line after a short bold block, the block anchor's break kept, `Revenue` / `20` kept, the inline
+underlined runs, a bold line wrapped in a run (stays text), a container of blocks (two units), empty blocks, a link with text, text between comments,
+`<h2>`, the table and picture guards, idempotence. The flip-check's greens on the narrowing conditions of (a) are the population measurement above, not unit
+cases: the detector's decision depends on the surrounding document, so a one-block case cannot make it fire.
+
+**B — the exam runner** (`prepare_work/heldout_exam/run_heldout.sh`, Codex's four faults): the frozen copy now holds `benchmarks/__init__.py`,
+`benchmarks/prepare/__init__.py`, the grader and `golden/PACKAGE.json`; each of the three interpreters must import the grader from inside the frozen copy
+(the Chrome venv holds the live repository as an editable install — asserted) and `grade --help` must run there; the key is read from the frozen pointer,
+checked against the pinned package and passed to every step; one atomic claim (`mkdir CLAIM`) after an offline preflight, a root holding any exam folder or
+claim refuses; the installed tools' versions, Chromium's, and every frozen file's hash are recorded (`FROZEN.txt`); the counts come from the grader's own
+aggregate (`summary.by_split_format[split]`). Smoke-tested in a separate root on the control split (the development sequence end to end: 63 of 65, 18 of
+18, nonempty aggregate), with one and with two prior folders (refused), and with two simultaneous launches (one claim, one refusal). Settings label
+`headings: detected blocks read whole`; `empty_anchors` gone — a raw parse saved under the old settings is not reused.
