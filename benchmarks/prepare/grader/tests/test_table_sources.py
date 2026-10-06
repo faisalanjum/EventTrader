@@ -214,5 +214,38 @@ class SourceTablesTests(unittest.TestCase):
         self.assertEqual(self.cells(raw), [[['<TD title="a > b">é'.encode(), b'<td>x']]])
 
 
+class NeverAcrossCells(unittest.TestCase):
+    def test_a_text_is_never_found_across_two_cells(self):  # Codex C4: "10.8" was read from "10.1" and "0.82" in two cells of a table the linker had not tied
+        raw = b'<table><tr><td>10.1</td><td>0.82</td></tr></table><p>then 10.8 here</p>'
+        out = link(raw, [{'id': 'u', 'kind': 'text', 'text': '10.8'}])['units'][0]; self.assertEqual(raw[out['anchor']['byte_start']:out['anchor']['byte_end_exclusive']], b'10.8')
+        raw = b'<table><tr><td>10.1</td><td>0.82</td></tr></table>'
+        self.assertEqual(link(raw, [{'id': 'u', 'kind': 'text', 'text': '10.8'}])['units'][0].get('link_error'), 'not_in_source')
+        raw = b'<table><tr><td>10.7</td><td>%</td><td>x</td></tr></table>'  # a value cell and its sign cell merged by the tool: whole cells, allowed
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': '10.7 %'}])['units'][0]; self.assertEqual(raw[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']], b'10.7</td><td>%')
+        self.assertEqual(link(raw, [{'id': 'u', 'kind': 'text', 'text': '0.7 %'}])['units'][0].get('link_error'), 'not_in_source')  # part of one cell and the next: no
+        self.assertEqual(link(raw, [{'id': 'u', 'kind': 'text', 'text': '% x'}])['units'][0].get('anchor', {}).get('byte_start'), raw.index(b'%'))
+        raw = b'<table><tr><td>$</td><td>5</td><td>a</td><td>bc</td></tr></table>yz'  # one-character cells merge whole; a part of a cell never; a cell and the prose after the table never
+        got = lambda text: link(raw, [{'id': 'u', 'kind': 'text', 'text': text}])['units'][0]
+        self.assertEqual(raw[got('$5')['anchor']['byte_start']:got('$5')['anchor']['byte_end_exclusive']], b'$</td><td>5'); self.assertEqual(got('ab').get('link_error'), 'not_in_source'); self.assertEqual(got('cy').get('link_error'), 'not_in_source'); self.assertEqual(got('bcyz').get('link_error'), 'not_in_source')
+        raw = b'<table><tr><td>alpha beta gamma delta epsilon zeta</td><td>eta theta iota kappa lambda mu nu xi omicron pi</td></tr></table>'
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': 'zeta eta theta iota kappa lambda mu nu xi omicron pi and words the source never prints anywhere at all'}])['units'][0]  # the first short piece straddles two cells: the chaining starts inside one
+        self.assertTrue(all(raw[a['byte_start']:a['byte_end_exclusive']].count(b'<td') == 0 for a in anchor_spans(u.get('anchor'))))
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': 'alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi and words the source never prints anywhere at all'}])['units'][0]  # a block that would run on into the next cell stops at its edge
+        self.assertEqual(u.get('link_flag'), 'pieced'); self.assertTrue(all(raw[a['byte_start']:a['byte_end_exclusive']].count(b'<td') == 0 for a in anchor_spans(u.get('anchor'))))
+        raw = b'xy<table><tr><td>z</td></tr></table>'; self.assertEqual(link(raw, [{'id': 'u', 'kind': 'text', 'text': 'yz'}])['units'][0].get('link_error'), 'not_in_source')  # prose and a cell: never one text
+        raw = b'<table><tr><td>total 10</td><td>.82 next</td></tr></table>'; long = 'total 10.82 next'  # nor pieced across them
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': long + ' and more words that the source does not print at all here'}])['units'][0]
+        self.assertTrue(all(raw[a['byte_start']:a['byte_end_exclusive']].count(b'<td') == 0 for a in anchor_spans(u.get('anchor'))))
+
+    def test_nor_found_before_its_window_across_two_cells(self):  # the backward search (out_of_order) refuses the same places
+        raw = b'<table><tr><td>10.1</td><td>0.82</td></tr></table><p>later</p>'
+        units = link(raw, [{'id': 'a', 'kind': 'text', 'text': 'later'}, {'id': 'u', 'kind': 'text', 'text': '10.8'}])['units']
+        self.assertEqual(units[1].get('link_error'), 'not_in_source'); self.assertEqual(raw[units[0]['anchor']['byte_start']:], b'later</p>')
+
+
+def anchor_spans(a):
+    return a if isinstance(a, list) else [a] if isinstance(a, dict) else []
+
+
 if __name__ == '__main__':
     unittest.main()

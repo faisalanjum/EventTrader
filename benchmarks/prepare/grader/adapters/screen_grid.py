@@ -27,8 +27,9 @@ def gaps_of(vis, units):
 
 
 def tag_cells(raw, vis=None, gaps=()):
-    """A copy with data-g="n" on every <td>/<th> (document order) and the byte span of each cell in the original; and, for each gap, the character before
-    and after it wrapped in <span data-j="n.0"> / <span data-j="n.1"> (an inline box of its own, no style: the page's layout does not move)."""
+    """A copy with data-g="n" on every <td>/<th> (document order) and the byte span of each cell in the original; and, for each gap, a comment <!--j:n.0-->
+    / <!--j:n.1--> right before the character before and after it — a comment is no element: no stylesheet rule and no structural selector sees it, the
+    page lays out exactly as before (Codex C2), and the page's own range over the character that follows it is measured."""
     vis = Visible(raw) if vis is None else vis
     spans = sorted((a, b) for table in vis.tables for row in table for a, b in row)  # the scanner's cells: the parser's own, where a plain search for the tags ran a cell with no end tag on to the next cell anywhere (Codex G2-C3)
     edits = []
@@ -36,16 +37,17 @@ def tag_cells(raw, vis=None, gaps=()):
         close = _CELL_END.match(raw, end); spans[n] = (start, close.end() if close else end)  # with its own end tag, where it has one
         edits.append((start + 3, b' data-g="%d"' % n))
     for n, (_, _, _, k, l) in enumerate(gaps):
-        for side, c in ((0, k), (1, l)): edits += [(vis.s[c], b'<span data-j="%d.%d">' % (n, side)), (vis.e[c], b'</span>')]
+        for side, c in ((0, k), (1, l)): edits.append((vis.s[c], b'<!--j:%d.%d-->' % (n, side)))
     out, pos = [], 0
     for at, piece in sorted(edits, key=lambda e: e[0]): out += [raw[pos:at], piece]; pos = at
     out.append(raw[pos:])
     return b''.join(out), spans
 
 
-def join(gaps, boxes, tol=0.75):
+def join(gaps, boxes, vis=None, tol=0.75):
     """Remove from each item's text the added spaces whose two characters Chrome lays out on one line, touching (the right box begins where the left one ends,
-    within `tol` pixels); returns how many. Each item keeps `joins`: [[start, end, gap in pixels]] in the text as it was."""
+    within `tol` pixels); returns how many. Each item keeps `joins`: [[start, end, gap in pixels]] in the text as it was; its struck places, which count the
+    text's characters, are read again from the source (`vis`; Codex C3) — or dropped where that cannot be done."""
     by_item, n = {}, 0
     for g, (x, a, b, k, l) in enumerate(gaps):
         left, right = boxes.get('%d.0' % g), boxes.get('%d.1' % g)
@@ -57,6 +59,10 @@ def join(gaps, boxes, tol=0.75):
         text = x['text']
         for a, b, _ in sorted(runs, reverse=True): text = text[:a] + text[b:]
         x['text'], x['joins'] = text, [list(r) for r in sorted(runs)]; n += len(runs)
+        if 'struck_at' in x:
+            at = grade.struck_at(vis, x) if vis is not None else None
+            if at: x['struck_at'] = at
+            else: x.pop('struck_at')
     return n
 
 
@@ -101,8 +107,10 @@ def apply(units, spans, measured_by_table):
 JS = """() => { const tables = Array.from(document.querySelectorAll('table')); const out = [];
   for (const el of document.querySelectorAll('[data-g]')) { const r = el.getBoundingClientRect(); const t = el.closest('table');
     out.push({g: +el.dataset.g, table: tables.indexOf(t), row: el.parentElement ? el.parentElement.rowIndex : -1, x: r.left, w: r.width}); }
-  const boxes = {};
-  for (const el of document.querySelectorAll('[data-j]')) { const rs = el.getClientRects(); if (rs.length === 1) boxes[el.dataset.j] = {x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom}; }
+  const boxes = {}; const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
+  for (let c = w.nextNode(); c; c = w.nextNode()) { const m = /^j:(\\d+\\.[01])$/.exec(c.data); if (!m) continue; let t = c.nextSibling; while (t && t.nodeType === Node.COMMENT_NODE) t = t.nextSibling;  // one character can end one gap and begin the next: its two marks stand side by side
+    if (!t || t.nodeType !== Node.TEXT_NODE || !t.data.length) continue; const r = document.createRange(); r.setStart(t, 0); r.setEnd(t, 1); const rs = r.getClientRects();
+    if (rs.length === 1) boxes[m[1]] = {x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom}; }
   return {cells: out, boxes}; }"""
 
 
@@ -134,7 +142,7 @@ def main(argv=None):
             t0 = time.time(); raw = paths[fid].read_bytes(); vis = Visible(raw); gaps = gaps_of(vis, d['units']); marked, spans = tag_cells(raw, vis, gaps)
             try: measured, boxes = measure(marked, browser)
             except Exception as e: facts[fid] = {'error': repr(e)[:200]}; dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True); continue
-            n = apply(d['units'], spans, measured); j = join(gaps, boxes); d['route'] = dict(d['route'], name=d['route']['name'] + '+screen', settings=dict(d['route'].get('settings') or {}, screen_grid=True, joins='touching on one line'))
+            n = apply(d['units'], spans, measured); j = join(gaps, boxes, vis); d['route'] = dict(d['route'], name=d['route']['name'] + '+screen', settings=dict(d['route'].get('settings') or {}, screen_grid=True, joins='touching on one line'))
             facts[fid] = {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': len(gaps), 'joined': j, 'seconds': round(time.time() - t0, 1)}
             dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True)
         browser.close()

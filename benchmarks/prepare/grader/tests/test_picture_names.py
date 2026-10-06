@@ -17,7 +17,7 @@ IMG = re.compile(rb'<img[^>]*?src="([^"]*)"')
 def tool(given, keep=None, rewrite=lambda s: s):
     """A stand-in for the tool: one image node per <img> of the source it is given, in order — hidden and template ones too, as the real tool returns them —
     its name as the tool would rewrite it; `keep`: the indices it returns (the others lost)."""
-    names = [m.group(1).decode() for m in IMG.finditer(given)]
+    names = [m.group(1).decode() for m in IMG.finditer(given.encode() if isinstance(given, str) else given)]
     return adapter.dump(node('DocumentNode', children=[node('ImageNode', src=rewrite(s)) for k, s in enumerate(names) if keep is None or k in keep]))
 
 
@@ -39,14 +39,26 @@ class PictureNames(unittest.TestCase):
         self.assertIsNone(vis.picture_sources[raw.index(b'<img alt=')])
         cp = b'<p>\xe9</p><img src="z.png">'; v = anchor.Visible(cp); (x, y), _ = v.picture_names[cp.index(b'<img')]; self.assertEqual(cp[x:y], b'z.png')  # a cp1252 source: one byte per character
 
+    def test_the_tool_is_not_shown_text_the_page_hides(self):  # a hidden "%" beside a value made "8.2 %" of "8.2" and a copy of the visible "%" cell (Codex C4)
+        raw = b'<table><tr><td>8.2&#160;<font style="visibility:hidden">%</font></td><td>%</td></tr></table><div style="display:none">gone &amp; away</div><p hidden>no</p><p>stays</p><img src="x.png">'
+        vis = anchor.Visible(raw); given = adapter.named(raw, vis, adapter.codes(raw, vis))
+        self.assertEqual(re.sub(r'src="[^"]*"', 'src=""', given), '<table><tr><td>8.2&#160;<font style="visibility:hidden"></font></td><td>%</td></tr></table><div style="display:none"></div><p hidden></p><p>stays</p><img src="">')
+        raw = b'<style>.x{display:none}</style><div class="x">unknown</div><p>stays</p>'; vis = anchor.Visible(raw); self.assertFalse(vis.certain)
+        self.assertEqual(adapter.named(raw, vis, adapter.codes(raw, vis)), raw.decode())  # a reading that is not certain hides nothing from the tool
+
     def test_the_tool_is_not_shown_an_anchor_that_holds_nothing(self):  # EdgarTools reads a heading-like <div> only to its first inline element: the title after a named anchor was lost
         raw = b'<div>Item 1A. <a name="ra"></a>Risk Factors</div><div>Item 6. <A id="x"><!--Anchor--></A>Exhibits <a href="#x"></a></div><p>See <a href="#n3">Note 3</a>, <a id="k"> </a>and the <a title="a>b"></a>rest.</p><img src="x.png">'
         vis = anchor.Visible(raw); given = adapter.named(raw, vis, adapter.codes(raw, vis))
-        self.assertEqual(re.sub(rb'src="[^"]*"', b'src=""', given), b'<div>Item 1A. Risk Factors</div><div>Item 6. Exhibits </div><p>See <a href="#n3">Note 3</a>, <a id="k"> </a>and the <a title="a>b"></a>rest.</p><img src="">')  # a link with text, an anchor holding white space, and a tag with a > in its attribute stay
+        self.assertEqual(re.sub(r'src="[^"]*"', 'src=""', given), '<div>Item 1A. Risk Factors</div><div>Item 6. Exhibits </div><p>See <a href="#n3">Note 3</a>, <a id="k"> </a>and the rest.</p><img src="">')  # a link with text and an anchor holding white space stay; an empty one with a > inside a quoted attribute is still an empty one to the tokenizer
+        raw = b'<div style="font-weight:bold">For the quarterly period ended <ix:nonNumeric name="dei:DocumentPeriodEndDate" contextRef="c1" format="ixt:date-monthname-day-year-en">December 28, 2024</ix:nonNumeric></div><p>a<ix:nonFraction name="x">1</ix:nonFraction>b <ix:continuation id="c">more</ix:continuation></p>'
+        self.assertEqual(adapter.named(raw, anchor.Visible(raw), {}), '<div style="font-weight:bold">For the quarterly period ended December 28, 2024</div><p>a1b more</p>')  # the wrappers present nothing; their text stays
+        kept = ('<p>Debt <a><!--one-->10 million<!--two--></a> outstanding.</p>', '<p><a><!--one--><b>x</b><!--two--></a></p>', '<script>var s = "<a></a>";</script>', '<title><a></a></title>', '<p title="<a></a>">t</p>', '<p><a><!--a--><!--b--></a>x</p>')
+        self.assertEqual([adapter.without_empty_anchors(t) for t in kept], [kept[0], kept[1], kept[2], kept[3], kept[4], '<p>x</p>'])  # text or an element between the comments stays (Codex C1); an anchor written inside a script, a title or an attribute is no anchor; comments alone go
+        self.assertEqual([adapter.without_empty_anchors(t) for t in ('<p>end <a id="x">', '<p>end <a id="x"><!--c-->', '<a id="x"></a', '<a"x"></a>', '<a href=x" id=y></a>', '<p><a =></a>x</p>', '<ix:nonNumeric name=x" id=y>t</ix:nonNumeric>')], ['<p>end <a id="x">', '<p>end <a id="x"><!--c-->', '<a id="x"></a', '<a"x"></a>', '<a href=x" id=y></a>', '<p><a =></a>x</p>', '<ix:nonNumeric name=x" id=y>t'])  # no closing tag, a cut closing tag, a tag outside the plain form (a quote astray: the tokenizer makes no tag of it; an attribute with no name: a tag the scanner does not follow): left as written
 
     def test_the_codes_are_this_sources_own_and_the_tool_gets_nothing_but_them_changed(self):
         raw = b'<p>Before.</p><img src="chart.JPG"><p>Middle.</p><img src="a&amp;b.png"><p>After.</p>'
-        vis = anchor.Visible(raw); codes = adapter.codes(raw, vis); given = adapter.named(raw, vis, codes)
+        vis = anchor.Visible(raw); codes = adapter.codes(raw, vis); given = adapter.named(raw, vis, codes).encode()
         self.assertEqual(re.sub(rb'src="[^"]*"', b'src=""', given), re.sub(rb'src="[^"]*"', b'src=""', raw))  # nothing but the names changes
         written = [m.group(1).decode() for m in IMG.finditer(given)]; self.assertEqual(written, list(codes))
         self.assertTrue(all(re.fullmatch(r'[a-z0-9]+', c) and c.startswith(grade.sha256(raw)[:16]) for c in written))

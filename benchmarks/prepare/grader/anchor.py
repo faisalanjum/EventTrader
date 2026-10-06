@@ -343,6 +343,7 @@ class Visible:
         struck_chars = array('b')  # per visible character: printed struck through (an <s>/<del>/<strike> ancestor or CSS line-through)
         apart = []  # (place in `chars`, byte span of the tag) where an element that strikes, and is no block otherwise, begins or ends: struck text is read apart from its neighbours (the contract's redline rule). The page has no line break there, so the layout rules below never see one — the boundary is set in after the scan
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
+        self.hidden = []  # the byte spans of the text in hidden subtrees, as written (text tokens and references), for an adapter that hands a tool the source without it
         computed = '\x00' in s or (not raw.isascii() and (blen is len or raw.startswith(b'\xef\xbb\xbf') or _META.search(raw) is not None))  # the reading cannot be certified: a hiding property with a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes), markup it does not follow — a null character, which the parser drops or replaces by where it stands (Codex R18-C1) — or bytes beyond ASCII that are not plainly UTF-8: the browser decodes them by the mark, the <meta> or a guess of its own (every one of 22,483 real documents is ASCII)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
@@ -515,6 +516,7 @@ class Visible:
             if hidden:
                 if not ref: self.hidden_chars += len(_WS.sub('', t))
                 elif not _WS.match(text): self.hidden_chars += 1
+                self.hidden.append((start, pos))
                 if not top.gone: veil = len(chars) if text[-1] in ('\r\n' if keeps else _SPACE) or (veil == len(chars) and not word) else None  # invisible text that ends with collapsible white space, or with a kept line feed (the line it starts drops the white space that follows) — and kept white space after either leaves it so; removed text is not there at all and changes nothing
                 continue
             if (after and word) or (touch == len(chars) and not _WS.match(text)) or (not keeps and text[0] in _SPACE and len(chars) in (lead, veil)) or (fresh and bool(top) and top.disp in _SHED and not text.strip(_SPACE) and bool(chars) and not _WS.fullmatch(chars[-1])): computed = True  # a word on the line of a box that must have it to itself; white space the browser drops — at the edge of an inline box between two words, after invisible text that ended with white space, or alone between a word and a tag in a flex, grid or table box, which shows none of its white space that stands alone between its children (CSS Flexbox 4, CSS 2 17.2.1; what follows is not looked at)
@@ -663,6 +665,13 @@ def link(raw, units, xml=False, vis=None):
     same_text = {}  # the items that carry each text, found once: asking every item again for each placement took time with the square of their number (Codex's worktree)
     for k, key in enumerate(keys): same_text.setdefault(key, []).append(k)
     (allowed, reserved), anywhere = table_places(vis, items, keys), (None, 0, len(vis.flat))
+    cell, edge = array('i', [-1]) * len(vis.flat), {}  # the innermost table cell each search-form character stands in (-1: none) and each cell's first and last character
+    for n, (a, b) in enumerate(sorted((a, b) for table in vis.tables for row in table for a, b in row)):
+        lo, hi = bisect_left(vis.s, a), bisect_left(vis.s, b); cell[lo:hi] = array('i', [n]) * (hi - lo); edge[n] = (lo, hi)
+    same = lambda j, n: cell[j] == cell[j + n - 1]  # one cell, or none (a text is never empty here)
+    def whole(j, n):  # a text found across cells only as whole cells: "10.7 %" is a value cell and its sign cell (the tool merged them); "10.8" is never read from "10.1|0.82" (Codex C4)
+        a, b = cell[j], cell[j + n - 1]
+        return same(j, n) or (a >= 0 and b >= 0 and j == edge[a][0] and j + n == edge[b][1])
 
     def place(i, lo, hi, forward_only):
         """Anchor item i inside flat[lo:hi]; forward search first, else the nearest earlier occurrence (flagged)."""
@@ -674,13 +683,13 @@ def link(raw, units, xml=False, vis=None):
         found = []
         for k in ([allm + n, n + allm] if marks else []) + [n]:
             off = len(allm) if marks and k == allm + n else 0; j = vis.flat.find(k, lo, hi)
-            while j >= 0 and (j + off in taken or not free(j + off)): j = vis.flat.find(k, j + 1, hi)
+            while j >= 0 and (j + off in taken or not free(j + off) or not whole(j + off, len(n))): j = vis.flat.find(k, j + 1, hi)
             if j >= 0: found.append((j, -len(k), k))
         j, _, key = min(found) if found else (-1, 0, n)  # marks kept apart sit right before or right after the text; the earliest start wins,
         flag = None                                      # because a mark that follows may belong to the next cell
         if j < 0 and not forward_only:
             key, j, flag = n, vis.flat.rfind(n, first, min(lo, final) + len(n)), 'out_of_order'  # found only before the window: the tool moved it
-            while j >= 0 and (j in taken or not free(j)): j = vis.flat.rfind(n, first, j)
+            while j >= 0 and (j in taken or not free(j) or not whole(j, len(n))): j = vis.flat.rfind(n, first, j)
         if j < 0: obj['anchor'] = None; obj['link_error'] = 'not_in_source'; return None
         left, end, used = j, j + len(key), set(range(len(marks))) if key != n else set()
         for k in reversed(range(len(marks))):  # marks not covered by the key: right before the text (inside this window) ...
@@ -704,7 +713,7 @@ def link(raw, units, xml=False, vis=None):
         obj, n = items[i][1], keys[i]
         taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i} | reserved.get(n, set())  # (and no place kept for a table's cell that reads so)
         j = vis.flat.find(n[:SHORT], lo, hi)
-        while j >= 0 and j in taken: j = vis.flat.find(n[:SHORT], j + 1, hi)
+        while j >= 0 and (j in taken or not same(j, SHORT)): j = vis.flat.find(n[:SHORT], j + 1, hi)
         if j < 0: return None
         seg = vis.flat[j:min(hi, j + 2 * len(n))]
         gn, gs = grams(n), grams(seg)
@@ -713,9 +722,9 @@ def link(raw, units, xml=False, vis=None):
         for a, b in chain(pairs):
             if a < ea or b < eb: continue  # inside the previous block's extension
             la, lb = a, b
-            while la > ea and lb > eb and n[la - 1] == seg[lb - 1]: la -= 1; lb -= 1
+            while la > ea and lb > eb and n[la - 1] == seg[lb - 1] and same(j + lb - 1, 2): la -= 1; lb -= 1
             size = a + SHORT - la
-            while la + size < len(n) and lb + size < len(seg) and n[la + size] == seg[lb + size]: size += 1
+            while la + size < len(n) and lb + size < len(seg) and n[la + size] == seg[lb + size] and same(j + lb + size - 1, 2): size += 1
             blocks.append((la, lb, size)); ea, eb = la + size, lb + size
         if not blocks: return None
         obj['anchor'] = [{'byte_start': vis.s[j + b], 'byte_end_exclusive': vis.e[j + b + size - 1]} for a, b, size in blocks]
@@ -736,8 +745,7 @@ def link(raw, units, xml=False, vis=None):
         while j >= 0:
             if j not in taken and (j in ok if ok else j not in held):
                 hit = place(i, max(0, j - m), j + len(n) + m, forward_only=True)
-                if hit: items[i][1]['link_flag'] = 'out_of_order'
-                return hit
+                if hit: items[i][1]['link_flag'] = 'out_of_order'; return hit
             j = vis.flat.find(n, j + 1, final + len(n))
         return None
     for i in range(len(items)):  # first, the cells with one place they may stand at — unambiguous, whatever order the tool lists its cells in

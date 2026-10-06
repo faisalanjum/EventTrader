@@ -69,17 +69,40 @@ def codes(raw, vis):
     return {sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()}
 
 
-_EMPTY_ANCHOR = re.compile(rb'<a\b[^>]*>(?:<!--.*?-->)*</a>', re.I | re.S)  # an <a> with no content at all (comments aside): it renders nothing; white space inside is content and stays
+_A_OPEN, _A_CLOSE = re.compile(r'<a(?=[\s/>])', re.I), re.compile(r'</a\s*>', re.I)
+_IX = re.compile(r'</?ix:', re.I)
+
+
+def without_empty_anchors(text):
+    """The text without its anchors that hold nothing — an <a> start tag, comments only, then </a> — by the scanner's own tokens (anchor._TOKEN): a tag is a tag
+    only where the tokenizer makes one (not inside a script, a title or a quoted attribute), and a comment ends at its own `-->`, so no text between two
+    comments can be taken for emptiness (Codex C1). White space inside is content and stays; so does every other anchor."""
+    toks = [m.group() for m in anchor._TOKEN.finditer(text)]; out, i = [], 0
+    while i < len(toks):
+        if _A_OPEN.match(toks[i]) and anchor._TAG.fullmatch(toks[i]):
+            j = i + 1
+            while j < len(toks) and toks[j].startswith('<!--'): j += 1
+            if j < len(toks) and _A_CLOSE.fullmatch(toks[j]): i = j + 1; continue
+        if _IX.match(toks[i]): i += 1; continue  # an inline-XBRL wrapper, opening or closing, however written: it presents nothing, and it is the inline element that cuts a heading-like <div> short
+        out.append(toks[i]); i += 1
+    return ''.join(out)
 
 
 def named(raw, vis, codes):
-    """The source as the tool gets it: each picture's name replaced by its code, and the anchors that hold nothing removed — the tool reads a <div> it takes
-    for a heading only up to its first inline element, so `Item 1A. <a name="x"></a>Risk Factors` came back as `Item 1A.` (run 36's coverage check: one title
-    lost in 60 files; the class reproduced on named anchors, empty links, with and without a comment inside). Nothing else changes."""
+    """The source as the tool gets it, decoded: each picture's name replaced by its code, the text the page hides left out (where the scanner's reading is
+    certain), and the anchors that hold nothing removed — the tool reads a <div> it takes for a heading only up to its first inline element, so `Item 1A.
+    <a name="x"></a>Risk Factors` came back as `Item 1A.` and `For the quarterly period ended <ix:nonNumeric …>December 28, 2024</ix:nonNumeric>` lost its
+    date (run 36's coverage check: one title and two cover facts lost in 60 files; the class reproduced on named anchors, empty links, with and without a
+    comment inside, and on the iXBRL wrappers) — and the inline-XBRL wrappers themselves, which present nothing (`without_empty_anchors`). Nothing else changes."""
+    edits = [(vis.picture_names[start][0], code.encode()) for code, (start, _) in codes.items()]
+    if vis.certain: edits += [(span, b'') for span in vis.hidden]  # text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
     out, at = [], 0
-    for code, (start, _) in sorted(codes.items(), key=lambda kv: kv[1]):
-        (a, b), _ = vis.picture_names[start]; out += [raw[at:a], code.encode()]; at = b
-    return _EMPTY_ANCHOR.sub(b'', b''.join(out) + raw[at:])
+    for (a, b), piece in sorted(edits):
+        out += [raw[at:a], piece]; at = b
+    given = b''.join(out) + raw[at:]
+    try: text = given.decode('utf-8')
+    except UnicodeDecodeError: text = given.decode('cp1252', 'replace')
+    return without_empty_anchors(text)
 
 
 def to_units(tree, codes=None):
@@ -152,7 +175,7 @@ def main(argv=None):
     files = {}
     for src in grade.load_sources(a.key, a.catalog):  # sources only: converters never read answers
         if src['split'] == a.split: files.setdefault(src['file_id'], (src['path'], src['sha256']))
-    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'empty_anchors': 'removed'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
+    facts, settings = {}, {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'empty_anchors': 'removed', 'hidden_text': 'left out', 'inline_xbrl_tags': 'left out'}  # what the saved parse keeps: one saved before pictures were kept answers to other settings and is not reused
     for fid, (path, sha) in sorted(files.items()):
         (out / 'route' / fid).parent.mkdir(parents=True, exist_ok=True); (out / 'raw' / fid).parent.mkdir(parents=True, exist_ok=True)
         if path.suffix.lower() not in ('.htm', '.html'):
@@ -165,10 +188,7 @@ def main(argv=None):
                 tree, dt, ver = json.loads(rawjson.read_text()), meta.get('tool_seconds', 0), meta['version']
             else:
                 cache.begin(metajson)  # from here the old record vouches for nothing: a crash below leaves no record
-                given = named(raw, vis, codes(raw, vis))  # the tool reads the source with the pictures' names as codes
-                try: text = given.decode('utf-8')
-                except UnicodeDecodeError: text = given.decode('cp1252', 'replace')
-                tree = dump(parse_html(text).root); dt = time.time() - t0
+                tree = dump(parse_html(named(raw, vis, codes(raw, vis))).root); dt = time.time() - t0  # the tool reads the source with the pictures' names as codes and no empty anchor
                 rawjson.write_text(json.dumps(tree, ensure_ascii=False)); cache.save(metajson, [rawjson], sha256=sha, version=version, settings=settings, status='OK', tool_seconds=round(dt, 2))
         except Exception as e:  # a tool crash is a result, never a stop
             facts[fid] = {'status': 'FAILED', 'error': repr(e)[:300], 'seconds': round(time.time() - t0, 2)}
