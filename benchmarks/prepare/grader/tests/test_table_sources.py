@@ -237,6 +237,19 @@ class NeverAcrossCells(unittest.TestCase):
         u = link(raw, [{'id': 'u', 'kind': 'text', 'text': long + ' and more words that the source does not print at all here'}])['units'][0]
         self.assertTrue(all(raw[a['byte_start']:a['byte_end_exclusive']].count(b'<td') == 0 for a in anchor_spans(u.get('anchor'))))
 
+    def test_a_chained_block_keeps_a_cell_only_whole(self):  # Codex R2-C2: a 20-character chain seed may cross a cell edge; the block keeps whole cells and loses the part of a cell at either end
+        raw = b'<p>This is the complete report heading.</p><table><tr><td>10.1</td><td>0.82 million for reporting period</td></tr></table>'
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': 'This is the complete report heading. 10.82 million for reporting period'}])['units'][0]
+        spans = [raw[a['byte_start']:a['byte_end_exclusive']] for a in anchor_spans(u.get('anchor'))]
+        self.assertEqual(u.get('link_flag'), 'pieced'); self.assertEqual(spans, [b'This is the complete report heading.', b'0.82 million for reporting period']); self.assertEqual(u['inserted_chars'], 1)  # the "1" is the tool's
+        raw = b'<p>This is the complete report heading, the words of it.</p><table><tr><td>10.19</td><td>0.82 million for reporting period</td></tr></table>'
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': 'This is the complete report heading, the words of it. 10.1 and words the source never prints anywhere at all'}])['units'][0]  # a block running from prose into part of a cell ends at the prose
+        self.assertEqual([raw[a['byte_start']:a['byte_end_exclusive']] for a in anchor_spans(u.get('anchor'))], [b'This is the complete report heading, the words of it.'])
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': 'This is the complete report heading, the words of it. 10.19 and words the source never prints anywhere at all'}])['units'][0]  # the prose block stops at the table's edge; a 5-character cell is no seed of its own
+        self.assertEqual([raw[a['byte_start']:a['byte_end_exclusive']] for a in anchor_spans(u.get('anchor'))], [b'This is the complete report heading, the words of it.'])
+        u = link(raw, [{'id': 'u', 'kind': 'text', 'text': 'This is the complete report heading, the words of it. 90.82 million for reporting and words the source never prints anywhere at all'}])['units'][0]  # a seed over the end of one cell and the start of the next: cut to nothing, no empty block; the next cell's own run is a block of its own
+        self.assertEqual([raw[a['byte_start']:a['byte_end_exclusive']] for a in anchor_spans(u.get('anchor'))], [b'This is the complete report heading, the words of it.', b'0.82 million for reporting']); self.assertEqual(u['inserted_chars'], 1 + len('andwordsthesourceneverprintsanywhereatall'))
+
     def test_nor_found_before_its_window_across_two_cells(self):  # the backward search (out_of_order) refuses the same places
         raw = b'<table><tr><td>10.1</td><td>0.82</td></tr></table><p>later</p>'
         units = link(raw, [{'id': 'a', 'kind': 'text', 'text': 'later'}, {'id': 'u', 'kind': 'text', 'text': '10.8'}])['units']

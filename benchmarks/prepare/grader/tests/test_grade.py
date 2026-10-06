@@ -574,6 +574,13 @@ class PlantedFaultTests(GraderFixture):
             return {r['check']: (r['verdict'], r['reason']) for r in g.rows}
         self.assertEqual(verdicts(False)['periods'], ('pass', None)); self.assertEqual(verdicts(True)['periods'], ('fail', 'group'))
 
+    def test_grouped_marks_and_the_records_own_unit_phrase_compose(self):  # Codex R2-C5: `Programs2,3 (in thousands)` — each allowance alone was known; both at once were not
+        want = 'Maximum Approximate Dollar Value of Shares that May Yet Be Purchased Under Plans or Programs'
+        self.assertEqual(grade.same(want + '2,3 (in thousands)', want, ['2', '3'], ['(in thousands)']), (True, 'unit_phrase_split'))
+        for got, marks, own in ((want + '2,3 (in thousands)', ['2', '3'], []), (want + '2,4 (in thousands)', ['2', '3'], ['(in thousands)']), (want + '2,3 excluding taxes (in thousands)', ['2', '3'], ['(in thousands)'])):
+            self.assertFalse(grade.same(got, want, marks, own)[0], got)  # an undeclared unit, an unknown mark, extra words: no
+        self.assertFalse(grade.same('Revenue 23 (in thousands)', 'Revenue 2', ['3'], ['(in thousands)'])[0])  # a changed number is never a mark
+
     def test_a_mark_printed_inside_a_label_header_or_basis_phrase_is_the_records_own_mark(self):
         # ledger class F: the contract allows a mark glued to a label or title (flagged); the comparison must see through it wherever it sits
         self.assertEqual(grade.same('Resolution of NASH and ≥ 1-stage improvement in fibrosis1,2', 'Resolution of NASH and ≥ 1-stage improvement in fibrosis', ['1', '2']), (True, 'marker_in_text'))

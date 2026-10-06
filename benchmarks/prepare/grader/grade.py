@@ -378,6 +378,7 @@ def same(got, want, markers=(), own=()):
     got, want = norm(got), norm(want)
     if boundary_equal(got, want): return True, None
     if without_marks(got, want, markers): return True, 'marker_in_text'
+    if without_marks(own_bracket_off(got, own), want, markers): return True, 'unit_phrase_split'  # marks glued to the text AND the record's own bracketed unit phrase after it: each allowance alone is known; together (Codex R2-C5: `Programs2,3 (in thousands)`)
     if norm(own_bracket_off(minus_markers(got, markers), own)) == want: return True, 'unit_phrase_split'
     rest = minus_markers(got, markers)
     for piece in sorted((norm(x) for x in own if x and norm(x) != want), key=len, reverse=True):
@@ -1119,7 +1120,7 @@ class Grader:
         if not ok and match_pieces([spaced(k, ' '.join(pieces)) for k in usable], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', norm(got)
         if not ok: return 'fail', 'spacing' if spacing_only(got, ' '.join(pieces)) else 'text', norm(got)
         orders = {k['order'] for k in usable}
-        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not continued(u, tb) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break)
+        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not (continued(u, tb) and all(source_before(k['anchor'], u.get('anchor')) for k in usable) and source_before(u.get('anchor'), tb.get('anchor'))) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break)
         self.ctx_orders.update(orders); self.matched = objects(usable)
         return 'pass', None, flag or ('anchor_unknown' if not anchors else None)
 

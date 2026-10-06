@@ -1822,3 +1822,47 @@ Not changed, stated: mur T05 (a header with its footnote marks "2,3" and a unit 
 record, not the route) and twst T02 (a "%" column the key reads as 2025's while the printed "2025" header spans only the amount columns: the key reads past
 the printed header). **Control after: 63 of 65 cells, 34 of 35 blocks + 1 approximate, 18 of 18.** These control documents are regression cases now; the
 held-out set is the untouched exam. Development: no target lost.
+
+## 52. Codex's gate of §51 (`CODEX_COVERAGE_R2_VERDICT.md`): five changes, each at its owner (2026-10-06)
+
+**C1 — the tool's heading reading, fixed at its boundary; the inline-XBRL wrappers stay.** §51 left every `ix:` tag out of what the tool reads. Codex: a
+wrapper may carry presentation (`<ix:nonFraction style="display:block">10</ix:nonFraction>20` breaks the line in the browser) and that removal did not
+depend on the scanner's certainty — true; §51's wording was wrong on that point. The cause of the lost cover facts was never the wrappers but the tool's
+reading of a block it takes for a heading: `DocumentBuilder._get_element_text` reads a block only to its first child element, and a HeadingNode is terminal.
+`whole_headings()` (the adapter, applied where the tool is imported) re-reads such a block as the tool reads an `<h1>` — every descendant's text, stripped
+and space-joined — for **block** elements only: an inline run the tool takes for a heading (a bold `<font>` inside a sentence) is already read whole with its
+white space, and re-read as a block it lost the space before it (a first version: 331 words glued in the 60 files' legal exhibits, best-route boundary flags
+18 → 349). The wrappers are given to the tool as written. Measured against §51's candidate: the two cover facts stay (`Commission File Number 001-35672`,
+`For the quarterly period ended December 28, 2024`, one heading each in the file; in a bare synthetic case the tool takes the fact itself for a heading —
+its case-sensitive skip list does not match the lower-cased tag — and the two parts stand as two units; stated), `bundle-020 T01`'s `kind` row is back to pass (the removal had caused it), 0 target flips.
+The empty-anchor removal stays, on a smaller footing than §50 gave it: with the heading fix in place the anchors' own effect, measured by leaving them in
+(`cand_r3c`), is one file of 60 — the tool breaks the heading's word around an anchor inside it (`Be<a id><!--Anchor--></a>rry` → `Be` / `rry`, 2 base-route
+flags the screen step joins); 71 files read identically. A first reading of the 331 glued words as the anchors' doing was wrong: they were the inline
+re-read above. The tool itself glues `Total <ix:nonFraction
+style="display:block">10</ix:nonFraction>20` into `1020` with or without the wrapper (it holds the tag inline whatever its style): the boundary gate reports
+it; not ours to fix here.
+
+**C2 — a chained block keeps a cell only whole.** `piece()` checked its first seed and the extensions, not a later 20-character seed: `10.82 million for
+reporting period` was read from `10.1 | 0.82 million …` with `inserted_chars` 0 (Codex's reproduction; the same hole §51 had stated). A block over several
+cells now loses the part of a cell at either end (the `cell`/`edge` indexes already built; Codex's tested substitution): the `1` becomes the tool's own
+character, the whole cell stays. Refusing every seed across an edge was tried and rejected (by both of us): it lost the valid flattened `$341 | $408` table.
+0 such blocks in the 60 files (§51), so no development record moves.
+
+**C3 — a continued table is excused only where the source order agrees.** `continued()` alone let a title listed before an unrelated table with the same
+header row pass. The excuse now also requires the title's source place before the intervening table and that table's before the target (`source_before`,
+as the lead-in check reads order). The page-break continuation keeps passing; the displaced title fails `placement`.
+
+**C4 — a table with no text cell but a caption is its caption.** `to_units` dropped it with the spacer tables; it is a `caption` unit now, linked like any text.
+
+**C5 — grouped marks and the record's own unit phrase compose.** `same()` allowed `Programs2,3` (marks glued) and `Programs (in thousands)` (an owned unit
+phrase) each alone; together they failed. `without_marks(own_bracket_off(got, own), want, markers)` → `unit_phrase_split`; an undeclared unit, an unknown
+mark, extra words or a changed number still fail. Murphy T05 needs, besides, its printed `(in thousands)` declared as anchored table-header context in the
+**next** key package (bytes [1214178, 1214192) of its original; package 3 stays frozen): not done here.
+
+**Staged for the key record, not changed:** twst T02 — the printed `2025` header spans the amount column, not the `%` column beside it; the key reads `2025`
+as the `%` cell's period. The question for the record: is that an interpreted year association, outside the printed-span rule the T1 check tests? Until
+dispositioned the failure stays visible; the year is not removed from the output, no header is stretched, no issuer exception.
+
+Tests 374 (+4: the chain and its two mirrors — a block ending inside a cell, a seed over two cell ends —, the displaced title and a same-header table listed
+between but placed after, the caption, the composition; `tests/test_whole_headings.py`, under the tool's environment, covers the block heading, the inline run
+kept whole with its space, the anchor and the `<h2>` controls; skipped without the tool).

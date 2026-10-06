@@ -725,6 +725,13 @@ def link(raw, units, xml=False, vis=None):
             while la > ea and lb > eb and n[la - 1] == seg[lb - 1] and same(j + lb - 1, 2): la -= 1; lb -= 1
             size = a + SHORT - la
             while la + size < len(n) and lb + size < len(seg) and n[la + size] == seg[lb + size] and same(j + lb + size - 1, 2): size += 1
+            first, last = j + lb, j + lb + size  # a block over several cells keeps a cell only whole: a part of a cell at either end is cut off (Codex R2-C2: "10.82" was read from "10.1 | 0.82 …" by a chain)
+            if not same(first, size):
+                left, right = cell[first], cell[last - 1]
+                cut_left = edge[left][1] - first if left >= 0 and first > edge[left][0] else 0
+                cut_right = last - edge[right][0] if right >= 0 and last < edge[right][1] else 0
+                la += cut_left; lb += cut_left; size -= cut_left + cut_right
+            if size <= 0: continue
             blocks.append((la, lb, size)); ea, eb = la + size, lb + size
         if not blocks: return None
         obj['anchor'] = [{'byte_start': vis.s[j + b], 'byte_end_exclusive': vis.e[j + b + size - 1]} for a, b, size in blocks]

@@ -2,7 +2,7 @@
 columns is the key's pieces; a row-label piece carried down a block (a stub printed once for several rows, no rowspan) still labels the row."""
 import unittest
 
-from benchmarks.prepare.grader import grade
+from benchmarks.prepare.grader import anchor, grade
 from benchmarks.prepare.grader.adapters import edgartools_html as adapter
 from benchmarks.prepare.grader.tests.test_edgar_images import node
 
@@ -53,6 +53,27 @@ class Fixture(unittest.TestCase):
         empty = lambda a: dict(a, cells=[], anchor=None)  # a table unit with nothing in it (no adapter makes one now; a route may still carry one)
         self.assertEqual(self.grade({'table_title': ['Results of operations'], 'row_label': 'Total'}, self.units(empty))['table_title'], ('pass', None))
 
+    def test_a_title_displaced_before_an_unrelated_table_with_the_same_header_fails(self):  # Codex R2-C3: equal header rows alone do not make a continuation; the source order must agree
+        raw = b'<p>Total assets</p><table id="a"><tr><td>Name</td><td>2024</td></tr><tr><td>Cash</td><td>100</td></tr></table><p>Current debt</p><table id="b"><tr><td>Name</td><td>2024</td></tr><tr><td>Loans</td><td>20</td></tr></table>'
+        def at(s, start=0):
+            n = raw.index(s.encode(), start); return {'byte_start': n, 'byte_end_exclusive': n + len(s)}
+        units = []
+        for title, tid, label, value in (('Total assets', 'a', 'Cash', '100'), ('Current debt', 'b', 'Loans', '20')):
+            units.append({'id': title, 'kind': 'text', 'text': title, 'anchor': at(title)}); start = raw.index(('id="%s"' % tid).encode())
+            cells = [{'r': r, 'c': c, 'rs': 1, 'cs': 1, 'text': s, 'anchor': at(s, start), 'header': r == 0} for r, row in enumerate([['Name', '2024'], [label, value]]) for c, s in enumerate(row)]
+            units.append({'id': tid, 'kind': 'table', 'cells': cells, 'anchor': {'byte_start': raw.rfind(b'<table', 0, start), 'byte_end_exclusive': raw.index(b'</table>', start) + 8}})
+        t = {'key_id': 'syn/T2', 'file_id': 'syn/g.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': units[-1]['cells'][-1]['anchor'], 'table_anchor': units[-1]['anchor'], 'alternatives': {}, 'excluded': set(),
+             'support': {'table_title': {'anchors': [at('Current debt')]}}, 'fields': {'printed_value': '20', 'display_value': '20', 'value_kind': 'number', 'sign': 'positive', 'header_path': ['2024'], 'row_label': 'Loans', 'table_title': ['Current debt'], 'footnote_markers': [], 'periods': None}}
+        def title(order):
+            g = grade.Grader(t, grade.RouteFile({'file_id': t['file_id'], 'units': [dict(u) for u in order]}, raw)); g.grade_cell(); return next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'table_title')
+        self.assertTrue(grade.continued(units[1], units[3]))  # the two tables share a header row: the excuse alone would call them one table
+        self.assertEqual(title(units), ('pass', None)); self.assertEqual(title([units[0], units[2], units[1], units[3]]), ('fail', 'placement'))  # the title listed before the other table, its source place after it
+        raw2 = raw + b'<table id="c"><tr><td>Name</td><td>2024</td></tr><tr><td>Bonds</td><td>30</td></tr></table>'; start = raw2.index(b'id="c"')
+        c = {'id': 'c', 'kind': 'table', 'anchor': {'byte_start': raw2.rfind(b'<table', 0, start), 'byte_end_exclusive': raw2.index(b'</table>', start) + 8},
+             'cells': [{'r': r, 'c': k, 'rs': 1, 'cs': 1, 'text': s, 'anchor': {'byte_start': raw2.index(s.encode(), start), 'byte_end_exclusive': raw2.index(s.encode(), start) + len(s)}, 'header': r == 0} for r, row in enumerate([['Name', '2024'], ['Bonds', '30']]) for k, s in enumerate(row)]}
+        g = grade.Grader(t, grade.RouteFile({'file_id': t['file_id'], 'units': [dict(u) for u in (units[0], units[1], units[2], c, units[3])]}, raw2)); g.grade_cell()
+        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'table_title'), ('fail', 'placement'))  # a same-header table listed between the title and its table, its source place after the table: no continuation
+
     def test_a_corner_of_two_stub_columns_is_the_keys_pieces(self):
         self.assertEqual(self.grade({'corner_text': 'Name | Type', 'row_label': 'Total'})['corner_text'], ('pass', None))
         self.assertEqual(self.grade({'corner_text': 'Name | Kind', 'row_label': 'Total'})['corner_text'][0], 'fail')
@@ -81,6 +102,10 @@ class Helpers(unittest.TestCase):
         tree = {'type': 'DocumentNode', 'children': [{'type': 'TableNode', 'caption': None, 'rows': [[{'text': ' ', 'colspan': 1, 'rowspan': 1, 'is_header': False}]]}, {'type': 'ParagraphNode', 'text': 'after'}]}
         self.assertEqual([u['kind'] for u in adapter.to_units(tree)], ['text'])
         tree['children'][0]['rows'][0][0]['text'] = 'x'; self.assertEqual([u['kind'] for u in adapter.to_units(tree)], ['table', 'text'])
+        tree['children'][0]['rows'][0][0]['text'] = ' '; tree['children'][0]['caption'] = 'Outstanding debt at December 31'  # no text in any cell, a caption: the caption is read, and anchored (Codex R2-C4)
+        units = adapter.to_units(tree); self.assertEqual([(u['kind'], u['text']) for u in units][0], ('caption', 'Outstanding debt at December 31'))
+        raw = b'<table><caption>Outstanding debt at December 31</caption><tr><td></td></tr></table><p>after</p>'
+        self.assertEqual(raw[anchor.link(raw, units)['units'][0]['anchor']['byte_start']:][:31], b'Outstanding debt at December 31')
 
 
 if __name__ == '__main__':
