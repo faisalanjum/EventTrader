@@ -249,6 +249,8 @@ def whole_headings():
         return all(not isinstance(d.tag, str) or d.tag.lower() not in ('a', 'img') and (d.tag.lower() in self.INLINE_ELEMENTS or d.tag.lower().startswith('ix:') or getattr(self._extract_style(d), 'display', None) in ('inline', 'inline-block')) for d in element.iterdescendants())
     def creating(self, element, style):
         tag = element.tag.lower() if isinstance(element.tag, str) else ''
+        if tag in self.INLINE_ELEMENTS and any(d.tag == 'table' for d in element.iterdescendants()):
+            return ContainerNode(tag_name=element.tag, style=style)  # a table stays structural through inline wrappers
         if tag.startswith('ix:') and tag in self.INLINE_ELEMENTS and any(c.tag in self.BLOCK_ELEMENTS or c.tag in ('table', 'div', 'p') for c in element if hasattr(c, 'tag')):
             return ContainerNode(tag_name=element.tag, style=style)  # an inline-XBRL element holding blocks is a container — the tool's own rule for ix:nonNumeric and ix:continuation; the tool read an ix:footnote's table as one string ("2025202420252024")
         inline = tag not in self.INLINE_ELEMENTS and getattr(style, 'display', None) in ('inline', 'inline-block') and (element.text or '').strip() and any(isinstance(c.tag, str) for c in element)  # a block laid out inline with text of its own and elements: the tool kept that text only ("…on Form" lost "8-K does not constitute…"); without text of its own it walks the children itself

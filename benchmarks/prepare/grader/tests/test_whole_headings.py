@@ -55,6 +55,21 @@ class WholeHeadings(unittest.TestCase):
         link = self.units(b'<div><div style="display:inline">See <a href="#n3">Note 3</a> for details.</div></div>' + body)
         self.assertIn('Note 3', ' '.join(t for _, t in link)); self.assertIn('for details.', ' '.join(t for _, t in link))  # a link keeps the tool's traversal, nothing dropped
 
+    def test_a_table_inside_formatting_wrappers_stays_a_table(self):  # Codex CODEX_JOINED_NUMBERS_VERDICT C1: the tool read an inline wrapper holding a table as one string
+        body = b'<p>Body text follows here, long enough to be a paragraph of its own.</p>'
+        table = b'<table><tr><td>Revenue</td><td>2025</td><td>2024</td></tr><tr><td>Net</td><td>10</td><td>20</td></tr></table>'
+        def cells(raw):
+            vis = anchor.Visible(raw); units = adapter.to_units(adapter.dump(self.parse(adapter.named(raw, vis, adapter.codes(raw, vis))).root))
+            return [[c['text'] for c in u.get('cells') or []] for u in units if u.get('kind') == 'table']
+        for outer in (b'', b'ix:footnote'):
+            for wrapper in ((), (b'span',), (b'font',), (b'b',), (b'span', b'font'), (b'font', b'span')):
+                inner = table
+                for tag in wrapper: inner = b'<' + tag + b'>' + inner + b'</' + tag + b'>'
+                if outer: inner = b'<' + outer + b' id="fn-1">' + inner + b'</' + outer + b'>'
+                with self.subTest(outer=outer, wrapper=wrapper):
+                    self.assertEqual(cells(inner + body), [['Revenue', '2025', '2024', 'Net', '10', '20']])  # the tool as installed: "Revenue20252024 Net1020"
+        self.assertEqual(self.units(b'<div><ix:footnote id="fn-2"><span>(2) Excludes the 2024 charge.</span></ix:footnote></div>' + body)[0], ('text', '(2) Excludes the 2024 charge.'))  # no table below: the tool's inline reading
+
     def test_nested_inline_facts_are_read_whole(self):  # Codex's held-out review: the tool read an inline-XBRL text fact only to its first child; two cybersecurity paragraphs were lost
         text = lambda body: ' '.join(' '.join(u.get('text', '') for u in adapter.to_units(adapter.dump(self.parse('<html><body>' + body + '</body></html>').root))).split())
         self.assertEqual(text('<p><ix:nonNumeric>Our <ix:nonNumeric>Chief Financial Officer</ix:nonNumeric> oversees our team.</ix:nonNumeric></p>'), 'Our Chief Financial Officer oversees our team.')

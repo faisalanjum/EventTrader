@@ -2087,3 +2087,17 @@ everything below is an inline run — inline by tag, an inline-XBRL fact, or lai
 `<span>` (the reader the adapter already uses for nested inline facts); a link or a picture below, or a block, keeps the tool's own fallback for an
 inline-laid block, a container whose children are walked. Measured: the local-corpus check — lost text 68,198 → 64,543 characters, recovered in exactly seven documents of that family (634 → 0, 550 → 42, 2,502 → 302 …), units, cells, pictures and every other gate unchanged but one document's +3 boundary flags ("CO 2 e" for CO₂e — a subscript the screen step keeps apart by design; the sentences were missing before); key documents (all nine routes): 0 target, 0 field, 0 gate changes, every route's units identical; tests 397 (394 without playwright); real-original variants 48/48. Tests: the sentence, a telephone number of inline facts (one unit, every
 part), a link inside (kept, nothing dropped); under the tool as installed the sentence reads "This Current Report on Form".
+
+## 62. A table inside a formatting wrapper stays a table (2026-10-06; Codex `CODEX_JOINED_NUMBERS_VERDICT` C1)
+
+EdgarTools reads an element it lists as inline (`span`, `font`, `b`, an inline-XBRL footnote, …) with `text_content()`, so a table anywhere below one
+became a single string — `<ix:footnote><span><table>…` gave "Revenue20252024 Net1020". §59 caught only an inline-XBRL element whose direct child is a
+block. Now any element in the tool's inline list that has a table below it is the tool's own container (its children walked, the table built by the
+tool), tested before §59's rule; an inline run with no table below keeps the tool's inline reading. Codex's two lines, as he tested them.
+**The affected class**, from the markup as the tool parses it (the adapter's input, the tool's own cleaner and `_parse_html`, its own inline list): 3 of
+the 3,353 filer HTML documents of the local-corpus check — the two footnote tables §59 already reads as tables (outputs identical) and one guarantee
+agreement whose table of contents sits in a `<font>`: one text unit becomes a 30-row, 2-column table (60 cells), the same 682 characters in reading
+order, no link or picture involved, every gate 0. The other documents cannot change: the rule fires only where the class does. Key documents (development, control, released × base, formatted, screened; none in the class): no set or file on one side only, every file identical after the declared normalizations, 0 target, 0 field, 0 gate changes. Cost: no
+measurable change (the three documents and the largest unaffected file, 22.6 MB, 7.72 → 7.69 s; run-to-run spread about 3 %). Tests: one new case
+(twelve subcases: a table with no wrapper, in `span`, `font`, `b`, nested wrappers, each alone and inside `ix:footnote`; an inline footnote stays text) —
+ten fail under the previous adapter; Codex's probes, six failing before, pass.
