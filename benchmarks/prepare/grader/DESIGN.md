@@ -50,7 +50,7 @@ Tool outputs will change shape (owner, 2026-10-03). The grader therefore reads *
 - **Optional** (reported as "structure" when present): `level`, `header`, `caption`, `markers` (footnote marks kept apart from the number), `notes`, `marker`, `links`/`to`, `struck`, `struck_at` (where in `text` the source strikes, `[[start, end), …]`; the formatting step writes it where exact, §47), `name`/`path`/`group`/`siblings`/`mixed`/`within` (XML: the containing instance, the element's own place, prose around child fields, the prose unit a field stands within). An `anchor` is one place or a list of places (a unit over several pages or boxes, a cell pieced from several spans); a page place is `{page, region}` and may carry `charspan: [start, end)` — the characters of the unit's text that lie at that place (Docling's `prov.charspan`), the only way the grader learns which words sit on which page (§37–§38). A page group converted again marks a unit that still straddles it `incomplete` (§36).
 - **Kinds:** `heading text list_item caption footnote table image field clutter other`. `clutter` = dropped on purpose (page numbers, running banners); it counts as accounted for, not lost. A `clutter` unit counts only for the nothing-lost gate; it never satisfies any check in §5.
 - **Anchors:** HTML/XML `{byte_start, byte_end_exclusive}` in the original's bytes; PDF `{page, region: [x0,y0,x1,y1]}` in points, 1-based page, top-left origin; picture files `{file, region}` in pixels, top-left origin. Same conventions as the key. A unit or cell that sits in several source places (a merged stacked header, a prose block printed over several lines) may carry a **list** of anchors.
-- **Status:** `FAILED` (tool error) and `UNSUPPORTED` (format the route does not handle) count every target of that file as not converted; `PARTIAL` marks hand-made fixtures that cover only part of a file (the "nothing lost" gate is skipped for them).
+- **Status:** `FAILED` (tool error) and `UNSUPPORTED` (format the route does not handle) count every target of that file as not converted; `PARTIAL` marks hand-made fixtures that cover only part of a file (the "nothing lost" gate is skipped for them), a partial conversion with the tool's errors (§36), and a route whose later step could not run — its units kept, `error` naming the step (§67).
 
 ## 3. Finding a target in the route output
 
@@ -2154,7 +2154,7 @@ command line replaces with one that reuses its saved parses), `source_formatting
 that cannot be measured leaves the route as it was and says why), `xml_fields.convert(raw, file_id, sha256)` (a document that does not parse is a
 FAILED route with the parser's message); the HTML route's settings and version with them. Statement for statement the work the command lines did;
 they keep the key packets, the loop, the cache, the files and the facts, and call these. Not added: one call chaining the three HTML stages — no code
-did that before, and today the stages run in three environments; put to Codex. Tests: four new, one per call's boundary (permanent suite 367); the
+did that before, and today the stages run in three environments; put to Codex. (Added in §67 after his answer.) Tests: four new, one per call's boundary (permanent suite 367); the
 grader's cache test now patches `dump` where the call lives. Checked: the nine key route sets and the XML routes rebuilt against the same relabelled
 reference as §64: no set or file on one side only — routes, facts and grades — every file identical after the declared normalizations; tests 398 and 367.
 
@@ -2170,3 +2170,16 @@ every other); **C4** the command line's `adapter_seconds` subtracts the current 
 cached parse had made it about −600 s). Only timings and failure handling change; the test fixtures now carry the real hashes, and the cache test whose
 save raises `OSError` now expects it to propagate. Codex's 13 probes ported unchanged: 12 into `tests/driver/prepare/convert/test_boundaries.py`, the
 replay-timing one beside the grader's cache tests. Measured: Codex's 13 probes pass on this checkout; grader suite 399 and permanent suite 379 in the common environment, no skips; the nine key route sets and the XML routes rebuilt against the relabelled reference of §64: identical after the declared normalizations — the changes are timing (`adapter_seconds` now the current call's own) and failure handling, which no key document reaches; three docstrings now say what the calls raise (Codex's C2 wording, completed).
+
+## 67. One HTML document through the selected route in one call (2026-10-07; Codex `CODEX_CLEANUP_R1_VERDICT`, the composition)
+
+`driver/prepare/convert/html_route.py::prepare(raw, file_id, sha256, browser)` (not `html.py`: a module of that name would shadow the standard library's `html`, which the scanner imports, wherever that folder is first on the path): `edgartools_html.convert` → `source_formatting.step` → `screen_grid.step`, with
+the caller's bytes, hash and a browser the caller owns and reuses; returns the route and each step's own result (`formatting`: its count, None where
+nothing can be certified; `screen`: its facts). A failed conversion stops there, no step runs. A page that cannot be measured keeps the units it has and
+marks the route `PARTIAL` with the step's error — the status the route format already gives a partial conversion (§36, now said in §2; the grader
+grades a PARTIAL route and leaves its coverage unmeasured) — never a successful route with the error hidden beside it; a browser that has died shows
+as such a route on every document, and the caller restarts it. Source-identity, storage, dependency and resource
+errors propagate (§66). No browser launcher, scheduler, cache or parser of its own. Codex answered the question §65 left open: one environment runs
+all three stages (the common test environment holds EdgarTools and Playwright; the same EdgarTools 5.60.0 and lxml as the converter's own). Tests: four,
+as he listed (stage order and success — the caller's browser and file id carried through, formatting's None kept; nothing after a failed conversion;
+an unmeasurable page visible on a PARTIAL route with its content; operational errors propagated). Measured: every HTML source of the development, control and released sets (116) through `prepare` in that one environment with one reused browser, each route against the screened route the three command lines saved: 116 equal after a JSON round trip and the declared timing keys, all OK, formatting uncertifiable in 2 (as before), no screen error (`prepare_work/cleanup_r2_20261007/E2E_PREPARE_ROUTE.json`, 518 s); the two swaps an independent review found untested (another browser, another file id) now fail the stage test; permanent suite 383, grader 399, no skips.
