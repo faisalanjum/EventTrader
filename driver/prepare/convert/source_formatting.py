@@ -34,6 +34,8 @@ def apply(raw, units):
 
 def step(raw, route):
     """The step on one document's route (the caller's bytes): the source's struck text written onto its units and cells (`apply`), the route record
-    naming the step. Returns `apply`'s count, None where nothing can be certified."""
+    naming the step. Returns `apply`'s count, None where nothing can be certified. Bytes that are not the route's source (its SHA-256) raise ValueError
+    before the route is touched."""
+    anchor.check_source(raw, route.get('sha256'))
     n = apply(raw, route['units']); route['route'] = dict(route['route'], name=route['route']['name'] + '+source-formatting', settings=dict(route['route'].get('settings') or {}, source_formatting=True))
     return n

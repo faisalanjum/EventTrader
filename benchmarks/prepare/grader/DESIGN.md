@@ -2157,3 +2157,16 @@ they keep the key packets, the loop, the cache, the files and the facts, and cal
 did that before, and today the stages run in three environments; put to Codex. Tests: four new, one per call's boundary (permanent suite 367); the
 grader's cache test now patches `dump` where the call lives. Checked: the nine key route sets and the XML routes rebuilt against the same relabelled
 reference as §64: no set or file on one side only — routes, facts and grades — every file identical after the declared normalizations; tests 398 and 367.
+
+## 66. The one-document calls check their source and stop on operational failures (2026-10-07; Codex `CODEX_CLEANUP_R1_VERDICT` C1–C4)
+
+Codex's review of §65 found four gaps and supplied a tested minimal patch (`codex_cleanup_r1/MINIMAL_FIX.patch`, 12 files pinned before and after),
+applied unchanged: **C1** every public call checks that the caller's bytes are the source the hash names (`anchor.check_source`), before any parse,
+browser work or change to a route — a false hash, or different bytes with the route's hash, raised `ValueError` nowhere before (even `<i>10</i>` for
+`<s>10</s>` passed); **C2** storage, dependency and resource failures (`OSError`, the downloader's `StorageError`, `ImportError`, `MemoryError`) stop
+the caller instead of becoming a bad document or a page error — a document the tool cannot read is still a FAILED route, a page that cannot be measured
+still reported with the route unchanged; **C3** each XML result owns its route record (one shared dictionary had let an annotation of one result change
+every other); **C4** the command line's `adapter_seconds` subtracts the current parse call's duration, not a reused parse's recorded one (a 600-second
+cached parse had made it about −600 s). Only timings and failure handling change; the test fixtures now carry the real hashes, and the cache test whose
+save raises `OSError` now expects it to propagate. Codex's 13 probes ported unchanged: 12 into `tests/driver/prepare/convert/test_boundaries.py`, the
+replay-timing one beside the grader's cache tests. Measured: Codex's 13 probes pass on this checkout; grader suite 399 and permanent suite 379 in the common environment, no skips; the nine key route sets and the XML routes rebuilt against the relabelled reference of §64: identical after the declared normalizations — the changes are timing (`adapter_seconds` now the current call's own) and failure handling, which no key document reaches; three docstrings now say what the calls raise (Codex's C2 wording, completed).

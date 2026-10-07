@@ -1,5 +1,7 @@
 """Independent positive and damaged controls for the six round-15 shared rules."""
+import contextlib
 import copy
+import hashlib
 import importlib.metadata
 import io
 import json
@@ -15,6 +17,7 @@ from unittest.mock import patch
 from benchmarks.prepare.grader import grade
 from benchmarks.prepare.grader.adapters import cache, edgartools_html as ed, prestep_headings as ph
 from benchmarks.prepare.grader.tests.test_grade import GraderFixture, HTM_ID, XML_ID, PDF_ID, HTML, elem
+from driver.prepare.convert import edgartools_html as eh
 
 
 class BoundaryTests(unittest.TestCase):
@@ -232,9 +235,35 @@ class EdgarCacheTests(unittest.TestCase):
             run(); m = json.loads(receipt.read_text()); m.pop('status'); receipt.write_text(json.dumps(m)); self.assertEqual(run(True)['status'], 'FAILED')
             run(); self.assertEqual(run(failure=True)['status'], 'FAILED'); self.assertFalse(receipt.exists()); self.assertEqual(run(True)['status'], 'FAILED')
             run()
-            with patch.object(cache, 'save', side_effect=OSError('interrupted receipt save')): self.assertEqual(run()['status'], 'FAILED')
+            with patch.object(cache, 'save', side_effect=OSError('interrupted receipt save')):
+                with self.assertRaises(OSError): run()
             self.assertFalse(receipt.exists()); self.assertEqual(run(True)['status'], 'FAILED')
             run(); receipt.unlink(); self.assertEqual(run(True)['status'], 'FAILED')
+
+
+# The command line's timing with a reused parse (Codex CODEX_CLEANUP_R1_VERDICT C4; his probe, ported unchanged)
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+RAW = b'<p><i>10</i> 20</p>'
+TREE = {'type': 'DocumentNode', 'children': [{'type': 'ParagraphNode', 'text': '10 20'}]}
+
+
+class ReplayTiming(unittest.TestCase):
+    def test_cached_tool_duration_is_not_subtracted_from_current_adapter_time(self):
+        from benchmarks.prepare.grader.adapters import edgartools_html as cli, cache
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td); src = root / 's.htm'; src.write_bytes(RAW)
+            out = root / 'out'; raw_dir = out / 'raw'; raw_dir.mkdir(parents=True)
+            cached = raw_dir / 's.htm.edgartools.json'; cached.write_text(json.dumps(TREE))
+            cache.save(raw_dir / 's.htm.meta.json', [cached], sha256=sha(RAW), version='edgartools prior',
+                       settings=eh.SETTINGS, status='OK', tool_seconds=600.0)
+            sources = [dict(file_id='s.htm', path=src, sha256=sha(RAW), split='development')]
+            with patch.object(cli.grade, 'load_sources', return_value=sources), patch.object(cli, 'parse', side_effect=AssertionError('must reuse saved parse')), contextlib.redirect_stdout(io.StringIO()):
+                cli.main(['--key', 'unused', '--split', 'development', '--out', str(out), '--reuse-raw'])
+            facts = json.loads((out / 'facts.json').read_text())['files']['s.htm']
+            self.assertEqual(facts['tool_seconds'], 600.0)
+            self.assertEqual(facts['version'], 'edgartools prior')
+            self.assertGreaterEqual(facts['adapter_seconds'], 0)
+            self.assertLess(facts['adapter_seconds'], 10)
 
 
 if __name__ == '__main__': unittest.main()

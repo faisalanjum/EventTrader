@@ -8,6 +8,7 @@ import time
 from dataclasses import asdict
 
 from driver.prepare.convert import anchor
+from driver.prepare.get.acquire import StorageError
 
 NAME = 'edgartools-html'  # the tool's heading nodes nested inside paragraphs are kept as headings
 KIND = {'HeadingNode': 'heading', 'ParagraphNode': 'text', 'TextNode': 'text', 'ListItemNode': 'list_item', 'ImageNode': 'image'}
@@ -292,9 +293,11 @@ def parse(raw, vis):
 
 
 def convert(raw, file_id, sha256, parse=parse):
-    """One HTML document into its route (the caller's bytes): scanned, parsed by the tool, adapted and linked to the source (`route_for`). A crash is a
-    FAILED route, never a stop. `parse(raw, vis)` -> (dump, seconds, version) is the tool call; the command line passes one that reuses its saved parses."""
+    """One HTML document into its route (the caller's bytes): scanned, parsed by the tool, adapted and linked to the source (`route_for`). A document parse error is a
+    FAILED route; source-identity, storage, dependency and resource failures stop the caller. `parse(raw, vis)` -> (dump, seconds, version) is the tool call; the command line passes one that reuses its saved parses."""
+    anchor.check_source(raw, sha256)
     vis = anchor.Visible(raw)
     try: tree, seconds, made_by = parse(raw, vis)
+    except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e: return unsupported(file_id, sha256, version(), 'FAILED', repr(e)[:300])
     return route_for(tree, raw, file_id, sha256, seconds, made_by, SETTINGS, vis)

@@ -6,7 +6,7 @@ import unittest
 import xml.parsers.expat as expat
 
 from driver.prepare.convert.xml_fields import convert, units_of
-from driver.prepare.convert.anchor import Visible
+from driver.prepare.convert.anchor import Visible, sha256
 
 
 class XmlRouteReading(unittest.TestCase):
@@ -39,9 +39,11 @@ class XmlRouteReading(unittest.TestCase):
     def test_a_document_that_does_not_parse_is_a_failed_route_not_a_stop(self):  # Codex G6-1 on the one-document call (the batch case stays with the grader's command line)
         for encoding in ('not-a-real-encoding', 'UTF-32', 'utf-7', 'shift_jis'):
             with self.subTest(encoding=encoding):
-                doc = convert(('<?xml version="1.0" encoding="%s"?><r>1</r>' % encoding).encode(), 'first.xml', 'abc')
+                raw = ('<?xml version="1.0" encoding="%s"?><r>1</r>' % encoding).encode()
+                doc = convert(raw, 'first.xml', sha256(raw))
                 self.assertEqual((doc['status'], doc['units'], doc['error'].startswith('XML parse failed')), ('FAILED', [], True))
-        doc = convert(b'<?xml version="1.0" encoding="UTF-8"?><r><n>2</n></r>', 'second.xml', 'def')
+        raw = b'<?xml version="1.0" encoding="UTF-8"?><r><n>2</n></r>'
+        doc = convert(raw, 'second.xml', sha256(raw))
         self.assertEqual((doc['status'], [u['text'] for u in doc['units']], doc['route']['adapter']), ('OK', ['2'], 'driver/prepare/convert/xml_fields.py'))
 
 

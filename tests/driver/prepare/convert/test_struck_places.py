@@ -71,7 +71,7 @@ class StruckPlaces(unittest.TestCase):
         x = formatted(b'<p><s>The</s> The</p>', 'The The', struck_at=[[4, 7]]); self.assertEqual(x['struck_at'], [[0, 3]])
 
     def test_the_step_names_itself_in_the_route_record(self):
-        raw = b'<p><s>Old</s> New</p>'; route = {'route': {'name': 'r', 'settings': {'a': 1}}, 'units': anchor.link(raw, [{'id': 'u', 'kind': 'text', 'text': 'Old New'}])['units']}
+        raw = b'<p><s>Old</s> New</p>'; route = {'sha256': anchor.sha256(raw), 'route': {'name': 'r', 'settings': {'a': 1}}, 'units': anchor.link(raw, [{'id': 'u', 'kind': 'text', 'text': 'Old New'}])['units']}
         self.assertEqual(source_formatting.step(raw, route), 1)
         self.assertEqual((route['route']['name'], route['route']['settings'], route['units'][0]['struck']), ('r+source-formatting', {'a': 1, 'source_formatting': True}, ['Old']))
 

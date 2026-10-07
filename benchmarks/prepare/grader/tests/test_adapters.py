@@ -157,7 +157,7 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         from unittest.mock import patch
         with tempfile.TemporaryDirectory() as d:  # Codex R12-4: the run summary keeps every file (the per-file unread dictionary used to overwrite it)
             pa, pb = Path(d) / 'a.xml', Path(d) / 'b.xml'; pa.write_bytes(b'<r><v u="x">1</v></r>'); pb.write_bytes(b'<r><v>2</v></r>')
-            srcs = [{'file_id': 'acc/a.xml', 'path': pa, 'sha256': 'a', 'split': 'development'}, {'file_id': 'acc/b.xml', 'path': pb, 'sha256': 'b', 'split': 'development'}]
+            srcs = [{'file_id': 'acc/a.xml', 'path': pa, 'sha256': grade.sha256(pa.read_bytes()), 'split': 'development'}, {'file_id': 'acc/b.xml', 'path': pb, 'sha256': grade.sha256(pb.read_bytes()), 'split': 'development'}]
             with patch.object(xf.grade, 'load_sources', return_value=srcs): xf.main(['--key', 'unused', '--split', 'development', '--out', d + '/run'])
             facts_run = json.loads((Path(d) / 'run' / 'facts.json').read_text())['files']
             self.assertEqual(sorted(facts_run), ['acc/a.xml', 'acc/b.xml']); self.assertEqual(facts_run['acc/a.xml']['status'], 'OK')
@@ -358,11 +358,11 @@ class DoclingPdfAdapterTests(unittest.TestCase):
             self.assertEqual(run(dp, [], ['--reuse-raw'], version='B')[2:], (['Good again'], 'docling A; docling-core A'))  # reused whole; the producing version, not the installed one
             raw = p / 'run' / 'raw' / 's.pdf.docling.json'; raw.write_bytes(raw.read_bytes() + b' ')
             r = run(dp, [], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('is not the file the cached run saved', r[1])  # an output changed under its record
-            src = p / 's.htm'; src.write_bytes(b'<p>x</p>'); sources[:] = [{'file_id': 's.htm', 'path': src, 'sha256': 'h1', 'split': 'development'}]
+            src = p / 's.htm'; src.write_bytes(b'<p>x</p>'); sources[:] = [{'file_id': 's.htm', 'path': src, 'sha256': eh.grade.sha256(src.read_bytes()), 'split': 'development'}]
             self.assertEqual(run(dh, [('Plain', False)])[0], 'OK')
             r = run(dh, [], ['--reuse-raw', '--prestep-headings']); self.assertEqual(r[0], 'FAILED'); self.assertIn('other settings', r[1])  # a plain run is not the headings route
             self.assertEqual(run(dh, [], ['--reuse-raw'], version='B')[2:], (['Plain'], 'docling A; docling-core A'))
-            sources[0]['sha256'] = 'h2'
+            src.write_bytes(b'<p>Revenue 11.</p>'); sources[0]['sha256'] = eh.grade.sha256(src.read_bytes())
             r = run(dh, [], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('other bytes', r[1])  # the original changed under the cache
 
     def test_an_edgartools_parse_is_reused_only_whole_and_keeps_its_producing_version(self):
@@ -385,7 +385,7 @@ class DoclingPdfAdapterTests(unittest.TestCase):
             return type('Parsed', (), {'root': DocumentNode(ParagraphNode(r))})()
         docs = ModuleType('edgar.documents'); docs.parse_html = parse_html
         with tempfile.TemporaryDirectory() as td:
-            p = Path(td); src = p / 's.htm'; src.write_bytes(b'<p>Revenue 10.</p>'); sources = [{'file_id': 's.htm', 'path': src, 'sha256': 'h1', 'split': 'development'}]
+            p = Path(td); src = p / 's.htm'; src.write_bytes(b'<p>Revenue 10.</p>'); sources = [{'file_id': 's.htm', 'path': src, 'sha256': eh.grade.sha256(src.read_bytes()), 'split': 'development'}]
             def run(texts, flags=(), version='A'):
                 plan[:] = list(texts)
                 with patch.dict(sys.modules, {'edgar': ModuleType('edgar'), 'edgar.documents': docs}), patch.object(eh.grade, 'load_sources', return_value=sources), patch.object(importlib.metadata, 'version', return_value=version), redirect_stdout(io.StringIO()):
@@ -398,9 +398,9 @@ class DoclingPdfAdapterTests(unittest.TestCase):
             r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('cache refused: no record', r[1])
             run(['Revenue 10.']); raw = p / 'run' / 'raw' / 's.htm.edgartools.json'; raw.write_bytes(raw.read_bytes() + b' ')
             r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('is not the file the cached run saved', r[1])  # an output changed under its record
-            run(['Revenue 10.']); sources[0]['sha256'] = 'h2'
+            run(['Revenue 10.']); src.write_bytes(b'<p>Revenue 11.</p>'); sources[0]['sha256'] = eh.grade.sha256(src.read_bytes())
             r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('other bytes', r[1])  # the original changed under the cache
-            sources[0]['sha256'] = 'h1'; run(['Revenue 10.']); meta = p / 'run' / 'raw' / 's.htm.meta.json'; m = json.loads(meta.read_text()); m.pop('status'); meta.write_text(json.dumps(m))
+            src.write_bytes(b'<p>Revenue 10.</p>'); sources[0]['sha256'] = eh.grade.sha256(src.read_bytes()); run(['Revenue 10.']); meta = p / 'run' / 'raw' / 's.htm.meta.json'; m = json.loads(meta.read_text()); m.pop('status'); meta.write_text(json.dumps(m))
             r = run([], ['--reuse-raw']); self.assertEqual(r[0], 'FAILED'); self.assertIn('did not succeed', r[1])  # a record without an outcome vouches for nothing (Codex's control)
 
 from benchmarks.prepare.grader.adapters import prestep_headings as ph

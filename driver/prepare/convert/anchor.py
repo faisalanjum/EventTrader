@@ -790,6 +790,11 @@ def link(raw, units, xml=False, vis=None):
 sha256 = lambda b: hashlib.sha256(b).hexdigest()
 
 
+def check_source(raw, expected):
+    """Refuse a mismatched source identity before parsing or changing a route."""
+    if sha256(raw) != expected: raise ValueError("source bytes differ from the declared SHA-256")
+
+
 def spans(anchor):
     """An anchor is one place or, for a cell that sits in several source places, a list of them."""
     return anchor if isinstance(anchor, list) else [anchor] if isinstance(anchor, dict) else []

@@ -39,12 +39,18 @@ def main(argv=None):
             tree, seconds, made_by = parse(raw, vis)
             rawjson.write_text(json.dumps(tree, ensure_ascii=False)); cache.save(metajson, [rawjson], sha256=sha, version=made_by, settings=SETTINGS, status='OK', tool_seconds=seconds)
             return tree, seconds, made_by
-        t0 = time.time(); route = convert(path.read_bytes(), fid, sha, kept)
-        if route['status'] != 'OK':  # a tool crash is a result, never a stop
-            facts[fid] = {'status': 'FAILED', 'error': route['error'], 'seconds': round(time.time() - t0, 2)}
+        parse_elapsed = 0
+        def timed_parse(raw, vis):
+            nonlocal parse_elapsed
+            started = time.perf_counter()
+            try: return kept(raw, vis)
+            finally: parse_elapsed = time.perf_counter() - started
+        t0 = time.perf_counter(); route = convert(path.read_bytes(), fid, sha, timed_parse)
+        if route['status'] != 'OK':  # a document parse failure is recorded; operational errors have propagated
+            facts[fid] = {'status': 'FAILED', 'error': route['error'], 'seconds': round(time.perf_counter() - t0, 2)}
             (out / 'route' / (fid + '.json')).write_text(json.dumps(route)); continue
         flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
-        facts[fid] = {'status': 'OK', 'version': route['route']['version'], 'tool_seconds': route['seconds'], 'adapter_seconds': round(time.time() - t0 - route['seconds'], 2), 'items': len(flat),
+        facts[fid] = {'status': 'OK', 'version': route['route']['version'], 'tool_seconds': route['seconds'], 'adapter_seconds': round(time.perf_counter() - t0 - parse_elapsed, 2), 'items': len(flat),
                       'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
                       'uncovered_chars': sum(len(anchor.squash(s['text'])) for s in route['uncovered'])}
         (out / 'route' / (fid + '.json')).write_text(json.dumps(route, ensure_ascii=False))

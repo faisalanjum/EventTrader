@@ -10,6 +10,7 @@ import time
 from bisect import bisect_left, bisect_right
 
 from driver.prepare.convert import anchor
+from driver.prepare.get.acquire import StorageError
 from driver.prepare.convert.anchor import Visible
 
 _CELL_END = re.compile(rb'(?i)</t[dh]\s*>')
@@ -142,9 +143,11 @@ def step(raw, route, browser):
     """The step on one document's route (the caller's bytes and browser): its tables gridded as Chrome lays them out (`apply`), the spaces the tool
     added measured and joined where Chrome shows them touching on one baseline (`join`), in a file the scanner cannot read for certain the units'
     endpoint boxes recorded; the route record names the step. Returns the step's facts; a page that cannot be measured leaves the route as it was
-    and says why."""
+    and says why. Bytes that are not the route's source raise ValueError before any browser work; storage, dependency and resource errors propagate."""
+    anchor.check_source(raw, route.get('sha256'))
     t0 = time.time(); vis = Visible(raw); gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []; marked, spans = tag_cells(raw, vis, gaps + endpoints)
     try: measured, boxes = measure(marked, browser)
+    except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e: return {'error': repr(e)[:200]}
     if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
         route['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}

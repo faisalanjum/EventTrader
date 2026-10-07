@@ -9,9 +9,10 @@ repaired: a document that does not parse is reported FAILED with the parser's ow
 what stands outside the document is refused, so a reading that would need it fails instead of going on without it; an element the parser
 makes from an entity's text has no bytes of its own, and the document is refused rather than given a position that is none."""
 import time
+from copy import deepcopy
 import xml.parsers.expat as expat
 
-from driver.prepare.convert.anchor import xml_parser
+from driver.prepare.convert.anchor import check_source, xml_parser
 
 NAME = 'xml-fields'
 
@@ -59,8 +60,9 @@ ROUTE = {'name': NAME, 'tool': 'python xml.parsers.expat', 'version': expat.EXPA
 
 def convert(raw, file_id, sha256):
     """One XML document into its route (`units_of`, the caller's bytes): a document that does not parse is a FAILED route with the parser's own
-    message, never a stop."""
-    t0 = time.time(); doc = {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'route': ROUTE, 'units': []}
+    message; bytes the hash does not name raise ValueError before any parse."""
+    check_source(raw, sha256)
+    t0 = time.time(); doc = {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'route': deepcopy(ROUTE), 'units': []}
     try:
         unread = {}; doc['units'] = units_of(raw, unread)  # the per-file unread count, apart from the run's facts
         if unread.get('attribute_values'): doc['not_read'] = unread  # what the route leaves unread, stated rather than silent

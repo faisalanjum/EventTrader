@@ -22,7 +22,7 @@ class Offline(unittest.TestCase):
     def test_a_page_that_cannot_be_measured_leaves_the_route_and_says_why(self):
         class Browser:
             def new_page(self, **kw): raise RuntimeError('no page')
-        route = {'route': {'name': 'r'}, 'units': [{'id': 'u', 'kind': 'text', 'text': 'x'}]}; before = copy.deepcopy(route)
+        route = {'sha256': screen_grid.anchor.sha256(b'<p>x</p>'), 'route': {'name': 'r'}, 'units': [{'id': 'u', 'kind': 'text', 'text': 'x'}]}; before = copy.deepcopy(route)
         facts = screen_grid.step(b'<p>x</p>', route, Browser())
         self.assertEqual(route, before); self.assertIn('no page', facts['error'])
 
