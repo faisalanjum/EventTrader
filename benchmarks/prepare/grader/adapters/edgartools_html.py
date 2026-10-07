@@ -266,6 +266,11 @@ def whole_headings():
         made = getattr(self, '_making', None)
         return whole(self, element) if made and made[0] is element else read(self, element)  # (a)
     db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text, db.DocumentBuilder._whole_headings = creating, reading, True
+    from edgar.documents.processors.preprocessor import HTMLPreprocessor as P
+    compile_ = P._compile_patterns
+    def patterns(self):  # the tool's cleaner deleted every white space before . , ; ! ? in the raw page ("1,855,579 ,941,411" became one number, "Sections .13, .14"
+        found = compile_(self); found['space_before_punct'] = re.compile(r'(?!)()'); return found  # "Sections.13,.14"); the page prints the space and so does the route: a pattern that never matches (its replacement names group 1)
+    P._compile_patterns = patterns
 
 
 def main(argv=None):

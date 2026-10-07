@@ -168,7 +168,7 @@ giant units, since fixed), flattens some tables into prose, splits a few words (
 (11 of its 60 blocks come back unresolved: nothing is emitted at their place — 3 page numbers, 8 pictures); both leave the 1-point white text of one exhibit uncovered, which the contract counts as visible
 (a key-side question).
 
-Proof state at hand-over (run 36 = run 35 + the worktree merge, `DESIGN.md` §45–§56 and §58–§59 (§57, the shared comparison file, is on the branch shared-compare until it merges), with 396 tests): 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 3 (and on package 2, as a control), package check `golden/check_package.py` passes; Codex's rounds
+Proof state at hand-over (run 36 = run 35 + the worktree merge, `DESIGN.md` §45–§56 and §58–§60 (§57, the shared comparison file, is on the branch shared-compare until it merges), with 396 tests): 244 unit tests (with the pages local Chrome printed, `tests/fixtures/browser_pages_r18.json`, as sub-tests), 48/48 real-original variants on package 3 (and on package 2, as a control), package check `golden/check_package.py` passes; Codex's rounds
 1–18 scripts and the package-2 reproducers re-run against this code behave as they expected (adapter audits over all 60 saved outputs: 0 cells lost, 0 tables shifted), except the differences stated in
 `prepare_work/grader_review_codex_20261003/FABLE_RESPONSE_R3.md` (digits split across 22 cells → False; "3.7 %" → pass) and
 `FABLE_RESPONSE_R4.md` (a packet name in two folders is refused as ambiguous; an invalid table-context declaration stops the run; the
