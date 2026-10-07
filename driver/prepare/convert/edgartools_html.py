@@ -165,8 +165,8 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
         if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own
     units = with_every_picture(linked['units'], vis)
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
-            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py',
-                      'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': units, 'uncovered': linked['uncovered']}
+            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'driver/prepare/convert/edgartools_html.py',
+                      'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered']}
 
 
 def with_every_picture(units, vis):
@@ -212,7 +212,7 @@ def with_every_picture(units, vis):
 
 def unsupported(file_id, sha256, version, status='UNSUPPORTED', error='not an HTML file'):
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': status, 'error': error, 'seconds': 0,
-            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': {}, 'adapter': 'benchmarks/prepare/grader/adapters/edgartools_html.py', 'linker': None}, 'units': []}
+            'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': {}, 'adapter': 'driver/prepare/convert/edgartools_html.py', 'linker': None}, 'units': []}
 
 
 def whole_headings():

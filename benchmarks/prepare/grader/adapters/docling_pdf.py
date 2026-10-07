@@ -125,7 +125,7 @@ def route_for_printed_html(doc, raw, file_id, sha256, seconds, version, settings
         for c in u.get('cells') or []: c.pop('_i', None)
     linked = anchor.link(raw, units)  # the tool's own order is kept
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds, 'pages': page_sizes(doc),
-            'route': {'name': NAME + ' (printed HTML)', 'tool': 'docling', 'version': version, 'settings': settings or {}, 'adapter': 'benchmarks/prepare/grader/adapters/docling_pdf.py', 'linker': 'benchmarks/prepare/grader/anchor.py'},
+            'route': {'name': NAME + ' (printed HTML)', 'tool': 'docling', 'version': version, 'settings': settings or {}, 'adapter': 'benchmarks/prepare/grader/adapters/docling_pdf.py', 'linker': 'driver/prepare/convert/anchor.py'},
             'units': linked['units'], 'uncovered': linked['uncovered']}
 
 

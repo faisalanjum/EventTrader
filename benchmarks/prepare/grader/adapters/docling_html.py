@@ -89,7 +89,7 @@ def route_for(doc, raw, file_id, sha256, seconds, version, settings=None):
     linked = anchor.link(raw, to_units(doc))  # the tool's own order is kept: the reading-order gate measures the tool, not the adapter
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'docling', 'version': version, 'settings': settings or {'backend': 'HTML', 'options': 'defaults'},
-                      'adapter': 'benchmarks/prepare/grader/adapters/docling_html.py', 'linker': 'benchmarks/prepare/grader/anchor.py'}, 'units': linked['units'], 'uncovered': linked['uncovered']}
+                      'adapter': 'benchmarks/prepare/grader/adapters/docling_html.py', 'linker': 'driver/prepare/convert/anchor.py'}, 'units': linked['units'], 'uncovered': linked['uncovered']}
 
 
 def route_status(status, errors=()):

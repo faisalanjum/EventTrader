@@ -24,7 +24,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--key', required=True); ap.add_argument('--split', required=True); ap.add_argument('--out', required=True); ap.add_argument('--catalog')
     a = ap.parse_args(argv); out = Path(a.out); facts = {}
-    route = {'name': NAME, 'tool': 'python xml.parsers.expat', 'version': expat.EXPAT_VERSION, 'settings': {'namespaces': True, 'recover': False}, 'adapter': 'benchmarks/prepare/grader/adapters/xml_fields.py', 'linker': None}
+    route = {'name': NAME, 'tool': 'python xml.parsers.expat', 'version': expat.EXPAT_VERSION, 'settings': {'namespaces': True, 'recover': False}, 'adapter': 'driver/prepare/convert/xml_fields.py', 'linker': None}
     for s in grade.load_sources(a.key, a.catalog):
         fid, path, sha = s['file_id'], s['path'], s['sha256']
         if s['split'] != a.split or path.suffix.lower() != '.xml': continue

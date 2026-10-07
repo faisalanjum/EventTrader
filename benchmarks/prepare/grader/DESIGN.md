@@ -2130,7 +2130,17 @@ stay here as well until MIGRATION step 5 reconciles old and new. Not copied: the
 mixed files), the Docling, PDF, pre-step and cache tests, and the XML batch case that runs through the command line.
 **Measured** (the common test environment, 3.11.10): grader suite 398, permanent suite 286 (105 get + 181 convert), no skips; under all four interpreters the
 moved modules import from the copy; the nine key route sets rebuilt by the moved code against `nested_table_20261006/build_nt` (9382f5d2e's code, the
-same key): 674 route files and 27 grading files, no set or file on one side only, every file identical after the declared normalizations (the timings and the run's own folder); the XML routes (development 4, control 7 files) identical; real-original variants 48/48 with the results file unchanged;
+same key): 655 files under the nine route sets (411 of them prepared-document JSON; my first count, 674, took in 19 empty folders) and 27 grading files, no set or file on one side only, every file identical after the declared normalizations (the timings and the run's own folder); the XML routes (development 4, control 7 files) identical; real-original variants 48/48 with the results file unchanged;
 package check clean.
 **Open, for the cleanup pass:** a route still names its linker `benchmarks/prepare/grader/anchor.py` (unchanged so that no output changes); a batch's
 per-file failure isolation is the command line's (no production batch yet); docstrings say "the grader" where they mean the scanner's users.
+
+## 64. A route names the code that made it (2026-10-07; Codex `CODEX_CONVERT_EXTRACT_VERDICT`, step 3)
+
+After §63 a route still named its linker `benchmarks/prepare/grader/anchor.py` and the HTML and XML adapters by their old paths: metadata only (no
+code reads them — checked), kept so that the move changed no output. Now the labels name where the code lives: the HTML route's `adapter`
+`driver/prepare/convert/edgartools_html.py` and `linker` `driver/prepare/convert/anchor.py`, the XML route's `adapter`
+`driver/prepare/convert/xml_fields.py`, the Docling routes' `linker` the same scanner; the Docling adapters' own paths are still true and stay. Old
+receipts are not rewritten. Checked on its own: in the code only path-label strings changed (a syntax-tree comparison); the nine key route sets and
+the XML routes rebuilt against a copy of the §63 build with exactly those labels replaced (`prepare_work/convert_extract_20261007/relabel.py`: 366
+linker and 429 adapter labels in the HTML build, 15 in the XML build): no set or file on one side only, every file identical after the declared normalizations (the timings and the run's own folder); tests 398 and 363.
