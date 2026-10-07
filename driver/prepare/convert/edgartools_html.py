@@ -273,9 +273,13 @@ def whole_headings():
     def patterns(self):  # the tool's cleaner deleted every white space before . , ; ! ? in the raw page ("1,855,579 ,941,411" became one number, "Sections .13, .14"
         found = compile_(self); found['space_before_punct'] = re.compile(r'(?!)()'); return found  # "Sections.13,.14"); the page prints the space and so does the route: a pattern that never matches (its replacement names group 1)
     P._compile_patterns = patterns
+    # The tool deletes any element whose whole text is a short number, a roman numeral or "Page N" when its style looks like a footer (centered or
+    # right-aligned, a bottom margin, a page break near): a cover ZIP code, a right-aligned "125" under "Shares outstanding", a tagged shares fact and a
+    # debt class "IV" were lost with the page numbers (Codex, accuracy-fable-1). Nothing is deleted here: what the page shows stays, in source order.
+    db.DocumentBuilder._is_page_number_container = lambda self, element: False
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def version():

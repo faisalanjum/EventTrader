@@ -266,4 +266,22 @@ class ReplayTiming(unittest.TestCase):
             self.assertLess(facts['adapter_seconds'], 10)
 
 
+class SettingsCache(unittest.TestCase):
+    def test_a_parse_saved_under_the_previous_settings_is_refused_and_one_under_the_current_settings_is_reused(self):  # Codex, accuracy-fable-1: a lossy parse saved before page-number candidates were kept is never reused
+        from benchmarks.prepare.grader.adapters import edgartools_html as cli, cache
+        previous = {k: v for k, v in eh.SETTINGS.items() if k != 'page_number_candidates'}
+        for settings, status in ((previous, 'FAILED'), (eh.SETTINGS, 'OK')):
+            with tempfile.TemporaryDirectory() as td, self.subTest(saved_under=sorted(settings)[-1]):
+                root = Path(td); src = root / 's.htm'; src.write_bytes(RAW); out = root / 'out'; raw_dir = out / 'raw'; raw_dir.mkdir(parents=True)
+                cached = raw_dir / 's.htm.edgartools.json'; cached.write_text(json.dumps(TREE))
+                cache.save(raw_dir / 's.htm.meta.json', [cached], sha256=sha(RAW), version='edgartools prior', settings=settings, status='OK', tool_seconds=1.0)
+                sources = [dict(file_id='s.htm', path=src, sha256=sha(RAW), split='development')]
+                with patch.object(cli.grade, 'load_sources', return_value=sources), patch.object(cli, 'parse', side_effect=AssertionError('a saved parse must decide')), contextlib.redirect_stdout(io.StringIO()):
+                    cli.main(['--key', 'unused', '--split', 'development', '--out', str(out), '--reuse-raw'])
+                route = json.loads((out / 'route' / 's.htm.json').read_text())
+                self.assertEqual(route['status'], status)
+                if status == 'FAILED': self.assertIn('other settings', route['error'])
+                else: self.assertEqual(route['route']['settings']['page_number_candidates'], 'kept')
+
+
 if __name__ == '__main__': unittest.main()

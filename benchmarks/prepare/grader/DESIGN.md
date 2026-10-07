@@ -2183,3 +2183,19 @@ errors propagate (§66). No browser launcher, scheduler, cache or parser of its 
 all three stages (the common test environment holds EdgarTools and Playwright; the same EdgarTools 5.60.0 and lxml as the converter's own). Tests: four,
 as he listed (stage order and success — the caller's browser and file id carried through, formatting's None kept; nothing after a failed conversion;
 an unmeasurable page visible on a PARTIAL route with its content; operational errors propagated). Measured: every HTML source of the development, control and released sets (116) through `prepare` in that one environment with one reused browser, each route against the screened route the three command lines saved: 116 equal after a JSON round trip and the declared timing keys, all OK, formatting uncertifiable in 2 (as before), no screen error (`prepare_work/cleanup_r2_20261007/E2E_PREPARE_ROUTE.json`, 518 s); the two swaps an independent review found untested (another browser, another file id) now fail the stage test; permanent suite 383, grader 399, no skips.
+
+## 68. What the page shows stays: the tool's page-number deletion is off (2026-10-07; Codex accuracy-fable-1, A1)
+
+EdgarTools deletes, before building anything, an element whose whole text is a short number, a roman numeral or "Page N" when its style looks like a
+footer (`DocumentBuilder._is_page_number_container`: centered or right-aligned, a bottom margin - its `bottom:` pattern also matches inside
+`margin-bottom:` -, a page break near). Real values went with the page numbers: a cover ZIP code (tagged in a 10-Q, plain in an 8-K) and, in Codex's
+controls, a right-aligned "125" under "Shares outstanding", a tagged shares fact and a debt class "IV". No page-number classifier is added and none of
+the tool's is kept: the deletion is switched off at its single owning hook (`whole_headings`), so what the page shows stays, in source order; a page
+number is its own unit, and the key's page-number exclusions still decide its scoring. A narrower correction of the tool's footer pattern was
+measured (it kept the two ZIP codes) and not taken: it leaves the other deletions. `SETTINGS` records `page_number_candidates: kept`, so a parse saved
+before is not reused (tested both ways). **Measured:** tests 386 + 400 (two new - five facts kept in order and page numbers as their own units, eight
+subcases failing before; the cache refusal); 746 local-corpus documents holding page-number candidates, current code against the change item by item:
+0 items lost, 22,718 page-number candidates added and 391 empty table wrappers around boxed ones (12 documents), statuses unchanged, uncovered runs
+23,063 to 446, route bytes +0.40 %, conversion time unchanged (488 to 459 s, concurrent runs); the nine key route sets rebuilt against the approved
+build: no file on one side only, 0 items lost, every addition a page-number candidate or its wrapper, the route record differing by the new setting
+and the screen facts by the cells of those wrappers; grades: 0 target flips, 0 field rows, 210 gate changes, every one `nothing_lost` improving.
