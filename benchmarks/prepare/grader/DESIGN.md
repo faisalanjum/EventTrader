@@ -2245,4 +2245,22 @@ glued words or numbers now separated ("North Carolina 27703", "6.3 years", "thre
 source text, the scanner certain, and what Chrome shows), 13 a trailing space after a paragraph's last fact -, none joined; bytes +0.013 % (the new
 setting in each route), no slowdown observed (two concurrent runs, not a controlled latency claim). The nine key route sets against the A4 build: no
 file on one side only, 0 items lost or added, one trailing space (one released document, three routes), the route record differing by the new setting;
-grades: 0 target flips, 0 field rows, 0 gate changes.
+grades: 0 target flips, 0 field rows, 0 gate changes. **Codex's gate** (`FABLE_A2_GATE.md`): PASS for the exact files of `4b7a273f9`; his
+field-by-field comparison of all 367,185 units of 411 rebuilt route files found only the three copies of one paragraph with edge white space, and his
+direct audit of the four separations against the originals and Chrome is their proof (the window check of `a2_compare.py` is supporting evidence
+only).
+
+## 71. A dependency the fixes need fails loudly and changes nothing (2026-10-07; Codex accuracy-fable-1, A6)
+
+`whole_headings` returned quietly when an EdgarTools module it needs did not import, so a conversion went on without the fixes `SETTINGS` names; an
+import failing later left the fixes marked applied though only some were installed. Codex's patch, applied unchanged: every module and hook it needs
+is imported and taken before anything changes; a failed import stops the caller (as §66's dependency errors do), a missing hook too - raised as an
+ImportError, so it is not taken for one bad document; the applied marker is set last. Two grader tests that faked the library under the real `parse`
+now give their stand-in at the command line's parse boundary; no fallback for a fake library stays in production. Scope (Codex): missing imports and
+the hooks this step takes - not a compatibility certificate for every private EdgarTools method or cleaner pattern (two such assumptions, the
+page-number hook and the cleaner's space pattern, were probed: a library without them would go unnoticed); the engine is pinned, and an upgrade reruns
+the source-backed regressions. **Measured** on the A2 commit: tests 393 + 400 (three faults - two imports, a missing hook - each in a fresh
+interpreter through the real `convert`: each failing before, now stopping with nothing changed, a healthy retry applying once, the A2/A4 controls
+right); the 964 corpus documents of §70 converted again: items, statuses and member hashes identical, route sizes within ±1 byte in 50 - the same
+jitter as two runs of the same A2 code (49): the route's own `seconds` field. **Codex's gate** (`FABLE_A6_GATE.md`): PASS for these files; two real
+documents through the whole route, every non-timing field identical.

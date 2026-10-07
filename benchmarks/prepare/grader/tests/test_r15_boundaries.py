@@ -5,7 +5,6 @@ import hashlib
 import importlib.metadata
 import io
 import json
-import sys
 import tempfile
 import types
 import unittest
@@ -220,9 +219,10 @@ class EdgarCacheTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td); src = root / 's.htm'; src.write_bytes(b'<p>Revenue 10.</p>'); out = root / 'run'
             sources = [dict(file_id='s.htm', path=src, sha256=grade.sha256(src.read_bytes()), split='development')]
-            stub = types.ModuleType('edgar.documents'); stub.parse_html = lambda text: types.SimpleNamespace(root=object(), metadata=types.SimpleNamespace(xbrl_data=[]))
+            parse_html = lambda text: types.SimpleNamespace(root=object(), metadata=types.SimpleNamespace(xbrl_data=[]))
+            stand_in = lambda raw, vis: (eh.dump(parse_html(raw).root), 0.0, eh.version())  # the tool call at the command line's parse boundary (the real parse also fixes the tool's own builder, which a stand-in tool has not: A6)
             def run(reuse=False, version='OLD', failure=False):
-                with patch.dict(sys.modules, {'edgar': types.ModuleType('edgar'), 'edgar.documents': stub}), patch.object(grade, 'load_sources', return_value=sources), patch('importlib.metadata.version', return_value=version), patch('driver.prepare.convert.edgartools_html.dump', side_effect=RuntimeError('interrupted') if failure else None, return_value=dict(type='ParagraphNode', text='Revenue 10.')), redirect_stdout(io.StringIO()):
+                with patch.object(ed, 'parse', stand_in), patch.object(grade, 'load_sources', return_value=sources), patch('importlib.metadata.version', return_value=version), patch('driver.prepare.convert.edgartools_html.dump', side_effect=RuntimeError('interrupted') if failure else None, return_value=dict(type='ParagraphNode', text='Revenue 10.')), redirect_stdout(io.StringIO()):
                     ed.main(['--key', td, '--split', 'development', '--out', str(out)] + (['--reuse-raw'] if reuse else []))
                 return json.loads((out / 'route/s.htm.json').read_text())
             self.assertEqual(run()['status'], 'OK')

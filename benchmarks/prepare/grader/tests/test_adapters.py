@@ -367,9 +367,8 @@ class DoclingPdfAdapterTests(unittest.TestCase):
 
     def test_an_edgartools_parse_is_reused_only_whole_and_keeps_its_producing_version(self):
         # Codex R15-5: the EdgarTools adapter read its saved dump with no record — stamped with the installed version, kept after the source changed
-        import importlib.metadata, io, sys, tempfile
+        import importlib.metadata, io, tempfile
         from contextlib import redirect_stdout
-        from types import ModuleType
         from unittest.mock import patch
         class ParagraphNode:
             children = []
@@ -383,12 +382,12 @@ class DoclingPdfAdapterTests(unittest.TestCase):
             r = plan.pop(0)
             if isinstance(r, Exception): raise r
             return type('Parsed', (), {'root': DocumentNode(ParagraphNode(r))})()
-        docs = ModuleType('edgar.documents'); docs.parse_html = parse_html
+        stand_in = lambda raw, vis: (eh.dump(parse_html(raw).root), 0.0, eh.version())  # the tool call at the command line's parse boundary (the real parse also fixes the tool's own builder, which a stand-in tool has not: A6)
         with tempfile.TemporaryDirectory() as td:
             p = Path(td); src = p / 's.htm'; src.write_bytes(b'<p>Revenue 10.</p>'); sources = [{'file_id': 's.htm', 'path': src, 'sha256': eh.grade.sha256(src.read_bytes()), 'split': 'development'}]
             def run(texts, flags=(), version='A'):
                 plan[:] = list(texts)
-                with patch.dict(sys.modules, {'edgar': ModuleType('edgar'), 'edgar.documents': docs}), patch.object(eh.grade, 'load_sources', return_value=sources), patch.object(importlib.metadata, 'version', return_value=version), redirect_stdout(io.StringIO()):
+                with patch.object(eh, 'parse', stand_in), patch.object(eh.grade, 'load_sources', return_value=sources), patch.object(importlib.metadata, 'version', return_value=version), redirect_stdout(io.StringIO()):
                     eh.main(['--key', td, '--split', 'development', '--out', str(p / 'run'), *flags])
                 r = json.loads((p / 'run' / 'route' / 's.htm.json').read_text())
                 return r['status'], r['error'] or '', [u['text'] for u in r['units'] if u.get('text')][:1], r['route']['version']

@@ -227,11 +227,17 @@ def whole_headings():
     <div> with the file number): read whole after the fact, again unless a table or picture is inside — the tool's terminal heading would swallow them (stated,
     the tool's). An inline run it takes for a heading (a bold <font> inside a sentence) keeps the tool's own reading. Codex R2-C1, R3-A; recorded here, never in
     the environment. Idempotent."""
-    try: from edgar.documents.nodes import ContainerNode, HeadingNode; from edgar.documents.strategies import document_builder as db
-    except ImportError: return  # a stand-in for the tool (the tests') has no builder: nothing to fix there; the tool itself has one (tests/test_whole_headings.py, under its environment)
+    from edgar.documents.nodes import ContainerNode, HeadingNode
+    from edgar.documents.strategies import document_builder as db
+    from edgar.documents.processors.preprocessor import HTMLPreprocessor as P
     if getattr(db.DocumentBuilder, '_whole_headings', False): return
     H, PARTS = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'), {'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col', 'ul', 'ol', 'li', 'dl', 'dt', 'dd'}
-    create, read = db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text
+    try:
+        create, read = db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text
+        compile_ = P._compile_patterns
+        skipped, inline = db.DocumentBuilder.SKIP_ELEMENTS - {'ix:exclude'}, db.DocumentBuilder.INLINE_ELEMENTS | {'ix:exclude'}
+    except AttributeError as exc:
+        raise ImportError("required EdgarTools preparation hooks are unavailable") from exc
     def line(self, element, style):  # a block the tool may take for one line of heading: not inline by tag, not laid out inline, not a table or list part, nothing but inline runs in it, no table or picture under it
         tag = element.tag.lower() if isinstance(element.tag, str) else ''
         return tag and tag not in H and tag not in self.INLINE_ELEMENTS and tag not in PARTS and not tag.startswith(('ix:', '{')) and getattr(style, 'display', None) not in ('inline', 'inline-block') \
@@ -269,9 +275,7 @@ def whole_headings():
             finally: element.tag = kept
         made = getattr(self, '_making', None)
         return whole(self, element) if made and made[0] is element else read(self, element)  # (a)
-    db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text, db.DocumentBuilder._whole_headings = creating, reading, True
-    from edgar.documents.processors.preprocessor import HTMLPreprocessor as P
-    compile_ = P._compile_patterns
+    db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text = creating, reading
     def patterns(self):  # the tool's cleaner deleted every white space before . , ; ! ? in the raw page ("1,855,579 ,941,411" became one number, "Sections .13, .14"
         found = compile_(self); found['space_before_punct'] = re.compile(r'(?!)()'); return found  # "Sections.13,.14"); the page prints the space and so does the route: a pattern that never matches (its replacement names group 1)
     P._compile_patterns = patterns
@@ -282,7 +286,8 @@ def whole_headings():
     # <ix:exclude> marks shown text that belongs to no XBRL fact - a scale line "(in thousands)", the "not" inside a tagged sentence. The tool skipped it
     # (its SKIP_ELEMENTS), so what the page shows was deleted; it is read as the tool reads its other inline-XBRL tags: inline in its sentence, a
     # container where it holds blocks or a table (the rules above); hidden is still hidden (Codex, accuracy-fable-1 A4)
-    db.DocumentBuilder.SKIP_ELEMENTS, db.DocumentBuilder.INLINE_ELEMENTS = db.DocumentBuilder.SKIP_ELEMENTS - {'ix:exclude'}, db.DocumentBuilder.INLINE_ELEMENTS | {'ix:exclude'}
+    db.DocumentBuilder.SKIP_ELEMENTS, db.DocumentBuilder.INLINE_ELEMENTS = skipped, inline
+    db.DocumentBuilder._whole_headings = True
 
 
 SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
