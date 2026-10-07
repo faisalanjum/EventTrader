@@ -1,20 +1,11 @@
 """The XML route reads one document with the grader's parser: what stands outside it is refused, markup an entity generates gets no position
 (Codex's worktree cases, `test_xml_evidence.py`, on this adapter); internal entities and CDATA read as written; a UTF-16 source is read by the adapter
-but the scanner certifies none of its positions, while a UTF-8 source places each character at its bytes; an unsupported encoding fails its own file and
-the batch goes on (Codex G6-1)."""
-import contextlib
-import hashlib
-import io
-import json
-import tempfile
+but the scanner certifies none of its positions, while a UTF-8 source places each character at its bytes; the batch case (an unsupported encoding fails its own file and
+the batch goes on, Codex G6-1) stays with the grader's command line."""
 import unittest
 import xml.parsers.expat as expat
-from pathlib import Path
-from unittest.mock import patch
 
-from benchmarks.prepare.grader import grade
-from benchmarks.prepare.grader.adapters import xml_fields
-from benchmarks.prepare.grader.adapters.xml_fields import units_of
+from driver.prepare.convert.xml_fields import units_of
 from driver.prepare.convert.anchor import Visible
 
 
@@ -44,19 +35,6 @@ class XmlRouteReading(unittest.TestCase):
             self.assertEqual([u['text'] for u in units_of(raw, {})], ['\u20aca'])  # the route still reads it; the grader certifies nothing of it
         raw = '<?xml version="1.0" encoding="UTF-8"?><r>\u20aca</r>'.encode(); view = Visible(raw, xml=True); self.assertEqual((view.certain, view.text), (True, '\u20aca'))
         self.assertEqual([raw[a:b].decode() for a, b in zip(view.starts, view.ends)], ['\u20ac', 'a'])
-
-    def test_an_unsupported_encoding_fails_its_own_file_and_the_batch_goes_on(self):  # Codex G6-1: expat raises ValueError or LookupError there, not ExpatError
-        for encoding in ('not-a-real-encoding', 'UTF-32', 'utf-7', 'shift_jis'):
-            with self.subTest(encoding=encoding), tempfile.TemporaryDirectory() as td:
-                folder = Path(td); first, second = folder / 'first.xml', folder / 'second.xml'
-                first.write_bytes(('<?xml version="1.0" encoding="%s"?><r>1</r>' % encoding).encode()); second.write_bytes(b'<?xml version="1.0" encoding="UTF-8"?><r><n>2</n></r>')
-                sources = [dict(file_id=p.name, path=p, sha256=hashlib.sha256(p.read_bytes()).hexdigest(), split='development') for p in (first, second)]
-                with patch.object(grade, 'load_sources', return_value=sources), contextlib.redirect_stdout(io.StringIO()):
-                    self.assertEqual(xml_fields.main(['--key', 'unused', '--split', 'development', '--out', str(folder / 'out')]), 0)
-                failed, good = (json.loads((folder / 'out/route' / n).read_text()) for n in ('first.xml.json', 'second.xml.json'))
-                self.assertEqual((failed['status'], failed['units'], bool(failed['error'])), ('FAILED', [], True))
-                self.assertEqual((good['status'], [u['text'] for u in good['units']]), ('OK', ['2']))
-                self.assertEqual(len(json.loads((folder / 'out/facts.json').read_text())['files']), 2)
 
 
 if __name__ == '__main__':

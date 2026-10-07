@@ -19,7 +19,7 @@ import xml.parsers.expat
 from pathlib import Path
 
 from benchmarks.prepare.grader import grade
-from benchmarks.prepare.grader.anchor import Visible, norm
+from driver.prepare.convert.anchor import Visible, norm
 
 KEY = Path(json.loads((Path(__file__).resolve().parents[2] / 'golden/PACKAGE.json').read_text())['package_path'])  # the recorded final package
 CATALOG = KEY.parent.parent / 'case_catalog.csv'

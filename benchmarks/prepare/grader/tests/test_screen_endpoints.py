@@ -2,7 +2,8 @@
 only that is taken as proof; touching, hidden or impossible boxes prove nothing. And the page never reaches the network."""
 import unittest
 
-from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader import grade
+from driver.prepare.convert import anchor
 from benchmarks.prepare.grader.adapters import screen_grid
 
 

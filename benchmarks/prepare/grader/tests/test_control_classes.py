@@ -2,7 +2,8 @@
 columns is the key's pieces; a row-label piece carried down a block (a stub printed once for several rows, no rowspan) still labels the row."""
 import unittest
 
-from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader import grade
+from driver.prepare.convert import anchor
 from benchmarks.prepare.grader.adapters import edgartools_html as adapter
 from benchmarks.prepare.grader.tests.test_edgar_images import node
 

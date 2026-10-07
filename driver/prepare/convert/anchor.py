@@ -8,11 +8,12 @@ from array import array
 from bisect import bisect_left
 from collections import Counter, defaultdict, namedtuple
 from functools import cached_property
+import hashlib
 import html
 from html.entities import html5
 import xml.parsers.expat as expat
 import re
-from driver.prepare.compare import _FOLD, _WS, norm, squash  # the comparison form, one implementation shared with production; the scanner's _TOKEN below is its own
+from driver.prepare.compare import _FOLD, _TOKEN_WORDS, _WS, norm, squash  # the comparison form, one implementation shared with production; the scanner's _TOKEN below is its own
 
 # The tokens of an HTML source (HTML Standard, tokenization): a comment — to `-->` or `--!>`, at once for `<!-->` and `<!--->`, to the end of the source when it never
 # ends; an element taken whole up to its closing tag, or to the end of the source when it has none (group 1); a declaration or processing instruction; a tag (a `>` inside a
@@ -782,3 +783,58 @@ def link(raw, units, xml=False, vis=None):
         u['anchor'] = {'byte_start': a, 'byte_end_exclusive': b}; u['link_flag'] = 'source_picture'
         u.pop('link_error', None)
     return {'units': units, 'uncovered': vis.uncovered(ranges)}
+
+
+# Route-item helpers the runtime shares with the grader (moved from grade.py with the scanner, 2026-10-07)
+
+sha256 = lambda b: hashlib.sha256(b).hexdigest()
+
+
+def spans(anchor):
+    """An anchor is one place or, for a cell that sits in several source places, a list of them."""
+    return anchor if isinstance(anchor, list) else [anchor] if isinstance(anchor, dict) else []
+
+
+def struck_at(vis, item):
+    """Where the source strikes the item's text: ranges [start, end) of the text's characters (code points) the source prints struck through, [] when
+    none is — or None when that cannot be said exactly: the decoration is not certified (`struck_certain`, which the scanner gives only where
+    `plain_certain` holds too), a place of the item is no byte span or its places overlap, or its text is not the source's text at its places (same
+    characters in the comparison form, so a reported mark or an inserted character leaves the places unsaid). A range never covers white space: a
+    struck run of words is one range per word."""
+    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
+    if not vis.struck_certain or len(byte) != len(spans(item.get('anchor'))) or any(a['byte_end_exclusive'] > b['byte_start'] for a, b in zip(byte, byte[1:])): return None
+    piece, flags = [], []
+    for a in byte:
+        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
+        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return None  # a character whose bytes run past the place's end: the place is no whole reading
+        piece.append(vis.flat[lo:hi]); flags.append(vis.struck_flat[lo:hi])
+    text = item.get('text', ''); own, out = None, []
+    if ''.join(piece) != squash(text): return None
+    for m in re.finditer(b'\x01+', b''.join(flags)):  # each run of struck characters, split where the text puts white space between them
+        own = own or [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]  # the text's own position of each search-form character, made only where something is struck
+        for i in (own[j] for j in range(m.start(), m.end())): out[-1].__setitem__(1, i + 1) if out and out[-1][1] == i else out.append([i, i + 1])
+    return out
+
+
+def tool_spaces(vis, item):
+    """Where the item's text puts white space between two characters the source prints touching as one word or number — a space the tool added:
+    [(start, end) of each such run in the text, with the search-form index of the character before and after] — or [] where the text is not the source's
+    text at its places. The page may still space the two (CSS): that is for a step with the page to decide; the gate's boundary rule stays as it is."""
+    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
+    if len(byte) != len(spans(item.get('anchor'))): return []
+    src = []
+    for a in byte:
+        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
+        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return []  # a character whose bytes run past the place's end: the place is no whole reading
+        src += range(lo, hi)
+    text = item.get('text', ''); own = [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]
+    if ''.join(vis.flat[k] for k in src) != squash(text): return []
+    out = []
+    for p, (i, j) in enumerate(zip(own, own[1:])):
+        k, l = src[p], src[p + 1]
+        if not text[i + 1:j].isspace() or vis.idx[l] != vis.idx[k] + 1: continue  # the text has no white space there (nothing, or something else), or the source itself puts something between the two
+        a = vis.flat[k - 1:k + 1] if k and vis.idx[k - 1] + 1 == vis.idx[k] else vis.flat[k]  # each side with the neighbour the source prints touching it:
+        b = vis.flat[l:l + 2] if l + 1 < len(vis.flat) and vis.idx[l + 1] == vis.idx[l] + 1 else vis.flat[l]  # a number's own separator belongs to the number ("0.|69"), as the gate's tokens read it
+        if len(_TOKEN_WORDS.findall(vis.flat[k] + ' ' + vis.flat[l])) != 2 and _TOKEN_WORDS.findall(a + b) == _TOKEN_WORDS.findall(a + ' ' + b): continue  # a space there cuts no word or number in two (reflow at punctuation and symbols is allowed, E12)
+        out.append((i + 1, j, k, l))
+    return out

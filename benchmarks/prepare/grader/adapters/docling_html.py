@@ -12,7 +12,8 @@ import re
 import time
 from pathlib import Path
 
-from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader import grade
+from driver.prepare.convert import anchor
 from benchmarks.prepare.grader.adapters import cache
 
 NAME = 'docling-html'

@@ -1,5 +1,7 @@
 # Grader review handover — for Codex's independent review (Fable, 2026-10-03)
 
+**Layout since 2026-10-07 (`DESIGN.md` §63).** The scanner and linker (`anchor.py`) and the runtime of the selected route (EdgarTools, source formatting, the screen step, XML fields) live in `driver/prepare/convert/`; the grader keeps scoring and the command lines over key packets and imports them. Paths below that name `anchor.py` or an adapter describe the code as it was reviewed.
+
 **What this is.** The code that scores a conversion route (tool output in the common route format) against the frozen golden set
 (package 4, `FINAL_KEY_FOR_CODEX_20261006_1753`, active since 2026-10-07, `../golden/PACKAGE.json`: package 3 — the 457 answers of package 2 with the owner's decisions of 2026-10-04, see `DESIGN.md` §44 — plus the ten released held-out key corrections, §56; packages 2 and 3 are history). Pure code, standard library only, no AI, no hard-coded document strings. It answers,
 per key target and per field: preserved and correctly associated (pass), not (fail with a reason), or not resolvable (unresolved).

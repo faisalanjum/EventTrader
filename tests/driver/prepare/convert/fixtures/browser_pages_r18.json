@@ -1,0 +1,1256 @@
+{
+"what": "Pages local offline Chrome printed (document.documentElement.innerText, white space folded as the grader folds it), kept because each tells the scanner from a one-change variant of it (round 18 mutation check). certain: the scanner must certify the page and read this text, or beside an inline table the block-table text; not certain: a variant certified another text here, so the scanner must say uncertain. For a page that holds a zero opacity, a <textarea> or an <ix:hidden> the text is Chrome's text of the page rewritten inside the browser to its agreed meaning (invisible in place; the inline box of its text; removed — AGREED_JS of r18_grid3_facts.py).",
+"chrome": "147.0.7727.15",
+"cases": [
+{
+"source": "&nbsp; <s>y.<b>.\n</b></s>",
+"browser": "y..",
+"certain": true
+},
+{
+"source": "<textarea> </textarea><style>q{}</style>.",
+"browser": ".",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>.</h2><p>B</p></body></html>",
+"browser": "A . B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<style>b<p>B</p></body></html>",
+"browser": "A a",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><a>net </a>w<p>B</p></body></html>",
+"browser": "A net w B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<hr>x</hr>b<p>B</p></body></html>",
+"browser": "A a xb B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>y<em></tfoot><p>B</p></body></html>",
+"browser": "A y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>w<base hidden><p>B</p></body></html>",
+"browser": "A w B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>1<ix:x open> x <p>B</p></body></html>",
+"browser": "A 1 x B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><dd>a<p>b</dd>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><embed hidden>)<p>B</p></body></html>",
+"browser": "A ) B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h1>a<p>b</h1>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h2></td><!---><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h3>a<p>b</h3>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h4>a<p>b</h4>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h5>a<p>b</h5>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h6>a<p>b</h6>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><ol>a<p>b</ol>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style>x</p>y<p>B</p></body></html>",
+"browser": "A x y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p>x<s></s>y</p><p>B</p></body></html>",
+"browser": "A xy B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><dir>a<p>b</dir>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><nav>a<p>b</nav>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><xmp>&amp;</xmp>x<p>B</p></body></html>",
+"browser": "A &amp; x B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><main>a<p>b</main>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><menu>a<p>b</menu>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><meta hidden></div><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><dd>(<input hidden> <p>B</p></body></html>",
+"browser": "A ( B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p>x<ul>y</p>z</ul>w<p>B</p></body></html>",
+"browser": "A x y z w B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><area hidden=\"\"></td><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><aside>a<p>b</aside>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>&nbsp;<track hidden=\"\"><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><figure>a<p>b</figure>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><footer>a<p>b</footer>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><header>a<p>b</header>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><hgroup>a<p>b</hgroup>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><search>a<p>b</search>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>(<h2 style=\"float:left\">)<p>B</p></body></html>",
+"browser": "A ( ) B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><address>a<p>b</address>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><article>a<p>b</article>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><summary>a<p>b</summary>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>%</ix:y>&gt;<param hidden> <p>B</p></body></html>",
+"browser": "A %> B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><fieldset>a<p>b</fieldset>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><center>x<p>y</center>z</p>w<p>B</p></body></html>",
+"browser": "A x y z w B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><img style=\"display:block\">\t<p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><link style=\"display:none\"> <p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p>x<center>y</p>z</center>w<p>B</p></body></html>",
+"browser": "A x y z w B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>w<keygen style=display:none><p>B</p></body></html>",
+"browser": "A w B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<a style=\"float:none\">x</a>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>x<p style=\"opacity:10\">a</p>y<p>B</p></body></html>",
+"browser": "A x a y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>y<u style=\"display:contents\"><p>B</p></body></html>",
+"browser": "A y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<hr>y<p>B</p></body></html>",
+"browser": "A y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style='display:none'>x</p>y<p>B</p></body></html>",
+"browser": "A y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><u style=\"position:absolute\">w<p>B</p></body></html>",
+"browser": "A w B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>x</body style=\"display:none\">y<p>B</p></body></html>",
+"browser": "A xy B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><figcaption>a<p>b</figcaption>c<p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>&amp;<p></tr><header class=\"q\">$<p>B</p></body></html>",
+"browser": "A & $ B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><a style=\"float:right\">(1)  </a><p>B</p></body></html>",
+"browser": "A (1) B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"position:fixed\">&nbsp;<p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "x <s><p>1x</p></s><s><b>.x</b>&amp;<pre>1</pre></s>",
+"browser": "x 1x .x& 1",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>\t<menu style=\"position:relative\"><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:flex\"><br>$%\nyw<p>B</p></body></html>",
+"browser": "A $% yw B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<input>y<p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<s style=\"display:inline\">x</s>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>w <p style=\"display:contents\">.%%<p>B</p></body></html>",
+"browser": "A w .%% B",
+"certain": true
+},
+{
+"source": "<!doctype html><html><body><p>A</p><source popover><u><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<a style=\"position:static\">x</a>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<a style=\"position:sticky\">x</a>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p></ix:x><frame style=\"display:none\"><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>$<title style=\"visibility:collapse\"><p>B</p></body></html>",
+"browser": "A $",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<dd>y</dd>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<dl>y</dl>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<dt>y</dt>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<h1>y</h1>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<h2>y</h2>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<h3>y</h3>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<h4>y</h4>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<h5>y</h5>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<h6>y</h6>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<ol>y</ol>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><sub style=\"white-space:pre\">%</sub><p>B</p></body></html>",
+"browser": "A % B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>,\f&lt;<basefont style=\"display:none\"><p>B</p></body></html>",
+"browser": "A , < B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>.<b style=\"float:right;display:none\"><p>B</p></body></html>",
+"browser": "A .",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<plaintext>y<p>B</p></body></html>",
+"browser": "A y<p>B</p></body></html>",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<dir>y</dir>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<nav>y</nav>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<pre>y</pre>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<xmp>y</xmp>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<!doctype html><html><body><p>A</p><p>(&gt;<article>x</big><p>B</p></body></html>",
+"browser": "A (> x B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:contents\">v</ul><i>zy<p>B</p></body></html>",
+"browser": "A vzy B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><s style=\"display:none\">x<b>y</s>z</b>w<p>B</p></body></html>",
+"browser": "A zw B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a <font style=\"display:none\">x</font> b<p>B</p></body></html>",
+"browser": "A a b B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<a style=\"display:inline-block\">x</a>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": true
+},
+{
+"source": "<!doctype html><html><body><p>A</p><col hidden=\"\"></bgsound><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><a style=\"white-space:pre-wrap\"><hr></a><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><b style=\"display:inline-flex\">  $  </b><p>B</p></body></html>",
+"browser": "A $ B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>x<span align=\"left\">a</span>y</div><p>B</p></body></html>",
+"browser": "A xay B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<main>y</main>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<menu>y</menu>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p> &gt;<p hidden><summary>&amp;&lt;</menu>v<p>B</p></body></html>",
+"browser": "A > &<v B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><bgsound style = \"display:none\"></header><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><dl><dd style=\"display:none\">x<dt>y</dl>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><font style=\"visibility:hidden\">%</font>,<p>B</p></body></html>",
+"browser": "A , B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><font style=\"visibility:hidden\">%</font> %<p>B</p></body></html>",
+"browser": "A % B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p popover>&gt;\n<aside style=\"float:left\"><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><span style=\"display&colon;none\">x</span>y<p>B</p></body></html>",
+"browser": "A y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><table><table><tr><td>b</td></tr></table>c<p>B</p></body></html>",
+"browser": "A b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>x.<s><textarea>q</textarea></s>y</div><p>B</p></body></html>",
+"browser": "A x.qy B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><img src=\"x.png\" style=\"float:left\">\n&#160;<p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<figure>y</figure>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<footer>y</footer>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<hgroup>y</hgroup>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<search>y</search>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div style=\"display:inline-flex\">10 </div> %  <p>B</p></body></html>",
+"browser": "A 10 % B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<address>y</address>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<listing>y</listing>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<section>y</section>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h2 style=\"white-space:nowrap\">&#8226; net</h2><p>B</p></body></html>",
+"browser": "A • net B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>\t2.5  <p style=\"display:contents;float:right\">%\t<p>B</p></body></html>",
+"browser": "A 2.5 % B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div style=\"display:flex\">a<span>b</span>c</div><p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<fieldset>y</fieldset>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><plaintext><link rel=\"stylesheet\" href=\"x.css\">x<p>B</p></body></html>",
+"browser": "A <link rel=\"stylesheet\" href=\"x.css\">x<p>B</p></body></html>",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><a style=\"display:none;float:right\"> 2.5</a>  ab\t<p>B</p></body></html>",
+"browser": "A ab B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><span></span><img src=\"x.png\" style=\"float:left\"><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<details open>y</details>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>x.<span style=\"opacity:0\"></span><s></s>y</div><p>B</p></body></html>",
+"browser": "A x.y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>x.<span style=\"opacity:0\"><s></s></span>y</div><p>B</p></body></html>",
+"browser": "A x.y B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<blockquote>y</blockquote>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p style=\"display:none\">x<figcaption>y</figcaption>z<p>B</p></body></html>",
+"browser": "A y z B",
+"certain": true
+},
+{
+"source": "<meta charset=\"utf-8\">x </html><ul><li> x<span style=\"visibility:hidden\">&nbsp;</span>\n</li></ul>",
+"browser": "x x",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>a <span style=\"white-space:unset\"> b </span> c</div><p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><pre>a<span style=\"visibility:hidden\"> x </span> b</pre>d<p>B</p></body></html>",
+"browser": "A a b d B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>a <span style=\"white-space:normal\"> b </span> c</div><p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p>a<img src=\"x.png\" align=\"left\" style=\"float:none\">b</p><p>B</p></body></html>",
+"browser": "A ab B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>a <span style=\"white-space:inherit\"> b </span> c</div><p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>a <span style=\"white-space:initial\"> b </span> c</div><p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>net\n<span style=\"display:inline-block;width:10pt\"></span>z <p>B</p></body></html>",
+"browser": "A net z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><dl><dd style=\"display:none\">a<section>b<dd>c</section></dl>d<p>B</p></body></html>",
+"browser": "A d B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>x<span style=\"url()display:block\">Q</span>y <b>z</b></div><p>B</p></body></html>",
+"browser": "A xQy z B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>a <span style=\"white-space:break-spaces\"> b </span> c</div><p>B</p></body></html>",
+"browser": "A a b c B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><listing>a<span style=\"visibility:hidden\"> x </span> b</listing>d<p>B</p></body></html>",
+"browser": "A a b d B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:inline-flex;white-space:pre-wrap\"> x </div>b<p>B</p></body></html>",
+"browser": "A a x b B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p> &nbsp;\n<i style=\"visibility:hidden\">&amp;\t<br></i> &#160;\t&#8203;\t<p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><p>a<span popover style=\"display:inline;position:static\">X</span>b</p><p>B</p></body></html>",
+"browser": "A aXb B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><pre style=\"display:contents\"> <dd style=display:none></u></pre></sub><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h2 style=\"display:inline\"><blockquote style=\"display:none\"><nobr>&gt; <p>B</p></body></html>",
+"browser": "A",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><a style=\"display:none;min-width:5%;text-transform:none\">\t$2.52.5\t</a>\n&nbsp;<p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>x<span style=\"display:inline-block\"><plaintext style=\"display:inline\"> a<p>B</p></body></html>",
+"browser": "A x a<p>B</p></body></html>",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>a<span style=\"display:none\"><div style=\"visibility:hidden\">y</div></span>b</div><p>B</p></body></html>",
+"browser": "A ab B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><table style=\"visibility:hidden\"><tr><td>y</td></tr><img src=\"x.png\" alt=\"pic\"></table><p>B</p></body></html>",
+"browser": "A B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><h1 style=\"display:table-cell\"> </address>.</td></h1><pre style=\"visibility:hidden\"><dd><p>B</p></body></html>",
+"browser": "A .",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p></tbody>&amp;<!-- <p>h</p> --><p title=\"a>b\"><base popover><dl style=\"visibility:hidden\"><p>B</p></body></html>",
+"browser": "A &",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><div>x<span style=\"display:inline-block\"><xmp style=\"display:inline\"> a</xmp></span>y</div><p>B</p></body></html>",
+"browser": "A x ay B",
+"certain": true
+},
+{
+"source": "<span style=\"visibility:hidden\"><div>x xx </div></span><s><span style=\"display:none\"> x</span></s><body style=\"white-space:pre\" class=\"k\">",
+"browser": "",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p> y\n (1)\n  <h2 style=\"display:block\"><p style=\"display:flow-root;float:left\"><span></span>\ty _____</h2><p>B</p></body></html>",
+"browser": "A y (1) y _____ B",
+"certain": true
+},
+{
+"source": "<!doctype html><html><body><p>A</p>\t2.5 <strong style=\"white-space:pre-wrap\"><font style=\"display:inline-flex\">  ab\n10\n  </font>,\n  </strong><p>B</p></body></html>",
+"browser": "A 2.5 ab 10 , B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>\tab<sup style=\"white-space:nowrap\"><small style=\"display:inline-block;visibility:collapse\">\n&lt;</small></sup>\n&#x2022;   .<p>B</p></body></html>",
+"browser": "A ab • . B",
+"certain": true
+},
+{
+"source": "<!doctype html><html><body><p>A</p><em style=\"float:right\">&nbsp; .\nx\n  </em><u style=\"visibility:hidden;float:right\"><span style=\"display:inline-block;width:10pt\"> </span>, &lt;  </u>\n&#8203;<p>B</p></body></html>",
+"browser": "A . x B",
+"certain": true
+},
+{
+"source": "<!doctype html><html><body><p>A</p> <li style=\"display:none\" style=\"display:block\"><h2 style=\"display:block\"><listing style=\"visibility:collapse\"></th><li style=\"display:contents\">1\t&lt;1&nbsp;&nbsp;</listing><p>B</p></body></html>",
+"browser": "A",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><ix:nonnumeric style=\"visibility:hidden;white-space:pre\"><h2 style=\"display:inline-block;margin-left:9pt\">\n  . % </h2></ix:nonnumeric>\nw<a style=\"display:list-item;color:red\">x 10 2.5  x</a><p>B</p></body></html>",
+"browser": "A w x 10 2.5 x B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><table><tbody><tr>  <td><b style=\"visibility:visible\"><p style=\"display:inline;position:relative\">  .<font style=\"display:block\">,&lt;2.5\n\t&lt; $</font><a style=\"display:inline-grid;color:red\">\n  &#8203;&mdash;\n &amp; </a></p></b><blockquote style=\"display:flex;white-space:nowrap;visibility:collapse\"><span style=\"display:inline-block;width:10pt\"> </span>\n_____&#160;</blockquote></td></tr></tbody></table>,  &amp; <h2 style=\"display:grid;margin-left:9pt\"><blockquote style=\"display:inline-flex;width:20pt\">.\t</blockquote></h2><p>B</p></body></html>",
+"browser": "A . ,<2.5 < $ - & , & . B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p>\n2.5&#x2022; x <center style=\"visibility:visible\"><ul><li>&amp;\n  </li><li>\t,\t<center style=\"display:inline-flex;margin-left:9pt\">\t% </center></li><li><table> <tr>\n  <td><i style=\"visibility:collapse\"> 10\n  </i><center style=\"display:inline;position:fixed\">\nx\n  </center></td>\n  <td>  w&#x2022;\t</td></tr><tr>\t<td>%\n</tr> <tr><td><font style=\"white-space:nowrap\">ab&nbsp;</font></td></tr></table><center style=\"display:contents;width:20pt\"><ul><li>ab\n  </li><li style=\"color:red\"> &#8226; y\n  </li></ul> &#8226;\n<table style=\"display:table\"> <tr>\n  <td>  net </td><td> ab</td></tr> <tr>  <td>\n&mdash;&mdash; </td><td>y&lt; &mdash;&#x2022;</td><td> x %\n  $y\n</tr> <tr><td>\tnetnet  </td><td> x\n   10 &#8226;</td><td>_____ net  </td></table></center></ul></center>ab<p>B</p></body></html>",
+"browser": "A 2.5• x & , % x w• % ab ab • y • net ab -- y< -• x % $y netnet x 10 • _____ net ab B",
+"certain": true
+},
+{
+"source": "<html><body><p>A</p><span style=\"display:inline-block;text-indent:-18pt\"><h2 style=\"display:flow-root;font-family:'Arial',sans-serif\"><span style=\"display:inline-block;width:10pt\"></span></h2><blockquote style=\"text-transform:none;position:fixed\">  .z\t2.5\n  &#8203; .</blockquote></span>\n%&mdash;<small style=\"visibility:hidden\"><small style=\"display:inline-block\"><span style=\"display:inline-block;width:10pt\"> </span><blockquote style=\"display:inline-flex;width:20pt;text-indent:-18pt\">&nbsp; <h2 style=\"position:fixed;visibility:visible\"> &#8203; </h2><u style=\"display:flex;visibility:hidden\"> net\t %,\t</u></blockquote></small><ul><li> &mdash;  <i style=\"display:flex;font-family:'Arial',sans-serif\"><sup style=\"display:block\"> (1)\n  \t_____\n&amp;</sup></i></li><li>&amp;<li><sub style=\"display:inline-flex;width:20pt\"><em>  &#8226;  ,\n  (1)</em><center style=\"white-space:pre\">&mdash;\n\n  (1)\n</center> y</sub></li></ul>\n&#8203;&#160;\t</small><p>B</p></body></html>",
+"browser": "A .z 2.5 . %- B",
+"certain": true
+},
+{
+"source": "a<b style=\"visibility:hidden\"> </b> b",
+"browser": "ab",
+"certain": false
+},
+{
+"source": "1<body style=\"display:inline\">y <s>\n\nx 1</s>x ",
+"browser": "1y x 1x",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>$<div<p>(<p>B</p></body></html>",
+"browser": "A $( B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><a title=\"\n<p>B</p></body></html>",
+"browser": "A",
+"certain": false
+},
+{
+"source": "<!doctype html><p>a<img src=\"x.png\" align=\"left\">b</p>",
+"browser": "a b",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><body hidden>x<p>B</p></body></html>",
+"browser": "",
+"certain": false
+},
+{
+"source": "<!doctype html><div>x<div style=\"all:unset\">b</div>c</div>",
+"browser": "xbc",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><h1>a</h3>b</h1>c<p>B</p></body></html>",
+"browser": "A a bc B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><h1>a</h4>b</h1>c<p>B</p></body></html>",
+"browser": "A a bc B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><h1>a</h5>b</h1>c<p>B</p></body></html>",
+"browser": "A a bc B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><h1>a</h6>b</h1>c<p>B</p></body></html>",
+"browser": "A a bc B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>x<s>y<p>z</p>w<p>B</p></body></html>",
+"browser": "A xy z w B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><h1>x<h1>y</h1>z</h1>w<p>B</p></body></html>",
+"browser": "A x y zw B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><form>a<b>b</form>c</b>d<p>B</p></body></html>",
+"browser": "A abc d B",
+"certain": false
+},
+{
+"source": "<body style=\"font-weight:bold\"><body style=\"display:block\" hidden>x",
+"browser": "",
+"certain": false
+},
+{
+"source": "<!doctype html><p>a<span popover style=\"display:inline\">X</span>b</p>",
+"browser": "a X b",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><a>x<s>y<a>z</a>w</s>v</a>u<p>B</p></body></html>",
+"browser": "A xyzwvu B",
+"certain": false
+},
+{
+"source": "<!doctype html><p>a <span style=\"content:url(x.png)\">SECRET</span> b</p>",
+"browser": "a b",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><form>x<form>y</form>z</form>w<p>B</p></body></html>",
+"browser": "A xy zw B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><table><td>a</tr>b</td></table><p>B</p></body></html>",
+"browser": "A b a B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><body style=\"visibility:hidden\">x<p>B</p></body></html>",
+"browser": "",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<td style=\"display:block\">x</td>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p></dt><u>w&#xD800;<source>v<td>&amp;<p>B</p></body></html>",
+"browser": "A w�v& B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<br style=\"display:inline\">x</br>b<p>B</p></body></html>",
+"browser": "A a x b B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><b>x<i style=\"opacity:0\">y</b>z</i>w<p>B</p></body></html>",
+"browser": "A xyzw B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><span hidden=\"UNTIL-FOUND\">x</span>y<p>B</p></body></html>",
+"browser": "A xy B",
+"certain": false
+},
+{
+"source": "<s><span style=\"display:inline-block\">.y</span>1</s>y<head style=\"opacity:0\">y",
+"browser": ".y1yy",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:table-row\"></div>b<p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:table-cell\"></div>b<p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><script><!--<script>x</script>y</script>z<p>B</p></body></html>",
+"browser": "A z B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:inline-flex\"> </div>b<p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><nobr style=\"display:none\">x<nobr>y</nobr>z<p>B</p></body></html>",
+"browser": "A yz B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:inline-flex\"> x</div>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:inline-flex\">x </div>b<p>B</p></body></html>",
+"browser": "A axb B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:table-row-group\"></div>b<p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<!doctype html><p>w</p><table><a style=\"display:block\"><tr><td>y</td></tr></table>z</a>q",
+"browser": "w y z q",
+"certain": false
+},
+{
+"source": "<!doctype html><p>w</p><table><tr><b style=\"display:block\"><td>y</td></tr></table>z</b>q",
+"browser": "w y z q",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><i style=\"display:table-cell\">\n,</i>$ &#8226;\n<p>B</p></body></html>",
+"browser": "A ,$ • B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<textarea style=\"display:block\">x</textarea>b<p>B</p></body></html>",
+"browser": "A a b B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>x<p style=\"-webkit-text-security:circle\">a</p>y<p>B</p></body></html>",
+"browser": "A x ◦ y B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:table-footer-group\"></div>b<p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>a<div style=\"display:table-header-group\"></div>b<p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div>a<input style=\"display:table-caption\">c</div><p>B</p></body></html>",
+"browser": "A ac B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p></main><big>(<dl style=\"display:inline-block\">\t&lt;<p>B</p></body></html>",
+"browser": "A (< B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div><b style=\"display:inline-block\">x</div>y </b>z<p>B</p></body></html>",
+"browser": "A x yz B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div>x<span style=\"-webkit-opacity:0\">a</span>y</div><p>B</p></body></html>",
+"browser": "A xy B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div>x.<span style=\"opacity:0\">\n</span><s>\n</s>y</div><p>B</p></body></html>",
+"browser": "A x.y B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><span style=\"font-family:&quot x; display:none\">x</span>y<p>B</p></body></html>",
+"browser": "A xy B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><table><p style=\"display:none\"><tr><td>y</td></tr></table><p>B</p></body></html>",
+"browser": "A y B",
+"certain": false
+},
+{
+"source": "<!doctype html><p>w</p><table><font style=\"display:inline-block\"><tr><td>y</td></tr></table>z </font>q",
+"browser": "w y zq",
+"certain": false
+},
+{
+"source": "<!doctype html><pre style=\"white-space-collapse:collapse\">x<span style=\"display:inline-block\"> y</span></pre>",
+"browser": "xy",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div>x.\n<span style=\"display:inline-table\">r<s>q</s> </span>\ny</div><p>B</p></body></html>",
+"browser": "A x. rq y B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><table><tr><td style=\"appearance:auto\">a</td><td>b</td></tr></table><p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div style=\"display:flex\"><slot><span>a</span><span>b</span></slot></div><p>B</p></body></html>",
+"browser": "A a b B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><i style=\"display:block\"><tr><td>y</td></tr></table>z</i>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><s style=\"display:block\"><tr><td>y</td></tr></table>z</s>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><u style=\"display:block\"><tr><td>y</td></tr></table>z</u>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><em style=\"display:block\"><tr><td>y</td></tr></table>z</em>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><tt style=\"display:block\"><tr><td>y</td></tr></table>z</tt>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><big style=\"display:block\"><tr><td>y</td></tr></table>z</big>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><table><tr><td>a</td><td style=\"display:inline\">x</td><td>b</td></tr></table><p>B</p></body></html>",
+"browser": "A a xb B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><code style=\"display:block\"><tr><td>y</td></tr></table>z</code>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><nobr style=\"display:block\"><tr><td>y</td></tr></table>z</nobr>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div>x</div><table style=\"display:inline\"><tr><td>a</td><td>b</td></tr></table>y<p>B</p></body></html>",
+"browser": "A x a by B",
+"certain": false
+},
+{
+"source": "<!doctype html><table><font style=\"white-space:pre\"><tr><td>x<span style=\"display:inline-block\"> y</span></td></tr></table>",
+"browser": "xy",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div>a<span style=\"visibility:hidden\"> x </span><br style=\"display:none\"> b</div><p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><small style=\"display:block\"><tr><td>y</td></tr></table>z</small>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>x<span style=\"opacity:0\">a<span style=\"visibility:visible\">b</span></span>y</p><p>B</p></body></html>",
+"browser": "A xaby B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><strike style=\"display:block\"><tr><td>y</td></tr></table>z</strike>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><p>w</p><table><strong style=\"display:block\"><tr><td>y</td></tr></table>z</strong>q<p>B</p></body></html>",
+"browser": "A w y z q B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><pre style=\"white-space:unset\">a<span style=\"display:inline-block\"> b </span>c</pre><p>B</p></body></html>",
+"browser": "A abc B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div>a<span style=\"visibility:hidden\"> x </span><p style=\"display:none\">y</p> b</div><p>B</p></body></html>",
+"browser": "A ab B",
+"certain": false
+},
+{
+"source": "<!doctype html><html><body><p>A</p>v<tt hidden>(&#65;\t</dir><dt></tt>$<nobr STYLE=\"DISPLAY:NONE\"></tt></base>,<p>B</p></body></html>",
+"browser": "A v $",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><small style=\"display:table-row;white-space:nowrap\">\t&#x2022;\n</small>&#x2022; \n%  <img src=\"x.png\"><p>B</p></body></html>",
+"browser": "A •• % B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><style>.k{-webkit-appearance:auto}</style><table><caption class=\"k\">c</caption><tr><td>a</td></tr></table>x<p>B</p></body></html>",
+"browser": "A ca x B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><a><u style=\"display:table-cell;font-family:&quot;Times New Roman&quot;\"><br/> &lt; \tnet  </u></a>10\n&mdash; <p>B</p></body></html>",
+"browser": "A < net10 - B",
+"certain": false
+},
+{
+"source": "</html><span style=\"display:inline-block\"><s>x x &amp;</s>1</span> x\n<span style=\"visibility:hidden\">&#xA;<s>&#10;yx &nbsp;</s></span></body><!doctype html><s>\n\n</s>x",
+"browser": "x x &1 x x",
+"certain": false
+},
+{
+"source": "<!doctype html><html><body><p>A</p></nobr>2&#65;<q style=\"display:none\">2,</header><font style = \"display:none\">ab</q><nav style=\"display:contents\"><dir><p>B</p></body></html>",
+"browser": "A 2A",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><div><ix:nonnumeric style=\"display:table-row-group\"><input> x y z</ix:nonnumeric><span style=\"display:table-cell\"><br style=\"display:none\"> .</span></div><p>B</p></body></html>",
+"browser": "A x y z. B",
+"certain": false
+},
+{
+"source": "<ul><li><s>1x.</s>y</li></ul><body style=\"position:absolute\"><span style=\"visibility:hidden\">1<div> \n&amp;\n </div></span><span style=\"display:inline-block\"><table><tr><td>x x </td></tr></table>\n</span>",
+"browser": "1x.y x x",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>\n&nbsp;&nbsp;<em style=\"display:inline-flex;text-transform:none\">  $ </em><sub style=\"display:inline-flex;font-family:'Arial',sans-serif\">\n&lt;\t<img src=\"x.png\"></sub><p>B</p></body></html>",
+"browser": "A $< B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><center style=\"color:red\">&nbsp;\n<div style=\"display:inline-block\">\t&#8226;$<center style=\"display:inline-flex;position:relative;visibility:visible\"><p style=\"display:contents\">z\t</p></center></div><span style=\"display:inline-block;width:10pt\"></span></center><div></div><p>B</p></body></html>",
+"browser": "A •$z B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><sup style=\"display:flow-root;visibility:hidden\">\n  x<u style=\"visibility:visible\">\t.\n   ,</u></sup>  x\n  <ul><li><u>\nz   10 <strong style=\"display:inline-block\"><div style=\"display:inline-grid;text-transform:none\">\t_____\t</div></strong></u></li><li><span style=\"display:contents;visibility:hidden;visibility:collapse\">&#8226; x<img src=\"x.png\"></span><img src=\"x.png\" style=\"float:left\"><li>\tab</li></ul><p>B</p></body></html>",
+"browser": "A . ,x z 10 _____ ab B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><ul><li>%x \n  y </li></ul><span><ix:nonnumeric style=\"display:table-row;text-transform:none\"> &lt;, <b style=\"padding-left:14pt\"><ul><li> 2.5&amp;\n</li><li>\n  x </li><li>\n  10\n</li></ul><ix:nonnumeric style=\"display:flex\">% \tz  &#8226;</ix:nonnumeric></b>\t_____ </ix:nonnumeric></span><div style=\"display:table-row;color:red\"> _____<u style=\"display:table-caption;position:absolute\">net $&amp;</u></div>&#8203; <p>B</p></body></html>",
+"browser": "A %x y <, 2.5& x 10 % z • __________ net $& B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>$ <ix:nonnumeric style=\"white-space:pre-wrap;position:relative\"><center style=\"visibility:visible\">\t_____</center><strong style=\"display:table-row;font-family:&quot;Times New Roman&quot;\"><blockquote style=\"display:list-item;position:fixed\"><div style=\"display:inline-flex;white-space:nowrap\">(1)_____\n  </div>z &amp;</blockquote><span style=\"display:inline-block;width:10pt\"> </span>  &nbsp;\n  </strong></ix:nonnumeric><!-- c --><p>B</p></body></html>",
+"browser": "A $ _____ (1)_____z & B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p>.<sub style=\"display:flex;position:absolute\"><h2 style=\"text-transform:none;white-space:pre\"><table><tr>\t<td><ul><li> net</li></ul></td><td><br style=\"display:none\"></td>\n  <td>2.5\t.&amp; </td></tr> <tr>\n<td> &#8203;.<blockquote style=\"display:inline-grid;margin-left:9pt\">\n  %</blockquote></td> <td>\n  ab </td></table><u style=\"visibility:collapse\"> _____ <table style=\"display:none\"> <tr>\n  <td>\t_____ &#8226;\n  \nw</td>\n<td>\t&#8203; </td></tr><tr> <td>  ,</td></tr></table>\n.</u></h2></sub><u style=\"display:table-cell;margin-left:9pt;white-space:nowrap\">\n&nbsp;%</u><p>B</p></body></html>",
+"browser": "A . net 2.5 .& .% ab % B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><sup style=\"display:grid\">  _____ <ix:nonfraction style=\"display:table-caption;visibility:hidden\"><table style=\"display:none\"><tr> <td>% y (1)z  </td>\t<td style=\"position:relative\"><sup style=\"float:right\">&#x2022;2.5  </sup></td></tr>\n  <tr>\n<td><small style=\"visibility:collapse\">,  x&amp;   , &#160;  </small></td> <td><i style=\"display:table;position:fixed\">&lt;  2.5 &#x2022;\n  </i> ab$  </tr> <tr>  <td>&#x2022; &amp;<ix:nonfraction style=\"display:table-caption;white-space:nowrap\"> z&mdash;\t&amp; net</ix:nonfraction></table><i style=\"visibility:visible\"> &amp;</i>ab&#160;  </ix:nonfraction></sup><p>B</p></body></html>",
+"browser": "A _____& B",
+"certain": false
+},
+{
+"source": "<html><body><p>A</p><sup style=\"display:table-cell;white-space:nowrap\"><small style=\"display:inline-grid;visibility:hidden\">  &#8226;\tx%\n  </small><strong style=\"display:table-row;white-space:pre\"><ix:nonnumeric><img src=\"x.png\" style=\"float:left\"><blockquote style=\"float:right\">_____   2.5</blockquote><strong style=\"display:flex;text-transform:none\">,\t,</strong></ix:nonnumeric></strong><center style=\"margin-left:9pt\"><p style=\"display:table-row;padding-left:14pt\">  &mdash;\t<blockquote style=\"display:inline;text-transform:none\">  (1)%</blockquote><strong style=\"display:grid;font-family:'Arial',sans-serif\">&#160;%\n &amp;\t</strong></p>2.5</center></sup><p>B</p></body></html>",
+"browser": "A _____ 2.5 , , -(1)% % & 2.5 B",
+"certain": false
+}
+]
+}

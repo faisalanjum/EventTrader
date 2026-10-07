@@ -5,7 +5,7 @@ output to the ORIGINAL bytes, never to this copy. Rules are the guide's, with no
 from html.parser import HTMLParser
 import re
 
-from benchmarks.prepare.grader.anchor import Visible, norm
+from driver.prepare.convert.anchor import Visible, norm
 
 BLOCK = {'p', 'div', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'td', 'th', 'span', 'font', 'b', 'strong', 'u', 'i', 'em', 'a', 'sup', 'sub', 'br', 'table', 'tr'}
 WRAP = ('p', 'div')  # block lines a heading can be; table cells are left to the table rules

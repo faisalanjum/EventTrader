@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 from benchmarks.prepare.grader.adapters import docling_html as dh
-from benchmarks.prepare.grader.anchor import Visible
+from driver.prepare.convert.anchor import Visible
 from benchmarks.prepare.grader.adapters import edgartools_html as eh
 
 DOC = {  # the DoclingDocument JSON shape that matters: reading order in body, texts, tables with rich cells, groups, pictures
@@ -112,7 +112,7 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
     def test_source_formatting_step_writes_the_sources_own_strike_through_onto_units_and_cells(self):
         # ledger class I: redlines marked with CSS line-through (and the three tags) become `struck` phrases by anchor; a tool's own wrong claim is dropped
         from benchmarks.prepare.grader.adapters import source_formatting as sf
-        from benchmarks.prepare.grader import anchor as an
+        from driver.prepare.convert import anchor as an
         raw = (b'<p>Applicable <span style="text-decoration:line-through">Eurocurrency Rate</span>Term SOFR Spread</p>'
                b'<table><tr><td><s>LIBOR</s> Loans</td><td>12</td></tr></table><p>Plain words.</p>')
         self.assertEqual([an.norm(an.Visible(raw).at(a, b)) for a, b in an.Visible(raw).struck_runs()], ['Eurocurrency Rate', 'LIBOR'])
@@ -425,7 +425,7 @@ class HeadingPrestepTests(unittest.TestCase):
         self.assertEqual(out.count(b'<h2>'), 4)  # Item 2 line, Free Cash Flow, RESULTS OF OPERATIONS, PART I
         for kept in (b'summarized as follows:</p>', b'amounts in millions', b'<td style="font-weight:bold">Total</td>'):
             self.assertIn(kept, out)  # a sentence, a styled opener of a sentence, and table cells are left alone
-        from benchmarks.prepare.grader.anchor import Visible
+        from driver.prepare.convert.anchor import Visible
         self.assertEqual(Visible(out).text.replace(' ', ''), Visible(HTML_STYLED).text.replace(' ', ''))  # visible characters untouched
 
     def test_a_quoted_greater_than_inside_the_start_tag_does_not_cut_it(self):

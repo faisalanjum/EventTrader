@@ -1,15 +1,14 @@
 """The tool's heading reading, fixed at its boundary (adapters.edgartools_html.whole_headings): a block the tool takes for a heading is read whole — every
-descendant's text — as it reads <h1>–<h6>. Runs under the tool's own environment; skipped where EdgarTools is not installed."""
+descendant's text — as it reads <h1>–<h6>. Runs under the tool's own environment; EdgarTools is required (a missing install fails, never skips)."""
 import unittest
 
 from driver.prepare.convert import anchor
-from benchmarks.prepare.grader.adapters import edgartools_html as adapter
+from driver.prepare.convert import edgartools_html as adapter
 
 
 class WholeHeadings(unittest.TestCase):
     def setUp(self):
-        try: from edgar.documents import parse_html; from edgar.documents.strategies import document_builder
-        except ImportError: self.skipTest('EdgarTools not installed')
+        from edgar.documents import parse_html; from edgar.documents.strategies import document_builder  # required: a missing install fails the suite
         self.parse = parse_html; adapter.whole_headings()
 
     def units(self, raw):

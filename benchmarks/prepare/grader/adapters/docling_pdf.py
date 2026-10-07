@@ -16,7 +16,8 @@ import tempfile
 import time
 from pathlib import Path
 
-from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader import grade
+from driver.prepare.convert import anchor
 from benchmarks.prepare.grader.adapters import cache
 from benchmarks.prepare.grader.adapters.docling_html import to_units, unsupported as _unsupported, route_status
 

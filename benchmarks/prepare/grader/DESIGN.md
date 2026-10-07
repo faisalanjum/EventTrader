@@ -2107,3 +2107,30 @@ order, no link or picture involved, every gate 0. The other documents cannot cha
 measurable change (the three documents and the largest unaffected file, 22.6 MB, 7.72 → 7.69 s; run-to-run spread about 3 %). Tests: one new case
 (twelve subcases: a table with no wrapper, in `span`, `font`, `b`, nested wrappers, each alone and inside `ix:footnote`; an inline footnote stays text) —
 ten fail under the previous adapter; Codex's probes, six failing before, pass.
+
+## 63. The converter's runtime moves into production: `driver/prepare/convert/` (2026-10-07; the owner, Codex `prepare_integration_20261007/CODEX_GATE.md`)
+
+The selected route (HTML: EdgarTools, source formatting, the screen step; XML: `xml_fields`) is production code; scoring is evaluation. Codex's work
+order: the mechanical extraction into `driver/prepare/convert/`, `driver/prepare/compare.py` reused, scanner/linker/formatting/XML functions kept only
+where the runtime calls them, no grader copy, parser or chunker of our own, behaviour and imports preserved in an isolated copy first. **Sizing** (a call
+graph from every runtime definition, the command lines left out; `prepare_work/convert_extract_20261007/callgraph.py`): the scanner and linker
+`anchor.py` is reached whole (81 of 81 definitions); of `grade.py` four helpers (`sha256`, `spans`, `struck_at`, `tool_spaces`; 45 lines of 74
+definitions); the four adapters without their command lines (EdgarTools 243 lines, the screen step 108, source formatting 23, XML 34). Not reached: the
+Docling HTML/PDF adapters, the heading pre-step and the conversion cache (the command lines' own).
+**The move** (`move_convert.py`, every step asserted): `anchor.py` moves whole with the four helpers appended verbatim (`grade.py` imports them back);
+each adapter's runtime (all but `main` and the `__main__` guard) moves, its command line over key packets stays here and imports the moved names back;
+every importer switches. The only edits inside moved definitions: `grade.<name>` becomes `anchor.<name>` where the grader merely passed on a name the
+scanner holds (`squash`, the four helpers); a moved docstring loses its command-line usage line (the command line keeps it); `grade.py` loses
+`import hashlib` (its only user moved). Checked: every moved definition equals its original after that rename, every original definition is still
+defined once, no production module imports the benchmark package or names `grade`. Production: 6 files, 1,335 lines; `grade.py` 1,657 → 1,605 lines;
+the four adapters here 642 → 187.
+**Tests** (`port_tests.py`): 181 converter regressions copied into `tests/driver/prepare/convert/` (11 files whole, 6 in part; each test keeps its
+class, name and body — checked — after the import switch; a missing EdgarTools or playwright fails instead of skipping, MIGRATION correction 1). They
+stay here as well until MIGRATION step 5 reconciles old and new. Not copied: the scoring tests (`test_grade.py`'s 165 and the scoring parts of the
+mixed files), the Docling, PDF, pre-step and cache tests, and the XML batch case that runs through the command line.
+**Measured** (the common test environment, 3.11.10): grader suite 398, permanent suite 286 (105 get + 181 convert), no skips; under all four interpreters the
+moved modules import from the copy; the nine key route sets rebuilt by the moved code against `nested_table_20261006/build_nt` (9382f5d2e's code, the
+same key): 674 route files and 27 grading files, no set or file on one side only, every file identical after the declared normalizations (the timings and the run's own folder); the XML routes (development 4, control 7 files) identical; real-original variants 48/48 with the results file unchanged;
+package check clean.
+**Open, for the cleanup pass:** a route still names its linker `benchmarks/prepare/grader/anchor.py` (unchanged so that no output changes); a batch's
+per-file failure isolation is the command line's (no production batch yet); docstrings say "the grader" where they mean the scanner's users.

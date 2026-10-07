@@ -10,53 +10,14 @@ what stands outside the document is refused, so a reading that would need it fai
 makes from an entity's text has no bytes of its own, and the document is refused rather than given a position that is none.
 
     python3 -m benchmarks.prepare.grader.adapters.xml_fields --key <key package> --split development --out <run dir> [--catalog CSV]"""
+# The runtime lives in driver.prepare.convert.xml_fields (moved 2026-10-07); this module keeps the command line over key packets.
 import argparse
 import json
 import time
 import xml.parsers.expat as expat
 from pathlib import Path
-
 from benchmarks.prepare.grader import grade
-from benchmarks.prepare.grader.anchor import xml_parser
-
-NAME = 'xml-fields'
-
-
-def clark(name):
-    return '{' + name if '}' in name else name
-
-
-def units_of(raw, facts=None):
-    """Field units of one XML document; raises ExpatError, ValueError or LookupError for invalid XML or an unsupported encoding. `facts`, when
-    given, receives what the route does not read (`attribute_values`)."""
-    p = xml_parser(namespace_separator='}'); stack, leaves, root_counts, attrs = [], [], {}, 0
-    def start(name, a):
-        nonlocal attrs; attrs += sum(1 for v in a.values() if v.strip())
-        parent = stack[-1]['counts'] if stack else root_counts; parent[name] = parent.get(name, 0) + 1
-        stack.append({'name': name, 'index': parent[name], 'parent_counts': parent, 'counts': {}, 'own': [], 'parts': [], 'start_tag': p.CurrentByteIndex, 'mark': len(leaves)})
-    def data(text):
-        fr = stack[-1]; fr['own'].append(text); fr['parts'].append(text)
-    def end(name):
-        fr = stack.pop(); text = ''.join(fr['parts'])
-        if p.CurrentByteIndex <= fr['start_tag']: raise expat.ExpatError('an element with no bytes of its own (markup from an entity) has no source position')
-        if stack: stack[-1]['parts'].append(text)  # a parent that is prose sees its children's text in place
-        if not ''.join(fr['own']).strip(): return  # no text of its own: a container of elements, or empty
-        leaf = {'name': fr['name'], 'index': fr['index'], 'siblings': fr['parent_counts'], 'ancestors': [(a['name'], a['index'], a['parent_counts'], a['start_tag']) for a in stack], 'mixed': len(leaves) > fr['mark'],
-                'text': text.strip(), 'anchor': {'byte_start': fr['start_tag'], 'byte_end_exclusive': p.CurrentByteIndex}}  # from the element's own start tag to the end of its text; an element with text of its own around child elements is read whole as prose AND its children stay fields of their own
-        for child in leaves[fr['mark']:]: child.setdefault('within', leaf)  # the nearest prose ancestor reads the child's text in place
-        leaves.append(leaf)
-    p.StartElementHandler, p.EndElementHandler, p.CharacterDataHandler = start, end, data
-    p.Parse(raw, True)
-    if facts is not None: facts['attribute_values'] = attrs
-    order = sorted(leaves, key=lambda leaf: leaf['anchor']['byte_start']); ids = {id(leaf): f'f{i}' for i, leaf in enumerate(order)}  # source order: prose before the fields inside it
-    out = []
-    for leaf in order:
-        group = next(({'index': idx, 'count': counts[name], 'at': at} for name, idx, counts, at in reversed(leaf['ancestors']) if counts[name] > 1), None) \
-            or {'index': 1, 'count': 1, 'at': leaf['ancestors'][0][3] if leaf['ancestors'] else leaf['anchor']['byte_start']}  # no repeated ancestor: the document is the instance
-        out.append({'id': ids[id(leaf)], 'kind': 'field', 'name': clark(leaf['name']), 'path': [clark(n) for n, _, _, _ in leaf['ancestors']], 'group': group,
-                    'siblings': {'index': leaf['index'], 'count': leaf['siblings'][leaf['name']]}, 'text': leaf['text'], 'anchor': leaf['anchor'],
-                    **({'mixed': True} if leaf['mixed'] else {}), **({'within': ids[id(leaf['within'])]} if leaf.get('within') else {})})
-    return out
+from driver.prepare.convert.xml_fields import NAME, clark, units_of
 
 
 def main(argv=None):

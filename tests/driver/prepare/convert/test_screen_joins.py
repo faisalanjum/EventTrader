@@ -3,9 +3,9 @@ characters touching on one baseline — never on the text alone (the page's styl
 import re
 import unittest
 
-from benchmarks.prepare.grader import grade
-from benchmarks.prepare.grader.adapters import source_formatting
-from benchmarks.prepare.grader.adapters import screen_grid as sg
+from driver.prepare.convert import anchor
+from driver.prepare.convert import source_formatting
+from driver.prepare.convert import screen_grid as sg
 from driver.prepare.convert.anchor import Visible
 
 
@@ -16,34 +16,34 @@ def unit(raw, text, start=None, end=None, **more):
 class ToolSpaces(unittest.TestCase):
     def test_a_space_the_tool_added_inside_a_word_or_number_is_found_by_its_place(self):
         raw = b'<p>CVS HEALTH CORP<ix:nonNumeric name="x">ORATION</ix:nonNumeric> had 1,2<a id="k"></a>34 in <i>Oc</i>tober.</p>'
-        vis = Visible(raw); found = grade.tool_spaces(vis, unit(raw, 'CVS HEALTH CORP ORATION had 1,2 34 in Oc tober.'))
+        vis = Visible(raw); found = anchor.tool_spaces(vis, unit(raw, 'CVS HEALTH CORP ORATION had 1,2 34 in Oc tober.'))
         text = 'CVS HEALTH CORP ORATION had 1,2 34 in Oc tober.'; self.assertEqual([(a, b) for a, b, _, _ in found], [(text.index(' ORATION'), text.index(' ORATION') + 1), (text.index(' 34'), text.index(' 34') + 1), (text.index(' tober'), text.index(' tober') + 1)])
         self.assertEqual([vis.flat[k] + vis.flat[l] for _, _, k, l in found], ['PO', '23', 'ct'])
 
     def test_a_space_the_source_has_or_that_reflows_punctuation_is_no_gap(self):
         raw = b'<p>Net sales<br>fell<div>by</div>2.5 (loss)<span> </span>x; Co.<b>Inc</b></p>'
         vis = Visible(raw); text = 'Net sales fell by 2.5 (loss) x; Co. Inc'
-        self.assertEqual(grade.tool_spaces(vis, unit(raw, text)), [])  # white space, a line break, a block, punctuation: the source or the rule spaces them
-        self.assertEqual(grade.tool_spaces(vis, unit(raw, 'Net sales fell by 2.5 (loss) x; Co.Inc')), [])  # a space the tool dropped is not this step's
-        self.assertEqual(grade.tool_spaces(vis, unit(raw, 'Net sales fell by 2.5 (loss) y; Co. Inc')), [])  # not the source's text: nothing is said
+        self.assertEqual(anchor.tool_spaces(vis, unit(raw, text)), [])  # white space, a line break, a block, punctuation: the source or the rule spaces them
+        self.assertEqual(anchor.tool_spaces(vis, unit(raw, 'Net sales fell by 2.5 (loss) x; Co.Inc')), [])  # a space the tool dropped is not this step's
+        self.assertEqual(anchor.tool_spaces(vis, unit(raw, 'Net sales fell by 2.5 (loss) y; Co. Inc')), [])  # not the source's text: nothing is said
 
     def test_an_item_without_a_whole_byte_reading_says_nothing(self):
         raw = b'<p>CORP<i>ORATION</i> a&amp;b</p>'; vis = Visible(raw); text = 'CORP ORATION a&b'
-        self.assertEqual(grade.tool_spaces(vis, {'text': text}), []); self.assertEqual(grade.tool_spaces(vis, {'text': text, 'anchor': [{'byte_start': 3, 'byte_end_exclusive': len(raw)}, {'page': 1, 'region': [0, 0, 1, 1]}]}), [])
-        cut = raw.index(b'&amp;') + 2; self.assertEqual(grade.tool_spaces(vis, {'text': 'CORP ORATION a', 'anchor': {'byte_start': 3, 'byte_end_exclusive': cut}}), [])  # a place that ends inside a character
-        self.assertEqual(len(grade.tool_spaces(vis, {'text': 'CORP ORATION', 'anchor': {'byte_start': 3, 'byte_end_exclusive': raw.index(b' a&amp;')}})), 1)
-        self.assertEqual(grade.tool_spaces(vis, unit(raw, 'CORP\u200bORATION a&b')), [])  # not white space between the two: not this step's
-        self.assertEqual(grade.tool_spaces(vis, {'text': '', 'anchor': {'byte_start': 0, 'byte_end_exclusive': 3}}), [])  # a place holding no character
-        self.assertEqual(len(grade.tool_spaces(vis, {'text': 'CORP ORATION a&b', 'anchor': {'byte_start': 3, 'byte_end_exclusive': raw.index(b'</p>')}})), 1)  # a place ending exactly where its last character ends
+        self.assertEqual(anchor.tool_spaces(vis, {'text': text}), []); self.assertEqual(anchor.tool_spaces(vis, {'text': text, 'anchor': [{'byte_start': 3, 'byte_end_exclusive': len(raw)}, {'page': 1, 'region': [0, 0, 1, 1]}]}), [])
+        cut = raw.index(b'&amp;') + 2; self.assertEqual(anchor.tool_spaces(vis, {'text': 'CORP ORATION a', 'anchor': {'byte_start': 3, 'byte_end_exclusive': cut}}), [])  # a place that ends inside a character
+        self.assertEqual(len(anchor.tool_spaces(vis, {'text': 'CORP ORATION', 'anchor': {'byte_start': 3, 'byte_end_exclusive': raw.index(b' a&amp;')}})), 1)
+        self.assertEqual(anchor.tool_spaces(vis, unit(raw, 'CORP\u200bORATION a&b')), [])  # not white space between the two: not this step's
+        self.assertEqual(anchor.tool_spaces(vis, {'text': '', 'anchor': {'byte_start': 0, 'byte_end_exclusive': 3}}), [])  # a place holding no character
+        self.assertEqual(len(anchor.tool_spaces(vis, {'text': 'CORP ORATION a&b', 'anchor': {'byte_start': 3, 'byte_end_exclusive': raw.index(b'</p>')}})), 1)  # a place ending exactly where its last character ends
 
     def test_a_space_beside_a_numbers_own_separator_is_found(self):  # the gate reads "0.69" and "1,234" as one number each: a space beside the separator cuts it
         raw = b'<p>EPS was $0<b>.</b>69, up 1<i>,</i>234 and Co.<b>Inc</b> in the 10<sup>th</sup></p>'; text = 'EPS was $0. 69, up 1, 234 and Co. Inc in the 10 th'
-        found = grade.tool_spaces(Visible(raw), unit(raw, text))
+        found = anchor.tool_spaces(Visible(raw), unit(raw, text))
         self.assertEqual([text[a - 1:b + 1] for a, b, _, _ in found], ['. 6', ', 2', '0 t'])  # the two separators' spaces, the digit-letter one as before; "Co. Inc" stays reflow at punctuation
 
     def test_the_keys_marks_do_not_shift_the_places(self):
         raw = b'<p><s>old</s>new CORP<i>ORATION</i></p>'
-        self.assertEqual([(a, b) for a, b, _, _ in grade.tool_spaces(Visible(raw), unit(raw, '~~old~~new CORP ORATION'))], [(15, 16)])  # the text's own position, the marks counted
+        self.assertEqual([(a, b) for a, b, _, _ in anchor.tool_spaces(Visible(raw), unit(raw, '~~old~~new CORP ORATION'))], [(15, 16)])  # the text's own position, the marks counted
 
 
 class Tagging(unittest.TestCase):
@@ -71,7 +71,7 @@ class Joining(unittest.TestCase):
         item = unit(raw, 'oldnew CORP ORATION gone 1,2 34 xy'); source_formatting.apply(raw, [item]); before = item['struck_at']
         gaps = sg.gaps_of(vis, [item]); L = dict(x=0, r=8, t=0, b=12); boxes = {'0.0': L, '0.1': dict(L, x=8), '1.0': L, '1.1': dict(L, x=8)}
         self.assertEqual(sg.join(gaps, boxes, vis), 2); self.assertEqual(item['text'], 'oldnew CORPORATION gone 1,234 xy')
-        self.assertEqual(item['struck_at'], grade.struck_at(vis, item)); self.assertEqual([item['text'][a:b] for a, b in item['struck_at']], ['old', 'gone', 'x']); self.assertNotEqual(item['struck_at'], before)
+        self.assertEqual(item['struck_at'], anchor.struck_at(vis, item)); self.assertEqual([item['text'][a:b] for a, b in item['struck_at']], ['old', 'gone', 'x']); self.assertNotEqual(item['struck_at'], before)
         other = unit(raw, 'oldnew CORP ORATION gone 1,2 34 xy', struck_at=[[0, 3]]); self.assertEqual(sg.join(sg.gaps_of(vis, [other]), boxes), 2); self.assertNotIn('struck_at', other)  # without the reading, a stale place is dropped, never kept
 
     def test_a_gap_the_page_shows_or_another_line_or_a_missing_box_keeps_the_space(self):
@@ -90,10 +90,9 @@ class Joining(unittest.TestCase):
 
 
 class Measuring(unittest.TestCase):
-    """The measuring script itself, in Chrome (offline: every request aborted); skipped where playwright is not installed."""
+    """The measuring script itself, in Chrome (offline: every request aborted); playwright is required (a missing install fails, never skips)."""
     def setUp(self):
-        try: from playwright.sync_api import sync_playwright
-        except ImportError: self.skipTest('playwright not installed')
+        from playwright.sync_api import sync_playwright  # required: a missing install fails the suite
         self.pw = sync_playwright().start(); self.browser = self.pw.chromium.launch(); self.page = self.browser.new_page(); self.page.route('**/*', lambda r: r.abort())
 
     def tearDown(self):

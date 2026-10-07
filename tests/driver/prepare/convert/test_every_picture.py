@@ -3,7 +3,7 @@ picture there got no unit; the adapter adds it from the scanner's inventory, in 
 import unittest
 
 from driver.prepare.convert import anchor
-from benchmarks.prepare.grader.adapters import edgartools_html as adapter
+from driver.prepare.convert import edgartools_html as adapter
 
 RAW = (b'<p>Intro text here.</p>'
        b'<table><tr><td colspan="2"><img src="logo.png"></td></tr><tr><td>Revenue</td><td>10 <img src="up.png"></td></tr></table>'

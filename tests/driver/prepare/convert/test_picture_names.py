@@ -7,10 +7,9 @@ cannot put a picture at another picture's tag, a hidden copy of a resource canno
 import re
 import unittest
 
-from benchmarks.prepare.grader import grade
 from driver.prepare.convert import anchor
-from benchmarks.prepare.grader.adapters import edgartools_html as adapter
-from benchmarks.prepare.grader.tests.test_edgar_images import node
+from driver.prepare.convert import edgartools_html as adapter
+from tests.driver.prepare.convert.test_edgar_images import node
 
 IMG = re.compile(rb'<img[^>]*?src="([^"]*)"')
 
@@ -60,7 +59,7 @@ class PictureNames(unittest.TestCase):
         vis = anchor.Visible(raw); codes = adapter.codes(raw, vis); given = adapter.named(raw, vis, codes).encode()
         self.assertEqual(re.sub(rb'src="[^"]*"', b'src=""', given), re.sub(rb'src="[^"]*"', b'src=""', raw))  # nothing but the names changes
         written = [m.group(1).decode() for m in IMG.finditer(given)]; self.assertEqual(written, list(codes))
-        self.assertTrue(all(re.fullmatch(r'[a-z0-9]+', c) and c.startswith(grade.sha256(raw)[:16]) for c in written))
+        self.assertTrue(all(re.fullmatch(r'[a-z0-9]+', c) and c.startswith(anchor.sha256(raw)[:16]) for c in written))
         self.assertEqual([codes[c] for c in written], [(raw.index(b'<img'), 'chart.JPG'), (raw.index(b'<img src="a&amp'), 'a&b.png')])
         self.assertNotEqual(adapter.codes(raw + b' ', anchor.Visible(raw + b' ')).keys(), codes.keys())  # another source, other codes
         self.assertNotIn('tag', adapter.to_units(tool(raw))[0])  # without this source's codes a unit names no tag: the linker's own rule applies (Docling)

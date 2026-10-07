@@ -1,7 +1,7 @@
 """Image locations come from actual source tags, never chained empty gaps."""
 import unittest
 from driver.prepare.convert import anchor
-from benchmarks.prepare.grader.adapters.edgartools_html import to_units
+from driver.prepare.convert.edgartools_html import to_units
 
 
 class ImageSourcesTests(unittest.TestCase):

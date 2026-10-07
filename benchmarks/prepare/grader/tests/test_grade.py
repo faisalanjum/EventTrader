@@ -10,7 +10,8 @@ import re
 import tempfile
 import unittest
 
-from benchmarks.prepare.grader import anchor, grade
+from benchmarks.prepare.grader import grade
+from driver.prepare.convert import anchor
 
 FIX = Path(__file__).with_name('fixtures')
 HTML, XML = (FIX / 'sample.htm').read_bytes(), (FIX / 'sample.xml').read_bytes()

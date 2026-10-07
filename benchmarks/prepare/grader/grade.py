@@ -11,7 +11,6 @@ import argparse
 from bisect import bisect_left
 import csv
 import difflib
-import hashlib
 from itertools import product
 from math import prod, isfinite
 import json
@@ -20,7 +19,7 @@ import re
 import unicodedata
 import xml.etree.ElementTree as ET
 
-from benchmarks.prepare.grader.anchor import Visible, norm, squash, xml_parser
+from driver.prepare.convert.anchor import Visible, norm, sha256, spans, squash, struck_at, tool_spaces, xml_parser
 from driver.prepare.compare import _TOKEN_NUMBERS, _TOKEN_WORDS, boundary_equal, critical, reading_units, spacing_only, tokens, wer_counts  # shared with production
 
 T4 = ('value_kind', 'sign', 'marker_meaning', 'measure', 'unit_interpretation')  # meaning: Step 8, not graded here
@@ -32,7 +31,6 @@ _CONTINUED = re.compile(r'\s*\((?:continued)\)', re.I)            # E2
 _OPEN = ''.join(chr(i) for i in range(0x3000) if unicodedata.category(chr(i)) == 'Ps'); _CLOSE = ''.join(chr(i) for i in range(0x3000) if unicodedata.category(chr(i)) == 'Pe')
 _EMPTY_BRACKETS = re.compile('[' + re.escape(_OPEN) + ']\\s*[' + re.escape(_CLOSE) + ']')
 _TRAILING_BRACKET = re.compile('\\s*[' + re.escape(_OPEN) + '][^' + re.escape(_OPEN + _CLOSE) + ']*[' + re.escape(_CLOSE) + ']\\s*$')  # guide 3.5 rule 6: a bracketed unit phrase is split off a header
-sha256 = lambda b: hashlib.sha256(b).hexdigest()
 local = lambda name: name.rsplit('}', 1)[-1]
 
 
@@ -184,11 +182,6 @@ def anchors_of(t, field, alt=None, governing=False):
 
 
 # -------------------------------------------------------------------------------------------------------- geometry
-def spans(anchor):
-    """An anchor is one place or, for a cell that sits in several source places, a list of them."""
-    return anchor if isinstance(anchor, list) else [anchor] if isinstance(anchor, dict) else []
-
-
 def _ratio(a, b):
     if 'byte_start' in a and 'byte_start' in b:
         return float(a['byte_start'] < b['byte_end_exclusive'] and b['byte_start'] < a['byte_end_exclusive'])
@@ -563,51 +556,6 @@ def splits(toks, a, b):
     """Does the stretch [a, b) take part of a word or number and leave part: some of its characters, its digits without their sign or point, its
     sign alone? A currency symbol or a space between a sign and its digits is no part of the number ('$' is printed in '-$506')."""
     return any((a <= first < b or (a < end and core < b)) and not (a <= first and end <= b) for first, core, end, _ in toks)
-
-
-def struck_at(vis, item):
-    """Where the source strikes the item's text: ranges [start, end) of the text's characters (code points) the source prints struck through, [] when
-    none is — or None when that cannot be said exactly: the decoration is not certified (`struck_certain`, which the scanner gives only where
-    `plain_certain` holds too), a place of the item is no byte span or its places overlap, or its text is not the source's text at its places (same
-    characters in the comparison form, so a reported mark or an inserted character leaves the places unsaid). A range never covers white space: a
-    struck run of words is one range per word."""
-    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
-    if not vis.struck_certain or len(byte) != len(spans(item.get('anchor'))) or any(a['byte_end_exclusive'] > b['byte_start'] for a, b in zip(byte, byte[1:])): return None
-    piece, flags = [], []
-    for a in byte:
-        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
-        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return None  # a character whose bytes run past the place's end: the place is no whole reading
-        piece.append(vis.flat[lo:hi]); flags.append(vis.struck_flat[lo:hi])
-    text = item.get('text', ''); own, out = None, []
-    if ''.join(piece) != squash(text): return None
-    for m in re.finditer(b'\x01+', b''.join(flags)):  # each run of struck characters, split where the text puts white space between them
-        own = own or [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]  # the text's own position of each search-form character, made only where something is struck
-        for i in (own[j] for j in range(m.start(), m.end())): out[-1].__setitem__(1, i + 1) if out and out[-1][1] == i else out.append([i, i + 1])
-    return out
-
-
-def tool_spaces(vis, item):
-    """Where the item's text puts white space between two characters the source prints touching as one word or number — a space the tool added:
-    [(start, end) of each such run in the text, with the search-form index of the character before and after] — or [] where the text is not the source's
-    text at its places. The page may still space the two (CSS): that is for a step with the page to decide; the gate's boundary rule stays as it is."""
-    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
-    if len(byte) != len(spans(item.get('anchor'))): return []
-    src = []
-    for a in byte:
-        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
-        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return []  # a character whose bytes run past the place's end: the place is no whole reading
-        src += range(lo, hi)
-    text = item.get('text', ''); own = [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]
-    if ''.join(vis.flat[k] for k in src) != squash(text): return []
-    out = []
-    for p, (i, j) in enumerate(zip(own, own[1:])):
-        k, l = src[p], src[p + 1]
-        if not text[i + 1:j].isspace() or vis.idx[l] != vis.idx[k] + 1: continue  # the text has no white space there (nothing, or something else), or the source itself puts something between the two
-        a = vis.flat[k - 1:k + 1] if k and vis.idx[k - 1] + 1 == vis.idx[k] else vis.flat[k]  # each side with the neighbour the source prints touching it:
-        b = vis.flat[l:l + 2] if l + 1 < len(vis.flat) and vis.idx[l + 1] == vis.idx[l] + 1 else vis.flat[l]  # a number's own separator belongs to the number ("0.|69"), as the gate's tokens read it
-        if len(_TOKEN_WORDS.findall(vis.flat[k] + ' ' + vis.flat[l])) != 2 and _TOKEN_WORDS.findall(a + b) == _TOKEN_WORDS.findall(a + ' ' + b): continue  # a space there cuts no word or number in two (reflow at punctuation and symbols is allowed, E12)
-        out.append((i + 1, j, k, l))
-    return out
 
 
 def redline_apart(item, vis, byte):
