@@ -2033,6 +2033,19 @@ not taken). Key documents: 0 joins changed (development 140, control 6, released
 (every flagged document, formatting then the screen step, offline): 2,285 base flags in 168 documents → **131 after the screen step** (`f83117fbf`: 2,315 in 175 → 249; no document has more than before; joins 970 → 1,207; 0 errors, 0 requests) — 77 of the 118 fewer by the baseline join alone, 41 by the `<br>` split. The 131 left, each recorded at the gate (`boundary_detail.py`, `classify_flags.py`): 68 a space after the period of a number ("$0. 69": the period in a `<font>` of its own; the gap finder judges a space from its two characters only, so it never measures these — a separate, older class), 45 a list glyph the source glues to its item ("oThe": the tool's space is the reader's), 13 a space the source shows that the tool lost (older), 3 a raised mark kept apart, 2 other. Tests: the old rule's "another top" case now joins; a Chrome case
 with small capitals, a raised and a lowered mark (two failures under the old rule).
 
+## 57. The shared comparison file: one implementation for the grader and production (2026-10-06; Codex's queued item)
+
+OCR's `driver/prepare/compare.py` (SHA-256 `17b74c8b…`) holds the grader's comparison functions, copied so that production never imports benchmark
+code. The grader now imports them from there instead of keeping its own copies: `anchor.py` takes `_FOLD`, `_WS`, `norm`, `squash`; `grade.py` takes
+`_TOKEN_NUMBERS`, `_TOKEN_WORDS`, `boundary_equal`, `critical`, `reading_units`, `spacing_only`, `tokens`, `wer_counts`. Each of the 18 copies was
+removed only after it was checked identical, character for character, to the shared definition
+(`prepare_work/shared_compare_20261006/switch_imports.py`); none had changed since the copy. `anchor.py`'s `_TOKEN` — the HTML tokenizer, a
+different thing from the comparison's word tokenizer — stays where it is. Modules that import `norm` from `anchor.py` get the shared one.
+**Checked:** the same tests pass; the development, control and released routes rebuilt by the switched code are byte-identical to the unswitched
+code's but for timing fields, with identical grades; the saved routes regrade identically; OCR's replay of its 506 pictures, Sonnet off and on from
+saved readings, is OCR's report. The exam runner archives `driver/__init__.py`, `driver/prepare/__init__.py` and `driver/prepare/compare.py` with
+the grader.
+
 ## 58. The screen step measures a space beside a number's own separator (2026-10-06; the corpus's remaining flags, §56)
 
 Of the 131 word-boundary flags the corpus kept after the screen step, 68 (17 documents) were one class: a space the tool printed beside the period or

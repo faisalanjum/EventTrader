@@ -12,16 +12,8 @@ import html
 from html.entities import html5
 import xml.parsers.expat as expat
 import re
-import unicodedata
+from driver.prepare.compare import _FOLD, _WS, norm, squash  # the comparison form, one implementation shared with production; the scanner's _TOKEN below is its own
 
-# Character classes come from the Unicode database, never from hand-written lists:
-#   whitespace = Unicode whitespace plus format marks (zero-width, soft hyphen, direction marks: category Cf);
-#   E8 folding = quotation-mark glyphs to their class's ASCII mark (double stays double, single stays single: 6" is not 6'),
-#   every dash (Pd) and the minus sign to a hyphen.
-_CF = ''.join(chr(i) for i in range(0x110000) if unicodedata.category(chr(i)) == 'Cf')
-_WS = re.compile('[\\s' + re.escape(_CF) + ']+')
-_FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), '') or chr(i) == '"') else "'") for i in range(0x110000) if 'QUOTATION MARK' in unicodedata.name(chr(i), '')},
-                       **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
 # The tokens of an HTML source (HTML Standard, tokenization): a comment — to `-->` or `--!>`, at once for `<!-->` and `<!--->`, to the end of the source when it never
 # ends; an element taken whole up to its closing tag, or to the end of the source when it has none (group 1); a declaration or processing instruction; a tag (a `>` inside a
 # quoted attribute value is no end); a character reference (a numeric one is its digits); text; a `<` that begins none of these (text); `&`; and (group 2) a `<` that begins a tag
@@ -175,16 +167,6 @@ def html_tokens(s):
             body = s[pos:end.start() if end else len(s)]; pos += len(body)
             if tag == 'textarea': yield from ((x.group(), '', 2) for x in _ENTITY_TEXT.finditer(body))
             elif body: yield body, '' if tag in ('xmp', 'plaintext') else tag, 1
-
-
-def norm(s):
-    """Comparison form: glyphs folded (E8), the key's ~~struck~~ marks dropped, whitespace runs -> one space."""
-    return _WS.sub(' ', s.translate(_FOLD).replace('~~', '')).strip()
-
-
-def squash(s):
-    """Search form: norm without any whitespace."""
-    return _WS.sub('', s.translate(_FOLD).replace('~~', ''))
 
 
 def _zero(value):
