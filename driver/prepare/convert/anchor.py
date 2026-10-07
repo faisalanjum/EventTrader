@@ -778,11 +778,15 @@ def link(raw, units, xml=False, vis=None):
         if len(n) < SHORT: continue
         j = vis.flat.find(n)
         if j >= 0 and vis.flat.find(n, j + 1) < 0: pos[i] = place(i, 0, len(vis.flat), forward_only=True)
-    for i, n in enumerate(keys):  # pass 2: the other long texts, in the tool's order, inside the window their anchored neighbours leave
-        if len(n) < SHORT or pos[i]: continue
+    for i, n in enumerate(keys):  # pass 2: the other long texts and the short texts outside tables, in the tool's order, inside the window their anchored neighbours leave
+        if not n or pos[i]: continue
+        if len(n) < SHORT:  # a short text: here only outside tables and when the text before it already has its place (a cell, or a text not yet found, before it: pass 3, as before)
+            k = next((k for k in range(i - 1, -1, -1) if keys[k]), None)
+            if items[i][0] is not items[i][1] or (k is not None and not pos[k]): continue
         lo, hi = window(i)
-        pos[i] = place(i, lo, hi, forward_only=True) or unclaimed(i) or piece(i, lo, hi) or place(i, lo, hi, forward_only=False)
-    for i, n in enumerate(keys):  # pass 3: short texts, only between their anchored neighbours, never far ahead by elimination
+        if len(n) >= SHORT: pos[i] = place(i, lo, hi, forward_only=True) or unclaimed(i) or piece(i, lo, hi) or place(i, lo, hi, forward_only=False)
+        else: pos[i] = place(i, lo, hi, forward_only=False)  # in order with the long texts: a long text that reads like the short runs the tool split an earlier block into no longer stands at that block (Codex, accuracy-fable-1: OGE's two signature titles)
+    for i, n in enumerate(keys):  # pass 3: short texts left (cells), only between their anchored neighbours, never far ahead by elimination
         if not n or len(n) >= SHORT or pos[i]: continue
         lo, hi = window(i)
         pos[i] = place(i, lo, hi, forward_only=False)  # not in its window: the nearest earlier occurrence, flagged

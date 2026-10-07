@@ -2291,3 +2291,20 @@ field of 367,185 key-route units); two input boundaries of the linker closed wit
 cells places nowhere (it crashed on its empty range), and a named table's cell takes a mark the tool kept apart only inside that table (one before or
 after the table was taken in) -, neither observed in a real document: tests 399 + 400 (three new, the empty and outside-mark cases failing before, the
 inside-mark and long partial readings right on both), the four changed documents identical to the build above.
+
+## 73. A short text outside tables is placed in order with the long ones (2026-10-07; Codex accuracy-fable-1, OGE)
+
+The linker places the long texts first (pass 2, in the tool's order) and the short ones after, between their placed neighbours (pass 3). On a
+signature page of OGE's exhibit two blocks hold the same title, "Title: Senior Vice President"; the tool read the first title as two short runs
+("Title: Senior", "Vice President") and the second whole, so the whole title - a long text - was placed before those runs and the names round it, at
+the first block: the second signer's title cited the first signer's, and five order flags followed. A short text outside tables is now placed in pass
+2 as well, in the tool's order with the long ones, once the text before it has its place (Codex's diagnostic, with that condition); a short cell, or a
+short text after one with no place yet (a cell, a text not found), waits for pass 3 as before - placed earlier without that condition, a heading took
+a cell of an untied table. No text, list or rule of its own; a linker change, so the saved parses stand and no setting changes. The same order put a
+second class right: in MTW's call transcript a dotted separator line - a long text - was placed before the short reply above it and took that reply's
+final full stop, its anchor crossing into the paragraph before (11 times). **Measured** against the A3 commit: tests 402 + 400 (three new - the
+split/whole shapes, each failing before; whole and split titles in either order, as before; the table guard, failing without the condition -); a grid
+of 48 split/whole signature pages (2-5 blocks, names of 2, 8 or 18 letters): 28 failing before, none now (Codex's 120: 12 before, 24 without the
+condition, none with it); all 3,353 approved-corpus filer HTML documents: no text changed, 2 documents and 12 items moved, each from out of order to
+in order between its own neighbours (OGE's title; MTW's 11 separators), 16 order flags fewer, overlapping text places 13 to none, uncovered characters
+1,734 to 1,695, no rise in any document. The nine key route sets: identical to the A3 build; grades unchanged.
