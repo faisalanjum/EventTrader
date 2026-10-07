@@ -1,8 +1,8 @@
 """A table the adapter names stands in its own source table (accuracy-fable-1 A3, Codex's cause and controls): of two copies of one table none was tied by its
 texts, and the cells the tool moved were placed in the prose before it or in the other copy (KRC: the date and the unit row listed first). Each shown <table>
 tag carries this source's code to the tool (edgartools_html.codes, named), the unit names its table (`tag`), and every placement keeps its cells there: tied
-when it reads as that table; anywhere in it when the tool lost or changed a cell; nowhere when its code names no table of the source. A table no adapter names
-reads as before. Runs the real tool (required)."""
+when it reads as that table; anywhere in it when the tool lost or changed a cell; nowhere when its code names no table of the source, or a table with no
+cells; a cell's marks inside that table too (Codex's A3 review). A table no adapter names reads as before. Runs the real tool (required)."""
 import hashlib
 import re
 import unittest
@@ -56,6 +56,32 @@ class TableIdentity(unittest.TestCase):
         r = eh.convert(raw, 'x.htm', hashlib.sha256(raw).hexdigest())
         self.assertEqual([[c['text'] for c in u['cells']] for u in r['units']], [['Café & Co.', '(1,234)'], ['Outer', 'Inner\n\n1']])
         self.assertTrue(all(c.get('anchor') and 'tag' not in u for u in r['units'] for c in u['cells']))
+
+    def test_a_named_table_with_no_source_cells_places_nothing(self):  # Codex's A3 review C1: the empty table's range crashed the linker; nor may the prose lend its text
+        for body in (b'', b'<tr></tr>', b'<caption>Debt</caption>'):
+            raw = b'<table>' + body + b'</table><p>Debt</p>'
+            with self.subTest(body=body):
+                u = anchor.link(raw, [table(0, [('Debt',)])])['units'][0]
+                self.assertIsNone(u['anchor']); self.assertIsNone(u['cells'][0]['anchor']); self.assertIn('link_error', u['cells'][0])
+
+    def test_the_marks_of_a_named_tables_cell_stay_in_its_table(self):  # C2: a mark the tool keeps apart was taken from the paragraph before or after the table
+        for side in ('before', 'after'):
+            for text in ('125', 'Outstanding convertible principal amount'):
+                for inside in (False, True):
+                    cell = ('*' + text if side == 'before' else text + '*') if inside else text
+                    raw = (b'<p>*</p>' if side == 'before' else b'') + b'<table><tr><td>' + cell.encode() + b'</td></tr></table>' + (b'<p>*</p>' if side == 'after' else b'')
+                    start, end = raw.index(b'<table>'), raw.index(b'</table>') + len(b'</table>')
+                    with self.subTest(side=side, text=text, inside=inside):
+                        unit = table(start, [(text,)]); unit['cells'][0]['markers'] = ['*']
+                        spans = anchor.spans(anchor.link(raw, [unit])['units'][0]['cells'][0]['anchor'])
+                        self.assertTrue(spans and all(start <= a['byte_start'] < a['byte_end_exclusive'] <= end for a in spans))
+                        self.assertEqual(b''.join(raw[a['byte_start']:a['byte_end_exclusive']] for a in spans), cell.encode())  # a mark inside the cell is still taken in
+
+    def test_a_long_partial_reading_stays_in_its_own_table(self):
+        text = 'Outstanding convertible principal amount paid in full'
+        raw = ('<table><tr><td>' + text + '</td></tr></table><p>' + text + '</p>').encode()
+        spans = anchor.spans(anchor.link(raw, [table(0, [(text.replace('amount', 'amount inserted'),)])])['units'][0]['cells'][0]['anchor'])
+        self.assertTrue(spans and all(a['byte_end_exclusive'] <= raw.index(b'</table>') for a in spans))
 
 
 if __name__ == '__main__':

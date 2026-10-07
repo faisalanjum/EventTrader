@@ -633,7 +633,7 @@ def table_places(vis, items, keys):
     tied = {id(cells) for cells, _ in ties}
     for u, k in named.items():
         if id(mine[u]) in tied: continue
-        if k is NOWHERE:
+        if k is NOWHERE or not any(tables[k]):
             for key, c in mine[u]: out[id(c)] = NOWHERE
             continue
         spans = [(at, at + len(text)) for row in tables[k] for text, at in row]; lo, hi = min(a for a, _ in spans), max(b for _, b in spans)
@@ -689,7 +689,8 @@ def link(raw, units, xml=False, vis=None):
         obj, n = items[i][1], keys[i]
         if allowed.get(id(obj)) is NOWHERE: obj['anchor'], obj['link_error'] = None, 'unknown_source_table'; return None  # its table is named by no table of the source
         marks = [squash(m) for m in obj.get('markers') or () if squash(m)]; allm = ''.join(marks)
-        ok, first, final = allowed.get(id(obj), anywhere); lo, hi = max(lo, first - len(allm)), min(hi, final + len(n) + len(allm))  # a cell of a table that is one table of the source: only at its places there
+        margin = 0 if id(obj) in confined else len(allm)  # a named table's marks cannot extend beyond its source bounds
+        ok, first, final = allowed.get(id(obj), anywhere); lo, hi = max(lo, first - margin), min(hi, final + len(n) + margin)  # a cell of a table that is one table of the source: only at its places there
         free = ok.__contains__ if ok else lambda j, held=reserved.get(n, ()): j not in held  # any other item: never at a place kept for such a cell
         taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i}  # copies of this text other units already hold
         found = []
@@ -707,7 +708,7 @@ def link(raw, units, xml=False, vis=None):
         for k in reversed(range(len(marks))):  # marks not covered by the key: right before the text (inside this window) ...
             if k not in used and left - len(marks[k]) >= lo and vis.flat.startswith(marks[k], left - len(marks[k])): left -= len(marks[k]); used.add(k)
         for k in range(len(marks)):  # ... or right after it
-            if k not in used and vis.flat.startswith(marks[k], end): end += len(marks[k]); used.add(k)
+            if k not in used and (id(obj) not in confined or end + len(marks[k]) <= hi) and vis.flat.startswith(marks[k], end): end += len(marks[k]); used.add(k)
         if flag: obj['link_flag'] = flag
         obj.pop('link_error', None)
         obj['anchor'] = {'byte_start': vis.s[left], 'byte_end_exclusive': vis.e[end - 1]}  # the anchor takes the marks in; the position given back stays the text's own — given as the first mark's, a second unit that reads the same took the same copy (Codex G2-R2)

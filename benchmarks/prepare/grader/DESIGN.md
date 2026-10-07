@@ -2285,4 +2285,9 @@ table each; 4, in two documents with two copies of a table, whose repeated row l
 tool's row -, unanchored items 93 to 91, bytes +0.03 % (the new setting in each route), no slowdown observed (two concurrent runs, not a controlled
 latency claim). The nine key route sets against the A2 build: no file on one side only, no text changed, only AAL's two tables changed (one table
 each, three routes), the route record differing by the new setting and the screen facts by AAL's re-gridded cells (3,394 to 3,398); grades: 0 target
-flips, 0 field rows, 10 gate changes, every one AAL's improving (unanchored 1, order breaks 2, uncovered characters 46 - to none).
+flips, 0 field rows, 10 gate changes, every one AAL's improving (unanchored 1, order breaks 2, uncovered characters 46 - to none). **Codex's review**
+(`FABLE_A3_REVIEW.md`): the identity and the measured gains verified (all 290 cells of the 10 changed tables in their own source table and row; every
+field of 367,185 key-route units); two input boundaries of the linker closed with his tested patch, applied unchanged - a named table with no source
+cells places nowhere (it crashed on its empty range), and a named table's cell takes a mark the tool kept apart only inside that table (one before or
+after the table was taken in) -, neither observed in a real document: tests 399 + 400 (three new, the empty and outside-mark cases failing before, the
+inside-mark and long partial readings right on both), the four changed documents identical to the build above.
