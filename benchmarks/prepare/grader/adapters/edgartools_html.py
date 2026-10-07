@@ -245,20 +245,25 @@ def whole_headings():
         kept, element.tag = element.tag, 'h1'  # the tool reads an <h1> whole: the same reading for the block it takes for one
         try: return read(self, element)
         finally: element.tag = kept
+    def runs(self, element):  # nothing below but inline text runs — inline by tag, an inline-XBRL fact, or laid out inline by its own style, the tool's own notions; a link or a picture keeps the tool's traversal (as for inline facts)
+        return all(not isinstance(d.tag, str) or d.tag.lower() not in ('a', 'img') and (d.tag.lower() in self.INLINE_ELEMENTS or d.tag.lower().startswith('ix:') or getattr(self._extract_style(d), 'display', None) in ('inline', 'inline-block')) for d in element.iterdescendants())
     def creating(self, element, style):
         tag = element.tag.lower() if isinstance(element.tag, str) else ''
         if tag.startswith('ix:') and tag in self.INLINE_ELEMENTS and any(c.tag in self.BLOCK_ELEMENTS or c.tag in ('table', 'div', 'p') for c in element if hasattr(c, 'tag')):
             return ContainerNode(tag_name=element.tag, style=style)  # an inline-XBRL element holding blocks is a container — the tool's own rule for ix:nonNumeric and ix:continuation; the tool read an ix:footnote's table as one string ("2025202420252024")
+        inline = tag not in self.INLINE_ELEMENTS and getattr(style, 'display', None) in ('inline', 'inline-block') and (element.text or '').strip() and any(isinstance(c.tag, str) for c in element)  # a block laid out inline with text of its own and elements: the tool kept that text only ("…on Form" lost "8-K does not constitute…"); without text of its own it walks the children itself
+        whole_run = inline and runs(self, element); self._run = element if whole_run else None
         self._making = (element, style) if line(self, element, style) and self._is_text_only_container(element) and not (element.text or '').strip() and len(element) and not (element[0].text_content() or '').strip() else None  # (a): only where the block's text begins after an element holding nothing — the branch the tool's reader loses
         try: node = create(self, element, style)
-        finally: self._making = None
+        finally: self._making = self._run = None
         if isinstance(node, HeadingNode) and line(self, element, style): node.content = whole(self, element)  # (b): every heading the tool made from a block, read whole
+        if inline and not whole_run and getattr(node, 'metadata', {}).get('inline_via_css'): node = ContainerNode(tag_name=element.tag, style=style)  # blocks below: the tool's own fallback for an inline-laid block, each child walked — nothing dropped
         return node
     def reading(self, element):
         # The tool treats inline XBRL as terminal text but its reader only walks
         # descendants for inline HTML tags. Reuse that reader for inline facts;
         # containers with blocks, pictures, or links keep the tool's traversal.
-        if isinstance(element.tag, str) and element.tag.lower() in ('ix:nonnumeric', 'ix:continuation') and len(element) and not any(
+        if element is getattr(self, '_run', None) or isinstance(element.tag, str) and element.tag.lower() in ('ix:nonnumeric', 'ix:continuation') and len(element) and not any(
                 isinstance(d.tag, str) and d.tag.lower() in self.BLOCK_ELEMENTS | {'table', 'img', 'a'} for d in element.iterdescendants()):
             kept, element.tag = element.tag, 'span'
             try: return read(self, element)

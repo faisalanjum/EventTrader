@@ -46,6 +46,15 @@ class WholeHeadings(unittest.TestCase):
         self.assertIn('Section 2.11(m), or Section 2.13(d)(i) or amounts under Section 2.14(a) relative', ' '.join(t for _, t in self.units(inline) if t))  # an underlined run inside a sentence that the tool takes for a heading keeps the space before it: not re-read (a first version glued 331 words in the legal exhibits)
 
 
+    def test_a_block_laid_out_inline_is_read_whole_and_nothing_after_its_first_child_is_lost(self):  # the tool kept its own first text only
+        body = b'<p>Body text follows here, long enough to be a paragraph of its own.</p>'
+        got = self.units(b'<div><div style="display:inline">This Current Report on Form <div style="white-space:nowrap;display:inline">8-K</div> does not constitute an offer.</div></div>' + body)
+        self.assertEqual((got[0][0], anchor.norm(got[0][1])), ('text', 'This Current Report on Form 8-K does not constitute an offer.'))  # the tool as installed: "This Current Report on Form"
+        phone = self.units(b'<div><div style="display:inline">(<div style="display:inline"><ix:nonNumeric name="dei:CityAreaCode" contextRef="c1">608</ix:nonNumeric></div>) <div style="display:inline"><ix:nonNumeric name="dei:LocalPhoneNumber" contextRef="c1">275-3340</ix:nonNumeric></div></div></div>' + body)
+        self.assertEqual(anchor.squash(phone[0][1]), '(608)275-3340')  # one unit, every part (inline facts are inline runs)
+        link = self.units(b'<div><div style="display:inline">See <a href="#n3">Note 3</a> for details.</div></div>' + body)
+        self.assertIn('Note 3', ' '.join(t for _, t in link)); self.assertIn('for details.', ' '.join(t for _, t in link))  # a link keeps the tool's traversal, nothing dropped
+
     def test_nested_inline_facts_are_read_whole(self):  # Codex's held-out review: the tool read an inline-XBRL text fact only to its first child; two cybersecurity paragraphs were lost
         text = lambda body: ' '.join(' '.join(u.get('text', '') for u in adapter.to_units(adapter.dump(self.parse('<html><body>' + body + '</body></html>').root))).split())
         self.assertEqual(text('<p><ix:nonNumeric>Our <ix:nonNumeric>Chief Financial Officer</ix:nonNumeric> oversees our team.</ix:nonNumeric></p>'), 'Our Chief Financial Officer oversees our team.')

@@ -2061,3 +2061,15 @@ The tool's cleaner deleted every white space before `. , ; ! ?` in the raw page 
 "Sections .13, .14" became "Sections.13,.14". The page prints the space; the route now does too — the one cleaning pattern replaced by one that never
 matches, nothing else of the cleaner changed. A space before punctuation that the page prints is harmless for the reader and never a boundary flag
 (E12); a space deleted inside numbers joined them. Measured: corpus — boundary flags 2,283 → 2,278 (five documents: the joined amounts of a text layer, the section numbers), three table-of-contents lines with dot leaders no longer taken for headings (the cleaner had squeezed ". . . ." into "......"), every other gate unchanged; key documents — 0 target and 0 field changes, one boundary flag fewer (development), control and released gates identical; 23 key documents keep a space the page prints before punctuation; tests 396 (393 without playwright); real-original variants 48/48; under the tool as installed the new case reads "1,855,579,941,411 under Sections.13,.14 of the rule."
+
+## 61. A block laid out inline with text of its own is read whole: nothing after its first child is lost (2026-10-06; the corpus's real text losses)
+
+Most of the corpus's uncovered text is furniture by design (page numbers, running page headers). The real losses were in one family of filings, where
+a sentence is built from `<div style="display:inline">` pieces: `This Current Report on Form <div style="…display:inline">8-K</div> does not constitute
+an offer…`. EdgarTools takes a block laid out inline for one text node, but its reader reads a `div` (not inline by tag) only to its own first text —
+"…on Form" — and the node is terminal: the child and everything after it were lost (sentences, a cover page's form type, date and telephone number). Now,
+only where the block has text of its own and holds elements (the lossy branch; without text of its own the tool walks the children itself): when
+everything below is an inline run — inline by tag, an inline-XBRL fact, or laid out inline by its own style — it is read whole, as the tool reads a
+`<span>` (the reader the adapter already uses for nested inline facts); a link or a picture below, or a block, keeps the tool's own fallback for an
+inline-laid block, a container whose children are walked. Measured: the whole local corpus — lost text 68,198 → 64,543 characters, recovered in exactly seven documents of that family (634 → 0, 550 → 42, 2,502 → 302 …), units, cells, pictures and every other gate unchanged but one document's +3 boundary flags ("CO 2 e" for CO₂e — a subscript the screen step keeps apart by design; the sentences were missing before); key documents (all nine routes): 0 target, 0 field, 0 gate changes, every route's units identical; tests 397 (394 without playwright); real-original variants 48/48. Tests: the sentence, a telephone number of inline facts (one unit, every
+part), a link inside (kept, nothing dropped); under the tool as installed the sentence reads "This Current Report on Form".
