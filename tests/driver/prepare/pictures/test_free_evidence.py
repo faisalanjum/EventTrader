@@ -3,10 +3,13 @@ occurrence, and both tools reading the same other words is a conflict to show, n
 on the runtime functions by Codex (r20 follow-up, the retired evaluation helpers select / spots_grade / verdict are not used); 2026-10-06."""
 import json
 import os
+import tempfile
 import unittest
 from pathlib import Path
 
 from driver.prepare.pictures import free_evidence as evidence
+from driver.prepare.pictures import packets
+from tests.driver.prepare.pictures.saved import Saved
 
 CASES = os.path.join(os.path.dirname(__file__), 'cases')
 case = lambda name: json.loads(Path(CASES, name).read_text())
@@ -30,6 +33,28 @@ class FreeEvidenceTests(unittest.TestCase):
             with self.subTest(x=x, y=y):
                 self.assertEqual(own(x, y), expected)
         self.assertIsNone(evidence.owner_of([(0, 0, 1000, 100)], 600, 800, 10)(300, 500))     # far from every box: outside every block
+
+
+class SavedFreeEvidence(unittest.TestCase):  # the real shared typo and a visible conflict, through the pinned fixtures (ported 2026-10-07)
+    @classmethod
+    def setUpClass(cls):
+        tmp = tempfile.TemporaryDirectory(); cls.addClassCleanup(tmp.cleanup)
+        cls.s = Saved(tmp.name)
+
+    def test_the_real_shared_typo_and_a_visible_conflict(self):
+        r = self.s.by_name['simon10k_p1_75']
+        self.assertEqual(len(r['free']['lines']), 1)                       # the probe reads the page's one free-OCR row
+        name, pic, html, _, fr, (son, src) = self.s.inputs(r)
+        bl = packets.blocks_of(html)
+        free = [evidence.free_tokens(fr[t], bl, fr['w'], fr['h']).get(28, []) for t in ('pp', 'ox')]
+        # KNOWN CHANDRA ERROR: the page prints the typo "restaetments"; Chandra (and Sonnet) silently corrected it; both free tools read it
+        self.assertIn(('restatements', 'restaetments'), [(x, y) for _, _, x, y in evidence.conflicts(packets.toks(bl[28]['html'], 'html'), free)])
+        text, rec = packets.packet(name, pic, html, son, src, free=fr)
+        # KNOWN CHANDRA ERROR: printed "indicated", Chandra "indicate"; the conflict is shown, the block's status is unchanged
+        self.assertIn('[FREE OCR conflict, unverified: this block has "indicate" where both free tools read "indicated"]', text)
+        self.assertEqual(rec['blocks'][26]['status'], 'agree')
+        probe = self.s.picture(self.s.by_name['udr_p5_75'])               # a block both readers agree on, with no free evidence: nothing added
+        self.assertFalse(packets.packet('probe', probe, '<div data-bbox="0 0 1000 1000" data-label="Text"><p>Revenue 10.</p></div>', '<p>Revenue 10.</p>', 'probe')[1]['blocks'][0]['free_ocr'])
 
 
 if __name__ == '__main__':
