@@ -232,7 +232,7 @@ def whole_headings():
     <div> with the file number): read whole after the fact, again unless a table or picture is inside — the tool's terminal heading would swallow them (stated,
     the tool's). An inline run it takes for a heading (a bold <font> inside a sentence) keeps the tool's own reading. Codex R2-C1, R3-A; recorded here, never in
     the environment. Idempotent."""
-    try: from edgar.documents.nodes import HeadingNode; from edgar.documents.strategies import document_builder as db
+    try: from edgar.documents.nodes import ContainerNode, HeadingNode; from edgar.documents.strategies import document_builder as db
     except ImportError: return  # a stand-in for the tool (the tests') has no builder: nothing to fix there; the tool itself has one (tests/test_whole_headings.py, under its environment)
     if getattr(db.DocumentBuilder, '_whole_headings', False): return
     H, PARTS = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'), {'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col', 'ul', 'ol', 'li', 'dl', 'dt', 'dd'}
@@ -246,6 +246,9 @@ def whole_headings():
         try: return read(self, element)
         finally: element.tag = kept
     def creating(self, element, style):
+        tag = element.tag.lower() if isinstance(element.tag, str) else ''
+        if tag.startswith('ix:') and tag in self.INLINE_ELEMENTS and any(c.tag in self.BLOCK_ELEMENTS or c.tag in ('table', 'div', 'p') for c in element if hasattr(c, 'tag')):
+            return ContainerNode(tag_name=element.tag, style=style)  # an inline-XBRL element holding blocks is a container — the tool's own rule for ix:nonNumeric and ix:continuation; the tool read an ix:footnote's table as one string ("2025202420252024")
         self._making = (element, style) if line(self, element, style) and self._is_text_only_container(element) and not (element.text or '').strip() and len(element) and not (element[0].text_content() or '').strip() else None  # (a): only where the block's text begins after an element holding nothing — the branch the tool's reader loses
         try: node = create(self, element, style)
         finally: self._making = None

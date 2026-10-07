@@ -2045,3 +2045,12 @@ with a margin, "2. 4.650% Notes" — keeps its space. A first version read the n
 sentence as "57.3") and joined spaces before a sentence's period: harmless, but not this rule — not taken. Key documents: 0 target, 0 field changes,
 the same joins (one more space measured in the released set, not joined). Corpus (the 168 flagged documents, formatting then the screen step, offline): flags left 131 → 75, no document worse; joins 1,207 → 1,288; 55 of the 68 joined; the 13 kept are a list number the page sets apart ("2. 4.650% Senior Notes") or a raised mark after a period ("2024.¹") — the reader's space. Tests: the finder on separators, a digit-letter pair and
 reflow at punctuation; Chrome on the 10-K's own markup (joined) and a list number set apart (kept) — three failures under the old rule.
+
+## 59. An inline-XBRL element that holds blocks is a container: a footnote's table stays a table (2026-10-06; Codex, after §56–§58)
+
+The corpus's joined years and amounts ("Nine Months Ended October 31, 2025202420252024", "Pension and other benefits adjustments23 (24)95") had
+one cause: EdgarTools lists `ix:footnote` among its "inline elements for simple values", so a footnote holding a `<div>` and a table was read as one
+string — every cell's text run into the next. The tool already decides the right thing for the two sibling tags, `ix:nonNumeric` and
+`ix:continuation`: holding a block (`div`, `p`, `table`, a block element), they are containers, and the tool's own traversal builds the table. That rule
+now covers every inline-XBRL element the tool treats as an inline value (`whole_headings`' `creating`): a footnote of inline runs keeps the tool's own
+inline reading. Measured: the whole local corpus (1,016 filings, 3,353 filer HTML documents) — exactly two documents change, the two with joined numbers: a text unit each becomes a table (+69 cells), boundary flags 2,285 → 2,283, every other gate unchanged; key documents (development, control, released; base, formatted and screened routes): 0 target, 0 field, 0 gate changes, one development route changed (a footnote holding a separator line and a note: two units now, "$ 17.1  million" — spacing E12 allows); tests 396 (393 without playwright); real-original variants 48/48; the new case fails under the tool as installed (`text`, not `table`).
