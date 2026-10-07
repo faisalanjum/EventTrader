@@ -2177,8 +2177,8 @@ replay-timing one beside the grader's cache tests. Measured: Codex's 13 probes p
 the caller's bytes, hash and a browser the caller owns and reuses; returns the route and each step's own result (`formatting`: its count, None where
 nothing can be certified; `screen`: its facts). A failed conversion stops there, no step runs. A page that cannot be measured keeps the units it has and
 marks the route `PARTIAL` with the step's error — the status the route format already gives a partial conversion (§36, now said in §2; the grader
-grades a PARTIAL route and leaves its coverage unmeasured) — never a successful route with the error hidden beside it; a browser that has died shows
-as such a route on every document, and the caller restarts it. Source-identity, storage, dependency and resource
+grades a PARTIAL route and leaves its coverage unmeasured) — never a successful route with the error hidden beside it; a browser that has disconnected raises its
+error instead, so the caller stops and restarts it (Codex `CODEX_CLEANUP_R2_VERDICT`, his `BROWSER_STOP.patch` applied unchanged: one condition in the screen step's page-error branch). Source-identity, storage, dependency and resource
 errors propagate (§66). No browser launcher, scheduler, cache or parser of its own. Codex answered the question §65 left open: one environment runs
 all three stages (the common test environment holds EdgarTools and Playwright; the same EdgarTools 5.60.0 and lxml as the converter's own). Tests: four,
 as he listed (stage order and success — the caller's browser and file id carried through, formatting's None kept; nothing after a failed conversion;

@@ -6,6 +6,7 @@ import copy
 import errno
 import hashlib
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from driver.prepare.convert import edgartools_html as eh, screen_grid as sg, source_formatting as sf, xml_fields as xf
@@ -89,7 +90,7 @@ class Failures(unittest.TestCase):
     def test_page_failure_is_reported_without_mutating_the_reading(self):
         doc = route(); before = copy.deepcopy(doc)
         with patch.object(sg, 'measure', side_effect=RuntimeError('one page cannot be measured')):
-            facts = sg.step(RAW, doc, object())
+            facts = sg.step(RAW, doc, SimpleNamespace(is_connected=lambda: True))
         self.assertIn('one page cannot be measured', facts['error'])
         self.assertEqual(doc, before)
 

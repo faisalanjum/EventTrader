@@ -4,6 +4,7 @@ The tool call and the browser's measurement are stand-ins; everything else is th
 import copy
 import hashlib
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from driver.prepare.convert import edgartools_html as eh, html_route, screen_grid as sg, source_formatting as sf
@@ -40,7 +41,7 @@ class Prepare(unittest.TestCase):
 
     def test_a_page_that_cannot_be_measured_is_a_partial_route_with_its_content(self):
         with patch.object(eh, 'convert', side_effect=parsed), patch.object(sg, 'measure', side_effect=RuntimeError('one page cannot be measured')):
-            route, facts = html_route.prepare(RAW, 'a.htm', SHA, object())
+            route, facts = html_route.prepare(RAW, 'a.htm', SHA, SimpleNamespace(is_connected=lambda: True))
         self.assertEqual((route['status'], [u['text'] for u in route['units']], route['units'][0]['struck']), ('PARTIAL', ['10 20'], ['10']))
         self.assertIn('one page cannot be measured', route['error']); self.assertIn('one page cannot be measured', facts['screen']['error'])
         self.assertEqual(route['route']['name'], 'edgartools-html+source-formatting')  # the screen step did not finish, and the record says so

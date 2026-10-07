@@ -148,7 +148,9 @@ def step(raw, route, browser):
     t0 = time.time(); vis = Visible(raw); gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []; marked, spans = tag_cells(raw, vis, gaps + endpoints)
     try: measured, boxes = measure(marked, browser)
     except (OSError, StorageError, ImportError, MemoryError): raise
-    except Exception as e: return {'error': repr(e)[:200]}
+    except Exception as e:
+        if not browser.is_connected(): raise
+        return {'error': repr(e)[:200]}
     if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
         route['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
     n = apply(route['units'], spans, measured); j = join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline'))
