@@ -6,6 +6,7 @@ cells by their byte anchors, and joins a word or number the tool printed with a 
 characters touching on one baseline (a space the tool adds across inline markup: `CORP ORATION` over an iXBRL tag; the page alone can tell that from
 a gap its styles make). It changes no anchor; the joined text records where its spaces were. Rules are geometric only."""
 import re
+import time
 from bisect import bisect_left, bisect_right
 
 from driver.prepare.convert import anchor
@@ -135,3 +136,17 @@ def measure(marked_html, browser):
     by_table = {}
     for c in got['cells']: by_table.setdefault(c['table'], []).append(c)
     return by_table, got['boxes']
+
+
+def step(raw, route, browser):
+    """The step on one document's route (the caller's bytes and browser): its tables gridded as Chrome lays them out (`apply`), the spaces the tool
+    added measured and joined where Chrome shows them touching on one baseline (`join`), in a file the scanner cannot read for certain the units'
+    endpoint boxes recorded; the route record names the step. Returns the step's facts; a page that cannot be measured leaves the route as it was
+    and says why."""
+    t0 = time.time(); vis = Visible(raw); gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []; marked, spans = tag_cells(raw, vis, gaps + endpoints)
+    try: measured, boxes = measure(marked, browser)
+    except Exception as e: return {'error': repr(e)[:200]}
+    if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
+        route['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
+    n = apply(route['units'], spans, measured); j = join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline'))
+    return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': len(gaps), 'joined': j, 'seconds': round(time.time() - t0, 1)}

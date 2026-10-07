@@ -9,7 +9,7 @@ import argparse
 import json
 from pathlib import Path
 from benchmarks.prepare.grader import grade
-from driver.prepare.convert.source_formatting import apply
+from driver.prepare.convert.source_formatting import apply, step
 
 
 def main(argv=None):
@@ -24,7 +24,7 @@ def main(argv=None):
         if d.get('status') != 'OK' or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue
         raw = paths[fid][0].read_bytes()
         if grade.sha256(raw) != paths[fid][1] or d.get('sha256') != paths[fid][1]: facts[fid] = {'error': 'source bytes differ from the key'}; dest.write_text(json.dumps(d, ensure_ascii=False)); continue
-        n = apply(raw, d['units']); d['route'] = dict(d['route'], name=d['route']['name'] + '+source-formatting', settings=dict(d['route'].get('settings') or {}, source_formatting=True))
+        n = step(raw, d)
         facts[fid] = {'items_with_struck_text': n} if n is not None else {'uncertain': "struck text cannot be certified from the source; the tool's own claims kept"}; dest.write_text(json.dumps(d, ensure_ascii=False))
     (out / 'source_formatting_facts.json').write_text(json.dumps(facts, indent=1))
     print(f"{len(facts)} files; items with struck text: {sum(f.get('items_with_struck_text', 0) for f in facts.values())}; uncertain files: {sum('uncertain' in f for f in facts.values())}")

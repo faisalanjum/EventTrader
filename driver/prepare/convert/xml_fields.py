@@ -8,6 +8,7 @@ Attribute values are not read; their count is reported as `not_read` so the omis
 repaired: a document that does not parse is reported FAILED with the parser's own message. The parser is the grader's own (`anchor.xml_parser`):
 what stands outside the document is refused, so a reading that would need it fails instead of going on without it; an element the parser
 makes from an entity's text has no bytes of its own, and the document is refused rather than given a position that is none."""
+import time
 import xml.parsers.expat as expat
 
 from driver.prepare.convert.anchor import xml_parser
@@ -50,3 +51,19 @@ def units_of(raw, facts=None):
                     'siblings': {'index': leaf['index'], 'count': leaf['siblings'][leaf['name']]}, 'text': leaf['text'], 'anchor': leaf['anchor'],
                     **({'mixed': True} if leaf['mixed'] else {}), **({'within': ids[id(leaf['within'])]} if leaf.get('within') else {})})
     return out
+
+
+ROUTE = {'name': NAME, 'tool': 'python xml.parsers.expat', 'version': expat.EXPAT_VERSION, 'settings': {'namespaces': True, 'recover': False},
+         'adapter': 'driver/prepare/convert/xml_fields.py', 'linker': None}
+
+
+def convert(raw, file_id, sha256):
+    """One XML document into its route (`units_of`, the caller's bytes): a document that does not parse is a FAILED route with the parser's own
+    message, never a stop."""
+    t0 = time.time(); doc = {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'route': ROUTE, 'units': []}
+    try:
+        unread = {}; doc['units'] = units_of(raw, unread)  # the per-file unread count, apart from the run's facts
+        if unread.get('attribute_values'): doc['not_read'] = unread  # what the route leaves unread, stated rather than silent
+    except (expat.ExpatError, ValueError, LookupError) as e: doc['status'], doc['error'] = 'FAILED', f'XML parse failed: {e}'
+    doc['seconds'] = round(time.time() - t0, 3)
+    return doc

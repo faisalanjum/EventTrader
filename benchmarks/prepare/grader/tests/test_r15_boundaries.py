@@ -219,7 +219,7 @@ class EdgarCacheTests(unittest.TestCase):
             sources = [dict(file_id='s.htm', path=src, sha256=grade.sha256(src.read_bytes()), split='development')]
             stub = types.ModuleType('edgar.documents'); stub.parse_html = lambda text: types.SimpleNamespace(root=object(), metadata=types.SimpleNamespace(xbrl_data=[]))
             def run(reuse=False, version='OLD', failure=False):
-                with patch.dict(sys.modules, {'edgar': types.ModuleType('edgar'), 'edgar.documents': stub}), patch.object(grade, 'load_sources', return_value=sources), patch('importlib.metadata.version', return_value=version), patch.object(ed, 'dump', side_effect=RuntimeError('interrupted') if failure else None, return_value=dict(type='ParagraphNode', text='Revenue 10.')), redirect_stdout(io.StringIO()):
+                with patch.dict(sys.modules, {'edgar': types.ModuleType('edgar'), 'edgar.documents': stub}), patch.object(grade, 'load_sources', return_value=sources), patch('importlib.metadata.version', return_value=version), patch('driver.prepare.convert.edgartools_html.dump', side_effect=RuntimeError('interrupted') if failure else None, return_value=dict(type='ParagraphNode', text='Revenue 10.')), redirect_stdout(io.StringIO()):
                     ed.main(['--key', td, '--split', 'development', '--out', str(out)] + (['--reuse-raw'] if reuse else []))
                 return json.loads((out / 'route/s.htm.json').read_text())
             self.assertEqual(run()['status'], 'OK')

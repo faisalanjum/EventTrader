@@ -4,6 +4,7 @@ dumps the parsed node tree to plain JSON (kept as the raw output); `to_units` wo
 without the package. Shape rules only, no document-specific logic."""
 from bisect import bisect_left, bisect_right
 import re
+import time
 from dataclasses import asdict
 
 from driver.prepare.convert import anchor
@@ -271,3 +272,29 @@ def whole_headings():
     def patterns(self):  # the tool's cleaner deleted every white space before . , ; ! ? in the raw page ("1,855,579 ,941,411" became one number, "Sections .13, .14"
         found = compile_(self); found['space_before_punct'] = re.compile(r'(?!)()'); return found  # "Sections.13,.14"); the page prints the space and so does the route: a pattern that never matches (its replacement names group 1)
     P._compile_patterns = patterns
+
+
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+
+
+def version():
+    import importlib.metadata as md
+    return f"edgartools {md.version('edgartools')}"
+
+
+def parse(raw, vis):
+    """The tool's own parse of the caller's bytes - the pictures' names given as codes (`named`), its reading of headings fixed (`whole_headings`) - as
+    a plain node dump: (dump, seconds, producing version)."""
+    from edgar.documents import parse_html  # only here: the rest of the module needs no EdgarTools
+    whole_headings(); t0 = time.time()
+    tree = dump(parse_html(named(raw, vis, codes(raw, vis))).root)
+    return tree, round(time.time() - t0, 2), version()
+
+
+def convert(raw, file_id, sha256, parse=parse):
+    """One HTML document into its route (the caller's bytes): scanned, parsed by the tool, adapted and linked to the source (`route_for`). A crash is a
+    FAILED route, never a stop. `parse(raw, vis)` -> (dump, seconds, version) is the tool call; the command line passes one that reuses its saved parses."""
+    vis = anchor.Visible(raw)
+    try: tree, seconds, made_by = parse(raw, vis)
+    except Exception as e: return unsupported(file_id, sha256, version(), 'FAILED', repr(e)[:300])
+    return route_for(tree, raw, file_id, sha256, seconds, made_by, SETTINGS, vis)

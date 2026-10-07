@@ -96,6 +96,14 @@ class EdgartoolsHtmlAdapterTests(unittest.TestCase):
         self.assertTrue(all(x.get('anchor') for u in route['units'] for x in (u.get('cells') or [u])))
         self.assertEqual(route['units'][-2]['src'], 'x.jpg')  # and the name is given back
 
+    def test_a_tool_crash_is_a_failed_route_not_a_stop(self):  # the one-document call keeps the command line's error boundary
+        def crash(raw, vis): raise RuntimeError('the tool stopped')
+        route = eh.convert(b'<p>Revenue 10.</p>', 'a.htm', 'abc', crash)
+        self.assertEqual((route['status'], route['units'], route['file_id'], route['sha256']), ('FAILED', [], 'a.htm', 'abc')); self.assertIn('the tool stopped', route['error'])
+        tree = {'type': 'DocumentNode', 'children': [{'type': 'ParagraphNode', 'text': 'Revenue 10.'}]}
+        ok = eh.convert(b'<p>Revenue 10.</p>', 'a.htm', 'abc', lambda raw, vis: (tree, 0.5, 'edgartools X'))
+        self.assertEqual((ok['status'], [u['text'] for u in ok['units']], ok['route']['version'], ok['seconds'], ok['route']['settings']['picture_names']), ('OK', ['Revenue 10.'], 'edgartools X', 0.5, 'codes'))
+
 
 from driver.prepare.convert import screen_grid as sg
 

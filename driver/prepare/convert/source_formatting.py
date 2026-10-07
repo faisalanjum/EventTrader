@@ -30,3 +30,10 @@ def apply(raw, units):
             if at: x['struck_at'] = at
             else: x.pop('struck_at', None)  # nothing struck, or no exact answer: no claim of places
     return n
+
+
+def step(raw, route):
+    """The step on one document's route (the caller's bytes): the source's struck text written onto its units and cells (`apply`), the route record
+    naming the step. Returns `apply`'s count, None where nothing can be certified."""
+    n = apply(raw, route['units']); route['route'] = dict(route['route'], name=route['route']['name'] + '+source-formatting', settings=dict(route['route'].get('settings') or {}, source_formatting=True))
+    return n

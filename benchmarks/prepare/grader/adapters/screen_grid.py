@@ -10,11 +10,9 @@ a gap its styles make). It changes no anchor; the joined text records where its 
 # The runtime lives in driver.prepare.convert.screen_grid (moved 2026-10-07); this module keeps the command line over key packets.
 import argparse
 import json
-import time
 from pathlib import Path
 from benchmarks.prepare.grader import grade
-from driver.prepare.convert.anchor import Visible
-from driver.prepare.convert.screen_grid import JS, TOL, _CELL_END, apply, endpoints_of, gaps_of, join, measure, screen_grid, tag_cells
+from driver.prepare.convert.screen_grid import JS, TOL, _CELL_END, apply, endpoints_of, gaps_of, join, measure, screen_grid, step, tag_cells
 
 
 def main(argv=None):
@@ -30,13 +28,7 @@ def main(argv=None):
         for rp in sorted(src.rglob('*.json')):
             d = json.loads(rp.read_text()); fid = d.get('file_id'); dest = out / rp.relative_to(src); dest.parent.mkdir(parents=True, exist_ok=True)
             if d.get('status') != 'OK' or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue  # another step's facts file is copied through
-            t0 = time.time(); raw = paths[fid].read_bytes(); vis = Visible(raw); gaps = gaps_of(vis, d['units']); endpoints = endpoints_of(vis, d['units']) if not vis.certain else []; marked, spans = tag_cells(raw, vis, gaps + endpoints)
-            try: measured, boxes = measure(marked, browser)
-            except Exception as e: facts[fid] = {'error': repr(e)[:200]}; dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True); continue
-            if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
-                d['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
-            n = apply(d['units'], spans, measured); j = join(gaps, boxes, vis); d['route'] = dict(d['route'], name=d['route']['name'] + '+screen', settings=dict(d['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline'))
-            facts[fid] = {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': len(gaps), 'joined': j, 'seconds': round(time.time() - t0, 1)}
+            facts[fid] = step(paths[fid].read_bytes(), d, browser)
             dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True)
         browser.close()
     (out / 'screen_facts.json').write_text(json.dumps(facts, indent=1))

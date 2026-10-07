@@ -5,7 +5,7 @@ the batch goes on, Codex G6-1) stays with the grader's command line."""
 import unittest
 import xml.parsers.expat as expat
 
-from driver.prepare.convert.xml_fields import units_of
+from driver.prepare.convert.xml_fields import convert, units_of
 from driver.prepare.convert.anchor import Visible
 
 
@@ -35,6 +35,14 @@ class XmlRouteReading(unittest.TestCase):
             self.assertEqual([u['text'] for u in units_of(raw, {})], ['\u20aca'])  # the route still reads it; the grader certifies nothing of it
         raw = '<?xml version="1.0" encoding="UTF-8"?><r>\u20aca</r>'.encode(); view = Visible(raw, xml=True); self.assertEqual((view.certain, view.text), (True, '\u20aca'))
         self.assertEqual([raw[a:b].decode() for a, b in zip(view.starts, view.ends)], ['\u20ac', 'a'])
+
+    def test_a_document_that_does_not_parse_is_a_failed_route_not_a_stop(self):  # Codex G6-1 on the one-document call (the batch case stays with the grader's command line)
+        for encoding in ('not-a-real-encoding', 'UTF-32', 'utf-7', 'shift_jis'):
+            with self.subTest(encoding=encoding):
+                doc = convert(('<?xml version="1.0" encoding="%s"?><r>1</r>' % encoding).encode(), 'first.xml', 'abc')
+                self.assertEqual((doc['status'], doc['units'], doc['error'].startswith('XML parse failed')), ('FAILED', [], True))
+        doc = convert(b'<?xml version="1.0" encoding="UTF-8"?><r><n>2</n></r>', 'second.xml', 'def')
+        self.assertEqual((doc['status'], [u['text'] for u in doc['units']], doc['route']['adapter']), ('OK', ['2'], 'driver/prepare/convert/xml_fields.py'))
 
 
 if __name__ == '__main__':

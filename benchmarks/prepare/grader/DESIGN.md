@@ -2144,3 +2144,16 @@ code reads them — checked), kept so that the move changed no output. Now the l
 receipts are not rewritten. Checked on its own: in the code only path-label strings changed (a syntax-tree comparison); the nine key route sets and
 the XML routes rebuilt against a copy of the §63 build with exactly those labels replaced (`prepare_work/convert_extract_20261007/relabel.py`: 366
 linker and 429 adapter labels in the HTML build, 15 in the XML build): no set or file on one side only, every file identical after the declared normalizations (the timings and the run's own folder); tests 398 and 363.
+
+## 65. One document in, one route out: the per-document calls move into production (2026-10-07; Codex `CODEX_CONVERT_EXTRACT_VERDICT`, step 3)
+
+The runtime moved in §63 as primitives; the sequence each command line ran for one file — and its error boundary — stayed in the command lines. It
+now lives beside the runtime, called with the caller's bytes, file id, hash and browser — no key, no loop, no files: `edgartools_html.convert(raw,
+file_id, sha256, parse=parse)` (scanned, parsed by the tool, adapted and linked; a tool crash is a FAILED route; `parse` is the tool call, which the
+command line replaces with one that reuses its saved parses), `source_formatting.step(raw, route)`, `screen_grid.step(raw, route, browser)` (a page
+that cannot be measured leaves the route as it was and says why), `xml_fields.convert(raw, file_id, sha256)` (a document that does not parse is a
+FAILED route with the parser's message); the HTML route's settings and version with them. Statement for statement the work the command lines did;
+they keep the key packets, the loop, the cache, the files and the facts, and call these. Not added: one call chaining the three HTML stages — no code
+did that before, and today the stages run in three environments; put to Codex. Tests: four new, one per call's boundary (permanent suite 367); the
+grader's cache test now patches `dump` where the call lives. Checked: the nine key route sets and the XML routes rebuilt against the same relabelled
+reference as §64: no set or file on one side only — routes, facts and grades — every file identical after the declared normalizations; tests 398 and 367.
