@@ -2002,7 +2002,7 @@ with scripts); the filer's own documents are 3,353, **3,328 (99.3 %) read with c
 
 **Results (`prepare_work/heldout_r2_20261006/`):** the 11 saved Docling, PDF and XML routes and the 3 control routes regraded or rebuilt: 0 target, 0
 field changes; development EdgarTools routes rebuilt: 0 target, 0 field changes (best route: one exhibit's 10 boundary flags gone; four base-route flags
-the screen step joins); released set (24 documents, development evidence since §54): **frozen key 54/64 cells, blocks 18 / 2 / 1; with the ten reviewed
+the screen step joins); released set (24 documents, development evidence since §54; the best route, formatted and screened): **frozen key 54/64 cells, blocks 18 / 2 / 1; with the ten reviewed
 key corrections applied in memory 64/64 cells, blocks 18 pass, 2 fail, 1 approximate** (the three picture-related blocks) — Codex's figures exactly;
 pictures: the OCR review's 120 documents still 1,508 of 1,508 at their own tag. The ten corrections go into the next key package through the decision log
 and support builder; package 3 and the exam stay as they are.
@@ -2017,9 +2017,11 @@ in-memory replay's 1,335 rows exactly: 64/64 cells, blocks 18 / 2 / 1. The repos
 
 **The corpus check of the merged code** (`prepare_work/corpus_checks_20261006/`: the local-corpus check — 1,009 filings, the 1,016 local packages less the 7 holding reserved exam documents; 27,236 inventory rows, of which 3,353 filer HTML and 3,440 XML documents converted and checked and 20,443 EDGAR-generated pages counted without conversion; not the whole database), against `f83117fbf`: cells, pictures (5,762 shown, 799 added, 0 unplaced), dishonest, inserted, duplicate ids and order breaks unchanged; uncovered
 text 69,762 → 68,198 characters — four documents gain a paragraph lost inside a nested inline fact (SPG's 10-K, two 8-K/A amendment paragraphs, an RH
-10-Q); unanchored units 3 → 2; units +1,127, diffed unit by unit on 59 documents: 189 splits at certified `<br>` (233 units → 551, kinds kept), 179 merges
-(560 → 208: a sentence no longer broken at its inline facts — 44 of them had a false heading in the middle, "As of | March 31, 2023, | and …"), 18 kind
-changes (note titles inside a text block now headings, cover-page facts now text), 7 text changes (the recoveries). Base-route word-boundary flags
+10-Q); unanchored units 3 → 2; units +1,127 (473 documents: 315 with more, +2,234; 158 with fewer, −1,107); a unit-by-unit diff of a sample of 59 documents (chosen for moved flags
+or text; sample counts, not the total): 189 splits at certified `<br>` (233 units → 551, kinds kept), 179 merges (560 → 208: a sentence no longer broken
+at its inline facts — 44 of them had a false heading in the middle, "As of | March 31, 2023, | and …"), 18 kind changes (15 text → heading: note titles
+inside a text block, a 10-Q cover's "10-Q" and date, one sentence fragment; 3 heading → text: cover-page facts), 7 text changes (5 recoveries, 2 a
+heading re-split at a `<br>`), 6 spacing-only. Base-route word-boundary flags
 2,315 → 2,285: 19 documents fewer (a line break the tool glued, "ARTICLE IDefinitions", now two lines), 13 more — the tool's inline reader space-joins the
 parts of a fact by its own design (its preprocessor strips the white space next to tags): "S IGNIFICANT", "i n", "CO 2". The screen step joins them where
 Chrome shows the two characters touching — except where the two boxes' tops differed: small capitals (a 10 pt "S" beside an 8 pt "IGNIFICANT") stayed apart,
@@ -2028,8 +2030,8 @@ Chrome shows the two characters touching — except where the two boxes' tops di
 **`screen_grid.join`: one baseline, not one box height.** Two characters stand on one line when their boxes' bottoms agree within a pixel; their tops may
 differ, a smaller font on the same baseline. Measured in Chrome: small capitals 10/8 pt — tops 3 px apart, bottoms 1; a raised mark ($5¹) — bottoms
 6.4 px apart; a lowered one (CO₂) — 2.7 px: both keep their space (a rule "one box inside the other" would have joined a small raised mark into "$51":
-not taken). Key documents: 0 joins changed (development 140, control 6, released 77), every route byte-identical, 0 target and 0 field changes. Corpus
-(every flagged document, formatting then the screen step, offline): 2,285 base flags in 168 documents → **131 after the screen step** (`f83117fbf`: 2,315 in 175 → 249; no document has more than before; joins 970 → 1,207; 0 errors, 0 requests) — 77 of the 118 fewer by the baseline join alone, 41 by the `<br>` split. The 131 left, each recorded at the gate (`boundary_detail.py`, `classify_flags.py`): 68 a space after the period of a number ("$0. 69": the period in a `<font>` of its own; the gap finder judges a space from its two characters only, so it never measures these — a separate, older class), 45 a list glyph the source glues to its item ("oThe": the tool's space is the reader's), 13 a space the source shows that the tool lost (older), 3 a raised mark kept apart, 2 other. Tests: the old rule's "another top" case now joins; a Chrome case
+not taken). Key documents: 0 joins changed (development 140, control 6, released 77), every route identical but its timing fields (rechecked both ways: `prepare_work/shared_compare_20261006/RECHECK_R3.txt`), 0 target and 0 field changes. Corpus
+(every flagged document, formatting then the screen step, offline): 2,285 base flags in 168 documents → **131 after the screen step** (`f83117fbf`: 2,315 in 175 → 249; no document has more than before; joins 970 → 1,207; 0 errors, 0 requests) — of the 118 fewer, 41 are the `<br>` split's (the 32 documents whose base flags moved, run with the old join: 61 → 20) and the rest is attributed to the baseline join (−16 more on those 32, −61 in three documents whose base flags did not move). The 131 left, each recorded at the gate (`boundary_detail.py`, `classify_flags.py`): 68 a space after the period of a number ("$0. 69": the period in a `<font>` of its own; the gap finder judges a space from its two characters only, so it never measures these — a separate, older class), 45 a list glyph the source glues to its item ("oThe": the tool's space is the reader's), 13 a space the source shows that the tool lost (older), 3 a raised mark kept apart, 2 other. Tests: the old rule's "another top" case now joins; a Chrome case
 with small capitals, a raised and a lowered mark (two failures under the old rule).
 
 ## 57. The shared comparison file: one implementation for the grader and production (2026-10-06; Codex's queued item)
@@ -2040,10 +2042,10 @@ code. The grader now imports them from there instead of keeping its own copies: 
 removed only after it was checked identical, character for character, to the shared definition
 (`prepare_work/shared_compare_20261006/switch_imports.py`); none had changed since the copy. `anchor.py`'s `_TOKEN` — the HTML tokenizer, a
 different thing from the comparison's word tokenizer — stays where it is. Modules that import `norm` from `anchor.py` get the shared one.
-**Checked:** the same tests pass; the development, control and released routes rebuilt by the switched code are byte-identical to the unswitched
-code's but for timing fields, with identical grades; the saved routes regrade identically; OCR's replay of its 506 pictures, Sonnet off and on from
-saved readings, is OCR's report. The exam runner archives `driver/__init__.py`, `driver/prepare/__init__.py` and `driver/prepare/compare.py` with
-the grader.
+**Checked:** the same tests run, 0 failures; the development, control and released routes rebuilt by the switched code are identical to the
+unswitched code's after the declared normalizations (timing fields, the run's own folder; compared both ways), with identical grades; the saved routes regrade identically; OCR's replay of its 506 pictures, Sonnet off and on from
+saved readings, is OCR's report. After the merge the exam runner (`prepare_work/heldout_exam/run_heldout_v2.sh`, replacing v1) archives
+`driver/__init__.py`, `driver/prepare/__init__.py` and `driver/prepare/compare.py` with the grader.
 
 ## 58. The screen step measures a space beside a number's own separator (2026-10-06; the corpus's remaining flags, §56)
 
@@ -2065,14 +2067,14 @@ one cause: EdgarTools lists `ix:footnote` among its "inline elements for simple 
 string — every cell's text run into the next. The tool already decides the right thing for the two sibling tags, `ix:nonNumeric` and
 `ix:continuation`: holding a block (`div`, `p`, `table`, a block element), they are containers, and the tool's own traversal builds the table. That rule
 now covers every inline-XBRL element the tool treats as an inline value (`whole_headings`' `creating`): a footnote of inline runs keeps the tool's own
-inline reading. Measured: the local-corpus check (1,009 filings; 3,353 filer HTML documents converted) — exactly two documents change, the two with joined numbers: a text unit each becomes a table (+69 cells), boundary flags 2,285 → 2,283, every other gate unchanged; key documents (development, control, released; base, formatted and screened routes): 0 target, 0 field, 0 gate changes, one development route changed (a footnote holding a separator line and a note: two units now, "$ 17.1  million" — spacing E12 allows); tests 396 (393 without playwright); real-original variants 48/48; the new case fails under the tool as installed (`text`, not `table`).
+inline reading. Measured: the local-corpus check (1,009 filings; 3,353 filer HTML documents converted) — three documents change: the two with joined numbers (a text unit each becomes a table, +69 cells, boundary flags 2,285 → 2,283) and American Tower's 10-K (a footnote of a separator line and a note becomes two units); every other gate unchanged; key documents (development, control, released; base, formatted and screened routes): 0 target, 0 field, 0 gate changes, one key document changed, American Tower's 10-K, in all three development route sets (a footnote holding a separator line and a note: two units now, "$ 17.1  million" — spacing E12 allows); tests 396 (393 without playwright); real-original variants 48/48; the new case fails under the tool as installed (`text`, not `table`).
 
 ## 60. The source's own space before punctuation stays (2026-10-06; Codex, after §56–§58)
 
 The tool's cleaner deleted every white space before `. , ; ! ?` in the raw page before parsing: "1,855,579 ,941,411" became one number,
 "Sections .13, .14" became "Sections.13,.14". The page prints the space; the route now does too — the one cleaning pattern replaced by one that never
 matches, nothing else of the cleaner changed. A space before punctuation that the page prints is harmless for the reader and never a boundary flag
-(E12); a space deleted inside numbers joined them. Measured: corpus — boundary flags 2,283 → 2,278 (five documents: the joined amounts of a text layer, the section numbers), three table-of-contents lines with dot leaders no longer taken for headings (the cleaner had squeezed ". . . ." into "......"), every other gate unchanged; key documents — 0 target and 0 field changes, one boundary flag fewer (development), control and released gates identical; 23 key documents keep a space the page prints before punctuation; tests 396 (393 without playwright); real-original variants 48/48; under the tool as installed the new case reads "1,855,579,941,411 under Sections.13,.14 of the rule."
+(E12); a space deleted inside numbers joined them. Measured: the local-corpus check — boundary flags 2,283 → 2,278 (five documents: the joined amounts of a text layer, the section numbers, a chart's letter-spaced figure), three table-of-contents lines with dot leaders no longer taken for headings (the cleaner had squeezed ". . . ." into "......"), every other gate unchanged; key documents — 0 target and 0 field changes, one boundary flag fewer (development), control and released gates identical; 23 key documents keep a space the page prints before punctuation; tests 396 (393 without playwright); real-original variants 48/48; under the tool as installed the new case reads "1,855,579,941,411 under Sections.13,.14 of the rule."
 
 ## 61. A block laid out inline with text of its own is read whole: nothing after its first child is lost (2026-10-06; the corpus's real text losses)
 
