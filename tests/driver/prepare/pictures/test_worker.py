@@ -2,7 +2,7 @@
 per folder; storage failures stop; a saved or new record must be well formed and agree with its reader; a failed retry never erases the other
 free tool's reading; a repeated occurrence id never replaces a picture. Ported on 2026-10-06 from prepare_work worker_check_20261006/
 worker_test.py (Codex r15 plan, r16 corrections) with Codex's r16 regression scenarios and r17 boundary tests; the 506-picture preservation
-case moves with the shared fixtures. Fake readers only: no model, no network."""
+cases run in test_replay on the pinned fixtures. Fake readers only: no model, no network."""
 import copy
 import errno
 import io

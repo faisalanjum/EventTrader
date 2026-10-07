@@ -1,7 +1,7 @@
 """Reader packets (pictures/packets.py): block statuses come from the checker, uncertainty survives, tables pair only by content at their own
 place, the second reading reaches the packet, declared math decodes plain symbols only, and a visual region's free-OCR boxes are evidence kept
 whole. Ported from prepare_work reader_packets/selftest.py (Codex's block, r2, r3, r4, r6 and real336 review probes) on 2026-10-06; the probes
-that need saved readings (Simon p28 values, the real fcpt2 slide, the real shared typo) move with the shared fixtures."""
+that need saved readings (Simon p28 values, the real fcpt2 slide) read the pinned fixtures (SavedProbes, 2026-10-07)."""
 import json
 import os
 import tempfile
@@ -11,6 +11,7 @@ from pathlib import Path
 from PIL import Image
 
 from driver.prepare.pictures import packets as p
+from tests.driver.prepare.pictures.saved import Saved
 
 CASES = os.path.join(os.path.dirname(__file__), 'cases')
 block = lambda text, label='Text': dict(box=(0, 0, 1000, 1000), label=label, html=text)
@@ -114,10 +115,31 @@ class PacketTests(unittest.TestCase):
                 d = p.toks(pp, 'text') != p.toks(ox, 'text')
                 self.assertEqual((v['ox_differs'], v['ox_other']), (d, [ox] if ox and d else []))
 
-    def test_single_reader_said_plainly(self):  # Codex r6: never "unresolved" against nothing (the real-picture probe follows the shared fixtures)
+    def test_single_reader_said_plainly(self):  # Codex r6: never "unresolved" against nothing (every real picture's single-reader packet: test_replay)
         txt, _ = p.packet('single', self.picture, box('<p>Revenue 10.</p>') + box(TABLE, 'Table'), None, None)
         self.assertIn('[CHANDRA ONLY', txt); self.assertIn('read by Chandra only', txt)
         self.assertNotIn('[UNRESOLVED', txt); self.assertNotIn('Sonnet (nothing)', txt)
+
+
+class SavedProbes(unittest.TestCase):  # the probes on saved readings, through the pinned fixtures (ported 2026-10-07)
+    @classmethod
+    def setUpClass(cls):
+        tmp = tempfile.TemporaryDirectory(); cls.addClassCleanup(tmp.cleanup)
+        cls.s = Saved(tmp.name)
+
+    def test_simon_p28_values_the_second_reading_holds(self):  # KNOWN CHANDRA ERROR (Codex): Chandra wrote other values; Sonnet's are printed
+        name, pic, html, _, _, (son, src) = self.s.inputs(self.s.by_name['simon10k_p28_75'])
+        text, _ = p.packet(name, pic, html, son, src)
+        for v in ('2,121,975', '1,450,887', '476,600', '608,739', '763,262', '1,263,516', '926,223', '1,169,321'):
+            with self.subTest(v):
+                self.assertNotIn(v, html)                                  # Chandra alone lacks it: the error stays explicit
+                self.assertIn(v, son); self.assertIn(v, text)              # the optional second reading carries it to the packet
+
+    def test_the_real_fcpt2_slide_pairs_each_table_with_its_own(self):
+        _, _, html, _, _, (son, _) = self.s.inputs(self.s.by_name['fcpt2_s8'])
+        st = p.statuses(p.blocks_of(html), son)
+        self.assertIn('Net debt to Adjusted EBITDA', st[1][st[0][5][4]]['raw'])
+        self.assertIn('Common dividend', st[1][st[0][4][4]]['raw'])
 
 
 if __name__ == '__main__':

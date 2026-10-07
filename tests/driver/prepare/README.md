@@ -1,17 +1,22 @@
 # Permanent Prepare regressions
 
-**Migration in progress (7 October 2026).** Integrated base `5d25539d1`
-has 384 permanent tests. The shared fixture helper adds 12 (396 pass, no skips).
-The 506-input OCR fixtures and 576 saved-packet data are pinned and restored from
-a separate machine. Their permanent test ports are still pending; this command
-is not yet the complete Prepare acceptance gate.
+**Migration status (7 October 2026, branch `ocr-fixture-tests`).** Integrated base
+`5d25539d1` has 384 permanent tests; the shared fixture helper adds 12 and the
+ported OCR fixture tests add 15: **411 pass, no skips**, on the primary and the
+restored fixture roots with the original research folders hidden (Codex gate
+`prepare_work/prepare_accuracy_20261007/OCR_FIXTURE_GATE.md`). The 506-input OCR
+fixtures and 576 saved-packet data are pinned and restored from a separate machine.
+This command is not yet the complete Prepare acceptance gate: the fresh combined
+converter/image/context check and actual-machine execution remain separate.
 
 From the repository root, in the approved preparation environment:
 
 ```bash
 export PREPARE_TEST_DATA=/home/faisal/prepare_test_data
-/home/faisal/prepare_work/venvs/prepare-tests/bin/python -m unittest discover -s tests/driver/prepare -t . -v
+env -u PYTHONPATH /home/faisal/prepare_work/venvs/prepare-tests/bin/python -m unittest discover -s tests/driver/prepare -t . -v
 ```
+
+`env -u PYTHONPATH`: the shell exports the main checkout; the tests must import only the checkout under test.
 
 Keep `unittest`, already used by the downloader and grader. No new test framework,
 scoring engine or orchestration service. The full command includes browser tests,
@@ -40,12 +45,15 @@ migration is incomplete. Until their retained assertions are fully reconciled,
 also run from the relevant checkout:
 
 ```bash
-/home/faisal/prepare_work/venvs/prepare-tests/bin/python -m unittest discover -s benchmarks/prepare/grader/tests -t . -v
+env -u PYTHONPATH /home/faisal/prepare_work/venvs/prepare-tests/bin/python -m unittest discover -s benchmarks/prepare/grader/tests -t . -v
 ```
 
-Converter coverage begins with the reviewed candidate's integration; do not report
-saved-fixture coverage until those tests have actually migrated. Saved-picture replay, current producer
-handoff, fixture restoration and target-machine execution remain separate gates.
+Converter coverage begins with the reviewed candidate's integration. The OCR saved-fixture tests have
+migrated (`pictures/`: the 506-input replay in both modes, 576 saved packets, worker reuse, table
+choice and its 546 frozen damages, saved probes, isolation, and the test-consumer handoff on frozen
+routes). They preserve saved behaviour; they are not OCR accuracy, and their frozen routes are never
+regenerated. The fresh combined converter/image/context handoff (current producer) and target-machine
+execution remain separate gates.
 Environment and validation evidence:
 `prepare_work/prepare_regression_20261006/codex_port_review_20261007/` and
 `prepare_work/convert_extract_20261007/codex_review/`.
@@ -56,9 +64,9 @@ Environment and validation evidence:
 tests/driver/prepare/
   get/                  existing downloader tests and small fixtures
   convert/              HTML/XML, source links, formatting, tables and images
-  pictures/             OCR comparison, packets, readers, workers and saved replays
+  pictures/             OCR comparison, packets, readers, workers, saved replays, frozen-route handoff
   test_compare.py       shared comparison rules, tested once
-  test_handoff.py       downloaded source -> conversion -> OCR -> consumer receipt
+  test_handoff.py       planned: fresh source -> conversion -> OCR -> consumer receipt
   support.py            only reused fixture-loading/isolation helpers
   fixtures/manifest.json  large-fixture hashes, provenance and expected-result pins
 ```
