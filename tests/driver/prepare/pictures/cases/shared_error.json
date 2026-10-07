@@ -1,0 +1,54 @@
+{
+  "chandra": [
+    "Revenue",
+    "10",
+    ".",
+    "Costs",
+    "99",
+    "."
+  ],
+  "sonnet": [
+    "Revenue",
+    "11",
+    ".",
+    "Costs",
+    "99",
+    "."
+  ],
+  "original": [
+    "Revenue",
+    "10",
+    ".",
+    "Costs",
+    "20",
+    "."
+  ],
+  "free": [
+    [
+      "Revenue",
+      "10",
+      ".",
+      "Costs",
+      "20",
+      "."
+    ],
+    [
+      "Revenue",
+      "10",
+      ".",
+      "Costs",
+      "20",
+      "."
+    ]
+  ],
+  "selection": {
+    "any": "C",
+    "both": "C"
+  },
+  "reported_grade": "right",
+  "whole_text_grade": "differs",
+  "challenge_selected": [
+    true,
+    true
+  ]
+}

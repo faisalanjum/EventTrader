@@ -1,0 +1,350 @@
+[
+  {
+    "name": "article: certain direct text",
+    "chandra": "<article>Revenue 10.</article>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "agree"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "agree"
+    ]
+  },
+  {
+    "name": "article: uncertain direct Chandra text",
+    "chandra": "<article data-uncertain>Revenue 10.</article>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "article: uncertain direct Sonnet text",
+    "chandra": "<p>Revenue 10.</p>",
+    "sonnet": "<article data-uncertain>Revenue 10.</article>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "body: certain direct text",
+    "chandra": "<body>Revenue 10.</body>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "agree"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "agree"
+    ]
+  },
+  {
+    "name": "body: uncertain direct Chandra text",
+    "chandra": "<body data-uncertain>Revenue 10.</body>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "body: uncertain direct Sonnet text",
+    "chandra": "<p>Revenue 10.</p>",
+    "sonnet": "<body data-uncertain>Revenue 10.</body>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "div: certain direct text",
+    "chandra": "<div>Revenue 10.</div>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "agree"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "agree"
+    ]
+  },
+  {
+    "name": "div: uncertain direct Chandra text",
+    "chandra": "<div data-uncertain>Revenue 10.</div>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "div: uncertain direct Sonnet text",
+    "chandra": "<p>Revenue 10.</p>",
+    "sonnet": "<div data-uncertain>Revenue 10.</div>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "html: certain direct text",
+    "chandra": "<html>Revenue 10.</html>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "agree"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "agree"
+    ]
+  },
+  {
+    "name": "html: uncertain direct Chandra text",
+    "chandra": "<html data-uncertain>Revenue 10.</html>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "html: uncertain direct Sonnet text",
+    "chandra": "<p>Revenue 10.</p>",
+    "sonnet": "<html data-uncertain>Revenue 10.</html>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "main: certain direct text",
+    "chandra": "<main>Revenue 10.</main>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "agree"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "agree"
+    ]
+  },
+  {
+    "name": "main: uncertain direct Chandra text",
+    "chandra": "<main data-uncertain>Revenue 10.</main>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "main: uncertain direct Sonnet text",
+    "chandra": "<p>Revenue 10.</p>",
+    "sonnet": "<main data-uncertain>Revenue 10.</main>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "section: certain direct text",
+    "chandra": "<section>Revenue 10.</section>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "agree"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "agree"
+    ]
+  },
+  {
+    "name": "section: uncertain direct Chandra text",
+    "chandra": "<section data-uncertain>Revenue 10.</section>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "section: uncertain direct Sonnet text",
+    "chandra": "<p>Revenue 10.</p>",
+    "sonnet": "<section data-uncertain>Revenue 10.</section>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "uncertain plain text then certain sibling",
+    "chandra": "<section data-uncertain>Revenue 10.</section><p>Debt 20.</p>",
+    "sonnet": "<p>Revenue 10.</p><p>Debt 20.</p>",
+    "expected": [
+      "unresolved",
+      "agree"
+    ],
+    "before": [
+      "agree",
+      "agree"
+    ],
+    "after": [
+      "unresolved",
+      "agree"
+    ]
+  },
+  {
+    "name": "certain plain text then uncertain sibling",
+    "chandra": "<section>Revenue 10.</section><section data-uncertain>Debt 20.</section>",
+    "sonnet": "<p>Revenue 10.</p><p>Debt 20.</p>",
+    "expected": [
+      "agree",
+      "unresolved"
+    ],
+    "before": [
+      "agree",
+      "agree"
+    ],
+    "after": [
+      "agree",
+      "unresolved"
+    ]
+  },
+  {
+    "name": "nested direct uncertain text",
+    "chandra": "<section data-uncertain><div>Revenue 10.</div></section>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "unrelated closing tag does not end uncertainty",
+    "chandra": "<section data-uncertain></div><p>Revenue 10.</p></section>",
+    "sonnet": "<p>Revenue 10.</p>",
+    "expected": [
+      "unresolved"
+    ],
+    "before": [
+      "agree"
+    ],
+    "after": [
+      "unresolved"
+    ]
+  },
+  {
+    "name": "inner closing tag preserves outer uncertainty",
+    "chandra": "<section data-uncertain><div>Revenue 10.</div><p>Debt 20.</p></section>",
+    "sonnet": "<p>Revenue 10.</p><p>Debt 20.</p>",
+    "expected": [
+      "unresolved",
+      "unresolved"
+    ],
+    "before": [
+      "unresolved",
+      "unresolved"
+    ],
+    "after": [
+      "unresolved",
+      "unresolved"
+    ]
+  },
+  {
+    "name": "closed uncertain sibling does not infect following text",
+    "chandra": "<section data-uncertain><p>Revenue 10.</p></section><p>Debt 20.</p>",
+    "sonnet": "<p>Revenue 10.</p><p>Debt 20.</p>",
+    "expected": [
+      "unresolved",
+      "agree"
+    ],
+    "before": [
+      "unresolved",
+      "agree"
+    ],
+    "after": [
+      "unresolved",
+      "agree"
+    ]
+  }
+]

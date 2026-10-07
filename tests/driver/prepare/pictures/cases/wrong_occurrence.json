@@ -1,0 +1,50 @@
+{
+  "correct": [
+    "2024",
+    "Revenue",
+    "10",
+    "million",
+    "2025",
+    "Revenue",
+    "20",
+    "million"
+  ],
+  "wrong": [
+    "2024",
+    "Revenue",
+    "20",
+    "million",
+    "2025",
+    "Revenue",
+    "20",
+    "million"
+  ],
+  "free_only_later_occurrence": [
+    [
+      "Revenue",
+      "20",
+      "million"
+    ],
+    [
+      "Revenue",
+      "20",
+      "million"
+    ]
+  ],
+  "current": {
+    "any": "S",
+    "both": "S"
+  },
+  "with_candidate": {
+    "any": null,
+    "both": null
+  },
+  "correct_control": {
+    "any": "C",
+    "both": "C"
+  },
+  "reverse_control": {
+    "any": "S",
+    "both": "S"
+  }
+}
