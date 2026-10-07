@@ -1,10 +1,10 @@
 {
- "what": "The frozen golden-set package the Prepare benchmark grades against. The package itself (answers, originals, raw model answers) lives outside the repo; this record pins its location and hashes. Package 3 (2026-10-04 05:58) supersedes package 2: three header_path corrections under owner decision (c), Park's reviewed header support, contract addendum R4 (picture text approximate with critical-token flags, three declared page-number exclusions, continuous paragraphs by page mapping, XML-route exception recorded, OCR adoption rule); the three changed records re-verified and stamped; everything else byte-identical to package 2. Approved by Codex in round 14; the pointer was switched on 2026-10-05, after his gate on the grader's round 19 (c96ec20bd).",
- "recorded_at": "2026-10-05T16:07:57+00:00",
- "package_path": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261004_0557",
+ "what": "The frozen golden-set package the Prepare benchmark grades against. The package itself (answers, originals, raw model answers) lives outside the repo; this record pins its location and hashes. Package 4 (2026-10-06 17:53) supersedes package 3: the ten released held-out corrections of Codex CODEX_HELDOUT_R1_VERDICT through the existing mechanisms - two segment_or_basis decisions (the printed space after a struck phrase) and eight reviewed support declarations (named in the package's own manifest); the two changed records re-verified and stamped; contract declarations R4 unchanged; everything else byte-identical to package 3. A regression-key change, not the new exam's answer key. Approved by Codex (CODEX_JOINED_NUMBERS_VERDICT); the pointer was switched on 2026-10-07, after his integration gate (prepare_integration_20261007/CODEX_GATE.md) on 9382f5d2e.",
+ "recorded_at": "2026-10-07T15:28:43+00:00",
+ "package_path": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002/FINAL_KEY_FOR_CODEX_20261006_1753",
  "evidence_root": "/home/faisal/prepare_work/step3_sample_20261002/bulk_20261002",
- "manifest_sha256": "39a5df74a1176ce1ee8b995c18510e1a00639af1c693a12c8472497eceacc9c7",
- "key_sha256": "41d5c68db597e48c17af6744f8681766de1b114ccdd00853d1e60e913dcc9bbb",
+ "manifest_sha256": "554a41d643a3e3c464ce05159ca6b780ed57f6a1a23dec15a57dea5c69e7a297",
+ "key_sha256": "3c6d68cf170a4a0b73ac6fb2469551f9aee5547d43de71db27b06ea9251e6da5",
  "targets": 457,
  "targets_pending": 0,
  "excluded_fields": 5,
@@ -19,16 +19,17 @@
   "FINAL_KEY_FOR_CODEX_20261003_0005",
   "FINAL_KEY_FOR_CODEX_20261003_0729",
   "FINAL_KEY_FOR_CODEX_20261003_1134",
-  "FINAL_KEY_FOR_CODEX_20261003_2014"
+  "FINAL_KEY_FOR_CODEX_20261003_2014",
+  "FINAL_KEY_FOR_CODEX_20261004_0557"
  ],
  "files_sha256": {
-  "FINAL_MANIFEST.json": "39a5df74a1176ce1ee8b995c18510e1a00639af1c693a12c8472497eceacc9c7",
-  "CLAUDE_ANSWER_KEY.json": "41d5c68db597e48c17af6744f8681766de1b114ccdd00853d1e60e913dcc9bbb",
+  "FINAL_MANIFEST.json": "554a41d643a3e3c464ce05159ca6b780ed57f6a1a23dec15a57dea5c69e7a297",
+  "CLAUDE_ANSWER_KEY.json": "3c6d68cf170a4a0b73ac6fb2469551f9aee5547d43de71db27b06ea9251e6da5",
   "CLAUDE_KEY_FLAGS.json": "da6c6cd95647d7600b6dc4780a2277325787037c9f7655e9db6a946d9715f315",
-  "CLAUDE_VERIFIED.json": "224518e322e0338c4fc8d970df2e70ead39199e008050c74986880ef9fd6f812",
-  "CLAUDE_DECISIONS.json": "48b5688a0533b748e4ea1cdb98b5fef1db759c51b5b1afb8e1ca5b29ee0ea177",
-  "KEY_SUPPORT_MAP.json": "d243b2ff4963ddc57b319d5435c2708f3c7d002ce1a2250e024f1ebd455f6c33",
-  "KEY_SUPPORT_OVERRIDES.json": "b8b45cab0304f04005e2ba5da0e7437697fbcd1305cc25873795420593d5e3ef",
+  "CLAUDE_VERIFIED.json": "a91cef4cea511b59f27ec92a736c0851054d19e4fb08d85eca23143447650695",
+  "CLAUDE_DECISIONS.json": "d00404ec214ee68afde0b53e896fd34741d1b0bc26c4d096a08fff3043b777bf",
+  "KEY_SUPPORT_MAP.json": "b656ae2ffda60c77327572dfea98f28fd3655731bcc525dfc410aabd53a0879a",
+  "KEY_SUPPORT_OVERRIDES.json": "c03ff018efe664830f83cb989643e22f6b19d7eb45800daec2ff7e64de41c314",
   "CONVERTER_COMPARISON.md": "589a5b4f0017084530908761b821662d6fe7f4828be212928cd0372a203aa7fa",
   "CLAUDE_KEY_README.md": "6d61a5d48bc3499a51a2fa4b7f9b8051f8d8f2e8d6ed7349fc89a39407346635",
   "CONTRACT_DECISIONS_R2.json": "2298c4aae2718a665e18fadbecb1d1727e9d9b5aeb879521ff70eea38cca2f26",
@@ -42,7 +43,9 @@
   "CONTRACT_DECISIONS_R4.json": "6c897a61d0cbd3b73ebf974bd639b23fc7d76212094f071643afccfca8e46efd",
   "decision_batches_package3.json": "c467da738b6c5dceb4dbc8628fa34a445fb8537d9978aace200debf91f566a37",
   "decision_batches_package3_stamps.json": "6e994a0774adb08071534d6d4f5feb188ac64687714e03332f7cc814723e028a",
-  "final_pass/make_manifest.py": "0c9eefcffdccdb39c1e0aad9e68ab240d3cf3b2b82009f8d839808f596680341"
+  "final_pass/make_manifest.py": "0c9eefcffdccdb39c1e0aad9e68ab240d3cf3b2b82009f8d839808f596680341",
+  "decision_batches_package4.json": "62395919b04d1a3a71221994073801f0dde49c2a9adac5c5e605498fa9a263a0",
+  "decision_batches_package4_stamps.json": "79d504b986c4fc438495252649eddb295a6dff582ea2c951e0e54fcd4893c642"
  },
  "copies_sha256": {
   "CONVERTER_COMPARISON.md": "589a5b4f0017084530908761b821662d6fe7f4828be212928cd0372a203aa7fa",

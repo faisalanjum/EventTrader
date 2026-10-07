@@ -1,7 +1,7 @@
 # Grader review handover — for Codex's independent review (Fable, 2026-10-03)
 
 **What this is.** The code that scores a conversion route (tool output in the common route format) against the frozen golden set
-(package 3, `FINAL_KEY_FOR_CODEX_20261004_0557`, active since `9ccfd7c19`, `../golden/PACKAGE.json`; the 457 answers of package 2 with the owner's decisions of 2026-10-04, see `DESIGN.md` §44; package 2 is history). Pure code, standard library only, no AI, no hard-coded document strings. It answers,
+(package 4, `FINAL_KEY_FOR_CODEX_20261006_1753`, active since 2026-10-07, `../golden/PACKAGE.json`: package 3 — the 457 answers of package 2 with the owner's decisions of 2026-10-04, see `DESIGN.md` §44 — plus the ten released held-out key corrections, §56; packages 2 and 3 are history). Pure code, standard library only, no AI, no hard-coded document strings. It answers,
 per key target and per field: preserved and correctly associated (pass), not (fail with a reason), or not resolvable (unresolved).
 It does **not** rank tools and does **not** grade meaning fields (T4: `measure`, `sign`, `unit_interpretation`, `marker_meaning`
 are reported `not_t1`).
@@ -74,13 +74,15 @@ checks 340 lines. Design and every rule's origin: `DESIGN.md` (§1–§27; §20 
 - What is not certified, added in round 19 (`DESIGN.md` §43). **Uncertain page:** one that carries a script (a `<script>` of any type, an event attribute, a framed document with a `src` or `srcdoc`: nothing is run, so no reading of the page is vouched for); a `<meta>` content security policy (it turns style attributes off) or refresh (it sends the browser to another page); a character reference in a link's `rel`, an `http-equiv` or the `align` of an element it floats (the parser decodes it, the scanner only in a style string); a writing mode on an element in the line or in a sheet (under `-webkit-` and `-epub-` too: an inline in another writing mode is a box of its own lines; on a block it changes nothing). **Strike certificates withdrawn:** an element with `display:contents` and a strike of its own; a `color`, `text-decoration-color` or `-webkit-text-fill-color` anywhere in the file that may paint nothing (`transparent`, an alpha that is not the literal 1, a form not evaluated: a line takes its element's text colour unless given its own); struck text under a negative `letter-spacing` or a `contain` (on its element or above it; on the page's own elements, in a sheet, or on a formatting element left open that the browser opens again: anywhere): its line may have no length — a table floated by `align` is a float, its parent's strike does not reach it. Stated, not followed: text clipped by several declarations together is still text, and so is its strike. **XML:** a reading is certified only complete and byte for byte, by one parser setting for the scanner and the cell grader (parameter entities are read as declared): an external subset or entity, a reference the parser passes over, an encoding it does not know, or text beyond ASCII that is not UTF-8 leave it uncertain and read as nothing, and the cell grader then leaves `value` and `row_label` `unresolved` (`source_reading`). None of these forms stands in a certified document of the 22,483 HTML and 4,377 XML documents of the completed census.
 - Review history: Codex's nineteen rounds and the package-2 verdict (`prepare_work/grader_review_codex_20261003/`) and the changes they caused are in `DESIGN.md` §21–§43; every probe script was re-run against this code (`FABLE_RESPONSE*.md` there, `codex_probes_live/`).
 
-## Results on the development split — current: package 3, official run 35 (2026-10-05)
+## Results on the development split — official run 35 (package 3, 2026-10-05; unchanged under package 4)
 
 **Current baseline: run 36 (`b18f3743d`, 2026-10-05; `DESIGN.md` §49; `prepare_work/grader_runs/run36_20261005/`)** — run 35 plus the worktree merge: the same
 scores but for 3 cells now passing and the 48 picture blocks now placed (unread). The paragraphs below describe run 35, which run 36 supersedes as the baseline.
 
-Golden set: 457 reviewed targets = 249 development + 118 stratified control + 90 held-out; eight supplemental targets are separate. **Package 3**
-(`FINAL_KEY_FOR_CODEX_20261004_0557`, active since `9ccfd7c19`) is package 2 with the owner's decisions of 2026-10-04: three page-number blocks are **excluded**
+Golden set: 457 reviewed targets = 249 development + 118 stratified control + 90 held-out; eight supplemental targets are separate. **Package 4**
+(`FINAL_KEY_FOR_CODEX_20261006_1753`, active since 2026-10-07) is package 3 with the ten released held-out corrections (`DESIGN.md` §56); regraded with it,
+every development and control result below is unchanged (`prepare_work/package4_switch_20261007/`: 20 route sets, changes only at the ten corrected
+released records). **Package 3** (`FINAL_KEY_FOR_CODEX_20261004_0557`, active 2026-10-05 to 2026-10-07) is package 2 with the owner's decisions of 2026-10-04: three page-number blocks are **excluded**
 (not graded, counted apart, their characters subtracted from required coverage as `excluded_chars`), a picture's text is **approximate** evidence (reported with its
 word error rate and its critical differences; never a pass), three header paths are corrected. Run 35 graded the same 13 saved development route folders against
 it with the grader of round 19 (`c96ec20bd`; Codex's gates `CODEX_GATE_R19.md`, `CODEX_RUN35_VERDICT.md`). Everything of the run is in

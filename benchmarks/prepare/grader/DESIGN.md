@@ -2013,7 +2013,13 @@ anchor — "0.9" + "x", "(in millions)", "Category" + "4.", the NXST cell "Third
 (`claude_decide.py`; exactly those two records changed, one item each), eight reviewed support declarations (`claude_support_map.py`: exactly those slots
 moved, plus the two decided fields' own search support), the two changed records verified again and stamped (457 of 457 current), the R4 contract
 declarations carried forward, the manifest last, `VERIFY_PACKAGE.py` clean, the overrides' own test 11/11. Graded with it, the released set gives the
-in-memory replay's 1,335 rows exactly: 64/64 cells, blocks 18 / 2 / 1. The repository's pointer stays on package 3 until Codex's gate.
+in-memory replay's 1,335 rows exactly: 64/64 cells, blocks 18 / 2 / 1. The repository's pointer stayed on package 3 until Codex's gate; it was switched
+on 2026-10-07, after his integration gate (`prepare_integration_20261007/CODEX_GATE.md`). Every existing set regraded through the switched pointer
+(`prepare_work/package4_switch_20261007/`, 20 route sets, each grading under a time limit, none reached): development, control and the eleven saved
+Docling/PDF/XML routes unchanged; the released set changes only at the ten corrected records (28 target flips, 30 field rows, 0 gate changes) — the best
+route 54/64 to 64/64 cells, blocks 18 / 2 / 1 unchanged; in the unformatted route the two NXST records now fail for the strike that route does not carry
+(`struck`, before `missing`); 0001104659-23-078169 T02 passes `row_context` and stays unresolved by adjacency where no screen step proves it.
+Real-original variants 48/48, the results identical but for the key path.
 
 **The corpus check of the merged code** (`prepare_work/corpus_checks_20261006/`: the local-corpus check — 1,009 filings, the 1,016 local packages less the 7 holding reserved exam documents; 27,236 inventory rows, of which 3,353 filer HTML and 3,440 XML documents converted and checked and 20,443 EDGAR-generated pages counted without conversion; not the whole database), against `f83117fbf`: cells, pictures (5,762 shown, 799 added, 0 unplaced), dishonest, inserted, duplicate ids and order breaks unchanged; uncovered
 text 69,762 → 68,198 characters — four documents gain a paragraph lost inside a nested inline fact (SPG's 10-K, two 8-K/A amendment paragraphs, an RH
