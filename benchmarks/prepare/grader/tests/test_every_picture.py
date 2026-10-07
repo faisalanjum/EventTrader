@@ -21,7 +21,11 @@ def tool(*children):
 def para(text): return {'type': 'ParagraphNode', 'text': text}
 
 
-def cells(*rows): return {'type': 'TableNode', 'caption': None, 'rows': [[{'text': t, 'colspan': cs, 'rowspan': 1, 'is_header': False} for t, cs in row] for row in rows]}
+def cells(*rows, code=None): return {'type': 'TableNode', 'caption': None, **({'code': code} if code else {}), 'rows': [[{'text': t, 'colspan': cs, 'rowspan': 1, 'is_header': False} for t, cs in row] for row in rows]}
+
+
+def table_code(raw, k=0):  # the code the tool returns for the k-th shown table of the source (edgartools_html.codes; test_table_identity)
+    return [c for c, (start, name) in sorted(adapter.codes(raw, anchor.Visible(raw)).items(), key=lambda kv: kv[1][0]) if name is None][k]
 
 
 class EveryPicture(unittest.TestCase):
@@ -29,7 +33,7 @@ class EveryPicture(unittest.TestCase):
         vis = anchor.Visible(RAW); return adapter.route_for(tree, RAW, 'f.htm', 'sha', 0, 'v', vis=vis)
 
     def test_each_shown_picture_once_at_its_own_tag_in_order_with_its_cell(self):
-        r = self.route(tool(para('Intro text here.'), cells([('', 2)], [('Revenue', 1), ('10', 1)]), para('Before after.'), para('Outer'), para('End end.')))
+        r = self.route(tool(para('Intro text here.'), cells([('', 2)], [('Revenue', 1), ('10', 1)], code=table_code(RAW)), para('Before after.'), para('Outer'), para('End end.')))
         units = r['units']; pics = [u for u in units if u['kind'] == 'image']
         tag = lambda name, k=0: [i for i in range(len(RAW)) if RAW.startswith(b'<img src="%s">' % name.encode(), i)][k]
         self.assertEqual([(u['src'], u['anchor']['byte_start']) for u in pics], [('logo.png', tag('logo.png')), ('up.png', tag('up.png')), ('x.png', tag('x.png')), ('in.png', tag('in.png')), ('x.png', tag('x.png', 2))])  # the hidden copy (the second x.png) gets none; the same bytes shown twice are two units
@@ -56,7 +60,7 @@ class EveryPicture(unittest.TestCase):
 
     def test_a_picture_in_the_documents_first_cell_is_tied_to_that_cell(self):  # the first source cell is index 0 of the scanner's cells
         raw = b'<table><tr><td>Total <img src="t.png"></td><td>5</td></tr></table>'; vis = anchor.Visible(raw)
-        units = adapter.route_for(tool(cells([('Total', 1), ('5', 1)])), raw, 'f.htm', 'sha', 0, 'v', vis=vis)['units']
+        units = adapter.route_for(tool(cells([('Total', 1), ('5', 1)], code=table_code(raw))), raw, 'f.htm', 'sha', 0, 'v', vis=vis)['units']
         pic = next(u for u in units if u['kind'] == 'image')
         self.assertEqual((pic['cell'].get('table'), pic['cell'].get('r'), pic['cell'].get('c')), (units[0]['id'], 0, 0))
 

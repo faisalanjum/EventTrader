@@ -336,6 +336,7 @@ class Visible:
         self.picture_sources = {}  # the `src` of each of those tags as the parser reads it (references decoded once), by the tag's first byte: which picture a tool's unit is, where the tool names its resource (Codex's worktree)
         style_cache, sheet_tokens = {}, []
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
+        self.table_tags = []  # for each table of `tables`, the first byte of its start tag where the page shows the table, else None: the adapter names a table by it (edgartools_html.codes)
         lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
         line = seen = 0; after = fresh = eat = dimmed = False  # where the current line starts in `chars` (after the last break), where its last word ends, and whether a box that must have its line to itself ended on it; `fresh`: the last thing read was a tag, so white space alone after it may be a text of its own; `eat`: the last thing read was a start tag after which the parser drops a line feed; `dimmed`: the file holds a zero opacity
 
@@ -480,7 +481,7 @@ class Visible:
                         pre = white in _KEPT or (white in (None, 'inherit', 'unset') and ((white is None and name in _PRE) or (bool(top) and top.pre and name != 'table')))  # outside standards mode the browser's own sheet resets white-space at a table: what a table inherits is not taken as kept
                         stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre, (bool(top) and top.loose) or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                         if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
-                        if name == 'table': self.tables.append([]); grid.append([self.tables[-1], None])
+                        if name == 'table': self.tables.append([]); self.table_tags.append(start if shown else None); grid.append([self.tables[-1], None])
                         elif grid and name in ('tr', 'thead', 'tbody', 'tfoot'): grid[-1][1] = None  # a row or a group of rows starts: the row before it has ended
                         if grid and name in ('tr', 'td', 'th') and grid[-1][1] is None: grid[-1][1] = []; grid[-1][0].append(grid[-1][1])
                         if grid and name in ('td', 'th'): spans[len(stack) - 1] = [start, len(raw)]; grid[-1][1].append(spans[len(stack) - 1])
@@ -583,6 +584,7 @@ class Visible:
 
 
 SHORT = 20  # search-form characters; shorter texts are ambiguous (a word can occur anywhere) and are placed between neighbours
+NOWHERE = (range(0), 0, -1)  # where a cell may stand when its adapter names, for its table, no table of the source: nowhere (table_places)
 
 
 def grams(s):
@@ -610,24 +612,45 @@ def table_places(vis, items, keys):
     {id(cell): (places in `vis.flat`, the first, the last)}, and those places by text — kept for these cells: no other item may take one (a text the tool lists before
     its table would take a cell's place and leave the cell none; Codex G2-C1). A cell may stand where a source cell of the table reads as it does; where the tool kept the table's rows
     (the same rows by their texts) and a row's texts single it out, only in that row — a text the row holds twice in the row's order — so that a repeated label stays
-    with its values when the tool moves rows (Codex's worktree, test_table_sources). Texts are evidence, never the order of tables: of two tables that read alike none is tied."""
+    with its values when the tool moves rows (Codex's worktree, test_table_sources). Texts are evidence, never the order of tables: of two tables that read alike none is tied
+    by its texts. A table the adapter names (`tag`: its own start tag, `Visible.table_tags`) stands in that table only (Codex, accuracy-fable-1 A3: the tool's moved rows
+    were placed in the other copy of a table or in the prose before it): tied to it as above when it reads as it and no other table names it; else each cell anywhere in
+    that table and nowhere else (a cell the tool lost or changed, a table the tool split); a table its adapter names by no table of the source has no place at all
+    (`NOWHERE`). The places of a named table are kept for its cells. A table no adapter names (`tag` absent) is read as before."""
     holds = lambda texts: tuple(sorted(Counter(t for t in texts if t).items()))  # the texts of a table or of a row, each with its number, in no order
     mine, alike, source, out, reserved = defaultdict(list), defaultdict(list), defaultdict(list), {}, defaultdict(set)
+    by_tag, named = {start: k for k, start in enumerate(vis.table_tags) if start is not None}, {}
     for (u, c), key in zip(items, keys):
-        if c is not u: mine[id(u)].append((key, c))
+        if c is not u:
+            mine[id(u)].append((key, c))
+            if 'tag' in u: named[id(u)] = by_tag.get(u['tag'], NOWHERE)
     for cells in mine.values(): alike[holds(key for key, _ in cells)].append(cells)
-    for table in vis.tables if mine else ():
-        rows = [[(vis.flat[a:b], a) for a, b in ((bisect_left(vis.s, x), bisect_left(vis.s, y)) for x, y in row)] for row in table]
-        source[holds(text for row in rows for text, _ in row)].append(rows)
-    for texts, tables in alike.items():
-        if len(tables) != 1 or len(source.get(texts, ())) != 1: continue
+    tables =[[[(vis.flat[a:b], a) for a, b in ((bisect_left(vis.s, x), bisect_left(vis.s, y)) for x, y in row)] for row in table] for table in vis.tables] if mine else []
+    for rows in tables: source[holds(text for row in rows for text, _ in row)].append(rows)
+    once = Counter(named.values())
+    ties = [(cells, tables[named[u]]) for u, cells in mine.items() if named.get(u, NOWHERE) is not NOWHERE and once[named[u]] == 1
+            and holds(key for key, _ in cells) == holds(text for row in tables[named[u]] for text, _ in row)]
+    tied = {id(cells) for cells, _ in ties}
+    for u, k in named.items():
+        if id(mine[u]) in tied: continue
+        if k is NOWHERE:
+            for key, c in mine[u]: out[id(c)] = NOWHERE
+            continue
+        spans = [(at, at + len(text)) for row in tables[k] for text, at in row]; lo, hi = min(a for a, _ in spans), max(b for _, b in spans)
+        for text, at in (x for row in tables[k] for x in row):
+            if text: reserved[text].add(at)
+        for key, c in mine[u]:
+            if key: out[id(c)] = (range(lo, hi), lo, hi - len(key))  # anywhere in its own table: a text that starts there
+    handled, claimed = {id(mine[u]) for u in named}, {id(tables[k]) for k in named.values() if k is not NOWHERE}  # a named table, and a table a unit names, are never tied by texts
+    ties += [(cells[0], source[texts][0]) for texts, cells in alike.items() if len(cells) == 1 and len(source.get(texts, ())) == 1 and id(cells[0]) not in handled and id(source[texts][0]) not in claimed]
+    for cells, rows in ties:
         theirs, ours, anywhere = defaultdict(list), defaultdict(list), defaultdict(set)
-        for row in source[texts][0]:
+        for row in rows:
             theirs[holds(text for text, _ in row)].append(row)
             for text, at in row: anywhere[text].add(at)
         anywhere = {text: (at, min(at), max(at)) for text, at in anywhere.items() if text}
         for text, (at, _, _) in anywhere.items(): reserved[text] |= at
-        for key, c in tables[0]: ours[c.get('r')].append((key, c))
+        for key, c in cells: ours[c.get('r')].append((key, c))
         ours = [(holds(key for key, _ in row), row) for row in ours.values()]
         kept = Counter(h for h, _ in ours if h) == Counter({h: len(v) for h, v in theirs.items() if h})  # the tool's rows are the source's rows
         for h, row in ours:
@@ -649,7 +672,10 @@ def link(raw, units, xml=False, vis=None):
     keys = [squash(c.get('text', '')) if u.get('kind') != 'image' else '' for u, c in items]
     same_text = {}  # the items that carry each text, found once: asking every item again for each placement took time with the square of their number (Codex's worktree)
     for k, key in enumerate(keys): same_text.setdefault(key, []).append(k)
+    confined = {id(c) for u, c in items if c is not u and 'tag' in u}  # the cells of a table its adapter names: every path below keeps them in that table (table_places)
     (allowed, reserved), anywhere = table_places(vis, items, keys), (None, 0, len(vis.flat))
+    for u in units:
+        if u.get('kind') == 'table': u.pop('tag', None)  # the table's own start tag has decided where its cells may stand (table_places); it is no part of the route
     cell, edge = array('i', [-1]) * len(vis.flat), {}  # the innermost table cell each search-form character stands in (-1: none) and each cell's first and last character
     for n, (a, b) in enumerate(sorted((a, b) for table in vis.tables for row in table for a, b in row)):
         lo, hi = bisect_left(vis.s, a), bisect_left(vis.s, b); cell[lo:hi] = array('i', [n]) * (hi - lo); edge[n] = (lo, hi)
@@ -661,6 +687,7 @@ def link(raw, units, xml=False, vis=None):
     def place(i, lo, hi, forward_only):
         """Anchor item i inside flat[lo:hi]; forward search first, else the nearest earlier occurrence (flagged)."""
         obj, n = items[i][1], keys[i]
+        if allowed.get(id(obj)) is NOWHERE: obj['anchor'], obj['link_error'] = None, 'unknown_source_table'; return None  # its table is named by no table of the source
         marks = [squash(m) for m in obj.get('markers') or () if squash(m)]; allm = ''.join(marks)
         ok, first, final = allowed.get(id(obj), anywhere); lo, hi = max(lo, first - len(allm)), min(hi, final + len(n) + len(allm))  # a cell of a table that is one table of the source: only at its places there
         free = ok.__contains__ if ok else lambda j, held=reserved.get(n, ()): j not in held  # any other item: never at a place kept for such a cell
@@ -696,6 +723,10 @@ def link(raw, units, xml=False, vis=None):
         The blocks become a list anchor; the text's characters outside them are the tool's insertions (`inserted_chars`); the source's
         characters between them stay uncovered."""
         obj, n = items[i][1], keys[i]
+        if id(obj) in confined:  # a cell of a named table: only inside its own table
+            ok, first, final = allowed.get(id(obj), NOWHERE)
+            if ok is NOWHERE[0]: return None
+            lo, hi = max(lo, first), min(hi, final + len(n))
         taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i} | reserved.get(n, set())  # (and no place kept for a table's cell that reads so)
         j = vis.flat.find(n[:SHORT], lo, hi)
         while j >= 0 and (j in taken or not same(j, SHORT)): j = vis.flat.find(n[:SHORT], j + 1, hi)

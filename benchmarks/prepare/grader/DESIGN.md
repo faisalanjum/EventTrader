@@ -2264,3 +2264,25 @@ interpreter through the real `convert`: each failing before, now stopping with n
 right); the 964 corpus documents of §70 converted again: items, statuses and member hashes identical, route sizes within ±1 byte in 50 - the same
 jitter as two runs of the same A2 code (49): the route's own `seconds` field. **Codex's gate** (`FABLE_A6_GATE.md`): PASS for these files; two real
 documents through the whole route, every non-timing field identical.
+
+## 72. A table the adapter names stands in its own source table (2026-10-07; Codex accuracy-fable-1, A3)
+
+The linker ties a tool's table to a source table by its texts - the same texts, each as often, in exactly one table on either side (`table_places`);
+of two copies of one table none is tied, and their cells were placed one by one: the cells the tool moved (a date and a unit row it took for headers
+and listed first) went to the prose before the table or into the other copy, or stayed unplaced - six tables, 108 cells, in two exposed 10-Qs (AAL,
+KRC; Codex's cause). Each table now carries its own source identity through the tool, as each picture does (`codes`, Codex G3-C2): the scanner records
+each shown table's start tag (`Visible.table_tags`); `codes` gives it this source's code; `named` writes the code as one attribute right after
+`<table` (the source's own attributes stay as written; a table in a comment, a script or a hidden part gets none); the tool keeps it in its table
+node's metadata (`whole_headings`); `dump` and `to_units` give the table unit its `tag`; and every placement keeps the cells in that table (Codex's
+early review): tied as before when the table reads as it and no other unit names it; anywhere in it and nowhere else when the tool lost or changed a
+cell or two units name it (`place`, `unclaimed` and `piece` all held to it); nowhere (`unknown_source_table`) when its code names no table of this
+source; the places of a named table are kept for its cells. A route that names no tables (another tool's adapter) reads as before. `SETTINGS` records
+`table_identity: own start tag` (a parse saved before is refused). **Measured** against the A6 commit: tests 396 + 400 (three new - the KRC shape, the
+early-review controls, the code reaching the tool with texts unchanged -, each failing before; fixtures giving their tables the code the tool now
+returns; the cache refusal, which fails if the record is dropped); Codex's two originals: tables outside one source table AAL 2 and KRC 4 to 0, the
+108 cells each in its own table; all 3,353 approved-corpus filer HTML documents: no text changed, 4 documents and 10 tables changed - the 6 now in one
+table each; 4, in two documents with two copies of a table, whose repeated row label pointed at the other such row, now in the row whose texts are the
+tool's row -, unanchored items 93 to 91, bytes +0.03 % (the new setting in each route), no slowdown observed (two concurrent runs, not a controlled
+latency claim). The nine key route sets against the A2 build: no file on one side only, no text changed, only AAL's two tables changed (one table
+each, three routes), the route record differing by the new setting and the screen facts by AAL's re-gridded cells (3,394 to 3,398); grades: 0 target
+flips, 0 field rows, 10 gate changes, every one AAL's improving (unanchored 1, order breaks 2, uncovered characters 46 - to none).

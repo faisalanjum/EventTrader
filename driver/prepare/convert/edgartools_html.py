@@ -14,6 +14,7 @@ NAME = 'edgartools-html'  # the tool's heading nodes nested inside paragraphs ar
 KIND = {'HeadingNode': 'heading', 'ParagraphNode': 'text', 'TextNode': 'text', 'ListItemNode': 'list_item', 'ImageNode': 'image'}
 BRANCH = ('DocumentNode', 'ContainerNode', 'SectionNode', 'ListNode')
 BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode', 'ImageNode')  # children that make their parent a branch; a picture has no text to merge into a run: flattened with its paragraph it was lost (Codex's worktree)
+TABLE = 'data-prepare-table'  # the attribute that carries a table's code (`codes`) through the tool to its table node
 
 
 def dump(node):
@@ -30,6 +31,8 @@ def dump(node):
     if kind == 'TableNode':
         rows = list(node.headers or []) + [getattr(r, 'cells', r) for r in node.rows or []]
         d['caption'] = node.caption
+        code = (getattr(node, 'metadata', None) or {}).get(TABLE)
+        if code: d['code'] = code  # the source table it came from (`codes`)
         d['rows'] = [[{'text': (c.text() if callable(c.text) else c.text) or '', 'colspan': c.colspan or 1, 'rowspan': c.rowspan or 1, 'is_header': bool(c.is_header)} for c in row] for row in rows]
         return d
     kids = list(getattr(node, 'children', None) or [])
@@ -56,19 +59,20 @@ def dump(node):
 
 
 def codes(raw, vis):
-    """One code for every picture tag that writes a `src`, shown or hidden: the source's own SHA-256 (its first 16 hex digits) and the tag's first byte — letters
-    and digits the tool's cleaning cannot touch, and nothing a name written in any source can impersonate — with what it stands for: {code: (tag start, the name
-    as the parser reads it)}. EdgarTools rewrites the file's text before it parses it (runs of spaces, a space after a point before a capital, `&amp;amp;`,
-    zero-width characters), and a name that reached the linker changed stood at another picture's tag; two tags that name one resource, one of them hidden,
-    stood for each other (Codex G3-C2)."""
+    """One code for every picture tag that writes a `src`, shown or hidden, and for every table tag the page shows: the source's own SHA-256 (its first 16 hex
+    digits) and the tag's first byte — letters and digits the tool's cleaning cannot touch, and nothing a name written in any source can impersonate — with what it
+    stands for: {code: (tag start, the name as the parser reads it; None for a table)}. EdgarTools rewrites the file's text before it parses it (runs of spaces, a
+    space after a point before a capital, `&amp;amp;`, zero-width characters), and a name that reached the linker changed stood at another picture's tag; two
+    tags that name one resource, one of them hidden, stood for each other (Codex G3-C2); two copies of one table took each other's cells (A3)."""
     sha = anchor.sha256(raw)[:16]
-    return {sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()}
+    return {sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()} | {sha + str(start): (start, None) for start in vis.table_tags if start is not None}
 
 
 def named(raw, vis, codes):
-    """The source as the tool gets it, decoded: each picture's name replaced by its code, and the text the page hides left out (where the scanner's reading
-    is certain). Every tag the source has, the tool sees — an empty anchor too: it may be laid out as a block and break the line (Codex R3-A)."""
-    edits = [(vis.picture_names[start][0], code.encode()) for code, (start, _) in codes.items()]
+    """The source as the tool gets it, decoded: each picture's name replaced by its code, each shown table tag given its code (one attribute, `TABLE`, its
+    first: no attribute the source writes is changed), and the text the page hides left out (where the scanner's reading is certain). Every tag the source
+    has, the tool sees — an empty anchor too: it may be laid out as a block and break the line (Codex R3-A)."""
+    edits = [(vis.picture_names[start][0], code.encode()) if name is not None else ((start + 6, start + 6), f' {TABLE}="{code}"'.encode()) for code, (start, name) in codes.items()]  # after "<table"
     if vis.certain: edits += [(span, b'') for span in vis.hidden]  # text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
     out, at = [], 0
     for (a, b), piece in sorted(edits):
@@ -80,7 +84,8 @@ def named(raw, vis, codes):
 
 def to_units(tree, codes=None):
     """The units of the tool's tree. With `codes` (this source's, from `codes`), every picture names the tag it came from (`tag`, for the linker: a `src` that is no
-    code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back."""
+    code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back;
+    every table names the table it came from the same way (`tag`, None when the tool's table carries no code of this source: it then stands nowhere)."""
     units = []
 
     def table_unit(t):
@@ -94,7 +99,7 @@ def to_units(tree, codes=None):
                     cells.append({'r': r, 'c': c, 'rs': rs, 'cs': cs, 'text': cell['text'], 'header': bool(cell.get('is_header'))})
                 for k in range(c, c + cs): until[k] = r + rs
                 c += cs
-        if cells: units.append({'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else []})  # a table with no text in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
+        if cells: units.append({'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else [], **({'tag': codes[t['code']][0] if t.get('code') in codes and codes[t['code']][1] is None else None} if codes is not None else {})})  # `tag`: the source table it came from (None: no table of this source - it stands nowhere), for the linker; a table with no text in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
 
         elif t.get('caption'): units.append({'id': f'u{len(units)}', 'kind': 'caption', 'text': t['caption']})  # no text in any cell, but a caption: that is read (Codex R2-C4)
 
@@ -260,6 +265,7 @@ def whole_headings():
         try: node = create(self, element, style)
         finally: self._making = self._run = None
         if isinstance(node, HeadingNode) and line(self, element, style): node.content = whole(self, element)  # (b): every heading the tool made from a block, read whole
+        if tag == 'table' and type(node).__name__ == 'TableNode' and element.get(TABLE): node.set_metadata(TABLE, element.get(TABLE))  # the table's code (named), kept in the tool's own metadata for dump (A3)
         if inline and not whole_run and getattr(node, 'metadata', {}).get('inline_via_css'): node = ContainerNode(tag_name=element.tag, style=style)  # blocks below: the tool's own fallback for an inline-laid block, each child walked — nothing dropped
         return node
     def reading(self, element):
@@ -290,7 +296,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def version():

@@ -46,7 +46,7 @@ class PictureNames(unittest.TestCase):
     def test_the_tool_is_not_shown_text_the_page_hides(self):  # a hidden "%" beside a value made "8.2 %" of "8.2" and a copy of the visible "%" cell (Codex C4)
         raw = b'<table><tr><td>8.2&#160;<font style="visibility:hidden">%</font></td><td>%</td></tr></table><div style="display:none">gone &amp; away</div><p hidden>no</p><p>stays</p><img src="x.png">'
         vis = anchor.Visible(raw); given = adapter.named(raw, vis, adapter.codes(raw, vis))
-        self.assertEqual(re.sub(r'src="[^"]*"', 'src=""', given), '<table><tr><td>8.2&#160;<font style="visibility:hidden"></font></td><td>%</td></tr></table><div style="display:none"></div><p hidden></p><p>stays</p><img src="">')
+        self.assertEqual(re.sub(r'src="[^"]*"', 'src=""', given), '<table data-prepare-table="%s"><tr><td>8.2&#160;<font style="visibility:hidden"></font></td><td>%%</td></tr></table><div style="display:none"></div><p hidden></p><p>stays</p><img src="">' % (anchor.sha256(raw)[:16] + '0'))  # the shown table carries its code (test_table_identity)
         raw = b'<style>.x{display:none}</style><div class="x">unknown</div><p>stays</p>'; vis = anchor.Visible(raw); self.assertFalse(vis.certain)
         self.assertEqual(adapter.named(raw, vis, adapter.codes(raw, vis)), raw.decode())  # a reading that is not certain hides nothing from the tool
 
