@@ -2223,4 +2223,26 @@ side only, 0 items lost or grown, every addition inside an `<ix:exclude>` of its
 15 gate changes, every one `nothing_lost` improving (page numbers and "Table of Contents" inside the tag in 3 documents, uncovered before, now
 covered: no uncovered text is left in the development and released sets). (The corpus runs of §68 and this section's first run cut documents out of
 their packages with a pattern of their own, which left off the member's final newline in 335 of 861 documents and changed no other byte; rerun here
-on the members, the items are identical.)
+on the members, the items are identical.) **Codex's gate** (`FABLE_A4_GATE.md`): PASS on `87594c003` (first given on `495c91225`, which differs only
+by this section's document counts, corrected) as an isolated correctness fix; his own comparison of every field of the 366,789 existing units of 411
+route files found none lost, changed or ambiguous, and the 95 scale lines back at their own anchors.
+
+## 70. The spaces at the edges of an inline fact stay (2026-10-07; Codex accuracy-fable-1, A2)
+
+The tool reads an inline-XBRL text fact (`ix:nonNumeric`, `ix:continuation`) as terminal text, stripped at its edges; §56's reading - the fact read as
+an inline run, as the tool reads a `<span>` - reached only a fact with an element inside. A fact with none lost the spaces at its edges, which the
+page shows: an 8-K cover's "Durham, North Carolina 27703" became "Carolina27703" (the space is inside the ZIP code's tag), "Total", a fact "\n125\n"
+and "units" one word. The condition is dropped (Codex: that alone restores the space; his eight Chrome controls): every inline text fact without a
+block, table, picture or link below is read as a run. No space is made: what the source joins stays joined ("12" + "5", "CORP" + "ORATION"); hidden
+facts, facts holding blocks or tables, table cells, struck places and anchors read as before. A fact at the very start or end of a line keeps the
+space its tag holds in the unit's text (" Leading text"; the browser drops it there): white space only, as units already could, and no repair is
+added. `SETTINGS` records `inline_fact_spaces: kept` (a parse saved before is refused). **Measured** against the A4 commit: tests 392 + 400 (both
+tags' space cases, line breaks inside a fact and the shape of Codex's real 8-K cover, each failing before; controls the same before and after - joined
+digits and letters, a nested span, hidden facts, a table cell -; the struck places and the anchor; the cache refusal, which fails if the record is
+dropped; every input's units what Chromium 147 shows); the 964 approved-corpus filer HTML documents holding the tags (of 3,353; packages opened
+through the downloader's reader, hashes checked): 0 items lost or added, statuses unchanged, 17 items in 11 documents changed in white space only - 4
+glued words or numbers now separated ("North Carolina 27703", "6.3 years", "three-year measurement" twice; Codex's audit: each the whole anchored
+source text, the scanner certain, and what Chrome shows), 13 a trailing space after a paragraph's last fact -, none joined; bytes +0.013 % (the new
+setting in each route), no slowdown observed (two concurrent runs, not a controlled latency claim). The nine key route sets against the A4 build: no
+file on one side only, 0 items lost or added, one trailing space (one released document, three routes), the route record differing by the new setting;
+grades: 0 target flips, 0 field rows, 0 gate changes.

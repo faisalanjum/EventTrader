@@ -269,8 +269,8 @@ class ReplayTiming(unittest.TestCase):
 class SettingsCache(unittest.TestCase):
     def test_a_parse_saved_under_the_previous_settings_is_refused_and_one_under_the_current_settings_is_reused(self):  # Codex, accuracy-fable-1: a lossy parse saved before page-number candidates were kept is never reused
         from benchmarks.prepare.grader.adapters import edgartools_html as cli, cache
-        previous = [{k: v for k, v in eh.SETTINGS.items() if k != key} for key in ('page_number_candidates', 'ix_exclude')]  # a parse saved before either reading changed
-        for settings, status in ((previous[0], 'FAILED'), (previous[1], 'FAILED'), (eh.SETTINGS, 'OK')):
+        previous = [{k: v for k, v in eh.SETTINGS.items() if k != key} for key in ('page_number_candidates', 'ix_exclude', 'inline_fact_spaces')]  # a parse saved before any of these readings changed
+        for settings, status in [(p, 'FAILED') for p in previous] + [(eh.SETTINGS, 'OK')]:
             with tempfile.TemporaryDirectory() as td, self.subTest(saved_under=sorted(settings)):
                 root = Path(td); src = root / 's.htm'; src.write_bytes(RAW); out = root / 'out'; raw_dir = out / 'raw'; raw_dir.mkdir(parents=True)
                 cached = raw_dir / 's.htm.edgartools.json'; cached.write_text(json.dumps(TREE))

@@ -260,7 +260,9 @@ def whole_headings():
         # The tool treats inline XBRL as terminal text but its reader only walks
         # descendants for inline HTML tags. Reuse that reader for inline facts;
         # containers with blocks, pictures, or links keep the tool's traversal.
-        if element is getattr(self, '_run', None) or isinstance(element.tag, str) and element.tag.lower() in ('ix:nonnumeric', 'ix:continuation') and len(element) and not any(
+        # A fact with no element inside too: read as terminal text it lost the spaces at its edges, which the page shows ("North Carolina 27703" became
+        # "Carolina27703"); read as a run it keeps them (Codex, accuracy-fable-1 A2)
+        if element is getattr(self, '_run', None) or isinstance(element.tag, str) and element.tag.lower() in ('ix:nonnumeric', 'ix:continuation') and not any(
                 isinstance(d.tag, str) and d.tag.lower() in self.BLOCK_ELEMENTS | {'table', 'img', 'a'} for d in element.iterdescendants()):
             kept, element.tag = element.tag, 'span'
             try: return read(self, element)
@@ -283,7 +285,7 @@ def whole_headings():
     db.DocumentBuilder.SKIP_ELEMENTS, db.DocumentBuilder.INLINE_ELEMENTS = db.DocumentBuilder.SKIP_ELEMENTS - {'ix:exclude'}, db.DocumentBuilder.INLINE_ELEMENTS | {'ix:exclude'}
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def version():
