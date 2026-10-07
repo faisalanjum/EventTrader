@@ -277,9 +277,13 @@ def whole_headings():
     # right-aligned, a bottom margin, a page break near): a cover ZIP code, a right-aligned "125" under "Shares outstanding", a tagged shares fact and a
     # debt class "IV" were lost with the page numbers (Codex, accuracy-fable-1). Nothing is deleted here: what the page shows stays, in source order.
     db.DocumentBuilder._is_page_number_container = lambda self, element: False
+    # <ix:exclude> marks shown text that belongs to no XBRL fact - a scale line "(in thousands)", the "not" inside a tagged sentence. The tool skipped it
+    # (its SKIP_ELEMENTS), so what the page shows was deleted; it is read as the tool reads its other inline-XBRL tags: inline in its sentence, a
+    # container where it holds blocks or a table (the rules above); hidden is still hidden (Codex, accuracy-fable-1 A4)
+    db.DocumentBuilder.SKIP_ELEMENTS, db.DocumentBuilder.INLINE_ELEMENTS = db.DocumentBuilder.SKIP_ELEMENTS - {'ix:exclude'}, db.DocumentBuilder.INLINE_ELEMENTS | {'ix:exclude'}
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def version():

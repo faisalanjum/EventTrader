@@ -2196,6 +2196,31 @@ measured (it kept the two ZIP codes) and not taken: it leaves the other deletion
 before is not reused (tested both ways). **Measured:** tests 386 + 400 (two new - five facts kept in order and page numbers as their own units, eight
 subcases failing before; the cache refusal); 746 local-corpus documents holding page-number candidates, current code against the change item by item:
 0 items lost, 22,718 page-number candidates added and 391 empty table wrappers around boxed ones (12 documents), statuses unchanged, uncovered runs
-23,063 to 446, route bytes +0.40 %, conversion time unchanged (488 to 459 s, concurrent runs); the nine key route sets rebuilt against the approved
-build: no file on one side only, 0 items lost, every addition a page-number candidate or its wrapper, the route record differing by the new setting
-and the screen facts by the cells of those wrappers; grades: 0 target flips, 0 field rows, 210 gate changes, every one `nothing_lost` improving.
+23,063 to 446, route bytes +0.40 %, no slowdown observed (488 to 459 s; two concurrent runs, not a controlled latency claim); the nine key route sets
+rebuilt against the approved build: no file on one side only, 0 items lost, every addition a page-number candidate or its wrapper, the route record
+differing by the new setting and the screen facts by the cells of those wrappers; grades: 0 target flips, 0 field rows, 210 gate changes, every one
+`nothing_lost` improving. **Codex's gate** (`FABLE_A1_GATE.md`): PASS for `2386b6c15` as an exposed-evidence correctness fix, not production, exam or
+universal-accuracy approval; his own comparison of every field of the 344,784 existing units of 411 route files found none lost, changed or ambiguous.
+
+## 69. Shown text inside <ix:exclude> is read where the page shows it (2026-10-07; Codex accuracy-fable-1, A4)
+
+`<ix:exclude>` marks text of an inline-XBRL document that belongs to no XBRL fact: in practice the running page headers of a 10-Q's notes - the
+company's name, "Notes to … Financial Statements (Continued)", the scale line "(amounts in thousands, except per share amounts)", "(unaudited)", the
+page number - and, in Codex's controls, the "not" of a tagged sentence. EdgarTools lists the tag among the elements it skips
+(`DocumentBuilder.SKIP_ELEMENTS`), so it deleted what the page shows: notes tables whose only scale statement is that header lost their scale (Codex
+traced 95 missing copies in three documents). The tag is now read as the tool reads its other inline-XBRL tags (`INLINE_ELEMENTS`): inline in its
+sentence ("Debt not guaranteed", one unit), a container where it holds blocks or a table (§59, §62); a hidden one stays hidden. Un-skipping alone was
+measured and not taken: it splits a sentence round the tag ("Debt" | "not" | "guaranteed"). `SETTINGS` records `ix_exclude: read as shown` (a parse
+saved before is refused). **Measured** against the A1 commit: tests 389 + 400 (eight shown-text controls - two in the shape filings use, inside a
+tagged text block -, each failing before, and a hidden one, their expected units what Chromium 147 shows; the restored word's anchor; the cache
+refusal, which fails if the record is dropped); the 146 filer HTML documents of the 22 approved-corpus filings that use the tag, each read by
+the downloader's own package reader: 0 items lost or grown, 907 restored in 22 documents - every one starting inside an `<ix:exclude>` of its own
+source; 12 of them "Table of Contents" links marked as headings, as the tool
+marked their kept copies -, statuses unchanged, bytes +0.41 %, no slowdown observed (two concurrent runs, not a controlled latency claim); Codex's
+three documents 5 to 47, 38 and 25 copies of their scale sentence. The nine key route sets rebuilt against the A1 build: no file on one
+side only, 0 items lost or grown, every addition inside an `<ix:exclude>` of its source (development 106 per route in 2 documents, released 52 in
+1, control none), the route record differing by the new setting and the screen facts by their timings; grades: 0 target flips, 0 field rows,
+15 gate changes, every one `nothing_lost` improving (page numbers and "Table of Contents" inside the tag in 3 documents, uncovered before, now
+covered: no uncovered text is left in the development and released sets). (The corpus runs of §68 and this section's first run cut documents out of
+their packages with a pattern of their own, which left off the member's final newline in 335 of 861 documents and changed no other byte; rerun here
+on the members, the items are identical.)
