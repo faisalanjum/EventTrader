@@ -118,6 +118,7 @@ class Replay(unittest.TestCase):
                 self.assertFalse(asked); self.assertEqual(flags, b['flags']); self.assertEqual(rec['sonnet'], 'off')
                 line = rec['extraction_status']
                 self.assertTrue(status_follows_flags(line, flags) and 'Sonnet off' in line, line)
+                self.assertLessEqual(len(line), 260)                          # the one status line stays short (modes.py)
                 t, rc = body(*self.s.relocated(r, text, rec))
                 self.assertEqual((t, rc), (b['text'], b['record']))
 
