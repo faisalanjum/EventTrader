@@ -878,25 +878,52 @@ def struck_at(vis, item):
     return out
 
 
+def _reading(vis, item):
+    """(text, the text position of each of its search-form characters, the reading's index of each) where the item's text is the source's text at its
+    byte places; else None."""
+    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
+    if len(byte) != len(spans(item.get('anchor'))): return None
+    src = []
+    for a in byte:
+        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
+        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return None  # a character whose bytes run past the place's end: the place is no whole reading
+        src += range(lo, hi)
+    text = item.get('text', ''); own = [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]
+    return (text, own, src) if ''.join(vis.flat[k] for k in src) == squash(text) else None
+
+
+def _cuts(vis, k, l):
+    """Whether a space between the search-form characters k and l cuts a word or number in two (reflow at punctuation and symbols is allowed, E12)."""
+    a = vis.flat[k - 1:k + 1] if k and vis.idx[k - 1] + 1 == vis.idx[k] else vis.flat[k]  # each side with the neighbour the source prints touching it:
+    b = vis.flat[l:l + 2] if l + 1 < len(vis.flat) and vis.idx[l + 1] == vis.idx[l] + 1 else vis.flat[l]  # a number's own separator belongs to the number ("0.|69"), as the gate's tokens read it
+    return len(_TOKEN_WORDS.findall(vis.flat[k] + ' ' + vis.flat[l])) == 2 or _TOKEN_WORDS.findall(a + b) != _TOKEN_WORDS.findall(a + ' ' + b)
+
+
 def tool_spaces(vis, item):
     """Where the item's text puts white space between two characters the source prints touching as one word or number — a space the tool added:
     [(start, end) of each such run in the text, with the search-form index of the character before and after] — or [] where the text is not the source's
     text at its places. The page may still space the two (CSS): that is for a step with the page to decide; the gate's boundary rule stays as it is."""
-    byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
-    if len(byte) != len(spans(item.get('anchor'))): return []
-    src = []
-    for a in byte:
-        lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
-        if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return []  # a character whose bytes run past the place's end: the place is no whole reading
-        src += range(lo, hi)
-    text = item.get('text', ''); own = [m.start() for m in re.finditer(r'~~|.', text, re.S) if squash(m.group())]
-    if ''.join(vis.flat[k] for k in src) != squash(text): return []
-    out = []
+    got = _reading(vis, item)
+    if got is None: return []
+    text, own, src = got; out = []
     for p, (i, j) in enumerate(zip(own, own[1:])):
         k, l = src[p], src[p + 1]
         if not text[i + 1:j].isspace() or vis.idx[l] != vis.idx[k] + 1: continue  # the text has no white space there (nothing, or something else), or the source itself puts something between the two
-        a = vis.flat[k - 1:k + 1] if k and vis.idx[k - 1] + 1 == vis.idx[k] else vis.flat[k]  # each side with the neighbour the source prints touching it:
-        b = vis.flat[l:l + 2] if l + 1 < len(vis.flat) and vis.idx[l + 1] == vis.idx[l] + 1 else vis.flat[l]  # a number's own separator belongs to the number ("0.|69"), as the gate's tokens read it
-        if len(_TOKEN_WORDS.findall(vis.flat[k] + ' ' + vis.flat[l])) != 2 and _TOKEN_WORDS.findall(a + b) == _TOKEN_WORDS.findall(a + ' ' + b): continue  # a space there cuts no word or number in two (reflow at punctuation and symbols is allowed, E12)
-        out.append((i + 1, j, k, l))
+        if _cuts(vis, k, l): out.append((i + 1, j, k, l))
+    return out
+
+
+def tool_joins(vis, item):
+    """The mirror: where the item's text prints touching two characters the source reads apart — only white space between them in the reading (a line of
+    its own: a block, a box taken out of the flow, CSS 2 section 9.7) — and a space between them parts two words or numbers: [(place, place) — the empty
+    range where the space would stand — with the search-form index of the character before and after], or [] where the text is not the source's text at
+    its places. Whether the page lays the two apart is for a step with the page to decide."""
+    got = _reading(vis, item)
+    if got is None: return []
+    text, own, src = got; out = []
+    for p, (i, j) in enumerate(zip(own, own[1:])):
+        k, l = src[p], src[p + 1]
+        if j != i + 1 or l != k + 1 or vis.idx[l] == vis.idx[k] + 1: continue  # the text has something between the two, or the source prints them touching
+        if any(c.isspace() and m not in vis.reading_breaks for m, c in enumerate(vis.text[vis.idx[k] + 1:vis.idx[l]], vis.idx[k] + 1)) and _cuts(vis, k, l):  # white space of the page: not a zero-width character alone, nor a redline separator (no layout gap)
+            out.append((j, j, k, l))
     return out

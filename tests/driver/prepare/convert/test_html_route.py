@@ -26,7 +26,7 @@ class Prepare(unittest.TestCase):
         self.assertEqual(calls, ['convert', 'formatting', ('screen', browser)]); self.assertIs(calls[2][1], browser)
         self.assertEqual((route['status'], route['error'], route['route']['name'], route['file_id'], route['sha256']), ('OK', None, 'edgartools-html+source-formatting+screen', 'a.htm', SHA))
         self.assertEqual((facts['formatting'], route['units'][0]['struck']), (1, ['10']))
-        self.assertEqual(sorted(facts['screen']), ['cells_measured', 'cells_regridded', 'joined', 'seconds', 'spaces_the_tool_added'])
+        self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'joined', 'parted', 'seconds', 'spaces_the_tool_added'])
         raw = b'<style>.x{text-decoration:line-through}</style><p>10 20</p>'  # a sheet rule could add a strike: the formatting step certifies nothing and says so
         with patch.object(eh, 'convert', side_effect=parsed), patch.object(sg, 'measure', return_value=({}, {})):
             route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())

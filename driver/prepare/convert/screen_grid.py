@@ -4,7 +4,8 @@ when the value sits inside the header's span ON SCREEN (guide 3.5 rule 3). DOM c
 Chrome, measures every table cell's box, derives screen columns from the pixel edges, and re-grids a route's table
 cells by their byte anchors, and joins a word or number the tool printed with a space the source does not have where Chrome shows its two
 characters touching on one baseline (a space the tool adds across inline markup: `CORP ORATION` over an iXBRL tag; the page alone can tell that from
-a gap its styles make). It changes no anchor; the joined text records where its spaces were. Rules are geometric only."""
+a gap its styles make); and, the mirror, sets a space in where the tool printed touching two characters the source reads apart and Chrome lays them apart
+on one baseline (positioned boxes `1.` and `10700` printed `1.10700`). It changes no anchor; the text records where its spaces were. Rules are geometric only."""
 import re
 import time
 from bisect import bisect_left, bisect_right
@@ -18,8 +19,10 @@ TOL = 2  # pixels: edges closer than this are the same column edge
 
 
 def gaps_of(vis, units):
-    """Every space the tool added inside a word or number, per item: [(item, text start, text end, search-form index before, after)] (anchor.tool_spaces)."""
-    return [(x, a, b, k, l) for u in units for x in ((u.get('cells') or []) if u.get('kind') == 'table' else [u]) for a, b, k, l in anchor.tool_spaces(vis, x)]
+    """Every space the tool added inside a word or number, and every boundary it dropped where a space parts two words or numbers the source reads apart,
+    per item: [(item, text start, text end, search-form index before, after)]; a dropped boundary is the empty range at its place (anchor.tool_spaces,
+    anchor.tool_joins)."""
+    return [(x, a, b, k, l) for u in units for x in ((u.get('cells') or []) if u.get('kind') == 'table' else [u]) for a, b, k, l in anchor.tool_spaces(vis, x) + anchor.tool_joins(vis, x)]
 
 
 def endpoints_of(vis, units):
@@ -56,19 +59,24 @@ def tag_cells(raw, vis=None, gaps=()):
 
 def join(gaps, boxes, vis=None, tol=0.75):
     """Remove from each item's text the added spaces whose two characters Chrome lays out on one baseline, touching (the boxes' bottoms within a pixel — their
-    tops may differ, a smaller font on the same baseline as small capitals print; the right box begins where the left one ends, within `tol` pixels); returns how many. Each item keeps `joins`: [[start, end, gap in pixels]] in the text as it was; its struck places, which count the
+    tops may differ, a smaller font on the same baseline as small capitals print; the right box begins where the left one ends, within `tol` pixels); and,
+    the mirror, set one space in at each dropped boundary whose two characters Chrome lays out on one baseline apart (further than `tol`: positioned boxes
+    `1.` and `10700` printed `1.10700`); returns how many. Each item keeps `joins`: [[start, end, gap in pixels]] and `parts`: [[place, gap in pixels]] in the text as it was; its struck places, which count the
     text's characters, are read again from the source (`vis`; Codex C3) — or dropped where that cannot be done."""
     by_item, n = {}, 0
     for g, (x, a, b, k, l) in enumerate(gaps):
         left, right = boxes.get('%d.0' % g), boxes.get('%d.1' % g)
-        if not left or not right or abs(left['b'] - right['b']) > 1: continue  # not one baseline: another line, or a raised or lowered mark ($5¹, CO₂ stay apart)
+        if not left or not right or abs(left['b'] - right['b']) > 1: continue  # not one baseline: another line, or a raised or lowered mark ($5¹, CO₂ stay apart; 6ᵗʰ stays together)
         gap = right['x'] - left['r']
-        if not -tol <= gap <= tol: continue  # the page spaces them (its styles), or lays them apart: no join
+        if a < b and not -tol <= gap <= tol: continue  # the page spaces them (its styles), or lays them apart: no join
+        if a == b and not (gap > tol and left.get('shown') and right.get('shown')): continue  # a dropped boundary comes back only where both are shown and the right one begins clearly after the left: touching, an overlap or a reversed pair is no gap
         by_item.setdefault(id(x), (x, []))[1].append((a, b, round(gap, 2)))
     for x, runs in by_item.values():
         text = x['text']
-        for a, b, _ in sorted(runs, reverse=True): text = text[:a] + text[b:]
-        x['text'], x['joins'] = text, [list(r) for r in sorted(runs)]; n += len(runs)
+        for a, b, _ in sorted(runs, reverse=True): text = text[:a] + ('' if a < b else ' ') + text[b:]
+        x['text'] = text; n += len(runs)
+        for key, got in (('joins', [[a, b, g] for a, b, g in sorted(runs) if a < b]), ('parts', [[a, g] for a, b, g in sorted(runs) if a == b])):
+            if got: x[key] = got
         if 'struck_at' in x:
             at = anchor.struck_at(vis, x) if vis is not None else None
             if at: x['struck_at'] = at
@@ -172,5 +180,7 @@ def step(raw, route, browser):
         return {'error': repr(e)[:200]}
     if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
         route['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
-    n = apply(route['units'], spans, measured); j = join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline'))
-    return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': len(gaps), 'joined': j, 'seconds': round(time.time() - t0, 1)}
+    n = apply(route['units'], spans, measured); join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline', parts='apart on one baseline'))
+    edited = {id(x): x for x, *_ in gaps}.values()
+    return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
+            'boundaries_the_tool_dropped': sum(a == b for _, a, b, _, _ in gaps), 'parted': sum(len(x.get('parts', ())) for x in edited), 'seconds': round(time.time() - t0, 1)}
