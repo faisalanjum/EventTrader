@@ -92,7 +92,11 @@ def screen_grid(cells):
 
 def apply(units, spans, measured_by_table):
     """Re-grid the route's table cells whose byte anchors fall in a measured cell; returns how many changed. A table whose every cell is measured in
-    one source table is then listed row by row, as the route's cells are (DESIGN §4): the tool may list rows in another order than the page."""
+    one source table is then listed row by row, as the route's cells are (DESIGN §4): the tool may list rows in another order than the page. A picture
+    in a cell of such a table takes its own cell's measured row, column and spans (its rows where the browser's table model ends them), as a text cell
+    there would, an image-only cell too; a picture in any other route table states none, its cell span kept: a row and column copied before this step
+    are the tool's grid, which the step replaced (a hidden or zero-width column), and a table holding cells of two grids has no one row or column
+    (Codex, PICTURE_CONTEXT_ORDER)."""
     starts = [s for s, _ in spans]; by_g, table_of = {}, {}
     parents, stack = [], []  # the cell each cell stands in (a table inside a cell): text after the inner table is the outer cell's again (Codex's worktree)
     for g, (start, end) in enumerate(spans):
@@ -100,7 +104,8 @@ def apply(units, spans, measured_by_table):
         parents.append(stack[-1] if stack else -1); stack.append(g)
     for t, table_cells in measured_by_table.items():
         for g, (r, c, cs) in screen_grid(table_cells).items(): by_g[g] = (r, c, cs); table_of[g] = t
-    n = 0
+    rows = {c['g']: c.get('rs', 1) for table_cells in measured_by_table.values() for c in table_cells}  # each cell's rows as the browser's table model ends them (for pictures: a text cell keeps the tool's)
+    n, grid = 0, {}  # grid: route table -> the one measured table all its cells stand in, else None
     for u in units:
         if u.get('kind') != 'table': continue
         tables = set()  # the measured table each cell stands in; None: a cell not measured
@@ -113,13 +118,22 @@ def apply(units, spans, measured_by_table):
             r, c, cs = by_g[g]
             if (cell['r'], cell['c'], cell.get('cs', 1)) != (r, c, cs): cell.update(r=r, c=c, cs=cs); n += 1
             cell['grid'] = 'screen'; tables.add(table_of[g])
-        if len(tables) == 1 and None not in tables: u['cells'].sort(key=lambda x: (x['r'], x['c']))  # stable: cells that share a place keep their order; a table with a cell not measured, or measured in two tables (one inside the other), keeps the tool's order
+        grid[u.get('id')] = next(iter(tables)) if len(tables) == 1 and None not in tables else None
+        if grid[u.get('id')] is not None: u['cells'].sort(key=lambda x: (x['r'], x['c']))  # stable: cells that share a place keep their order; a table with a cell not measured, or measured in two tables (one inside the other), keeps the tool's order
+    for u in units:
+        cell = u.get('cell') if u.get('kind') == 'image' else None
+        if not isinstance(cell, dict) or 'table' not in cell: continue  # no route table: no place to state in one
+        g, t = bisect_left(starts, cell['byte_start']), grid.get(cell['table'])
+        if t is not None and g < len(starts) and starts[g] == cell['byte_start'] and table_of.get(g) == t: r, c, cs = by_g[g]; cell.update(r=r, c=c, rs=rows[g], cs=cs)
+        else:
+            for k in ('r', 'c', 'rs', 'cs'): cell.pop(k, None)
     return n
 
 
 JS = """() => { const tables = Array.from(document.querySelectorAll('table')); const out = [];
-  for (const el of document.querySelectorAll('[data-g]')) { const r = el.getBoundingClientRect(); const t = el.closest('table');
-    out.push({g: +el.dataset.g, table: tables.indexOf(t), row: el.parentElement ? el.parentElement.rowIndex : -1, x: r.left, w: r.width}); }
+  for (const el of document.querySelectorAll('td[data-g], th[data-g]')) { const r = el.getBoundingClientRect(); const t = el.closest('table'); const tr = el.parentElement;
+    const rest = tr && tr.parentElement && tr.parentElement.rows ? tr.parentElement.rows.length - tr.sectionRowIndex : 1;  // the rows left in its row group, where the table model ends a cell: rowspan="0" runs to there, a larger one stops there
+    out.push({g: +el.dataset.g, table: tables.indexOf(t), row: tr ? tr.rowIndex : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest)}); }
   const boxes = {}; const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
   for (let c = w.nextNode(); c; c = w.nextNode()) { const m = /^j:(\\d+\\.[01])$/.exec(c.data); if (!m) continue; let t = c.nextSibling; while (t && t.nodeType === Node.COMMENT_NODE) t = t.nextSibling;  // one character can end one gap and begin the next: its two marks stand side by side
     if (!t || t.nodeType !== Node.TEXT_NODE || !t.data.length) continue;
@@ -131,7 +145,9 @@ JS = """() => { const tables = Array.from(document.querySelectorAll('table')); c
 
 
 def measure(marked_html, browser):
-    """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window)."""
+    """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window). Only table cells are read: a source element
+    that writes the mark itself (`<div data-g="2">`) is no cell and measured nothing in its place (Codex, MEASURE_ALIAS_BASELINE); on a cell the step's
+    own mark stands first and the browser keeps the first."""
     page = browser.new_page(viewport={'width': 1400, 'height': 1000}); page.route('**/*', lambda route: route.abort())  # offline: a document's own references are never fetched (EDGAR forbids external ones; the step must not depend on that)
     try:
         page.set_content(marked_html.decode('utf-8', 'replace'), wait_until='load'); got = page.evaluate(JS)

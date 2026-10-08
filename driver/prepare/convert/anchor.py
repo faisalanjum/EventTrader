@@ -334,6 +334,7 @@ class Visible:
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
         self.picture_names = {}  # every <img>/<svg> opening tag that writes a `src`, shown or hidden: its first byte -> (the byte span of the value as written, the name as the parser reads it) — for an adapter that hands a tool the source with a name it cannot alter
         self.picture_sources = {}  # the `src` of each of those tags as the parser reads it (references decoded once), by the tag's first byte: which picture a tool's unit is, where the tool names its resource (Codex's worktree)
+        self.picture_descriptions = {}  # the `alt` and `title` each shown picture tag writes, as the parser reads them (decoded once, the first of duplicates; an empty value kept, an absent one absent), by the tag's first byte: what the source says of the picture, evidence beside it, never its text (Codex, PICTURE_CONTEXT_ORDER)
         style_cache, sheet_tokens = {}, []
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
         self.table_tags = []  # for each table of `tables`, the first byte of its start tag where the page shows the table, else None: the adapter names a table by it (edgartools_html.codes)
@@ -473,7 +474,7 @@ class Visible:
                     if name in ('img', 'svg'):
                         span = attribute_span(t, name, 'src')
                         if span is not None: self.picture_names[start] = ((start + blen(t[:span[0]]), start + blen(t[:span[1]])), attribute_value(attrs['src']))
-                        if shown: self.pictures.append((start, pos)); self.picture_sources[start] = self.picture_names[start][1] if start in self.picture_names else None
+                        if shown: self.pictures.append((start, pos)); self.picture_sources[start] = self.picture_names[start][1] if start in self.picture_names else None; self.picture_descriptions[start] = {k: attribute_value(attrs[k]) for k in ('alt', 'title') if k in attrs}
                     if shown and edge == 'atomic' and chars and not _WS.fullmatch(chars[-1]): lead = len(chars)  # white space at the start of an inline box's content: the browser drops it, so the word before the box touches its first word
                     brk = brk or (shown and block)
                     if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing

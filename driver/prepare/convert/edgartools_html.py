@@ -181,12 +181,13 @@ def with_every_picture(units, vis):
     a picture there got no unit (386 of 1,508 occurrences in the OCR review's 120 documents, 385 of them in cells; r12). A shown picture tag no unit
     stands at gets one from the scanner's inventory (`vis.pictures`: the same visibility state as the text, so a hidden copy gets none and lends no
     identity), with its own name, inserted before the first unit that starts after the tag — the tool's units keep their order, ids and content — and
-    with the cell it stands in: the scanner's innermost cell span, the table unit that holds a cell of the same source table and, where a cell of that
-    unit stands in the picture's own cell, its row and column. The same bytes shown twice are two occurrences, two units. `from: source` records it as
-    the adapter's work, not the tool's."""
+    with the cell it stands in: the scanner's innermost cell span, the table unit that holds the cells of the same source table (where one does) and, where a cell of that
+    unit stands in the picture's own cell, its row and column (the tool's grid; the screen step measures it again). The same bytes shown twice are two
+    occurrences, two units. `from: source` records it as the adapter's work, not the tool's. Every picture at a shown tag, the tool's own too, gets the
+    same: its cell, and the `alt` and `title` its tag writes (`vis.picture_descriptions`), beside it, never as its text (Codex, PICTURE_CONTEXT_ORDER)."""
     at = {u['anchor']['byte_start'] for u in units if u.get('kind') == 'image' and isinstance(u.get('anchor'), dict)}
     todo = [(a, b) for a, b in vis.pictures if a not in at]
-    if not todo: return units
+    if not vis.pictures: return units
     def start(x):
         x = x[0] if isinstance(x, list) and x else x
         return x['byte_start'] if isinstance(x, dict) and 'byte_start' in x else None
@@ -195,20 +196,24 @@ def with_every_picture(units, vis):
         i = bisect_right(starts, x) - 1
         while i >= 0 and not spans[i][0] <= x < spans[i][1]: i -= 1
         return i
-    unit_table, route_cell = {}, {}  # source table -> the table unit holding one of its cells; source cell -> (row, column) of the unit's cell in it
+    unit_table, route_cell = {}, {}  # source table -> the table unit holding its cells (None: cells of it in two units, no one table); source cell -> (row, column) of the unit's cell in it
     for t in units:
         for c in (t.get('cells') or []) if t.get('kind') == 'table' else []:
             i = cell_of(start(c.get('anchor'))) if start(c.get('anchor')) is not None else -1
-            if i >= 0: unit_table.setdefault(spans[i][2], t['id']); route_cell.setdefault(i, (c['r'], c['c']))
-    added = []
-    for a, b in todo:
-        u = {'id': f'p{a}', 'kind': 'image', 'text': '', 'src': vis.picture_sources.get(a), 'anchor': {'byte_start': a, 'byte_end_exclusive': b}, 'from': 'source'}
+            if i >= 0: k = spans[i][2]; unit_table[k] = t['id'] if unit_table.get(k, t['id']) == t['id'] else None; route_cell.setdefault(i, (c['r'], c['c']))
+    def placed(u, a):  # a picture at its shown tag `a`: the cell it stands in, and what its tag says of it
         i = cell_of(a)
         if i >= 0:
             u['cell'] = {'byte_start': spans[i][0], 'byte_end_exclusive': spans[i][1]}
-            if spans[i][2] in unit_table: u['cell']['table'] = unit_table[spans[i][2]]
-            if i in route_cell: u['cell']['r'], u['cell']['c'] = route_cell[i]
-        added.append(u)
+            if unit_table.get(spans[i][2]) is not None:
+                u['cell']['table'] = unit_table[spans[i][2]]
+                if i in route_cell: u['cell']['r'], u['cell']['c'] = route_cell[i]
+        u.update(vis.picture_descriptions.get(a, {}))
+        return u
+    shown = {a for a, _ in vis.pictures}
+    for u in units:
+        if u.get('kind') == 'image' and start(u.get('anchor')) in shown: placed(u, start(u['anchor']))
+    added = [placed({'id': f'p{a}', 'kind': 'image', 'text': '', 'src': vis.picture_sources.get(a), 'anchor': {'byte_start': a, 'byte_end_exclusive': b}, 'from': 'source'}, a) for a, b in todo]
     out = []
     for u in units:
         s0 = start(u.get('anchor'))

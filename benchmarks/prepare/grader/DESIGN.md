@@ -2325,3 +2325,29 @@ nine key route sets against the OGE build: the routes without the screen step un
 development, 35 control, 21 released), every screen-measured table row by row, every cell record, unit field and route record identical; grades
 unchanged (no target, field row or gate). **Codex's preliminary gate** (`row_order_review/`): his 120 fully measured permutations and 602 negative
 controls pass, and the same 35 reorders in the eight documents.
+
+
+## 75. A picture keeps its table place and its tag's descriptions (2026-10-08; Codex PICTURE_CONTEXT_ORDER, OCR's 769 in-cell pictures)
+
+A picture in a table cell is read in that cell's context: the row label beside it, the column heading above. The route gave a picture the cell it
+stands in (the scanner's cell span and the table unit holding that source table's cells) but a row and column only where a text cell shared its cell
+- an image-only cell had none (682 of OCR's 769 in-cell pictures) - and that pair was the tool's, copied before the screen step re-measured the table
+(P20): a picture beside text kept a row or column its own text no longer had (13: twelve rows - Autoliv 6, Robinhood 5, MicroStrategy 1 - and one
+column). The screen step now gives a picture in a cell of a route table laid out on one measured grid its own cell's measured row, column and spans -
+`r`, `c`, `rs`, `cs`, as a text cell there would have them, its rows ending where the browser's table model ends a cell (`rowspan="0"` runs to the end
+of its row group, a larger value stops there; Codex's CANDIDATE_ROWSPAN_PROBE). In any other route table (a cell not measured, cells of two grids - a
+table inside a table) it states none and keeps its cell span; a table the route does not have is never named, and a source table whose cells the tool
+gives to two route tables names no table (no first-found choice). The tool's own pictures get the same as added ones. Every shown picture carries the
+`alt` and `title` its tag writes, as written - decoded once, the first of duplicates, an empty value apart from an absent one: what the source says of
+the picture, beside it, never its text, its name or a reason not to read it. The step measures table cells only: a source element writing the step's
+own mark (`<div data-g="2">`) was measured as cell 2 (Codex's MEASURE_ALIAS_BASELINE; no approved document writes one). No setting: no saved parse
+changes. **Measured** against d34dc16b4: tests 448 + 400 (15 new: image-only cells, a picture beside a hidden or zero-width column, row-group
+extents, cell-only measurement and the descriptions in Chrome, the screen step's guards, one treatment for the tool's pictures, a source table read as
+two route tables - failing before; a table inside a table and a picture-only table as controls); Codex's root regressions v2 12/12. Every approved
+document that shows a picture (794): 5,762 pictures (4,974 the tool's), 769 in a cell; 682 image-only pictures gain the measured place and spans, the
+13 move to their own text cell's place, 21 stay; the 53 of picture-only tables keep no table and no place; 2,754 `alt` (99 empty) and 2,957 `title`
+added; every other unit, cell, field and screen fact identical; records +148,208 bytes (+0.07%), time within noise. The nine key route sets against
+the row-major build: only these fields (in the screen routes 187 pictures gain a place, 5 move to their text cell's row); grades unchanged. OCR's
+frozen checker: 1,893 -> 63 failures (v1) and 1,905 -> 108 (v2, with spans), each explained - 88 invisible zero-width cells and one CSS upper-casing in
+the checker's browser text, 19 pictures in cells over several rows, where its neighbour rule reads the first row only (their spans pass) - a check of
+these classes, not on its own a proof of every coordinate (Codex).
