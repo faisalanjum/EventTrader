@@ -2,7 +2,7 @@
 # free_runner.py's failure record; Chandra's call from mac/mac_real.py. Each reader takes a picture's bytes and comes with the settings it
 # actually runs with (the identity of its readings, computed once) and a status rule that also checks its reading's shape; worker.py
 # keeps the readings. PP-OCR and OnnxTR are separate readers, so one tool's good reading is never redone or lost with the other's failure.
-# A picture whose bytes do not decode is a PictureError (its content); a storage failure is never caught here. The optional Sonnet caller
+# Undecodable bytes or unprepared transparency are a PictureError; source-rendered inputs must be opaque. A storage failure is never caught here. The optional Sonnet caller
 # stays outside the runtime until it is production-safe (Codex r12 C3).
 import ast, functools, hashlib, importlib.metadata as md, inspect, io, json, math, os, re, tempfile, textwrap, time, types, zipfile
 from pathlib import PurePath
@@ -13,13 +13,16 @@ MAX_TOKENS = 12384                                                       # Chand
 
 
 class PictureError(ValueError):
-    """The picture's bytes do not decode as an image: its content, not a disk or model failure."""
+    """The supplied picture cannot be read as-is: invalid image content or transparency needing its source background."""
 
 
 def _image(data):  # the picture decoded from its bytes in memory, so any failure here is the picture's own - except running out of memory
     from PIL import Image
     try:
-        im = Image.open(io.BytesIO(data)); im.load(); return im.convert('RGB')
+        im = Image.open(io.BytesIO(data)); im.load()
+        if im.has_transparency_data and im.convert('RGBA').getchannel('A').getextrema() != (255, 255):
+            raise ValueError('non-opaque image requires source-context rendering before OCR')
+        return im.convert('RGB')
     except MemoryError: raise                                            # the machine, not the picture: stop (as the converter does)
     except Exception as e: raise PictureError(f'{type(e).__name__}: {str(e)[:200]}') from e
 

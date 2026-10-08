@@ -96,6 +96,52 @@ class FreeOcrGuard(Base):  # Codex r16 C1 / r17: storage failures escape the inn
             with self.assertRaises(readers.PictureError): readers._image(b.getvalue())
 
 
+class SourceRenderedImages(unittest.TestCase):
+    @staticmethod
+    def encoded(im, fmt='PNG', **kwargs):
+        stream = io.BytesIO(); im.save(stream, fmt, **kwargs); return stream.getvalue()
+
+    def test_nonopaque_bytes_cannot_silently_discard_their_background(self):
+        rgba = Image.new('RGBA', (2, 1)); rgba.putdata([(0, 0, 0, 0), (0, 0, 0, 255)])
+        la = Image.new('LA', (2, 1)); la.putdata([(100, 0), (200, 255)])
+        palette = Image.new('P', (2, 1)); palette.putpalette([0, 0, 0, 0, 0, 255] + [0] * 762); palette.putdata([0, 1])
+        rgb = Image.new('RGB', (2, 1)); rgb.putdata([(1, 2, 3), (4, 5, 6)])
+        gray = Image.new('L', (2, 1)); gray.putdata([64, 128])
+        cases = {
+            'RGBA': self.encoded(rgba), 'LA': self.encoded(la),
+            'palette key': self.encoded(palette, transparency=0),
+            'palette partial': self.encoded(palette, transparency=bytes([128, 255])),
+            'RGB key': self.encoded(rgb, transparency=(1, 2, 3)),
+            'gray key': self.encoded(gray, transparency=64),
+            'GIF key': self.encoded(palette, fmt='GIF', transparency=0, optimize=False),
+        }
+        for name, data in cases.items():
+            with self.subTest(name=name), self.assertRaisesRegex(readers.PictureError, 'source'):
+                readers._image(data)
+
+    def test_opaque_pixels_stay_identical_including_unused_transparency(self):
+        rgb = Image.new('RGB', (2, 1)); rgb.putdata([(1, 2, 3), (4, 5, 6)])
+        rgba = Image.new('RGBA', (2, 1)); rgba.putdata([(1, 2, 3, 255), (4, 5, 6, 255)])
+        palette = Image.new('P', (2, 1)); palette.putpalette([0, 0, 0, 1, 2, 3, 4, 5, 6] + [0] * 759); palette.putdata([1, 2])
+        cases = {
+            'RGB': self.encoded(rgb), 'RGBA opaque': self.encoded(rgba),
+            'unused RGB key': self.encoded(rgb, transparency=(99, 98, 97)),
+            'unused palette key': self.encoded(palette, transparency=0),
+            'unused GIF key': self.encoded(palette, fmt='GIF', transparency=0, optimize=False),
+        }
+        for name, data in cases.items():
+            with self.subTest(name=name):
+                got = readers._image(data)
+                self.assertEqual((got.mode, got.size, list(got.getdata())), ('RGB', (2, 1), [(1, 2, 3), (4, 5, 6)]))
+
+    def test_explicitly_prepared_pixels_keep_the_chosen_source_background(self):
+        foreground = Image.new('RGBA', (2, 1)); foreground.putdata([(0, 0, 0, 0), (0, 0, 0, 255)])
+        for background in ((255, 255, 255), (24, 48, 96)):
+            with self.subTest(background=background):
+                prepared = Image.alpha_composite(Image.new('RGBA', (2, 1), background + (255,)), foreground).convert('RGB')
+                self.assertEqual(list(readers._image(self.encoded(prepared)).getdata()), [background, (0, 0, 0)])
+
+
 class Fingerprints(Base):
     def test_code_identity_ignores_comments_and_docstrings_not_code(self):
         def cid(src, n):
