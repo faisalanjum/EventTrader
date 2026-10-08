@@ -541,6 +541,7 @@ class Visible:
             out, prev = seq[:0], 0
             for (i, _, _), x in zip(keep, fill): out += seq[prev:i]; out.append(x); prev = i
             return out + seq[prev:]
+        self.reading_breaks = frozenset(i + n for n, (i, _, _) in enumerate(keep))  # redline contract separators in self.text, never layout gaps
         if keep: chars, starts, ends, struck_chars = spliced(chars, ' ' * len(keep)), spliced(starts, [m[1] for m in keep]), spliced(ends, [m[2] for m in keep]), spliced(struck_chars, [0] * len(keep))
         for r in (r for rs in marks.values() for r in rs if 'href' in r): r['whole'] = False  # never closed: it runs to wherever the parser ends it
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars

@@ -8,9 +8,11 @@ from itertools import accumulate
 import re
 import time
 from dataclasses import asdict
+from types import SimpleNamespace
 from urllib.parse import quote, unquote
 
 from driver.prepare.convert import anchor
+from driver.prepare.compare import _CF
 from driver.prepare.get.acquire import StorageError
 
 NAME = 'edgartools-html'  # the tool's heading nodes nested inside paragraphs are kept as headings
@@ -18,6 +20,13 @@ KIND = {'HeadingNode': 'heading', 'ParagraphNode': 'text', 'TextNode': 'text', '
 BRANCH = ('DocumentNode', 'ContainerNode', 'SectionNode', 'ListNode')
 BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode', 'ImageNode')  # children that make their parent a branch; a picture has no text to merge into a run: flattened with its paragraph it was lost (Codex's worktree)
 TABLE = 'data-prepare-table'  # the attribute that carries a table's code (`codes`) through the tool to its table node
+_NO_FORMAT = str.maketrans('', '', _CF)
+
+
+def _heading_boundary(text, cut):
+    """A partial style claim needs whitespace; lost layout gaps are proved later."""
+    left, right = text[:cut].translate(_NO_FORMAT), text[cut:].translate(_NO_FORMAT)
+    return not left or not right or left[-1].isspace() or right[0].isspace()
 
 
 def dump(node):
@@ -50,9 +59,16 @@ def dump(node):
     text = node.text() if callable(getattr(node, 'text', None)) else getattr(node, 'text', '')
     heads = [k for k in kids if type(k).__name__ == 'HeadingNode']
     if heads:  # the tool's heading claim inside a paragraph: kept when its text is the paragraph's start or end (the parser's own text, no new joins)
+        nonempty = [k for k in kids if (k.text() or '').strip()]
         ht = (heads[0].text() or '').strip(); pt = (text or '').strip()
-        if ht and pt.startswith(ht): d['heading'] = dict(dump(heads[0]), text=ht); d['rest'] = pt[len(ht):].strip(); d['order'] = 'head_first'
-        elif ht and pt.endswith(ht): d['heading'] = dict(dump(heads[0]), text=ht); d['rest'] = pt[:-len(ht)].strip(); d['order'] = 'head_last'
+        if ht and heads[0] is nonempty[0] and pt.startswith(ht):
+            d['heading' if _heading_boundary(pt, len(ht)) else 'pending_heading'] = dict(dump(heads[0]), text=ht)
+            d['rest'] = pt[len(ht):].strip(); d['order'] = 'head_first'
+            if len(nonempty) > 1: d['heading_gap'] = bool(getattr(nonempty[1], '_prepare_left_gap', False))
+        elif ht and heads[0] is nonempty[-1] and pt.endswith(ht):
+            d['heading' if _heading_boundary(pt, len(pt)-len(ht)) else 'pending_heading'] = dict(dump(heads[0]), text=ht)
+            d['rest'] = pt[:-len(ht)].strip(); d['order'] = 'head_last'
+            d['heading_gap'] = bool(getattr(heads[0], '_prepare_left_gap', False))
     d['text'] = text or ''
     for k in ('level', 'src', 'href'):
         if getattr(node, k, None) is not None: d[k] = getattr(node, k)
@@ -127,6 +143,11 @@ def to_units(tree, codes=None):
             if n.get('level') is not None: u['level'] = n['level']
             if n.get('native') is not None: u['native_heading'] = n['native']  # (only a heading's dump carries it)
             if n.get('links'): u['links'] = [{'text': l['text'], 'href': l['href'], 'to': None} for l in n['links']]
+            if n.get('pending_heading'):
+                first = n['order'] == 'head_first'
+                u['_heading'] = {'first': first, 'claim': n['pending_heading'],
+                                 'gap': n.get('heading_gap', False),
+                                 'cut': len(anchor.squash(n['pending_heading']['text'] if first else n['rest']))}
             units.append(u)
     walk(tree)
     return units
@@ -137,7 +158,9 @@ _BR = re.compile(rb'</?br(?=[\s/>])', re.I)
 
 def split_lines(raw, units, vis=None):
     vis = anchor.Visible(raw) if vis is None else vis
-    if not vis.certain: return units
+    if not vis.certain:
+        for u in units: u.pop('_heading', None)
+        return units
     # Scanner-emitted spaces whose original token is <br>: hidden tags,
     # comments and attribute strings never enter this inventory.
     breaks = sorted({s for c, s, e in zip(vis.text, vis.starts, vis.ends)
@@ -146,6 +169,7 @@ def split_lines(raw, units, vis=None):
     referenced |= {link['to'] for u in units for link in u.get('links') or [] if link.get('to')}
     out = []
     for unit in units:
+        pending = unit.pop('_heading', None)  # never publish an unproved split
         a, text = unit.get('anchor'), unit.get('text', '')
         if unit.get('kind') in ('table', 'image') or unit.get('id') in referenced or unit.get('links') or not text or not isinstance(a, dict) or 'byte_start' not in a:
             out.append(unit); continue
@@ -153,7 +177,14 @@ def split_lines(raw, units, vis=None):
         if anchor.squash(text) != vis.flat[lo:hi]:
             out.append(unit); continue
         left, right = bisect_left(breaks, a['byte_start']), bisect_left(breaks, a['byte_end_exclusive'])
-        cuts = sorted({bisect_left(vis.s, b) for b in breaks[left:right]} - {lo, hi})
+        cuts = {bisect_left(vis.s, b) for b in breaks[left:right]} - {lo, hi}
+        heading_cut = lo + pending['cut'] if pending else None
+        # The native terminal reader can erase a real BR/block/spacer boundary.
+        # Only the matched parent's exact source occurrence may restore it.
+        if heading_cut is not None and lo < heading_cut < hi and (pending.get('gap') or any(vis.text[i].isspace() and i not in vis.reading_breaks for i in range(vis.idx[heading_cut-1]+1, vis.idx[heading_cut]))):
+            cuts.add(heading_cut)
+        else: heading_cut = None
+        cuts = sorted(cuts)
         if not cuts:
             out.append(unit); continue
         idx = [i for i, c in enumerate(text) if not anchor._WS.match(c)]
@@ -164,6 +195,10 @@ def split_lines(raw, units, vis=None):
             # Every removed field is indexed into the old text; existing downstream
             # steps recompute them from this slice and its unchanged source bytes.
             for key in ('struck', 'struck_at', 'joins', '_order'): piece.pop(key, None)
+            if heading_cut is not None and (end <= heading_cut if pending['first'] else start >= heading_cut):
+                piece['kind'] = 'heading'
+                if pending['claim'].get('level') is not None: piece['level'] = pending['claim']['level']
+                if pending['claim'].get('native') is not None: piece['native_heading'] = pending['claim']['native']
             out.append(piece)
     return out
 
@@ -304,7 +339,7 @@ def whole_headings():
     <div> with the file number): read whole after the fact, again unless a table or picture is inside — the tool's terminal heading would swallow them (stated,
     the tool's). An inline run it takes for a heading (a bold <font> inside a sentence) keeps the tool's own reading. Codex R2-C1, R3-A; recorded here, never in
     the environment. Idempotent."""
-    from edgar.documents.nodes import ContainerNode, HeadingNode
+    from edgar.documents.nodes import ContainerNode, HeadingNode, TextNode, _has_left_gap
     from edgar.documents.strategies import document_builder as db
     from edgar.documents.processors.preprocessor import HTMLPreprocessor as P
     from edgar.documents.strategies.style_parser import StyleParser
@@ -316,6 +351,7 @@ def whole_headings():
         compile_ = P._compile_patterns
         skipped, inline = db.DocumentBuilder.SKIP_ELEMENTS - {'ix:exclude'}, db.DocumentBuilder.INLINE_ELEMENTS | {'ix:exclude'}
         parse_style, clear_styles = StyleParser.parse, get_cache_manager().style_cache.clear
+        apply_style, read_length = StyleParser._apply_property, StyleParser._parse_length
     except AttributeError as exc:
         raise ImportError("required EdgarTools preparation hooks are unavailable") from exc
     def line(self, element, style):  # a block the tool may take for one line of heading: not inline by tag, not laid out inline, not a table or list part, nothing but inline runs in it, no table or picture under it
@@ -328,6 +364,18 @@ def whole_headings():
         finally: element.tag = kept
     def runs(self, element):  # nothing below but inline text runs — inline by tag, an inline-XBRL fact, or laid out inline by its own style, the tool's own notions; a link or a picture keeps the tool's traversal (as for inline facts)
         return all(not isinstance(d.tag, str) or d.tag.lower() not in ('a', 'img') and (d.tag.lower() in self.INLINE_ELEMENTS or d.tag.lower().startswith('ix:') or getattr(self._extract_style(d), 'display', None) in ('inline', 'inline-block')) for d in element.iterdescendants())
+    def left_gap(self, element):
+        # Use the existing CSS cascade and native length/box reader. Unknown
+        # or negative spacing cannot prove a gap; never retain a stale positive.
+        parsed = self.style_parser.parse('')
+        for prop, value, _ in sorted(anchor.declarations(element.get('style', '')), key=lambda d: d[2]):
+            if prop not in ('margin', 'margin-left', 'padding', 'padding-left'): continue
+            parts = value.split()
+            if not 1 <= len(parts) <= (1 if prop.endswith('-left') else 4): return None
+            lengths = [read_length(self.style_parser, p) for p in parts]
+            if any(n is None or n < 0 or n != 0 and anchor._number(p) for p, n in zip(parts, lengths)): return None
+            apply_style(self.style_parser, parsed, prop, value)
+        return _has_left_gap(SimpleNamespace(style=parsed))
     def creating(self, element, style):
         tag = element.tag.lower() if isinstance(element.tag, str) else ''
         if tag in self.INLINE_ELEMENTS and any(d.tag == 'table' for d in element.iterdescendants()):
@@ -342,6 +390,21 @@ def whole_headings():
         if isinstance(node, HeadingNode) and line(self, element, style): node.content = whole(self, element)  # (b): every heading the tool made from a block, read whole
         if tag == 'table' and type(node).__name__ == 'TableNode' and element.get(TABLE): node.set_metadata(TABLE, element.get(TABLE))  # the table's code (named), kept in the tool's own metadata for dump (A3)
         if inline and not whole_run and getattr(node, 'metadata', {}).get('inline_via_css'): node = ContainerNode(tag_name=element.tag, style=style)  # blocks below: the tool's own fallback for an inline-laid block, each child walked — nothing dropped
+        if isinstance(node, (TextNode, HeadingNode)) and isinstance(node.content, str):
+            # A terminal wrapper hides its descendants from ParagraphNode's
+            # own gap check. Keep this private claim only for an anchored
+            # heading seam, without changing the node's text or own Style.
+            first = next((t for t in element.xpath('.//text()') if str(t).strip()), None) if len(element) else None
+            parent = first.getparent() if first is not None else element
+            if first is not None and first.is_tail: parent = parent.getparent()
+            gap = False
+            while parent is not None and first is not None:
+                value = left_gap(self, parent)
+                if value is None: gap = False; break
+                gap |= value
+                if parent is element: break
+                parent = parent.getparent()
+            if gap: node._prepare_left_gap = True
         return node
     def reading(self, element):
         # The tool treats inline XBRL as terminal text but its reader only walks
@@ -378,7 +441,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def version():
