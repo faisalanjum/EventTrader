@@ -2345,9 +2345,11 @@ changes. **Measured** against d34dc16b4: tests 448 + 400 (15 new: image-only cel
 extents, cell-only measurement and the descriptions in Chrome, the screen step's guards, one treatment for the tool's pictures, a source table read as
 two route tables - failing before; a table inside a table and a picture-only table as controls); Codex's root regressions v2 12/12. Every approved
 document that shows a picture (794): 5,762 pictures (4,974 the tool's), 769 in a cell; 682 image-only pictures gain the measured place and spans, the
-13 move to their own text cell's place, 21 stay; the 53 of picture-only tables keep no table and no place; 2,754 `alt` (99 empty) and 2,957 `title`
+13 move to their own text cell's place, 21 stay; the 53 picture occurrences with no route table (22 documents) keep no table and no place; 2,754 `alt` (99 empty) and 2,957 `title`
 added; every other unit, cell, field and screen fact identical; records +148,208 bytes (+0.07%), time within noise. The nine key route sets against
 the row-major build: only these fields (in the screen routes 187 pictures gain a place, 5 move to their text cell's row); grades unchanged. OCR's
 frozen checker: 1,893 -> 63 failures (v1) and 1,905 -> 108 (v2, with spans), each explained - 88 invisible zero-width cells and one CSS upper-casing in
 the checker's browser text, 19 pictures in cells over several rows, where its neighbour rule reads the first row only (their spans pass) - a check of
-these classes, not on its own a proof of every coordinate (Codex).
+these classes, not on its own a proof of every coordinate (Codex). **Gate** (Codex, `prepare_context_20261008/PICTURE_GATE.md`): PASS on
+`d794689`; OCR's frozen v3.2 reference (`picture_oracle/FROZEN_V3_2.json`, unmarked originals in Chromium): 772 in-cell occurrences = 719 exact
+row, column and spans + 53 source-only, 1,102 image records and descriptions exact, no unexplained finding.
