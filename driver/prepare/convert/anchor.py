@@ -334,8 +334,12 @@ class Visible:
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
         self.picture_names = {}  # every <img>/<svg> opening tag that writes a `src`, shown or hidden: its first byte -> (the byte span of the value as written, the name as the parser reads it) — for an adapter that hands a tool the source with a name it cannot alter
         self.picture_sources = {}  # the `src` of each of those tags as the parser reads it (references decoded once), by the tag's first byte: which picture a tool's unit is, where the tool names its resource (Codex's worktree)
+        self.links = []  # every <a href> start tag the parser sees (none in a comment, a raw body or a template), in order: {'start', 'tag_end', 'href' (as the parser reads it: decoded once, nothing trimmed), 'hidden' (it stands in a removed subtree: nothing of it shows), 'end' (where the element ends; None: never), 'whole' (closed by its own </a>, no <a> opened inside it, not standing in a table outside a cell: the page reads it as written)} (Codex HREF_DESIGN_REVIEW)
+        self.ids, self.names = {}, {}  # what a fragment can name: every id and every <a name>, by value (decoded once) -> [{'start', 'end'}] in document order, hidden ones too
+        self.base = None  # the first <base href>, hidden or not (a template's is never read): {'start', 'end', 'href'}
         self.picture_descriptions = {}  # the `alt` and `title` each shown picture tag writes, as the parser reads them (decoded once, the first of duplicates; an empty value kept, an absent one absent), by the tag's first byte: what the source says of the picture, evidence beside it, never its text (Codex, PICTURE_CONTEXT_ORDER)
         style_cache, sheet_tokens = {}, []
+        marks = {}  # id(open element) -> its link and target records, which get their end when it ends
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
         self.table_tags = []  # for each table of `tables`, the first byte of its start tag where the page shows the table, else None: the adapter names a table by it (edgartools_html.codes)
         lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
@@ -358,9 +362,13 @@ class Visible:
 
         simple = lambda i: not (stack[i].block or stack[i].edge or stack[i].declares or stack[i].strikes)  # an inline element in the line that neither hides, strikes nor forms a box of its own: the same wherever the browser opens it again
 
-        def leave(k):
-            """The open elements from k on end here. Returns whether a visible block ends (a break) and whether a box ends that must have its line to itself."""
+        def leave(k, closing=None):
+            """The open elements from k on end here (`closing`: the end tag that ends them, if one does). Returns whether a visible block ends (a break) and whether a box ends that must have its line to itself."""
             nonlocal veil, touch, struck_computed
+            for f in stack[k:]:
+                for rec in marks.pop(id(f), ()):
+                    rec['end'] = start
+                    if 'href' in rec and not (f is stack[k] and closing == 'a'): rec['whole'] = False  # ended by another tag: the browser opens the link again after it, or has cut it short
             for d in range(len(stack) - 1, k - 1, -1):  # the tables, rows and cells that end here, innermost first
                 if d in spans: spans.pop(d)[1] = start
                 if stack[d].name == 'table': grid.pop()
@@ -381,7 +389,8 @@ class Visible:
             if kind == 'style' or t[:5].lower() == '<link': sheet_tokens.append((t, kind, literal))  # read for stylesheets after the scan: a comment is never one
             if kind:  # an element taken whole, a raw body the page never renders, or a construct that never ends: certain only while nothing can show it or move it — a plain opening tag, a plain style, no template, no `display` from the author (R17, R18-C1, Chrome)
                 if not literal:
-                    m = _TAG.match(t); decls, plain = read(m.group(), kind)[1:] if m else ((), False)
+                    m = _TAG.match(t); attrs, decls, plain = read(m.group(), kind) if m else ({}, (), False)
+                    if 'id' in attrs: self.ids.setdefault(attribute_value(attrs['id']), []).append({'start': start, 'end': None})  # its own id is a target (Codex, TARGET_SPECIALS); its body is not read, so it holds no unit
                     if not plain or kind == 'template' or resolve(decls, 'display', _DISPLAY.__contains__) not in (None, 'none'): computed = True
                 if kind == 'script': computed = True  # a script is not run: what it would write into the page or change in it is not followed
                 continue
@@ -415,6 +424,7 @@ class Visible:
                 gone = disp == 'none' or (ua_hidden and not disp) or name == 'ix:hidden'
                 if disp is None and name == 'textarea': disp = 'inline-block'  # the browser's own sheet: a <textarea> is an inline box that holds its text (HTML rendering, form controls); one the author gives a display is not followed (as `contents` it is not rendered at all)
                 if name == 'details' and 'open' not in attrs and not t.startswith('</'): computed = True  # a closed <details> shows its summary only: not followed here
+                if name in ('html', 'head', 'body') and 'id' in attrs and not t.startswith('</'): self.ids.setdefault(attribute_value(attrs['id']), []).append({'start': start, 'end': None})
                 if name in ('html', 'head', 'body'):  # the document's own elements: the parser keeps one of each wherever their tags stand, and merges a repeated tag's attributes into the first — none opens, closes or breaks anything here, and one that hides, strikes or is given a display other than block is not followed
                     if not t.startswith('</') and (dim or ua_hidden or v in ('hidden', 'collapse') or disp not in (None, 'block')): computed = True  # (a body laid out as a flex row or a table sets its children as that box does; a repeated tag's `hidden` is merged without its style)
                     if not t.startswith('</') and (name in STRUCK if deco in (None, 'default') else deco): struck_computed = True
@@ -433,7 +443,7 @@ class Visible:
                             if any(f.name in barrier for f in stack[i + 1:]): computed = True  # across a nested table, an open block, list or cell, or a </form>, which closes nothing inside it: not followed
                             elif not part and not all(stack[j].name in _ENDED or simple(j) for j in range(i + 1, len(stack))): computed = True  # an element closed on the way that hides, strikes or forms a box of its own: the browser opens a formatting element again for what follows — which ones is not followed (a paragraph or list item ended on the way stays ended)
                             if any(f.name in STRUCK for f in stack[i + 1:]): struck_computed = True  # an unclosed <s>/<del>/<strike>: the browser reopens it in the next block (formatting elements); not followed here
-                        brk, lone = leave(i)
+                        brk, lone = leave(i, name)
                 else:
                     eat = name in _EATS
                     if name in _ONCE and any(f.name in (_HEADINGS if name in _HEADINGS else (name,)) for f in stack): computed = True  # opened inside its like: the parser closes the open one first, or drops the tag — not followed
@@ -477,10 +487,18 @@ class Visible:
                         if shown: self.pictures.append((start, pos)); self.picture_sources[start] = self.picture_names[start][1] if start in self.picture_names else None; self.picture_descriptions[start] = {k: attribute_value(attrs[k]) for k in ('alt', 'title') if k in attrs}
                     if shown and edge == 'atomic' and chars and not _WS.fullmatch(chars[-1]): lead = len(chars)  # white space at the start of an inline box's content: the browser drops it, so the word before the box touches its first word
                     brk = brk or (shown and block)
+                    recs = []  # its link and target records
+                    if 'id' in attrs: recs.append({'start': start, 'end': pos if name in VOID else None}); self.ids.setdefault(attribute_value(attrs['id']), []).append(recs[-1])
+                    if name == 'a':
+                        for r in (r for rs in marks.values() for r in rs if 'href' in r): r['whole'] = False  # an <a> inside an open one: the parser ends that one here
+                        if 'name' in attrs: recs.append({'start': start, 'end': None}); self.names.setdefault(attribute_value(attrs['name']), []).append(recs[-1])
+                        if 'href' in attrs: recs.append({'start': start, 'tag_end': pos, 'href': attribute_value(attrs['href']), 'hidden': off, 'end': None, 'whole': not (top and top.inside in _TABLE)}); self.links.append(recs[-1])  # standing in a table outside any cell, the parser moves it out
+                    if name == 'base' and 'href' in attrs and self.base is None: self.base = {'start': start, 'end': pos, 'href': attribute_value(attrs['href'])}
                     if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing
                         inside = name if name in _PARTS or name == 'table' else top.inside if top else None  # the innermost table, row group, row or cell this element stands in
                         pre = white in _KEPT or (white in (None, 'inherit', 'unset') and ((white is None and name in _PRE) or (bool(top) and top.pre and name != 'table')))  # outside standards mode the browser's own sheet resets white-space at a table: what a table inherits is not taken as kept
                         stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre, (bool(top) and top.loose) or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
+                        if recs: marks[id(stack[-1])] = recs  # they end with it
                         if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
                         if name == 'table': self.tables.append([]); self.table_tags.append(start if shown else None); grid.append([self.tables[-1], None])
                         elif grid and name in ('tr', 'thead', 'tbody', 'tfoot'): grid[-1][1] = None  # a row or a group of rows starts: the row before it has ended
@@ -524,6 +542,7 @@ class Visible:
             for (i, _, _), x in zip(keep, fill): out += seq[prev:i]; out.append(x); prev = i
             return out + seq[prev:]
         if keep: chars, starts, ends, struck_chars = spliced(chars, ' ' * len(keep)), spliced(starts, [m[1] for m in keep]), spliced(ends, [m[2] for m in keep]), spliced(struck_chars, [0] * len(keep))
+        for r in (r for rs in marks.values() for r in rs if 'href' in r): r['whole'] = False  # never closed: it runs to wherever the parser ends it
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
         sheets = stylesheets(sheet_tokens)
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)

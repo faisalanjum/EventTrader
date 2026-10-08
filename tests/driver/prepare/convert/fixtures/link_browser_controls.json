@@ -1,0 +1,960 @@
+{
+ "what": "Chromium's own reading of 58 synthetic link cases, recorded by Codex (prepare_work/prepare_context_20261008: LINK_BROWSER_ORACLE.json - getAttribute('href'), textContent, innerText of every a[href], every [id]/a[name] element, document.baseURI - and LINK_URL_CONTROLS.json / LINK_URL_FOLLOWUP.json / LINK_URL_SERIALIZATION.json - the element :target selects after following the link, requests blocked). Copied field for field; the expected values of the tests, never the candidate's. Six more from href_draft_review/TARGET_SPECIALS.json: the element :target selects (or the top of the document), links not recorded (links: null).",
+ "sources_sha256": {
+  "LINK_BROWSER_ORACLE.json": "adaff6c4b87215d04677f6f8adbcabb111e2a4ff86754ce808fe34ddf22f8cb4",
+  "LINK_URL_CONTROLS.json": "80d14d0896af8c60ab0e378a6f1a5d817de858c97c790db2051b38b7fb562b09",
+  "LINK_URL_FOLLOWUP.json": "208dda8a0959f5c41a6c87e8361134e63a8458b8a8a2a5f952145d67a03c630a",
+  "LINK_URL_SERIALIZATION.json": "085f8683511596980d1ef3003dd0d0806d4c115a43e8fbb57a53ce58ba079b36",
+  "href_draft_review/TARGET_SPECIALS.json": "404278bd701b989ab1241a6d5f8749c473f8e51c9f8195d3c76d3ba75440893f"
+ },
+ "cases": {
+  "prose": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p>Revenue<a href=\"#n1\"><sup>(1)</sup></a> was $25.</p><p id=\"n1\">(1) Excludes tax.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n1",
+     "text": "(1)",
+     "shown": "(1)"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n1",
+     "name": null,
+     "text": "(1) Excludes tax."
+    }
+   ]
+  },
+  "cell": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><table><tr><td>25<a href=\"#n1\">(1)</a></td></tr></table><p id=\"n1\">Excludes tax.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n1",
+     "text": "(1)",
+     "shown": "(1)"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n1",
+     "name": null,
+     "text": "Excludes tax."
+    }
+   ]
+  },
+  "heading": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><h2><a href=\"#n\">Revenue</a></h2><p id=\"n\">Policy.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Revenue",
+     "shown": "Revenue"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Policy."
+    }
+   ]
+  },
+  "image": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#n\"><img src=\"s.png\" alt=\"Profit &amp; loss\" title=\"USD millions\"></a><p id=\"n\">Chart note.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "",
+     "shown": ""
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Chart note."
+    }
+   ]
+  },
+  "two_links_one_unit": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p><a href=\"#a\">Note</a> and <a href=\"#b\">Note</a>.</p><p id=\"a\">2024.</p><p id=\"b\">2025.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#a",
+     "text": "Note",
+     "shown": "Note"
+    },
+    {
+     "href": "#b",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "a",
+     "name": null,
+     "text": "2024."
+    },
+    {
+     "tag": "p",
+     "id": "b",
+     "name": null,
+     "text": "2025."
+    }
+   ]
+  },
+  "same_text_plain_first": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p>Note</p><p><a href=\"#n\">Note</a></p><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "duplicate_id": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p><a href=\"#n\">Note</a></p><p id=\"n\">First.</p><p id=\"n\">Second.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "First."
+    },
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Second."
+    }
+   ]
+  },
+  "id_name_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a name=\"n\">Named.</a><p><a href=\"#n\">Note</a></p><p id=\"n\">Identified.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "a",
+     "id": null,
+     "name": "n",
+     "text": "Named."
+    },
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Identified."
+    }
+   ]
+  },
+  "empty_target": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#n\">Note</a><a id=\"n\"></a><p>After anchor.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "a",
+     "id": "n",
+     "name": null,
+     "text": ""
+    }
+   ]
+  },
+  "container_target": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#n\">Policy</a><div id=\"n\"><h2>Policy</h2><p>Two paragraphs.</p><p>Second.</p></div></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Policy",
+     "shown": "Policy"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "div",
+     "id": "n",
+     "name": null,
+     "text": "PolicyTwo paragraphs.Second."
+    }
+   ]
+  },
+  "percent_encoded": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#caf%C3%A9\">Note</a><p id=\"caf&#233;\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#caf%C3%A9",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "café",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "entity_decode_once": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a&amp;amp;b\">Note</a><p id=\"a&amp;amp;b\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#a&amp;b",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "a&amp;b",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "duplicate_href": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#right\" href=\"#wrong\">Note</a><p id=\"right\">Right.</p><p id=\"wrong\">Wrong.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#right",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "right",
+     "name": null,
+     "text": "Right."
+    },
+    {
+     "tag": "p",
+     "id": "wrong",
+     "name": null,
+     "text": "Wrong."
+    }
+   ]
+  },
+  "relative": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"ex99.htm#n\">Agreement</a></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "ex99.htm#n",
+     "text": "Agreement",
+     "shown": "Agreement"
+    }
+   ],
+   "targets": []
+  },
+  "base": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><base href=\"https://elsewhere.invalid/other.htm\"><a href=\"#n\">Note</a><p id=\"n\">Local.</p></body></html>",
+   "base": "https://elsewhere.invalid/other.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Local."
+    }
+   ]
+  },
+  "template_base": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><template><base href=\"https://elsewhere.invalid/other.htm\"><a href=\"#n\">Inert</a></template><a href=\"#n\">Note</a><p id=\"n\">Local.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Local."
+    }
+   ]
+  },
+  "comment": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><!--<a href=\"#wrong\">fake</a>--><a href=\"#n\">Real</a><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Real",
+     "shown": "Real"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "hidden_origin": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><div style=\"display:none\"><a href=\"#n\">Hidden</a></div><a href=\"#n\">Shown</a><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Hidden",
+     "shown": "Hidden"
+    },
+    {
+     "href": "#n",
+     "text": "Shown",
+     "shown": "Shown"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "hidden_target": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#n\">Note</a><p id=\"n\" style=\"display:none\">Hidden.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Hidden."
+    }
+   ]
+  },
+  "reopened_a": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p><a href=\"#n\">Before</p>After</a><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Before",
+     "shown": "Before"
+    },
+    {
+     "href": "#n",
+     "text": "After",
+     "shown": "After"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "nested_a": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a\">First<a href=\"#b\">Second</a>Tail</a><p id=\"a\">A</p><p id=\"b\">B</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#a",
+     "text": "First",
+     "shown": "First"
+    },
+    {
+     "href": "#b",
+     "text": "Second",
+     "shown": "Second"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "a",
+     "name": null,
+     "text": "A"
+    },
+    {
+     "tag": "p",
+     "id": "b",
+     "name": null,
+     "text": "B"
+    }
+   ]
+  },
+  "fostered_a": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><table><a href=\"#n\"><tr><td>25</td></tr></a></table><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "",
+     "shown": ""
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "link_container": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#n\"><div>First</div><div>Second</div></a><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "FirstSecond",
+     "shown": "First\nSecond"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "foreign": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><svg xmlns=\"http://www.w3.org/2000/svg\"><a href=\"#n\"><text>Label</text></a></svg><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Label",
+     "shown": null
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "source_whitespace": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"  #n&#10;\">Note</a><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "  #n\n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "rawtext": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><script type=\"text/plain\"><a href=\"#fake\">Fake</a></script><a href=\"#n\">Note</a><p id=\"n\">Target.</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Note",
+     "shown": "Note"
+    }
+   ],
+   "targets": [
+    {
+     "tag": "p",
+     "id": "n",
+     "name": null,
+     "text": "Target."
+    }
+   ]
+  },
+  "internal_tab": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a&#9;b\">Link</a><p id=\"ab\">Correct</p><p id=\"a&#9;b\">Other</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#a\tb",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "ab",
+    "name": null,
+    "text": "Correct"
+   }
+  },
+  "internal_newline": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a&#10;b\">Link</a><p id=\"ab\">Correct</p><p id=\"a&#10;b\">Other</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#a\nb",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "ab",
+    "name": null,
+    "text": "Correct"
+   }
+  },
+  "non_ascii_space": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"&#160;#n\">Link</a><p id=\"n\">Local</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": " #n",
+     "text": "Link"
+    }
+   ],
+   "target": "not same document"
+  },
+  "encoded_fragment_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x%20y\">Link</a><p id=\"x%20y\">Encoded ID</p><p id=\"x y\">Decoded ID</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#x%20y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "x%20y",
+    "name": null,
+    "text": "Encoded ID"
+   }
+  },
+  "bad_utf8_fragment": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#%FF\">Link</a><p id=\"&#xfffd;\">Replacement ID</p><p id=\"%FF\">Literal ID</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#%FF",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "%FF",
+    "name": null,
+    "text": "Literal ID"
+   }
+  },
+  "double_encoded_fragment": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x%2520y\">Link</a><p id=\"x%20y\">One decode</p><p id=\"x y\">Two decodes</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#x%2520y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "x%20y",
+    "name": null,
+    "text": "One decode"
+   }
+  },
+  "empty_base": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><base href=\"\"><a href=\"#n\">Link</a><p id=\"n\">Local</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "n",
+    "name": null,
+    "text": "Local"
+   }
+  },
+  "hidden_base": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><base style=\"display:none\" href=\"https://elsewhere.invalid/other.htm\"><a href=\"#n\">Link</a><p id=\"n\">Local</p></body></html>",
+   "base": "https://elsewhere.invalid/other.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Link"
+    }
+   ],
+   "target": "not same document"
+  },
+  "formatting_reopens_link": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><b><a href=\"#n\">Before</b>After</a><p id=\"n\">Target</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "Before"
+    },
+    {
+     "href": "#n",
+     "text": "After"
+    }
+   ],
+   "target": {
+    "id": "n",
+    "name": null,
+    "text": "Target"
+   }
+  },
+  "link_across_br": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p><a href=\"#n\">First<br>Second</a></p><p id=\"n\">Target</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#n",
+     "text": "FirstSecond"
+    }
+   ],
+   "target": {
+    "id": "n",
+    "name": null,
+    "text": "Target"
+   }
+  },
+  "raw_name_vs_decoded_id": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x%20y\">Link</a><a name=\"x%20y\">Raw name</a><p id=\"x y\">Decoded ID</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#x%20y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "",
+    "name": "x%20y",
+    "text": "Raw name"
+   }
+  },
+  "raw_id_vs_decoded_name": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x%20y\">Link</a><p id=\"x%20y\">Raw ID</p><a name=\"x y\">Decoded name</a></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#x%20y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "x%20y",
+    "name": null,
+    "text": "Raw ID"
+   }
+  },
+  "raw_name_vs_decoded_name": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x%20y\">Link</a><a name=\"x%20y\">Raw name</a><a name=\"x y\">Decoded name</a></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#x%20y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "",
+    "name": "x%20y",
+    "text": "Raw name"
+   }
+  },
+  "bad_utf8_without_literal": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#%FF\">Link</a><p id=\"&#xfffd;\">Replacement ID</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#%FF",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "�",
+    "name": null,
+    "text": "Replacement ID"
+   }
+  },
+  "percent_one_level": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x%2520y\">Link</a><p id=\"x y\">Too far decoded</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#x%2520y",
+     "text": "Link"
+    }
+   ],
+   "target": null
+  },
+  "encoded_unicode": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#caf%C3%A9\">Link</a><p id=\"caf&#233;\">Decoded Unicode ID</p></body></html>",
+   "base": "https://prepared.invalid/filing/report.htm",
+   "links": [
+    {
+     "href": "#caf%C3%A9",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "café",
+    "name": null,
+    "text": "Decoded Unicode ID"
+   }
+  },
+  "raw_space_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x y\">Link</a><p id=\"x%20y\">Encoded</p><p id=\"x y\">Decoded</p></body></html>",
+   "links": [
+    {
+     "href": "#x y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "x%20y",
+    "name": null,
+    "text": "Encoded"
+   }
+  },
+  "raw_unicode_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#café\">Link</a><p id=\"caf%C3%A9\">Encoded</p><p id=\"café\">Decoded</p></body></html>",
+   "links": [
+    {
+     "href": "#café",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "caf%C3%A9",
+    "name": null,
+    "text": "Encoded"
+   }
+  },
+  "raw_space_name_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x y\">Link</a><a name=\"x%20y\">Encoded name</a><p id=\"x y\">Decoded id</p></body></html>",
+   "links": [
+    {
+     "href": "#x y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "",
+    "name": "x%20y",
+    "text": "Encoded name"
+   }
+  },
+  "raw_unicode_only": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#café\">Link</a><p id=\"café\">Target</p></body></html>",
+   "links": [
+    {
+     "href": "#café",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "café",
+    "name": null,
+    "text": "Target"
+   }
+  },
+  "raw_quote_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a&quot;b\">Link</a><p id=\"a%22b\">Encoded</p><p id=\"a&quot;b\">Decoded</p></body></html>",
+   "links": [
+    {
+     "href": "#a\"b",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "a%22b",
+    "name": null,
+    "text": "Encoded"
+   }
+  },
+  "raw_backtick_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a`b\">Link</a><p id=\"a%60b\">Encoded</p><p id=\"a`b\">Decoded</p></body></html>",
+   "links": [
+    {
+     "href": "#a`b",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "a%60b",
+    "name": null,
+    "text": "Encoded"
+   }
+  },
+  "raw_lt_collision": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a&lt;b\">Link</a><p id=\"a%3Cb\">Encoded</p><p id=\"a&lt;b\">Decoded</p></body></html>",
+   "links": [
+    {
+     "href": "#a<b",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "a%3Cb",
+    "name": null,
+    "text": "Encoded"
+   }
+  },
+  "raw_second_hash": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a#b\">Link</a><p id=\"a#b\">Target</p><p id=\"a%23b\">Encoded</p></body></html>",
+   "links": [
+    {
+     "href": "#a#b",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "a#b",
+    "name": null,
+    "text": "Target"
+   }
+  },
+  "raw_apostrophe": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#a'b\">Link</a><p id=\"a'b\">Target</p><p id=\"a%27b\">Encoded</p></body></html>",
+   "links": [
+    {
+     "href": "#a'b",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "a'b",
+    "name": null,
+    "text": "Target"
+   }
+  },
+  "encoded_space_control": {
+   "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><a href=\"#x%20y\">Link</a><p id=\"x%20y\">Literal</p><p id=\"x y\">Decoded</p></body></html>",
+   "links": [
+    {
+     "href": "#x%20y",
+     "text": "Link"
+    }
+   ],
+   "target": {
+    "id": "x%20y",
+    "name": null,
+    "text": "Literal"
+   }
+  },
+  "empty_id": {
+   "raw": "<!doctype html><html><head></head><body><a href=\"#\">L</a><p id=\"\">Empty</p></body></html>",
+   "links": null,
+   "target": "top of the document"
+  },
+  "empty_name": {
+   "raw": "<!doctype html><html><head></head><body><a href=\"#\">L</a><a name=\"\">Empty</a></body></html>",
+   "links": null,
+   "target": "top of the document"
+  },
+  "top_id": {
+   "raw": "<!doctype html><html><head></head><body><a href=\"#top\">L</a><p id=\"top\">Actual</p></body></html>",
+   "links": null,
+   "target": {
+    "id": "top",
+    "name": null
+   }
+  },
+  "encoded_empty_control": {
+   "raw": "<!doctype html><html><head></head><body><a href=\"#%00\">L</a><p id=\"\">Empty</p></body></html>",
+   "links": null,
+   "target": "top of the document"
+  },
+  "style_id": {
+   "raw": "<!doctype html><html><head></head><body><a href=\"#n\">L</a><style id=\"n\">p{color:black}</style><p>Text</p></body></html>",
+   "links": null,
+   "target": {
+    "id": "n",
+    "name": null
+   }
+  },
+  "title_id": {
+   "raw": "<!doctype html><html><head></head><body><a href=\"#n\">L</a><title id=\"n\">A title</title><p>Text</p></body></html>",
+   "links": null,
+   "target": {
+    "id": "n",
+    "name": null
+   }
+  }
+ }
+}

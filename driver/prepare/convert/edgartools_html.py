@@ -3,9 +3,11 @@ edgartools keeps no source positions, so the linker places every block. Under it
 dumps the parsed node tree to plain JSON (kept as the raw output); `to_units` works on that dump, so it is testable
 without the package. Shape rules only, no document-specific logic."""
 from bisect import bisect_left, bisect_right
+from itertools import accumulate
 import re
 import time
 from dataclasses import asdict
+from urllib.parse import quote, unquote
 
 from driver.prepare.convert import anchor
 from driver.prepare.get.acquire import StorageError
@@ -170,10 +172,10 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
     linked['units'] = split_lines(raw, linked['units'], vis)
     for u in linked['units']:
         if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own
-    units = with_every_picture(linked['units'], vis)
+    units = with_every_picture(linked['units'], vis); base = {'source_base': {'tag': {'byte_start': vis.base['start'], 'byte_end_exclusive': vis.base['end']}, 'href': vis.base['href']}} if vis.base else {}
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'driver/prepare/convert/edgartools_html.py',
-                      'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered']}
+                      'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered'], 'source_links': source_links(units, vis), **base}
 
 
 def with_every_picture(units, vis):
@@ -220,6 +222,70 @@ def with_every_picture(units, vis):
         while added and s0 is not None and added[0]['anchor']['byte_start'] < s0: out.append(added.pop(0))
         out.append(u)
     return out + added
+
+
+_URL_EDGES, _URL_INSIDE = ''.join(map(chr, range(0x21))), str.maketrans('', '', '\t\n\r')  # what the URL standard drops from an href: C0 controls and spaces at its ends, tabs and line ends anywhere (a no-break space is part of the path)
+_FRAGMENT_SAFE = ''.join(chr(c) for c in range(0x21, 0x7f) if chr(c) not in '"<>`')  # what the URL standard leaves as written in a fragment; a space, a quote, <, >, `, a control or any non-ASCII character it percent-encodes (UTF-8) - before the page is searched (Codex, LINK_URL_SERIALIZATION)
+
+
+def source_links(units, vis):
+    """Every <a href> the source writes, as source evidence beside the units, which it does not touch (Codex HREF_DESIGN_REVIEW, HREF_URL_REVIEW): the href
+    as written (decoded once, nothing trimmed), its opening tag, `hidden` where it stands in a removed subtree, `certain: false` where the scanner's
+    reading is not certain. Its `extent` (opening tag to its own </a>) and `owners` - every unit, table cell (by its anchor's first byte, which the
+    screen step's re-grid and sort leave as it is) or picture holding what it shows, [] for nothing shown (empty, or text the page does not show; not
+    `hidden`), `unheld` for shown characters no unit holds - only where the scan proves the element whole
+    (`vis.links`): a link the parser splits, reopens, cuts short or moves is left unresolved, never given an owner. Where it points: a same-document
+    fragment with no active <base href> names its targets as Chromium finds them - the fragment as the URL holds it (percent-encoded by the standard's
+    own set), then one UTF-8 percent-decoding; ids before
+    names; every duplicate - and the unit or cell a single target's own text all stands in, where that is exactly one (an empty anchor or a target
+    holding several units names none); any other href, and any under a base, stays as written: no URL resolution, no member guess, no fetch."""
+    items, pics = [], []  # (start, end, (unit, cell or None)) of every anchored unit and cell; pictures apart (they hold a tag, no text)
+    for u in units:
+        for x, cell in ([(c, True) for c in u.get('cells') or []] if u.get('kind') == 'table' else [(u, False)]):
+            sp = [a for a in anchor.spans(x.get('anchor')) if 'byte_start' in a]
+            (pics if u.get('kind') == 'image' else items).extend((a['byte_start'], a['byte_end_exclusive'], (u['id'], sp[0]['byte_start'] if cell else None)) for a in sp)
+    items.sort(); starts = [s for s, _, _ in items]; reach = list(accumulate((e for _, e, _ in items), max))
+    owner = lambda key: {'unit': key[0]} if key[1] is None else {'unit': key[0], 'cell': key[1]}
+
+    def held(lo, hi):  # each unit or cell holding visible characters of [lo, hi): {key: (first such character, how many)}, how many there are, how many none holds
+        chars, got, covered = vis.s[bisect_left(vis.s, lo):bisect_left(vis.s, hi)], {}, set()
+        i = bisect_right(starts, chars[-1]) - 1 if chars else -1
+        while i >= 0 and reach[i] > chars[0]:
+            s, e, key = items[i]; a, b = bisect_left(chars, s), bisect_left(chars, e)
+            if b > a: first, n = got.get(key, (chars[a], 0)); got[key] = (min(first, chars[a]), n + b - a); covered.update(range(a, b))
+            i -= 1
+        return got, len(chars), len(chars) - len(covered)
+
+    def target(t):  # the one unit or cell that holds all of a target's own text
+        if t['end'] is None: return None
+        got, n, unheld = held(t['start'], t['end'])
+        return owner(next(iter(got))) if n and not unheld and len(got) == 1 and next(iter(got.values()))[1] == n else None
+
+    def destination(href):
+        url = href.strip(_URL_EDGES).translate(_URL_INSIDE)
+        if vis.base is not None or not url.startswith('#'): return {'kind': 'as_written'}
+        frag = quote(url[1:], safe=_FRAGMENT_SAFE)  # the fragment as the URL holds it
+        if not frag: return {'kind': 'same_document', 'targets': [], 'status': 'top'}  # a bare #: the top of the page, whatever has an empty id or name
+        for key in dict.fromkeys((frag, unquote(frag, errors='replace'))):  # as the URL holds it first, then once decoded (Chromium, LINK_URL_CONTROLS)
+            for by, found in (('id', vis.ids), ('name', vis.names)):
+                if key in found:
+                    hits = found[key]
+                    return {'kind': 'same_document', 'by': by, 'targets': [t['start'] for t in hits], 'status': 'one' if len(hits) == 1 else 'several', 'owner': target(hits[0]) if len(hits) == 1 and vis.certain else None}
+        return {'kind': 'same_document', 'targets': [], 'status': 'top' if unquote(frag, errors='replace').lower() == 'top' else 'none'}
+
+    out = []
+    for l in vis.links:
+        rec = {'href': l['href'], 'tag': {'byte_start': l['start'], 'byte_end_exclusive': l['tag_end']}, **({'hidden': True} if l['hidden'] else {}), **({} if vis.certain else {'certain': False})}
+        whole = vis.certain and not l['hidden'] and l['whole'] and l['end'] is not None
+        rec['extent'] = {'byte_start': l['start'], 'byte_end_exclusive': l['end']} if whole else None
+        if whole:
+            got, _, unheld = held(l['tag_end'], l['end'])
+            found = sorted([(first, key) for key, (first, _) in got.items()] + [(s, k) for s, e, k in pics if l['tag_end'] <= s and e <= l['end']])
+            rec['owners'] = [owner(k) for _, k in found]
+            if unheld: rec['unheld'] = unheld  # shown characters of it that no unit holds (the linker left them uncovered): said, not dropped
+        else: rec['owners'] = None
+        rec['destination'] = destination(l['href']); out.append(rec)
+    return out
 
 
 def unsupported(file_id, sha256, version, status='UNSUPPORTED', error='not an HTML file'):

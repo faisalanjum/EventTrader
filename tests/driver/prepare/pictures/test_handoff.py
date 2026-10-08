@@ -92,7 +92,7 @@ class Handoff(unittest.TestCase):
             raise DeliveryError('the occurrence is not at the referenced unit')
         tag = raw[a['byte_start']:a['byte_end_exclusive']]
         if not (tag.lower().startswith(b'<img') and img['member'].encode() in tag): raise DeliveryError('the anchor is not the picture tag')
-        return dict(data=data, size=size, units=units, unit=u, raw=raw, packet=ocr['packet'], record=ocr['record'])
+        return dict(data=data, size=size, route=route, units=units, unit=u, raw=raw, packet=ocr['packet'], record=ocr['record'])   # the whole hash-checked route: every top-level field
 
     def produce(self, kind, on):
         ocr_by_bytes, deliveries, failures, owner = {}, [], [], {}
@@ -166,7 +166,7 @@ class Handoff(unittest.TestCase):
                 by = {}
                 for d, g in zip(deliveries, got): by.setdefault(d['case'], []).append((d, g))
                 for d, g in zip(deliveries, got):                           # the whole ordered document and the whole OCR output arrive
-                    self.assertEqual(g['units'], json.loads(self.route_file(d['document']['route']['path']).read_text())['units'])
+                    self.assertEqual(g['route'], json.loads(self.route_file(d['document']['route']['path']).read_text())); self.assertIs(g['units'], g['route']['units'])
                     self.assertEqual(g['packet'].split('\n')[1], g['record']['extraction_status']); self.assertEqual(g['record']['sonnet'], 'on' if on else 'off')
                 (kd, kg), = by['20p_18_0001357615-23-000123_exhibit103kbr-warrantame001.jpg']   # a long neighbour, in full
                 after = kg['units'][kd['unit_index'] + 1]
