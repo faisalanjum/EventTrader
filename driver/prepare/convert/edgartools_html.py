@@ -3,6 +3,7 @@ edgartools keeps no source positions, so the linker places every block. Under it
 dumps the parsed node tree to plain JSON (kept as the raw output); `to_units` works on that dump, so it is testable
 without the package. Shape rules only, no document-specific logic."""
 from bisect import bisect_left, bisect_right
+from copy import copy
 from itertools import accumulate
 import re
 import time
@@ -306,12 +307,15 @@ def whole_headings():
     from edgar.documents.nodes import ContainerNode, HeadingNode
     from edgar.documents.strategies import document_builder as db
     from edgar.documents.processors.preprocessor import HTMLPreprocessor as P
+    from edgar.documents.strategies.style_parser import StyleParser
+    from edgar.documents.utils import get_cache_manager
     if getattr(db.DocumentBuilder, '_whole_headings', False): return
     H, PARTS = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'), {'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col', 'ul', 'ol', 'li', 'dl', 'dt', 'dd'}
     try:
         create, read = db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text
         compile_ = P._compile_patterns
         skipped, inline = db.DocumentBuilder.SKIP_ELEMENTS - {'ix:exclude'}, db.DocumentBuilder.INLINE_ELEMENTS | {'ix:exclude'}
+        parse_style, clear_styles = StyleParser.parse, get_cache_manager().style_cache.clear
     except AttributeError as exc:
         raise ImportError("required EdgarTools preparation hooks are unavailable") from exc
     def line(self, element, style):  # a block the tool may take for one line of heading: not inline by tag, not laid out inline, not a table or list part, nothing but inline runs in it, no table or picture under it
@@ -352,6 +356,13 @@ def whole_headings():
             finally: element.tag = kept
         made = getattr(self, '_making', None)
         return whole(self, element) if made and made[0] is element else read(self, element)  # (a)
+    def independent_style(self, style_string):
+        # The native cache returns one mutable Style for every equal CSS string.
+        # The builder adds bold/italic/underline/align to it; keep those changes
+        # local to their element, on cache misses as well as hits.
+        return copy(parse_style(self, style_string))
+    clear_styles()  # once: a native caller may already have polluted old entries
+    StyleParser.parse = independent_style
     db.DocumentBuilder._create_node_for_element, db.DocumentBuilder._get_element_text = creating, reading
     def patterns(self):  # the tool's cleaner deleted every white space before . , ; ! ? in the raw page ("1,855,579 ,941,411" became one number, "Sections .13, .14"
         found = compile_(self); found['space_before_punct'] = re.compile(r'(?!)()'); return found  # "Sections.13,.14"); the page prints the space and so does the route: a pattern that never matches (its replacement names group 1)
@@ -367,7 +378,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def version():
