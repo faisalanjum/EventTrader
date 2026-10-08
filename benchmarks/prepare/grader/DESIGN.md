@@ -2383,3 +2383,21 @@ the same OCR results. OCR's independent gate (80 controls, 18 mutations, the cor
 Found on the way, not changed here: EdgarTools' style parser hands out shared cached Style objects its builder then changes, so a heading's
 native style can depend on documents converted earlier in the process (6 documents in an uncontrolled warm run; replayed in order, base and
 candidate identical) - queued as its own repair.
+
+## 77. Native style ownership and heading boundaries (2026-10-08; Codex)
+
+The queued cache defect is fixed at `61ce4d548`: native cached Style values are copied on return, with startup invalidation of old shared values.
+The full 3,353-document comparison preserves content and structure; two source-proved own-element style claims change. Native own-element metadata
+is not computed visual styling. See `prepare_work/prepare_context_20261008/STYLE_GATE.md`.
+
+The adapter's partial-heading split now requires the actual native edge child and whitespace, or an exact layout gap proved at the linked parent
+occurrence by the existing source pass. Otherwise it keeps the whole paragraph. This fixes splits inside words, numbers, possessives and quotations;
+scanner-inserted redline reading separators cannot prove layout. It reuses native CSS/length handling, without changing source text or native Style.
+Some genuine no-space run-in titles remain text paragraphs: their words and source context stay, but their separate heading role is not asserted.
+No punctuation list, document exception or parent-wide heading promotion. Unknown layout remains unproved.
+
+Final snapshot `a9bf9508e`, clean integration `14bd185be`: 485 permanent + 400 grader + 18 focused tests; nine reversals and broken baseline caught.
+All 3,353 originals preserve characters/order, tables, pictures and link content; 761 change segmentation. Independent 18,600-seam census,
+3,900 punctuation-source checks, exact duplicate-occurrence controls and 43,971-link owner proof pass. All 411 routes on the old released sources
+rebuilt through three stages: zero screen errors, zero target/gate flips; one paragraph kind improves and its fragmentation detail disappears.
+Fresh saved-OCR handoff is unchanged. No sealed exam or model call. Bounded limits and complete evidence: `prepare_work/prepare_context_20261008/HEADING_GATE.md`.
