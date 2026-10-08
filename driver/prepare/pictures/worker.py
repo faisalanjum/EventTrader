@@ -2,8 +2,8 @@
 # file - the reading with its settings and status - published whole; one job per output folder. The saved reading holds no file or
 # document name: occurrences and their context are attached when the packet is made. Statuses: 'complete'; 'cut off' (a successful reading
 # that stopped at its output limit: kept, never read again with the same settings); 'error' (the reader failed: no reading, read again on
-# the next run - never twice in one run). One rule checks a record when it is saved and when it is loaded. Storage failures, invalid saved
-# results and malformed reader returns stop the job; only the reader's own failures are recorded as a picture's error.
+# the next run - never twice in one run). One rule checks a record when it is saved and when it is loaded. Storage and memory failures, invalid
+# saved results and malformed reader returns stop the job; only the reader's own failures are recorded as a picture's error.
 import contextlib, fcntl, hashlib, json, os
 from ..get.acquire import StorageError, _make_dirs, _sync_dir             # the downloader's own durability rules
 
@@ -40,7 +40,7 @@ def _one(path, image, data, reader, settings):
     rec = _load(path, image, settings, reader)
     if rec and rec['status'] != 'error': return rec
     try: result = reader.read(data)
-    except (OSError, StorageError): raise                                  # the disk or the store, not the picture: stop
+    except (OSError, StorageError, MemoryError): raise                     # the disk, the store or the machine's memory, not the picture: stop
     except Exception as e: rec = dict(status='error', result=None, error=f'{type(e).__name__}: {str(e)[:300]}')
     else: rec = dict(status=reader.status(result), result=result, error=None)   # a malformed return stops here: it is not a reading error
     rec.update(image_sha256=image, settings=settings); _check(rec, reader)

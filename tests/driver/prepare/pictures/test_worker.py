@@ -145,11 +145,21 @@ class Outcomes(Base):
 
 class Storage(Base):  # Codex r16 C1: a disk fault stops; only the reader's own failure is a picture's error
     def test_storage_failures_inside_a_reading_stop_with_nothing_published(self):
-        for exc in (OSError(errno.EIO, 'read'), OSError(errno.ENOSPC, 'full'), StorageError('store')):
+        for exc in (OSError(errno.EIO, 'read'), OSError(errno.ENOSPC, 'full'), StorageError('store'), MemoryError('injected')):
             with self.subTest(error=repr(exc)):
-                f = self.folder(); mk = lambda exc=exc: types.SimpleNamespace(read=lambda d: (_ for _ in ()).throw(exc), settings=dict(reader='fake'), status=lambda r: 'complete')
-                with self.assertRaises((OSError, StorageError)): worker.run(f, [('a', A)], mk)
-                self.assertEqual(self.saved(f), [])
+                f, calls = self.folder(), []
+                def read(d, exc=exc): calls.append(d); return [(_ for _ in ()).throw(exc)] if d == A else ['printed', dict(generation_tokens=1)]
+                mk = lambda: types.SimpleNamespace(read=read, settings=dict(reader='fake'), status=readers._chandra_status)
+                with self.assertRaises((OSError, StorageError, MemoryError)): worker.run(f, [('a', A), ('b', B)], mk)
+                self.assertEqual((self.saved(f), calls), ([], [A]))                       # nothing published, and the next picture is never read
+
+    def test_memory_exhaustion_keeps_earlier_readings_and_starts_nothing_after(self):   # Codex/root MEMORY_BOUNDARY: a complete reading survives, cached
+        f = self.folder(); worker.run(f, [('a', A)], fake()[0]); before = {p.name: p.read_bytes() for p in self.saved(f)}
+        calls = []
+        def read(d): calls.append(d); raise MemoryError('injected') if d == B else AssertionError('read after the failure')
+        mk = lambda: types.SimpleNamespace(read=read, settings=dict(reader='fake', model='m1'), status=readers._chandra_status)
+        with self.assertRaises(MemoryError): worker.run(f, [('a', A), ('b', B), ('c', C)], mk)
+        self.assertEqual(({p.name: p.read_bytes() for p in self.saved(f)}, calls), (before, [B]))   # A byte-identical and not read again; C never started
 
     def test_a_disk_error_on_a_saved_result_stops_instead_of_reading_again(self):
         f = self.folder(); worker.run(f, [('a', A)], fake()[0]); mk, calls = fake(); real_open = open

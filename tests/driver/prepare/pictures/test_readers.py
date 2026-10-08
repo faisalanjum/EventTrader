@@ -71,7 +71,7 @@ class FreeOcrGuard(Base):  # Codex r16 C1 / r17: storage failures escape the inn
 
     def test_storage_failures_from_either_tool_escape(self):
         for name in ('_pp_boxes', '_ox_boxes'):
-            for error in (StorageError('flush failed'), OSError(errno.EIO, 'I/O error'), OSError(errno.ENOSPC, 'full')):
+            for error in (StorageError('flush failed'), OSError(errno.EIO, 'I/O error'), OSError(errno.ENOSPC, 'full'), MemoryError('injected')):
                 with self.subTest(tool=name, error=type(error).__name__), patch.object(readers, '_free_tools', return_value=(None, None, {})), \
                         patch.object(readers, '_pp_boxes', return_value=[]), patch.object(readers, '_ox_boxes', return_value=[]), patch.object(readers, name, side_effect=error):
                     with self.assertRaises(type(error)): readers.free_ocr(self.picture)
@@ -87,6 +87,13 @@ class FreeOcrGuard(Base):  # Codex r16 C1 / r17: storage failures escape the inn
         with self.assertRaises(readers.PictureError): readers._image(b'not a picture')
         self.assertNotIsInstance(readers.PictureError('x'), OSError)
         b = io.BytesIO(); Image.new('RGB', (7, 3)).save(b, 'PNG'); self.assertEqual(readers._image(b.getvalue()).size, (7, 3))
+
+    def test_a_memory_failure_while_decoding_stops_instead_of_blaming_the_picture(self):   # Codex/root MEMORY_BOUNDARY_BEFORE
+        b = io.BytesIO(); Image.new('RGB', (7, 3)).save(b, 'PNG')
+        with patch.object(Image.Image, 'load', side_effect=MemoryError('injected')):
+            with self.assertRaises(MemoryError): readers._image(b.getvalue())
+        with patch.object(Image.Image, 'load', side_effect=Image.DecompressionBombError('too many pixels')):   # the picture's own size: its error
+            with self.assertRaises(readers.PictureError): readers._image(b.getvalue())
 
 
 class Fingerprints(Base):

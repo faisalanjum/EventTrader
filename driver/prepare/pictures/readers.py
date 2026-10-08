@@ -16,10 +16,11 @@ class PictureError(ValueError):
     """The picture's bytes do not decode as an image: its content, not a disk or model failure."""
 
 
-def _image(data):  # the picture decoded from its bytes in memory, so any failure here is the picture's own
+def _image(data):  # the picture decoded from its bytes in memory, so any failure here is the picture's own - except running out of memory
     from PIL import Image
     try:
         im = Image.open(io.BytesIO(data)); im.load(); return im.convert('RGB')
+    except MemoryError: raise                                            # the machine, not the picture: stop (as the converter does)
     except Exception as e: raise PictureError(f'{type(e).__name__}: {str(e)[:200]}') from e
 
 
@@ -83,14 +84,14 @@ def _ox_boxes(ox, im):  # OnnxTR's words with their boxes
 
 def free_ocr(picture):
     """Both free tools' text boxes with their positions (evidence only): dict(file, w, h, pp, ox, pp_secs, ox_secs), plus pp_error /
-    ox_error naming a tool's inference failure (its boxes then empty). A storage failure is not a tool failure: it stops."""
+    ox_error naming a tool's inference failure (its boxes then empty). A storage or memory failure is not a tool failure: it stops."""
     pp, ox, _ = _free_tools()
     with open(picture, 'rb') as f: im = _image(f.read())
     rec = dict(file=os.path.basename(picture), w=im.width, h=im.height)
     for name, tool, boxes in (('pp', pp, _pp_boxes), ('ox', ox, _ox_boxes)):
         t0 = time.time()
         try: rec[name] = boxes(tool, im)
-        except (OSError, StorageError): raise
+        except (OSError, StorageError, MemoryError): raise
         except Exception as e: rec[name] = []; rec[name + '_error'] = f'{type(e).__name__}: {str(e)[:200]}'
         rec[name + '_secs'] = round(time.time() - t0, 2)
     return rec
