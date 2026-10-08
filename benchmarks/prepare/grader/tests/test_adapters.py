@@ -144,7 +144,7 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
         self.assertEqual([(u['name'], u['text'], u['group']) for u in units], [('{urn:x}title', 'Common & Preferred', {'index': 1, 'count': 1, 'at': R}), ('{urn:x}name', 'Alpha', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}shares', '10', {'index': 1, 'count': 2, 'at': P1}), ('{urn:x}name', 'Beta', {'index': 2, 'count': 2, 'at': P2}), ('{urn:x}shares', '0', {'index': 2, 'count': 2, 'at': P2})])
         facts = {}; us = xf.units_of(b'<r><note>Ownership is <b>not</b> zero.</note><holding amount="10" unit="shares"/><q>1</q><q>2</q></r>', facts)
         self.assertEqual([(u['id'], u['name'], u['text'], u['siblings'], u.get('mixed'), u.get('within')) for u in us], [('f0', 'note', 'Ownership is not zero.', {'index': 1, 'count': 1}, True, None), ('f1', 'b', 'not', {'index': 1, 'count': 1}, None, 'f0'), ('f2', 'q', '1', {'index': 1, 'count': 2}, None, None), ('f3', 'q', '2', {'index': 2, 'count': 2}, None, None)])  # source order; prose around a child: read whole and marked mixed, the child kept as a field of its own that names the prose it stands within (Codex R12-6, R13 C4); repeated leaves report their own place
-        self.assertEqual(facts, {'attribute_values': 2})  # attribute values are not read, and the route says so
+        self.assertEqual(facts, {'attribute_values': 2})  # the call without a tree counts the attribute values it does not read
         rawm = b'<r><holding>Balance:<amount>10</amount><unit>shares</unit></holding><note>1<b>2</b>3</note></r>'; us = xf.units_of(rawm)
         self.assertEqual([(u['name'], u['text'], u.get('mixed'), u.get('within')) for u in us], [('holding', 'Balance:10shares', True, None), ('amount', '10', None, 'f0'), ('unit', 'shares', None, 'f0'), ('note', '123', True, None), ('b', '2', None, 'f3')])  # no field identity erased, no space of ours
         from benchmarks.prepare.grader import grade
@@ -161,7 +161,8 @@ class DoclingHtmlAdapterTests(unittest.TestCase):
             with patch.object(xf.grade, 'load_sources', return_value=srcs): xf.main(['--key', 'unused', '--split', 'development', '--out', d + '/run'])
             facts_run = json.loads((Path(d) / 'run' / 'facts.json').read_text())['files']
             self.assertEqual(sorted(facts_run), ['acc/a.xml', 'acc/b.xml']); self.assertEqual(facts_run['acc/a.xml']['status'], 'OK')
-            self.assertEqual(json.loads((Path(d) / 'run' / 'route' / 'acc' / 'a.xml.json').read_text()).get('not_read'), {'attribute_values': 1})
+            route_a = json.loads((Path(d) / 'run' / 'route' / 'acc' / 'a.xml.json').read_text())
+            self.assertEqual((route_a.get('not_read'), [e.get('attributes') for e in route_a['xml_elements']]), (None, [None, {'u': 'x'}]))  # the route keeps the attribute in its element tree: nothing left unread to state
         self.assertEqual(units[3]['path'], ['{urn:x}sub', '{urn:x}data', '{urn:x}persons', '{urn:x}person'])
         a = units[3]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<name>Beta')  # from the start tag to the end of the text: the key's name and text anchors both fall inside
         a = units[0]['anchor']; self.assertEqual(raw[a['byte_start']:a['byte_end_exclusive']], b'<title>Common &amp; Preferred')  # entities inside the text do not shift the span

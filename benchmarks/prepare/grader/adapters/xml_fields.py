@@ -4,7 +4,7 @@ place among same-named siblings, "2 of 8", and the byte of its start tag, which 
 own place among its siblings, its text, and the byte span from its start tag to the end of its text. Units stand in source order. An element whose
 own text stands around child elements is read whole as prose (`mixed`) and its children stay fields of their own, each naming the prose unit it
 stands `within`: the reading stream is the units held by no other, each source character once; field lookups see every unit (Codex R13 C4).
-Attribute values are not read; their count is reported as `not_read` so the omission is visible. No field list, nothing inferred, nothing
+The same parse keeps the element tree, attributes and namespace bindings as `xml_elements` (described in the runtime). No field list, nothing inferred, nothing
 repaired: a document that does not parse is reported FAILED with the parser's own message. The parser is the grader's own (`anchor.xml_parser`):
 what stands outside the document is refused, so a reading that would need it fails instead of going on without it; an element the parser
 makes from an entity's text has no bytes of its own, and the document is refused rather than given a position that is none.
