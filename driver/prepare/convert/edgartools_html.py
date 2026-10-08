@@ -211,7 +211,7 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
     units = with_every_picture(linked['units'], vis); base = {'source_base': {'tag': {'byte_start': vis.base['start'], 'byte_end_exclusive': vis.base['end']}, 'href': vis.base['href']}} if vis.base else {}
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'driver/prepare/convert/edgartools_html.py',
-                      'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered'], 'source_links': source_links(units, vis), **base}
+                      'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered'], 'source_links': source_links(units, vis), 'source_relations': source_relations(raw, units, vis), **base}
 
 
 def with_every_picture(units, vis):
@@ -264,6 +264,37 @@ _URL_EDGES, _URL_INSIDE = ''.join(map(chr, range(0x21))), str.maketrans('', '', 
 _FRAGMENT_SAFE = ''.join(chr(c) for c in range(0x21, 0x7f) if chr(c) not in '"<>`')  # what the URL standard leaves as written in a fragment; a space, a quote, <, >, `, a control or any non-ASCII character it percent-encodes (UTF-8) - before the page is searched (Codex, LINK_URL_SERIALIZATION)
 
 
+def _holders(units, vis):
+    """Who holds which source bytes - the one ownership the source links and relations share: every anchored unit and table cell (a cell by its table
+    and its anchor's first byte, which the screen step's re-grid and sort leave as it is), pictures apart (they hold a tag, no text). Returns
+    `held(lo, hi)` - each holder of visible characters of [lo, hi): {key: (first such character, how many)}, how many there are, how many none
+    holds -, `owner(key)`, and `owners(lo, hi)`: the holders of [lo, hi)'s visible characters and the pictures whose tags stand in it, in source
+    order, with those two counts."""
+    items, pics = [], []  # (start, end, (unit, cell or None)) of every anchored unit and cell; pictures apart (they hold a tag, no text)
+    for u in units:
+        for x, cell in ([(c, True) for c in u.get('cells') or []] if u.get('kind') == 'table' else [(u, False)]):
+            sp = [a for a in anchor.spans(x.get('anchor')) if 'byte_start' in a]
+            (pics if u.get('kind') == 'image' else items).extend((a['byte_start'], a['byte_end_exclusive'], (u['id'], sp[0]['byte_start'] if cell else None)) for a in sp)
+    items.sort(); starts = [s for s, _, _ in items]; reach = list(accumulate((e for _, e, _ in items), max))
+    owner = lambda key: {'unit': key[0]} if key[1] is None else {'unit': key[0], 'cell': key[1]}
+
+    def held(lo, hi):
+        chars, got, covered = vis.s[bisect_left(vis.s, lo):bisect_left(vis.s, hi)], {}, set()
+        i = bisect_right(starts, chars[-1]) - 1 if chars else -1
+        while i >= 0 and reach[i] > chars[0]:
+            s, e, key = items[i]; a, b = bisect_left(chars, s), bisect_left(chars, e)
+            if b > a: first, n = got.get(key, (chars[a], 0)); got[key] = (min(first, chars[a]), n + b - a); covered.update(range(a, b))
+            i -= 1
+        return got, len(chars), len(chars) - len(covered)
+
+    def owners(lo, hi):
+        got, n, unheld = held(lo, hi)
+        found = sorted([(first, key) for key, (first, _) in got.items()] + [(s, k) for s, e, k in pics if lo <= s and e <= hi])
+        return [owner(k) for _, k in found], n, unheld
+
+    return held, owner, owners
+
+
 def source_links(units, vis):
     """Every <a href> the source writes, as source evidence beside the units, which it does not touch (Codex HREF_DESIGN_REVIEW, HREF_URL_REVIEW): the href
     as written (decoded once, nothing trimmed), its opening tag, `hidden` where it stands in a removed subtree, `certain: false` where the scanner's
@@ -275,22 +306,7 @@ def source_links(units, vis):
     own set), then one UTF-8 percent-decoding; ids before
     names; every duplicate - and the unit or cell a single target's own text all stands in, where that is exactly one (an empty anchor or a target
     holding several units names none); any other href, and any under a base, stays as written: no URL resolution, no member guess, no fetch."""
-    items, pics = [], []  # (start, end, (unit, cell or None)) of every anchored unit and cell; pictures apart (they hold a tag, no text)
-    for u in units:
-        for x, cell in ([(c, True) for c in u.get('cells') or []] if u.get('kind') == 'table' else [(u, False)]):
-            sp = [a for a in anchor.spans(x.get('anchor')) if 'byte_start' in a]
-            (pics if u.get('kind') == 'image' else items).extend((a['byte_start'], a['byte_end_exclusive'], (u['id'], sp[0]['byte_start'] if cell else None)) for a in sp)
-    items.sort(); starts = [s for s, _, _ in items]; reach = list(accumulate((e for _, e, _ in items), max))
-    owner = lambda key: {'unit': key[0]} if key[1] is None else {'unit': key[0], 'cell': key[1]}
-
-    def held(lo, hi):  # each unit or cell holding visible characters of [lo, hi): {key: (first such character, how many)}, how many there are, how many none holds
-        chars, got, covered = vis.s[bisect_left(vis.s, lo):bisect_left(vis.s, hi)], {}, set()
-        i = bisect_right(starts, chars[-1]) - 1 if chars else -1
-        while i >= 0 and reach[i] > chars[0]:
-            s, e, key = items[i]; a, b = bisect_left(chars, s), bisect_left(chars, e)
-            if b > a: first, n = got.get(key, (chars[a], 0)); got[key] = (min(first, chars[a]), n + b - a); covered.update(range(a, b))
-            i -= 1
-        return got, len(chars), len(chars) - len(covered)
+    held, owner, owners = _holders(units, vis)
 
     def target(t):  # the one unit or cell that holds all of a target's own text
         if t['end'] is None: return None
@@ -315,13 +331,84 @@ def source_links(units, vis):
         whole = vis.certain and not l['hidden'] and l['whole'] and l['end'] is not None
         rec['extent'] = {'byte_start': l['start'], 'byte_end_exclusive': l['end']} if whole else None
         if whole:
-            got, _, unheld = held(l['tag_end'], l['end'])
-            found = sorted([(first, key) for key, (first, _) in got.items()] + [(s, k) for s, e, k in pics if l['tag_end'] <= s and e <= l['end']])
-            rec['owners'] = [owner(k) for _, k in found]
+            rec['owners'], _, unheld = owners(l['tag_end'], l['end'])
             if unheld: rec['unheld'] = unheld  # shown characters of it that no unit holds (the linker left them uncovered): said, not dropped
         else: rec['owners'] = None
         rec['destination'] = destination(l['href']); out.append(rec)
     return out
+
+
+IX = 'http://www.xbrl.org/2013/inlineXBRL'  # Inline XBRL 1.1: its elements are known by this namespace, whatever prefix a document binds to it
+_FACTS, _FOOTNOTE, _CONTINUATION = frozenset(IX + '}' + n for n in ('nonFraction', 'nonNumeric', 'fraction', 'tuple')), IX + '}footnote', IX + '}continuation'
+_IDREFS = re.compile(r'[^ \t\r\n]+')  # an IDREFS value's tokens: XML white space apart
+
+
+def source_relations(raw, units, vis):
+    """The explicit relationships of an Inline XBRL 1.1 document, as source evidence beside the units, which it does not touch (Codex
+    ix_footnotes/DESIGN_REVIEW). The whole document is read by the strict XML parser every reader of the grader shares (`anchor.xml_parser`, namespaces
+    resolved, nothing external fetched); a document it cannot read - ordinary HTML, malformed markup, a refused external entity - is `{read: false,
+    error}`, never "no relationships". One record per relationship element (its expanded name, whatever the prefix): `at`, the first byte of its
+    tag; its attribute values as the parser reports them (absent stays absent; no XBRL default added); its from and to references in source order,
+    each resolved only to the element its id names - `one` when that is exactly one element of the kind the specification admits (from: a fact; to:
+    a fact or a footnote, and all footnotes once one is: section 13.1; the arcrole stays the parser's value, no role rule), `none`, `several`, `wrong
+    type`, or `entity` (written by an entity's replacement text: no source place); only `one` carries owners - the source links' own (`_holders`): units, cells and pictures holding what its
+    extent shows, [] when it shows nothing (empty or hidden alike), null when the scanner's reading is not certain. An extent runs from the start
+    tag's first byte to the end tag's first byte (an empty-element tag: to the end of the tag itself, so a "/>" ends it where the XML does); owners
+    certify that extent only, never a whole note. A footnote's or a fact's continuations are
+    followed in order and stop at the first link that is not one (missing, several, of another kind, from an entity, or a cycle): `chain` says
+    `complete` or `unresolved`; each reference stays as written. No value, context, unit or note text is read or copied."""
+    p, ids, rels, stack = anchor.xml_parser(namespace_separator='}'), {}, [], []
+    literal = lambda at: raw[at:at + 1] == b'<' or raw[at:at + 2] == b'\x00<'  # the parser's place holds a tag's own "<" (one byte, or a UTF-16 unit either way round)
+
+    def start(name, attrs):
+        at = p.CurrentByteIndex; rec = {'name': name, 'start': at if literal(at) else None, 'end': None, 'next': attrs.get('continuedAt')}  # an entity's replacement text has no tag of its own here
+        stack.append(rec)
+        if 'id' in attrs: ids.setdefault(attrs['id'], []).append(rec)
+        if name == IX + '}relationship': rels.append((rec, dict(attrs)))
+
+    def end(name):
+        rec = stack.pop(); at = p.CurrentByteIndex
+        if rec['start'] is not None: rec['end'] = at  # its end tag's "<"; for an empty-element tag the byte after its "/>" (the parser's own places: well-formed, an element a literal tag opens ends in literal markup)
+
+    p.StartElementHandler, p.EndElementHandler = start, end
+    try: p.Parse(raw, True)
+    except Exception as e: return {'read': False, 'error': str(e)[:200]}
+    held, owner, owners = _holders(units, vis)
+
+    def found(ref, rec, kinds):  # a resolved element: its kind, place and owners
+        if rec['start'] is None or rec['end'] is None: return {'ref': ref, 'status': 'entity', 'element': rec['name'], 'owners': None}
+        out = {'ref': ref, 'status': 'one' if rec['name'] in kinds else 'wrong type', 'element': rec['name'], 'extent': {'byte_start': rec['start'], 'byte_end_exclusive': rec['end']}, 'owners': None}
+        if out['status'] == 'one' and vis.certain:
+            out['owners'], out['visible'], unheld = owners(rec['start'], rec['end'])
+            if unheld: out['unheld'] = unheld
+        return out
+
+    def chain(rec):
+        links, seen = [], {id(rec)}
+        while rec['next'] is not None:
+            ref = rec['next']; hits = ids.get(ref, [])
+            if len(hits) != 1: links.append({'ref': ref, 'status': 'none' if not hits else 'several', 'owners': None}); break
+            rec = hits[0]
+            if id(rec) in seen: links.append({'ref': ref, 'status': 'cycle', 'owners': None}); break
+            seen.add(id(rec)); links.append(found(ref, rec, {_CONTINUATION}))
+            if links[-1]['status'] != 'one': break
+        return links
+
+    def endpoint(ref, kinds):
+        hits = ids.get(ref, [])
+        if len(hits) != 1: return {'ref': ref, 'status': 'none' if not hits else 'several', 'owners': None}
+        out = found(ref, hits[0], kinds)
+        if out['status'] == 'one' and hits[0]['next'] is not None:
+            out['continuations'] = chain(hits[0]); out['chain'] = 'complete' if out['continuations'][-1]['status'] == 'one' else 'unresolved'
+        return out
+
+    out = []
+    for rec, attrs in rels:
+        to = [endpoint(r, _FACTS | {_FOOTNOTE}) for r in _IDREFS.findall(attrs.get('toRefs', ''))]
+        if any(e['status'] == 'one' and e['element'] == _FOOTNOTE for e in to):  # a set holding a footnote holds footnotes only
+            to = [dict(e, status='wrong type', owners=None) if e['status'] == 'one' and e['element'] != _FOOTNOTE else e for e in to]
+        out.append({'at': rec['start'], 'attributes': attrs, 'from': [endpoint(r, _FACTS) for r in _IDREFS.findall(attrs.get('fromRefs', ''))], 'to': to})
+    return {'read': True, 'relationships': out}
 
 
 def unsupported(file_id, sha256, version, status='UNSUPPORTED', error='not an HTML file'):
