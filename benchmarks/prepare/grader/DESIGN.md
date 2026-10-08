@@ -2308,3 +2308,20 @@ of 48 split/whole signature pages (2-5 blocks, names of 2, 8 or 18 letters): 28 
 condition, none with it); all 3,353 approved-corpus filer HTML documents: no text changed, 2 documents and 12 items moved, each from out of order to
 in order between its own neighbours (OGE's title; MTW's 11 separators), 16 order flags fewer, overlapping text places 13 to none, uncovered characters
 1,734 to 1,695, no rise in any document. The nine key route sets: identical to the A3 build; grades unchanged.
+
+## 74. A measured table is listed row by row (2026-10-07; Codex accuracy-fable-1, the 86-cell audit)
+
+A route lists a table's cells row by row (§4). The screen step (P20) gives each cell the row, column and span the page shows, but kept the tool's list
+order, and the tool lists some tables' rows in another order than the page: ICE's quarters before their year, LPX's additions before their opening
+balance, the first balances of a two-period equity statement after the second period's header - a reader taking the cells in order met values before
+their period. A table whose every cell is measured in one source table is now listed by its measured row and column (a stable sort: cells that share a
+place keep their order); a table with a cell not measured, or with cells measured in two tables (a nested table's own grid), keeps the tool's order.
+No record changes, only its place in the list; no setting (the step's own output, no saved parse). The audit behind it: every one of the 86 cells
+whose text repeats in its table stands at its own source cell (Codex's trace of the tool's own cells; an order check of the tool's rows: 12 between
+certain rows, 74 copies in the tool's order), so the source citations were right and only the list order was not. **Measured** against the OGE commit:
+tests 406 + 400 (four new - row by row with every record whole, failing before; a shared place keeping its order; a cell not measured and cells in two
+tables keeping the tool's order); the audit's eight documents: 774 tables, 35 now in row order, every cell record and every other field identical. The
+nine key route sets against the OGE build: the routes without the screen step unchanged; in the screen routes 162 tables now in row order (106
+development, 35 control, 21 released), every screen-measured table row by row, every cell record, unit field and route record identical; grades
+unchanged (no target, field row or gate). **Codex's preliminary gate** (`row_order_review/`): his 120 fully measured permutations and 602 negative
+controls pass, and the same 35 reorders in the eight documents.

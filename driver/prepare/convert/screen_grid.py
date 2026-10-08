@@ -91,26 +91,29 @@ def screen_grid(cells):
 
 
 def apply(units, spans, measured_by_table):
-    """Re-grid the route's table cells whose byte anchors fall in a measured cell; returns how many changed."""
-    starts = [s for s, _ in spans]; by_g = {}
+    """Re-grid the route's table cells whose byte anchors fall in a measured cell; returns how many changed. A table whose every cell is measured in
+    one source table is then listed row by row, as the route's cells are (DESIGN §4): the tool may list rows in another order than the page."""
+    starts = [s for s, _ in spans]; by_g, table_of = {}, {}
     parents, stack = [], []  # the cell each cell stands in (a table inside a cell): text after the inner table is the outer cell's again (Codex's worktree)
     for g, (start, end) in enumerate(spans):
         while stack and spans[stack[-1]][1] <= start: stack.pop()
         parents.append(stack[-1] if stack else -1); stack.append(g)
-    for table_cells in measured_by_table.values():
-        for g, (r, c, cs) in screen_grid(table_cells).items(): by_g[g] = (r, c, cs)
+    for t, table_cells in measured_by_table.items():
+        for g, (r, c, cs) in screen_grid(table_cells).items(): by_g[g] = (r, c, cs); table_of[g] = t
     n = 0
     for u in units:
         if u.get('kind') != 'table': continue
+        tables = set()  # the measured table each cell stands in; None: a cell not measured
         for cell in u.get('cells') or []:
             a = cell.get('anchor'); a = a[0] if isinstance(a, list) else a
-            if not isinstance(a, dict) or 'byte_start' not in a: continue
+            if not isinstance(a, dict) or 'byte_start' not in a: tables.add(None); continue
             g = bisect_right(starts, a['byte_start']) - 1
             while g >= 0 and a['byte_start'] >= spans[g][1]: g = parents[g]
-            if g < 0 or not (spans[g][0] <= a['byte_start'] < spans[g][1]) or g not in by_g: continue
+            if g < 0 or not (spans[g][0] <= a['byte_start'] < spans[g][1]) or g not in by_g: tables.add(None); continue
             r, c, cs = by_g[g]
             if (cell['r'], cell['c'], cell.get('cs', 1)) != (r, c, cs): cell.update(r=r, c=c, cs=cs); n += 1
-            cell['grid'] = 'screen'
+            cell['grid'] = 'screen'; tables.add(table_of[g])
+        if len(tables) == 1 and None not in tables: u['cells'].sort(key=lambda x: (x['r'], x['c']))  # stable: cells that share a place keep their order; a table with a cell not measured, or measured in two tables (one inside the other), keeps the tool's order
     return n
 
 
