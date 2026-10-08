@@ -2401,3 +2401,18 @@ All 3,353 originals preserve characters/order, tables, pictures and link content
 3,900 punctuation-source checks, exact duplicate-occurrence controls and 43,971-link owner proof pass. All 411 routes on the old released sources
 rebuilt through three stages: zero screen errors, zero target/gate flips; one paragraph kind improves and its fragmentation detail disappears.
 Fresh saved-OCR handoff is unchanged. No sealed exam or model call. Bounded limits and complete evidence: `prepare_work/prepare_context_20261008/HEADING_GATE.md`.
+
+## 78. Explicit inline-XBRL source relationships (2026-10-08; Codex/Fable)
+
+The HTML route retains explicit relationship declarations in `source_relations`, separate from its unchanged units. The existing strict XML
+parser supplies namespace-aware references and byte extents; the existing source-link ownership identifies local units/cells/pictures. Continuation
+parts remain separate. Parsed/no relationships and XML metadata unavailable are distinct. Ordinary HTML is not a failed conversion merely because
+it is not XML. Unknown/duplicate/wrong-type references, unplaced entity markup and uncertain scans never acquire invented owners. Hidden text is
+not inserted, and an empty endpoint is not called hidden. Non-content errors propagate. This is source evidence, not full XBRL validation or a
+fact/context metadata dump; plain-text note targets are not guessed.
+
+Final runtime `14ed0767`: 499 permanent + 400 grader tests; ten runtime reversals caught. Every prior field of all 3,353 exposed routes is unchanged;
+908 declarations / 3,710 pairs / 4,664 source parts are independently checked. Two IDs absent from their local original stay unresolved.
+All 411 released routes survive the three-stage pipeline, with valid owner addresses and 19,191 score rows byte-identical. Fresh saved-OCR delivery
+and a populated-relationship integration control pass against the test consumer; default makes no second-reader call. Output grows 0.44%; shared-machine
+timing is provisional. No private exam, OCR call or deployment. Full proof, provenance and limits: `prepare_work/prepare_context_20261008/IXREL_GATE.md`.
