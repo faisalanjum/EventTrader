@@ -19,13 +19,13 @@ class Offline(unittest.TestCase):
         screen_grid.measure(b'<p>x</p>', Browser())
         self.assertEqual(calls[:2], [('route', '**/*'), ('set_content',)])
 
-    def test_a_page_that_cannot_be_measured_leaves_the_route_and_says_why(self):
+    def test_a_page_that_cannot_be_measured_keeps_the_route_content_and_says_why(self):
         class Browser:
             def new_page(self, **kw): raise RuntimeError('no page')
             def is_connected(self): return True
         route = {'sha256': screen_grid.anchor.sha256(b'<p>x</p>'), 'route': {'name': 'r'}, 'units': [{'id': 'u', 'kind': 'text', 'text': 'x'}]}; before = copy.deepcopy(route)
         facts = screen_grid.step(b'<p>x</p>', route, Browser())
-        self.assertEqual(route, before); self.assertIn('no page', facts['error'])
+        self.assertEqual(route, dict(before, source_symbols={'read': False, 'error': "RuntimeError('no page')"})); self.assertIn('no page', facts['error'])  # content kept; the failure added
 
     def test_a_disconnected_browser_stops_instead_of_marking_every_document_partial(self):
         error = RuntimeError('browser connection lost')

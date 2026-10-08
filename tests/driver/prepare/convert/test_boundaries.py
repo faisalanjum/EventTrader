@@ -1,6 +1,6 @@
 """The production boundaries of the one-document calls (Codex CODEX_CLEANUP_R1_VERDICT C1-C3; his probes, ported unchanged): the caller's bytes must be
 the source the hash names - checked before any parse, browser work or change to a route; storage, dependency and resource failures stop the caller,
-a document the tool cannot read is a FAILED route and a page that cannot be measured is reported, the route unchanged; results never share
+a document the tool cannot read is a FAILED route and a page that cannot be measured is reported, the route's content unchanged (only source_symbols' read: false added); results never share
 metadata. No model or external request."""
 import copy
 import errno
@@ -50,7 +50,7 @@ class SourceIdentity(unittest.TestCase):
 
     def test_screen_rejects_wrong_bytes_without_browser_or_mutation(self):
         doc = route(); before = copy.deepcopy(doc)
-        with patch.object(sg, 'measure', return_value=({}, {})) as measure:
+        with patch.object(sg, 'measure', return_value=({}, {}, {'marks': {}, 'faces': []})) as measure:
             with self.assertRaises(ValueError): sg.step(OTHER, doc, object())
             measure.assert_not_called()
         self.assertEqual(doc, before)
@@ -58,7 +58,7 @@ class SourceIdentity(unittest.TestCase):
     def test_matching_source_bytes_allow_both_stages(self):
         doc = route()
         self.assertEqual(sf.step(RAW, doc), 0)
-        with patch.object(sg, 'measure', return_value=({}, {})):
+        with patch.object(sg, 'measure', return_value=({}, {}, {'marks': {}, 'faces': []})):
             facts = sg.step(RAW, doc, object())
         self.assertNotIn('error', facts)
         self.assertEqual(doc['route']['name'], 'edgartools-html+source-formatting+screen')
@@ -92,7 +92,7 @@ class Failures(unittest.TestCase):
         with patch.object(sg, 'measure', side_effect=RuntimeError('one page cannot be measured')):
             facts = sg.step(RAW, doc, SimpleNamespace(is_connected=lambda: True))
         self.assertIn('one page cannot be measured', facts['error'])
-        self.assertEqual(doc, before)
+        self.assertEqual(doc, dict(before, source_symbols={'read': False, 'error': "RuntimeError('one page cannot be measured')"}))  # content kept; only the failure added
 
 class ResultOwnership(unittest.TestCase):
     def test_xml_results_do_not_share_route_metadata_with_other_documents(self):

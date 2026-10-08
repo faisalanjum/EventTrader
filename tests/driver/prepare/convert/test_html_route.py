@@ -21,14 +21,14 @@ class Prepare(unittest.TestCase):
         calls, browser = [], object()  # the caller's own browser: the screen step must measure in it
         with patch.object(eh, 'convert', side_effect=lambda *a: calls.append('convert') or parsed(*a)), \
              patch.object(sf, 'step', side_effect=lambda *a, step=sf.step: calls.append('formatting') or step(*a)), \
-             patch.object(sg, 'measure', side_effect=lambda marked, used: calls.append(('screen', used)) or ({}, {})):
+             patch.object(sg, 'measure', side_effect=lambda marked, used, prefix=None: calls.append(('screen', used)) or ({}, {}, {'marks': {}, 'faces': []})):
             route, facts = html_route.prepare(RAW, 'a.htm', SHA, browser)
         self.assertEqual(calls, ['convert', 'formatting', ('screen', browser)]); self.assertIs(calls[2][1], browser)
         self.assertEqual((route['status'], route['error'], route['route']['name'], route['file_id'], route['sha256']), ('OK', None, 'edgartools-html+source-formatting+screen', 'a.htm', SHA))
         self.assertEqual((facts['formatting'], route['units'][0]['struck']), (1, ['10']))
         self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'joined', 'parted', 'seconds', 'spaces_the_tool_added'])
         raw = b'<style>.x{text-decoration:line-through}</style><p>10 20</p>'  # a sheet rule could add a strike: the formatting step certifies nothing and says so
-        with patch.object(eh, 'convert', side_effect=parsed), patch.object(sg, 'measure', return_value=({}, {})):
+        with patch.object(eh, 'convert', side_effect=parsed), patch.object(sg, 'measure', return_value=({}, {}, {'marks': {}, 'faces': []})):
             route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())
         self.assertEqual((route['status'], facts['formatting'], route['route']['name']), ('OK', None, 'edgartools-html+source-formatting+screen'))
 
