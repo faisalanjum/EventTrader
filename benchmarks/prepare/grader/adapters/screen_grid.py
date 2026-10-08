@@ -27,8 +27,9 @@ def main(argv=None):
         browser = pw.chromium.launch()
         for rp in sorted(src.rglob('*.json')):
             d = json.loads(rp.read_text()); fid = d.get('file_id'); dest = out / rp.relative_to(src); dest.parent.mkdir(parents=True, exist_ok=True)
-            if d.get('status') != 'OK' or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue  # another step's facts file is copied through
+            if d.get('status') not in ('OK', 'PARTIAL') or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue  # another step's facts file is copied through
             facts[fid] = step(paths[fid].read_bytes(), d, browser)
+            if 'error' in facts[fid]: d['status'], d['error'] = 'PARTIAL', '; '.join(x for x in (d.get('error'), 'screen step: ' + facts[fid]['error']) if x)  # as html_route.prepare marks it, any earlier reason kept
             dest.write_text(json.dumps(d, ensure_ascii=False)); print(fid, facts[fid], flush=True)
         browser.close()
     (out / 'screen_facts.json').write_text(json.dumps(facts, indent=1))

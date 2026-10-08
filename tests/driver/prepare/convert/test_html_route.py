@@ -12,14 +12,14 @@ from driver.prepare.convert import edgartools_html as eh, html_route, screen_gri
 RAW = b'<p><s>10</s> 20</p>'; SHA = hashlib.sha256(RAW).hexdigest()
 TREE = {'type': 'DocumentNode', 'children': [{'type': 'ParagraphNode', 'text': '10 20'}]}
 _convert = eh.convert
-convert = lambda parse: (lambda raw, file_id, sha256: _convert(raw, file_id, sha256, parse))  # the production conversion with the tool call replaced
+convert = lambda parse: (lambda raw, file_id, sha256, vis=None: _convert(raw, file_id, sha256, parse, vis))  # the production conversion with the tool call replaced
 parsed = convert(lambda raw, vis: (copy.deepcopy(TREE), 0.1, 'edgartools tested'))
 
 
 class Prepare(unittest.TestCase):
     def test_the_stages_run_in_order_and_the_route_names_them(self):
         calls, browser = [], object()  # the caller's own browser: the screen step must measure in it
-        with patch.object(eh, 'convert', side_effect=lambda *a: calls.append('convert') or parsed(*a)), \
+        with patch.object(eh, 'convert', side_effect=lambda *a, **k: calls.append('convert') or parsed(*a, **k)), \
              patch.object(sf, 'step', side_effect=lambda *a, step=sf.step: calls.append('formatting') or step(*a)), \
              patch.object(sg, 'measure', side_effect=lambda marked, used, prefix=None: calls.append(('screen', used)) or ({}, {}, {'marks': {}, 'faces': []})):
             route, facts = html_route.prepare(RAW, 'a.htm', SHA, browser)

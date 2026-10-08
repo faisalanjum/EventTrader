@@ -21,7 +21,7 @@ def main(argv=None):
     src, out, facts = Path(a.route), Path(a.out), {}
     for rp in sorted(src.rglob('*.json')):
         d = json.loads(rp.read_text()); fid = d.get('file_id'); dest = out / rp.relative_to(src); dest.parent.mkdir(parents=True, exist_ok=True)
-        if d.get('status') != 'OK' or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue
+        if d.get('status') not in ('OK', 'PARTIAL') or not str(fid).lower().endswith(('.htm', '.html')) or fid not in paths: dest.write_text(json.dumps(d, ensure_ascii=False)); continue
         raw = paths[fid][0].read_bytes()
         if grade.sha256(raw) != paths[fid][1] or d.get('sha256') != paths[fid][1]: facts[fid] = {'error': 'source bytes differ from the key'}; dest.write_text(json.dumps(d, ensure_ascii=False)); continue
         n = step(raw, d)

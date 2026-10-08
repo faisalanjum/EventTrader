@@ -61,13 +61,14 @@ def endpoints_of(vis, units):
     return gaps
 
 
-def tag_cells(raw, vis=None, gaps=(), marks=(), prefix=''):
+def tag_cells(raw, vis=None, gaps=(), marks=(), prefix='', cells=True):
     """A copy with data-g="n" on every <td>/<th> (document order) and the byte span of each cell in the original; and, for each gap, a comment <!--j:n.0-->
     / <!--j:n.1--> right before the character before and after it — a comment is no element: no stylesheet rule and no structural selector sees it, the
-    page lays out exactly as before (Codex C2), and the page's own range over the character that follows it is measured. `marks`: (byte, comment) pairs
+    page lays out exactly as before (Codex C2), and the page's own range over the character that follows it is measured. `cells`: False for a copy
+    with no attribute added (comments only: a sheet can select an attribute; spans then none). `marks`: (byte, comment) pairs
     set in as given (the symbol runs' marks); `prefix` (`marker_prefix`) begins every comment the step writes, so none the source writes stands for one."""
     vis = Visible(raw) if vis is None else vis
-    spans = sorted((a, b) for table in vis.tables for row in table for a, b in row)  # the scanner's cells: the parser's own, where a plain search for the tags ran a cell with no end tag on to the next cell anywhere (Codex G2-C3)
+    spans = sorted((a, b) for table in vis.tables for row in table for a, b in row) if cells else []  # the scanner's cells: the parser's own, where a plain search for the tags ran a cell with no end tag on to the next cell anywhere (Codex G2-C3)
     edits = []
     for n, (start, end) in enumerate(spans):
         close = _CELL_END.match(raw, end); spans[n] = (start, close.end() if close else end)  # with its own end tag, where it has one
@@ -176,7 +177,7 @@ JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAl
   return {cells: out, boxes}; }"""
 
 
-SYMBOLS_JS = "(p) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], mark = new RegExp('^' + p + 's:([0-9]+)$');
+SYMBOLS_JS = "([p, every]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
   for (const f of document.fonts) faces.push(f.family.replace(/^["']|["']$/g, '').toUpperCase());  // typefaces the document defines itself (@font-face)
   const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
   for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (!m) continue;
@@ -185,10 +186,13 @@ SYMBOLS_JS = "(p) => { " + _decoder_js() + """ const marks = {}, faces = [], pla
     if (!el) { marks[m[1]] = null; continue; }  // the parser moved the run away from its mark (a table's foster parent): unbound
     const cs = getComputedStyle(el), fam = cs.fontFamily.toUpperCase(), chars = Array.from(text);
     const face = lib.faces.find(f => { const k = f.indexOf(' ') < 0 ? f : '"' + f + '"'; return fam === k || fam.startsWith(k + ', '); }) || null;  // the primary family, as Chrome writes it
-    if (!face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text)) { plain.push(m[1]); continue; }  // ordinary text: nothing a symbol record could say (its id only: a large result is slow to leave the page)
+    const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text);
+    if (ordinary && !every) { plain.push(m[1]); continue; }  // ordinary text: nothing a symbol record could say (its id only: a large result is slow to leave the page)
     const r = document.createRange(); r.setStart(first, 0); r.setEnd(last, last.length); const rs = Array.from(r.getClientRects());  // the glyphs' own boxes, not the element's
     let seen = getComputedStyle(el).visibility === 'visible'; for (let a = el; a && seen; a = a.parentElement) if (+getComputedStyle(a).opacity === 0) seen = false;  // the gap marks' rule
-    marks[m[1]] = {text, family: cs.fontFamily, face, visibility: !rs.length || !seen ? 'hidden' : rs.some(q => q.width > 0 && q.height > 0) ? 'shown' : 'unproven',
+    const visibility = !rs.length || !seen ? 'hidden' : rs.some(q => q.width > 0 && q.height > 0) ? 'shown' : 'unproven';
+    if (ordinary) { marks[m[1]] = {text, visibility}; continue; }  // every run measured: an ordinary one says only its text and whether it shows
+    marks[m[1]] = {text, family: cs.fontFamily, face, visibility,
       changed: cs.textTransform !== 'none' || cs.fontVariant !== 'normal' || cs.fontFeatureSettings !== 'normal',
       pseudo: !!face && (() => { for (let a = el; a; a = a.parentElement) { const own = getComputedStyle(a); for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(a, ps);  // a block's first letter or line set another way
         if (q.fontFamily !== own.fontFamily || q.textTransform !== own.textTransform || q.fontVariant !== own.fontVariant || q.fontFeatureSettings !== own.fontFeatureSettings) return true; } } return false; })(),
@@ -234,21 +238,32 @@ def symbol_runs(raw, vis):
     return [(at(a), chars, hidden, not any(x <= a < y for x, y in literal)) for a, chars, hidden in sorted(runs)], unread
 
 
+def _char(b):  # one source character's text as the parser decodes it (anchor.text_reference); None where its bytes are not UTF-8 (never kept as Unicode)
+    try: return anchor.text_reference(b.decode()) if b[:1] == b'&' else b.decode('utf-8')
+    except UnicodeDecodeError: return None
+
+
+def _glyphs(raw, chars):  # a run's source characters with their text, and those of them that are not white space CSS collapses
+    every = [((s, e), _char(raw[s:e])) for s, e in chars]
+    return every, [(x, g) for x, g in every if g is None or g.strip(anchor._SPACE)]
+
+
+def _bound(glyphs, text):  # the DOM text a mark reached is exactly its own run's characters, white space CSS collapses aside: missing, moved or misread text is not
+    return [ch for _, g in glyphs for ch in (g if g is not None else '\ufffd')] == [ch for ch in text if ch not in anchor._SPACE]
+
+
 def symbols(raw, vis, runs, got, units):
     """`source_symbols` records from the page's marks (`SYMBOLS_JS`): each glyph of a run the page sets in a decoder typeface, and each private-use
     glyph in any other, by its own bytes; owners as the source links' (`_holders`), null where hidden or not every character is held. A run its mark
     does not reach whole (unbound) or may not carry a mark (literal text) is one unresolved record, never matched by text."""
     _, _, owners = edgartools_html._holders(units, vis); out = []; plain = set(got.get('plain', '').split(','))
-    def text(b):  # one source character's text as the parser decodes it (anchor.text_reference); None where its bytes are not UTF-8 (never kept as Unicode)
-        try: return anchor.text_reference(b.decode()) if b[:1] == b'&' else b.decode('utf-8')
-        except UnicodeDecodeError: return None
     for k, (a, chars, hidden, marked) in enumerate(runs):
         if marked and str(k) in plain: continue  # bound or not, a run in an ordinary font with no private-use character carries no symbol
         m = got['marks'].get(str(k)) if marked else None  # None: the mark's text was moved away (null) or the mark was never found (absent)
-        every = [((s, e), text(raw[s:e])) for s, e in chars]; glyphs = [(x, g) for x, g in every if g is None or g.strip(anchor._SPACE)]  # only the white space CSS collapses
+        every, glyphs = _glyphs(raw, chars)  # only the white space CSS collapses is left out
         cps = [(i, ch) for i, (_, g) in enumerate(glyphs) for ch in (g if g is not None else '\ufffd')]
         dom = [(ch, d) for ch, d in zip(m['text'], m['decoded'] or [None] * len(m['text'])) if ch not in anchor._SPACE] if m else None
-        if m is None or [ch for _, ch in cps] != [ch for ch, _ in dom]:
+        if m is None or not _bound(glyphs, m['text']):
             if glyphs and not hidden:
                 s0, e0 = glyphs[0][0][0], glyphs[-1][0][1]
                 out.append({'at': {'byte_start': s0, 'byte_end_exclusive': e0}, 'raw': ''.join(g if g is not None else '\ufffd' for (x, g) in every if s0 <= x[0] < e0), 'status': 'unresolved',
@@ -274,15 +289,30 @@ def symbols(raw, vis, runs, got, units):
     return out
 
 
-def measure(marked_html, browser, prefix=None):
+def _offline_page(browser, asked=None, document=None):
+    """A page as the step opens it: a wide window, the document's scripts never run, nothing fetched - a document's own references are never fetched
+    (EDGAR forbids external ones; the step must not depend on that). `asked`: a list that gets the address of every style sheet the page requests.
+    `document`: (address, bytes[, charset]) answered once, to the page's own first load: with no charset named, as a server sends a page that names
+    none, so the browser decodes the bytes by its own rules (a byte order mark, a <meta>, its default); with one, in that charset. Every other request
+    is refused - a later navigation (a refresh, a frame, a redirect) as cancelled, so that the page stays the one loaded."""
+    page = browser.new_page(viewport={'width': 1400, 'height': 1000}, java_script_enabled=False); first = [document]
+    def answer(route):
+        r = route.request
+        if first[0] and r.url == first[0][0] and r.is_navigation_request() and r.frame == page.main_frame: (_, body, *named), first[0] = first[0], None; return route.fulfill(status=200, content_type='text/html' + ''.join('; charset=' + c for c in named), body=body)
+        if asked is not None and r.resource_type == 'stylesheet': asked.append(r.url)
+        route.abort('aborted' if document else 'failed')  # cancelled: no error page replaces the loaded one ('failed', the default, for the step's other renders)
+    page.route('**/*', answer); return page
+
+
+def measure(marked_html, browser, prefix=None, every=False):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window; the document's scripts never run). Only
     table cells are read: a source element that writes the mark itself (`<div data-g="2">`) is no cell and measured nothing in its place (Codex,
     MEASURE_ALIAS_BASELINE); on a cell the step's own mark stands first and the browser keeps the first. With a symbol-mark `prefix`, the same page's
-    symbol marks (`SYMBOLS_JS`) come third."""
-    page = browser.new_page(viewport={'width': 1400, 'height': 1000}, java_script_enabled=False); page.route('**/*', lambda route: route.abort())  # offline: a document's own references are never fetched (EDGAR forbids external ones; the step must not depend on that)
+    symbol marks (`SYMBOLS_JS`) come third: with `every`, each run's, an ordinary one's too."""
+    page = _offline_page(browser)
     try:
         page.set_content(marked_html.decode('utf-8', 'replace'), wait_until='load'); got = page.evaluate(JS) if prefix is None else page.evaluate(JS, prefix)
-        try: sym = page.evaluate(SYMBOLS_JS, prefix) if prefix is not None else None
+        try: sym = page.evaluate(SYMBOLS_JS, [prefix, every]) if prefix is not None else None
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: sym = {'error': repr(e)[:200]}  # the symbols alone: the geometry measured stays (the step says why)
     finally:
@@ -292,6 +322,38 @@ def measure(marked_html, browser, prefix=None):
     return (by_table, got['boxes']) if prefix is None else (by_table, got['boxes'], sym)
 
 
+def page_visibility(raw, vis, browser):
+    """Which of the scanner's text runs the page itself hides, for a file whose reading is not certain, before the tool reads it: the step's own marks
+    (`symbol_runs`, `tag_cells` with comments only, no cell attribute a sheet could select) in a page that loads the marked bytes in the charset the
+    browser gives the original bytes (read first, sent as a server sends a page naming none); each run measured by the symbol marks' rule (`SYMBOLS_JS`) - no box, not
+    visible, or an ancestor at opacity 0: hidden; a box with area: shown; boxes of no area: neither (`unproven`). A run counts only where it holds more
+    than white space and the text its mark reached is exactly its own (`_bound`, as for symbols): one that is unmarked (literal text, or before a byte
+    order mark, which stays first), unbound (the parser moved it), decoded otherwise than by the scanner or not found counts nothing, and the scanner's
+    reading stays for it.
+    {'hidden': [[start, end], ...] the runs proved hidden, 'shown': [...] the runs the scanner hides that the page shows,
+    'unproven': n, 'unbound': [...] the runs no verdict reached}. A page the browser cannot read raises, and so does one that names a style sheet (its
+    request, refused offline: what the sheet shows or hides is not known)."""
+    runs, _ = symbol_runs(raw, vis); prefix = marker_prefix(raw); asked = []; address = 'http://%s.invalid/' % prefix  # an address the source nowhere writes
+    bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # a byte order mark stays first: the browser decodes by it
+    marked, _ = tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok and a >= bom], prefix, cells=False)  # comments only: no attribute a sheet could select
+    page = _offline_page(browser, asked, (address, raw))  # first the original bytes as they are: how the browser itself decodes them, and what they ask for
+    try: page.goto(address, wait_until='load'); charset = page.evaluate('document.characterSet')
+    finally: page.close()
+    if asked: raise RuntimeError('style sheets the page names cannot be read offline: ' + ', '.join(asked)[:150])  # every sheet the page names is requested from a page with an address, and refused: what it shows or hides is not known, no verdict at all
+    page = _offline_page(browser, None, (address, marked, charset))  # then the marked bytes in that charset: a comment cannot move a <meta> out of the browser's reach
+    try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True])
+    finally: page.close()
+    out = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}
+    for k, (_, chars, hidden, ok) in enumerate(runs):
+        glyphs = _glyphs(raw, chars)[1]; m = got['marks'].get(str(k)) if ok else None
+        if not glyphs: continue  # white space only: nothing to bind it by
+        if m is None or not _bound(glyphs, m['text']): out['unbound'].append([chars[0][0], chars[-1][1]])  # listed: text the parser moved, literal or misread, kept as the scanner reads it
+        elif m['visibility'] == 'hidden': out['hidden'].append([chars[0][0], chars[-1][1]])
+        elif m['visibility'] == 'unproven': out['unproven'] += 1
+        elif hidden: out['shown'].append([chars[0][0], chars[-1][1]])
+    return out
+
+
 def step(raw, route, browser):
     """The step on one document's route (the caller's bytes and browser): its tables gridded as Chrome lays them out (`apply`), the spaces the tool
     added measured and joined where Chrome shows them touching on one baseline (`join`), in a file the scanner cannot read for certain the units'
@@ -299,7 +361,7 @@ def step(raw, route, browser):
     anchors as they were, adds only the failure evidence (`source_symbols` read: false) and says why; a failed symbol reading alone keeps the geometry
     measured, says the same, and its error makes the route PARTIAL. Bytes that are not the route's source raise ValueError before any browser work; storage, dependency and resource errors propagate."""
     anchor.check_source(raw, route.get('sha256'))
-    t0 = time.time(); vis = Visible(raw); gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []
+    t0 = time.time(); vis = Visible(raw, page=route.get('page_visibility')); gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []  # the reading the route was made with
     (runs, unread), prefix = symbol_runs(raw, vis), marker_prefix(raw)
     marked, spans = tag_cells(raw, vis, gaps + endpoints, [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], prefix)
     try: measured, boxes, got = measure(marked, browser, prefix)

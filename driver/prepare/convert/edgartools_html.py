@@ -90,10 +90,11 @@ def codes(raw, vis):
 
 def named(raw, vis, codes):
     """The source as the tool gets it, decoded: each picture's name replaced by its code, each shown table tag given its code (one attribute, `TABLE`, its
-    first: no attribute the source writes is changed), and the text the page hides left out (where the scanner's reading is certain). Every tag the source
+    first: no attribute the source writes is changed), and the text the page hides left out (where the scanner's reading is certain; where it is not, only
+    the text the browser proved hidden, each whole source token: Visible's `page`). Every tag the source
     has, the tool sees — an empty anchor too: it may be laid out as a block and break the line (Codex R3-A)."""
     edits = [(vis.picture_names[start][0], code.encode()) if name is not None else ((start + 6, start + 6), f' {TABLE}="{code}"'.encode()) for code, (start, name) in codes.items()]  # after "<table"
-    if vis.certain: edits += [(span, b'') for span in vis.hidden]  # text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
+    edits += [(span, b'') for span in (vis.hidden if vis.certain else vis.browser_hidden)]  # only what is proved hidden: an uncertain scan's own spans stay, a sheet can show them again (Codex, CODEX_DESIGN_REVIEW 2); text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
     out, at = [], 0
     for (a, b), piece in sorted(edits):
         out += [raw[at:a], piece]; at = b
@@ -532,6 +533,12 @@ def whole_headings():
 SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
+def settings(vis):
+    """SETTINGS for one document; where the browser proved which of its text hides (Visible's `page`), that reading with a digest of the spans the tool
+    is given without, so that a parse saved for other input (a raw one, or another verdict) is never reused for this one."""
+    return dict(SETTINGS, hidden_text='left out as the browser proved it ' + anchor.sha256(str(vis.browser_hidden).encode())[:16]) if vis.paged else SETTINGS
+
+
 def version():
     import importlib.metadata as md
     return f"edgartools {md.version('edgartools')}"
@@ -546,12 +553,16 @@ def parse(raw, vis):
     return tree, round(time.time() - t0, 2), version()
 
 
-def convert(raw, file_id, sha256, parse=parse):
+def convert(raw, file_id, sha256, parse=parse, vis=None):
     """One HTML document into its route (the caller's bytes): scanned, parsed by the tool, adapted and linked to the source (`route_for`). A document parse error is a
-    FAILED route; source-identity, storage, dependency and resource failures stop the caller. `parse(raw, vis)` -> (dump, seconds, version) is the tool call; the command line passes one that reuses its saved parses."""
+    FAILED route; source-identity, storage, dependency and resource failures stop the caller. `parse(raw, vis)` -> (dump, seconds, version) is the tool call; the command line passes one that reuses its saved parses.
+    `vis`: the caller's scan of these bytes (html_route.visibility: with the browser's verdict on the text of a file the scanner cannot certify, taken
+    before the tool reads it); the tool's input and the linker follow it, and the route keeps that verdict (`page_visibility`) for the steps that read the source again."""
     anchor.check_source(raw, sha256)
-    vis = anchor.Visible(raw)
+    vis = anchor.Visible(raw) if vis is None else vis
     try: tree, seconds, made_by = parse(raw, vis)
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e: return unsupported(file_id, sha256, version(), 'FAILED', repr(e)[:300])
-    return route_for(tree, raw, file_id, sha256, seconds, made_by, SETTINGS, vis)
+    route = route_for(tree, raw, file_id, sha256, seconds, made_by, settings(vis), vis)
+    if vis.paged: route['page_visibility'] = vis.page
+    return route

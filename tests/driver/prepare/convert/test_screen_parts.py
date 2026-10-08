@@ -96,12 +96,12 @@ class Route(unittest.TestCase):
 
     def test_touching_pieces_raised_marks_cells_amounts_and_a_period_before_a_letter_keep_their_text(self):
         for want in ('407 PARK', '3.14 PERCENT', '19.AAA HOLDINGS LLC', '1.', '10700', 'Total $1,234', 'Wholly-Owned  Active  Subsidiaries1', 'Exhibit 21.1',
-                     '21.400 HIDDEN'):  # a box at opacity 0 beside a list number: the tool prints it, the page does not show it - no space for it
+                     '21. HIDDEN'):  # a box at opacity 0 beside a list number: the page does not show it, and in this file the scanner cannot certify the browser's verdict leaves it out of what the tool reads (it printed `21.400 HIDDEN`)
             with self.subTest(want=want): self.assertIn(want, self.texts)
         self.assertEqual(sorted(x for x in self.texts if ' ' not in x), ['1.', '10700'])  # the two cells stay two items
 
     def test_ids_kinds_and_anchors_stay_as_the_converter_gave_them(self):
-        bare = edgartools_html.convert(PAGE, 'positioned.htm', hashlib.sha256(PAGE).hexdigest())
+        bare = edgartools_html.convert(PAGE, 'positioned.htm', hashlib.sha256(PAGE).hexdigest(), vis=Visible(PAGE, page=self.route['page_visibility']))  # the conversion the route was made by
         shape = lambda r: [(u['id'], u['kind'], [x.get('anchor') for x in ((u.get('cells') or []) if u.get('kind') == 'table' else [u])]) for u in r['units']]
         self.assertEqual(shape(self.route), shape(bare))
 

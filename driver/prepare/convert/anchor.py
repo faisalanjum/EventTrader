@@ -5,7 +5,7 @@ in the source stays unanchored and the source text it should have covered is rep
 in several source places (a merged stacked header) must come from the adapter with a list of anchors; the linker
 never guesses such a split."""
 from array import array
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 from collections import Counter, defaultdict, namedtuple
 from functools import cached_property
 import hashlib
@@ -317,9 +317,12 @@ def resolve(decls, prop, valid):
 class Visible:
     """Characters a reader sees (hidden subtrees, head, scripts, styles and comments removed), each with its byte span. `certain` is False where
     the source holds something this scanner knows it does not follow — a value it does not evaluate, a stylesheet rule on a hiding property,
-    content it does not model, markup the parser would move: nothing is certified from the reading then."""
+    content it does not model, markup the parser would move: nothing is certified from the reading then. `page`: where the reading is not certain,
+    the browser's own verdict on text runs (screen_grid.page_visibility: the byte spans of the runs it proved hidden, and of those the scanner hides that
+    it proved shown); a text token one of those runs holds whole takes that verdict instead of the scanner's — every other token, every tag and the
+    layout keep the scanner's reading, and the file is never certain."""
 
-    def __init__(self, raw, xml=False):
+    def __init__(self, raw, xml=False, page=None):
         try:
             s, blen = raw.decode('utf-8'), (lambda t: len(t.encode('utf-8')))
         except UnicodeDecodeError:
@@ -329,6 +332,8 @@ class Visible:
         apart = []  # (place in `chars`, byte span of the tag) where an element that strikes, and is no block otherwise, begins or ends: struck text is read apart from its neighbours (the contract's redline rule). The page has no line break there, so the layout rules below never see one — the boundary is set in after the scan
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         self.hidden = []  # the byte spans of the text in hidden subtrees, as written (text tokens and references), for an adapter that hands a tool the source without it
+        self.browser_hidden, self.paged, self.page = [], page is not None, page  # the text tokens the browser proved hidden (`page`): all an adapter may leave out where the reading is not certain; the verdict itself, for the route
+        told = sorted([(a, b, True) for a, b in page['hidden']] + [(a, b, False) for a, b in page['shown']]) if page else []; told_at = [a for a, _, _ in told]
         computed = '\x00' in s or (not raw.isascii() and (blen is len or raw.startswith(b'\xef\xbb\xbf') or _META.search(raw) is not None))  # the reading cannot be certified: a hiding property with a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes), markup it does not follow — a null character, which the parser drops or replaces by where it stands (Codex R18-C1) — or bytes beyond ASCII that are not plainly UTF-8: the browser decodes them by the mark, the <meta> or a guess of its own (every one of 22,483 real documents is ASCII)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
@@ -518,11 +523,14 @@ class Visible:
             if literal != 1 and not ref and text_reference(t) != t: computed = True  # a reference without its semicolon that the browser decodes ('&#150 ', '&nbsp ', '&notes'): read literally here, so not certified (Codex R18-C1)
             text = text_reference(t) if ref else t; word = not _WS.fullmatch(text)
             if top and top.inside in _TABLE and word: computed = True  # text in a table outside any cell — directly, or inside an element the parser moves out: the browser prints it before the table
-            if hidden:
+            k = bisect_right(told_at, start) - 1
+            said = told[k][2] if k >= 0 and pos <= told[k][1] else None  # the browser's verdict, for a token a run it proved holds whole; never one beside it
+            if hidden if said is None else said:
                 if not ref: self.hidden_chars += len(_WS.sub('', t))
                 elif not _WS.match(text): self.hidden_chars += 1
                 self.hidden.append((start, pos))
-                if not top.gone: veil = len(chars) if text[-1] in ('\r\n' if keeps else _SPACE) or (veil == len(chars) and not word) else None  # invisible text that ends with collapsible white space, or with a kept line feed (the line it starts drops the white space that follows) — and kept white space after either leaves it so; removed text is not there at all and changes nothing
+                if said: self.browser_hidden.append((start, pos))
+                if top is not None and not top.gone: veil = len(chars) if text[-1] in ('\r\n' if keeps else _SPACE) or (veil == len(chars) and not word) else None  # invisible text that ends with collapsible white space, or with a kept line feed (the line it starts drops the white space that follows) — and kept white space after either leaves it so; removed text is not there at all and changes nothing
                 continue
             if (after and word) or (touch == len(chars) and not _WS.match(text)) or (not keeps and text[0] in _SPACE and len(chars) in (lead, veil)) or (fresh and bool(top) and top.disp in _SHED and not text.strip(_SPACE) and bool(chars) and not _WS.fullmatch(chars[-1])): computed = True  # a word on the line of a box that must have it to itself; white space the browser drops — at the edge of an inline box between two words, after invisible text that ended with white space, or alone between a word and a tag in a flex, grid or table box, which shows none of its white space that stands alone between its children (CSS Flexbox 4, CSS 2 17.2.1; what follows is not looked at)
             fresh = False
@@ -547,7 +555,7 @@ class Visible:
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
         sheets = stylesheets(sheet_tokens)
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
-        self.certain = not computed and not sheet  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified
+        self.certain = not computed and not sheet and page is None  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified; nor by the browser's verdict, which proves text, not tags or layout
         struck_computed = struck_computed or any(unpaints(m.group(1).lower(), m.group(2)) for x in sheets if x for m in _PAINT.finditer(x))  # a sheet may colour a line so that it is not seen, or leave struck letters no room
         self.struck_certain = self.certain and not struck_computed and not any(_DECO_RULE.search(x) for x in sheets)  # a struck run is certified only when the reading is, no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
         self.plain_certain = self.certain and not struck_computed and not any(sheet_can_strike(x) for x in sheets)  # "nothing struck here" needs, besides, that no sheet rule can add or force a strike (line-through, inherit, revert, a function, !important or any token this scanner does not know)

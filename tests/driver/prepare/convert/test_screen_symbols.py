@@ -128,7 +128,7 @@ class Route(unittest.TestCase):
         r = self.by[at(PAGE, b'</table><table>')]; self.assertEqual((r['status'], r['why'], r['owners']), ('unresolved', 'unbound', None))
 
     def test_units_keep_their_text_ids_kinds_and_anchors(self):
-        bare = edgartools_html.convert(PAGE, 'symbols.htm', hashlib.sha256(PAGE).hexdigest())
+        bare = edgartools_html.convert(PAGE, 'symbols.htm', hashlib.sha256(PAGE).hexdigest(), vis=Visible(PAGE, page=self.route['page_visibility']))  # the conversion the route was made by (the page holds a script: the browser read its visibility)
         shape = lambda r: [(u['id'], u['kind'], u.get('anchor')) for u in r['units']]
         self.assertEqual(shape(self.route), shape(bare))
         self.assertTrue(any('Q1 Yes þ No ¨' == u.get('text') for u in self.route['units']))
