@@ -2353,3 +2353,33 @@ the checker's browser text, 19 pictures in cells over several rows, where its ne
 these classes, not on its own a proof of every coordinate (Codex). **Gate** (Codex, `prepare_context_20261008/PICTURE_GATE.md`): PASS on
 `d794689`; OCR's frozen v3.2 reference (`picture_oracle/FROZEN_V3_2.json`, unmarked originals in Chromium): 772 in-cell occurrences = 719 exact
 row, column and spans + 53 source-only, 1,102 image records and descriptions exact, no unexplained finding.
+
+## 76. Every link the source writes is kept as source evidence (2026-10-08; Codex HREF_DESIGN_REVIEW, HREF_URL_REVIEW; Fable HREF_DESIGN_v2)
+
+The tool keeps a paragraph's links and drops every other - a table cell's, a heading's, a picture's (its table processor returns strings): of 43,971
+links in 851 of the 3,353 approved documents the route kept 2,158, so an exhibit index lost the file a cell points to (CP's 8-K) and a statement cell
+its note ("Goodwill (Note 3)", Deckers). The route now carries `source_links` beside its units: one record per `<a href>` start tag the parser sees,
+read in the scanner's existing pass from the attributes it already reads - the href as written (decoded once, nothing trimmed), its opening tag,
+`hidden` where it stands in a removed subtree, `certain: false` where the scanner's reading is not certain. Its `extent` and `owners` - every unit,
+table cell (by its anchor's first byte, which the screen step leaves as it is) or picture holding what it shows, `[]` when it shows nothing (empty, or
+text the page does not show: not `hidden`), `unheld` for shown characters no unit holds - only where the scan proves the element whole: closed by its
+own `</a>`, no `<a>` opened inside it, not standing in a table outside a cell; a link the parser splits, reopens or moves stays unresolved, never given
+an owner. Where it points: with no active `<base href>`, a same-document fragment names its source targets as Chromium finds them (URL syntax first:
+tabs and line ends removed, C0 controls and spaces trimmed at the ends, a no-break space part of the path; then the URL-serialized fragment, then one UTF-8
+percent-decoding; ids before names; every duplicate) and the unit or cell a single target's own text all stands in, where that is exactly one - an
+empty anchor, a container holding several units or a hidden target names none, never "the next paragraph"; every other href, and any under a base, stays as written (no URL
+resolution, no fetch). The first `<base href>` (hidden too; a template's is inert) is kept once as `source_base`. Units, cells, text, order and
+segmentation are untouched: the records are read after the split, beside them. No setting: no saved parse changes. **Measured** on `9c7079c57` against `a4884216`: tests 460 + 400 (12 new, failing before: 58 synthetic Chromium controls - Codex's 26 link,
+16 target, 10 URL-serialization and 6 special-target cases - with visibility controls, the CP and Deckers shapes and the steps keeping the records;
+OCR's two-line consumer patch). All 3,353 approved documents, the tool's caches cleared before each conversion on both sides (audit isolation, not
+a proof of production order independence): every route identical apart from timings and the new fields; 43,971 records, per document the
+inventory's `<a href>` tags; the 43,162 in certain readings all whole (no reopened, nested, fostered or hidden link occurs), owned by cells
+26,663, units 15,102, nothing shown 1,299, shown text no unit holds 98 (table-of-contents navigation, Codex's check of the originals); 809 in
+uncertain readings unresolved; same-document 32,747 one target (1,077 with a unit: most targets are empty anchors), 189 none, 76 top; 10,959 as
+written; no base. Size +3.57% of the conversion records; the scanner +4-7% CPU on link-heavy filings, the records 0.01-0.02 s. The key route sets
+against the picture build: 411 routes, 17,422 records per step, the formatting and screen steps keeping them; every other field equal apart from
+timings; grades identical. A fresh nine-route consumer handoff: the whole route with its records handed over, both modes 10 delivered, 9 refused,
+the same OCR results. OCR's independent gate (80 controls, 18 mutations, the corpus, fresh and warm runs) 0 failures; Codex's reversals caught.
+Found on the way, not changed here: EdgarTools' style parser hands out shared cached Style objects its builder then changes, so a heading's
+native style can depend on documents converted earlier in the process (6 documents in an uncontrolled warm run; replayed in order, base and
+candidate identical) - queued as its own repair.
