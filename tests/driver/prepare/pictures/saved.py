@@ -94,6 +94,33 @@ def body(text, rec):  # the packet text without the one status line; the record 
     return '\n'.join(lines[:1] + lines[2:]), {k: v for k, v in json.loads(json.dumps(rec)).items() if k not in RUNTIME_KEYS}
 
 
+def evidence_whole(text, rec):  # the Oct 8 display-only change (PACKET_EVIDENCE_WORK_ORDER), applied to a frozen packet: where it printed a block's first
+    # four stored free-OCR conflicts and supports, each cut at 80 characters, and a "+N more" line, the packet now prints every one, whole; the record
+    # (blocks[i].free_ocr) holds that evidence unchanged, and nothing else in the text changes
+    tab = '\u27e6table\u27e7'                                       # packets.TAB, as the frozen text wrote it
+    cut = lambda x: (lambda x: '"%s"' % (x if len(x) <= 80 else x[:77] + '...'))(x.replace(tab, '[a table]')) if x else '(nothing)'
+    whole = lambda x: '"%s"' % x.replace(tab, '[a table]') if x else '(nothing)'
+    conflict = lambda q, c, o: f'[FREE OCR conflict, unverified: this block has {q(c)} where both free tools read {q(o)}]'
+    support = lambda q, c, o, who: f"[FREE OCR support, unverified: at Chandra {q(c)} / Sonnet {q(o)} both free tools read {who}'s version]"
+    lines, at = text.split('\n'), 0
+    for i, b in enumerate(rec['blocks']):
+        cs, ss = ((b.get('free_ocr') or {}).get(k, []) for k in ('conflicts', 'support'))
+        if not cs and not ss:
+            continue
+        old = [conflict(cut, *x) for x in cs[:4]] + [support(cut, *x) for x in ss[:4]]
+        k = next((k for k in range(at, len(lines) - len(old) + 1) if lines[k:k + len(old)] == old), None)
+        if k is None:
+            raise AssertionError(f'block {i}: its frozen free-OCR lines are not in the frozen text')
+        end, extra = k + len(old), max(0, len(cs) - 4) + max(0, len(ss) - 4)
+        if extra:
+            if not (lines[end].startswith(f'[FREE OCR: +{extra} more in ') and lines[end].endswith(f', block {i}]')):
+                raise AssertionError(f'block {i}: the frozen "+{extra} more" line is not where the format put it')
+            end += 1
+        new = [conflict(whole, *x) for x in cs] + [support(whole, *x) for x in ss]
+        lines[k:end] = new; at = k + len(new)
+    return '\n'.join(lines)
+
+
 def status_follows_flags(line, flags):
     return (('MISSING' in line) == ('no reading' in flags) and ('INCOMPLETE' in line) == ('cut off' in flags)
             and ('possible skipped' in line) == ('missed' in flags) and ('unconfirmed' in line) == ('no support' in flags))

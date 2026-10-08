@@ -7,6 +7,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from PIL import Image
 
@@ -120,6 +121,25 @@ class PacketTests(unittest.TestCase):
         self.assertIn('[CHANDRA ONLY', txt); self.assertIn('read by Chandra only', txt)
         self.assertNotIn('[UNRESOLVED', txt); self.assertNotIn('Sonnet (nothing)', txt)
 
+
+    def test_every_stored_free_ocr_alternative_is_printed_whole(self):  # Codex, Oct 8 (PACKET_EVIDENCE_WORK_ORDER): no display cap or cut hides one
+        long = 'Investment income, before expense, for the quarter ended March 31, 2025, in millions of dollars'   # > 80 characters, the difference at the end
+        cases = {'more than four, the material one last': dict(conflicts=[('$', '')] * 4 + [('660', '650')], support=[]),
+                 'difference past 80 characters': dict(conflicts=[(long + ' 660', long + ' 650')], support=[]),
+                 'empty sides': dict(conflicts=[('As of or for the', ''), ('', 'Note 3')], support=[]),
+                 'normal short control': dict(conflicts=[('Dycorn', 'Dycom')], support=[]),
+                 'two readers, supports past four': dict(conflicts=[], support=[('$', '', 'Chandra')] * 4 + [('660', '650', 'Sonnet')])}
+        q = lambda x: f'"{x}"' if x else '(nothing)'
+        for name, ev in cases.items():
+            with self.subTest(name):
+                other = '<p>Ordinary context.</p>' if ev['support'] else None
+                with patch.object(p, 'free_notes', return_value={0: ev}):
+                    txt, rec = p.packet('evidence', self.picture, box('<p>Ordinary context.</p>'), other, 'saved:other' if other else None, free={'saved': True})
+                self.assertEqual(rec['blocks'][0]['free_ocr'], ev)                          # the stored evidence, unchanged
+                self.assertIn('<p>Ordinary context.</p>', txt)                               # the reading itself, as written
+                want = ([f'[FREE OCR conflict, unverified: this block has {q(c)} where both free tools read {q(o)}]' for c, o in ev['conflicts']]
+                        + [f"[FREE OCR support, unverified: at Chandra {q(c)} / Sonnet {q(o)} both free tools read {w}'s version]" for c, o, w in ev['support']])
+                self.assertEqual([x for x in txt.split('\n') if x.startswith('[FREE OCR')], want)   # every item, in order, whole, unverified; no "+N more"
 
 class SavedProbes(unittest.TestCase):  # the probes on saved readings, through the pinned fixtures (ported 2026-10-07)
     @classmethod

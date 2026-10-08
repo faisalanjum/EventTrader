@@ -22,7 +22,7 @@ from driver.prepare import pictures
 from driver.prepare.convert import anchor
 from driver.prepare.get.acquire import read_package
 from driver.prepare.pictures import readers
-from tests.driver.prepare.pictures.saved import Saved
+from tests.driver.prepare.pictures.saved import Saved, evidence_whole
 
 H = 'real575_20261005/handoff_20261006/'
 RECEIPTS = {('route', False): 'real575_20261005/runs/20261007_main_d4639b096/HANDOFF_routes.json',
@@ -153,7 +153,9 @@ class Handoff(unittest.TestCase):
         saved = copy.deepcopy(received)                                     # the receipt as saved: named picture relocation only
         for k, o in saved['ocr_results'].items():
             o['packet'], o['record'] = self.s.relocated(owners[k], o['packet'], o['record'])
-        self.assertEqual(dict(saved, refused=refused), self.s.json(RECEIPTS[kind, on]))
+        want = self.s.json(RECEIPTS[kind, on])
+        for o in want['ocr_results'].values(): o['packet'] = evidence_whole(o['packet'], o['record'])   # the frozen receipt, as the packet now prints its evidence
+        self.assertEqual(dict(saved, refused=refused), want)
         return received
 
     def test_current_routes_deliver_every_occurrence_with_its_full_context(self):

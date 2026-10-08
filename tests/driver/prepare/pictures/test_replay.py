@@ -20,7 +20,7 @@ from unittest.mock import patch
 
 from driver.prepare import pictures
 from driver.prepare.pictures import packets, readers, worker
-from tests.driver.prepare.pictures.saved import SETS, Saved, body, status_follows_flags
+from tests.driver.prepare.pictures.saved import SETS, Saved, body, evidence_whole, status_follows_flags
 
 V6 = {'validation120': 'real575_20261005/validation_20261006/ROUTES_V6.json', 'rest': 'real575_20261005/reader_packets/real336_dev/ROUTING_V6_EVAL.json'}
 V5 = 'real575_20261005/validation_20261006/ROUTES.json'
@@ -120,7 +120,7 @@ class Replay(unittest.TestCase):
                 self.assertTrue(status_follows_flags(line, flags) and 'Sonnet off' in line, line)
                 self.assertLessEqual(len(line), 260)                          # the one status line stays short (modes.py)
                 t, rc = body(*self.s.relocated(r, text, rec))
-                self.assertEqual((t, rc), (b['text'], b['record']))
+                self.assertEqual((t, rc), (evidence_whole(b['text'], b['record']), b['record']))
 
     def test_optional_mode_asks_exactly_the_saved_routes(self):
         asked = collections.Counter()
@@ -141,10 +141,10 @@ class Replay(unittest.TestCase):
                 t, rc = body(*self.s.relocated(r, text, rec))
                 exp = r['expected']['on']['assets']
                 if exp == [BASELINE]:
-                    want = (b['text'], b['record'])
+                    want = (evidence_whole(b['text'], b['record']), b['record'])
                 else:
                     md, js = exp
-                    want = (self.s.text(md)[:-1], self.s.json(js))
+                    want = (evidence_whole(self.s.text(md)[:-1], self.s.json(js)), self.s.json(js))
                 self.assertEqual((t, rc), want)
 
     def test_the_576_saved_packets(self):
@@ -166,7 +166,7 @@ class Replay(unittest.TestCase):
                     md, js = SAVED[kind] + r['name'] + '.md', SAVED[kind] + r['name'] + '.json'
                     self.assertIn(md, self.s.store.members('ocr.saved_packets.576')); self.assertIn(js, self.s.store.members('ocr.saved_packets.576'))
                     t, rc = self.s.relocated(r, *want)
-                    self.assertEqual((t + '\n', rc), (self.s.text(md), self.s.json(js)))
+                    self.assertEqual((t + '\n', rc), (evidence_whole(self.s.text(md)[:-1], self.s.json(js)) + '\n', self.s.json(js)))
                     seen[kind] += 1
         self.assertEqual(dict(seen), {'production': 120, 'evaluation': 120, 'development': 336})
 

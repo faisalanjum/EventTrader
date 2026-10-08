@@ -26,7 +26,7 @@ VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'met
 
 WRAP = {'html', 'body', 'div', 'section', 'article', 'main'}         # containers whose children are the elements (not Chandra's block divs)
 
-SHOWN = 4                                                            # differences shown per block; the rest are in the .json
+SHOWN = 4                                                            # two-reader differences shown per block (each reading is printed in full below); the rest are in the .json
 
 toks = lambda x, fmt: rc._TOKEN.findall(rc.norm(rc.plain('\n'.join(rc.read(x, fmt)[0])))) if x else []
 
@@ -195,6 +195,7 @@ def packet(name, picture, html, other_html, other_src, free=None):  # (the exact
                 if who: res[i] = (who, why)
     n = {k: sum(v[0] == k for v in st.values()) for k in ('agree', 'unresolved', 'visual')}; n['unresolved'] -= len(res)
     q = lambda x: (lambda x: '"%s"' % (x if len(x) <= 80 else x[:77] + '...'))(x.replace(TAB, '[a table]')) if x else '(nothing)'
+    whole = lambda x: '"%s"' % x.replace(TAB, '[a table]') if x else '(nothing)'   # free-OCR evidence is printed nowhere else: every item, whole
     side, done = f'packets/{name}.json', set()
     out = [f'<picture id="{name}" src="{picture}" size="{w}x{h}">',
            f'Status: {n["agree"]} blocks agree between two readers; ' + (f'{len(res)} tables resolved by the picture\'s word positions; ' if res else '') + (f'{n["unresolved"]} unresolved; ' if other_html else f'{n["unresolved"]} read by Chandra only (single reader, not compared); ') + f'{n["visual"]} visual (charts, pictures, diagrams: reader text unverified; free-OCR evidence shown, unverified). '
@@ -238,10 +239,8 @@ def packet(name, picture, html, other_html, other_src, free=None):  # (the exact
         else:
             out += [head + ' | differ: ' + '; '.join(shown[:SHOWN]) + more + ']', b['html']]
             show(span, 'ALTERNATIVE: Sonnet\'s reading of this region, unverified')
-        for c, o in ev.get(i, {}).get('conflicts', [])[:SHOWN]: out.append(f'[FREE OCR conflict, unverified: this block has {q(c)} where both free tools read {q(o)}]')
-        for c, o, who in ev.get(i, {}).get('support', [])[:SHOWN]: out.append(f'[FREE OCR support, unverified: at Chandra {q(c)} / Sonnet {q(o)} both free tools read {who}\'s version]')
-        extra = max(0, len(ev.get(i, {}).get('conflicts', [])) - SHOWN) + max(0, len(ev.get(i, {}).get('support', [])) - SHOWN)
-        if extra: out.append(f'[FREE OCR: +{extra} more in {side}, block {i}]')
+        for c, o in ev.get(i, {}).get('conflicts', []): out.append(f'[FREE OCR conflict, unverified: this block has {whole(c)} where both free tools read {whole(o)}]')
+        for c, o, who in ev.get(i, {}).get('support', []): out.append(f'[FREE OCR support, unverified: at Chandra {whole(c)} / Sonnet {whole(o)} both free tools read {who}\'s version]')
         lonely(i)
     assert done == set(range(len(el))), 'a Sonnet element is missing from the packet'
     record = dict(picture=picture, size=[w, h], second_reading=other_src, elements=[dict(chars=e['chars']) for e in el],
