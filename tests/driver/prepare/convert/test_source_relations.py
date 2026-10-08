@@ -7,6 +7,7 @@ shows nothing (empty or hidden alike), null when the scan is uncertain. Continua
 one (missing, duplicated, of another kind, or a cycle). Expected owners are read off the route's own units by their text, never from the candidate."""
 import json
 import unittest
+from unittest.mock import patch
 
 from driver.prepare.convert import anchor
 from driver.prepare.convert import edgartools_html as eh
@@ -130,6 +131,17 @@ class Relationships(unittest.TestCase):
     def test_attributes_as_the_parser_reports_them(self):
         r = route(doc(TABLE() + NOTES(), rel('f1', 'n1', role=None), before='<!DOCTYPE html [<!ATTLIST ix:relationship order CDATA "7">]>'))
         self.assertEqual(r['source_relations']['relationships'][0]['attributes'], {'fromRefs': 'f1', 'toRefs': 'n1', 'order': '7'})  # a DTD default is the parser's value; no XBRL default is added
+
+    def test_only_xml_content_errors_mean_unread(self):  # Codex boundary_probes: a fault of the machine is no fact about the document
+        class Failing:
+            def __init__(self, error): self.error = error
+            def Parse(self, *_): raise self.error
+        raw = b'<html><p>Text</p></html>'; vis = anchor.Visible(raw)
+        for error in (OSError('read failed'), RuntimeError('broken callback'), MemoryError('no memory')):
+            with self.subTest(type(error).__name__), patch.object(anchor, 'xml_parser', return_value=Failing(error)), self.assertRaises(type(error)):
+                eh.source_relations(raw, [], vis)
+        raw = b'<html><p>Text</html>'; got = eh.source_relations(raw, [], anchor.Visible(raw))
+        self.assertEqual((got['read'], 'relationships' in got, bool(got['error'])), (False, False, True))  # bad XML: unread, said so
 
     def test_the_units_and_links_are_not_touched(self):
         raw = doc(TABLE() + NOTES(), rel('f1', 'n1')); r = route(raw)

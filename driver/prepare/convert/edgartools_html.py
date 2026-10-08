@@ -10,6 +10,7 @@ import time
 from dataclasses import asdict
 from types import SimpleNamespace
 from urllib.parse import quote, unquote
+from xml.parsers import expat
 
 from driver.prepare.convert import anchor
 from driver.prepare.compare import _CF
@@ -372,7 +373,7 @@ def source_relations(raw, units, vis):
 
     p.StartElementHandler, p.EndElementHandler = start, end
     try: p.Parse(raw, True)
-    except Exception as e: return {'read': False, 'error': str(e)[:200]}
+    except (expat.ExpatError, LookupError, ValueError) as e: return {'read': False, 'error': str(e)[:200]}  # what the document's own bytes cause (as anchor.xml_chars reads them); a fault of the machine propagates
     held, owner, owners = _holders(units, vis)
 
     def found(ref, rec, kinds):  # a resolved element: its kind, place and owners
