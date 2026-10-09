@@ -424,7 +424,12 @@ def step(raw, route, browser):
     anchors as they were, adds only the failure evidence (`source_symbols` read: false) and says why; a failed symbol reading alone keeps the geometry
     measured, says the same, and its error makes the route PARTIAL. Bytes that are not the route's source raise ValueError before any browser work; storage, dependency and resource errors propagate."""
     anchor.check_source(raw, route.get('sha256'))
-    t0 = time.time(); vis = Visible(raw, page=route.get('page_visibility')); gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []  # the reading the route was made with
+    t0 = time.time(); return _step(raw, route, browser, Visible(raw, page=route.get('page_visibility')), t0)  # the reading the route was made with; the step's time counts its own scan
+
+
+def _step(raw, route, browser, vis, t0=None):  # `step` on a reading already made of the route's own bytes (html_route.prepare, which checked them): the one the route was made with
+    if vis.page != route.get('page_visibility'): raise ValueError('the screen step reads the source as the route was read (its page visibility), not another reading')
+    t0 = time.time() if t0 is None else t0; gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []  # a reading made before the step is not its time
     (runs, unread), prefix = symbol_runs(raw, vis), marker_prefix(raw)
     marked, spans = tag_cells(raw, vis, gaps + endpoints, [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], prefix)
     try: measured, boxes, got = measure(marked, browser, prefix)

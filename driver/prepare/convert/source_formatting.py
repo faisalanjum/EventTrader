@@ -14,7 +14,11 @@ def apply(raw, units):
     converter's own claim stands. When neither can be certified nothing is changed and None is returned. Beside the phrases, `struck_at`: the
     exact places of the struck characters in the item's text (`anchor.struck_at`), written only where both readings are certain and the text is the
     source's at its place — a phrase that stands twice in the text is placed by it; a redline printed as one run (`TheExcept`) keeps its two words."""
-    vis = Visible(raw)
+    return _apply(Visible(raw), units)
+
+
+def _apply(vis, units):  # `apply` on a reading already made of the same bytes: the source as written, never the browser-qualified one (html_route.prepare)
+    if vis.paged: raise ValueError('formatting reads the source as written, not a browser-qualified reading')
     if not vis.struck_certain and not vis.plain_certain: return None
     runs = vis.struck_runs(); n = 0
     for u in units:
@@ -37,5 +41,9 @@ def step(raw, route):
     naming the step. Returns `apply`'s count, None where nothing can be certified. Bytes that are not the route's source (its SHA-256) raise ValueError
     before the route is touched."""
     anchor.check_source(raw, route.get('sha256'))
-    n = apply(raw, route['units']); route['route'] = dict(route['route'], name=route['route']['name'] + '+source-formatting', settings=dict(route['route'].get('settings') or {}, source_formatting=True))
+    return _step(Visible(raw), route)
+
+
+def _step(vis, route):  # `step` on a reading already made of the route's own bytes (html_route.prepare, which checked them)
+    n = _apply(vis, route['units']); route['route'] = dict(route['route'], name=route['route']['name'] + '+source-formatting', settings=dict(route['route'].get('settings') or {}, source_formatting=True))
     return n

@@ -24,11 +24,15 @@ def prepare(raw, file_id, sha256, browser):
     browser's counts or why it could not read them. A failed conversion stops there (no step runs, `facts` empty). A page that cannot be measured keeps
     the units it has and marks the route PARTIAL with the step's error, as a partial conversion is marked (DESIGN §36); so does a page whose visibility
     cannot be read, which keeps the scanner's reading. A disconnected browser's error propagates so the caller can stop and restart it. Source-identity,
-    storage, dependency and resource errors propagate."""
-    anchor.check_source(raw, sha256); vis, failed = visibility(raw, anchor.Visible(raw), browser)
+    storage, dependency and resource errors propagate. The bytes are read once as written and, where the scanner cannot certify them, once as the
+    browser shows them: formatting reads the first, the conversion and the screen step the reading the route is made with (each step called alone
+    reads its own)."""
+    anchor.check_source(raw, sha256); original = anchor.Visible(raw); vis, failed = visibility(raw, original, browser)
     route = edgartools_html.convert(raw, file_id, sha256, vis=vis)  # one scan: a certain file is not read twice
     if route['status'] != 'OK': return route, {}
-    facts = {'formatting': source_formatting.step(raw, route), 'screen': screen_grid.step(raw, route, browser)}
+    anchor.check_source(raw, route.get('sha256'))  # the route names these bytes before the steps change it with this call's own readings
+    facts = {'formatting': source_formatting._step(original, route)}; del original  # the source as written is for formatting only: not kept through the screen work
+    facts['screen'] = screen_grid._step(raw, route, browser, vis)
     if failed or vis.paged: facts['visibility'] = {'error': failed} if failed else {k: len(v) if isinstance(v, list) else v for k, v in vis.page.items()}
     errors = (['page visibility: ' + failed] if failed else []) + (['screen step: ' + facts['screen']['error']] if 'error' in facts['screen'] else [])
     if errors: route['status'], route['error'] = 'PARTIAL', '; '.join(errors)
