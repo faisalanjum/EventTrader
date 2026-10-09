@@ -394,7 +394,10 @@ def page_visibility(raw, vis, browser):
     order mark, which stays first), unbound (the parser moved it), decoded otherwise than by the scanner or not found counts nothing, and the scanner's
     reading stays for it.
     {'hidden': [[start, end], ...] the runs proved hidden, 'shown': [...] the runs the scanner hides that the page shows,
-    'unproven': n, 'unbound': [...] the runs no verdict reached}. A page the browser cannot read raises, and so does one that names a style sheet (its
+    'unproven': n, 'unbound': [...] the runs no verdict reached, and - where there are any - 'unresolved': beside each of those spans, in order, its
+    exact source fragment as evidence (`at`; `raw`, those bytes read as UTF-8 and nothing more - no reference decoded, so it encodes back to them
+    exactly - or, where they are not UTF-8, the `bytes` in hex; `why`): source spelling, not what the browser shows; neither shown nor hidden, its
+    place in the page unknown (Root, fostered_text_20261009)}. A page the browser cannot read raises, and so does one that names a style sheet (its
     request, refused offline: what the sheet shows or hides is not known)."""
     runs, _ = symbol_runs(raw, vis); prefix = marker_prefix(raw); asked = []; address = 'http://%s.invalid/' % prefix  # an address the source nowhere writes
     bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # a byte order mark stays first: the browser decodes by it
@@ -406,14 +409,20 @@ def page_visibility(raw, vis, browser):
     page = _offline_page(browser, None, (address, marked, charset))  # then the marked bytes in that charset: a comment cannot move a <meta> out of the browser's reach
     try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True])
     finally: page.close()
-    out = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}
+    out, unresolved = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}, []
     for k, (_, chars, hidden, ok) in enumerate(runs):
         glyphs = _glyphs(raw, chars)[1]; m = got['marks'].get(str(k)) if ok else None
         if not glyphs: continue  # white space only: nothing to bind it by
-        if m is None or not _bound(glyphs, m['text']): out['unbound'].append([chars[0][0], chars[-1][1]])  # listed: text the parser moved, literal or misread, kept as the scanner reads it
+        if m is None or not _bound(glyphs, m['text']):  # listed: text the parser moved, literal or misread, kept as the scanner reads it - and its source beside it
+            s, e = chars[0][0], chars[-1][1]; out['unbound'].append([s, e])
+            try: fragment = {'raw': raw[s:e].decode('utf-8')}
+            except UnicodeDecodeError: fragment = {'bytes': raw[s:e].hex()}
+            unresolved.append({'at': {'byte_start': s, 'byte_end_exclusive': e}, **fragment,
+                               'why': 'byte order mark' if e <= bom else 'literal text' if not ok else 'unbound' if str(k) in got['marks'] else 'mark not found'})  # as `symbols` says it; the encoding's own mark is no text the page shows
         elif m['visibility'] == 'hidden': out['hidden'].append([chars[0][0], chars[-1][1]])
         elif m['visibility'] == 'unproven': out['unproven'] += 1
         elif hidden: out['shown'].append([chars[0][0], chars[-1][1]])
+    if unresolved: out['unresolved'] = unresolved
     return out
 
 

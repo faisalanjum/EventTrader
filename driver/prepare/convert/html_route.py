@@ -18,6 +18,13 @@ def visibility(raw, vis, browser):
         return vis, repr(e)[:200]
 
 
+def unresolved(vis):
+    """The reason a page is partial whose browser verdict reached some of its text runs not at all (`page_visibility['unresolved']`: kept as source,
+    never shown or hidden; the encoding's own byte order mark, which no page shows, aside): its reading is not certified whole."""
+    n = sum(1 for r in vis.page.get('unresolved') or [] if r['why'] != 'byte order mark') if vis.paged else 0
+    return ['page visibility: %d text run%s without a browser verdict' % (n, '' if n == 1 else 's')] if n else []
+
+
 def prepare(raw, file_id, sha256, browser):
     """(route, facts) for one HTML document: the caller's bytes, their SHA-256 and a browser the caller owns and may reuse. `facts` holds each step's own
     result - `formatting` its count (None where nothing can be certified), `screen` its facts, `visibility` (a file the scanner cannot certify) the
@@ -34,6 +41,6 @@ def prepare(raw, file_id, sha256, browser):
     facts = {'formatting': source_formatting._step(original, route)}; del original  # the source as written is for formatting only: not kept through the screen work
     facts['screen'] = screen_grid._step(raw, route, browser, vis)
     if failed or vis.paged: facts['visibility'] = {'error': failed} if failed else {k: len(v) if isinstance(v, list) else v for k, v in vis.page.items()}
-    errors = (['page visibility: ' + failed] if failed else []) + (['screen step: ' + facts['screen']['error']] if 'error' in facts['screen'] else [])
+    errors = (['page visibility: ' + failed] if failed else []) + unresolved(vis) + (['screen step: ' + facts['screen']['error']] if 'error' in facts['screen'] else [])
     if errors: route['status'], route['error'] = 'PARTIAL', '; '.join(errors)
     return route, facts

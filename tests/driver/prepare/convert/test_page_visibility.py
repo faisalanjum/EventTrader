@@ -47,7 +47,8 @@ class Route(unittest.TestCase):
     def held(self, text): x = self.texts[text]; self.assertTrue(x.get('anchor'), text); return x
 
     def test_what_the_browser_proves_hidden_is_left_out_and_the_shown_text_beside_it_anchors(self):
-        self.assertEqual(self.route['status'], 'OK'); self.assertEqual(self.route['page_visibility'], self.page)
+        self.assertEqual(self.route['page_visibility'], self.page)
+        self.assertEqual((self.route['status'], self.route['error']), ('PARTIAL', 'page visibility: %d text runs without a browser verdict' % len(self.page['unbound'])))  # Root, fostered_text_20261009: runs no verdict reached leave the page partial
         cells = [(x['text'], x['c']) for u in self.route['units'] if u.get('kind') == 'table' for x in u['cells'] if x['text'] in ('VAL835', 'NEXTA')]
         self.assertEqual(cells, [('VAL835', 0), ('NEXTA', 1)])  # the hidden copy no longer runs the next cell into this one
         for text in ('VAL835', 'NEXTA', 'BEFOREB AFTERB', 'CHILDE ENDE', 'REVF million'): self.held(text)
@@ -64,6 +65,7 @@ class Route(unittest.TestCase):
         self.assertNotIn('FOSTH', ' '.join(self.texts)); self.assertNotIn('FOSTH', ' '.join(before))  # as before: the tool prints no text from outside a cell
         listed = {PAGE[a:b].strip() for a, b in self.page['unbound']}  # said, by place: the literal, the moved, the misread and the two lone-"<" runs
         self.assertLessEqual({b'LITG', b'FOSTH', b'MISI &copy2024', b'LEFTJ', b'RIGHTJ'}, listed)
+        self.assertEqual([x['raw'].encode() for x in self.page['unresolved']], [PAGE[a:b] for a, b in self.page['unbound']])  # each beside its span: the source as written
 
     def test_pictures_and_their_records_are_the_scanners(self):
         pics = lambda r: [{k: u.get(k) for k in ('src', 'alt', 'anchor', 'link_flag', 'cell', 'tag')} for u in r['units'] if u.get('kind') == 'image']

@@ -54,7 +54,8 @@ def main(argv=None):
             if route['status'] != 'OK':  # a document parse failure is recorded; operational errors have propagated
                 facts[fid] = {'status': 'FAILED', 'error': route['error'], 'seconds': round(time.perf_counter() - t0, 2)}
                 (out / 'route' / (fid + '.json')).write_text(json.dumps(route)); continue
-            if failed: route['status'], route['error'] = 'PARTIAL', 'page visibility: ' + failed  # as html_route.prepare marks it: the scanner's reading kept, the reason said
+            errors = (['page visibility: ' + failed] if failed else []) + html_route.unresolved(vis)  # as html_route.prepare marks it: the scanner's reading kept, or runs no verdict reached, the reason said
+            if errors: route['status'], route['error'] = 'PARTIAL', '; '.join(errors)
             flat = [x for u in route['units'] for x in (u.get('cells') or [u])]
             facts[fid] = {'status': route['status'], **({'error': route['error']} if route['error'] else {}), 'version': route['route']['version'], 'tool_seconds': route['seconds'], 'adapter_seconds': round(time.perf_counter() - t0 - parse_elapsed, 2), 'items': len(flat),
                           'unanchored': sum(1 for x in flat if not x.get('anchor')), 'uncovered_spans': len(route['uncovered']),
