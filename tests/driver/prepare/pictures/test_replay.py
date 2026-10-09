@@ -20,7 +20,7 @@ from unittest.mock import patch
 
 from driver.prepare import pictures
 from driver.prepare.pictures import packets, readers, worker
-from tests.driver.prepare.pictures.saved import SETS, Saved, body, evidence_whole, status_follows_flags
+from tests.driver.prepare.pictures.saved import SETS, Saved, body, evidence_whole, record_reference, status_follows_flags
 
 V6 = {'validation120': 'real575_20261005/validation_20261006/ROUTES_V6.json', 'rest': 'real575_20261005/reader_packets/real336_dev/ROUTING_V6_EVAL.json'}
 V5 = 'real575_20261005/validation_20261006/ROUTES.json'
@@ -133,6 +133,7 @@ class Replay(unittest.TestCase):
         self.assertEqual(dict(asked), {'validation120': 52, 'development336': 169, 'hard50': 43})
 
     def test_optional_mode_equals_the_saved_packets(self):
+        rewritten = 0
         for r, b in zip(self.s.records, self.base):
             with self.subTest(r['id']):
                 a, flags, text, rec = self.on[r['id']]
@@ -144,11 +145,13 @@ class Replay(unittest.TestCase):
                     want = (evidence_whole(b['text'], b['record']), b['record'])
                 else:
                     md, js = exp
-                    want = (evidence_whole(self.s.text(md)[:-1], self.s.json(js)), self.s.json(js))
+                    text, n = record_reference(evidence_whole(self.s.text(md)[:-1], self.s.json(js))); rewritten += n
+                    want = (text, self.s.json(js))
                 self.assertEqual((t, rc), want)
+        self.assertEqual(rewritten, 23)                                   # the frozen packets the Oct 9 reference change rewrites, one line each
 
     def test_the_576_saved_packets(self):
-        seen = collections.Counter()
+        seen, rewritten = collections.Counter(), collections.Counter()
         for r in self.s.records:
             if r['set'] == 'hard50':
                 continue
@@ -166,9 +169,11 @@ class Replay(unittest.TestCase):
                     md, js = SAVED[kind] + r['name'] + '.md', SAVED[kind] + r['name'] + '.json'
                     self.assertIn(md, self.s.store.members('ocr.saved_packets.576')); self.assertIn(js, self.s.store.members('ocr.saved_packets.576'))
                     t, rc = self.s.relocated(r, *want)
-                    self.assertEqual((t + '\n', rc), (evidence_whole(self.s.text(md)[:-1], self.s.json(js)) + '\n', self.s.json(js)))
+                    text, n = record_reference(evidence_whole(self.s.text(md)[:-1], self.s.json(js))); rewritten[kind] += n
+                    self.assertEqual((t + '\n', rc), (text + '\n', self.s.json(js)))
                     seen[kind] += 1
         self.assertEqual(dict(seen), {'production': 120, 'evaluation': 120, 'development': 336})
+        self.assertEqual(dict(rewritten), {'production': 3, 'evaluation': 6, 'development': 21})   # the Oct 9 reference change, one line each
 
     def test_known_reading_errors_stay_explicit(self):  # checked against the originals (ANSWERS_LOCAL_ONLY, CHECK10); NOT accuracy passes
         known = [('development336/157_0001558370-25-005434_dlr-20250424xex99d2g026.jpg', '5.1%', '5.1x', 'silent'),

@@ -4,7 +4,7 @@
 #                its own, and the checker (rowcheck.compare: words, marks, uncertainty, unread text and, for a table, every cell
 #                relationship) finds the two the same. Word alignment only proposes the pair; the checker decides. It is not a
 #                check against the original, and a table's heading, unit, period and notes are blocks with their own status.
-#   unresolved - otherwise: Chandra's text, its differences from Sonnet (all of them in the .json beside the packet), and
+#   unresolved - otherwise: Chandra's text, its differences from Sonnet (all of them in the returned record: blocks[i].differences), and
 #                Sonnet's own reading of that region as a separate, unverified alternative with its source pointer.
 #   visual     - Chandra's labels for pictures, charts and diagrams: Chandra's text there may be its own description or
 #                estimates, so none of it is passed on; the region, and Sonnet's reading of that area as unverified.
@@ -26,7 +26,7 @@ VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'met
 
 WRAP = {'html', 'body', 'div', 'section', 'article', 'main'}         # containers whose children are the elements (not Chandra's block divs)
 
-SHOWN = 4                                                            # two-reader differences shown per block (each reading is printed in full below); the rest are in the .json
+SHOWN = 4                                                            # two-reader differences shown per block (each reading is printed in full below); all are in the returned record (blocks[i].differences)
 
 toks = lambda x, fmt: rc._TOKEN.findall(rc.norm(rc.plain('\n'.join(rc.read(x, fmt)[0])))) if x else []
 
@@ -202,7 +202,7 @@ def packet(name, picture, html, other_html, other_src, free=None, picture_ref=No
     n = {k: sum(v[0] == k for v in st.values()) for k in ('agree', 'unresolved', 'visual')}; n['unresolved'] -= len(res)
     q = lambda x: (lambda x: '"%s"' % (x if len(x) <= 80 else x[:77] + '...'))(x.replace(TAB, '[a table]')) if x else '(nothing)'
     whole = lambda x: '"%s"' % x.replace(TAB, '[a table]') if x else '(nothing)'   # free-OCR evidence is printed nowhere else: every item, whole
-    side, done = f'packets/{name}.json', set()
+    done = set()
     ref = picture if picture_ref is None else picture_ref
     out = [f'<picture id="{name}" src="{ref}" size="{w}x{h}">',
            f'Status: {n["agree"]} blocks agree between two readers; ' + (f'{len(res)} tables resolved by the picture\'s word positions; ' if res else '') + (f'{n["unresolved"]} unresolved; ' if other_html else f'{n["unresolved"]} read by Chandra only (single reader, not compared); ') + f'{n["visual"]} visual (charts, pictures, diagrams: reader text unverified; free-OCR evidence shown, unverified). '
@@ -226,7 +226,7 @@ def packet(name, picture, html, other_html, other_src, free=None, picture_ref=No
     for i, b in enumerate(bl):
         s, d, span, covers, _ = st[i]; head = f'[{s.upper()} {b["label"]} | region {region(b["box"], w, h)}'
         shown = [f'Chandra {q(c)} / Sonnet {q(o)}' if c is not None else o for c, o in d if c != VIS]
-        more = f' (+{len(shown) - SHOWN} more differences in {side}, block {i})' if len(shown) > SHOWN else ''
+        more = f' (+{len(shown) - SHOWN} more differences in the packet record, blocks[{i}].differences)' if len(shown) > SHOWN else ''
         if s == 'visual':
             out.append(head + '] A chart, picture or diagram: look at the region. Readers\' text for it is unverified: it may be a description, or values estimated from the drawing. The FREE-OCR EVIDENCE line shows what simple OCR tools read there: unverified. Which label goes with which value is not proved.')
             if b['html'].strip(): out += ['[Chandra\'s reading of this region, unverified]', b['html']]

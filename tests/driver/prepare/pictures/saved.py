@@ -8,6 +8,7 @@ record['picture']; nothing else is rewritten or left out."""
 import io
 import json
 import os
+import re
 from pathlib import Path
 
 from tests.driver.prepare.support import FixtureStore
@@ -119,6 +120,15 @@ def evidence_whole(text, rec):  # the Oct 8 display-only change (PACKET_EVIDENCE
         new = [conflict(whole, *x) for x in cs] + [support(whole, *x) for x in ss]
         lines[k:end] = new; at = k + len(new)
     return '\n'.join(lines)
+
+
+OLD_MORE = re.compile(r' \(\+(\d+) more differences in packets/[^\n]*?\.json, block (\d+)\)\]$', re.M)
+
+
+def record_reference(text):  # the Oct 9 display-only change (packet_reference_20261009), applied to a frozen packet: its "+N more differences in
+    # packets/<name>.json, block i" named a file nothing writes; the packet now names the returned record's field (blocks[i].differences), which holds
+    # every difference unchanged. Only that phrase, at the end of its block line; nothing else in the text changes. Returns (text, lines rewritten).
+    return OLD_MORE.subn(lambda m: f' (+{m[1]} more differences in the packet record, blocks[{m[2]}].differences)]', text)
 
 
 def status_follows_flags(line, flags):

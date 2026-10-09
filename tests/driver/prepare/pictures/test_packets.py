@@ -141,6 +141,26 @@ class PacketTests(unittest.TestCase):
                         + [f"[FREE OCR support, unverified: at Chandra {q(c)} / Sonnet {q(o)} both free tools read {w}'s version]" for c, o, w in ev['support']])
                 self.assertEqual([x for x in txt.split('\n') if x.startswith('[FREE OCR')], want)   # every item, in order, whole, unverified; no "+N more"
 
+    def test_more_differences_name_the_returned_record_field(self):  # Root, Oct 9 (packet_reference_20261009): no file is written; the record holds them
+        nums = lambda word, base, n, d: ' '.join(f'{word}{k} {base + k + d}' for k in range(n))
+        sizes = (6, 5, 4, 2)                                           # two blocks over the four shown, one exactly at it, one under
+        mine = ''.join(f'<div data-bbox="0 {250 * i} 1000 {250 * i + 200}" data-label="Text"><p>{nums(w, 10 * i, n, 0)} end{i}</p></div>'
+                       for i, (w, n) in enumerate(zip('abcd', sizes)))
+        other = ''.join(f'<p>{nums(w, 10 * i, n, 1)} end{i}</p>' for i, (w, n) in enumerate(zip('abcd', sizes)))
+        for name in ('arbitrary', 'sha256:' + 'a' * 64):
+            with self.subTest(name=name):
+                text, rec = p.packet(name, self.picture, mine, other, 'saved:second')
+                self.assertNotIn('packets/', text); self.assertNotIn('.json', text); self.assertEqual(text.count(name), 1)   # the name: only the header id
+                for i, n in enumerate(sizes):
+                    want = [(str(10 * i + k), str(10 * i + k + 1)) for k in range(n)]
+                    self.assertEqual([tuple(x) for x in rec['blocks'][i]['differences']], want)   # every difference, in the returned record
+                    line = next(x for x in text.split('\n') if x.startswith('[UNRESOLVED Text') and f'end{i}' not in x and f'"{10 * i}"' in x)
+                    more = f' (+{n - p.SHOWN} more differences in the packet record, blocks[{i}].differences)]'
+                    self.assertEqual(line.endswith(more), n > p.SHOWN, line); self.assertEqual('more differences' in line, n > p.SHOWN, line)
+        text, rec = p.packet('arbitrary', self.picture, mine, None, None)   # no second reading: nothing compared, nothing referenced
+        self.assertNotIn('more differences', text); self.assertNotIn('packets/', text); self.assertIn('[CHANDRA ONLY Text', text)
+
+
 class SavedProbes(unittest.TestCase):  # the probes on saved readings, through the pinned fixtures (ported 2026-10-07)
     @classmethod
     def setUpClass(cls):
