@@ -3,8 +3,9 @@ edgartools keeps no source positions, so the linker places every block. Under it
 dumps the parsed node tree to plain JSON (kept as the raw output); `to_units` works on that dump, so it is testable
 without the package. Shape rules only, no document-specific logic."""
 from bisect import bisect_left, bisect_right
+from collections import Counter
 from copy import copy
-from itertools import accumulate
+from itertools import accumulate, count
 import re
 import time
 from dataclasses import asdict
@@ -34,6 +35,7 @@ def dump(node):
     """Plain-dict copy of an edgartools node tree (run under the edgartools environment)."""
     kind = type(node).__name__
     d = {'type': kind}
+    if kind == 'ParagraphNode': d['paragraph'] = True  # the tool's paragraph, kept for the units it becomes (to_units, route_for)
     if kind == 'HeadingNode':  # the tool's own evidence for its heading claim, kept as a claim: a style or a confidence certifies no heading (Codex's worktree)
         native = {'metadata': dict(getattr(node, 'metadata', None) or {})}
         if getattr(node, 'style', None) is not None: native['style'] = asdict(node.style)
@@ -107,7 +109,7 @@ def to_units(tree, codes=None):
     """The units of the tool's tree. With `codes` (this source's, from `codes`), every picture names the tag it came from (`tag`, for the linker: a `src` that is no
     code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back;
     every table names the table it came from the same way (`tag`, None when the tool's table carries no code of this source: it then stands nowhere)."""
-    units = []
+    units, paragraphs = [], count()
 
     def table_unit(t):
         cells, until = [], {}  # until[column] = the first row at which that column is free again: a rowspan expires by row, whatever later rows hold
@@ -125,6 +127,12 @@ def to_units(tree, codes=None):
         elif t.get('caption'): units.append({'id': f'u{len(units)}', 'kind': 'caption', 'text': t['caption']})  # no text in any cell, but a caption: that is read (Codex R2-C4)
 
     def walk(n):
+        first = len(units); visit(n)
+        if n.get('paragraph'):  # every unit made from the tool's paragraph - not one of a paragraph inside it - keeps its membership
+            k = next(paragraphs)
+            for u in units[first:]: u.setdefault('_paragraph', k)
+
+    def visit(n):
         kind = n['type']
         if kind == 'TableNode': table_unit(n)
         elif kind in BRANCH:
@@ -210,7 +218,11 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
     linked['units'] = split_lines(raw, linked['units'], vis)
     for u in linked['units']:
         if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own
-    units = with_every_picture(linked['units'], vis); base = {'source_base': {'tag': {'byte_start': vis.base['start'], 'byte_end_exclusive': vis.base['end']}, 'href': vis.base['href']}} if vis.base else {}
+    units = with_every_picture(linked['units'], vis); size = Counter(u['_paragraph'] for u in units if '_paragraph' in u); number = {}
+    for u in units:  # a paragraph of the tool's that is published as several units (a heading claim, its blocks, its lines) names them by one number
+        k = u.pop('_paragraph', None)
+        if size[k] > 1: u['paragraph'] = number.setdefault(k, len(number))
+    base = {'source_base': {'tag': {'byte_start': vis.base['start'], 'byte_end_exclusive': vis.base['end']}, 'href': vis.base['href']}} if vis.base else {}
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'driver/prepare/convert/edgartools_html.py',
                       'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered'], 'source_links': source_links(units, vis), 'source_relations': source_relations(raw, units, vis), **base}
@@ -530,7 +542,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def settings(vis):
