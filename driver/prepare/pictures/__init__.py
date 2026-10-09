@@ -23,17 +23,18 @@ def status(flags, enable_sonnet, asked, second_text, generated_tokens, limit):
     return '[EXTRACTION STATUS: ' + '; '.join(says) + ']'
 
 
-def read_picture(name, picture, chandra_html, generated_tokens, free, limit, enable_sonnet=False, second=None):
+def read_picture(name, picture, chandra_html, generated_tokens, free, limit, enable_sonnet=False, second=None, picture_ref=None):
     """One picture: (read by Sonnet?, flags, packet text, packet record). chandra_html None = no reading; free = the free OCR's record;
     limit = Chandra's output limit. Flags are the existing checks on Chandra's reading and the free OCR alone: 'no reading' and
     'cut off' mark a failed or partial reading; 'table', 'chart text', 'missed' and 'no support' mark risk. Off (default): second is
     never called and no comparison runs. On: second(picture) -> (text or None, source pointer) is called for a flagged picture.
-    The text is the packet with the extraction-status line after its first line; the record carries the mode, flags and line."""
+    The text is the packet with the extraction-status line after its first line; the record carries the mode, flags and line. picture_ref: what the
+    packet names as its picture (packet()); the picture file is still what is measured and what the second reader reads."""
     if enable_sonnet and second is None: raise ValueError('enable_sonnet needs a second reader')
     flagged, flags = route(chandra_html, generated_tokens, free, limit)
     asked = enable_sonnet and flagged
     text, src = second(picture) if asked else (None, None)
-    t, rec = packet(name, picture, chandra_html or '', text, src, free=free)
+    t, rec = packet(name, picture, chandra_html or '', text, src, free=free, picture_ref=picture_ref)
     line = status(flags, enable_sonnet, asked, text, generated_tokens, limit)
     first, rest = t.split('\n', 1)
     rec.update(sonnet='on' if enable_sonnet else 'off', flags=flags, extraction_status=line, format=FORMAT)   # results never mix

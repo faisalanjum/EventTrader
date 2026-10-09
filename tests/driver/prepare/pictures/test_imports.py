@@ -19,7 +19,7 @@ class Block(importlib.abc.MetaPathFinder):
 sys.meta_path.insert(0, Block()); sys.path.insert(0, sys.argv[1]); os.chdir('/')
 if len(sys.argv) > 2: sys.path.insert(1, sys.argv[2]); importlib.import_module(sys.argv[3])   # a control: some other module loaded too
 for m in ('compare', 'pictures', 'pictures.readers', 'pictures.worker', 'pictures.packets', 'pictures.routing', 'pictures.rowcheck', 'pictures.free_evidence',
-          'pictures.table_choice', 'pictures.geometry'):
+          'pictures.table_choice', 'pictures.geometry', 'pictures.join'):
     importlib.import_module('driver.prepare.' + m)
 root = os.path.realpath(sys.argv[1]) + os.sep
 ours = [n for n, m in sys.modules.items() if n.startswith('driver.') and getattr(m, '__file__', None)]

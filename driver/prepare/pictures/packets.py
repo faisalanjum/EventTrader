@@ -189,7 +189,8 @@ def free_notes(bl, st, el, free):  # per block: what BOTH saved free OCR tools r
         out[i] = dict(conflicts=[(x, y) for _, _, x, y in E.conflicts(c, fr)], support=[v for v in E.support(c, sx, fr) if v[2]] if s == 'unresolved' and el else [])
     return out
 
-def packet(name, picture, html, other_html, other_src, free=None):  # (the exact text the AI reader receives, its record); free: saved free OCR
+def packet(name, picture, html, other_html, other_src, free=None, picture_ref=None):  # (the exact text the AI reader receives, its record); free: saved free OCR;
+    # picture_ref: what the packet names as its picture (src, record) where `picture` is only the file it is measured from; None names `picture` itself
     bl = blocks_of(html); st, el = statuses(bl, other_html); w, h = Image.open(picture).size; ev = free_notes(bl, st, el, free) if free else {}
     res = {}                                                           # disputed tables whose whole reading the picture's word positions support
     if free and other_html:                                            # table choice weighs two readings: only with a second one
@@ -202,7 +203,8 @@ def packet(name, picture, html, other_html, other_src, free=None):  # (the exact
     q = lambda x: (lambda x: '"%s"' % (x if len(x) <= 80 else x[:77] + '...'))(x.replace(TAB, '[a table]')) if x else '(nothing)'
     whole = lambda x: '"%s"' % x.replace(TAB, '[a table]') if x else '(nothing)'   # free-OCR evidence is printed nowhere else: every item, whole
     side, done = f'packets/{name}.json', set()
-    out = [f'<picture id="{name}" src="{picture}" size="{w}x{h}">',
+    ref = picture if picture_ref is None else picture_ref
+    out = [f'<picture id="{name}" src="{ref}" size="{w}x{h}">',
            f'Status: {n["agree"]} blocks agree between two readers; ' + (f'{len(res)} tables resolved by the picture\'s word positions; ' if res else '') + (f'{n["unresolved"]} unresolved; ' if other_html else f'{n["unresolved"]} read by Chandra only (single reader, not compared); ') + f'{n["visual"]} visual (charts, pictures, diagrams: reader text unverified; free-OCR evidence shown, unverified). '
            'Agreement is per block and is not a check against the original; a table\'s heading, unit, period and notes are separate blocks '
            'with their own status. Quote unresolved text only after looking at its region; an alternative is unverified.'
@@ -248,6 +250,6 @@ def packet(name, picture, html, other_html, other_src, free=None):  # (the exact
         for c, o, who in ev.get(i, {}).get('support', []): out.append(f'[FREE OCR support, unverified: at Chandra {whole(c)} / Sonnet {whole(o)} both free tools read {who}\'s version]')
         lonely(i)
     assert done == set(range(len(el))), 'a Sonnet element is missing from the packet'
-    record = dict(picture=picture, size=[w, h], second_reading=other_src, elements=[dict(chars=e['chars']) for e in el],
+    record = dict(picture=ref, size=[w, h], second_reading=other_src, elements=[dict(chars=e['chars']) for e in el],
                   blocks=[dict(label=b['label'], box=b['box'], status=st[i][0], differences=st[i][1], sonnet_elements=st[i][2], agreement_covers=st[i][3], paired_table=st[i][4], free_ocr=ev.get(i), table_choice=res.get(i)) for i, b in enumerate(bl)])
     return '\n'.join(out + ['</picture>']), record
