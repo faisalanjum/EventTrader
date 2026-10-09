@@ -118,11 +118,15 @@ def free_readers():  # PP-OCR and OnnxTR as two readers for worker.py: each kept
     return reader(pp, _pp_boxes, s['pp']), reader(ox, _ox_boxes, s['ox'])
 
 
-def free_record(pp, ox):  # the free OCR evidence the packets read, from the two tools' worker records; None when neither tool read it
+def free_record(pp, ox):  # the free OCR evidence the packets read, from the two tools' worker records of ONE picture's bytes; None when neither tool read it
+    if not (isinstance(pp.get('image_sha256'), str) and pp['image_sha256'] and pp['image_sha256'] == ox.get('image_sha256')):  # the worker's own identity of the bytes read
+        raise ValueError("the two free OCR records are not of one picture's bytes")                                           # (settings differ by design)
     rec = {}
     for name, r in (('pp', pp), ('ox', ox)):
         if r['status'] == 'error': rec[name] = []; rec[name + '_error'] = r['error']
-        else: rec[name] = r['result']['boxes']; rec.update(w=r['result']['w'], h=r['result']['h'])
+        else:
+            if 'w' in rec and (rec['w'], rec['h']) != (r['result']['w'], r['result']['h']): raise ValueError('the two free OCR readings measure the picture differently')  # one box frame
+            rec[name] = r['result']['boxes']; rec.update(w=r['result']['w'], h=r['result']['h'])
     return rec if 'w' in rec else None
 
 

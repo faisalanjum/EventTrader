@@ -267,8 +267,49 @@ class FreeToolsApart(Base):  # Codex r16 C3: PP-OCR and OnnxTR are separate read
                 run[0] = 3; recs = {t: worker.run(f, [('a', A)], mk[t])['a'] for t in ('pp', 'ox')}; rec = readers.free_record(recs['pp'], recs['ox'])
                 self.assertEqual(calls.count(good), 1); self.assertTrue(rec['pp'] and rec['ox']); self.assertNotIn('pp_error', rec); self.assertNotIn('ox_error', rec)
 
-    def test_with_neither_tool_read_there_is_no_free_evidence(self):
-        self.assertIsNone(readers.free_record(dict(status='error', error='x'), dict(status='error', error='y')))
+    def test_with_neither_tool_read_there_is_no_free_evidence(self):  # two worker records of one picture (its input was two hand-made dicts without the worker's fields)
+        calls, run = [], [1]; f = self.folder()
+        recs = {t: worker.run(f, [('a', A)], self.tool(t, {1}, calls, run))['a'] for t in ('pp', 'ox')}
+        self.assertEqual((recs['pp']['status'], recs['ox']['status']), ('error', 'error'))
+        self.assertIsNone(readers.free_record(recs['pp'], recs['ox']))
+
+
+class FreeRecordOnePicture(Base):  # Root, picture_record_binding_20261009: the join takes two worker records of ONE picture's bytes
+    tool = FreeToolsApart.tool  # the same fake free tools
+
+    def recs(self, pp_data, ox_data, pp_fail=(), ox_fail=(), ox_size=None):
+        calls, run = [], [1]; f = self.folder(); ox = self.sized('ox', ox_size) if ox_size else self.tool('ox', set(ox_fail), calls, run)
+        return worker.run(f, [('p', pp_data)], self.tool('pp', set(pp_fail), calls, run))['p'], worker.run(f, [('o', ox_data)], ox)['o']
+
+    def sized(self, name, size):  # a reader that measures the picture otherwise
+        read = lambda d: dict(w=size[0], h=size[1], boxes=[dict(t=f'{name} required fact', box=[0, 0, 1, 1])])
+        return lambda: types.SimpleNamespace(read=read, settings=dict(reader=name), status=readers._free_status)
+
+    def test_records_of_different_pictures_are_refused(self):  # failed before: the wrong pair joined into the right pair's evidence
+        for pp_fail, ox_fail in (((), ()), ((), {1}), ({1}, ()), ({1}, {1})):
+            with self.subTest(pp_failed=bool(pp_fail), ox_failed=bool(ox_fail)), self.assertRaises(ValueError):
+                readers.free_record(*self.recs(A, B, pp_fail, ox_fail))
+
+    def test_a_record_without_the_picture_identity_is_refused(self):
+        pp, ox = self.recs(A, A)
+        for k in ('pp', 'ox'):
+            for bad in (None, '', 'absent'):
+                with self.subTest(record=k, image_sha256=bad), self.assertRaises(ValueError):
+                    x, y = copy.deepcopy(pp), copy.deepcopy(ox); z = x if k == 'pp' else y
+                    z.pop('image_sha256') if bad == 'absent' else z.__setitem__('image_sha256', bad); readers.free_record(x, y)
+
+    def test_two_readings_of_one_picture_in_different_frames_are_refused(self):  # failed before: the second tool's size silently replaced the first's
+        with self.assertRaises(ValueError): readers.free_record(*self.recs(A, A, ox_size=(11, 5)))
+        rec = readers.free_record(*self.recs(A, A, ox_fail={1}))                  # an error carries no frame: the one reading keeps its own
+        self.assertEqual((rec['w'], rec['h']), (10, 5))
+
+    def test_one_picture_joins_as_before_whatever_the_settings(self):  # the two tools' settings differ by design; the join is unchanged
+        pp, ox = self.recs(A, A); self.assertNotEqual(pp['settings'], ox['settings'])
+        want = dict(pp=[dict(t='pp required fact', box=[0, 0, 1, 1])], w=10, h=5, ox=[dict(t='ox required fact', box=[0, 0, 1, 1])])
+        self.assertEqual(json.dumps(readers.free_record(pp, ox)), json.dumps(want))   # same keys, order and values
+        self.assertEqual(json.dumps(readers.free_record(*self.recs(A, A, ox_fail={1}))), json.dumps(dict(pp=want['pp'], w=10, h=5, ox=[], ox_error='RuntimeError: ox failed on run 1')))
+        self.assertEqual(json.dumps(readers.free_record(*self.recs(A, A, pp_fail={1}))), json.dumps(dict(pp=[], pp_error='RuntimeError: pp failed on run 1', ox=want['ox'], w=10, h=5)))
+        self.assertIsNone(readers.free_record(*self.recs(A, A, {1}, {1})))
 
 
 if __name__ == '__main__':
