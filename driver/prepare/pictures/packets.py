@@ -88,14 +88,19 @@ def decode_math(html):  # Chandra's declared math (<math>...</math>): plain symb
         return H.escape(''.join(out), quote=False)
     return re.sub(r'<math>(.*?)</math>', one, html, flags=re.S)
 
-def blocks_of(html):  # Chandra's blocks: its data-bbox divs (box 0-1000, label, inner HTML); anything else is an 'Unlabelled' block.
+def box_of(a):  # a block's place: its reader's box on the 0-1000 scale, four integers in order; None when it gives none that can be placed
+    m = re.fullmatch(r'(\d+) (\d+) (\d+) (\d+)', a.get('data-bbox', ''))   # (malformed, missing, reversed, empty or beyond the scale: the
+    b = m and tuple(map(int, m.groups()))                                 # raw reading keeps what the reader wrote)
+    return b if b and b[0] < b[2] <= 1000 and b[1] < b[3] <= 1000 else None
+
+def blocks_of(html):  # Chandra's blocks: its data-bbox divs (box 0-1000 or None, label, inner HTML); anything else is an 'Unlabelled' block.
     out = []               # A block's own or inherited data-uncertain travels with its HTML to the checker (Codex r2 C1)
     for u in _Top(html).out:
-        m = re.fullmatch(r'(\d+) (\d+) (\d+) (\d+)', u['attrs'].get('data-bbox', '')) if u['tag'] == 'div' else None
+        m = u['tag'] == 'div' and 'data-bbox' in u['attrs']
         h = html[u['inner']:u['inner_end']].strip() if m else html[u['start']:u['end']]
         h = decode_math(h)                                             # (the raw reading stays in the reader's saved file)
         if u['uncertain'] or (m and 'data-uncertain' in u['attrs']): h = f'<div data-uncertain>{h}</div>'
-        out.append(dict(box=tuple(map(int, m.groups())), label=u['attrs'].get('data-label', ''), html=h) if m else dict(box=None, label='Unlabelled', html=h))
+        out.append(dict(box=box_of(u['attrs']), label=u['attrs'].get('data-label', ''), html=h) if m else dict(box=None, label='Unlabelled', html=h))
     return out
 
 def elements(html):  # Sonnet's elements: raw HTML (an uncertain container travels with it), char span, tokens (a table is one slot)
@@ -165,7 +170,7 @@ def statuses(blocks, other_html):  # {block: (status, differences, Sonnet elemen
           for i, b in enumerate(blocks)}
     return st, el
 
-def region(box, w, h): return 'whole picture' if box is None else '%d,%d-%d,%d px' % (box[0] * w // 1000, box[1] * h // 1000, box[2] * w // 1000, box[3] * h // 1000)
+def region(box, w, h): return 'unknown' if box is None else '%d,%d-%d,%d px' % (box[0] * w // 1000, box[1] * h // 1000, box[2] * w // 1000, box[3] * h // 1000)
 
 def free_notes(bl, st, el, free):  # per block: what BOTH saved free OCR tools read at the same spot (evidence only, never a decision)
     from . import free_evidence as E                                          # (imported here: it reads this module's tokenizer)
@@ -190,7 +195,7 @@ def packet(name, picture, html, other_html, other_src, free=None):  # (the exact
     if free and other_html:                                            # table choice weighs two readings: only with a second one
         from . import table_choice                                     # (owner, Oct 6: loaded only when Sonnet is on and has read)
         for i, b in enumerate(bl):
-            if b['label'] == 'Table' and st[i][0] == 'unresolved':
+            if b['label'] == 'Table' and st[i][0] == 'unresolved' and b['box']:   # positions weigh only a table with a place
                 who, why, _ = table_choice.choose(html, bl, i, st, el, free)
                 if who: res[i] = (who, why)
     n = {k: sum(v[0] == k for v in st.values()) for k in ('agree', 'unresolved', 'visual')}; n['unresolved'] -= len(res)
