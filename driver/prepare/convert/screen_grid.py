@@ -177,8 +177,13 @@ JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAl
   return {cells: out, boxes}; }"""
 
 
-SYMBOLS_JS = "([p, every]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
+SYMBOLS_JS = "([p, every]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
   for (const f of document.fonts) faces.push(f.family.replace(/^["']|["']$/g, '').toUpperCase());  // typefaces the document defines itself (@font-face)
+  const lift = el => { if (!el) return null; if (lifts.has(el)) return lifts.get(el);  // an element's and its ancestors' raised or lowered evidence, nearest first (null: none), each element's style read once:
+    const cs = getComputedStyle(el), tag = el.localName, up = lift(el.parentElement);  // a sup or sub, whatever its computed style; a plain inline box whose computed vertical-align is not baseline; any other inline box
+    const got = tag === 'sup' || tag === 'sub' || (cs.display.startsWith('inline') && cs.verticalAlign !== 'baseline' && (cs.display === 'inline' ||  // only where it is super, sub or a number (Typed OM: a length, percentage, calc or zero), never
+      cs.verticalAlign === 'super' || cs.verticalAlign === 'sub' || el.computedStyleMap().get('vertical-align') instanceof CSSNumericValue)) ? [{tag, display: cs.display, vertical_align: cs.verticalAlign}].concat(up || []) : up;  // an alignment keyword (a whole inline table set text-bottom; root, ROOT_NATIVE_PREDICATE)
+    lifts.set(el, got); return got; };
   const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
   for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (!m) continue;
     let text = '', el = null, first = null, last = null, n = c.nextSibling;  // the run's text: the text nodes after its mark, across inserted comments, to an element or the next run's mark
@@ -186,18 +191,21 @@ SYMBOLS_JS = "([p, every]) => { " + _decoder_js() + """ const marks = {}, faces 
     if (!el) { marks[m[1]] = null; continue; }  // the parser moved the run away from its mark (a table's foster parent): unbound
     const cs = getComputedStyle(el), fam = cs.fontFamily.toUpperCase(), chars = Array.from(text);
     const face = lib.faces.find(f => { const k = f.indexOf(' ') < 0 ? f : '"' + f + '"'; return fam === k || fam.startsWith(k + ', '); }) || null;  // the primary family, as Chrome writes it
-    const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text);
+    const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text), lifted = lift(el);
+    const shows = () => { const r = document.createRange(); r.setStart(first, 0); r.setEnd(last, last.length); const rs = Array.from(r.getClientRects());  // the glyphs' own boxes, not the element's
+      let seen = getComputedStyle(el).visibility === 'visible'; for (let a = el; a && seen; a = a.parentElement) if (+getComputedStyle(a).opacity === 0) seen = false;  // the gap marks' rule
+      return !rs.length || !seen ? 'hidden' : rs.some(q => q.width > 0 && q.height > 0) ? 'shown' : 'unproven'; };
+    let visibility = lifted ? shows() : null;
+    if (lifted) inline[m[1]] = {text, visibility, ancestors: lifted};  // raised or lowered: kept apart from the symbol records, before the ordinary-font exit
     if (ordinary && !every) { plain.push(m[1]); continue; }  // ordinary text: nothing a symbol record could say (its id only: a large result is slow to leave the page)
-    const r = document.createRange(); r.setStart(first, 0); r.setEnd(last, last.length); const rs = Array.from(r.getClientRects());  // the glyphs' own boxes, not the element's
-    let seen = getComputedStyle(el).visibility === 'visible'; for (let a = el; a && seen; a = a.parentElement) if (+getComputedStyle(a).opacity === 0) seen = false;  // the gap marks' rule
-    const visibility = !rs.length || !seen ? 'hidden' : rs.some(q => q.width > 0 && q.height > 0) ? 'shown' : 'unproven';
+    visibility = visibility || shows();
     if (ordinary) { marks[m[1]] = {text, visibility}; continue; }  // every run measured: an ordinary one says only its text and whether it shows
     marks[m[1]] = {text, family: cs.fontFamily, face, visibility,
       changed: cs.textTransform !== 'none' || cs.fontVariant !== 'normal' || cs.fontFeatureSettings !== 'normal',
       pseudo: !!face && (() => { for (let a = el; a; a = a.parentElement) { const own = getComputedStyle(a); for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(a, ps);  // a block's first letter or line set another way
         if (q.fontFamily !== own.fontFamily || q.textTransform !== own.textTransform || q.fontVariant !== own.fontVariant || q.fontFeatureSettings !== own.fontFeatureSettings) return true; } } return false; })(),
       decoded: face ? chars.map(ch => { let k = ch.codePointAt(0); if (k >= 0xF020 && k <= 0xF0FF) k -= 0xF000; const r = k <= 0xFF ? lib.codePoint(face, k) : undefined; return r ? r.codePoint : null; }) : null}; }
-  return {marks, faces, plain: plain.join(',')}; }"""
+  return {marks, faces, plain: plain.join(','), inline}; }"""
 
 
 def marker_prefix(raw):
@@ -289,6 +297,61 @@ def symbols(raw, vis, runs, got, units):
     return out
 
 
+def inline(raw, vis, runs, got, units):
+    """`source_inline` records from the page's marks (`SYMBOLS_JS`'s `inline`): each source run the page sets under a sup or sub element, whatever its
+    computed style, or an inline box whose computed vertical-align is not baseline (other than a plain one: super, sub or a number) - that evidence
+    nearest-first (`ancestors`), the run's exact bytes
+    and source text and, where it shows and its owners (`_holders`) hold every character of it and read it whole (each owner's text the source's own at
+    ordered whole-byte places, `anchor._reading`, read once per owner), the code-point ranges of their final text it stands at (`text_at`). Declared tags
+    and computed styles only, evidence and never a measured position (a relatively positioned raise is not seen; an inline block's or table's alignment
+    keyword is not counted), nothing read as a footnote or an exponent, no text changed. A run its mark does not reach whole, or that may not carry one (literal text), is `unresolved`, never matched by text."""
+    held, owner, _ = edgartools_html._holders(units, vis); found, marks, plain = got.get('inline') or {}, got.get('marks') or {}, set(got.get('plain', '').split(','))
+    item, readings, records, unresolved = {(u['id'], None): u for u in units if u.get('kind') not in ('table', 'image')}, {}, [], []
+    for u in (u for u in units if u.get('kind') == 'table'):
+        for c in u.get('cells') or []:
+            a = [x for x in anchor.spans(c.get('anchor')) if 'byte_start' in x]
+            if a: item[(u['id'], a[0]['byte_start'])] = c  # the holders' key: a cell by its table and its anchor's first byte
+
+    def reading(key):  # the owner's text position of each search-form character it holds, or None where its text is not the source's at ordered whole-byte places
+        if key not in readings:
+            x = item[key]; a = [s for s in anchor.spans(x.get('anchor')) if 'byte_start' in s]
+            r = anchor._reading(vis, x) if all(p['byte_end_exclusive'] <= q['byte_start'] for p, q in zip(a, a[1:])) else None
+            readings[key] = dict(zip(r[2], r[1])) if r else None
+        return readings[key]
+
+    def owners(s, e):  # (each owner with the ranges of its text the run's characters stand at, or None; why not)
+        has, n, unheld = held(s, e)
+        if not n or unheld: return None, 'not every character held'
+        lo, hi, out, read = bisect_left(vis.s, s), bisect_left(vis.s, e), [], set()
+        for key in sorted(has, key=lambda k: has[k][0]):
+            at = reading(key)
+            if at is None: return None, 'an owner is not read whole'
+            ranges = []
+            for p in sorted(at[k] for k in range(lo, hi) if k in at):  # consecutive positions only: a range never spans text the run does not hold
+                if ranges and ranges[-1][1] == p: ranges[-1][1] = p + 1
+                else: ranges.append([p, p + 1])
+            read.update(k for k in range(lo, hi) if k in at); out.append(dict(owner(key), text_at=ranges))
+        return (out, None) if len(read) == hi - lo else (None, 'not every character read')
+
+    for k, (_, chars, hidden, marked) in enumerate(runs):
+        key = str(k); m = found.get(key) if marked else None
+        if m is None and marked and (key in plain or marks.get(key) is not None): continue  # bound and not raised: nothing to say (almost every run)
+        every, glyphs = _glyphs(raw, chars)
+        if not glyphs: continue
+        s0, e0 = glyphs[0][0][0], glyphs[-1][0][1]
+        where = {'at': {'byte_start': s0, 'byte_end_exclusive': e0}, 'raw': ''.join(g if g is not None else '\ufffd' for (x, g) in every if s0 <= x[0] < e0), **({} if vis.certain else {'certain': False})}
+        if m is None or not _bound(glyphs, m['text']):  # what kept the run from being read
+            if not hidden: unresolved.append(dict(where, why='literal text' if not marked else 'unbound' if m is not None or key in marks else 'mark not found'))
+            continue
+        rec = dict(where, ancestors=m['ancestors'])
+        if m['visibility'] != 'shown': rec.update(visibility=m['visibility'], owners=None)  # hidden, or boxes of no area: no text of an owner stands for it
+        else:
+            rec['owners'], why = owners(s0, e0)
+            if why: rec['why'] = why
+        records.append(rec)
+    return {'records': records, 'unresolved': unresolved}
+
+
 def _offline_page(browser, asked=None, document=None):
     """A page as the step opens it: a wide window, the document's scripts never run, nothing fetched - a document's own references are never fetched
     (EDGAR forbids external ones; the step must not depend on that). `asked`: a list that gets the address of every style sheet the page requests.
@@ -368,13 +431,14 @@ def step(raw, route, browser):
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e:
         if not browser.is_connected(): raise
-        route['source_symbols'] = {'read': False, 'error': repr(e)[:200]}  # content and anchors stay; the failure is said, never an empty success
+        err = repr(e)[:200]; route['source_symbols'], route['source_inline'] = {'read': False, 'error': err}, {'read': False, 'error': err}  # content and anchors stay; the failure is said, never an empty success
         return {'error': repr(e)[:200]}
     if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
         route['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
     if 'error' in got and not browser.is_connected(): raise RuntimeError('browser disconnected: ' + got['error'])
     route['source_symbols'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, 'decoder': 'dingbat-to-unicode 1.0.2', 'records': symbols(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}
     n = apply(route['units'], spans, measured); join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline', parts='apart on one baseline'))
+    route['source_inline'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, **inline(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}  # the owners' final text: after the re-grid and the joins
     edited = {id(x): x for x, *_ in gaps}.values()
     return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
             'boundaries_the_tool_dropped': sum(a == b for _, a, b, _, _ in gaps), 'parted': sum(len(x.get('parts', ())) for x in edited), 'seconds': round(time.time() - t0, 1),

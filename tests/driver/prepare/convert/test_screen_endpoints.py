@@ -25,7 +25,7 @@ class Offline(unittest.TestCase):
             def is_connected(self): return True
         route = {'sha256': screen_grid.anchor.sha256(b'<p>x</p>'), 'route': {'name': 'r'}, 'units': [{'id': 'u', 'kind': 'text', 'text': 'x'}]}; before = copy.deepcopy(route)
         facts = screen_grid.step(b'<p>x</p>', route, Browser())
-        self.assertEqual(route, dict(before, source_symbols={'read': False, 'error': "RuntimeError('no page')"})); self.assertIn('no page', facts['error'])  # content kept; the failure added
+        self.assertEqual(route, dict(before, source_symbols={'read': False, 'error': "RuntimeError('no page')"}, source_inline={'read': False, 'error': "RuntimeError('no page')"})); self.assertIn('no page', facts['error'])  # content kept; the failure added
 
     def test_a_disconnected_browser_stops_instead_of_marking_every_document_partial(self):
         error = RuntimeError('browser connection lost')

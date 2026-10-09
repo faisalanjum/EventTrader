@@ -92,7 +92,7 @@ class Failures(unittest.TestCase):
         with patch.object(sg, 'measure', side_effect=RuntimeError('one page cannot be measured')):
             facts = sg.step(RAW, doc, SimpleNamespace(is_connected=lambda: True))
         self.assertIn('one page cannot be measured', facts['error'])
-        self.assertEqual(doc, dict(before, source_symbols={'read': False, 'error': "RuntimeError('one page cannot be measured')"}))  # content kept; only the failure added
+        self.assertEqual(doc, dict(before, source_symbols={'read': False, 'error': "RuntimeError('one page cannot be measured')"}, source_inline={'read': False, 'error': "RuntimeError('one page cannot be measured')"}))  # content kept; only the failure added
 
 class ResultOwnership(unittest.TestCase):
     def test_xml_results_do_not_share_route_metadata_with_other_documents(self):
