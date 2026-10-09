@@ -713,8 +713,13 @@ def link(raw, units, xml=False, vis=None):
         a, b = cell[j], cell[j + n - 1]
         return same(j, n) or (a >= 0 and b >= 0 and j == edge[a][0] and j + n == edge[b][1])
 
+    cut = lambda k: 0 <= k < len(vis.flat) - 1 and vis.idx[k] + 1 == vis.idx[k + 1] and _cuts(vis, k, k + 1)  # a boundary after the search-form character k parts a word or number the source prints whole (the gate's test)
+
     def place(i, lo, hi, forward_only):
-        """Anchor item i inside flat[lo:hi]; forward search first, else the nearest earlier occurrence (flagged)."""
+        """Anchor item i inside flat[lo:hi]; forward search first, else the nearest earlier occurrence (flagged). In each, a copy that parts no word
+        or number of the source is taken before one cut out of a longer word ("4" stands at a page's own "4", not inside the exhibit number "104"),
+        unless the tool parted the word there itself: what the source prints on the other side is the text of the item next to it (pictures and
+        empty units aside) or a mark of its own. A whole copy is evidence, not proof: with none, the first copy, as before."""
         obj, n = items[i][1], keys[i]
         if allowed.get(id(obj)) is NOWHERE: obj['anchor'], obj['link_error'] = None, 'unknown_source_table'; return None  # its table is named by no table of the source
         marks = [squash(m) for m in obj.get('markers') or () if squash(m)]; allm = ''.join(marks)
@@ -722,16 +727,22 @@ def link(raw, units, xml=False, vis=None):
         ok, first, final = allowed.get(id(obj), anywhere); lo, hi = max(lo, first - margin), min(hi, final + len(n) + margin)  # a cell of a table that is one table of the source: only at its places there
         free = ok.__contains__ if ok else lambda j, held=reserved.get(n, ()): j not in held  # any other item: never at a place kept for such a cell
         taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i}  # copies of this text other units already hold
-        found = []
-        for k in ([allm + n, n + allm] if marks else []) + [n]:
-            off = len(allm) if marks and k == allm + n else 0; j = vis.flat.find(k, lo, hi)
-            while j >= 0 and (j + off in taken or not free(j + off) or not whole(j + off, len(n))): j = vis.flat.find(k, j + 1, hi)
-            if j >= 0: found.append((j, -len(k), k))
+        before, after = [next((keys[k] for k in ks if keys[k]), '') for ks in (range(i - 1, -1, -1), range(i + 1, len(keys)))]
+        apart = lambda j, m: ((not cut(j - 1) or any(t and vis.flat.endswith(t, 0, j) for t in [before] + marks))
+                              and (not cut(j + m - 1) or any(t and vis.flat.startswith(t, j + m) for t in [after] + marks)))
+        for strict in (True, False):
+            found = []
+            for k in ([allm + n, n + allm] if marks else []) + [n]:
+                off = len(allm) if marks and k == allm + n else 0; j = vis.flat.find(k, lo, hi)
+                while j >= 0 and (j + off in taken or not free(j + off) or not whole(j + off, len(n)) or strict and not apart(j, len(k))): j = vis.flat.find(k, j + 1, hi)
+                if j >= 0: found.append((j, -len(k), k))
+            if found: break
         j, _, key = min(found) if found else (-1, 0, n)  # marks kept apart sit right before or right after the text; the earliest start wins,
         flag = None                                      # because a mark that follows may belong to the next cell
-        if j < 0 and not forward_only:
+        for strict in (True, False) if j < 0 and not forward_only else ():
             key, j, flag = n, vis.flat.rfind(n, first, min(lo, final) + len(n)), 'out_of_order'  # found only before the window: the tool moved it
-            while j >= 0 and (j in taken or not free(j) or not whole(j, len(n))): j = vis.flat.rfind(n, first, j)
+            while j >= 0 and (j in taken or not free(j) or not whole(j, len(n)) or strict and not apart(j, len(n))): j = vis.flat.rfind(n, first, j)
+            if j >= 0: break
         if j < 0: obj['anchor'] = None; obj['link_error'] = 'not_in_source'; return None
         left, end, used = j, j + len(key), set(range(len(marks))) if key != n else set()
         for k in reversed(range(len(marks))):  # marks not covered by the key: right before the text (inside this window) ...

@@ -1,0 +1,735 @@
+{
+ "doc": "v2 of fixture_v1.py (v1 and its output kept): each case also keeps `others` - every other unit and cell of the excerpt with the anchor, flag and",
+ "cases": [
+  {
+   "source": {
+    "accession": "0000105770-25-000007",
+    "file": "wst-20250213.htm",
+    "sha256": "cca19b768438f9b345393fcb86ed0a7e5e82a6efc81bf69d4b5eace98e33b2ca",
+    "bytes": [
+     23609,
+     27794
+    ]
+   },
+   "unit": "u33",
+   "text": "2",
+   "true": 3711,
+   "wrong": 3300,
+   "wrong_flag": null,
+   "html": "<div><table style=\"border-collapse:collapse;display:inline-table;margin-bottom:5pt;vertical-align:text-bottom;width:99.269%\"><tr><td style=\"width:1.0%\"/><td style=\"width:7.589%\"/><td style=\"width:0.1%\"/><td style=\"width:1.0%\"/><td style=\"width:10.829%\"/><td style=\"width:0.1%\"/><td style=\"width:1.0%\"/><td style=\"width:78.282%\"/><td style=\"width:0.1%\"/></tr><tr><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">(d)</span></div></td><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\">Exhibit No.</span></div></td><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\">Description</span></div></td></tr><tr><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">&#160;99.1</span></div></td><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">West Pharmaceutical Services, Inc. Press Release, dated February&#160;13, 2025.</span></div></td></tr><tr><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">&#160;99.2</span></div></td><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">West Pharmaceutical Services, Inc. Presentation, dated February&#160;13, 2025.</span></div></td></tr><tr><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">&#160;104</span></div></td><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">The cover page from the Company&#8217;s Current Report on Form 8-K, dated February&#160;13, 2025, formatted in Inline XBRL.</span></div></td></tr></table></div><div><span><br/></span></div><div><span><br/></span></div><div><span><br/></span></div><div style=\"height:42.75pt;position:relative;width:100%\"><div style=\"bottom:0;position:absolute;width:100%\"><div style=\"text-align:center\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:144%\">2</span></div></div></div><div id=\"i61334b40eb8c4320ad6501096f0aff88_10\"></div><hr style=\"page-break-after:always\"/><div style=\"min-height:42.75pt;width:100%\"><div><span><br/></span></div></div><div style=\"text-align:center\"><span><br/></span></div><div style=\"text-align:center\"><span><br/></span></div><div style=\"text-align:center\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:700;line-height:120%\">SIGNATURE</span></div>",
+   "units": [
+    {
+     "id": "t32",
+     "kind": "table",
+     "cells": [
+      {
+       "r": 0,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "(d)",
+       "header": true
+      },
+      {
+       "r": 0,
+       "c": 3,
+       "rs": 1,
+       "cs": 3,
+       "text": "Exhibit No.",
+       "header": true
+      },
+      {
+       "r": 0,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "Description",
+       "header": true
+      },
+      {
+       "r": 1,
+       "c": 3,
+       "rs": 1,
+       "cs": 3,
+       "text": "104",
+       "header": true
+      },
+      {
+       "r": 1,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "The cover page from the Company’s Current Report on Form 8-K, dated February 13, 2025, formatted in Inline XBRL.",
+       "header": true
+      },
+      {
+       "r": 3,
+       "c": 3,
+       "rs": 1,
+       "cs": 3,
+       "text": "99.1",
+       "header": false
+      },
+      {
+       "r": 3,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "West Pharmaceutical Services, Inc. Press Release, dated February 13, 2025.",
+       "header": false
+      },
+      {
+       "r": 4,
+       "c": 3,
+       "rs": 1,
+       "cs": 3,
+       "text": "99.2",
+       "header": false
+      },
+      {
+       "r": 4,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "West Pharmaceutical Services, Inc. Presentation, dated February 13, 2025.",
+       "header": false
+      }
+     ],
+     "caption": [],
+     "tag": 5
+    },
+    {
+     "id": "u33",
+     "kind": "text",
+     "text": "2"
+    },
+    {
+     "id": "u34",
+     "kind": "text",
+     "text": "SIGNATURE"
+    }
+   ],
+   "others": [
+    [
+     "t32",
+     [
+      0,
+      0
+     ],
+     {
+      "byte_start": 626,
+      "byte_end_exclusive": 629
+     },
+     null,
+     null
+    ],
+    [
+     "t32",
+     [
+      0,
+      3
+     ],
+     {
+      "byte_start": 937,
+      "byte_end_exclusive": 948
+     },
+     null,
+     null
+    ],
+    [
+     "t32",
+     [
+      0,
+      6
+     ],
+     {
+      "byte_start": 1235,
+      "byte_end_exclusive": 1246
+     },
+     null,
+     null
+    ],
+    [
+     "t32",
+     [
+      1,
+      3
+     ],
+     {
+      "byte_start": 2923,
+      "byte_end_exclusive": 2926
+     },
+     null,
+     null
+    ],
+    [
+     "t32",
+     [
+      1,
+      6
+     ],
+     {
+      "byte_start": 3208,
+      "byte_end_exclusive": 3331
+     },
+     null,
+     null
+    ],
+    [
+     "t32",
+     [
+      3,
+      3
+     ],
+     {
+      "byte_start": 1562,
+      "byte_end_exclusive": 1566
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "t32",
+     [
+      3,
+      6
+     ],
+     {
+      "byte_start": 1848,
+      "byte_end_exclusive": 1927
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "t32",
+     [
+      4,
+      3
+     ],
+     {
+      "byte_start": 2243,
+      "byte_end_exclusive": 2247
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "t32",
+     [
+      4,
+      6
+     ],
+     {
+      "byte_start": 2529,
+      "byte_end_exclusive": 2607
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "u34",
+     null,
+     {
+      "byte_start": 4163,
+      "byte_end_exclusive": 4172
+     },
+     null,
+     null
+    ]
+   ]
+  },
+  {
+   "source": {
+    "accession": "0000105770-25-000007",
+    "file": "wst-20250213.htm",
+    "sha256": "cca19b768438f9b345393fcb86ed0a7e5e82a6efc81bf69d4b5eace98e33b2ca",
+    "bytes": [
+     31527,
+     36568
+    ]
+   },
+   "unit": "u40",
+   "text": "4",
+   "true": 5001,
+   "wrong": 4177,
+   "wrong_flag": "out_of_order",
+   "html": "<div style=\"margin-bottom:7pt;text-align:justify\"><table style=\"border-collapse:collapse;display:inline-table;margin-bottom:5pt;vertical-align:text-bottom;width:91.666%\"><tr><td style=\"width:1.0%\"/><td style=\"width:11.818%\"/><td style=\"width:0.1%\"/><td style=\"width:0.1%\"/><td style=\"width:0.597%\"/><td style=\"width:0.1%\"/><td style=\"width:1.0%\"/><td style=\"width:85.185%\"/><td style=\"width:0.1%\"/></tr><tr><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:bottom\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\">Exhibit No.</span></div></td><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\">Description</span></div></td></tr><tr><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">99.1</span></div></td><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\"><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"exh991q42024earningsrelease.htm\">West Pharmaceutical Services, Inc. Press Release, dated </a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"exh991q42024earningsrelease.htm\">February 13, 2025</a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"exh991q42024earningsrelease.htm\">.</a></span></div></td></tr><tr><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">99.2</span></div></td><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\"><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"westq4fy24final4.htm\">West Pharmaceutical Services, Inc. Presentation, dated </a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"westq4fy24final4.htm\">February </a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"westq4fy24final4.htm\">13, 2025</a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"westq4fy24final4.htm\">.</a></span></div></td></tr><tr><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">104</span></div></td><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:top\"><div style=\"margin-bottom:2pt;padding-left:2.25pt;padding-right:2.25pt\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:100%\">The cover page from the Company&#8217;s Current Report on Form 8-K, dated February 13, 2025, formatted in Inline XBRL.</span></div></td></tr></table></div><div style=\"margin-top:3pt;text-align:center\"><span><br/></span></div><div style=\"height:42.75pt;position:relative;width:100%\"><div style=\"bottom:0;position:absolute;width:100%\"><div style=\"-sec-extract:summary;text-align:center\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:144%\">4</span></div></div></div></body></html>",
+   "units": [
+    {
+     "id": "t39",
+     "kind": "table",
+     "cells": [
+      {
+       "r": 0,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "Exhibit No.",
+       "header": true
+      },
+      {
+       "r": 0,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "Description",
+       "header": true
+      },
+      {
+       "r": 1,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "104",
+       "header": true
+      },
+      {
+       "r": 1,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "The cover page from the Company’s Current Report on Form 8-K, dated February 13, 2025, formatted in Inline XBRL.",
+       "header": true
+      },
+      {
+       "r": 3,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "99.1",
+       "header": false
+      },
+      {
+       "r": 3,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "West Pharmaceutical Services, Inc. Press Release, dated February 13, 2025.",
+       "header": false
+      },
+      {
+       "r": 4,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "99.2",
+       "header": false
+      },
+      {
+       "r": 4,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "West Pharmaceutical Services, Inc. Presentation, dated February 13, 2025.",
+       "header": false
+      }
+     ],
+     "caption": [],
+     "tag": 50
+    },
+    {
+     "id": "u40",
+     "kind": "text",
+     "text": "4"
+    }
+   ],
+   "others": [
+    [
+     "t39",
+     [
+      0,
+      0
+     ],
+     {
+      "byte_start": 700,
+      "byte_end_exclusive": 711
+     },
+     null,
+     null
+    ],
+    [
+     "t39",
+     [
+      0,
+      6
+     ],
+     {
+      "byte_start": 1058,
+      "byte_end_exclusive": 1069
+     },
+     null,
+     null
+    ],
+    [
+     "t39",
+     [
+      1,
+      0
+     ],
+     {
+      "byte_start": 4175,
+      "byte_end_exclusive": 4178
+     },
+     null,
+     null
+    ],
+    [
+     "t39",
+     [
+      1,
+      6
+     ],
+     {
+      "byte_start": 4499,
+      "byte_end_exclusive": 4617
+     },
+     null,
+     null
+    ],
+    [
+     "t39",
+     [
+      3,
+      0
+     ],
+     {
+      "byte_start": 1360,
+      "byte_end_exclusive": 1364
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "t39",
+     [
+      3,
+      6
+     ],
+     {
+      "byte_start": 1911,
+      "byte_end_exclusive": 2393
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "t39",
+     [
+      4,
+      0
+     ],
+     {
+      "byte_start": 2688,
+      "byte_end_exclusive": 2692
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "t39",
+     [
+      4,
+      6
+     ],
+     {
+      "byte_start": 3228,
+      "byte_end_exclusive": 3880
+     },
+     "out_of_order",
+     null
+    ]
+   ]
+  },
+  {
+   "source": {
+    "accession": "0001637459-24-000013",
+    "file": "khc-20240214.htm",
+    "sha256": "73c1be1205b60e35baa145305e746229cf5d0b8483d40752f5a5512fd93c007a",
+    "bytes": [
+     18691,
+     22463
+    ]
+   },
+   "unit": "u37",
+   "text": "1",
+   "true": 3389,
+   "wrong": 2717,
+   "wrong_flag": "out_of_order",
+   "html": "<div style=\"margin-top:5pt\"><table style=\"border-collapse:collapse;display:inline-table;margin-bottom:5pt;vertical-align:text-bottom;width:509.25pt\"><tr><td style=\"width:1.0pt\"/><td style=\"width:64.00pt\"/><td style=\"width:1.0pt\"/><td style=\"width:1.0pt\"/><td style=\"width:24.25pt\"/><td style=\"width:1.0pt\"/><td style=\"width:1.0pt\"/><td style=\"width:415.00pt\"/><td style=\"width:1.0pt\"/></tr><tr style=\"height:15pt\"><td colspan=\"3\" style=\"padding:2px 1pt;text-align:center;vertical-align:bottom\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:700;line-height:100%;text-decoration:underline\">Exhibit&#160;No.</span></td><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:bottom\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:700;line-height:100%;text-decoration:underline\">Description</span></td></tr><tr style=\"height:15pt\"><td colspan=\"3\" style=\"padding:2px 1pt;text-align:center;vertical-align:bottom\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%\">99.1</span></td><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:bottom\"><div><span style=\"color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%;text-decoration:underline\"><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"ex991-erq42023.htm\">The Kraft Heinz Company Press Release, dated February 1</a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"ex991-erq42023.htm\">4</a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"ex991-erq42023.htm\">, 202</a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"ex991-erq42023.htm\">4</a><a style=\"-sec-extract:exhibit;color:#0000ff;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%;text-decoration:underline\" href=\"ex991-erq42023.htm\">.</a></span></div></td></tr><tr style=\"height:27pt\"><td colspan=\"3\" style=\"padding:2px 1pt;text-align:center;vertical-align:bottom\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%\">104</span></td><td colspan=\"3\" style=\"padding:0 1pt\"/><td colspan=\"3\" style=\"padding:2px 1pt;text-align:left;vertical-align:bottom\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:11pt;font-weight:400;line-height:100%\">The cover page of The Kraft Heinz Company's Current Report on Form 8-K dated February 14, 2024, formatted in iXBRL.</span></td></tr></table></div><div style=\"height:42.75pt;position:relative;width:100%\"><div style=\"bottom:0;position:absolute;width:100%\"><div style=\"-sec-extract:summary;text-align:center\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:10pt;font-weight:400;line-height:120%\">1</span></div></div></div><div id=\"id0ddefbb628f4264bbf7a8bd771af1d5_10\"></div><hr style=\"page-break-after:always\"/><div style=\"min-height:42.75pt;width:100%\"><div><span><br/></span></div></div><div style=\"margin-bottom:12pt;text-align:center\"><span style=\"color:#000000;font-family:'Times New Roman',sans-serif;font-size:12pt;font-weight:700;line-height:120%\">SIGNATURE</span></div>",
+   "units": [
+    {
+     "id": "t36",
+     "kind": "table",
+     "cells": [
+      {
+       "r": 0,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "Exhibit No.",
+       "header": true
+      },
+      {
+       "r": 0,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "Description",
+       "header": true
+      },
+      {
+       "r": 1,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "104",
+       "header": true
+      },
+      {
+       "r": 1,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "The cover page of The Kraft Heinz Company's Current Report on Form 8-K dated February 14, 2024, formatted in iXBRL.",
+       "header": true
+      },
+      {
+       "r": 3,
+       "c": 0,
+       "rs": 1,
+       "cs": 3,
+       "text": "99.1",
+       "header": false
+      },
+      {
+       "r": 3,
+       "c": 6,
+       "rs": 1,
+       "cs": 3,
+       "text": "The Kraft Heinz Company Press Release, dated February 14, 2024.",
+       "header": false
+      }
+     ],
+     "caption": [],
+     "tag": 28
+    },
+    {
+     "id": "u37",
+     "kind": "text",
+     "text": "1"
+    },
+    {
+     "id": "u38",
+     "kind": "text",
+     "text": "SIGNATURE"
+    }
+   ],
+   "others": [
+    [
+     "t36",
+     [
+      0,
+      0
+     ],
+     {
+      "byte_start": 637,
+      "byte_end_exclusive": 653
+     },
+     null,
+     null
+    ],
+    [
+     "t36",
+     [
+      0,
+      6
+     ],
+     {
+      "byte_start": 925,
+      "byte_end_exclusive": 936
+     },
+     null,
+     null
+    ],
+    [
+     "t36",
+     [
+      1,
+      0
+     ],
+     {
+      "byte_start": 2717,
+      "byte_end_exclusive": 2720
+     },
+     null,
+     null
+    ],
+    [
+     "t36",
+     [
+      1,
+      6
+     ],
+     {
+      "byte_start": 2966,
+      "byte_end_exclusive": 3081
+     },
+     null,
+     null
+    ],
+    [
+     "t36",
+     [
+      3,
+      0
+     ],
+     {
+      "byte_start": 1174,
+      "byte_end_exclusive": 1178
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "t36",
+     [
+      3,
+      6
+     ],
+     {
+      "byte_start": 1642,
+      "byte_end_exclusive": 2469
+     },
+     "out_of_order",
+     null
+    ],
+    [
+     "u38",
+     null,
+     {
+      "byte_start": 3750,
+      "byte_end_exclusive": 3759
+     },
+     null,
+     null
+    ]
+   ]
+  },
+  {
+   "source": {
+    "accession": "0000950170-24-040129",
+    "file": "payx-20240229.htm",
+    "sha256": "bf92797830edf9d36f0e5cb8fa3151059234bd97dbe3ac0894bd4e7171892135",
+    "bytes": [
+     2298063,
+     2300466
+    ]
+   },
+   "unit": "u295",
+   "text": "o",
+   "true": 2151,
+   "wrong": 1576,
+   "wrong_flag": null,
+   "html": "<div style=\"margin-left:10%;display:flex;margin-top:0;justify-content:flex-start;align-items:baseline;margin-bottom:0;min-width:3.333%;text-align:left;\"><span style=\"color:#000000;white-space:pre-wrap;font-size:10pt;font-family:Times New Roman;min-width:3.7033333333333336%;display:inline-flex;justify-content:flex-start;\">o</span><div style=\"width:100%;display:inline;\"><span style=\"color:#000000;white-space:pre-wrap;font-size:10pt;font-family:Times New Roman;min-width:fit-content;\">Growth in the number of clients served across our suite of HCM solutions; </span></div></div>\n  <div style=\"flex-direction:column;display:flex;padding-bottom:0.5in;min-height:0.6in;justify-content:flex-end;box-sizing:border-box;\"><p style=\"font-size:10pt;margin-top:0;font-family:Times New Roman;margin-bottom:0;text-align:center;\"><span style=\"color:#000000;white-space:pre-wrap;font-size:10pt;font-family:Times New Roman;min-width:fit-content;\">20</span></p><p style=\"font-size:10pt;margin-top:0;font-family:Times New Roman;margin-bottom:0;text-align:left;\"><span style=\"white-space:pre-wrap;font-size:10pt;font-family:Times New Roman;min-width:fit-content;\">&#160;</span></p></div>\n  <hr style=\"page-break-after:always;\"/>\n  <div style=\"padding-top:0.5in;min-height:0.6in;box-sizing:border-box;\"><p style=\"font-size:10pt;margin-top:0;font-family:Times New Roman;margin-bottom:0;text-align:left;\"><a href=\"#tableofcontents\"><span style=\"color:#0563c1;white-space:pre-wrap;font-weight:bold;text-decoration:underline;font-size:10pt;font-family:Times New Roman;min-width:fit-content;\">Table of Contents</span></a></p><p style=\"font-size:10pt;margin-top:0;font-family:Times New Roman;margin-bottom:0;text-align:left;\"><span style=\"white-space:pre-wrap;font-size:6pt;font-family:Times New Roman;min-width:fit-content;\">&#160;</span></p></div>\n  <div style=\"margin-left:10%;display:flex;margin-top:0;justify-content:flex-start;align-items:baseline;margin-bottom:0;min-width:3.333%;text-align:left;\"><span style=\"color:#000000;white-space:pre-wrap;font-size:10pt;font-family:Times New Roman;min-width:3.7033333333333336%;display:inline-flex;justify-content:flex-start;\">o</span><div style=\"width:100%;display:inline;\"><span style=\"color:#000000;white-space:pre-wrap;font-size:10pt;font-family:Times New Roman;min-width:fit-content;\">Higher product penetration, including HR Solutions and retirement; and</span></div></div>",
+   "units": [
+    {
+     "id": "u292",
+     "kind": "text",
+     "text": "o"
+    },
+    {
+     "id": "u293",
+     "kind": "text",
+     "text": "Growth in the number of clients served across our suite of HCM solutions; "
+    },
+    {
+     "id": "u294",
+     "kind": "text",
+     "text": "20"
+    },
+    {
+     "id": "u295",
+     "kind": "text",
+     "text": "o"
+    },
+    {
+     "id": "u296",
+     "kind": "heading",
+     "text": "Higher product penetration, including HR Solutions and retirement; and",
+     "level": 3,
+     "native_heading": {
+      "metadata": {
+       "detection_method": "contextual",
+       "confidence": 0.6000000000000001
+      },
+      "style": {
+       "font_size": 13.33,
+       "font_weight": null,
+       "font_style": null,
+       "font_family": "times new roman",
+       "text_align": null,
+       "text_decoration": null,
+       "color": "#000000",
+       "background_color": null,
+       "margin_top": null,
+       "margin_bottom": null,
+       "margin_left": null,
+       "margin_right": null,
+       "padding_top": null,
+       "padding_bottom": null,
+       "padding_left": null,
+       "padding_right": null,
+       "display": null,
+       "width": null,
+       "height": null,
+       "line_height": null
+      }
+     }
+    }
+   ],
+   "others": [
+    [
+     "u292",
+     null,
+     {
+      "byte_start": 323,
+      "byte_end_exclusive": 324
+     },
+     null,
+     null
+    ],
+    [
+     "u293",
+     null,
+     {
+      "byte_start": 486,
+      "byte_end_exclusive": 559
+     },
+     null,
+     null
+    ],
+    [
+     "u294",
+     null,
+     {
+      "byte_start": 933,
+      "byte_end_exclusive": 935
+     },
+     null,
+     null
+    ],
+    [
+     "u296",
+     null,
+     {
+      "byte_start": 2314,
+      "byte_end_exclusive": 2384
+     },
+     null,
+     null
+    ]
+   ]
+  }
+ ]
+}
