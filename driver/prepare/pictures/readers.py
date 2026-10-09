@@ -145,7 +145,7 @@ def chandra(model, wheel):
     exec(z.read('chandra/prompts.py').decode().split('if __name__')[0], ns)  # Chandra's own prompts
     min_dim = int(re.search(r'MIN_IMAGE_DIM: int = (\d+)', z.read('chandra/settings.py').decode()).group(1))  # 1,536 in 0.2.0
     settings = dict(reader='chandra', model_files=_tree_sha256(model), wheel=_tree_sha256(wheel), max_tokens=MAX_TOKENS, temperature=0.0,
-                    code=[_code_id(_image), _code_id(chandra)], versions={p: md.version(p) for p in ('mlx-vlm', 'mlx', 'pillow')})
+                    code=[_code_id(_image), _code_id(chandra)], versions={p: md.version(p) for p in ('mlx-vlm', 'mlx', 'transformers', 'tokenizers', 'pillow')})
     m, processor = load(model); config = load_config(model)
     def read(data):
         im = _image(data)

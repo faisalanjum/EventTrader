@@ -25,7 +25,9 @@ ROOT = str(Path(__file__).resolve().parents[4])
 sha = lambda b: hashlib.sha256(b).hexdigest()
 FAKE_MLX = {'mlx_vlm/__init__.py': "def load(m): return 'model', 'processor'\ndef generate(*a, **k): raise SystemExit('no generation in this test')\n",
             'mlx_vlm/prompt_utils.py': 'def apply_chat_template(*a, **k): return ""\n', 'mlx_vlm/utils.py': 'def load_config(m): return {}\n', 'mlx/__init__.py': '',
-            'mlx_vlm-0.7.4.dist-info/METADATA': 'Metadata-Version: 2.1\nName: mlx-vlm\nVersion: 0.7.4\n', 'mlx-0.32.3.dist-info/METADATA': 'Metadata-Version: 2.1\nName: mlx\nVersion: 0.32.3\n'}
+            'mlx_vlm-0.7.4.dist-info/METADATA': 'Metadata-Version: 2.1\nName: mlx-vlm\nVersion: 0.7.4\n', 'mlx-0.32.3.dist-info/METADATA': 'Metadata-Version: 2.1\nName: mlx\nVersion: 0.32.3\n',
+            'transformers-5.18.0.dist-info/METADATA': 'Metadata-Version: 2.1\nName: transformers\nVersion: 5.18.0\n',   # the processor and tokenizer MLX loads
+            'tokenizers-0.22.1.dist-info/METADATA': 'Metadata-Version: 2.1\nName: tokenizers\nVersion: 0.22.1\n'}
 
 
 class Base(unittest.TestCase):
@@ -55,10 +57,23 @@ class ChandraSettings(Base):
         w1, w2 = self.wheel('P1'), self.wheel('P2'); s1, s2 = self.settings(self.model, w1), self.settings(self.model, w2)
         self.assertEqual(set(s1), {'reader', 'model_files', 'wheel', 'max_tokens', 'temperature', 'code', 'versions'})
         self.assertEqual((s1['max_tokens'], s1['temperature'], len(s1['code'])), (12384, 0.0, 2))
-        self.assertEqual({k: v for k, v in s1['versions'].items() if k != 'pillow'}, {'mlx-vlm': '0.7.4', 'mlx': '0.32.3'})
+        self.assertEqual({k: v for k, v in s1['versions'].items() if k != 'pillow'}, {'mlx-vlm': '0.7.4', 'mlx': '0.32.3', 'transformers': '5.18.0', 'tokenizers': '0.22.1'})
         self.assertNotEqual(s1['wheel'], s2['wheel']); self.assertEqual(s1['model_files'], s2['model_files'])          # a changed prompt
         (self.model / 'weights.safetensors').write_bytes(b'w2'); s3 = self.settings(self.model, w1)
         self.assertNotEqual(s1['model_files'], s3['model_files']); self.assertEqual(s1['wheel'], s3['wheel'])          # changed weights
+
+    def test_each_processor_dependency_version_is_part_of_the_identity(self):  # Mac native trace (Oct 9): MLX loads the processor and tokenizer
+        w = self.wheel('P1'); s1 = self.settings(self.model, w)                    # through transformers/tokenizers, so their versions name the reading
+        self.assertEqual(self.settings(self.model, w), s1)                            # the same versions: the same identity, saved readings reused
+        for name, old, new in (('transformers', '5.18.0', '5.19.0'), ('tokenizers', '0.22.1', '0.22.2')):
+            with self.subTest(dependency=name):
+                meta = next(self.fake.glob(f'{name}-*.dist-info')) / 'METADATA'; text = meta.read_text()
+                meta.write_text(text.replace(f'Version: {old}', f'Version: {new}'))
+                s2 = self.settings(self.model, w)
+                self.assertNotEqual(s2, s1)
+                self.assertEqual({k: v for k, v in s2.items() if k != 'versions'}, {k: v for k, v in s1.items() if k != 'versions'})   # only the version moved
+                self.assertEqual(s2['versions'][name], new)
+                meta.write_text(text)
 
     def test_a_model_that_is_not_a_local_folder_stops(self):
         with self.assertRaises(subprocess.CalledProcessError) as e: self.settings(self.tmp / 'no-such-model', self.wheel('P1'))
