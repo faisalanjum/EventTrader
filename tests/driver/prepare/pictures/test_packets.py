@@ -161,6 +161,18 @@ class PacketTests(unittest.TestCase):
         self.assertNotIn('more differences', text); self.assertNotIn('packets/', text); self.assertIn('[CHANDRA ONLY Text', text)
 
 
+    def test_the_picture_file_is_closed_when_the_packet_is_made(self):  # Root, Oct 9: packet() measures the picture inside Pillow's own context
+        import gc, warnings                                           # manager (ImageFile.__exit__ closes the file it opened); success and failure
+        from PIL import UnidentifiedImageError
+        bad = self.picture + '.bad'; Path(bad).write_bytes(b'not a picture')
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always', ResourceWarning)
+            p.packet('page', self.picture, box('<p>Revenue 10</p>'), None, None); gc.collect()
+            with self.assertRaises(UnidentifiedImageError): p.packet('bad', bad, box('<p>Revenue 10</p>'), None, None)
+            gc.collect()
+        self.assertEqual([str(w.message) for w in caught if issubclass(w.category, ResourceWarning)], [])
+
+
 class SavedProbes(unittest.TestCase):  # the probes on saved readings, through the pinned fixtures (ported 2026-10-07)
     @classmethod
     def setUpClass(cls):

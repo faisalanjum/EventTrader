@@ -191,7 +191,9 @@ def free_notes(bl, st, el, free):  # per block: what BOTH saved free OCR tools r
 
 def packet(name, picture, html, other_html, other_src, free=None, picture_ref=None):  # (the exact text the AI reader receives, its record); free: saved free OCR;
     # picture_ref: what the packet names as its picture (src, record) where `picture` is only the file it is measured from; None names `picture` itself
-    bl = blocks_of(html); st, el = statuses(bl, other_html); w, h = Image.open(picture).size; ev = free_notes(bl, st, el, free) if free else {}
+    bl = blocks_of(html); st, el = statuses(bl, other_html)
+    with Image.open(picture) as im: w, h = im.size                    # Pillow's own context manager closes the file it opened (ImageFile.__exit__)
+    ev = free_notes(bl, st, el, free) if free else {}
     res = {}                                                           # disputed tables whose whole reading the picture's word positions support
     if free and other_html:                                            # table choice weighs two readings: only with a second one
         from . import table_choice                                     # (owner, Oct 6: loaded only when Sonnet is on and has read)
