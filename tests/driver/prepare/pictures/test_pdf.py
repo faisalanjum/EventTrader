@@ -476,5 +476,36 @@ class NativeOpenings(unittest.TestCase):  # OCR organization review: the four PD
         self.assertEqual(self.run_pdf('views.pdf')[0]['units'][0]['links'][0]['dest'], {'page': 2, 'page_index': 1, 'view': 'Fit', 'params': []})   # positive control
         self.assertEqual({k: self.run_pdf('links.pdf')[0]['units'][0]['links'][1]['dest'][k] for k in ('x', 'y')}, {'x': 5.0, 'y': 80.0})
 
+
+class NativeLifetime(unittest.TestCase):  # every PDFium page and bitmap pages() opens is closed by pages() itself - before it closes the document (whose close
+    def opened(self, data, fault=None):     # would otherwise close them as its children): the handle (`raw`) of each is None at that moment
+        made, at_close = [], []
+        real_get, real_render, real_close = pdfium.PdfDocument.__getitem__, pdfium.PdfPage.render, pdfium.PdfDocument.close
+        def get(doc, i): page = real_get(doc, i); made.append(page); return page
+        def render(page, **k): bitmap = real_render(page, **k); made.append(bitmap); return bitmap
+        def close(doc, *a, **k): at_close.append([type(o).__name__ for o in made if o.raw is not None]); return real_close(doc, *a, **k)
+        pdfium.PdfDocument.__getitem__, pdfium.PdfPage.render, pdfium.PdfDocument.close = get, render, close
+        try:
+            if fault: fault()
+            try: pdf.pages(data, 'f/x.pdf', sha(data)); error = None
+            except Exception as e: error = e
+        finally: pdfium.PdfDocument.__getitem__, pdfium.PdfPage.render, pdfium.PdfDocument.close = real_get, real_render, real_close
+        return made, at_close, error
+
+    def test_pages_and_bitmaps_are_released_on_completion_and_on_failures(self):
+        data = made((100, 100), (200, 100))
+        made_, at_close, error = self.opened(data)                                                    # healthy control: two pages, each loaded twice, two bitmaps
+        self.assertEqual(([type(o).__name__ for o in made_].count('PdfPage'), [type(o).__name__ for o in made_].count('PdfBitmap'), at_close, error), (4, 2, [[]], None))
+        real_render, real_save = pdfium.PdfPage.render, Image.Image.save
+        faults = {'render fails': ('render', lambda: setattr(pdfium.PdfPage, 'render', lambda page, **k: (_ for _ in ()).throw(pdfium.PdfiumError('fake: render')))),
+                  'encoding fails': ('save', lambda: setattr(Image.Image, 'save', lambda im, *a, **k: (_ for _ in ()).throw(OSError('fake: write'))))}
+        for name, (what, fault) in faults.items():
+            with self.subTest(name):
+                try: made_, at_close, error = self.opened(data, fault)
+                finally: pdfium.PdfPage.render, Image.Image.save = real_render, real_save
+                self.assertTrue(made_); self.assertEqual(at_close, [[]])                                # nothing still open when the document closes
+                if what == 'save': self.assertIsInstance(error, OSError); self.assertIn('PdfBitmap', [type(o).__name__ for o in made_])
+
+
 if __name__ == '__main__':
     unittest.main()
