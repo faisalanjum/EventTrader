@@ -78,11 +78,11 @@ def _pp_boxes(pp, im):  # PP-OCR's text lines with their boxes
     return [dict(t=t, box=[round(float(v), 1) for v in np.array(b).reshape(-1)]) for t, b in zip(r.txts or (), r.boxes if r.boxes is not None else [])]
 
 
-def _ox_boxes(ox, im):  # OnnxTR's words with their boxes
+def _ox_boxes(ox, im):  # OnnxTR's words with their boxes, each word as OnnxTR exports it (its to_json_safe: a straight box's corners are NumPy scalars)
     import numpy as np
     W, H = im.size; doc = ox([np.array(im)])
-    return [dict(t=w.value, box=[round(w.geometry[0][0] * W, 1), round(w.geometry[0][1] * H, 1), round(w.geometry[1][0] * W, 1), round(w.geometry[1][1] * H, 1)])
-            for p in doc.pages for b in p.blocks for l in b.lines for w in l.words]
+    return [dict(t=w['value'], box=[round(w['geometry'][0][0] * W, 1), round(w['geometry'][0][1] * H, 1), round(w['geometry'][1][0] * W, 1), round(w['geometry'][1][1] * H, 1)])
+            for p in doc.pages for b in p.blocks for l in b.lines for w in (word.export() for word in l.words)]
 
 
 def free_ocr(picture):
