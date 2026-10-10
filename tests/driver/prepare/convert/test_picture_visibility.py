@@ -8,6 +8,7 @@ import io, unittest
 from PIL import Image
 
 from driver.prepare.convert import anchor, html_route
+from driver.prepare.convert import edgartools_html as eh
 from driver.prepare.pictures import inputs
 
 SHEET = b'<style>.h{display:none}.s{display:inline !important}.v{visibility:visible}.o{opacity:0}</style>'
@@ -72,6 +73,40 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual([(u['src'], 'input_sha256' in u['input']) for u in pics], [('s.png', True)]); self.assertEqual(len(got), 1)
 
 
+    def test_an_older_stored_verdict_proves_no_picture_hidden_and_awards_nothing(self):  # N3: a route saved before the picture verdict existed
+        body = b'<p>a</p><img class="h" src="h.png" width="40" height="20"><img class="s" style="display:none" src="s.png" width="40" height="20"><img src="p.png" width="40" height="20"><p>b</p>'
+        raw, r, _, pics, at = self.route(body)
+        h, s, p = (raw.index(b'<img class="h"'), raw.index(b'<img class="s"'), raw.index(b'<img src="p.png"'))  # the three tags, from the source
+        members = {'h.png': png(), 's.png': png(), 'p.png': png()}
+        self.assertEqual([(u['src'], u['anchor']['byte_start']) for u in pics], [('s.png', s), ('p.png', p)])  # positive control: the current verdict (sheet hides h, shows s)
+        inputs.prepare(raw, r, members, self.browser)
+        self.assertEqual(sorted((u['src'], 'input_sha256' in u['input']) for u in pics), [('p.png', True), ('s.png', True)])
+        old = {k: v for k, v in r['page_visibility'].items() if k not in ('pictures', 'unresolved_pictures')}  # the same verdict as stored before picture verdicts
+        v = anchor.Visible(raw, page=old)
+        self.assertEqual((v.certain, v.hidden_pictures, sorted(a for a, _ in v.pictures)), (False, set(), [h, p]))  # no hidden proof invented; the scanner's own reading (it reads no sheet)
+        units = [u for u in eh.convert(raw, 'f.htm', anchor.sha256(raw), vis=v)['units'] if u['kind'] == 'image']
+        self.assertEqual([(u['src'], u['anchor']['byte_start'] if isinstance(u.get('anchor'), dict) else None) for u in units], [('h.png', h), ('s.png', None), ('p.png', p)])  # nothing dropped; s.png unplaced
+        saved = dict(r, page_visibility=old, units=[dict(u) for u in r['units']])  # the current units read back with the older verdict: the inputs step decides by it
+        inputs.prepare(raw, saved, members, self.browser)
+        self.assertEqual([(u['src'], u['input'].get('error') or 'captured') for u in saved['units'] if u['kind'] == 'image'],
+                         [('s.png', 'not a shown picture tag of the source with its src'), ('p.png', 'captured')])  # unproved placement stays an explicit error, never a capture
+
+    def test_the_picture_verdict_is_kept_in_the_routes_settings_and_names_it(self):  # N6
+        raw, r, _, _, _ = self.route(b'<p>a</p><img class="h" src="h.png" width="40" height="20"><img src="p.png" width="40" height="20"><p>b</p>')
+        got = r['route']['settings']['picture_visibility']
+        self.assertTrue(got.startswith('as the browser proved it (checkVisibility: opacity, CSS visibility) ') and r['page_visibility']['pictures']['hidden'] == [raw.index(b'<img class="h"')])
+        same = eh.settings(anchor.Visible(raw, page=r['page_visibility']))['picture_visibility']
+        pv = dict(r['page_visibility'], pictures={'hidden': [], 'shown': sorted(r['page_visibility']['pictures']['hidden'] + r['page_visibility']['pictures']['shown']), 'unbound': []})
+        other = eh.settings(anchor.Visible(raw, page=pv))
+        self.assertEqual(same, got); self.assertNotEqual(other['picture_visibility'], got)  # read back the same: the same name; another verdict: another name
+        self.assertEqual(other['hidden_text'], r['route']['settings']['hidden_text'])  # the text's own identity is untouched by it
+        old = {k: v for k, v in r['page_visibility'].items() if k not in ('pictures', 'unresolved_pictures')}
+        self.assertNotIn('picture_visibility', eh.settings(anchor.Visible(raw, page=old)))  # an older verdict: no digest invented
+        _, plain, _, _, _ = self.route(b'<p>a</p><img src="p.png" width="40" height="20"><p>b</p>', sheet=b'')
+        self.assertEqual(plain['route']['settings'].get('picture_visibility'), None)  # a certified page asks no verdict and names none
+        _, nopic, _, _, _ = self.route(b'<p>a</p><p class="h">gone</p><p>b</p>')
+        self.assertNotIn('picture_visibility', nopic['route']['settings']); self.assertNotIn('pictures', nopic['page_visibility'])  # an uncertain page with no picture tag
+
 class CertainPage(InTheBrowser):  # no sheet: the scanner certifies the page itself; no browser verdict is asked, and its certified verdict is the one used
     def test_a_picture_a_certified_reading_proves_hidden_is_no_picture(self):  # changed (Root review addendum): v1 kept c.png unplaced, so inputs gave it an error
         for hide in ('display:none', 'visibility:hidden', 'opacity:0'):
@@ -95,3 +130,4 @@ class CertainPage(InTheBrowser):  # no sheet: the scanner certifies the page its
     test_a_picture_the_page_hides_is_no_picture = test_a_picture_a_sheet_shows_again_is_one_at_its_own_tag = None
     test_one_file_twice_is_two_occurrences_each_by_its_own_tag = test_tables_nested_tables_captions_and_inline_svg = test_size_is_not_visibility = None
     test_a_source_comment_or_attribute_like_a_mark_binds_nothing = test_a_tag_the_parser_moves_keeps_the_scanners_reading_and_is_said = test_the_picture_inputs_read_the_same_verdict = None
+    test_an_older_stored_verdict_proves_no_picture_hidden_and_awards_nothing = test_the_picture_verdict_is_kept_in_the_routes_settings_and_names_it = None
