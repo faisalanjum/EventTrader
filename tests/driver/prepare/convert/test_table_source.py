@@ -115,5 +115,38 @@ class TableSource(unittest.TestCase):
         self.assertEqual([u.get('cell') for u in self.tables('NO_MAPPING')], [None, None])
 
 
+TWINS = T('<table><tr><td>A</td><td></td></tr></table><table><tr><td>A</td><td></td></tr></table>')   # identical text, blank cells (root's loss control)
+ENTITY = T('<table><tr><td>A&amp;B</td></tr></table>')                                                 # the tool's text differs from the source bytes
+
+
+class TableProvenance(unittest.TestCase):  # root OCR_TABLE_PROVENANCE: the table's own source occurrence (its <table start tag) survives linking
+    @classmethod
+    def setUpClass(cls):
+        from playwright.sync_api import sync_playwright
+        cls.routes = {}
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch()
+            try:
+                for name in ('TWINS', 'ENTITY', 'SIBLINGS'):
+                    raw = globals()[name]; cls.routes[name] = (raw, html_route.prepare(raw, name + '.htm', hashlib.sha256(raw).hexdigest(), browser)[0])
+            finally: browser.close()
+
+    def test_each_table_names_its_own_source_start_tag(self):  # expected: every <table start in the original bytes, in document order
+        for name in ('TWINS', 'ENTITY', 'SIBLINGS'):
+            with self.subTest(name):
+                raw, route = self.routes[name]
+                tabs = [u for u in route['units'] if u['kind'] == 'table']
+                self.assertEqual([u['source_table'] for u in tabs], [{'tag_start': m.start(), 'claims': 1} for m in re.finditer(rb'<table', raw)])
+
+    def test_unknown_split_and_legacy_identities_stay_distinct(self):  # the linker alone, on units an adapter could give
+        raw = TWINS; start = raw.index(b'<table')
+        unit = lambda i, **kw: {'id': f't{i}', 'kind': 'table', 'cells': [{'r': 0, 'c': 0, 'rs': 1, 'cs': 1, 'text': 'A'}], 'caption': [], **kw}
+        units = [unit(0, tag=None), unit(1, tag=start), unit(2, tag=start), unit(3)]
+        anchor.link(raw, units)
+        self.assertEqual([u.get('source_table', 'absent') for u in units],
+                         [None, {'tag_start': start, 'claims': 2}, {'tag_start': start, 'claims': 2}, 'absent'])   # unknown; one tag claimed twice; a legacy unit
+        self.assertNotIn('tag', units[1])
+
+
 if __name__ == '__main__':
     unittest.main()

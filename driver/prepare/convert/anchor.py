@@ -703,8 +703,10 @@ def link(raw, units, xml=False, vis=None):
     for k, key in enumerate(keys): same_text.setdefault(key, []).append(k)
     confined = {id(c) for u, c in items if c is not u and 'tag' in u}  # the cells of a table its adapter names: every path below keeps them in that table (table_places)
     (allowed, reserved), anywhere = table_places(vis, items, keys), (None, 0, len(vis.flat))
-    for u in units:
-        if u.get('kind') == 'table': u.pop('tag', None)  # the table's own start tag has decided where its cells may stand (table_places); it is no part of the route
+    shown, claims = {s for s in vis.table_tags if s is not None}, Counter(u['tag'] for u in units if u.get('kind') == 'table' and u.get('tag') is not None)
+    for u in units:  # the table's own start tag has decided where its cells may stand (table_places); it stays as the point of its source occurrence:
+        if u.get('kind') == 'table' and 'tag' in u:  # {tag_start: the byte of its <table tag, claims: how many route tables name that tag} - not its extent;
+            t = u.pop('tag'); u['source_table'] = {'tag_start': t, 'claims': claims[t]} if t in shown else None   # None: no shown table of this source
     cell, edge = array('i', [-1]) * len(vis.flat), {}  # the innermost table cell each search-form character stands in (-1: none) and each cell's first and last character
     for n, (a, b) in enumerate(sorted((a, b) for table in vis.tables for row in table for a, b in row)):
         lo, hi = bisect_left(vis.s, a), bisect_left(vis.s, b); cell[lo:hi] = array('i', [n]) * (hi - lo); edge[n] = (lo, hi)
