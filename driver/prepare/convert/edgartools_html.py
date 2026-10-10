@@ -113,11 +113,17 @@ def named(raw, vis, codes):
     except UnicodeDecodeError: return given.decode('cp1252', 'replace')
 
 
-def to_units(tree, codes=None):
+def to_units(tree, codes=None, shown=()):
     """The units of the tool's tree. With `codes` (this source's, from `codes`), every picture names the tag it came from (`tag`, for the linker: a `src` that is no
     code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back;
-    every table names the table it came from the same way (`tag`, None when the tool's table carries no code of this source: it then stands nowhere)."""
+    every table names the table it came from the same way (`tag`, None when the tool's table carries no code of this source: it then stands nowhere). `shown`:
+    the sorted first bytes of the picture tags the page shows (`Visible.pictures`); a table with no text whose own cell holds one is kept for it."""
     units, paragraphs, holders = [], count(), []
+
+    def pictured(x):  # a shown picture tag stands in this cell's own source span (its code's): the tool keeps the cell, not the picture (EdgarTools 5.60.0 cells are text)
+        a = codes.get(x['_code']) if codes is not None and isinstance(x['_code'], str) else None
+        if not (a and isinstance(a[1], tuple)): return False
+        i = bisect_left(shown, a[0]); return i < len(shown) and shown[i] < a[1][1]
 
     def table_unit(t, holder=None):  # holder: (its table unit, the cell) where this table stands in a cell
         cells, until, kids = [], {}, []  # until[column] = the first row at which that column is free again: a rowspan expires by row, whatever later rows hold
@@ -130,8 +136,8 @@ def to_units(tree, codes=None):
                 kids += [(k, cells[-1]) for k in cell.get('tables') or []]
                 for k in range(c, c + cs): until[k] = r + rs
                 c += cs
-        if holder or any((x['text'] or '').strip() or 'tables' in x for x in cells):  # a table with text, or standing in a cell (its relation is structure): every own cell, blank too
-            u = {'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else [], **({'tag': codes[t['code']][0] if t.get('code') in codes and codes[t['code']][1] is None else None} if codes is not None else {})}  # `tag`: the source table it came from (None: no table of this source - it stands nowhere), for the linker; a table with no text in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
+        if holder or any((x['text'] or '').strip() or 'tables' in x or pictured(x) for x in cells):  # a table with text or a shown picture, or standing in a cell (its relation is structure): every own cell, blank too
+            u = {'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else [], **({'tag': codes[t['code']][0] if t.get('code') in codes and codes[t['code']][1] is None else None} if codes is not None else {})}  # `tag`: the source table it came from (None: no table of this source - it stands nowhere), for the linker; a table with no text and no shown picture in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
             if holder: u['cell'] = {'table': holder[0]['id'], **{k: holder[1][k] for k in ('r', 'c', 'rs', 'cs')}}; holders.append((u, holder[1]))  # its holder, as a picture names one; the screen step regrids it
             units.append(u)
             for k, h in kids: h['tables'].append(f't{len(units)}'); table_unit(k, (u, h))  # each child right after its parent and its earlier children, in source order
@@ -234,7 +240,7 @@ def split_lines(raw, units, vis=None):
 
 
 def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=None):
-    vis = anchor.Visible(raw) if vis is None else vis; known = codes(raw, vis); linked = anchor.link(raw, to_units(tree, known), vis=vis)
+    vis = anchor.Visible(raw) if vis is None else vis; known = codes(raw, vis); linked = anchor.link(raw, to_units(tree, known, sorted(a for a, _ in vis.pictures)), vis=vis)
     linked['units'] = split_lines(raw, linked['units'], vis)
     for u in linked['units']:
         if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own

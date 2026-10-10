@@ -67,10 +67,35 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual((place(p), spans_of(p)), ((child, 1, 0), {'r': 1, 'c': 0, 'rs': 1, 'cs': 1}))  # its own cell: inner row 1, column 0 (the markup)
         self.assertTrue(raw[p['cell']['byte_start']:p['cell']['byte_end_exclusive']].startswith(b'<td><img src="same.png">'))  # its own (inner) source cell
 
-    def test_pictures_of_a_table_with_no_route_table_name_no_table(self):
-        raw, r, t = self.route(b'<table><tr><td><img src="a.png"></td><td><img src="b.png"></td></tr></table>')
-        self.assertEqual((t, [place(u) for u in pictures(r)]), ([], [(None, None, None)] * 2))  # never a parent the route does not have
+    def test_pictures_of_a_table_with_no_text_name_that_table(self):  # formerly ..._with_no_route_table_name_no_table, expecting ([], [(None, None, None)] * 2): the table was
+        raw, r, t = self.route(b'<table><tr><td><img src="a.png"></td><td><img src="b.png"></td></tr></table>')  # dropped as text-blank; it is now kept for its pictures (Root, picture-table fix)
+        self.assertEqual((t, [place(u) for u in pictures(r)]), (['t0'], [('t0', 0, 0), ('t0', 0, 1)]))  # never a parent the route does not have: the route has it; one row, two columns
         self.assertEqual([raw[u['cell']['byte_start']:u['cell']['byte_end_exclusive']][:20] for u in pictures(r)], [b'<td><img src="a.png"', b'<td><img src="b.png"'])
+        self.assertEqual([raw[u['cell']['byte_start']:u['cell']['byte_end_exclusive']] for u in pictures(r)], [b'<td><img src="a.png">', b'<td><img src="b.png">'])  # each its own whole source cell (the scanner's span: start tag to content end)
+
+    def test_a_table_whose_only_content_is_shown_pictures_is_kept_with_them(self):  # failed before: no table, pictures with a cell span only (Root, picture-only audit)
+        raw, r, t = self.route(b'<table><tr><td colspan="2"><img src="w.png" width="80" height="20"></td></tr><tr><td><img src="a.png" width="40" height="20"></td><td><img src="b.png" width="40" height="20"></td></tr></table>')
+        self.assertEqual([(place(u), spans_of(u)) for u in pictures(r)], [((t[0], 0, 0), {'r': 0, 'c': 0, 'rs': 1, 'cs': 2}), ((t[0], 1, 0), {'r': 1, 'c': 0, 'rs': 1, 'cs': 1}),
+                                                                        ((t[0], 1, 1), {'r': 1, 'c': 1, 'rs': 1, 'cs': 1})])  # over both columns the shown cells make (measured, not guessed: an unsized picture the offline page cannot load draws next to nothing)
+        raw, r, t = self.route(b'<p>Logo <img src="same.png"></p><table><tr><td><img src="same.png"></td><td><img src="same.png"></td></tr></table>')
+        self.assertEqual(['cell' in u for u in pictures(r)], [False, True, True])  # one file three times: three occurrences, only two in the table
+        self.assertEqual([place(u) for u in pictures(r)[1:]], [(t[0], 0, 0), (t[0], 0, 1)])
+        raw, r, t = self.route(b'<table><caption>Our brands</caption><tr><td><img src="a.png"></td><td><img src="chart.svg"></td></tr></table>')
+        self.assertEqual(([u['caption'] for u in r['units'] if u['kind'] == 'table'], [u['kind'] for u in r['units']].count('caption')), ([['Our brands']], 0))  # the caption stays the table's
+        self.assertEqual([(u['src'], place(u)) for u in pictures(r)], [('a.png', (t[0], 0, 0)), ('chart.svg', (t[0], 0, 1))])
+        raw, r, t = self.route(b'<table><tr><td><svg width="40" height="20"><rect width="40" height="20"></rect></svg></td></tr></table>')  # inline SVG: a picture tag the scanner lists, no new support
+        self.assertEqual((len(t), [place(u) for u in pictures(r)]), (1, [(t[0], 0, 0)]))
+        self.assertTrue(raw[pictures(r)[0]['anchor']['byte_start']:].startswith(b'<svg'))  # the picture is the inline <svg> tag itself
+        raw, r, t = self.route(b'<table><tr><td><table><tr><td><img src="n.png"></td></tr></table></td></tr></table>')
+        self.assertEqual((len(t), [place(u) for u in pictures(r)]), (2, [(t[1], 0, 0)]))  # the inner table's own cell (kept before too: a table in a cell)
+        raw, r, t = self.route(b'<table><tr><td>First<img src="a.png"></td><td>Second<img src="b.png"></td></tr></table>')
+        self.assertEqual((len(t), [place(u) for u in pictures(r)]), (1, [(t[0], 0, 0), (t[0], 0, 1)]))  # text beside them: kept as before
+
+    def test_a_table_with_no_text_and_no_shown_picture_is_still_left_out(self):  # the spacer policy is unchanged
+        for body in (b'<table><tr><td></td><td></td></tr></table>', b'<table><tr><td>&nbsp;</td><td> </td></tr></table>',
+                     b'<table><tr><td><img style="display:none" src="h.png"></td></tr></table>'):
+            _, r, t = self.route(b'<p>Before</p>' + body + b'<p>After</p>')
+            self.assertEqual((t, pictures(r)), ([], []))
 
     def test_the_source_descriptions_as_written_for_the_tools_pictures_and_the_added_ones(self):  # failed before: no alt or title anywhere
         _, r, _ = self.route(b'<h2>Revenue</h2><img src="same.png" alt="Profit &amp;amp; loss" title=""><p>USD millions.</p>')
