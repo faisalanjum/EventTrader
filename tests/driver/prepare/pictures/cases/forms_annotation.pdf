@@ -1,0 +1,99 @@
+%PDF-1.3
+%‚„œ”
+1 0 obj
+<<
+/Producer (pypdf)
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Count 1
+/Kids [ 4 0 R ]
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+/AcroForm <<
+/Fields [ 8 0 R ]
+>>
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/Resources <<
+>>
+/MediaBox [ 0.0 0.0 200 100 ]
+/Parent 2 0 R
+/Annots [ 6 0 R 8 0 R ]
+>>
+endobj
+5 0 obj
+<<
+/Type /XObject
+/Subtype /Form
+/BBox [ 0.0 0.0 40 20 ]
+/Length 23
+>>
+stream
+1 0 0 rg 0 0 40 20 re f
+endstream
+endobj
+6 0 obj
+<<
+/Type /Annot
+/Subtype /Square
+/Rect [ 10 10 50 30 ]
+/AP <<
+/N 5 0 R
+>>
+>>
+endobj
+7 0 obj
+<<
+/Type /XObject
+/Subtype /Form
+/BBox [ 0.0 0.0 40 20 ]
+/Length 23
+>>
+stream
+0 0 1 rg 0 0 40 20 re f
+endstream
+endobj
+8 0 obj
+<<
+/Type /Annot
+/Subtype /Widget
+/FT /Tx
+/T (amount)
+/V (42)
+/Rect [ 100 10 140 30 ]
+/P 4 0 R
+/AP <<
+/N 7 0 R
+>>
+>>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000015 00000 n 
+0000000054 00000 n 
+0000000113 00000 n 
+0000000196 00000 n 
+0000000314 00000 n 
+0000000441 00000 n 
+0000000533 00000 n 
+0000000660 00000 n 
+trailer
+<<
+/Size 9
+/Root 3 0 R
+/Info 1 0 R
+>>
+startxref
+791
+%%EOF

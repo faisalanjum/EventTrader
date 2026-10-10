@@ -49,7 +49,7 @@ def join(route, got, folder, make_readers, enable_sonnet=False, second=None):
         if any(x['image_sha256'] != s for x in (c, pp, ox)): raise ValueError(f'{o}: a reader record is of other bytes than its input')
         if s not in made: made[s] = _packet(s, data[s], c, pp, ox, enable_sonnet, second)
         fields, size = made[s]
-        if u['input'].get('how') == 'page' and fields.get('packet') and list(size) != list(u['input']['size']): raise ValueError(f'{o}: the capture is not the size its input records')
+        if u['input'].get('how') in ('page', 'pdf_page') and fields.get('packet') and list(size) != list(u['input']['size']): raise ValueError(f'{o}: the capture is not the size its input records')  # a rendered input (pdf.py) is checked as a capture is
         e.update(records=dict(chandra=c, pp=pp, ox=ox), archive=dict(root=root, sha256=s), **fields)
     return route, out
 

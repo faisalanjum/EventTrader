@@ -1,0 +1,171 @@
+%PDF-1.3
+%‚„œ”
+1 0 obj
+<<
+/Producer (pypdf)
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Count 4
+/Kids [ 4 0 R 7 0 R 10 0 R 13 0 R ]
+/MediaBox [ 0.0 0.0 300 200 ]
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/Resources <<
+>>
+/Parent 2 0 R
+/Contents 5 0 R
+/Annots [ 6 0 R ]
+>>
+endobj
+5 0 obj
+<<
+/Length 25
+>>
+stream
+1 0 0 rg 30 40 40 20 re f
+endstream
+endobj
+6 0 obj
+<<
+/Type /Annot
+/Subtype /Link
+/Rect [ 30 40 70 60 ]
+/Border [ 0.0 0.0 0.0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057example\056invalid\057box)
+>>
+>>
+endobj
+7 0 obj
+<<
+/Type /Page
+/Resources <<
+>>
+/Parent 2 0 R
+/Rotate 90
+/Contents 8 0 R
+/Annots [ 9 0 R ]
+>>
+endobj
+8 0 obj
+<<
+/Length 25
+>>
+stream
+1 0 0 rg 30 40 40 20 re f
+endstream
+endobj
+9 0 obj
+<<
+/Type /Annot
+/Subtype /Link
+/Rect [ 30 40 70 60 ]
+/Border [ 0.0 0.0 0.0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057example\056invalid\057box)
+>>
+>>
+endobj
+10 0 obj
+<<
+/Type /Page
+/Resources <<
+>>
+/Parent 2 0 R
+/Rotate 180
+/Contents 11 0 R
+/Annots [ 12 0 R ]
+>>
+endobj
+11 0 obj
+<<
+/Length 25
+>>
+stream
+1 0 0 rg 30 40 40 20 re f
+endstream
+endobj
+12 0 obj
+<<
+/Type /Annot
+/Subtype /Link
+/Rect [ 30 40 70 60 ]
+/Border [ 0.0 0.0 0.0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057example\056invalid\057box)
+>>
+>>
+endobj
+13 0 obj
+<<
+/Type /Page
+/Resources <<
+>>
+/Parent 2 0 R
+/Rotate 270
+/Contents 14 0 R
+/Annots [ 15 0 R ]
+>>
+endobj
+14 0 obj
+<<
+/Length 25
+>>
+stream
+1 0 0 rg 30 40 40 20 re f
+endstream
+endobj
+15 0 obj
+<<
+/Type /Annot
+/Subtype /Link
+/Rect [ 30 40 70 60 ]
+/Border [ 0.0 0.0 0.0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057example\056invalid\057box)
+>>
+>>
+endobj
+xref
+0 16
+0000000000 65535 f 
+0000000015 00000 n 
+0000000054 00000 n 
+0000000163 00000 n 
+0000000212 00000 n 
+0000000310 00000 n 
+0000000385 00000 n 
+0000000547 00000 n 
+0000000656 00000 n 
+0000000731 00000 n 
+0000000893 00000 n 
+0000001006 00000 n 
+0000001082 00000 n 
+0000001245 00000 n 
+0000001358 00000 n 
+0000001434 00000 n 
+trailer
+<<
+/Size 16
+/Root 3 0 R
+/Info 1 0 R
+>>
+startxref
+1597
+%%EOF
