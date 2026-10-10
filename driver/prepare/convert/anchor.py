@@ -340,7 +340,7 @@ class Visible:
         style_cache, sheet_tokens = {}, []
         marks = {}  # id(open element) -> its link and target records, which get their end when it ends
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
-        self.table_tags = []  # for each table of `tables`, the first byte of its start tag where the page shows the table, else None: the adapter names a table by it (edgartools_html.codes)
+        self.table_tags = []  # for each table of `tables`, the first byte of its start tag, shown or hidden: a fact of the source (whether the page shows its content is the text's own reading); the adapter names a table by it (edgartools_html.codes)
         lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
         line = seen = 0; after = fresh = eat = dimmed = False  # where the current line starts in `chars` (after the last break), where its last word ends, and whether a box that must have its line to itself ended on it; `fresh`: the last thing read was a tag, so white space alone after it may be a text of its own; `eat`: the last thing read was a start tag after which the parser drops a line feed; `dimmed`: the file holds a zero opacity
 
@@ -500,7 +500,7 @@ class Visible:
                         stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre, (bool(top) and top.loose) or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                         if recs: marks[id(stack[-1])] = recs  # they end with it
                         if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
-                        if name == 'table': self.tables.append([]); self.table_tags.append(start if shown else None); grid.append([self.tables[-1], None])
+                        if name == 'table': self.tables.append([]); self.table_tags.append(start); grid.append([self.tables[-1], None])
                         elif grid and name in ('tr', 'thead', 'tbody', 'tfoot'): grid[-1][1] = None  # a row or a group of rows starts: the row before it has ended
                         if grid and name in ('tr', 'td', 'th') and grid[-1][1] is None: grid[-1][1] = []; grid[-1][0].append(grid[-1][1])
                         if grid and name in ('td', 'th'): spans[len(stack) - 1] = [start, len(raw)]; grid[-1][1].append(spans[len(stack) - 1])
@@ -701,10 +701,10 @@ def link(raw, units, xml=False, vis=None):
     for k, key in enumerate(keys): same_text.setdefault(key, []).append(k)
     confined = {id(c) for u, c in items if c is not u and 'tag' in u}  # the cells of a table its adapter names: every path below keeps them in that table (table_places)
     (allowed, reserved), anywhere = table_places(vis, items, keys), (None, 0, len(vis.flat))
-    shown, claims = {s for s in vis.table_tags if s is not None}, Counter(u['tag'] for u in units if u.get('kind') == 'table' and u.get('tag') is not None)
+    tags, claims = {s for s in vis.table_tags if s is not None}, Counter(u['tag'] for u in units if u.get('kind') == 'table' and u.get('tag') is not None)
     for u in units:  # the table's own start tag has decided where its cells may stand (table_places); it stays as the point of its source occurrence:
         if u.get('kind') == 'table' and 'tag' in u:  # {tag_start: the byte of its <table tag, claims: how many route tables name that tag} - not its extent;
-            t = u.pop('tag'); u['source_table'] = {'tag_start': t, 'claims': claims[t]} if t in shown else None   # None: no shown table of this source
+            t = u.pop('tag'); u['source_table'] = {'tag_start': t, 'claims': claims[t]} if t in tags else None   # None: no table start tag of this source (an older reading may list None)
     cell, edge = array('i', [-1]) * len(vis.flat), {}  # the innermost table cell each search-form character stands in (-1: none) and each cell's first and last character
     for n, (a, b) in enumerate(sorted((a, b) for table in vis.tables for row in table for a, b in row)):
         lo, hi = bisect_left(vis.s, a), bisect_left(vis.s, b); cell[lo:hi] = array('i', [n]) * (hi - lo); edge[n] = (lo, hi)

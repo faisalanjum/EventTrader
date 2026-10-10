@@ -87,7 +87,7 @@ def dump(node):
 
 
 def codes(raw, vis):
-    """One code for every picture tag that writes a `src`, shown or hidden, and for every table tag the page shows: the source's own SHA-256 (its first 16 hex
+    """One code for every picture tag that writes a `src`, shown or hidden, and for every table start tag, shown or hidden: the source's own SHA-256 (its first 16 hex
     digits) and the tag's first byte — letters and digits the tool's cleaning cannot touch, and nothing a name written in any source can impersonate — with what it
     stands for: {code: (tag start, the name as the parser reads it; None for a table)}. EdgarTools rewrites the file's text before it parses it (runs of spaces, a
     space after a point before a capital, `&amp;amp;`, zero-width characters), and a name that reached the linker changed stood at another picture's tag; two
@@ -98,7 +98,7 @@ def codes(raw, vis):
 
 
 def named(raw, vis, codes):
-    """The source as the tool gets it, decoded: each picture's name replaced by its code, each shown table tag given its code (one attribute, `TABLE`, its
+    """The source as the tool gets it, decoded: each picture's name replaced by its code, each table start tag given its code (one attribute, `TABLE`, its
     first: no attribute the source writes is changed), and the text the page hides left out (where the scanner's reading is certain; where it is not, only
     the text the browser proved hidden, each whole source token: Visible's `page`). Every tag the source
     has, the tool sees — an empty anchor too: it may be laid out as a block and break the line (Codex R3-A)."""
@@ -572,7 +572,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def settings(vis):

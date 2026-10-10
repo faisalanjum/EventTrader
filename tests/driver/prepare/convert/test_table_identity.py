@@ -51,8 +51,8 @@ class TableIdentity(unittest.TestCase):
                '<table><tr><td>Outer</td><td><table><tr><td>Inner</td><td>1</td></tr></table></td></tr></table></body></html>').encode()
         vis = anchor.Visible(raw); sha = anchor.sha256(raw)[:16]
         given = eh.named(raw, vis, eh.codes(raw, vis))
-        self.assertEqual(re.findall(r'<table[^>]*>', given, re.I), ['<table>', '<table>', '<TABLE data-prepare-table="%s%d" id="keep" class="x" data-prepare-table="forged">' % (sha, raw.index(b'<TABLE')),
-                         '<table data-prepare-table="%s%d">' % (sha, raw.index(b'<table><tr><td>Outer')), '<table data-prepare-table="%s%d">' % (sha, raw.index(b'<table><tr><td>Inner'))])  # in a comment: as written; a hidden table: no code (its text left out); the code first, the source's own attributes as written
+        self.assertEqual(re.findall(r'<table[^>]*>', given, re.I), ['<table>', '<table data-prepare-table="%s%d">' % (sha, raw.index(b'<table><tr><td>Secret')), '<TABLE data-prepare-table="%s%d" id="keep" class="x" data-prepare-table="forged">' % (sha, raw.index(b'<TABLE')),
+                         '<table data-prepare-table="%s%d">' % (sha, raw.index(b'<table><tr><td>Outer')), '<table data-prepare-table="%s%d">' % (sha, raw.index(b'<table><tr><td>Inner'))])  # in a comment: as written; a hidden table: its code too (identity is the source's; its text is still left out) - changed (Root, table identity release): formerly '<table>'; the code first, the source's own attributes as written
         r = eh.convert(raw, 'x.htm', hashlib.sha256(raw).hexdigest())
         self.assertEqual([[c['text'] for c in u['cells']] for u in r['units']], [['Café & Co.', '(1,234)'], ['Outer', 'Inner\n\n1'], ['Inner', '1']])  # the holder keeps the native text; the inner table is its own unit (nested tables)
         outer, inner = r['units'][1], r['units'][2]; holder = outer['cells'][1]
