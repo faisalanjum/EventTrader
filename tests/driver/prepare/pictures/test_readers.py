@@ -1,13 +1,13 @@
 """The readers (pictures/readers.py) without their engines: Chandra's settings name its actual model files, wheel (prompt and sizing), limits,
-code and versions; a missing model folder stops; the free-OCR inner guard lets storage failures escape and keeps a good tool's reading when
-the other fails; code identity ignores comments and docstrings; the model-tree fingerprint frames file boundaries and ignores location. Ported
+code and versions; a missing model folder stops; undecodable pictures remain distinct from resource failures;
+code identity ignores comments and docstrings; the model-tree fingerprint frames file boundaries and ignores location. Ported
 on 2026-10-06 from prepare_work worker_check_20261006/worker_test.py and Codex's r16, r17 and r20 tests. Engine-dependent cases (real RapidOCR
 and OnnxTR code) are in test_engines.py."""
-import errno
 import hashlib
 import importlib.util
 import io
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -18,7 +18,6 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from driver.prepare.get.acquire import StorageError
 from driver.prepare.pictures import readers
 
 ROOT = str(Path(__file__).resolve().parents[4])
@@ -80,24 +79,7 @@ class ChandraSettings(Base):
         self.assertIn('FileNotFoundError', e.exception.stderr)
 
 
-class FreeOcrGuard(Base):  # Codex r16 C1 / r17: storage failures escape the inner guard; a genuine inference error keeps the good peer
-    def setUp(self):
-        super().setUp(); self.picture = self.tmp / 'picture.png'; Image.new('RGB', (20, 10)).save(self.picture)
-
-    def test_storage_failures_from_either_tool_escape(self):
-        for name in ('_pp_boxes', '_ox_boxes'):
-            for error in (StorageError('flush failed'), OSError(errno.EIO, 'I/O error'), OSError(errno.ENOSPC, 'full'), MemoryError('injected')):
-                with self.subTest(tool=name, error=type(error).__name__), patch.object(readers, '_free_tools', return_value=(None, None, {})), \
-                        patch.object(readers, '_pp_boxes', return_value=[]), patch.object(readers, '_ox_boxes', return_value=[]), patch.object(readers, name, side_effect=error):
-                    with self.assertRaises(type(error)): readers.free_ocr(self.picture)
-
-    def test_a_genuine_inference_error_keeps_the_good_peer(self):
-        good = [{'t': 'Revenue', 'box': [0, 0, 8, 3]}]
-        with patch.object(readers, '_free_tools', return_value=(None, None, {})), patch.object(readers, '_pp_boxes', side_effect=RuntimeError('inference failed')), \
-                patch.object(readers, '_ox_boxes', return_value=good):
-            got = readers.free_ocr(self.picture)
-        self.assertEqual((got['ox'], got['pp']), (good, [])); self.assertIn('inference failed', got['pp_error'])
-
+class ImageGuard(unittest.TestCase):  # invalid picture bytes and resource failures keep distinct outcomes
     def test_undecodable_bytes_are_a_picture_error_not_a_disk_error(self):
         with self.assertRaises(readers.PictureError): readers._image(b'not a picture')
         self.assertNotIsInstance(readers.PictureError('x'), OSError)
@@ -181,6 +163,22 @@ class Fingerprints(Base):
         self.assertEqual(readers._tree_sha256(self.tmp), sha(json.dumps(entries).encode()))
         self.assertEqual(readers._tree_sha256(self.tmp / 'large'), sha(json.dumps([['.', sha(payload)]]).encode()))
 
+
+
+class Boundaries(Base):  # failure inventory 94 (the free status rule's top-level shape) and 99/100 (os.walk's error callback in the model hash)
+    def test_a_free_reading_of_the_wrong_shape_is_refused(self):
+        for bad in ({'w': 4, 'h': 2}, [], {'w': 4, 'h': 2, 'boxes': {}}, {'w': 4, 'h': 2, 'boxes': [], 'extra': 1}):
+            with self.subTest(bad=bad), self.assertRaisesRegex(ValueError, 'not a free OCR reading'): readers._free_status(bad)
+        self.assertEqual(readers._free_status({'w': 4, 'h': 2, 'boxes': []}), 'complete')                 # positive control
+
+    def test_an_unreadable_model_subfolder_stops_the_identity_instead_of_being_skipped(self):
+        root = self.tmp / 'model'; (root / 'sub').mkdir(parents=True); (root / 'a.bin').write_bytes(b'a'); (root / 'sub' / 'b.bin').write_bytes(b'b')
+        whole = readers._tree_sha256(str(root)); real = os.scandir
+        def denied(path='.'):
+            if str(path).endswith('sub'): raise PermissionError(13, 'denied', str(path))
+            return real(path)
+        with patch.object(os, 'scandir', denied), self.assertRaises(PermissionError): readers._tree_sha256(str(root))
+        self.assertEqual(readers._tree_sha256(str(root)), whole)                                             # positive control: both files hashed
 
 if __name__ == '__main__':
     unittest.main()

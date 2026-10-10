@@ -217,14 +217,6 @@ def _number(value):
     return _NUM.fullmatch(value) is not None
 
 
-def last(decls, prop):
-    """The value of the last declaration of `prop` (an `!important` one beats a later plain one), or None."""
-    value, strong = None, False
-    for name, v, important in decls:
-        if name == prop and (important or not strong): value, strong = v, important
-    return value
-
-
 def decoration(value, prop='text-decoration'):
     """What one text-decoration / text-decoration-line declaration says about striking: True (line-through), False (no line), 'default'
     (revert: the tag's own default), 'inherit' (the parent's own line), INVALID when the grammar proves the browser drops the declaration

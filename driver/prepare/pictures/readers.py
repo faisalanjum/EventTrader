@@ -85,21 +85,6 @@ def _ox_boxes(ox, im):  # OnnxTR's words with their boxes, each word as OnnxTR e
             for p in doc.pages for b in p.blocks for l in b.lines for w in (word.export() for word in l.words)]
 
 
-def free_ocr(picture):
-    """Both free tools' text boxes with their positions (evidence only): dict(file, w, h, pp, ox, pp_secs, ox_secs), plus pp_error /
-    ox_error naming a tool's inference failure (its boxes then empty). A storage or memory failure is not a tool failure: it stops."""
-    pp, ox, _ = _free_tools()
-    with open(picture, 'rb') as f: im = _image(f.read())
-    rec = dict(file=os.path.basename(picture), w=im.width, h=im.height)
-    for name, tool, boxes in (('pp', pp, _pp_boxes), ('ox', ox, _ox_boxes)):
-        t0 = time.time()
-        try: rec[name] = boxes(tool, im)
-        except (OSError, StorageError, MemoryError): raise
-        except Exception as e: rec[name] = []; rec[name + '_error'] = f'{type(e).__name__}: {str(e)[:200]}'
-        rec[name + '_secs'] = round(time.time() - t0, 2)
-    return rec
-
-
 def _free_status(r):  # one free tool's reading: the picture's size and the tool's boxes
     if not (isinstance(r, dict) and set(r) == {'w', 'h', 'boxes'} and isinstance(r['boxes'], list)): raise ValueError('not a free OCR reading')
     if any(type(r[k]) is not int or r[k] <= 0 for k in ('w', 'h')): raise ValueError('invalid picture dimensions')

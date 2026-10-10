@@ -165,3 +165,23 @@ class CampaignTests(unittest.TestCase):
                                   sleep=lambda delay: None) as run:
                         run.fetch('https://www.sec.gov/Archives/one')
                 self.assertEqual(path.read_bytes(), before)
+
+    def test_a_receipt_database_of_another_version_is_refused(self):  # Campaign.__enter__'s version check
+        with tempfile.TemporaryDirectory() as directory:
+            for _ in range(2):
+                with Campaign(directory):  # control: the current version opens, and opens again
+                    pass
+            with sqlite3.connect(Path(directory) / 'responses.sqlite3') as db:
+                db.execute('PRAGMA user_version=2')
+            db.close()
+            with self.assertRaisesRegex(ValueError, '^Unsupported receipt database version$'):
+                with Campaign(directory):
+                    pass
+
+    def test_a_recorded_retrieval_failure_is_refused_never_served_or_fetched_again(self):  # Campaign._fetch on a saved record holding an error
+        url = 'https://www.sec.gov/Archives/one'  # its successful replay is the control (test_shared_rate_limit_...)
+        with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / 'responses.json').write_text(json.dumps({url: {'url': url, 'error': 'HTTP 404'}}))
+            with Campaign(directory, live=True, sender=lambda *args: self.fail('a recorded failure was fetched again')) as run:
+                with self.assertRaisesRegex(ValueError, '^Recorded retrieval failure: HTTP 404$'):
+                    run.fetch(url)

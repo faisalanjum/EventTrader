@@ -4,12 +4,14 @@ size as drawn - and anything that cannot be read so is an error with no input, n
 its own source tag. Offline Chrome; playwright is required (a missing install fails, never skips)."""
 import hashlib
 import io
+import types
 import unittest
 from unittest.mock import patch
 
 from PIL import Image, ImageDraw
 
 from driver.prepare.convert import anchor, edgartools_html
+from driver.prepare.get.acquire import StorageError
 from driver.prepare.pictures import inputs
 
 
@@ -145,6 +147,18 @@ class Inputs(unittest.TestCase):
         with self.assertRaises(ValueError): inputs.prepare(raw + b' ', r, MEMBERS, self.browser)
         self.assertNotIn('input', r['units'][0])
 
+
+    def test_a_capture_fault_propagates_and_a_page_error_is_explicit_only_while_the_browser_lives(self):  # inputs.prepare's capture guard (failure inventory 43/44/85/86)
+        raw = page(b'<div style="background:#8899aa;padding:4px"><img src="black.png"></div>')   # a non-opaque member: only a page capture reads it
+        for failure in (OSError('disk'), StorageError('store')):
+            with self.subTest(failure=type(failure).__name__), patch.object(inputs, '_page', side_effect=failure), self.assertRaises(type(failure)):
+                inputs.prepare(raw, route(raw), MEMBERS, self.browser)
+        r = route(raw)
+        with patch.object(inputs, '_page', side_effect=RuntimeError('page failed')): inputs.prepare(raw, r, MEMBERS, self.browser)
+        [u] = [u for u in r['units'] if u['kind'] == 'image']
+        self.assertEqual((u['input']['member_sha256'], 'input_sha256' in u['input']), (hashlib.sha256(BLACK).hexdigest(), False)); self.assertIn("page: RuntimeError('page failed')", u['input']['error'])
+        gone = types.SimpleNamespace(is_connected=lambda: False)                                     # the same content error with the browser gone: stop
+        with patch.object(inputs, '_page', side_effect=RuntimeError('page failed')), self.assertRaises(RuntimeError): inputs.prepare(raw, route(raw), MEMBERS, gone)
 
 if __name__ == '__main__':
     unittest.main()

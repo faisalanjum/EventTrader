@@ -241,6 +241,16 @@ class PackageTests(unittest.TestCase):
             with self.subTest(mutated=mutated[:120]), self.assertRaises(AcquisitionError):
                 self.parse(mutated)
 
+    def test_an_unclosed_wrapper_a_wordy_count_or_a_wordy_sequence_is_refused_by_its_own_check(self):  # each its own refusal, not another check's
+        original = package()
+        wire = lambda closed: b'<XML>\n<a/>\n' + (b'</XML>\n' if closed else b'')
+        self.assertEqual(self.parse(package([('x.xml', wire(True), 'XML', '1', None)]))[1]['x.xml'], b'<a/>\n')  # control: the same wrapper closed
+        for mutated, refusal in ((package([('x.xml', wire(False), 'XML', '1', None)]), 'Unclosed SEC member wrapper'),
+                                 (original.replace(b'PUBLIC DOCUMENT COUNT: 1', b'PUBLIC DOCUMENT COUNT: one'), 'Invalid document count'),
+                                 (original.replace(b'<SEQUENCE>1', b'<SEQUENCE>1a'), 'Invalid member sequence')):
+            with self.subTest(refusal=refusal), self.assertRaisesRegex(AcquisitionError, '^' + refusal + '$'):
+                self.parse(mutated)
+
     def test_empty_lines_between_framing_tags_are_skipped_and_nothing_else(self):
         # Landstar 0001193125-23-048874: SEC left one empty line after </SEC-HEADER>.
         documents = [('a.htm', b'<p>one</p>\n\n\n', '10-K', '1', None), ('b.txt', b'\n\ntwo\r\n', 'EX-1', '2', 'x')]

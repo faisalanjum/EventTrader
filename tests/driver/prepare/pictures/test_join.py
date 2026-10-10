@@ -11,6 +11,7 @@ import os
 import tempfile
 import types
 import unittest
+import unittest.mock
 
 from PIL import Image
 
@@ -168,6 +169,20 @@ class Join(unittest.TestCase):
             with self.assertRaises(ValueError): join.join(r, g, d, fakes([]))
         with self.assertRaises(ValueError): join.read_pictures(DOC, self.route(page(b'<img src="opaque.png">')), MEMBERS, self.browser, self.folder, fakes([]))   # stale route
 
+
+    def test_records_of_other_bytes_a_status_against_its_limit_and_a_capture_of_another_size_stop(self):  # failure inventory 87/89/88
+        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser); real = join.worker.run
+        def changed(edit):
+            def run(folder, pairs, make): return {k: edit(dict(v)) for k, v in real(folder, pairs, make).items()}
+            return run
+        other = lambda r: dict(r, image_sha256='0' * 64)                                             # past the prepared-byte check: the record names other bytes
+        cut = lambda r: dict(r, status='cut off') if r['settings'].get('reader') == 'fake chandra' else r   # 'cut off' with 7 tokens, far below its limit
+        for name, edit in (('a record of other bytes', other), ("Chandra's status against its own limit", cut)):
+            with self.subTest(name), tempfile.TemporaryDirectory() as d, unittest.mock.patch.object(join.worker, 'run', changed(edit)):
+                with self.assertRaises(ValueError): join.join(copy.deepcopy(route), got, d, fakes([]))
+        bad = copy.deepcopy(route); [u for u in bad['units'] if u.get('input', {}).get('how') == 'page'][0]['input']['size'] = [1, 1]
+        with tempfile.TemporaryDirectory() as d, self.assertRaises(ValueError): join.join(bad, got, d, fakes([]))   # a page capture whose bytes are another size
+        with tempfile.TemporaryDirectory() as d: self.assertTrue(any('packet' in e for e in join.join(copy.deepcopy(route), got, d, fakes([]))[1]))   # positive control
 
 if __name__ == '__main__':
     unittest.main()

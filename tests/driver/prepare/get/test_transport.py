@@ -126,6 +126,25 @@ class DownloadTests(unittest.TestCase):
             self.assertEqual(http_request(URL, HEADERS, 10, 60, 120)[0], 403)
         response.read.assert_not_called()
 
+    def test_an_attempt_past_its_wall_limit_is_a_timeout_and_leaves_no_alarm(self):  # http_request's own SIGALRM handler, the real signal and timer
+        import signal, time
+        handler = signal.getsignal(signal.SIGALRM)
+        stalled = MagicMock(); stalled.connect.side_effect = lambda: time.sleep(5)  # DNS or connect that never answers
+        with patch('driver.prepare.get.transport.http.client.HTTPSConnection', return_value=stalled):
+            started = time.monotonic()
+            with self.assertRaisesRegex(TimeoutError, '^HTTP attempt wall limit$'):
+                http_request(URL, HEADERS, 10, 60, 0.05)
+        self.assertLess(time.monotonic() - started, 2)  # the limit ended it, not the stalled call
+        self.assertEqual((signal.getitimer(signal.ITIMER_REAL), signal.getsignal(signal.SIGALRM)), ((0.0, 0.0), handler))
+        quick = MagicMock(); response = quick.getresponse.return_value  # control: an attempt inside its limit, the same real timer
+        response.status, response.chunked, response.length = 200, False, 3
+        response.getheaders.return_value = [('Content-Length', '3')]
+        response.headers.get_all.side_effect = lambda name: ['3'] if name == 'content-length' else None
+        response.read.return_value = b'abc'
+        with patch('driver.prepare.get.transport.http.client.HTTPSConnection', return_value=quick):
+            self.assertEqual(http_request(URL, HEADERS, 10, 60, 5), (200, {'content-length': '3'}, b'abc'))
+        self.assertEqual((signal.getitimer(signal.ITIMER_REAL), signal.getsignal(signal.SIGALRM)), ((0.0, 0.0), handler))
+
 
 class WireConnection:
     """One in-memory server reply, read by Python's own HTTP parser; no network."""

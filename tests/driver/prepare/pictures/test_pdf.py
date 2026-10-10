@@ -446,5 +446,35 @@ class UriBytes(unittest.TestCase):  # root OCR_PDF_URI_PRESERVATION: PDFium retu
         self.assertTrue(all(l.get('uri') is None and l.get('unprocessed') == 'URI unreadable' for l in route['units'][0]['links']))
 
 
+
+class NativeOpenings(unittest.TestCase):  # OCR organization review: the four PDF branches it listed open
+    def run_pdf(self, name):
+        data = (CASES / name).read_bytes(); return pdf.pages(data, 'f/x.pdf', sha(data))
+
+    def test_an_unreadable_attachment_name_stays_unread_at_both_locations(self):
+        real = pdfium.PdfAttachment.get_name
+        pdfium.PdfAttachment.get_name = lambda self: (_ for _ in ()).throw(pdfium.PdfiumError('fake: name'))
+        try: doc_level, page_level = self.run_pdf('attachment.pdf')[0], self.run_pdf('page_attachment.pdf')[0]
+        finally: pdfium.PdfAttachment.get_name = real
+        self.assertEqual((doc_level['status'], doc_level['attachments'], [u['what'] for u in doc_level['unprocessed']]), ('PARTIAL', [{'index': 0, 'name': None}], ['attachment']))
+        rec = page_level['units'][0]['annotation_records'][0]
+        self.assertEqual(rec['attachment'], {'name': None}); self.assertIn('its name unread', rec['unprocessed'])
+        self.assertEqual((self.run_pdf('attachment.pdf')[0]['attachments'][0]['name'], self.run_pdf('page_attachment.pdf')[0]['units'][0]['annotation_records'][0]['attachment']),
+                         ('note.txt', {'name': 'qualification.txt'}))                                          # positive controls
+
+    def test_an_unknown_view_or_an_unread_xyz_location_is_unprocessed(self):
+        real_view, real_loc = pdfium.PdfDest.get_view, pdfium_c.FPDFDest_GetLocationInPage
+        pdfium.PdfDest.get_view = lambda self, *a, **k: (0, [])                                             # PDFDEST_VIEW_UNKNOWN_MODE
+        try: route = self.run_pdf('views.pdf')[0]
+        finally: pdfium.PdfDest.get_view = real_view
+        link = route['units'][0]['links'][0]
+        self.assertEqual((link['dest']['view'], link['unprocessed'], route['status']), (None, 'destination view unknown', 'PARTIAL'))
+        pdfium_c.FPDFDest_GetLocationInPage = lambda *a: 0
+        try: route = self.run_pdf('links.pdf')[0]
+        finally: pdfium_c.FPDFDest_GetLocationInPage = real_loc
+        self.assertEqual((route['units'][0]['links'][1].get('unprocessed'), route['units'][0]['links'][1]['dest']['view']), ('XYZ location unread', 'XYZ'))
+        self.assertEqual(self.run_pdf('views.pdf')[0]['units'][0]['links'][0]['dest'], {'page': 2, 'page_index': 1, 'view': 'Fit', 'params': []})   # positive control
+        self.assertEqual({k: self.run_pdf('links.pdf')[0]['units'][0]['links'][1]['dest'][k] for k in ('x', 'y')}, {'x': 5.0, 'y': 80.0})
+
 if __name__ == '__main__':
     unittest.main()

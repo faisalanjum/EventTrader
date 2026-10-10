@@ -105,6 +105,16 @@ class EdgartoolsHtmlAdapterTests(unittest.TestCase):
         ok = eh.convert(raw, 'a.htm', digest, lambda raw, vis: (tree, 0.5, 'edgartools X'))
         self.assertEqual((ok['status'], [u['text'] for u in ok['units']], ok['route']['version'], ok['seconds'], ok['route']['settings']['picture_names']), ('OK', ['Revenue 10.'], 'edgartools X', 0.5, 'codes'))
 
+    def test_a_machine_fault_in_the_tool_stops_the_caller_and_is_no_failed_document(self):  # convert's own catch: the disk, the store, a dependency or memory is not the document's
+        from driver.prepare.get.acquire import StorageError  # an AcquisitionError, so a ValueError: named before the document's own errors
+        raw = b'<p>Revenue 10.</p>'; digest = sha256(raw)
+        for error in (OSError(5, 'injected disk fault'), StorageError('injected store fault'), ImportError('injected missing dependency'), MemoryError('injected')):
+            def fault(raw, vis, error=error): raise error
+            with self.subTest(error=type(error).__name__), self.assertRaises(type(error)) as caught: eh.convert(raw, 'a.htm', digest, fault)
+            self.assertIs(caught.exception, error)  # the same fault, not a FAILED route
+        def malformed(raw, vis): raise ValueError('the tool cannot read this document')
+        self.assertEqual(eh.convert(raw, 'a.htm', digest, malformed)['status'], 'FAILED')  # the document's own error, at the same catch: a failed document
+
 
 from driver.prepare.convert import screen_grid as sg
 

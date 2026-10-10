@@ -45,6 +45,13 @@ class InventoryTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 parse_index(source, self.url)
 
+    def test_a_file_row_that_is_not_a_sec_file_row_is_refused(self):  # parse_index's row check; the unchanged index parses (test_real_sec_index_...)
+        for source in (self.source.replace(b'>209919<', b'>209919 bytes<'),  # a size that is not a number
+                       re.sub(rb'(<td scope="row">)9(</td>\s*<td scope="row">COURTESY PDF)', rb'\1nine\2', self.source)):  # a sequence that is not one
+            self.assertNotEqual(source, self.source)
+            with self.assertRaisesRegex(ValueError, '^Unrecognized filing-index file row$'):
+                parse_index(source, self.url)
+
     def test_joint_company_paths_keep_the_accession_and_sec_origin(self):
         url = ('https://www.sec.gov/Archives/edgar/data/65984/000006598425000132/'
                '0000065984-25-000132-index.html')

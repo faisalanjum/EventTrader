@@ -41,5 +41,58 @@ class Offline(unittest.TestCase):
         self.assertEqual(route, before)
 
 
+MACHINE = lambda: (OSError(5, 'injected disk fault'), StorageError('injected store fault'), ImportError('injected missing dependency'), MemoryError('injected'))
+GEOMETRY = {'cells': [], 'boxes': {'0': [1, 2, 3, 4]}}  # what the page measured before its symbols were read
+
+
+def offline(symbols, connected=True, closed=None):  # a page that measures GEOMETRY and whose symbol reading (SYMBOLS_JS) raises `symbols`
+    class Page:
+        def route(self, pattern, handler): pass
+        def set_content(self, html, wait_until=None): pass
+        def evaluate(self, js, *args):
+            if js is screen_grid.SYMBOLS_JS: raise symbols
+            return copy.deepcopy(GEOMETRY)
+        def close(self): closed is not None and closed.append(1)
+    class Browser:
+        def new_page(self, **kw): return Page()
+        def is_connected(self): return connected
+    return Browser()
+
+
+class Faults(unittest.TestCase):  # each catch tells the document's own failure from the machine's: a machine fault is never a failed or a partial document
+    RAW = b'<p>x</p>'
+
+    def route(self):
+        return {'sha256': screen_grid.anchor.sha256(self.RAW), 'route': {'name': 'r'}, 'units': [{'id': 'u', 'kind': 'text', 'text': 'x'}]}
+
+    def test_a_symbol_reading_that_fails_keeps_the_measured_geometry_and_says_why(self):  # measure's catch round SYMBOLS_JS
+        closed = []; tables, boxes, sym = screen_grid.measure(self.RAW, offline(RuntimeError('symbols failed'), closed=closed), prefix='p')
+        self.assertEqual((tables, boxes, sym, closed), ({}, GEOMETRY['boxes'], {'error': "RuntimeError('symbols failed')"}, [1]))
+
+    def test_a_machine_fault_while_reading_symbols_stops_the_measure(self):
+        for error in MACHINE():
+            closed = []
+            with self.subTest(error=type(error).__name__), self.assertRaises(type(error)) as caught: screen_grid.measure(self.RAW, offline(error, closed=closed), prefix='p')
+            self.assertIs(caught.exception, error); self.assertEqual(closed, [1])  # the page is closed whatever stops it
+
+    def test_a_machine_fault_while_measuring_stops_the_step_and_marks_nothing(self):  # _step's catch: the document's own failure is said (Offline above); a machine's stops
+        for error in MACHINE():
+            class Browser:
+                def new_page(self, error=error, **kw): raise error
+                def is_connected(self): return True
+            route = self.route(); before = copy.deepcopy(route)
+            with self.subTest(error=type(error).__name__), self.assertRaises(type(error)) as caught: screen_grid.step(self.RAW, route, Browser())
+            self.assertIs(caught.exception, error); self.assertEqual(route, before)
+
+    def test_a_failed_symbol_reading_with_the_browser_gone_stops_instead_of_a_partial_document(self):
+        route = self.route(); before = copy.deepcopy(route)
+        with self.assertRaisesRegex(RuntimeError, "^browser disconnected: RuntimeError\\('target closed'\\)$"): screen_grid.step(self.RAW, route, offline(RuntimeError('target closed'), connected=False))
+        self.assertEqual(route, before)
+        route = self.route(); screen_grid.step(self.RAW, route, offline(RuntimeError('target closed')))  # control: the browser still there - the document's own failure, said
+        self.assertEqual((route['source_symbols'], [u['text'] for u in route['units']]), ({'read': False, 'error': "RuntimeError('target closed')"}, ['x']))
+
+
+from driver.prepare.get.acquire import StorageError  # noqa: E402 - beside the faults that name it
+
 if __name__ == '__main__':
     unittest.main()
