@@ -3,8 +3,8 @@
 New home for the document-to-Driver pipeline. Build the design and code together,
 one agreed step at a time. Both existing and newly ingested documents use this flow.
 
-Step 1 is implemented: preserve a compressed SEC package and read its files on demand. Broader
-filing validation and later preparation stages remain separate checkpoints.
+Preparation includes verified package storage, HTML/XML extraction and picture-reading
+integration. Independent extraction scoring and actual-worker qualification remain open.
 
 - [Prepare: usage and limits](prepare/README.md)
 - [Tests: layout, fixtures and command](../tests/driver/README.md)

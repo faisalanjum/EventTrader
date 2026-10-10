@@ -1,5 +1,5 @@
-"""Shared text and number comparison for preparation (picture reading now; HTML/XML conversion when Fable switches its
-imports): the grader's own pure functions, copied unchanged so production never imports benchmark code. Sources:
+"""Shared text and number comparison for HTML/XML and picture preparation:
+the original grader's pure functions, kept here so production never imports benchmark code. Sources:
 benchmarks/prepare/grader/anchor.py (norm, squash) and grade.py (tokens, reading units, critical differences, spacing-only
 test, word counts)."""
 import difflib

@@ -1,6 +1,13 @@
 # Permanent Prepare regressions
 
-**Migration status (7 October 2026, branch `ocr-fixture-tests`).** Integrated base
+**Current execution (10 October 2026).** The permanent suite includes acquisition,
+HTML/XML conversion, picture integration and saved-reading replay. Run both commands
+below: retained grader assertions have not all been reconciled for retirement.
+The freshly checked `cf01ed22b` baseline passed 651 permanent and 402 retained grader
+tests without skips; later fixes require their own exact-candidate gate. Independent
+scoring, source coverage and actual-machine execution remain separate.
+
+**Historical migration receipt (7 October 2026, branch `ocr-fixture-tests`).** Integrated base
 `5d25539d1` has 384 permanent tests; the shared fixture helper adds 12 and the
 ported OCR fixture tests add 15: **411 pass, no skips**, on the primary and the
 restored fixture roots with the original research folders hidden (Codex gate
@@ -39,7 +46,7 @@ Chromium during provisioning, not from the test command. Tests of OCR engines
 use their real loader/configuration code with model execution/downloads replaced.
 No MLX, Chandra weights or GPU are needed for this offline suite.
 
-Latest qualification used a pinned copy of `d4639b096`: 363 permanent tests and
+An earlier qualification used a pinned copy of `d4639b096`: 363 permanent tests and
 398 retained grader/converter tests pass with no skips. The suites overlap while
 migration is incomplete. Until their retained assertions are fully reconciled,
 also run from the relevant checkout:
@@ -48,12 +55,13 @@ also run from the relevant checkout:
 env -u PYTHONPATH /home/faisal/prepare_work/venvs/prepare-tests/bin/python -m unittest discover -s benchmarks/prepare/grader/tests -t . -v
 ```
 
-Converter coverage begins with the reviewed candidate's integration. The OCR saved-fixture tests have
+Converter tests are integrated. The OCR saved-fixture tests have
 migrated (`pictures/`: the 506-input replay in both modes, 576 saved packets, worker reuse, table
 choice and its 546 frozen damages, saved probes, isolation, and the test-consumer handoff on frozen
 routes). They preserve saved behaviour; they are not OCR accuracy, and their frozen routes are never
-regenerated. The fresh combined converter/image/context handoff (current producer) and target-machine
-execution remain separate gates.
+regenerated. `pictures/test_join.py` checks current conversion, picture preparation,
+archiving and reader composition with controlled readers. It does not qualify actual
+model execution or independently score the full output.
 Environment and validation evidence:
 `prepare_work/prepare_regression_20261006/codex_port_review_20261007/` and
 `prepare_work/convert_extract_20261007/codex_review/`.
@@ -65,8 +73,9 @@ tests/driver/prepare/
   get/                  existing downloader tests and small fixtures
   convert/              HTML/XML, source links, formatting, tables and images
   pictures/             OCR comparison, packets, readers, workers, saved replays, frozen-route handoff
-  test_compare.py       shared comparison rules, tested once
-  test_handoff.py       planned: fresh source -> conversion -> OCR -> consumer receipt
+  pictures/test_imports.py  shared comparison identity and runtime isolation
+  pictures/test_join.py  current source -> conversion -> picture/reader composition
+  pictures/test_handoff.py  frozen-route serialization and test-consumer checks
   support.py            only reused fixture-loading/isolation helpers
   fixtures/manifest.json  large-fixture hashes, provenance and expected-result pins
 ```
