@@ -60,10 +60,11 @@ class InTheBrowser(unittest.TestCase):
             self.assertEqual([place(u) for u in pictures(r)], [text['2024'], text['2025']])
             self.assertEqual([place(u) for u in pictures(r)], [(t[0], 0, 0), (t[0], 0, 1)])
 
-    def test_a_route_table_of_two_grids_states_no_row_or_column(self):
+    def test_a_picture_in_a_nested_table_names_that_table_and_its_own_cell(self):  # source-bound nested tables (table-source v2): formerly one route table of two grids
         raw, r, t = self.route(b'<table><tr><th>Outer</th></tr><tr><td><table><tr><th>Inner 2025</th></tr><tr><td><img src="same.png"></td></tr></table></td></tr></table>')
         [p] = pictures(r)
-        self.assertEqual((place(p), spans_of(p)), ((t[0], None, None), {}))  # the route's one table holds cells of both grids: no row or column is one of them
+        child = [u['id'] for u in r['units'] if u['kind'] == 'table'][1]  # the inner source table, its own unit
+        self.assertEqual((place(p), spans_of(p)), ((child, 1, 0), {'r': 1, 'c': 0, 'rs': 1, 'cs': 1}))  # its own cell: inner row 1, column 0 (the markup)
         self.assertTrue(raw[p['cell']['byte_start']:p['cell']['byte_end_exclusive']].startswith(b'<td><img src="same.png">'))  # its own (inner) source cell
 
     def test_pictures_of_a_table_with_no_route_table_name_no_table(self):
@@ -89,7 +90,7 @@ class InTheBrowser(unittest.TestCase):
             _, r, t = self.route(b'<table><thead><tr><th>Region</th><th>Chart</th></tr></thead><tbody><tr><td>A</td><td rowspan="' + written + b'"><img src="s.png"></td></tr>'
                                  b'<tr><td>B</td></tr></tbody><tbody><tr><td>C</td><td>Separate</td></tr></tbody></table>')
             self.assertEqual([spans_of(u) for u in pictures(r)], [{'r': 1, 'c': 1, 'rs': rows, 'cs': 1}])
-            self.assertEqual([(c['text'], c['r'], c['c'], c['rs']) for u in r['units'] if u['kind'] == 'table' for c in u['cells'] if c['text'] in 'AB'], [('A', 1, 0, 1), ('B', 2, 0, 1)])  # text cells keep the tool's rows
+            self.assertEqual([(c['text'], c['r'], c['c'], c['rs']) for u in r['units'] if u['kind'] == 'table' for c in u['cells'] if c['text'] in ('A', 'B')], [('A', 1, 0, 1), ('B', 2, 0, 1)])  # text cells keep the tool's rows
 
     def test_only_table_cells_are_measured(self):  # failed before: a source element carrying the step's own mark was measured as that cell (Codex, MEASURE_ALIAS_BASELINE)
         body = b'<table><tr><th>2024</th><th>2025</th></tr><tr><td>Chart<img src="same.png"></td><td>Other</td></tr></table>'

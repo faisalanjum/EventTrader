@@ -138,24 +138,40 @@ def apply(units, spans, measured_by_table):
     for t, table_cells in measured_by_table.items():
         for g, (r, c, cs) in screen_grid(table_cells).items(): by_g[g] = (r, c, cs); table_of[g] = t
     rows = {c['g']: c.get('rs', 1) for table_cells in measured_by_table.values() for c in table_cells}  # each cell's rows as the browser's table model ends them (rowspan="0" to its row group's end, a larger span stopped there)
+    key = lambda u: u.get('id', id(u))  # a unit's id (a caller's bare unit: its identity)
+    tabs = {key(u): u for u in units if u.get('kind') == 'table'}
+
+    def owner(cell):  # the measured cell this route cell is: its own source cell (`source`, the adapter's injected identity; None: no place), else - a
+        if 'source' in cell:  # route that names none - the innermost measured cell holding its text's first byte; -1: none
+            s = cell['source']; j = bisect_left(starts, s['byte_start']) if s else len(starts)
+            return j if j < len(starts) and starts[j] == s['byte_start'] else -1
+        a = cell.get('anchor'); a = a[0] if isinstance(a, list) else a
+        if not isinstance(a, dict) or 'byte_start' not in a: return -1
+        g = bisect_right(starts, a['byte_start']) - 1
+        while g >= 0 and a['byte_start'] >= spans[g][1]: g = parents[g]
+        return g if g >= 0 and spans[g][0] <= a['byte_start'] < spans[g][1] else -1
     n, grid = 0, {}  # grid: route table -> the one measured table all its cells stand in, else None
-    for u in units:
-        if u.get('kind') != 'table': continue
+    for u in tabs.values():
         tables = set()  # the measured table each cell stands in; None: a cell not measured
         for cell in u.get('cells') or []:
-            a = cell.get('anchor'); a = a[0] if isinstance(a, list) else a
-            if not isinstance(a, dict) or 'byte_start' not in a: tables.add(None); continue
-            g = bisect_right(starts, a['byte_start']) - 1
-            while g >= 0 and a['byte_start'] >= spans[g][1]: g = parents[g]
-            if g < 0 or not (spans[g][0] <= a['byte_start'] < spans[g][1]) or g not in by_g: tables.add(None); continue
+            g = owner(cell)
+            if g >= 0 and g not in by_g and 'source' in cell: continue  # its own source cell, not laid out (hidden, no width): no place, and no say in the grid
+            if g < 0 or g not in by_g: tables.add(None); continue
             r, c, cs = by_g[g]; rs = rows[g]  # a text cell states its rows as a picture in the same cell does
             if (cell['r'], cell['c'], cell.get('rs', 1), cell.get('cs', 1)) != (r, c, rs, cs): cell.update(r=r, c=c, rs=rs, cs=cs); n += 1
             cell['grid'] = 'screen'; tables.add(table_of[g])
-        grid[u.get('id')] = next(iter(tables)) if len(tables) == 1 and None not in tables else None
-        if grid[u.get('id')] is not None: u['cells'].sort(key=lambda x: (x['r'], x['c']))  # stable: cells that share a place keep their order; a table with a cell not measured, or measured in two tables (one inside the other), keeps the tool's order
+        grid[key(u)] = next(iter(tables)) if len(tables) == 1 and None not in tables else None
+        if grid[key(u)] is not None: u['cells'].sort(key=lambda x: (x['r'], x['c']))  # stable: cells that share a place keep their order; a table with a cell not measured, or measured in two tables (one inside the other), keeps the tool's order
+    holder = {k: (u, c) for u in tabs.values() for c in u.get('cells') or [] for k in c.get('tables') or []}
     for u in units:
-        cell = u.get('cell') if u.get('kind') == 'image' else None
+        cell = u.get('cell') if u.get('kind') in ('image', 'table') else None
         if not isinstance(cell, dict) or 'table' not in cell: continue  # no route table: no place to state in one
+        if u.get('kind') == 'table':  # a table standing in a cell: its holder cell's measured place, where the holder's table has one grid
+            p, h = holder.get(u['id'], (None, None))
+            if p is not None and grid.get(key(p)) is not None and h.get('grid') == 'screen': cell.update({k: h[k] for k in ('r', 'c', 'rs', 'cs')})
+            else:
+                for k in ('r', 'c', 'rs', 'cs'): cell.pop(k, None)
+            continue
         g, t = bisect_left(starts, cell['byte_start']), grid.get(cell['table'])
         if t is not None and g < len(starts) and starts[g] == cell['byte_start'] and table_of.get(g) == t: r, c, cs = by_g[g]; cell.update(r=r, c=c, rs=rows[g], cs=cs)
         else:

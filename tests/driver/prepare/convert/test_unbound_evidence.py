@@ -53,13 +53,14 @@ class UnboundEvidence(unittest.TestCase):
 
     def test_text_freed_from_a_hidden_row_or_table_is_kept_as_source_evidence_and_the_route_is_partial(self):  # failed before: OK; from the row, the text nowhere
         # units as before: out of a hidden row no unit holds it; a hidden table EdgarTools reads as a heading claim once its cells are left out
-        for name, text, units in (('hidden_row', 'Net income was $56 million.', ['Visible cell 77']), ('hidden_table', 'Freed from a hidden table $9.9', ['Freed from a hidden table $9.9', 'After 1.'])):
+        for name, text, units, blanks in (('hidden_row', 'Net income was $56 million.', ['', 'Visible cell 77'], [b'<td>Hidden cell 99']), ('hidden_table', 'Freed from a hidden table $9.9', ['Freed from a hidden table $9.9', 'After 1.'], [])):
             with self.subTest(name):
                 route, facts = self.routes[name]; raw = PAGES[name]
                 self.assertEqual((route['status'], route['error']), ('PARTIAL', 'page visibility: 1 text run without a browser verdict'))
                 [rec] = self.evidence(name)
                 self.assertEqual(rec, {'at': {'byte_start': raw.index(text.encode()), 'byte_end_exclusive': raw.index(text.encode()) + len(text)}, 'raw': text, 'why': 'unbound'})
-                self.assertEqual(unit_texts(route), units)  # no unit made of it here
+                self.assertEqual(unit_texts(route), units)  # no unit made of it here; a hidden cell is a blank entry (table-source v2)
+                self.assertEqual([c['source']['byte_start'] for u in route['units'] for c in u.get('cells') or [] if not c['text'].strip()], [raw.index(b) for b in blanks])  # at its own source cell
                 self.assertEqual(route['uncovered'], [])  # nor read as shown (the scanner hides it)
                 self.assertEqual(facts['visibility']['unresolved'], 1)
 
@@ -83,7 +84,8 @@ class UnboundEvidence(unittest.TestCase):
         route, _ = self.routes['repeated']; raw = PAGES['repeated']
         recs = self.evidence('repeated'); first = raw.index(b'Total 42'); last = raw.rindex(b'Total 42')
         self.assertEqual([(r['raw'], r['at']['byte_start']) for r in recs], [('Total 42', first), ('Total 42', last)])
-        self.assertEqual(unit_texts(route), ['Total 42'])  # the shown cell, once
+        self.assertEqual(unit_texts(route), ['', 'Total 42', ''])  # the shown cell, once; the two hidden cells as blank entries (table-source v2)
+        self.assertEqual([c['source']['byte_start'] for u in route['units'] for c in u.get('cells') or [] if not c['text'].strip()], [raw.index(b'<td>h1'), raw.index(b'<td>h2')])  # each at its own source cell
         self.assertEqual(route['error'], 'page visibility: 2 text runs without a browser verdict')
 
     def test_references_stay_as_written_and_bytes_that_are_not_utf8_are_kept_whole(self):

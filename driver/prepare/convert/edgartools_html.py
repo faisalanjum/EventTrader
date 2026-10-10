@@ -22,6 +22,8 @@ KIND = {'HeadingNode': 'heading', 'ParagraphNode': 'text', 'TextNode': 'text', '
 BRANCH = ('DocumentNode', 'ContainerNode', 'SectionNode', 'ListNode')
 BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode', 'ImageNode')  # children that make their parent a branch; a picture has no text to merge into a run: flattened with its paragraph it was lost (Codex's worktree)
 TABLE = 'data-prepare-table'  # the attribute that carries a table's code (`codes`) through the tool to its table node
+CELL = 'data-prepare-cell'  # the same for each table cell, to the tool's own cell
+NO_CODE = object()  # a dumped cell with no `code` field at all (a dump made before cells had codes), unlike a code lost on the way (None)
 _NO_FORMAT = str.maketrans('', '', _CF)
 
 
@@ -48,7 +50,11 @@ def dump(node):
         d['caption'] = node.caption
         code = (getattr(node, 'metadata', None) or {}).get(TABLE)
         if code: d['code'] = code  # the source table it came from (`codes`)
-        d['rows'] = [[{'text': (c.text() if callable(c.text) else c.text) or '', 'colspan': c.colspan or 1, 'rowspan': c.rowspan or 1, 'is_header': bool(c.is_header)} for c in row] for row in rows]
+        held = {id(c): (code, kids) for c, code, kids in (getattr(node, 'metadata', None) or {}).get('held_tables', [])}  # parse's cell codes and tables in cells
+        d['rows'] = [[{'text': (c.text() if callable(c.text) else c.text) or '', 'colspan': c.colspan or 1, 'rowspan': c.rowspan or 1, 'is_header': bool(c.is_header),
+                       **({'code': held[id(c)][0]} if id(c) in held else {}),  # present for every cell this parse read: None where its code was lost
+                       **({'tables': [dump(k) for k in held[id(c)][1]]} if id(c) in held and held[id(c)][1] else {})}
+                      for c in row] for row in rows]
         return d
     kids = list(getattr(node, 'children', None) or [])
     if kind in BRANCH or any(type(k).__name__ in BLOCKY and type(k).__name__ != 'HeadingNode' for k in kids):  # a paragraph that holds blocks (a heading child alone keeps the run-in handling below) (a note emitted as one 60,000-character node) is a branch: its own inline runs become units, its blocks are walked
@@ -87,7 +93,8 @@ def codes(raw, vis):
     space after a point before a capital, `&amp;amp;`, zero-width characters), and a name that reached the linker changed stood at another picture's tag; two
     tags that name one resource, one of them hidden, stood for each other (Codex G3-C2); two copies of one table took each other's cells (A3)."""
     sha = anchor.sha256(raw)[:16]
-    return {sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()} | {sha + str(start): (start, None) for start in vis.table_tags if start is not None}
+    return ({sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()} | {sha + str(start): (start, None) for start in vis.table_tags if start is not None}
+            | {sha + 'c' + str(a): (a, ('cell', b)) for table in vis.tables for row in table for a, b in row})  # a cell: its span, as the scanner reads it
 
 
 def named(raw, vis, codes):
@@ -95,7 +102,8 @@ def named(raw, vis, codes):
     first: no attribute the source writes is changed), and the text the page hides left out (where the scanner's reading is certain; where it is not, only
     the text the browser proved hidden, each whole source token: Visible's `page`). Every tag the source
     has, the tool sees — an empty anchor too: it may be laid out as a block and break the line (Codex R3-A)."""
-    edits = [(vis.picture_names[start][0], code.encode()) if name is not None else ((start + 6, start + 6), f' {TABLE}="{code}"'.encode()) for code, (start, name) in codes.items()]  # after "<table"
+    edits = [((start + 3, start + 3), f' {CELL}="{code}"'.encode()) if isinstance(name, tuple) else (vis.picture_names[start][0], code.encode()) if name is not None
+             else ((start + 6, start + 6), f' {TABLE}="{code}"'.encode()) for code, (start, name) in codes.items()]  # after "<td"/"<th", the picture's name, after "<table"
     edits += [(span, b'') for span in (vis.hidden if vis.certain else vis.browser_hidden)]  # only what is proved hidden: an uncertain scan's own spans stay, a sheet can show them again (Codex, CODEX_DESIGN_REVIEW 2); text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
     out, at = [], 0
     for (a, b), piece in sorted(edits):
@@ -109,21 +117,24 @@ def to_units(tree, codes=None):
     """The units of the tool's tree. With `codes` (this source's, from `codes`), every picture names the tag it came from (`tag`, for the linker: a `src` that is no
     code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back;
     every table names the table it came from the same way (`tag`, None when the tool's table carries no code of this source: it then stands nowhere)."""
-    units, paragraphs = [], count()
+    units, paragraphs, holders = [], count(), []
 
-    def table_unit(t):
-        cells, until = [], {}  # until[column] = the first row at which that column is free again: a rowspan expires by row, whatever later rows hold
+    def table_unit(t, holder=None):  # holder: (its table unit, the cell) where this table stands in a cell
+        cells, until, kids = [], {}, []  # until[column] = the first row at which that column is free again: a rowspan expires by row, whatever later rows hold
         for r, row in enumerate(t.get('rows') or []):
             c = 0
             for cell in row:
                 while until.get(c, 0) > r: c += 1
                 cs, rs = cell.get('colspan') or 1, cell.get('rowspan') or 1
-                if (cell.get('text') or '').strip():
-                    cells.append({'r': r, 'c': c, 'rs': rs, 'cs': cs, 'text': cell['text'], 'header': bool(cell.get('is_header'))})
+                cells.append({'r': r, 'c': c, 'rs': rs, 'cs': cs, 'text': cell['text'], 'header': bool(cell.get('is_header')), '_code': cell.get('code', NO_CODE), **({'tables': []} if cell.get('tables') else {})})
+                kids += [(k, cells[-1]) for k in cell.get('tables') or []]
                 for k in range(c, c + cs): until[k] = r + rs
                 c += cs
-        if cells: units.append({'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else [], **({'tag': codes[t['code']][0] if t.get('code') in codes and codes[t['code']][1] is None else None} if codes is not None else {})})  # `tag`: the source table it came from (None: no table of this source - it stands nowhere), for the linker; a table with no text in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
-
+        if holder or any((x['text'] or '').strip() or 'tables' in x for x in cells):  # a table with text, or standing in a cell (its relation is structure): every own cell, blank too
+            u = {'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else [], **({'tag': codes[t['code']][0] if t.get('code') in codes and codes[t['code']][1] is None else None} if codes is not None else {})}  # `tag`: the source table it came from (None: no table of this source - it stands nowhere), for the linker; a table with no text in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
+            if holder: u['cell'] = {'table': holder[0]['id'], **{k: holder[1][k] for k in ('r', 'c', 'rs', 'cs')}}; holders.append((u, holder[1]))  # its holder, as a picture names one; the screen step regrids it
+            units.append(u)
+            for k, h in kids: h['tables'].append(f't{len(units)}'); table_unit(k, (u, h))  # each child right after its parent and its earlier children, in source order
         elif t.get('caption'): units.append({'id': f'u{len(units)}', 'kind': 'caption', 'text': t['caption']})  # no text in any cell, but a caption: that is read (Codex R2-C4)
 
     def walk(n):
@@ -160,6 +171,15 @@ def to_units(tree, codes=None):
                                  'cut': len(anchor.squash(n['pending_heading']['text'] if first else n['rest']))}
             units.append(u)
     walk(tree)
+    seen = Counter(c['_code'] for u in units if u['kind'] == 'table' for c in u['cells'] if isinstance(c.get('_code'), str))
+    for u in units:  # each cell's own source cell, by its code: an unknown, altered or repeated code names none (never a guess). A table none of whose
+        coded = codes is not None and any(c.get('_code', NO_CODE) is not NO_CODE for c in u.get('cells') or [] if u['kind'] == 'table')  # cells has a `code` field (a dump made before
+        for c in u['cells'] if u['kind'] == 'table' else []:  # cells had codes) keeps its former reading: no `source`, blank cells left out, placed by text
+            k = c.pop('_code', NO_CODE)
+            if coded: c['source'] = {'byte_start': codes[k][0], 'byte_end_exclusive': codes[k][1][1]} if k in codes and isinstance(codes[k][1], tuple) and seen[k] == 1 else None
+        if u['kind'] == 'table' and not coded: u['cells'] = [c for c in u['cells'] if (c['text'] or '').strip() or 'tables' in c]
+    for u, h in holders:  # a table in a cell: its holder's own source cell
+        if h.get('source'): u['cell'].update(h['source'])
     return units
 
 
@@ -243,7 +263,7 @@ def with_every_picture(units, vis):
     def start(x):
         x = x[0] if isinstance(x, list) and x else x
         return x['byte_start'] if isinstance(x, dict) and 'byte_start' in x else None
-    spans = sorted((a, b, k) for k, table in enumerate(vis.tables) for row in table for a, b in row); starts = [a for a, _, _ in spans]
+    spans = sorted((a, b, k) for k, table in enumerate(vis.tables) for row in table for a, b in row); starts = [a for a, _, _ in spans]; cell_at = {a: i for i, (a, _, _) in enumerate(spans)}
     def cell_of(x):  # the innermost source cell holding byte x (the one that starts last among those that do), or -1
         i = bisect_right(starts, x) - 1
         while i >= 0 and not spans[i][0] <= x < spans[i][1]: i -= 1
@@ -251,7 +271,8 @@ def with_every_picture(units, vis):
     unit_table, route_cell = {}, {}  # source table -> the table unit holding its cells (None: cells of it in two units, no one table); source cell -> (row, column) of the unit's cell in it
     for t in units:
         for c in (t.get('cells') or []) if t.get('kind') == 'table' else []:
-            i = cell_of(start(c.get('anchor'))) if start(c.get('anchor')) is not None else -1
+            if 'source' in c: i = cell_at.get((c['source'] or {}).get('byte_start'), -1)  # the cell's own source cell (its code); none named: no table from it
+            else: i = cell_of(start(c.get('anchor'))) if start(c.get('anchor')) is not None else -1  # a route that names no source cell: where its text starts
             if i >= 0: k = spans[i][2]; unit_table[k] = t['id'] if unit_table.get(k, t['id']) == t['id'] else None; route_cell.setdefault(i, (c['r'], c['c']))
     def placed(u, a):  # a picture at its shown tag `a`: the cell it stands in, and what its tag says of it
         i = cell_of(a)
@@ -542,7 +563,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def settings(vis):
@@ -566,10 +587,25 @@ def parse(raw, vis):
     # The tool reads a table's first own <tbody> alone, so later bodies, a footer and rows straight in the table were never cells (Root, Oct 10):
     # every table takes the tool's own path for a table with no <tbody>. A footer row then stands in the tool's rows and in its `footer`; `dump`
     # reads headers and rows, never `footer`, so the row is read once.
+    # A table standing in a cell is flattened into that cell's text and never becomes a TableNode: each such table is made by this same native
+    # `process` (re-entrant), kept beside its holder cell in the holder table's own metadata (a native Cell takes no attribute) with every cell's own code.
     class EveryRowGroup(TableProcessor):
         @classmethod
         def _own_section(cls, container, name):
             return None if name == 'tbody' else super()._own_section(container, name)
+
+        def process(self, element):
+            outer, self._held = getattr(self, '_held', []), []
+            try: table = super().process(element)
+            finally: held, self._held = self._held, outer
+            if element.get(TABLE): table.set_metadata(TABLE, element.get(TABLE))  # the builder names the tables it meets; a table in a cell it never meets
+            if held: table.set_metadata('held_tables', held)
+            return table
+
+        def _process_cell(self, elem, is_header):
+            cell = super()._process_cell(elem, is_header)
+            if cell is not None: self._held.append((cell, elem.get(CELL), [self.process(t) for t in elem.iterdescendants('table') if next(t.iterancestors('td', 'th'), None) is elem]))
+            return cell  # kept: its own code, and the tables whose nearest cell is this one, in source order
 
     whole_headings(); t0 = time.time(); parser = HTMLParser(ParserConfig())  # what parse_html builds
     parser.strategies['table_processing'] = EveryRowGroup(parser.config)

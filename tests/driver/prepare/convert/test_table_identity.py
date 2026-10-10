@@ -54,7 +54,10 @@ class TableIdentity(unittest.TestCase):
         self.assertEqual(re.findall(r'<table[^>]*>', given, re.I), ['<table>', '<table>', '<TABLE data-prepare-table="%s%d" id="keep" class="x" data-prepare-table="forged">' % (sha, raw.index(b'<TABLE')),
                          '<table data-prepare-table="%s%d">' % (sha, raw.index(b'<table><tr><td>Outer')), '<table data-prepare-table="%s%d">' % (sha, raw.index(b'<table><tr><td>Inner'))])  # in a comment: as written; a hidden table: no code (its text left out); the code first, the source's own attributes as written
         r = eh.convert(raw, 'x.htm', hashlib.sha256(raw).hexdigest())
-        self.assertEqual([[c['text'] for c in u['cells']] for u in r['units']], [['Café & Co.', '(1,234)'], ['Outer', 'Inner\n\n1']])
+        self.assertEqual([[c['text'] for c in u['cells']] for u in r['units']], [['Café & Co.', '(1,234)'], ['Outer', 'Inner\n\n1'], ['Inner', '1']])  # the holder keeps the native text; the inner table is its own unit (nested tables)
+        outer, inner = r['units'][1], r['units'][2]; holder = outer['cells'][1]
+        self.assertEqual((inner['cell']['table'], inner['cell']['byte_start'], holder['tables']), (outer['id'], raw.index(b'<td><table><tr><td>Inner'), [inner['id']]))
+        self.assertEqual([[c['source']['byte_start'] for c in u['cells']] for u in r['units']], [[raw.index(b'<TD>Caf'), raw.index(b'<TD>(1')], [raw.index(b'<td>Outer'), raw.index(b'<td><table><tr><td>Inner')], [raw.index(b'<td>Inner'), raw.index(b'<td>1</td>')]])
         self.assertTrue(all(c.get('anchor') and 'tag' not in u for u in r['units'] for c in u['cells']))
 
     def test_a_named_table_with_no_source_cells_places_nothing(self):  # Codex's A3 review C1: the empty table's range crashed the linker; nor may the prose lend its text

@@ -98,7 +98,7 @@ class Route(unittest.TestCase):
         for want in ('407 PARK', '3.14 PERCENT', '19.AAA HOLDINGS LLC', '1.', '10700', 'Total $1,234', 'Wholly-Owned  Active  Subsidiaries1', 'Exhibit 21.1',
                      '21. HIDDEN'):  # a box at opacity 0 beside a list number: the page does not show it, and in this file the scanner cannot certify the browser's verdict leaves it out of what the tool reads (it printed `21.400 HIDDEN`)
             with self.subTest(want=want): self.assertIn(want, self.texts)
-        self.assertEqual(sorted(x for x in self.texts if ' ' not in x), ['1.', '10700'])  # the two cells stay two items
+        self.assertEqual(sorted(x for x in self.texts if x and ' ' not in x), ['1.', '10700'])  # the two cells stay two items (non-blank text; blank cells: test_table_source)
 
     def test_ids_kinds_and_anchors_stay_as_the_converter_gave_them(self):
         bare = edgartools_html.convert(PAGE, 'positioned.htm', hashlib.sha256(PAGE).hexdigest(), vis=Visible(PAGE, page=self.route['page_visibility']))  # the conversion the route was made by
