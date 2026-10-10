@@ -6,6 +6,8 @@ import sqlite3
 import unittest
 from unittest.mock import patch
 
+from driver.prepare.get.acquire import StorageError
+from driver.prepare.get.archive import store_blob as real_store
 from driver.prepare.get.campaign import Campaign
 from driver.prepare.get.transport import DownloadError
 
@@ -185,3 +187,26 @@ class CampaignTests(unittest.TestCase):
             with Campaign(directory, live=True, sender=lambda *args: self.fail('a recorded failure was fetched again')) as run:
                 with self.assertRaisesRegex(ValueError, '^Recorded retrieval failure: HTTP 404$'):
                     run.fetch(url)
+
+    def test_a_storage_fault_stops_the_campaign_before_another_request_but_a_download_failure_does_not(self):  # Campaign.fetch's storage handler
+        import errno
+        first, second = 'https://www.sec.gov/Archives/one', 'https://www.sec.gov/Archives/two'
+        for case in ('storage', 'download'):
+            calls = []
+            def sender(url, *args, case=case):
+                calls.append(url)
+                return (404, {}, b'') if case == 'download' and url == first else (200, {}, b'bytes of ' + url.encode())
+            def store(root, data, case=case):
+                if case == 'storage': raise OSError(errno.EIO, 'injected blob store failure')
+                return real_store(root, data)
+            with self.subTest(case), tempfile.TemporaryDirectory() as directory, patch('driver.prepare.get.campaign.store_blob', store), \
+                    Campaign(directory, live=True, sender=sender, sleep=lambda delay: None) as run:
+                with self.assertRaisesRegex(StorageError, '^Campaign storage failure: ') if case == 'storage' else self.assertRaises(DownloadError):
+                    run.fetch(first)
+                if case == 'storage':  # stopped for good: the next URL is refused with no request
+                    with self.assertRaisesRegex(ValueError, '^Campaign stopped'):
+                        run.fetch(second)
+                    self.assertEqual(calls, [first])
+                else:  # a recorded download failure: an unrelated URL is still fetched
+                    self.assertEqual(run.fetch(second)[0], b'bytes of ' + second.encode())
+                    self.assertEqual(calls, [first, second])

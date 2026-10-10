@@ -83,6 +83,23 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(raw).hexdigest(), '7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb')
         self.assertEqual(load_blob(self.root, store_blob(self.root, raw)), raw)
 
+    def test_a_blob_another_writer_published_first_is_reused_only_after_it_verifies(self):  # store_blob's os.link race: the name appears after the exists check
+        data = b'concurrent bytes'
+        valid = gzip.compress(data, mtime=0)
+        for other, outcome in ((valid, 'reused'), (b'broken', 'refused')):
+            def link(staged, target, other=other):  # the other writer wins between store_blob's exists check and its publication
+                target.write_bytes(other); raise FileExistsError(17, 'File exists')
+            with self.subTest(outcome), tempfile.TemporaryDirectory() as directory, patch('driver.prepare.get.archive.os.link', link):
+                root = Path(directory) / 'blobs'
+                if outcome == 'reused':
+                    self.assertEqual(store_blob(root, data), hashlib.sha256(data).hexdigest())
+                    self.assertEqual(load_blob(root, hashlib.sha256(data).hexdigest()), data)
+                else:
+                    with self.assertRaises(ValueError):  # never counted stored: the damaged copy fails its own check
+                        store_blob(root, data)
+                self.assertEqual(sorted(p.name for p in root.iterdir()), [hashlib.sha256(data).hexdigest() + '.gz'])  # no staged file left, nothing replaced
+                self.assertEqual((root / (hashlib.sha256(data).hexdigest() + '.gz')).read_bytes(), other)
+
 
 if __name__ == '__main__':
     unittest.main()

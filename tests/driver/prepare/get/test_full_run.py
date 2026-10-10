@@ -125,6 +125,12 @@ class FullRunTests(unittest.TestCase):
         self.assertEqual(summary['counts'], {'FAILED': 2, 'PENDING': 1})
         self.assertEqual([row['reason'] for row in self.rows()], ['DownloadError: HTTP 404'] * 2)
 
+    def test_a_sec_copy_that_is_not_served_leaves_its_file_unresolved_not_the_filing_failed(self):  # _filing.copy: a 404 is no answer; 200 is test_success_...
+        self.status_for[BASE + 'report.css'] = 404  # one of AMG's two files only SEC's copy can prove
+        summary = self.run_with([AMG])
+        [row] = self.rows()
+        self.assertEqual((summary['counts'], row['status'], row['unresolved']), ({'UNRESOLVED': 1}, 'UNRESOLVED', ['report.css']))
+
     def test_scattered_failures_do_not_stop_a_retry_but_consecutive_ones_do(self):
         filings = [MISSING[0], AMG, MISSING[1], MISSING[2]]
         self.run_with(filings)

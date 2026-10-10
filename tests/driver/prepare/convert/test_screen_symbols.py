@@ -263,5 +263,19 @@ class Marks(unittest.TestCase):
         self.assertEqual([r['why'] for r in lost], ['mark not found']); self.assertEqual([r['why'] for r in moved], ['unbound'])
 
 
+class PinnedDecoder(unittest.TestCase):  # _decoder_js: the decoder the page runs is the pinned one, byte for byte; any other stops the step
+    def test_a_changed_decoder_file_stops_and_the_pinned_one_loads(self):
+        from pathlib import Path
+        from unittest.mock import patch
+        self.assertIn('const lib', sg._decoder_js())  # control: the genuine pinned files
+        real = Path.read_bytes
+        for name in sg._DECODER:
+            def changed(path, name=name):
+                data = real(path)
+                return data[:-1] + bytes([data[-1] ^ 1]) if path.parent.name in ('dingbat_to_unicode_1_0_2', 'dist') and path.as_posix().endswith(name) else data
+            with self.subTest(name), patch.object(Path, 'read_bytes', changed), self.assertRaisesRegex(ImportError, '^' + name + ': not the pinned dingbat-to-unicode 1.0.2$'):
+                sg._decoder_js()
+
+
 if __name__ == '__main__':
     unittest.main()
