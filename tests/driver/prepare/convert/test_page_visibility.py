@@ -67,9 +67,10 @@ class Route(unittest.TestCase):
         self.assertLessEqual({b'LITG', b'FOSTH', b'MISI &copy2024', b'LEFTJ', b'RIGHTJ'}, listed)
         self.assertEqual([x['raw'].encode() for x in self.page['unresolved']], [PAGE[a:b] for a, b in self.page['unbound']])  # each beside its span: the source as written
 
-    def test_pictures_and_their_records_are_the_scanners(self):
-        pics = lambda r: [{k: u.get(k) for k in ('src', 'alt', 'anchor', 'link_flag', 'cell', 'tag')} for u in r['units'] if u.get('kind') == 'image']
-        self.assertEqual(pics(self.route), pics(self.scanned))
+    def test_pictures_follow_the_browsers_verdict_where_it_reaches_them(self):  # changed (Root, OCR_PICTURE_VISIBILITY_FIX): formerly ..._are_the_scanners, route == scanned
+        anchored = lambda r: [u['src'] for u in r['units'] if u.get('kind') == 'image' and isinstance(u.get('anchor'), dict)]
+        self.assertEqual(anchored(self.route), ['r.jpg'])  # the sheet shows r.jpg again ("show" over its inline display:none); h.jpg stands in a display:none div, s.jpg is "gone"
+        self.assertEqual([u['src'] for u in self.route['units'] if u.get('kind') == 'image'], ['r.jpg'])  # the tool's own images of proved-hidden tags are left out, not left unplaced
 
     def test_the_route_says_how_its_text_was_read(self):
         self.assertTrue(self.route['route']['settings']['hidden_text'].startswith('left out as the browser proved it '))

@@ -113,7 +113,7 @@ def named(raw, vis, codes):
     except UnicodeDecodeError: return given.decode('cp1252', 'replace')
 
 
-def to_units(tree, codes=None, shown=()):
+def to_units(tree, codes=None, shown=(), hidden=frozenset()):
     """The units of the tool's tree. With `codes` (this source's, from `codes`), every picture names the tag it came from (`tag`, for the linker: a `src` that is no
     code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back;
     every table names the table it came from the same way (`tag`, None when the tool's table carries no code of this source: it then stands nowhere). `shown`:
@@ -163,7 +163,10 @@ def to_units(tree, codes=None, shown=()):
                 if level is not None: u['level'] = level
                 if kind2 == 'heading' and n['heading'].get('native') is not None: u['native_heading'] = n['heading']['native']
                 units.append(u)
-        elif kind == 'ImageNode': units.append({'id': f'u{len(units)}', 'kind': 'image', 'text': '', 'src': n.get('src'), **({'tag': codes.get(n.get('src'), (None,))[0]} if codes is not None else {})})
+        elif kind == 'ImageNode':
+            tag = codes.get(n.get('src'), (None,))[0] if codes is not None else None
+            if tag is not None and tag in hidden: return  # the tool's image of a picture tag proved hidden: no picture (its source tag is known only here)
+            units.append({'id': f'u{len(units)}', 'kind': 'image', 'text': '', 'src': n.get('src'), **({'tag': tag} if codes is not None else {})})
         else:
             if not anchor.squash(n.get('text') or ''): return  # whitespace or control characters only: not a block
             u = {'id': f'u{len(units)}', 'kind': KIND.get(kind, 'other'), 'text': n.get('text') or ''}
@@ -240,7 +243,7 @@ def split_lines(raw, units, vis=None):
 
 
 def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=None):
-    vis = anchor.Visible(raw) if vis is None else vis; known = codes(raw, vis); linked = anchor.link(raw, to_units(tree, known, sorted(a for a, _ in vis.pictures)), vis=vis)
+    vis = anchor.Visible(raw) if vis is None else vis; known = codes(raw, vis); linked = anchor.link(raw, to_units(tree, known, sorted(a for a, _ in vis.pictures), vis.hidden_pictures), vis=vis)
     linked['units'] = split_lines(raw, linked['units'], vis)
     for u in linked['units']:
         if u.get('src') in known: u['src'] = known[u['src']][1]  # the name back, now that the tag has decided the place; a src that is no code stays the tool's own
@@ -575,7 +578,9 @@ SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_he
 def settings(vis):
     """SETTINGS for one document; where the browser proved which of its text hides (Visible's `page`), that reading with a digest of the spans the tool
     is given without, so that a parse saved for other input (a raw one, or another verdict) is never reused for this one."""
-    return dict(SETTINGS, hidden_text='left out as the browser proved it ' + anchor.sha256(str(vis.browser_hidden).encode())[:16]) if vis.paged else SETTINGS
+    if not vis.paged: return SETTINGS
+    return dict(SETTINGS, hidden_text='left out as the browser proved it ' + anchor.sha256(str(vis.browser_hidden).encode())[:16],
+                **({'picture_visibility': 'as the browser proved it (checkVisibility: opacity, CSS visibility) ' + anchor.sha256(str(vis.page['pictures']).encode())[:16]} if vis.page.get('pictures') else {}))
 
 
 def version():

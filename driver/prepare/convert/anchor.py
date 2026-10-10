@@ -328,6 +328,8 @@ class Visible:
         told = sorted([(a, b, True) for a, b in page['hidden']] + [(a, b, False) for a, b in page['shown']]) if page else []; told_at = [a for a, _, _ in told]
         computed = '\x00' in s or (not raw.isascii() and (blen is len or raw.startswith(b'\xef\xbb\xbf') or _META.search(raw) is not None))  # the reading cannot be certified: a hiding property with a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes), markup it does not follow — a null character, which the parser drops or replaces by where it stands (Codex R18-C1) — or bytes beyond ASCII that are not plainly UTF-8: the browser decodes them by the mark, the <meta> or a guess of its own (every one of 22,483 real documents is ASCII)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
+        told_pictures = (page or {}).get('pictures')  # the browser's verdict on picture tags (`page_visibility`): {'hidden', 'shown', 'unbound'} first bytes; none in an older verdict
+        self.picture_tags = []  # every <img>/<svg> opening tag the parser sees, shown or hidden, with or without a `src`: what the browser is asked about
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
         self.picture_names = {}  # every <img>/<svg> opening tag that writes a `src`, shown or hidden: its first byte -> (the byte span of the value as written, the name as the parser reads it) — for an adapter that hands a tool the source with a name it cannot alter
         self.picture_sources = {}  # the `src` of each of those tags as the parser reads it (references decoded once), by the tag's first byte: which picture a tool's unit is, where the tool names its resource (Codex's worktree)
@@ -479,9 +481,10 @@ class Visible:
                     if alone and (seen > line or (after and shown)): computed = True  # a word before it on its line, or — for one that shows — another such box (invisible ones follow each other freely: the cells of a hidden row)
                     if shown and edge == 'atomic' and (after or touch == len(chars)): computed = True  # an inline box on the line of a box that must have it to itself, or right after an inline box that ended with white space (dropped by the browser: the two boxes touch); a picture or a field there holds no word, so what follows it is asked instead
                     if name in ('img', 'svg'):
-                        span = attribute_span(t, name, 'src')
+                        span = attribute_span(t, name, 'src'); self.picture_tags.append((start, pos))
+                        pic = start in told_pictures['shown'] if told_pictures and start in told_pictures['hidden'] + told_pictures['shown'] else shown  # the page's own verdict on this tag where its mark reached it (the text's `shown` is untouched)
                         if span is not None: self.picture_names[start] = ((start + blen(t[:span[0]]), start + blen(t[:span[1]])), attribute_value(attrs['src']))
-                        if shown: self.pictures.append((start, pos)); self.picture_sources[start] = self.picture_names[start][1] if start in self.picture_names else None; self.picture_descriptions[start] = {k: attribute_value(attrs[k]) for k in ('alt', 'title') if k in attrs}
+                        if pic: self.pictures.append((start, pos)); self.picture_sources[start] = self.picture_names[start][1] if start in self.picture_names else None; self.picture_descriptions[start] = {k: attribute_value(attrs[k]) for k in ('alt', 'title') if k in attrs}
                     if shown and edge == 'atomic' and chars and not _WS.fullmatch(chars[-1]): lead = len(chars)  # white space at the start of an inline box's content: the browser drops it, so the word before the box touches its first word
                     brk = brk or (shown and block)
                     recs = []  # its link and target records
@@ -547,7 +550,10 @@ class Visible:
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
         sheets = stylesheets(sheet_tokens)
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
-        self.certain = not computed and not sheet and page is None  # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified; nor by the browser's verdict, which proves text, not tags or layout
+        self.certain = not computed and not sheet and page is None
+        self.hidden_pictures = (set(told_pictures['hidden']) if told_pictures else {a for a, _ in self.picture_tags} - {a for a, _ in self.pictures} if self.certain else set())  # picture tags positively
+        # proved hidden: by the browser's verdict, or by a certified reading (no browser asked); an uncertain reading with no picture verdict (an older one) proves none
+        # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified; nor by the browser's verdict, which proves text, not tags or layout
         struck_computed = struck_computed or any(unpaints(m.group(1).lower(), m.group(2)) for x in sheets if x for m in _PAINT.finditer(x))  # a sheet may colour a line so that it is not seen, or leave struck letters no room
         self.struck_certain = self.certain and not struck_computed and not any(_DECO_RULE.search(x) for x in sheets)  # a struck run is certified only when the reading is, no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
         self.plain_certain = self.certain and not struck_computed and not any(sheet_can_strike(x) for x in sheets)  # "nothing struck here" needs, besides, that no sheet rule can add or force a strike (line-through, inherit, revert, a function, !important or any token this scanner does not know)

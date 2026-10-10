@@ -401,6 +401,12 @@ def measure(marked_html, browser, prefix=None, every=False):
     return (by_table, got['boxes']) if prefix is None else (by_table, got['boxes'], sym)
 
 
+PICTURES_JS = """p => { const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), out = {};
+  while (w.nextNode()) { const c = w.currentNode, e = c.nextSibling;  // a picture mark binds only the <img>/<svg> right after it; one the parser moved binds nothing (null)
+    if (c.data.startsWith(p)) out[c.data.slice(p.length)] = e && e.nodeType === 1 && (e.localName === 'img' || e.localName === 'svg') ? e.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}) : null; }
+  return out; }"""  # the native verdict: no box, CSS visibility other than visible, or opacity 0 on it or an ancestor hide it; its size is not asked (painting is another matter)
+
+
 def page_visibility(raw, vis, browser):
     """Which of the scanner's text runs the page itself hides, for a file whose reading is not certain, before the tool reads it: the step's own marks
     (`symbol_runs`, `tag_cells` with comments only, no cell attribute a sheet could select) in a page that loads the marked bytes in the charset the
@@ -417,13 +423,13 @@ def page_visibility(raw, vis, browser):
     request, refused offline: what the sheet shows or hides is not known)."""
     runs, _ = symbol_runs(raw, vis); prefix = marker_prefix(raw); asked = []; address = 'http://%s.invalid/' % prefix  # an address the source nowhere writes
     bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # a byte order mark stays first: the browser decodes by it
-    marked, _ = tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok and a >= bom], prefix, cells=False)  # comments only: no attribute a sheet could select
+    marked, _ = tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok and a >= bom] + [(a, b'<!--%sq:%d-->' % (prefix.encode(), k)) for k, (a, _) in enumerate(vis.picture_tags) if a >= bom], prefix, cells=False)  # comments only: no attribute a sheet could select
     page = _offline_page(browser, asked, (address, raw))  # first the original bytes as they are: how the browser itself decodes them, and what they ask for
     try: page.goto(address, wait_until='load'); charset = page.evaluate('document.characterSet')
     finally: page.close()
     if asked: raise RuntimeError('style sheets the page names cannot be read offline: ' + ', '.join(asked)[:150])  # every sheet the page names is requested from a page with an address, and refused: what it shows or hides is not known, no verdict at all
     page = _offline_page(browser, None, (address, marked, charset))  # then the marked bytes in that charset: a comment cannot move a <meta> out of the browser's reach
-    try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True])
+    try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True]); seen = page.evaluate(PICTURES_JS, prefix + 'q:')
     finally: page.close()
     out, unresolved = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}, []
     for k, (_, chars, hidden, ok) in enumerate(runs):
@@ -439,6 +445,9 @@ def page_visibility(raw, vis, browser):
         elif m['visibility'] == 'unproven': out['unproven'] += 1
         elif hidden: out['shown'].append([chars[0][0], chars[-1][1]])
     if unresolved: out['unresolved'] = unresolved
+    if vis.picture_tags: out['pictures'] = {'hidden': [], 'shown': [], 'unbound': []}  # every picture tag (Visible.picture_tags) by its first byte: the page's verdict, or none reached it
+    for k, (a, b) in enumerate(vis.picture_tags): out['pictures']['unbound' if seen.get(str(k)) is None else 'shown' if seen[str(k)] else 'hidden'].append(a)
+    if vis.picture_tags and out['pictures']['unbound']: out['unresolved_pictures'] = [{'at': {'byte_start': a, 'byte_end_exclusive': b}, 'raw': raw[a:b].decode('utf-8', 'replace'), 'why': 'unbound'} for a, b in vis.picture_tags if a in out['pictures']['unbound']]  # the tag as written: the scanner's reading stays for it
     return out
 
 

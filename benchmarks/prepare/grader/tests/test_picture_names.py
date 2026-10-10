@@ -83,7 +83,7 @@ class PictureNames(unittest.TestCase):
                     shown = 0 if order == 'shown first' else 1
                     for keep in ((0, 1), (0,), (1,)):
                         with self.subTest(hide=hide, order=order, text=text, keep=keep):
-                            self.assertEqual(placed(raw, keep), [('x.png', b'<img src="x.png">' if k == shown else 'ambiguous_image_location') for k in keep])
+                            self.assertEqual(placed(raw, keep), [('x.png', b'<img src="x.png">') for k in keep if k == shown])  # Root's source-backed visibility correction: a proved-hidden copy is omitted; formerly ('x.png', 'ambiguous_image_location'). Unknown/template copies still fail explicitly below.
 
     def test_a_shown_resource_repeated_stands_each_at_its_own_tag(self):
         raw = b'<img src="x.png"><p>Middle.</p><img src="x.png">'; a, b = raw.index(b'<img'), raw.rindex(b'<img')

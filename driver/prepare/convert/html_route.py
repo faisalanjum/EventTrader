@@ -22,7 +22,8 @@ def unresolved(vis):
     """The reason a page is partial whose browser verdict reached some of its text runs not at all (`page_visibility['unresolved']`: kept as source,
     never shown or hidden; the encoding's own byte order mark, which no page shows, aside): its reading is not certified whole."""
     n = sum(1 for r in vis.page.get('unresolved') or [] if r['why'] != 'byte order mark') if vis.paged else 0
-    return ['page visibility: %d text run%s without a browser verdict' % (n, '' if n == 1 else 's')] if n else []
+    p = len(vis.page.get('unresolved_pictures') or []) if vis.paged else 0  # a picture tag no verdict reached: the scanner's reading stays for it, said apart from text
+    return (['page visibility: %d text run%s without a browser verdict' % (n, '' if n == 1 else 's')] if n else []) + (['page visibility: %d picture tag%s without a browser verdict' % (p, '' if p == 1 else 's')] if p else [])
 
 
 def prepare(raw, file_id, sha256, browser):
