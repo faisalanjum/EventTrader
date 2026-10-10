@@ -542,7 +542,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def settings(vis):
@@ -557,11 +557,23 @@ def version():
 
 
 def parse(raw, vis):
-    """The tool's own parse of the caller's bytes - the pictures' names given as codes (`named`), its reading of headings fixed (`whole_headings`) - as
-    a plain node dump: (dump, seconds, producing version)."""
-    from edgar.documents import parse_html  # only here: the rest of the module needs no EdgarTools
-    whole_headings(); t0 = time.time()
-    tree = dump(parse_html(named(raw, vis, codes(raw, vis))).root)
+    """The tool's own parse of the caller's bytes - the pictures' names given as codes (`named`), its reading of headings fixed (`whole_headings`), every
+    own row group of a table read (`EveryRowGroup`) - as a plain node dump: (dump, seconds, producing version)."""
+    from edgar.documents.config import ParserConfig  # only here: the rest of the module needs no EdgarTools
+    from edgar.documents.parser import HTMLParser
+    from edgar.documents.strategies.table_processing import TableProcessor
+
+    # The tool reads a table's first own <tbody> alone, so later bodies, a footer and rows straight in the table were never cells (Root, Oct 10):
+    # every table takes the tool's own path for a table with no <tbody>. A footer row then stands in the tool's rows and in its `footer`; `dump`
+    # reads headers and rows, never `footer`, so the row is read once.
+    class EveryRowGroup(TableProcessor):
+        @classmethod
+        def _own_section(cls, container, name):
+            return None if name == 'tbody' else super()._own_section(container, name)
+
+    whole_headings(); t0 = time.time(); parser = HTMLParser(ParserConfig())  # what parse_html builds
+    parser.strategies['table_processing'] = EveryRowGroup(parser.config)
+    tree = dump(parser.parse(named(raw, vis, codes(raw, vis))).root)
     return tree, round(time.time() - t0, 2), version()
 
 
