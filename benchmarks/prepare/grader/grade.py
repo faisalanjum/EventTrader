@@ -1042,7 +1042,7 @@ class Grader:
         return self.pieces_match([c.get('text', '') for c in cells], want, [c.get('anchor') for c in cells], cells, symbols)[0]
 
     def row_label(self, value, alt, tb, vr):
-        pieces, anchors = pieces_of(value), anchors_of(self.t, 'row_label', alt)
+        pieces, anchors = pieces_of(value), anchors_of(self.t, 'row_label', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         cands = [c for a in anchors for c in self.rf.cells_at(a, tb)] if anchors else \
             [c for c in self.rf.cells_in(tb) if (abs(c['r'] - vr) <= 1 or carried(c, vr, tb)) and norm(c.get('text', '')) in {norm(p) for p in pieces}]
         cands = self.merged({id(c): c for c in cands}.values())
