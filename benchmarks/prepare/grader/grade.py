@@ -1060,7 +1060,7 @@ class Grader:
             cells = [c for c in pool if row_hit(c, vr) and self.same(c.get('text', ''), item['text'])[0]]  # a row may print the same text twice: the one under the named header is meant
             if not cells: return ('unresolved', 'adjacency', item['text']) if any(row_hit(c, vr) and self.same(spaced(c, item['text']), item['text'])[0] for c in pool) else ('fail', 'row', item['text'])
             if item.get('header') and item['header'] != 'position':
-                anchors = anchors_of(self.t, 'row_context', alt)
+                anchors = anchors_of(self.t, 'row_context', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
                 head_groups = [(tb, c) for c in pool if c['r'] < vr] + [(k['table'], k['cell']) for k in self.carriers(anchors, [item['header']])
                                                                                      if k['cell'] is not None and k['table'] is not tb and k['order'] < tb['_order']]
                 supported = lambda h: not anchors or any(overlap(h.get('anchor'), a) for a in anchors)
@@ -1089,7 +1089,7 @@ class Grader:
         return 'pass', None, None
 
     def header_path(self, value, alt, tb, vr, vcols):
-        pieces, anchors = pieces_of(value), anchors_of(self.t, 'header_path', alt)
+        pieces, anchors = pieces_of(value), anchors_of(self.t, 'header_path', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         cars = [k for k in self.carriers(anchors, pieces, tb) if k['cell'] is not None]
         own = [k for k in cars if k['table'] is tb and k['cell']['r'] < vr]
         other = [k for k in cars if k['table'] is not tb and k['order'] < tb['_order']]  # the first part of a continued table
@@ -1162,7 +1162,7 @@ class Grader:
 
     def corner_text(self, value, alt, tb, vr):
         pieces = pieces_of(value)  # one stub column's head, or several joined by the key's ' | '
-        cars = [k for k in self.carriers(anchors_of(self.t, 'corner_text', alt), pieces, tb) if k['cell'] is not None and self.in_order(k, tb, vr) and k['cell']['r'] != vr]
+        cars = [k for k in self.carriers(anchors_of(self.t, 'corner_text', alt, governing=True), pieces, tb) if k['cell'] is not None and self.in_order(k, tb, vr) and k['cell']['r'] != vr]  # governing places (DESIGN §3)
         if not cars: return 'fail', 'missing', None
         ok, flag = match_pieces([k['text'] for k in cars], pieces, self.markers, self.own + self.table_context)
         if ok: self.ctx_orders.update(k['order'] for k in cars); self.matched = objects(cars)
@@ -1170,7 +1170,7 @@ class Grader:
         return ('pass', None, flag) if ok else ('fail', 'text', ' '.join(k['text'] for k in cars))
 
     def lead_in(self, value, alt, tb, vr):
-        anchors = anchors_of(self.t, 'lead_in', alt)
+        anchors = anchors_of(self.t, 'lead_in', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         cars = [k for k in self.carriers(anchors, [value], tb) if self.in_order(k, tb, vr) and (k['table'] is not tb or k['cell']['r'] < vr)]
         if not cars: return 'fail', 'missing', None
         hit = next((k for k in cars if boundary_equal(k['text'], value)), None)
@@ -1188,7 +1188,7 @@ class Grader:
         return ('pass', None, flag) if not between else ('fail', 'placement', None)
 
     def section_path(self, value, alt, target_order, tb=None):
-        pieces, anchors = pieces_of(value), anchors_of(self.t, 'section_path', alt)
+        pieces, anchors = pieces_of(value), anchors_of(self.t, 'section_path', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         every = [k for k in self.carriers(anchors, pieces) if k['order'] < target_order and (tb is None or k['table'] is not tb)
                  or tb is not None and k['table'] is tb and k['cell']['r'] < self.vr and self.in_order(k, tb, self.vr)]  # or in an earlier row of the value's own table, in source order (lead_in's rule)
         found, matched_cars, i, run_in, doubt = [], [], 0, False, False  # matched_cars: every carrier the match used (a heading laid out in pieces, a run-in window), for the struck check
@@ -1255,7 +1255,7 @@ class Grader:
         return 'pass', None, None if anchors else 'anchor_unknown'
 
     def unit_printed(self, value, alt, tb, vr, V):
-        anchors = anchors_of(self.t, 'unit_printed', alt)
+        anchors = anchors_of(self.t, 'unit_printed', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         cars = self.carriers(anchors, [value], tb)
         good = [k for k in cars if self.same(k['text'], value)[0]] or ([cars[-1]] if cars and self.same(' '.join(k['text'] for k in cars), value)[0] else [])
         if good:
