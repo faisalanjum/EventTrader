@@ -1111,7 +1111,7 @@ class Grader:
         return 'fail', 'text', ' '.join(k['text'] for k in cars)
 
     def table_title(self, value, alt, tb, vr):
-        pieces, anchors = pieces_of(value), anchors_of(self.t, 'table_title', alt)
+        pieces, anchors = pieces_of(value), anchors_of(self.t, 'table_title', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         cars = self.carriers(anchors, pieces, tb)
         mine = tb.get('source_table') or {}  # the table's own caption unit may stand after it (a caption printed after the rows): named by this table and standing in its own source caption
         own = lambda k: k['unit'] is not None and k['unit'].get('kind') == 'caption' and mine.get('claims') == 1 and (k['unit'].get('source_table') or {}).get('tag_start') == mine.get('tag_start') and own_caption(self.rf, k['unit'])
@@ -1125,9 +1125,27 @@ class Grader:
         if not ok and match_pieces([spaced(k, ' '.join(pieces)) for k in usable], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', norm(got)
         if not ok: return 'fail', 'spacing' if spacing_only(got, ' '.join(pieces)) else 'text', norm(got)
         orders = {k['order'] for k in usable}
-        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not (continued(u, tb) and all(source_before(k['anchor'], u.get('anchor')) for k in usable) and source_before(u.get('anchor'), tb.get('anchor'))) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break)
+        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not (continued(u, tb) and all(source_before(k['anchor'], u.get('anchor')) for k in usable) and source_before(u.get('anchor'), tb.get('anchor')))
+               and not (anchors and self.kept_between(u, usable, tb, anchors)) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break) or, for the key's own title, the source's own separate table at its own place between them
         self.ctx_orders.update(orders); self.matched = objects(usable)
         return 'pass', None, flag or ('anchor_unknown' if not anchors else None)
+
+    def kept_between(self, u, usable, tb, places):
+        """Is table u, listed between the title and its table, the source's own separate table at its own place? The scanner proves both tables
+        (each names its own start tag, claimed once, every printed cell anchored inside that table's extent); u lies wholly after the title and
+        wholly before the table; no title place the key lists between them is lost. The route then keeps the source's arrangement: preservation
+        only, never proof that the title governs the later table. A cell reading other words is the honesty gate's fact (dishonest), not a move.
+        An uncertain reading proves nothing."""
+        vis = self.rf.vis
+        if vis is None or not vis.certain: return False
+        def extent(t):  # the route's claim of its source table, proved by the scanner (the own_caption principle: the claim alone is not the evidence)
+            st, printed = t.get('source_table') or {}, [c for c in t.get('cells') or [] if squash(c.get('text', ''))]
+            if st.get('claims') != 1 or st.get('tag_start') is None or st['tag_start'] not in vis.table_tags or not printed: return None
+            s, e = vis.table_spans[vis.table_tags.index(st['tag_start'])]
+            return (s, e) if all(spans(c.get('anchor')) and all('byte_start' in x and s <= x['byte_start'] < x['byte_end_exclusive'] <= e for x in spans(c.get('anchor'))) for c in printed) else None
+        mine, other, kept = extent(u), extent(tb), [x for k in usable for x in spans(k['anchor']) if 'byte_start' in x]
+        if not mine or not other or mine[1] > other[0] or not kept or max(x['byte_end_exclusive'] for x in kept) > mine[0]: return False
+        return not any('byte_start' in p and mine[0] <= p['byte_start'] and p['byte_end_exclusive'] <= other[0] and not any(overlap(p, x) for x in kept) for p in places)  # a listed title place nearer the table is lost
 
     def whole_carrier(self, k, anchors, want):
         """A carrier larger than the field: the field is carried where the source prints `want` at the key's own place, that place lies inside the
