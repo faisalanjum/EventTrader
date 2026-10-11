@@ -25,6 +25,9 @@ def place(u): return (u['cell'].get('table'), u['cell'].get('r'), u['cell'].get(
 def spans_of(u): return {k: u['cell'][k] for k in ('r', 'c', 'rs', 'cs') if k in u['cell']}
 
 
+from tests.driver.prepare.convert.test_picture_visibility import honest_negative, paired
+PICTURES = ('same.png', 'a.png', 'b.png', 'w.png', 'n.png', 's.png', 'h.png', 'chart.svg')  # every picture this module's pages name, each in its synthetic control's own package: a generated png(), chart.svg the one small SVG fixture
+
 class InTheBrowser(unittest.TestCase):
     """The selected route itself (EdgarTools, the formatting step, the screen step in Chrome)."""
 
@@ -37,7 +40,7 @@ class InTheBrowser(unittest.TestCase):
     def tearDownClass(cls): cls.browser.close(); cls.pw.stop()
 
     def route(self, body):
-        raw = page(body); route, facts = html_route.prepare(raw, 'f.htm', anchor.sha256(raw), self.browser)
+        raw = page(body); negative, route, facts = paired(raw, 'f.htm', self.browser, PICTURES); honest_negative(self, negative, route)
         self.assertEqual((route['status'], 'error' in facts['screen']), ('OK', False))
         table = [u['id'] for u in route['units'] if u['kind'] == 'table']
         return raw, route, table
@@ -122,13 +125,13 @@ class InTheBrowser(unittest.TestCase):
     def test_only_table_cells_are_measured(self):  # failed before: a source element carrying the step's own mark was measured as that cell (Codex, MEASURE_ALIAS_BASELINE)
         body = b'<table><tr><th>2024</th><th>2025</th></tr><tr><td>Chart<img src="same.png"></td><td>Other</td></tr></table>'
         def seen(suffix):
-            raw = page(body + suffix); route, facts = html_route.prepare(raw, 'f.htm', anchor.sha256(raw), self.browser)
+            raw = page(body + suffix); negative, route, facts = paired(raw, 'f.htm', self.browser, PICTURES); honest_negative(self, negative, route)
             return [(c['text'], c['r'], c['c'], c['cs']) for u in route['units'] if u['kind'] == 'table' for c in u['cells']], [spans_of(u) for u in pictures(route)], facts['screen']['cells_measured']
         plain = seen(b'')
         self.assertEqual(plain, ([('2024', 0, 0, 1), ('2025', 0, 1, 1), ('Chart', 1, 0, 1), ('Other', 1, 1, 1)], [{'r': 1, 'c': 0, 'rs': 1, 'cs': 1}], 4))
         for suffix in (b'<div data-g="2">Other text</div>', b'<span data-g="2">Other text</span>', b'<p data-g="0">y</p>'):
             self.assertEqual(seen(suffix)[0], plain[0]); self.assertEqual(seen(suffix)[1:], plain[1:])  # a mark the source writes on another element measures nothing
-        raw = page(body.replace(b'<td>Other', b'<td data-g="0">Other')); route, facts = html_route.prepare(raw, 'f.htm', anchor.sha256(raw), self.browser)  # on a cell itself: the step's own mark stands first, the browser keeps the first
+        raw = page(body.replace(b'<td>Other', b'<td data-g="0">Other')); negative, route, facts = paired(raw, 'f.htm', self.browser, PICTURES); honest_negative(self, negative, route)  # on a cell itself: the step's own mark stands first, the browser keeps the first
         self.assertEqual(([(c['text'], c['r'], c['c'], c['cs']) for u in route['units'] if u['kind'] == 'table' for c in u['cells']], facts['screen']['cells_measured']), (plain[0], 4))
 
 

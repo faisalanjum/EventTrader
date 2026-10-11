@@ -6,12 +6,12 @@ from driver.prepare.convert import anchor, edgartools_html, screen_grid, source_
 from driver.prepare.get.acquire import StorageError
 
 
-def visibility(raw, vis, browser):
+def visibility(raw, vis, browser, source=None):
     """(reading, error) for one document before the tool reads it (`vis`: the scanner's reading of the bytes): that reading where it is certain;
     else the reading with the browser's verdict on its text (`screen_grid.page_visibility`, one render in the caller's browser: Visible's `page`), or -
     a page that cannot be read - the scanner's reading and the error. A disconnected browser's error, and storage, dependency and resource errors, propagate."""
     if vis.certain: return vis, None
-    try: return anchor.Visible(raw, page=screen_grid.page_visibility(raw, vis, browser)), None
+    try: return anchor.Visible(raw, page=screen_grid.page_visibility(raw, vis, browser, source)), None
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e:
         if not browser.is_connected(): raise
@@ -26,7 +26,7 @@ def unresolved(vis):
     return (['page visibility: %d text run%s without a browser verdict' % (n, '' if n == 1 else 's')] if n else []) + (['page visibility: %d picture tag%s without a browser verdict' % (p, '' if p == 1 else 's')] if p else [])
 
 
-def prepare(raw, file_id, sha256, browser):
+def prepare(raw, file_id, sha256, browser, source=None):
     """(route, facts) for one HTML document: the caller's bytes, their SHA-256 and a browser the caller owns and may reuse. `facts` holds each step's own
     result - `formatting` its count (None where nothing can be certified), `screen` its facts, `visibility` (a file the scanner cannot certify) the
     browser's counts or why it could not read them. A failed conversion stops there (no step runs, `facts` empty). A page that cannot be measured keeps
@@ -35,13 +35,19 @@ def prepare(raw, file_id, sha256, browser):
     storage, dependency and resource errors propagate. The bytes are read once as written and, where the scanner cannot certify them, once as the
     browser shows them: formatting reads the first, the conversion and the screen step the reading the route is made with (each step called alone
     reads its own)."""
-    anchor.check_source(raw, sha256); original = anchor.Visible(raw); vis, failed = visibility(raw, original, browser)
+    anchor.check_source(raw, sha256)
+    given = source; source = source or screen_grid.Source('', {})  # one document's evidence for every render (none given: nothing answers), its charset read once
+    source.bind(raw)  # the evidence is this document's, before any render
+    original = anchor.Visible(raw); vis, failed = visibility(raw, original, browser, source)
     route = edgartools_html.convert(raw, file_id, sha256, vis=vis)  # one scan: a certain file is not read twice
-    if route['status'] != 'OK': return route, {}
+    if route['status'] != 'OK':
+        if given is not None: route['resources'] = source.identity()  # what the renders before the failed conversion used
+        return route, {}
     anchor.check_source(raw, route.get('sha256'))  # the route names these bytes before the steps change it with this call's own readings
     facts = {'formatting': source_formatting._step(original, route)}; del original  # the source as written is for formatting only: not kept through the screen work
-    facts['screen'] = screen_grid._step(raw, route, browser, vis)
+    facts['screen'] = screen_grid._step(raw, route, browser, vis, source=source)
     if failed or vis.paged: facts['visibility'] = {'error': failed} if failed else {k: len(v) if isinstance(v, list) else v for k, v in vis.page.items()}
     errors = (['page visibility: ' + failed] if failed else []) + unresolved(vis) + (['screen step: ' + facts['screen']['error']] if 'error' in facts['screen'] else [])
     if errors: route['status'], route['error'] = 'PARTIAL', '; '.join(errors)
+    if given is not None: route['resources'] = source.identity()  # the document, its bundle and every dependency the renders asked for, once
     return route, facts

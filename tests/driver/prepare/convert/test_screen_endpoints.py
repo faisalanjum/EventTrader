@@ -11,13 +11,13 @@ class Offline(unittest.TestCase):
         calls = []
         class Page:
             def route(self, pattern, handler): calls.append(('route', pattern))
-            def set_content(self, html, wait_until=None): calls.append(('set_content',))
-            def evaluate(self, js): calls.append(('evaluate',)); return {'cells': [], 'boxes': {}}
+            def goto(self, url, wait_until=None): calls.append(('goto',))  # the native loader the measure now uses (Source/_document)
+            def evaluate(self, js): calls.append(('evaluate',)); return 'UTF-8' if js == 'document.characterSet' else {'cells': [], 'boxes': {}}
             def close(self): calls.append(('close',))
         class Browser:
             def new_page(self, **kw): return Page()
         screen_grid.measure(b'<p>x</p>', Browser())
-        self.assertEqual(calls[:2], [('route', '**/*'), ('set_content',)])
+        self.assertEqual(calls[:2], [('route', '**/*'), ('goto',)]); self.assertEqual([calls[i - 1] for i, c in enumerate(calls) if c == ('goto',)], [('route', '**/*')] * 2)  # each page (the charset read's, the measure's) refuses every request before it loads
 
     def test_a_page_that_cannot_be_measured_keeps_the_route_content_and_says_why(self):
         class Browser:
@@ -48,8 +48,9 @@ GEOMETRY = {'cells': [], 'boxes': {'0': [1, 2, 3, 4]}}  # what the page measured
 def offline(symbols, connected=True, closed=None):  # a page that measures GEOMETRY and whose symbol reading (SYMBOLS_JS) raises `symbols`
     class Page:
         def route(self, pattern, handler): pass
-        def set_content(self, html, wait_until=None): pass
+        def goto(self, url, wait_until=None): pass  # the native loader the measure now uses (Source/_document)
         def evaluate(self, js, *args):
+            if js == 'document.characterSet': return 'UTF-8'
             if js is screen_grid.SYMBOLS_JS: raise symbols
             return copy.deepcopy(GEOMETRY)
         def close(self): closed is not None and closed.append(1)
@@ -67,13 +68,13 @@ class Faults(unittest.TestCase):  # each catch tells the document's own failure 
 
     def test_a_symbol_reading_that_fails_keeps_the_measured_geometry_and_says_why(self):  # measure's catch round SYMBOLS_JS
         closed = []; tables, boxes, sym = screen_grid.measure(self.RAW, offline(RuntimeError('symbols failed'), closed=closed), prefix='p')
-        self.assertEqual((tables, boxes, sym, closed), ({}, GEOMETRY['boxes'], {'error': "RuntimeError('symbols failed')"}, [1]))
+        self.assertEqual((tables, boxes, sym, closed), ({}, GEOMETRY['boxes'], {'error': "RuntimeError('symbols failed')"}, [1, 1]))  # both pages closed: the charset read's and the measure's
 
     def test_a_machine_fault_while_reading_symbols_stops_the_measure(self):
         for error in MACHINE():
             closed = []
             with self.subTest(error=type(error).__name__), self.assertRaises(type(error)) as caught: screen_grid.measure(self.RAW, offline(error, closed=closed), prefix='p')
-            self.assertIs(caught.exception, error); self.assertEqual(closed, [1])  # the page is closed whatever stops it
+            self.assertIs(caught.exception, error); self.assertEqual(closed, [1, 1])  # every page is closed whatever stops it: the charset read's and the measure's
 
     def test_a_machine_fault_while_measuring_stops_the_step_and_marks_nothing(self):  # _step's catch: the document's own failure is said (Offline above); a machine's stops
         for error in MACHINE():

@@ -17,15 +17,19 @@ EXPECTED = {'Region': (0, 0, 2), 'Revenue': (0, 1, 1), '2025': (1, 1, 1), '2024'
 GROUPS = [range(0, 2), range(2, 5)]
 
 
+from tests.driver.prepare.convert.test_picture_visibility import honest_negative, paired
+
 class RowGroupSpans(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from playwright.sync_api import sync_playwright  # required: a missing install fails the suite
         with sync_playwright() as pw:
             browser = pw.chromium.launch()
-            try: cls.route, cls.facts = html_route.prepare(PAGE, 'rowspan.htm', hashlib.sha256(PAGE).hexdigest(), browser)
+            try: cls.negative, cls.route, cls.facts = paired(PAGE, 'rowspan.htm', browser, ('flag.png',))
             finally: browser.close()
         cls.cells = {c['text'].strip(): c for u in cls.route['units'] if u['kind'] == 'table' for c in u['cells']}
+
+    def test_without_its_picture_the_original_input_is_an_honest_negative(self): honest_negative(self, self.negative, self.route)
 
     def test_the_route_is_whole(self):
         self.assertEqual(self.route['status'], 'OK')

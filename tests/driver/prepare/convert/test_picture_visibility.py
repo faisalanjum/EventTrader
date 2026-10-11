@@ -7,7 +7,7 @@ import io, unittest
 
 from PIL import Image
 
-from driver.prepare.convert import anchor, html_route
+from driver.prepare.convert import anchor, html_route, screen_grid
 from driver.prepare.convert import edgartools_html as eh
 from driver.prepare.pictures import inputs
 
@@ -18,6 +18,23 @@ def page(body, sheet=SHEET): return b'<!doctype html><html><head><meta charset="
 
 
 def png(): b = io.BytesIO(); Image.new('RGB', (40, 20), (200, 30, 30)).save(b, 'PNG'); return b.getvalue()
+
+
+SVG = b'<svg xmlns="http://www.w3.org/2000/svg" width="40" height="20"><rect width="40" height="20" fill="#c81e1e"/></svg>'  # the one small SVG fixture a synthetic positive declares (Root v5)
+
+
+def paired(raw, file_id, browser, names):  # Root's A2 decision (v4): (negative, positive route, its facts). The original input with no package stays the honest negative; the same bytes
+    # with this synthetic control's OWN declared package - each named picture this generated png(), new controlled test evidence, never a claim that an original asset existed - are the
+    # faithful positive the original assertions run on
+    sha = anchor.sha256(raw); negative = html_route.prepare(raw, file_id, sha, browser)[0]
+    return (negative,) + tuple(html_route.prepare(raw, file_id, sha, browser, screen_grid.Source('', {n: SVG if n.endswith('.svg') else png() for n in names})))
+
+
+def honest_negative(test, negative, positive):  # every unit, its source place and picture kept; where the page names a picture, PARTIAL with its geometry unproved and no grid
+    keep = lambda r: [(u['id'], u['kind'], u.get('anchor'), u.get('src')) for u in r['units']]
+    named = any(d.get('kind') != 'navigation' for d in positive['resources']['dependencies'])
+    test.assertEqual(keep(negative), keep(positive))
+    if named: test.assertEqual((negative['status'], 'geometry is unproved' in (negative.get('error') or ''), '+screen' in negative['route']['name']), ('PARTIAL', True, False))
 
 
 class InTheBrowser(unittest.TestCase):
@@ -36,7 +53,8 @@ class InTheBrowser(unittest.TestCase):
         return raw, route, facts, pics, at
 
     def test_a_picture_the_page_hides_is_no_picture(self):
-        _, r, _, pics, _ = self.route(b'<p>a</p><img class="h" src="h1.png" width="40" height="20"><div class="h"><img src="h2.png" width="40" height="20"></div><div class="o"><img src="o.png" width="40" height="20"></div><p>b</p>')
+        raw = page(b'<p>a</p><img class="h" src="h1.png" width="40" height="20"><div class="h"><img src="h2.png" width="40" height="20"></div><div class="o"><img src="o.png" width="40" height="20"></div><p>b</p>', SHEET)
+        negative, r, _ = paired(raw, 'f.htm', self.browser, ('h1.png', 'h2.png', 'o.png')); honest_negative(self, negative, r); pics = [u for u in r['units'] if u['kind'] == 'image']
         self.assertEqual((anchor.Visible(page(b'')).certain, r['status'], pics), (False, 'OK', []))  # a sheet, a hidden ancestor, an ancestor at opacity 0
 
     def test_a_picture_a_sheet_shows_again_is_one_at_its_own_tag(self):

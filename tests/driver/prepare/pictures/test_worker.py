@@ -108,20 +108,32 @@ class Publication(Base):
 
 
 class Ownership(Base):
-    SLOW = ("import sys, time, types; sys.path.insert(0, %r)\nfrom driver.prepare.pictures import worker\n"
-            "def read(d): open(sys.argv[2], 'a').write('read\\n'); time.sleep(float(sys.argv[3])); return ['printed', dict(generation_tokens=1)]\n"
+    HOLD = ("import sys, threading, time, types; time.sleep(float(sys.argv[4])); sys.path.insert(0, %r)\nfrom driver.prepare.pictures import worker\n"  # argv[4]: a delayed start
+            "calls = [0]\n"
+            "def read(d):\n"
+            "    calls[0] += 1; open(sys.argv[2], 'a').write('read\\n')\n"
+            "    if sys.argv[3] == 'hold' and calls[0] == 2: print('published', flush=True); threading.Event().wait()  # run saves each result before the next read: one is saved, this one is held until the test kills it (no timer)\n"
+            "    return ['printed', dict(generation_tokens=1)]\n"
             "mk = lambda: (open(sys.argv[2], 'a').write('init\\n'), types.SimpleNamespace(read=read, settings=dict(reader='fake'), status=lambda r: 'complete'))[1]\n"
             "try: worker.run(sys.argv[1], [(f'{i}.jpg', bytes([i])) for i in range(4)], mk); print('done')\nexcept RuntimeError as e: print('refused:', e)")
 
-    def test_one_owner_and_restart_after_a_kill(self):
-        f = self.folder(); log = str(self.tmp / 'owner.log'); code = self.SLOW % ROOT
-        a = subprocess.Popen([sys.executable, '-c', code, f, log, '0.5'], stdout=subprocess.PIPE, text=True); time.sleep(0.6)
-        b = subprocess.run([sys.executable, '-c', code, f, log, '0'], capture_output=True, text=True)
-        self.assertTrue(b.stdout.startswith('refused: another job')); self.assertEqual(Path(log).read_text().count('init'), 1)   # refused before model start or read
-        a.send_signal(signal.SIGKILL); a.wait(); a.stdout.close(); done = len(self.saved(f)); before = Path(log).read_text().count('read')
-        c = subprocess.run([sys.executable, '-c', code, f, log, '0'], capture_output=True, text=True)
-        self.assertEqual(c.stdout.strip(), 'done'); self.assertTrue(os.path.exists(os.path.join(f, '.lock')))
-        self.assertTrue(1 <= done < 4); self.assertEqual(Path(log).read_text().count('read') - before, 4 - done); self.assertEqual(len(self.saved(f)), 4)
+    def test_one_owner_and_restart_after_a_kill(self):  # a handshake at the real publication point, never a guess of how long start-up takes
+        import select
+        for delay in ('0', '1.5'):  # the same proof when the first job starts late
+            with self.subTest(start_delay=delay):
+                f = self.folder(); log = str(self.tmp / f'owner{delay}.log'); code = self.HOLD % ROOT
+                a = subprocess.Popen([sys.executable, '-c', code, f, log, 'hold', delay], stdout=subprocess.PIPE, text=True)
+                try:
+                    ready, _, _ = select.select([a.stdout], [], [], 60)  # bounded wait for: one result saved, the next read held, the lock still owned
+                    self.assertTrue(ready and a.stdout.readline().strip() == 'published'); self.assertEqual(len(self.saved(f)), 1)
+                    b = subprocess.run([sys.executable, '-c', code, f, log, 'go', '0'], capture_output=True, text=True, timeout=60)
+                    self.assertTrue(b.stdout.startswith('refused: another job')); self.assertEqual(Path(log).read_text().count('init'), 1)   # refused before model start or read
+                finally:
+                    a.kill(); a.wait(timeout=30); a.stdout.close()  # only the child this test started
+                done = len(self.saved(f)); before = Path(log).read_text().count('read')
+                c = subprocess.run([sys.executable, '-c', code, f, log, 'go', '0'], capture_output=True, text=True, timeout=60)
+                self.assertEqual(c.stdout.strip(), 'done'); self.assertTrue(os.path.exists(os.path.join(f, '.lock')))
+                self.assertEqual(done, 1); self.assertEqual(Path(log).read_text().count('read') - before, 4 - done); self.assertEqual(len(self.saved(f)), 4)  # the saved result reused, only the rest read
 
 
 class Outcomes(Base):

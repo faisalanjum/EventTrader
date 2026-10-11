@@ -12,6 +12,10 @@ from unittest.mock import patch
 from driver.prepare.convert import anchor, edgartools_html as eh, html_route, screen_grid as sg, source_formatting as sf
 
 RAW = b'<p><s>10</s> 20</p>'; SHA = hashlib.sha256(RAW).hexdigest()
+
+
+def shown(raw):  # a stand-in render's every-run reading (SYMBOLS_JS with `every`, the screen step's agreement proof): the page shows each marked source run exactly as the scan reads it
+    runs, _ = sg.symbol_runs(raw, anchor.Visible(raw)); return {'marks': {str(k): {'text': ''.join(g or '' for _, g in sg._glyphs(raw, chars)[0]), 'visibility': 'shown'} for k, (_, chars, _, ok) in enumerate(runs) if ok}, 'faces': []}
 TREE = {'type': 'DocumentNode', 'children': [{'type': 'ParagraphNode', 'text': '10 20'}]}
 _convert = eh.convert
 convert = lambda parse: (lambda raw, file_id, sha256, vis=None: _convert(raw, file_id, sha256, parse, vis))  # the production conversion with the tool call replaced
@@ -23,7 +27,7 @@ class Prepare(unittest.TestCase):
         calls, browser = [], object()  # the caller's own browser: the screen step must measure in it
         with patch.object(eh, 'convert', side_effect=lambda *a, **k: calls.append('convert') or parsed(*a, **k)), \
              patch.object(sf, '_step', side_effect=lambda *a, step=sf._step: calls.append('formatting') or step(*a)), \
-             patch.object(sg, 'measure', side_effect=lambda marked, used, prefix=None: calls.append(('screen', used)) or ({}, {}, {'marks': {}, 'faces': []})):
+             patch.object(sg, 'measure', side_effect=lambda marked, used, prefix=None, **reading: calls.append(('screen', used)) or ({}, {}, shown(RAW))):
             route, facts = html_route.prepare(RAW, 'a.htm', SHA, browser)
         self.assertEqual(calls, ['convert', 'formatting', ('screen', browser)]); self.assertIs(calls[2][1], browser)
         self.assertEqual((route['status'], route['error'], route['route']['name'], route['file_id'], route['sha256']), ('OK', None, 'edgartools-html+source-formatting+screen', 'a.htm', SHA))
@@ -31,15 +35,15 @@ class Prepare(unittest.TestCase):
         self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'joined', 'parted', 'seconds', 'spaces_the_tool_added'])
         raw = b'<style>.x{text-decoration:line-through}</style><p>10 20</p>'  # a sheet rule could add a strike: the formatting step certifies nothing and says so
         claimed = lambda *a, **k: (lambda r: r['units'][0].update(struck=['10']) or r)(parsed(*a, **k))  # a converter's own claim, standing in for a tool that reports strikes
-        with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', return_value=({}, {}, {'marks': {}, 'faces': []})):  # a render with no decoration answer
+        with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', return_value=({}, {}, shown(raw))):  # a render with no decoration answer
             route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())
         self.assertEqual((route['status'], facts['formatting'], route['route']['name']), ('PARTIAL', None, 'edgartools-html+source-formatting+screen'))  # unknown required text is said, never certified
         self.assertEqual(route['error'], 'screen step: source formatting: 1 text run without a native decoration verdict')
         a = raw.index(b'10 20'); self.assertEqual(route['source_formatting'], {'unresolved': [[a, a + 5, 'unresolved: no decoration']]})
         self.assertEqual((route['units'][0]['text'], route['units'][0]['struck'], 'struck_at' in route['units'][0], facts['screen']['source_formatting']), ('10 20', ['10'], False, 0))  # the claim stays, no places
-        def bound(marked, used, prefix=None, decorate=False):  # a browser that reached every mark and draws no decoration (the source has none)
+        def bound(marked, used, prefix=None, decorate=False, **reading):  # a browser that reached every mark and draws no decoration (the source has none)
             reached = re.findall(r'<!--%ss:(\d+)-->([^<]*)' % re.escape(prefix), marked.decode() if isinstance(marked, bytes) else marked)
-            return {}, {}, {'marks': {}, 'faces': [], **({'decor': {k: ['none', t] for k, t in reached}, 'decorations': 'none'} if decorate else {})}
+            return {}, {}, {'marks': {k: {'text': t, 'visibility': 'shown'} for k, t in reached}, 'faces': [], **({'decor': {k: ['none', t] for k, t in reached}, 'decorations': 'none'} if decorate else {})}  # every mark reached: its text too (the agreement reading)
         with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', side_effect=bound):
             route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())
         self.assertEqual((route['status'], route['error'], 'source_formatting' in route, facts['screen']['source_formatting']), ('OK', None, False, 0))  # proved unstruck: no error

@@ -12,13 +12,13 @@ class Offline(unittest.TestCase):
         calls = []
         class Page:
             def route(self, pattern, handler): calls.append(('route', pattern))
-            def set_content(self, html, wait_until=None): calls.append(('set_content',))
-            def evaluate(self, js): calls.append(('evaluate',)); return {'cells': [], 'boxes': {}}
+            def goto(self, url, wait_until=None): calls.append(('goto',))  # the native loader the measure now uses (Source/_document)
+            def evaluate(self, js): calls.append(('evaluate',)); return 'UTF-8' if js == 'document.characterSet' else {'cells': [], 'boxes': {}}
             def close(self): calls.append(('close',))
         class Browser:
             def new_page(self, **kw): return Page()
         screen_grid.measure(b'<p>x</p>', Browser())
-        self.assertEqual(calls[:2], [('route', '**/*'), ('set_content',)])
+        self.assertEqual(calls[:2], [('route', '**/*'), ('goto',)]); self.assertEqual([calls[i - 1] for i, c in enumerate(calls) if c == ('goto',)], [('route', '**/*')] * 2)  # each page (the charset read's, the measure's) refuses every request before it loads
 
 
 class EndpointBoxes(unittest.TestCase):

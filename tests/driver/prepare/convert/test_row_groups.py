@@ -48,20 +48,26 @@ NESTED = T('<tbody><tr><td>Outer<table><tbody><tr><td>Inner</td></tr></tbody><tb
 TAGS = re.compile(rb'<[^>]*>')
 
 
+from tests.driver.prepare.convert.test_picture_visibility import honest_negative, paired
+
 class EveryOwnRow(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from playwright.sync_api import sync_playwright  # required: a missing install fails the suite
-        cls.routes = {}
+        cls.routes, cls.negatives = {}, {}
         with sync_playwright() as pw:
             browser = pw.chromium.launch()
             try:
                 for name, raw in [(k, v[0]) for k, v in CASES.items()] + [('nested', NESTED)]:
-                    cls.routes[name] = html_route.prepare(raw, name + '.htm', hashlib.sha256(raw).hexdigest(), browser)[0]
+                    cls.negatives[name], cls.routes[name], _ = paired(raw, name + '.htm', browser, ('flag.png', 'asia.png'))
             finally: browser.close()
 
     def cells(self, name):
         return [c for u in self.routes[name]['units'] if u['kind'] == 'table' for c in u['cells']]
+
+    def test_without_their_pictures_the_original_inputs_are_honest_negatives(self):
+        for name in self.routes:
+            with self.subTest(name): honest_negative(self, self.negatives[name], self.routes[name])
 
     def test_every_case_is_ok_and_only_the_known_caption_range_stays_uncovered(self):
         for name in self.routes:

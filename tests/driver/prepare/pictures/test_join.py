@@ -15,7 +15,7 @@ import unittest.mock
 
 from PIL import Image
 
-from driver.prepare.convert import html_route
+from driver.prepare.convert import html_route, screen_grid
 from driver.prepare.get import archive
 from driver.prepare.get.acquire import AcquisitionError
 from driver.prepare.pictures import inputs, join, packets, read_picture, readers
@@ -58,13 +58,14 @@ class Join(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup); self.folder = self.tmp.name; self.calls = []
 
-    def route(self, raw, fid='test/doc.htm'):  # the real route, made once per page; a fresh copy each time (inputs.prepare marks it)
-        if raw not in self.routes:
-            r, _ = html_route.prepare(raw, fid, sha(raw), self.browser); assert r['status'] == 'OK', r; self.routes[raw] = r
-        return copy.deepcopy(self.routes[raw])
+    def route(self, raw, fid='test/doc.htm', unproved=None):  # the real route made with its own Source, kept in self.source and passed through to its pictures (one Source per document);
+        # `unproved`: the picture no member holds, which leaves its geometry unproved (PARTIAL)
+        self.source = screen_grid.Source('', MEMBERS); r, _ = html_route.prepare(raw, fid, sha(raw), self.browser, self.source)
+        assert (r['status'], unproved is None or 'geometry is unproved' in r['error'] and unproved in r['error']) == ('OK' if unproved is None else 'PARTIAL', True), r
+        return r
 
-    def run_doc(self, raw=DOC, members=MEMBERS, **kw):
-        route = self.route(raw); return route, join.read_pictures(raw, route, members, self.browser, self.folder, fakes(self.calls, **kw))[1]
+    def run_doc(self, raw=DOC, members=MEMBERS, unproved=None, **kw):
+        route = self.route(raw, unproved=unproved); return route, join.read_pictures(raw, route, members, self.browser, self.folder, fakes(self.calls, **kw), source=self.source)[1]
 
     def test_reference_names_the_packet_and_the_default_is_unchanged(self):
         with tempfile.NamedTemporaryFile(suffix='.png') as f:
@@ -100,12 +101,12 @@ class Join(unittest.TestCase):
     def test_a_relative_folder_records_an_absolute_archive_root(self):
         _, (e,) = self.run_doc(page(b'<img src="opaque.png">')); self.assertEqual(e['archive']['root'], os.path.join(self.folder, 'inputs'))   # absolute: as before
         here = os.getcwd(); self.addCleanup(os.chdir, here); os.chdir(self.folder); os.mkdir('cwd')
-        route = self.route(page(b'<img src="opaque.png">')); _, (r,) = join.read_pictures(page(b'<img src="opaque.png">'), route, MEMBERS, self.browser, 'run', fakes([]))
+        route = self.route(page(b'<img src="opaque.png">')); _, (r,) = join.read_pictures(page(b'<img src="opaque.png">'), route, MEMBERS, self.browser, 'run', fakes([]), source=self.source)
         os.chdir('cwd')                                                                    # the caller moves on: the recorded root still names the blob
         self.assertEqual(r['archive']['root'], os.path.join(self.folder, 'run', 'inputs')); self.assertEqual(sha(archive.load_blob(r['archive']['root'], r['archive']['sha256'])), r['archive']['sha256'])
 
     def test_a_wrong_or_missing_archive_blob_stops(self):
-        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser); s = route['units'][[u['kind'] for u in route['units']].index('image')]['input']['input_sha256']
+        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser, self.source); s = route['units'][[u['kind'] for u in route['units']].index('image')]['input']['input_sha256']
         path = archive._path(self.folder + '/inputs', s); path.parent.mkdir(parents=True); path.write_bytes(gzip.compress(b'other bytes'))
         with self.assertRaises(AcquisitionError): join.join(route, got, self.folder, fakes(self.calls))
         self.assertEqual(self.calls, [])                                                  # stopped before any reader
@@ -113,7 +114,7 @@ class Join(unittest.TestCase):
         with self.assertRaises(FileNotFoundError): archive.load_blob(out[1]['archive']['root'], out[1]['archive']['sha256'])
 
     def test_every_input_is_durable_before_any_reading(self):
-        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser)
+        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser, self.source)
         with self.assertRaises(MemoryError): join.join(route, got, self.folder, fakes(self.calls, crash=True))   # the first reading stops the job
         self.assertEqual(len(self.calls), 1)
         for s in {u['input']['input_sha256'] for u in route['units'] if u['kind'] == 'image'}: self.assertEqual(sha(archive.load_blob(self.folder + '/inputs', s)), s)
@@ -121,7 +122,7 @@ class Join(unittest.TestCase):
     def test_one_packet_and_one_second_reading_per_input(self):
         raw = page(b'<img src="opaque.png"><p>again</p><img src="opaque.png"><p>and again</p><img src="opaque.png">'); asked = []
         table = '<div data-bbox="0 0 1000 1000" data-label="Table"><table><tr><td>FAKE</td></tr></table></div>'   # a table: the second reader is asked
-        route = self.route(raw); got = inputs.prepare(raw, route, MEMBERS, self.browser)
+        route = self.route(raw); got = inputs.prepare(raw, route, MEMBERS, self.browser, self.source)
         _, out = join.join(route, got, self.folder, fakes(self.calls, html=table), enable_sonnet=True, second=lambda p: asked.append(p) or (None, None))
         self.assertEqual(len(out), 3); self.assertEqual(len({e['occurrence'] for e in out}), 3); self.assertEqual(len(asked), 1)
         self.assertTrue(all(e['sonnet_asked'] for e in out)); self.assertEqual(len({e['packet'] for e in out}), 1)
@@ -136,20 +137,20 @@ class Join(unittest.TestCase):
 
     def test_failures_stay_explicit_with_their_occurrences(self):
         raw = page(b'<img src="broken.png" width="10" height="10"><img src="opaque.png"><div style="background:#ffffff"><img src="black.png"></div>')
-        route = self.route(raw); got = inputs.prepare(raw, route, MEMBERS, self.browser); cap = [u['input']['input_sha256'] for u in route['units'] if u.get('input', {}).get('how') == 'page']
+        route = self.route(raw); got = inputs.prepare(raw, route, MEMBERS, self.browser, self.source); cap = [u['input']['input_sha256'] for u in route['units'] if u.get('input', {}).get('how') == 'page']
         _, (broken, good, captured) = join.join(route, got, self.folder, fakes(self.calls, fail_ox=cap))
         self.assertEqual(broken['input']['how'], 'member'); self.assertNotIn('packet', broken); self.assertIn('picture_error', broken)   # undecodable: no packet,
         self.assertTrue(all(broken['records'][r]['status'] == 'error' and 'PictureError' in broken['records'][r]['error'] for r in join.READERS))   # its errors kept
         self.assertIn('packet', good)
         self.assertEqual((captured['records']['pp']['status'], captured['records']['ox']['status']), ('complete', 'error')); self.assertIn('packet', captured)
-        _, (missing,) = self.run_doc(page(b'<img src="missing.png">'))
+        _, (missing,) = self.run_doc(page(b'<img src="missing.png">'), unproved='missing.png')
         self.assertEqual(missing['input'], {'error': 'not a member of the package'}); self.assertNotIn('records', missing)
         self.folder = tempfile.mkdtemp(dir=self.tmp.name); _, out = self.run_doc(page(b'<img src="opaque.png">'), tokens=readers.MAX_TOKENS)   # a new folder: no saved reading
         self.assertEqual(out[0]['records']['chandra']['status'], 'cut off'); self.assertIn('cut off', out[0]['flags'])
         self.assertIn('INCOMPLETE: Chandra stopped at its output limit', out[0]['packet'])
 
     def test_broken_bindings_stop(self):
-        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser); img = [u for u in route['units'] if u['kind'] == 'image']
+        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser, self.source); img = [u for u in route['units'] if u['kind'] == 'image']
         s1, s2 = img[1]['input']['input_sha256'], img[2]['input']['input_sha256']
         cases = {'bytes swapped': (route, {**got, s1: got[s2], s2: got[s1]}, {}), 'member bytes for a capture': (route, {**got, s1: BLACK}, {}),
                  'bytes missing': (route, {k: v for k, v in got.items() if k != s1}, {}),
@@ -158,8 +159,8 @@ class Join(unittest.TestCase):
         for name, (r, g, kw) in cases.items():
             with self.subTest(name), tempfile.TemporaryDirectory() as d:
                 with self.assertRaises(ValueError): join.join(copy.deepcopy(r), g, d, fakes([], **kw))
-        missing = self.route(page(b'<img src="opaque.png"><img src="missing.png"><img src="missing.png">'))
-        g = inputs.prepare(page(b'<img src="opaque.png"><img src="missing.png"><img src="missing.png">'), missing, MEMBERS, self.browser); u = [x for x in missing['units'] if x['kind'] == 'image']
+        missing = self.route(page(b'<img src="opaque.png"><img src="missing.png"><img src="missing.png">'), unproved='missing.png')
+        g = inputs.prepare(page(b'<img src="opaque.png"><img src="missing.png"><img src="missing.png">'), missing, MEMBERS, self.browser, self.source); u = [x for x in missing['units'] if x['kind'] == 'image']
         for name, ids in (('an error unit shares an input unit\'s id', (0, 1)), ('two error units share an id', (1, 2))):
             with self.subTest(name), tempfile.TemporaryDirectory() as d:
                 r = copy.deepcopy(missing); v = [x for x in r['units'] if x['kind'] == 'image']; v[ids[1]]['id'] = v[ids[0]]['id']
@@ -167,11 +168,11 @@ class Join(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             r = copy.deepcopy(missing); next(x for x in r['units'] if x['kind'] == 'image').pop('input')
             with self.assertRaises(ValueError): join.join(r, g, d, fakes([]))
-        with self.assertRaises(ValueError): join.read_pictures(DOC, self.route(page(b'<img src="opaque.png">')), MEMBERS, self.browser, self.folder, fakes([]))   # stale route
+        with self.assertRaises(ValueError): join.read_pictures(DOC, self.route(page(b'<img src="opaque.png">')), MEMBERS, self.browser, self.folder, fakes([]), source=self.source)   # stale route
 
 
     def test_records_of_other_bytes_a_status_against_its_limit_and_a_capture_of_another_size_stop(self):  # failure inventory 87/89/88
-        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser); real = join.worker.run
+        route = self.route(DOC); got = inputs.prepare(DOC, route, MEMBERS, self.browser, self.source); real = join.worker.run
         def changed(edit):
             def run(folder, pairs, make): return {k: edit(dict(v)) for k, v in real(folder, pairs, make).items()}
             return run

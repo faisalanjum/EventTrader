@@ -31,6 +31,8 @@ def items(route):
     return [x for u in route['units'] if u.get('kind') != 'image' for x in (u.get('cells') or [u])]
 
 
+from tests.driver.prepare.convert.test_picture_visibility import honest_negative, paired
+
 class Route(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -38,7 +40,7 @@ class Route(unittest.TestCase):
         with sync_playwright() as pw:
             browser = pw.chromium.launch()
             try:
-                cls.route, cls.facts = html_route.prepare(PAGE, 'v.htm', SHA, browser)
+                cls.negative, cls.route, cls.facts = paired(PAGE, 'v.htm', browser, ('h.jpg', 's.jpg', 'r.jpg'))  # each a generated png() in the synthetic control's own package
                 cls.page = sg.page_visibility(PAGE, anchor.Visible(PAGE), browser)
             finally: browser.close()
         cls.scanned = eh.convert(PAGE, 'v.htm', SHA)  # the scanner's reading alone: what the route was before
@@ -46,9 +48,11 @@ class Route(unittest.TestCase):
 
     def held(self, text): x = self.texts[text]; self.assertTrue(x.get('anchor'), text); return x
 
+    def test_without_its_pictures_the_original_input_is_an_honest_negative(self): honest_negative(self, self.negative, self.route)
+
     def test_what_the_browser_proves_hidden_is_left_out_and_the_shown_text_beside_it_anchors(self):
         self.assertEqual(self.route['page_visibility'], self.page)
-        self.assertEqual((self.route['status'], self.route['error']), ('PARTIAL', 'page visibility: %d text runs without a browser verdict' % len(self.page['unbound'])))  # Root, fostered_text_20261009: runs no verdict reached leave the page partial
+        self.assertEqual((self.route['status'], self.route['error']), ('PARTIAL', 'page visibility: %d text runs without a browser verdict' % len(self.page['unbound']) + "; screen step: RuntimeError('the page shows 4 source runs otherwise than the scan reads them, so its geometry is unproved')"))  # Root, fostered_text_20261009: runs no verdict reached leave the page partial; v4: and no grid over the runs the page shows otherwise
         cells = [(x['text'], x['c']) for u in self.route['units'] if u.get('kind') == 'table' for x in u['cells'] if x['text'] in ('VAL835', 'NEXTA')]
         self.assertEqual(cells, [('VAL835', 0), ('NEXTA', 1)])  # the hidden copy no longer runs the next cell into this one
         for text in ('VAL835', 'NEXTA', 'BEFOREB AFTERB', 'CHILDE ENDE', 'REVF million'): self.held(text)

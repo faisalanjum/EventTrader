@@ -56,7 +56,7 @@ class UnboundEvidence(unittest.TestCase):
         for name, text, units, blanks in (('hidden_row', 'Net income was $56 million.', ['', 'Visible cell 77'], [b'<td>Hidden cell 99']), ('hidden_table', 'Freed from a hidden table $9.9', ['Freed from a hidden table $9.9', 'After 1.'], [])):
             with self.subTest(name):
                 route, facts = self.routes[name]; raw = PAGES[name]
-                self.assertEqual((route['status'], route['error']), ('PARTIAL', 'page visibility: 1 text run without a browser verdict'))
+                self.assertEqual((route['status'], route['error']), ('PARTIAL', 'page visibility: 1 text run without a browser verdict; screen step: ' "RuntimeError('the page shows 1 source run otherwise than the scan reads it, so its geometry is unproved')"))  # the same run the page shows elsewhere: no grid over it (Root, v4 agreement)
                 [rec] = self.evidence(name)
                 self.assertEqual(rec, {'at': {'byte_start': raw.index(text.encode()), 'byte_end_exclusive': raw.index(text.encode()) + len(text)}, 'raw': text, 'why': 'unbound'})
                 self.assertEqual(unit_texts(route), units)  # no unit made of it here; a hidden cell is a blank entry (table-source v2)
@@ -86,7 +86,7 @@ class UnboundEvidence(unittest.TestCase):
         self.assertEqual([(r['raw'], r['at']['byte_start']) for r in recs], [('Total 42', first), ('Total 42', last)])
         self.assertEqual(unit_texts(route), ['', 'Total 42', ''])  # the shown cell, once; the two hidden cells as blank entries (table-source v2)
         self.assertEqual([c['source']['byte_start'] for u in route['units'] for c in u.get('cells') or [] if not c['text'].strip()], [raw.index(b'<td>h1'), raw.index(b'<td>h2')])  # each at its own source cell
-        self.assertEqual(route['error'], 'page visibility: 2 text runs without a browser verdict')
+        self.assertEqual(route['error'], 'page visibility: 2 text runs without a browser verdict; screen step: ' "RuntimeError('the page shows 2 source runs otherwise than the scan reads them, so its geometry is unproved')")  # no grid over runs the page shows otherwise (Root, v4 agreement)
 
     def test_references_stay_as_written_and_bytes_that_are_not_utf8_are_kept_whole(self):
         [rec] = self.evidence('entities')

@@ -48,16 +48,22 @@ def tables(route):
     return [u for u in route['units'] if u['kind'] == 'table']
 
 
+from tests.driver.prepare.convert.test_picture_visibility import honest_negative, paired
+
 class NestedTables(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from playwright.sync_api import sync_playwright  # required: a missing install fails the suite
-        cls.routes = {}
+        cls.routes, cls.negatives = {}, {}
         with sync_playwright() as pw:
             browser = pw.chromium.launch()
             try:
-                for name, (raw, _, _) in CASES.items(): cls.routes[name] = html_route.prepare(raw, 'nested.htm', hashlib.sha256(raw).hexdigest(), browser)[0]
+                for name, (raw, _, _) in CASES.items(): cls.negatives[name], cls.routes[name], _ = paired(raw, 'nested.htm', browser, ('p.png', 'q.png'))
             finally: browser.close()
+
+    def test_without_their_pictures_the_original_inputs_are_honest_negatives(self):
+        for name in self.routes:
+            with self.subTest(name): honest_negative(self, self.negatives[name], self.routes[name])
 
     def test_every_source_table_is_a_unit_in_source_order_gridded_in_itself(self):
         for name, (raw, want, _) in CASES.items():

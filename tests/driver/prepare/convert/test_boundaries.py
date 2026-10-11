@@ -58,7 +58,8 @@ class SourceIdentity(unittest.TestCase):
     def test_matching_source_bytes_allow_both_stages(self):
         doc = route()
         self.assertEqual(sf.step(RAW, doc), 0)
-        with patch.object(sg, 'measure', return_value=({}, {}, {'marks': {}, 'faces': []})):
+        from tests.driver.prepare.convert.test_html_route import shown
+        with patch.object(sg, 'measure', return_value=({}, {}, shown(RAW))):  # a stand-in render that shows each source run as the scan reads it
             facts = sg.step(RAW, doc, object())
         self.assertNotIn('error', facts)
         self.assertEqual(doc['route']['name'], 'edgartools-html+source-formatting+screen')

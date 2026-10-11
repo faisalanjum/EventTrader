@@ -36,7 +36,7 @@ class Rendered(unittest.TestCase):
     def test_the_public_failure_is_read_in_the_one_screen_render(self):
         self.assertFalse(anchor.Visible(CONTROL).struck_certain)
         route, facts, pages, items = self.run_route(CONTROL)
-        self.assertEqual(pages, 1); self.assertEqual(route['status'], 'OK'); self.assertEqual(route['route']['settings']['source_formatting'], 'rendered')
+        self.assertEqual(pages, 2); self.assertEqual(route['status'], 'OK'); self.assertEqual(route['route']['settings']['source_formatting'], 'rendered')  # 2: the one native loader reads the original's charset in its own page first (a cost, Root 2026-10-11)
         self.assertEqual(self.struck(items), {'Retired': (['Retired'], [[0, 7]]), 'Replace after forty days sixty days.': (['forty days'], [[14, 19], [20, 24]])})
         self.assertEqual((facts['formatting'], facts['screen']['source_formatting'], route['route']['name']), (None, 2, 'edgartools-html+source-formatting+screen'))
 
@@ -53,7 +53,7 @@ class Rendered(unittest.TestCase):
         for raw, want in cases.items():
             with self.subTest(raw=raw):
                 route, facts, pages, items = self.run_route(raw)
-                self.assertEqual(pages, 1 if anchor.Visible(raw).certain else 3); self.assertEqual(route['status'], 'OK')  # an uncertain reading adds only the existing visibility render (2 loads)
+                self.assertEqual(pages, 2 if anchor.Visible(raw).certain else 3); self.assertEqual(route['status'], 'OK')  # an uncertain reading adds only the existing visibility render (2 loads), whose charset read the document's one Source keeps; a certain one pays the native loader's charset read (a cost, Root 2026-10-11)
                 got = {anchor.squash(p) for x in items for p in x.get('struck') or []}
                 self.assertEqual(got, {anchor.squash(w) for w in want})
 
@@ -63,7 +63,7 @@ class Rendered(unittest.TestCase):
             raw = D(style, body); v = anchor.Visible(raw)
             self.assertTrue(v.certain and v.plain_certain and not v.struck_certain)
             route, facts, pages, items = self.run_route(raw)
-            self.assertEqual((pages, route['status']), (1, 'OK')); self.assertEqual(items[0].get('struck'), want)
+            self.assertEqual((pages, route['status']), (2, 'OK')); self.assertEqual(items[0].get('struck'), want)  # 2: the native loader's charset read, then the render (a cost)
 
     def test_repeated_equal_words_are_placed_by_their_bytes(self):
         route, facts, pages, items = self.run_route(D(X, b'<p>Retired and <span class="x">Retired</span> now</p>'))
@@ -99,7 +99,7 @@ class Rendered(unittest.TestCase):
         raw = D(X, b'<table><tr><td>Holder <table><tr><td>Inner plain</td><td><s>Inner gone</s></td></tr></table></td><td>Inner gone</td></tr></table>'
                    b'<table><tr><td><span class="x">Head</span> <table><tr><td>Free</td><td class="x">Own strike</td><td><s>Old <i>term</i></s> kept</td></tr></table></td></tr></table>')
         route, facts, pages, items = self.run_route(raw)
-        self.assertEqual((route['status'], route['error'], pages), ('OK', None, 1))
+        self.assertEqual((route['status'], route['error'], pages), ('OK', None, 2))  # 2: the native loader's charset read, then the render (a cost)
         tables = {u['id']: u for u in route['units'] if u.get('kind') == 'table'}; cell = lambda t, r, c: next(x for x in tables[t]['cells'] if (x['r'], x['c']) == (r, c))
         def places(text, *words):  # each word printed once in the item's text: its place there
             self.assertTrue(all(text.count(w) == 1 for w in words), text); return [[text.index(w), text.index(w) + len(w)] for w in words]

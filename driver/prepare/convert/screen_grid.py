@@ -11,8 +11,11 @@ In the same render, `source_symbols` keeps the meaning of a symbol font's code c
 BALLOT BOX WITH BOLD CHECK, LIGHT WHITE SQUARE), with its exact source bytes and the units that hold them."""
 import hashlib
 import json
+import mimetypes
 import re
+import urllib.parse
 import time
+import types
 import unicodedata
 from bisect import bisect_left, bisect_right
 from pathlib import Path
@@ -322,7 +325,8 @@ def symbols(raw, vis, runs, got, units):
             if glyphs and not hidden:
                 s0, e0 = glyphs[0][0][0], glyphs[-1][0][1]
                 out.append({'at': {'byte_start': s0, 'byte_end_exclusive': e0}, 'raw': ''.join(g if g is not None else '\ufffd' for (x, g) in every if s0 <= x[0] < e0), 'status': 'unresolved',
-                            'why': 'literal text' if not marked else 'unbound' if str(k) in got['marks'] else 'mark not found', 'owners': None, **({} if vis.certain else {'certain': False})})  # the source text as written, spaces kept
+                            'why': 'literal text' if not marked else 'unbound' if str(k) in got['marks'] else 'mark not found', **({'bytes': raw[s0:e0].hex()} if any(g is None for x, g in every if s0 <= x[0] < e0) else {}),
+                            'owners': None, **({} if vis.certain else {'certain': False})})  # the source text as written, spaces kept; bytes that are not UTF-8 kept as they are
             continue
         ds = [[] for _ in glyphs]
         for (j, _), (_, d) in zip(cps, dom): ds[j].append(d)  # each glyph's decoded code points
@@ -399,29 +403,104 @@ def inline(raw, vis, runs, got, units):
     return {'records': records, 'unresolved': unresolved}
 
 
-def _offline_page(browser, asked=None, document=None):
+class Source:
+    """The exact evidence one document's renders may use, nothing else: the document's own `path` among its bundle's verified `members`
+    ({path: bytes}, from the package reader; `bundle` names that bundle, e.g. its package sha256), read at `base` + path - `base` the bundle's
+    recorded address, or None for the step's own address, which no source writes - and `observed`, recorded answers for exact URLs
+    ({url: {'status', 'content_type', 'observed_at', 'sha256', 'body'}}). The browser resolves every reference itself (relative paths, <base>,
+    @import); a URL is answered only by the member at exactly that path under `base` or by its own observation - a 200 only with the bytes its
+    sha256 names. One document's: bound to its bytes at first use (the declared member, where it is one, must be those bytes). `records`: one per
+    URL asked (member path and sha256, observation status and time, or 'refused' and why); `charset`: the browser's for the document, read once."""
+    def __init__(self, path, members, base=None, observed=None, bundle=None):
+        split = urllib.parse.urlsplit(base) if base is not None else None
+        if split is not None and not (split.scheme and split.netloc and base.endswith('/')): raise ValueError('base: an absolute address ending in "/", or None')
+        if path.startswith('/') or urllib.parse.urlsplit(path).scheme: raise ValueError("path: the document's member path, relative to base")
+        if not all(isinstance(k, str) and type(v) is bytes for k, v in members.items()): raise ValueError('members: verified {path: bytes}')
+        if not all(isinstance(o.get('status'), int) and isinstance(o.get('observed_at'), str) for o in (observed or {}).values()): raise ValueError('observed: {url: {status, observed_at, ...}}')
+        self.path, self.base, self.bundle = path, base, bundle  # the evidence as given, unchangeable afterwards: a record always names the bytes every render used
+        self.members, self.observed = types.MappingProxyType(dict(members)), types.MappingProxyType({u: types.MappingProxyType(dict(o)) for u, o in (observed or {}).items()})
+        self.records, self.refusals, self.root, self.document, self.charset = {}, [], None, None, None
+
+    def bind(self, raw):  # ValueError unless `raw` is this source's document: its declared member (where it is one), the bytes it was first used for
+        digest = hashlib.sha256(raw).hexdigest()
+        if self.path in self.members and self.members[self.path] != raw: raise ValueError('the declared document member is not these bytes')
+        if self.document not in (None, digest): raise ValueError("a source is one document's evidence: these are other bytes")
+        self.document = digest
+
+    def at(self, address, raw):  # the document's address for a render whose own address is `address`
+        self.bind(raw); self.root = self.base or address; return self.root + urllib.parse.quote(self.path)  # the member path as a URL writes it
+
+    def identity(self):  # what the route keeps: the document and the evidence its renders used
+        return {'document': {'path': self.path, 'base': self.base, 'bundle': self.bundle, 'sha256': self.document},
+                'dependencies': sorted(self.records.values(), key=lambda r: json.dumps(r, sort_keys=True))}
+
+    def _refuse(self, url, key, name, kind, why=None):
+        self.refusals.append((url, kind)); self.records.setdefault(key, {('path' if key == name else 'url'): key, 'status': 'refused', 'kind': kind, **({'why': why} if why else {})})
+
+    def answer(self, url, kind, navigation=False):
+        name = urllib.parse.unquote(urllib.parse.urlsplit(url).path)[len(urllib.parse.urlsplit(self.root).path):] if self.root and url.startswith(self.root) else None  # the pictures' member rule: the decoded path under the address
+        key = name if self.base is None and name is not None else url
+        if navigation: return self._refuse(url, key, name, 'navigation')  # a member path never answers a navigation
+        if name in self.members:
+            body = self.members[name]; self.records.setdefault(key, {'member': name, 'sha256': hashlib.sha256(body).hexdigest(), 'status': 200, 'kind': kind})
+            return 200, mimetypes.guess_type(name)[0] or 'application/octet-stream', body
+        seen = self.observed.get(url)
+        if seen is None: return self._refuse(url, key, name, kind)
+        body = seen.get('body')
+        if seen['status'] == 200 and (body is None or hashlib.sha256(body).hexdigest() != seen.get('sha256')): return self._refuse(url, key, name, kind, 'observed bytes are not the recorded sha256')
+        self.records.setdefault(key, {'url': url, 'status': seen['status'], 'observed_at': seen['observed_at'], 'sha256': seen.get('sha256'), 'kind': kind})
+        return seen['status'], seen.get('content_type') or 'application/octet-stream', body or b''
+
+
+def _offline_page(browser, asked=None, document=None, source=None):
     """A page as the step opens it: a wide window, the document's scripts never run, nothing fetched - a document's own references are never fetched
-    (EDGAR forbids external ones; the step must not depend on that). `asked`: a list that gets the address of every style sheet the page requests.
-    `document`: (address, bytes[, charset]) answered once, to the page's own first load: with no charset named, as a server sends a page that names
-    none, so the browser decodes the bytes by its own rules (a byte order mark, a <meta>, its default); with one, in that charset. Every other request
-    is refused - a later navigation (a refresh, a frame, a redirect) as cancelled, so that the page stays the one loaded."""
+    (EDGAR forbids external ones; the step must not depend on that). `asked`: a list that gets the address of every style sheet the page requests
+    and no evidence answers. `document`: (address, bytes[, charset]) answered once, to the page's own first load: with no charset named, as a server
+    sends a page that names none, so the browser decodes the bytes by its own rules (a byte order mark, a <meta>, its default); with one, in that
+    charset. `source` (a Source): a request that is no navigation is answered from its evidence only. Every other request is refused - a later
+    navigation (a refresh, a frame, a redirect) as cancelled, so that the page stays the one loaded."""
     page = browser.new_page(viewport={'width': 1400, 'height': 1000}, java_script_enabled=False); first = [document]
     def answer(route):
         r = route.request
         if first[0] and r.url == first[0][0] and r.is_navigation_request() and r.frame == page.main_frame: (_, body, *named), first[0] = first[0], None; return route.fulfill(status=200, content_type='text/html' + ''.join('; charset=' + c for c in named), body=body)
+        got = source.answer(r.url, r.resource_type, r.is_navigation_request()) if source is not None else None
+        if got: return route.fulfill(status=got[0], content_type=got[1], body=got[2])
         if asked is not None and r.resource_type == 'stylesheet': asked.append(r.url)
         route.abort('aborted' if document else 'failed')  # cancelled: no error page replaces the loaded one ('failed', the default, for the step's other renders)
     page.route('**/*', answer); return page
 
 
-def measure(marked_html, browser, prefix=None, every=False, decorate=False):
+def _document(browser, raw, body, source):
+    """A page with `body` (the document's bytes, or a marked copy of them) at the source's declared address, in the charset the browser gives the
+    original `raw` there (read once per source, as `page_visibility` reads it); the page, its address and where its own load's refusals start."""
+    address = source.at('http://%s.invalid/' % marker_prefix(raw), raw)
+    if source.charset is None:
+        page = _offline_page(browser, None, (address, raw), source)
+        try: page.goto(address, wait_until='load'); source.charset = page.evaluate('document.characterSet')
+        finally: page.close()
+    first = len(source.refusals); page = _offline_page(browser, None, (address, body, source.charset), source)
+    try: page.goto(address, wait_until='load')
+    except BaseException: page.close(); raise
+    return page, address, first
+
+
+def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window; the document's scripts never run). Only
     table cells are read: a source element that writes the mark itself (`<div data-g="2">`) is no cell and measured nothing in its place (Codex,
     MEASURE_ALIAS_BASELINE); on a cell the step's own mark stands first and the browser keeps the first. With a symbol-mark `prefix`, the same page's
-    symbol marks (`SYMBOLS_JS`) come third: with `every`, each run's, an ordinary one's too."""
-    page = _offline_page(browser)
+    symbol marks (`SYMBOLS_JS`) come third: with `every`, each run's, an ordinary one's too. The page is read as every render reads it: at the
+    `source`'s address (none given: the step's own, with no evidence), in the browser's charset for the original `raw` (the bytes given, without
+    it), its references answered from that evidence only; one nothing answers raises: the geometry is not proved the original's. Its geometry is the
+    page's own: with no run map it claims nothing about any route's text - the screen step (`_step`) applies it only where every marked source run
+    shows exactly the characters the route keeps (`every`, `_bound`). `refused`: a list that gets what no evidence answered instead of the raise, the
+    readings then made in the same render - for a caller (the screen step) that withholds the geometry and keeps them."""
+    source = source or Source('', {})  # no evidence given: nothing answers, so anything the page names leaves its geometry unproved
+    page, _, first = _document(browser, marked_html if raw is None else raw, marked_html, source)
     try:
-        page.set_content(marked_html.decode('utf-8', 'replace'), wait_until='load'); got = page.evaluate(JS) if prefix is None else page.evaluate(JS, prefix)
+        unproved = [url for url, kind in source.refusals[first:] if kind != 'navigation']  # a sheet, font or picture no evidence answered
+        if unproved and refused is None: raise RuntimeError('what the page names cannot be read offline, so its geometry is unproved: ' + ', '.join(unproved)[:150])
+        if refused is not None: refused.extend(unproved)
+        got = page.evaluate(JS) if prefix is None else page.evaluate(JS, prefix)
         try: sym = page.evaluate(SYMBOLS_JS, [prefix, every, decorate]) if prefix is not None else None
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: sym = {'error': repr(e)[:200]}  # the symbols alone: the geometry measured stays (the step says why)
@@ -438,7 +517,7 @@ PICTURES_JS = """p => { const w = document.createTreeWalker(document, NodeFilter
   return out; }"""  # the native verdict: no box, CSS visibility other than visible, or opacity 0 on it or an ancestor hide it; its size is not asked (painting is another matter)
 
 
-def page_visibility(raw, vis, browser):
+def page_visibility(raw, vis, browser, source=None):
     """Which of the scanner's text runs the page itself hides, for a file whose reading is not certain, before the tool reads it: the step's own marks
     (`symbol_runs`, `tag_cells` with comments only, no cell attribute a sheet could select) in a page that loads the marked bytes in the charset the
     browser gives the original bytes (read first, sent as a server sends a page naming none); each run measured by the symbol marks' rule (`SYMBOLS_JS`) - no box, not
@@ -451,15 +530,18 @@ def page_visibility(raw, vis, browser):
     exact source fragment as evidence (`at`; `raw`, those bytes read as UTF-8 and nothing more - no reference decoded, so it encodes back to them
     exactly - or, where they are not UTF-8, the `bytes` in hex; `why`): source spelling, not what the browser shows; neither shown nor hidden, its
     place in the page unknown (Root, fostered_text_20261009)}. A page the browser cannot read raises, and so does one that names a style sheet (its
-    request, refused offline: what the sheet shows or hides is not known)."""
+    request, refused offline: what the sheet shows or hides is not known) - unless the `source`'s evidence answers it (`Source`: the page is then
+    read at the source's address)."""
     runs, _ = symbol_runs(raw, vis); prefix = marker_prefix(raw); asked = []; address = 'http://%s.invalid/' % prefix  # an address the source nowhere writes
+    if source is not None: address = source.at(address, raw)
     bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # a byte order mark stays first: the browser decodes by it
     marked, _ = tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok and a >= bom] + [(a, b'<!--%sq:%d-->' % (prefix.encode(), k)) for k, (a, _) in enumerate(vis.picture_tags) if a >= bom], prefix, cells=False)  # comments only: no attribute a sheet could select
-    page = _offline_page(browser, asked, (address, raw))  # first the original bytes as they are: how the browser itself decodes them, and what they ask for
+    page = _offline_page(browser, asked, (address, raw), source)  # first the original bytes as they are: how the browser itself decodes them, and what they ask for
     try: page.goto(address, wait_until='load'); charset = page.evaluate('document.characterSet')
     finally: page.close()
+    if source is not None: source.charset = charset  # read once: every later render of this document reads it so
     if asked: raise RuntimeError('style sheets the page names cannot be read offline: ' + ', '.join(asked)[:150])  # every sheet the page names is requested from a page with an address, and refused: what it shows or hides is not known, no verdict at all
-    page = _offline_page(browser, None, (address, marked, charset))  # then the marked bytes in that charset: a comment cannot move a <meta> out of the browser's reach
+    page = _offline_page(browser, None, (address, marked, charset), source)  # then the marked bytes in that charset: a comment cannot move a <meta> out of the browser's reach
     try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True]); seen = page.evaluate(PICTURES_JS, prefix + 'q:')
     finally: page.close()
     out, unresolved = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}, []
@@ -492,24 +574,34 @@ def step(raw, route, browser):
     t0 = time.time(); return _step(raw, route, browser, Visible(raw, page=route.get('page_visibility')), t0)  # the reading the route was made with; the step's time counts its own scan
 
 
-def _step(raw, route, browser, vis, t0=None):  # `step` on a reading already made of the route's own bytes (html_route.prepare, which checked them): the one the route was made with
+def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a reading already made of the route's own bytes (html_route.prepare, which checked them): the one the route was made with
     if vis.page != route.get('page_visibility'): raise ValueError('the screen step reads the source as the route was read (its page visibility), not another reading')
     decorate = vis.paged or not vis.struck_certain  # strike-through the scanner cannot certify (a browser-read page never is): this render decides it
     t0 = time.time() if t0 is None else t0; gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []  # a reading made before the step is not its time
     (runs, unread), prefix = symbol_runs(raw, vis), marker_prefix(raw)
     marked, spans = tag_cells(raw, vis, gaps + endpoints, [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], prefix)
-    try: measured, boxes, got = measure(marked, browser, prefix, decorate=True) if decorate else measure(marked, browser, prefix)
+    refused = []  # what the page names and no evidence answered: the geometry is withheld, the readings of the same render kept
+    try: measured, boxes, got = measure(marked, browser, prefix, every=True, decorate=True, raw=raw, source=source, refused=refused) if decorate else measure(marked, browser, prefix, every=True, raw=raw, source=source, refused=refused)
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e:
         if not browser.is_connected(): raise
         err = repr(e)[:200]; route['source_symbols'], route['source_inline'] = {'read': False, 'error': err}, {'read': False, 'error': err}  # content and anchors stay; the failure is said, never an empty success
         return {'error': repr(e)[:200]}
-    if endpoints:  # source-bound endpoints, measured in the existing render; no answer key chooses them
-        route['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
     if 'error' in got and not browser.is_connected(): raise RuntimeError('browser disconnected: ' + got['error'])
+    marks = None if 'error' in got else got['marks']  # each marked run's own text as this render shows it (`every`)
+    bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # the encoding's own mark: no text the page shows (as page_visibility and decorations)
+    off = None if marks is None else sum(1 for k, (_, chars, _, ok) in enumerate(runs) if ok and chars[-1][1] > bom and (g := [(x, c if c is not None else vis.at(*x) or None) for x, c in _glyphs(raw, chars)[1]]) and not (marks.get(str(k)) and _bound(g, marks[str(k)]['text'])))  # where `_char` cannot decode bytes, the text the scan already keeps for them (anchor.Visible: one cp1252 character per byte for a file that is not UTF-8)
+    if marks is not None:  # the readers below take an ordinary run by its id only, as a reading without `every` gives it
+        plain = {k for k, m in marks.items() if m is not None and 'family' not in m}; got = dict(got, plain=','.join(sorted(plain)), marks={k: m for k, m in marks.items() if k not in plain})
+    proved = off == 0 and not refused  # the geometry is the page's: it applies only where the page shows every marked source run exactly as the scan reads it - a run missing, moved or read otherwise (another decoding too), or no reading of the runs at all, leaves it unproved; every reading below is kept either way, each bound run by run
+    unproved = '; '.join(([repr(RuntimeError('what the page names cannot be read offline, so its geometry is unproved: ' + ', '.join(refused)[:150]))[:200]] if refused else []) +
+                         (["RuntimeError('the page shows %d source run%s otherwise than the scan reads %s, so its geometry is unproved')" % (off, '' if off == 1 else 's', 'it' if off == 1 else 'them')] if off else [])) or None  # no charset diagnosis
+    if endpoints and proved:  # source-bound endpoints, measured in the existing render; no answer key chooses them
+        route['screen_endpoints'] = {side: {str(g[0][side]): boxes[str(len(gaps) + n) + '.' + str(ix)] for n, g in enumerate(endpoints) if str(len(gaps) + n) + '.' + str(ix) in boxes} for ix, side in enumerate(('start', 'end'))}
     route['source_symbols'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, 'decoder': 'dingbat-to-unicode 1.0.2', 'records': symbols(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}
-    n = apply(route['units'], spans, measured); join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline', parts='apart on one baseline'))
-    route['source_inline'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, **inline(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}  # the owners' final text: after the re-grid and the joins
+    n = 0
+    if proved: n = apply(route['units'], spans, measured); join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline', parts='apart on one baseline'))
+    route['source_inline'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, **inline(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}  # the owners' final text: after the re-grid and the joins (where the geometry applies)
     edited = {id(x): x for x, *_ in gaps}.values()
     formatting = None
     if decorate:  # the source-formatting owner, on the final units (joins and parts done), from this render's own verdict per source run
@@ -521,4 +613,4 @@ def _step(raw, route, browser, vis, t0=None):  # `step` on a reading already mad
     return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
             'boundaries_the_tool_dropped': sum(a == b for _, a, b, _, _ in gaps), 'parted': sum(len(x.get('parts', ())) for x in edited), 'seconds': round(time.time() - t0, 1),
             **({'source_formatting': n_struck} if decorate else {}),  # items the render's own decoration proved struck (None: no verdict)
-            **({'error': '; '.join(x for x in ('symbols: ' + got['error'] if 'error' in got else None, formatting) if x)} if 'error' in got or formatting else {})}  # html_route marks the route PARTIAL with it
+            **({'error': '; '.join(x for x in ('symbols: ' + got['error'] if 'error' in got else None, unproved, formatting) if x)} if 'error' in got or unproved or formatting else {})}  # html_route marks the route PARTIAL with it

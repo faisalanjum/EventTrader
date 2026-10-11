@@ -15,11 +15,11 @@ READERS = ('chandra', 'pp', 'ox')
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
 
-def read_pictures(raw, route, members, browser, folder, make_readers, enable_sonnet=False, second=None):
+def read_pictures(raw, route, members, browser, folder, make_readers, enable_sonnet=False, second=None, source=None):
     """join() of a route's pictures as inputs.prepare marks them now. The caller owns the reviewed route (html_route.prepare's) with its source bytes,
     the package's verified members, the browser, the folder (the worker's records and, under inputs/, the archive; one job at a time) and its
     integrity, and the readers it builds; a second reader's results are not kept between calls."""
-    return join(route, inputs.prepare(raw, route, members, browser), folder, make_readers, enable_sonnet, second)
+    return join(route, inputs.prepare(raw, route, members, browser, source), folder, make_readers, enable_sonnet, second)
 
 
 def join(route, got, folder, make_readers, enable_sonnet=False, second=None):

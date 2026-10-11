@@ -4,6 +4,7 @@ units that hold those bytes; the units' text is not touched. A cover page writes
 Never decoded: a name the decoder does not know, a typeface the document redefines (@font-face), a transformed glyph, a character no marker reaches."""
 import hashlib
 import unittest
+from pathlib import Path
 
 from driver.prepare.convert import edgartools_html, html_route
 from driver.prepare.convert import screen_grid as sg
@@ -40,6 +41,9 @@ def at(raw, before, n=1):  # the source bytes of the character that follows the 
     return s, e
 
 
+PAGE_T, SEEN_T = b'<meta charset="utf-8">' + PAGE, b'<meta charset="utf-8">' + SEEN  # the declared UTF-8 twins: the original bytes after one declaration, so each offset is the original's plus its length
+
+
 class Route(unittest.TestCase):
     """The whole HTML route in Chrome (offline; playwright is required: a missing install fails, never skips)."""
     @classmethod
@@ -48,8 +52,10 @@ class Route(unittest.TestCase):
         with sync_playwright() as pw:
             browser = pw.chromium.launch()
             try:
-                cls.route, cls.facts = html_route.prepare(PAGE, 'symbols.htm', hashlib.sha256(PAGE).hexdigest(), browser)
-                cls.seen = html_route.prepare(SEEN, 'seen.htm', hashlib.sha256(SEEN).hexdigest(), browser)[0]
+                cls.negative = html_route.prepare(PAGE, 'symbols.htm', hashlib.sha256(PAGE).hexdigest(), browser)[0]  # the original bytes: w.woff absent, the text unlabelled (Chrome: windows-1252)
+                font = Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf').read_bytes()  # the installed font file the composition test already pins (a missing file fails, never skips)
+                cls.route, cls.facts = html_route.prepare(PAGE_T, 'symbols.htm', hashlib.sha256(PAGE_T).hexdigest(), browser, sg.Source('', {'w.woff': font}))  # the positive: its own declared font, UTF-8 declared
+                cls.seen = html_route.prepare(SEEN_T, 'seen.htm', hashlib.sha256(SEEN_T).hexdigest(), browser)[0]
                 v = Visible(JOIN); cls.unit = {'id': 'u', 'kind': 'text', 'text': 'CORP ORATION end Z Y', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(JOIN)}}  # the tool's added space
                 gaps = sg.gaps_of(v, [cls.unit]); k = sg.marker_prefix(JOIN); marked, _ = sg.tag_cells(JOIN, v, gaps, prefix=k)
                 cls.joined = sg.join(gaps, sg.measure(marked, browser, k)[1], v)
@@ -58,7 +64,12 @@ class Route(unittest.TestCase):
         cls.items = {(u['id'], None): u for u in cls.route['units']}
         cls.items.update({(u['id'], c['anchor']['byte_start']): c for u in cls.route['units'] for c in u.get('cells') or [] if isinstance(c.get('anchor'), dict)})
 
-    def rec(self, before, n=1): return self.by[at(PAGE, before, n)]
+    def test_without_its_font_and_charset_the_original_page_is_an_honest_negative(self):  # Root v5: the original bytes stay; the twins above are new evidence, never the missing file
+        r = self.negative
+        self.assertEqual((r['status'], '+screen' in r['route']['name'], r['source_symbols']['read']), ('PARTIAL', False, True))  # explicit; no grid; the readings are kept
+        self.assertRegex(r['error'], 'geometry is unproved: http://[^ ]*/w\\.woff'); self.assertIn('source runs otherwise than the scan reads them', r['error'])
+
+    def rec(self, before, n=1): return self.by[at(PAGE_T, before, n)]
 
     def owner_text(self, r): return [self.items[(o['unit'], o.get('cell'))]['text'] for o in r['owners']]
 
@@ -77,18 +88,18 @@ class Route(unittest.TestCase):
         self.assertEqual([self.owner_text(o), self.owner_text(x)], [['o'], ['x']]); self.assertIn('cell', o['owners'][0])
 
     def test_character_references_are_recorded_at_their_own_bytes(self):
-        base = PAGE.index(b'Q2 refs <span style="font-family:Wingdings">') + len(b'Q2 refs <span style="font-family:Wingdings">')
+        base = PAGE_T.index(b'Q2 refs <span style="font-family:Wingdings">') + len(b'Q2 refs <span style="font-family:Wingdings">')
         for s, e in ((base, base + 6), (base + 6, base + 12), (base + 12, base + 19)):
-            with self.subTest(ref=PAGE[s:e]): r = self.by[(s, e)]; self.assertEqual((r['raw'], r['unicode']['name']), ('þ', 'BALLOT BOX WITH BOLD CHECK'))
+            with self.subTest(ref=PAGE_T[s:e]): r = self.by[(s, e)]; self.assertEqual((r['raw'], r['unicode']['name']), ('þ', 'BALLOT BOX WITH BOLD CHECK'))
 
     def test_unicode_is_kept_private_use_is_decoded_only_in_a_decoder_typeface_else_unknown(self):
-        q = PAGE.index(b'Q3 kept')
-        got = [(PAGE[r['at']['byte_start']:r['at']['byte_end_exclusive']], r['status'], (r.get('unicode') or {}).get('name')) for k, r in sorted(self.by.items()) if q < k[0] < PAGE.index(b'Q4 names')]
+        q = PAGE_T.index(b'Q3 kept')
+        got = [(PAGE_T[r['at']['byte_start']:r['at']['byte_end_exclusive']], r['status'], (r.get('unicode') or {}).get('name')) for k, r in sorted(self.by.items()) if q < k[0] < PAGE_T.index(b'Q4 names')]
         self.assertEqual(got, [('☐'.encode(), 'unicode_kept', None), (b'&#183;', 'decoded', 'BULLET'), (b'&#xF0B7;', 'decoded', 'BULLET'), (b'&#xF0FE;', 'decoded', 'BALLOT BOX WITH BOLD CHECK'),
                                (b'&#xE000;', 'unknown_code', None), (b'&#xF0B7;', 'unknown_pua', None), (b'&#xF020;', 'unknown_pua', None)])
 
     def test_names_the_decoder_does_not_know_white_space_and_attribute_text_have_no_record_but_a_no_break_space_is_a_code(self):
-        q, r = PAGE.index(b'Q4 names'), PAGE.index(b'Q5 inherited'); got = [(PAGE[a:b], self.by[(a, b)]['unicode']['name']) for a, b in self.by if q < a < r]
+        q, r = PAGE_T.index(b'Q4 names'), PAGE_T.index(b'Q5 inherited'); got = [(PAGE_T[a:b], self.by[(a, b)]['unicode']['name']) for a, b in self.by if q < a < r]
         self.assertEqual(got, [(b'&nbsp;', 'BLACK VERY SMALL SQUARE')])  # Wingdings 160 (L2/12-368 1160); the ASCII spaces around it are white space
 
     def test_inherited_class_and_shorthand_families_are_the_browsers(self):
@@ -109,26 +120,26 @@ class Route(unittest.TestCase):
     def test_visibility_comes_from_the_glyphs_boxes_hidden_and_unproven_have_no_owner(self):
         r = self.rec(b'Q7 hidden <span style="font-family:Wingdings">'); self.assertEqual((r['visibility'], r['owners'], r['status']), ('hidden', None, 'decoded'))
         by = {(x['at']['byte_start'], x['at']['byte_end_exclusive']): x for x in self.seen['source_symbols']['records']}
-        c = by[at(SEEN, b'display:contents;font-family:Wingdings">')]; self.assertNotIn('visibility', c); self.assertEqual(c['owners'], [{'unit': self.seen['units'][0]['id']}])  # checkVisibility says hidden; its box is there
-        z = by[at(SEEN, b'font-size:0">')]; self.assertEqual((z['visibility'], z['owners']), ('unproven', None))  # a box of no area
-        o = by[at(SEEN, b'opacity:0">')]; self.assertEqual((o['visibility'], o['owners']), ('hidden', None))
+        c = by[at(SEEN_T, b'display:contents;font-family:Wingdings">')]; self.assertNotIn('visibility', c); self.assertEqual(c['owners'], [{'unit': self.seen['units'][0]['id']}])  # checkVisibility says hidden; its box is there
+        z = by[at(SEEN_T, b'font-size:0">')]; self.assertEqual((z['visibility'], z['owners']), ('unproven', None))  # a box of no area
+        o = by[at(SEEN_T, b'opacity:0">')]; self.assertEqual((o['visibility'], o['owners']), ('hidden', None))
 
     def test_source_comments_that_look_like_marks_bind_nothing_else(self):
         for before in (b'<!--j:0.0-->', b'<!--s:0-->'):  # the second of each stands inside the span, right before the glyph
             with self.subTest(before=before): r = self.rec(before, 2); self.assertEqual((r['status'], len(r['owners'])), ('decoded', 1))
-        q = PAGE.index(b'Q8'); self.assertEqual(len([k for k in self.by if q < k[0] < PAGE.index(b'Q9')]), 2)
+        q = PAGE_T.index(b'Q8'); self.assertEqual(len([k for k in self.by if q < k[0] < PAGE_T.index(b'Q9')]), 2)
 
     def test_a_document_script_does_not_run(self):
-        q = PAGE.index(b'Q9'); self.assertEqual([k for k in self.by if q < k[0] < PAGE.index(b'</script>')], [])
+        q = PAGE_T.index(b'Q9'); self.assertEqual([k for k in self.by if q < k[0] < PAGE_T.index(b'</script>')], [])
 
     def test_a_span_the_parser_moves_out_of_a_table_keeps_its_mark_but_no_unit_holds_it(self):
-        r = self.by[at(PAGE, b'<table><span style="font-family:Wingdings">')]; self.assertEqual((r['status'], r['unicode']['name'], r['owners']), ('decoded', 'BALLOT BOX WITH BOLD CHECK', None))
+        r = self.by[at(PAGE_T, b'<table><span style="font-family:Wingdings">')]; self.assertEqual((r['status'], r['unicode']['name'], r['owners']), ('decoded', 'BALLOT BOX WITH BOLD CHECK', None))
 
     def test_text_the_parser_moves_away_from_its_mark_is_unresolved_without_owner(self):
-        r = self.by[at(PAGE, b'</table><table>')]; self.assertEqual((r['status'], r['why'], r['owners']), ('unresolved', 'unbound', None))
+        r = self.by[at(PAGE_T, b'</table><table>')]; self.assertEqual((r['status'], r['why'], r['owners']), ('unresolved', 'unbound', None))
 
     def test_units_keep_their_text_ids_kinds_and_anchors(self):
-        bare = edgartools_html.convert(PAGE, 'symbols.htm', hashlib.sha256(PAGE).hexdigest(), vis=Visible(PAGE, page=self.route['page_visibility']))  # the conversion the route was made by (the page holds a script: the browser read its visibility)
+        bare = edgartools_html.convert(PAGE_T, 'symbols.htm', hashlib.sha256(PAGE_T).hexdigest(), vis=Visible(PAGE_T, page=self.route['page_visibility']))  # the conversion the route was made by (the page holds a script: the browser read its visibility)
         shape = lambda r: [(u['id'], u['kind'], u.get('anchor')) for u in r['units']]
         self.assertEqual(shape(self.route), shape(bare))
         self.assertTrue(any('Q1 Yes þ No ¨' == u.get('text') for u in self.route['units']))
@@ -165,7 +176,7 @@ class Binding(unittest.TestCase):
         r = self.got['combining']['records']; self.assertEqual([(x['raw'], x['status']) for x in r], [('\u2242\u0338', 'unicode_kept'), ('x', 'decoded')])
 
     def test_a_byte_that_is_not_utf8_is_unresolved_never_kept_unicode(self):
-        r = self.got['cp1252']['records']; self.assertEqual([(x['raw'], x['status'], x['why'], x['bytes']) for x in r], [(None, 'unresolved', 'not UTF-8', 'fe')])
+        r = self.got['cp1252']['records']; self.assertEqual([(x['raw'], x['status'], x['why'], x['bytes']) for x in r], [('\ufffd', 'unresolved', 'unbound', 'fe')])  # Chrome shows another character there: unbound, and its undecodable source bytes are kept (Root, v4)
 
     def test_a_reference_the_scanner_and_the_browser_read_apart_is_unbound_with_its_source_text(self):
         self.assertEqual([(x['raw'], x['status'], x['why'], x['owners']) for x in self.got['legacy']['records']], [('A &copy x', 'unresolved', 'unbound', None)])
@@ -190,24 +201,23 @@ class Faults(unittest.TestCase):
     """Root's probes (root_font_faults.py), ported unchanged: operational faults escape both browser evaluations, the route untouched; a document
     problem in either is an explicit read: false and the step's error (PARTIAL)."""
     class Browser:
-        def __init__(self, error, at): self.error, self.at, self.closed = error, at, False
+        def __init__(self, error, at): self.error, self.at, self.closed, self.count = error, at, False, 0
         def is_connected(self): return True
         def new_page(self, **kwargs):
             owner = self
             class Page:
-                count = 0
                 def route(self, *args): pass
-                def set_content(self, *args, **kwargs): pass
+                def goto(self, *args, **kwargs): pass  # the native loader the measure now uses (Source/_document)
                 def close(self): owner.closed = True
-                def evaluate(self, *args):
-                    self.count += 1
-                    if self.count == owner.at: raise owner.error('injected fault')
-                    return {'cells': [], 'boxes': {}}
+                def evaluate(self, *args):  # counted across the step's pages: 1 the charset read, 2 the geometry, 3 the symbols
+                    owner.count += 1
+                    if owner.count == owner.at: raise owner.error('injected fault')
+                    return 'UTF-8' if args[0] == 'document.characterSet' else {'cells': [], 'boxes': {}}
             return Page()
 
     def run_fault(self, error):
         raw = b'<p style="font-family:Wingdings">x</p>'
-        for stage in (1, 2):
+        for stage in (1, 2, 3):
             with self.subTest(stage=stage):
                 route = {'sha256': hashlib.sha256(raw).hexdigest(), 'units': [], 'route': {'name': 'probe'}}; browser = self.Browser(error, stage)
                 with self.assertRaises(error): sg.step(raw, route, browser)
@@ -225,11 +235,14 @@ class Faults(unittest.TestCase):
 
     def test_document_problem_is_explicit_partial(self):
         raw = b'<p>x</p>'
-        for stage in (1, 2):
+        for stage in (1, 2, 3):
             with self.subTest(stage=stage):
                 route = {'sha256': hashlib.sha256(raw).hexdigest(), 'units': [], 'route': {'name': 'probe'}}; browser = self.Browser(ValueError, stage)
                 result = sg.step(raw, route, browser)
                 self.assertIn('error', result); self.assertFalse(route['source_symbols']['read']); self.assertTrue(browser.closed)
+
+
+DECLARED = '<meta charset="utf-8">'  # a declared twin's only difference from its original input
 
 
 class WhiteSpace(unittest.TestCase):
@@ -238,21 +251,24 @@ class WhiteSpace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from playwright.sync_api import sync_playwright
-        cls.got = {}
+        cls.got, cls.errors = {}, {}
         with sync_playwright() as pw:
             browser = pw.chromium.launch()
             try:
                 for body in ('\u00a0', '&nbsp;', '\u0085', '&#xF0A0;', ' ', ' \t '):
-                    raw = ('<p style="font-family:Wingdings">' + body + '</p>').encode(); route = {'sha256': hashlib.sha256(raw).hexdigest(), 'units': [], 'route': {'name': 'probe'}}
-                    sg.step(raw, route, browser); cls.got[body] = [(r['status'], (r.get('unicode') or {}).get('name')) for r in route['source_symbols']['records']]
+                    for declared in ('', DECLARED):  # each original byte input as it was, and its correctly declared twin (a new positive; the original is never edited)
+                        raw = (declared + '<p style="font-family:Wingdings">' + body + '</p>').encode(); route = {'sha256': hashlib.sha256(raw).hexdigest(), 'units': [], 'route': {'name': 'probe'}}
+                        facts = sg.step(raw, route, browser); cls.got[declared + body] = [(r['status'], (r.get('unicode') or {}).get('name')) for r in route['source_symbols']['records']]; cls.errors[declared + body] = facts.get('error')
             finally: browser.close()
 
     def test_no_break_space_named_literal_and_f000_and_u0085_are_decoded(self):
         for body, name in (('\u00a0', 'BLACK VERY SMALL SQUARE'), ('&nbsp;', 'BLACK VERY SMALL SQUARE'), ('&#xF0A0;', 'BLACK VERY SMALL SQUARE'), ('\u0085', 'DINGBAT CIRCLED SANS-SERIF DIGIT FIVE')):
-            with self.subTest(body=body): self.assertEqual(self.got[body], [('decoded', name)])
+            with self.subTest(declared=body): self.assertEqual((self.got[DECLARED + body], self.errors[DECLARED + body]), ([('decoded', name)], None))  # declared UTF-8: the page shows the scan's characters, the decoder reads them
+            literal = not body.isascii()  # the original bytes, unlabeled: Chrome reads them as windows-1252 and shows other characters at a literal one (CHARSET_PROBE_v3)
+            with self.subTest(original=body): self.assertEqual((self.got[body], self.errors[body]), ([('unresolved', None)], "RuntimeError('the page shows 1 source run otherwise than the scan reads it, so its geometry is unproved')") if literal else ([('decoded', name)], None))
 
     def test_ordinary_white_space_stays_harmless(self):
-        self.assertEqual((self.got[' '], self.got[' \t ']), ([], []))
+        self.assertEqual((self.got[' '], self.got[' \t '], self.got[DECLARED + ' '], self.got[DECLARED + ' \t ']), ([], [], [], []))
 
 
 class Marks(unittest.TestCase):
