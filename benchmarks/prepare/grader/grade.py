@@ -543,7 +543,7 @@ def struck_kept(key_texts, items, anchors=(), vis=None, markers=()):
     if loose:
         field = ''.join(f for f, _ in loose); want = ''.join(w for _, w in loose)
         if ''.join(w for w, _ in strikes if w in field) != want: return False
-    return verdict
+    return None if any(not places for _, places in strikes) else verdict
 
 
 def own_bracket_off(text, own):
@@ -759,6 +759,8 @@ class Grader:
         self.lenient = self.undecided = False  # the dash question (`printed`): is an undecided dash read as no sign; did the strict reading meet one
         self.touching, self.unsure = True, False  # the join question (`adjacent`): how a join the source cannot settle is read; did the grading meet one
         self.markers = [m['marker_text'] for _, v in alternatives(t, 'footnote_markers') for m in (v or [])]
+        self.matched = None  # the carriers a field matched (`field` resets it per value); a check called alone starts with none
+        self.numeric = any(numbers(norm(t['fields'].get(f) or ''), self.markers) for f in ('printed_value', 'display_value'))  # a value that prints a number (mixed text included) keeps its marks strict (E11)
         self.own = [p for f in ('unit_printed', 'segment_or_basis', 'corner_text', 'table_title', 'row_label') for _, v in alternatives(t, f) for p in pieces_of(v)]
         self.own += [part['text'] for _, v in alternatives(t, 'periods') for g in (v or []) for part in g.get('parts') or []]
         # table context the key declares for this table (E13, addendum C1): admitted only for the table's heading block — title, header
@@ -1015,7 +1017,7 @@ class Grader:
         placement = self.placement(V)
         if placement: return self.row('value', 'fail', placement)
         cells = sorted(V, key=lambda c: c['c']); texts = [c.get('text', '') for c in cells]
-        if self.spell(cells, printed) is not True and any(fused(texts, printed + m) or fused(texts, m + printed) for m in self.markers): return self.row('value', 'fail', 'marker_glued')
+        if self.spell(cells, printed) is not True and self.numeric and any(fused(texts, printed + m) or fused(texts, m + printed) for m in self.markers): return self.row('value', 'fail', 'marker_glued')
         danch = anchors_of(t, 'display_value')
         D = list({id(c): c for a in danch for c in self.rf.cells_at(a, tb)}.values()) or V
         if any(not row_hit(c, vr) for c in D): return self.row('value', 'fail', 'symbol_detached')
@@ -1027,6 +1029,10 @@ class Grader:
             return self.row('value', 'pass' if kept is True else 'unresolved' if kept is None else 'fail', None if kept is True else 'struck')
         if said[2] is True: return self.row('value', 'fail', 'symbol_missing', joined(shown))
         if None in said: return self.row('value', 'unresolved', 'adjacency')  # pieces of the value whose page boxes cannot prove adjacency
+        for carriers in ([] if self.numeric else (shown, cells)):  # no number: the record's own marks printed into the full displayed reading are the label equivalence (without_marks); then strikes on the same carriers
+            if without_marks(joined(carriers), display, self.markers):
+                kept = struck_kept([display], carriers, [t['anchor']], self.rf.vis, self.markers)
+                return self.row('value', 'pass' if kept is True else 'unresolved' if kept is None else 'fail', None if kept is True else 'struck', 'marker_in_value' if kept is True else None)
         if squash(''.join(texts)) in (squash(printed), squash(display)) or squash(joined(shown)) == squash(display): return self.row('value', 'fail', 'spacing', norm(' '.join(texts)))
         self.row('value', 'fail', 'text', norm(' '.join(texts)))
 
@@ -1292,10 +1298,10 @@ class Grader:
         linked, own_marks = [], {norm(m['marker_text']) for m in value}
         for m in value:
             mark, a = m['marker_text'], m.get('anchor')
-            cars = self.carriers([a], [mark], tb) if a else []
-            apart = any(k['cell'] is not None and mark in (k['cell'].get('markers') or []) for k in cars) or any(squash(k['text']) == squash(mark) for k in cars)
+            cars = self.carriers([a], [mark], tb) if a else []; self.matched = (self.matched or []) + objects(cars)  # every marker's own carriers, linked or not
+            apart = any(k['cell'] is not None and norm(mark) in [norm(x) for x in k['cell'].get('markers') or []] for k in cars) or any(squash(k['text']) == squash(mark) for k in cars)
             if not apart:
-                if any(k['cell'] in V for k in cars): return 'fail', 'marker_glued', mark
+                if any(k['cell'] in V for k in cars) and self.numeric: return 'fail', 'marker_glued', mark
                 if not self.printed([k['text'] for k in cars], mark, [a], marker=True, marks=own_marks): return 'fail', 'marker_missing', mark  # glued to a label or title: allowed, flagged there; a digit inside a number is no mark; a comma group of the record's own marks is marks (guide 3.2)
             if m.get('note_anchor'):
                 # the note's body, with its own mark set apart, must sit at the note's anchor: alone, spaced, split into
@@ -1304,7 +1310,7 @@ class Grader:
                 at_note = self.carriers([m['note_anchor']], [m.get('note_text') or ''], tb)
                 notes = [k for k in at_note if body and self.printed(minus_markers(k['text'], [mark]), body, [m['note_anchor']])] or ([at_note[0]] if at_note and body and self.printed(' '.join(k['text'] for k in at_note), body, [m['note_anchor']]) else [])
                 if not notes: return ('unresolved', 'adjacency', mark) if any(self.printed(minus_markers(spaced(k, body), [mark]), body, [m['note_anchor']]) for k in at_note) else ('fail', 'missing_note', mark)
-                k = notes[0]; self.matched = (self.matched or []) + objects([k]) + objects([c for c in cars if squash(c['text']) == squash(mark)])
+                k = notes[0]; self.matched = (self.matched or []) + objects([k])
                 declared = (k['unit'] or {}).get('marker')
                 if declared and norm(declared) != norm(mark): return 'fail', 'wrong_note_link', mark  # an explicit wrong mark-to-note assignment
                 if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', mark
