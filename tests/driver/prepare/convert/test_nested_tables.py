@@ -60,11 +60,14 @@ class NestedTables(unittest.TestCase):
             finally: browser.close()
 
     def test_every_source_table_is_a_unit_in_source_order_gridded_in_itself(self):
-        for name, (_, want, _) in CASES.items():
+        for name, (raw, want, _) in CASES.items():
             with self.subTest(name):
-                self.assertEqual(self.routes[name]['status'], 'OK')
-                self.assertEqual([({(c['r'], c['c']): fold(c['text']) for c in u['cells']}, u.get('caption', [])) for u in tables(self.routes[name])],
-                                 [(cells, caption) for cells, _, caption in want])
+                route = self.routes[name]; caps = [u for u in route['units'] if u['kind'] == 'caption']
+                self.assertEqual(route['status'], 'OK')
+                own = lambda t: [c['text'] for c in caps if c.get('source_table') == t.get('source_table') and raw[c['anchor']['byte_start']:c['anchor']['byte_end_exclusive']].decode() == c['text']]
+                self.assertEqual([({(c['r'], c['c']): fold(c['text']) for c in u['cells']}, own(u)) for u in tables(route)],
+                                 [(cells, caption) for cells, _, caption in want])  # a table's caption is its own caption unit, at its own source bytes (caption design v2)
+                self.assertEqual(([u.get('caption', []) for u in tables(route)], len(caps)), ([[] for _ in want], sum(len(caption) for _, _, caption in want)))  # no bare copy; each caption once
 
     def test_a_child_names_its_holder_and_the_holder_names_the_child(self):
         for name, (_, want, _) in CASES.items():

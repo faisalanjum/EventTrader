@@ -193,7 +193,7 @@ JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAl
   return {cells: out, boxes}; }"""
 
 
-SYMBOLS_JS = "([p, every]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
+SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
   for (const f of document.fonts) faces.push(f.family.replace(/^["']|["']$/g, '').toUpperCase());  // typefaces the document defines itself (@font-face)
   const lift = el => { if (!el) return null; if (lifts.has(el)) return lifts.get(el);  // an element's and its ancestors' raised or lowered evidence, nearest first (null: none), each element's style read once:
     const cs = getComputedStyle(el), tag = el.localName, up = lift(el.parentElement);  // a sup or sub, whatever its computed style; a plain inline box whose computed vertical-align is not baseline; any other inline box
@@ -206,6 +206,7 @@ SYMBOLS_JS = "([p, every]) => { " + _decoder_js() + """ const marks = {}, faces 
     for (; n && (n.nodeType === Node.TEXT_NODE || (n.nodeType === Node.COMMENT_NODE && !mark.test(n.data))); n = n.nextSibling) if (n.nodeType === Node.TEXT_NODE) { text += n.data; el = n.parentElement; first = first || n; last = n; }
     if (!el) { marks[m[1]] = null; continue; }  // the parser moved the run away from its mark (a table's foster parent): unbound
     const cs = getComputedStyle(el), fam = cs.fontFamily.toUpperCase(), chars = Array.from(text);
+    if (decorate) decor[m[1]] = [cs.getPropertyValue('-webkit-text-decorations-in-effect'), text];  // asked for (strike-through the scanner cannot certify): the decorations the browser applies to this text, inherited ones too (not the element's own `text-decoration-line`), with the text to bind it
     const face = lib.faces.find(f => { const k = f.indexOf(' ') < 0 ? f : '"' + f + '"'; return fam === k || fam.startsWith(k + ', '); }) || null;  // the primary family, as Chrome writes it
     const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text), lifted = lift(el);
     const shows = () => { const r = document.createRange(); r.setStart(first, 0); r.setEnd(last, last.length); const rs = Array.from(r.getClientRects());  // the glyphs' own boxes, not the element's
@@ -221,7 +222,7 @@ SYMBOLS_JS = "([p, every]) => { " + _decoder_js() + """ const marks = {}, faces 
       pseudo: !!face && (() => { for (let a = el; a; a = a.parentElement) { const own = getComputedStyle(a); for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(a, ps);  // a block's first letter or line set another way
         if (q.fontFamily !== own.fontFamily || q.textTransform !== own.textTransform || q.fontVariant !== own.fontVariant || q.fontFeatureSettings !== own.fontFeatureSettings) return true; } } return false; })(),
       decoded: face ? chars.map(ch => { let k = ch.codePointAt(0); if (k >= 0xF020 && k <= 0xF0FF) k -= 0xF000; const r = k <= 0xFF ? lib.codePoint(face, k) : undefined; return r ? r.codePoint : null; }) : null}; }
-  return {marks, faces, plain: plain.join(','), inline}; }"""
+  return Object.assign({marks, faces, plain: plain.join(','), inline}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
 
 
 def marker_prefix(raw):
@@ -260,6 +261,36 @@ def symbol_runs(raw, vis):
     def at(a):  # a run's mark stands where its text starts after markup, so it never splits the text Chrome lays out (a split moves glyphs 1/64 px)
         i = bisect_right(ends, a) - 1; return ends[i] if i >= 0 else 0
     return [(at(a), chars, hidden, not any(x <= a < y for x, y in literal)) for a, chars, hidden in sorted(runs)], unread
+
+
+def decorations(raw, vis, runs, got):
+    """The browser's own decoration of each source text run in this render (asked of `SYMBOLS_JS` with `decorate`: per run it reached, the decorations it
+    applies - `-webkit-text-decorations-in-effect`, inherited ones too - and the text its mark reached), for a source whose strike-through the scanner
+    cannot certify (`source_formatting.rendered`): [[first byte, end byte, verdict]] for every run with more than white space - 'struck' or 'unstruck'
+    only where the run's mark reached exactly its own text and the browser gave the property (it names it, 'none' included, on the document element
+    too); 'excluded' where the reading hides the run; else 'unresolved: why' - literal text, where no mark may stand; unbound, the parser moved it or its
+    own text was not what its mark reached; no mark found; no decoration, the property or the answer missing; paint, a line in this file may be drawn
+    unseen (`Visible.paint_uncertain`). Never a guess: no answer is no proof of an unstruck run."""
+    decor = got.get('decor'); usable = isinstance(decor, dict) and bool(got.get('decorations'))  # a browser without the property, or a malformed answer, proves nothing
+    bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # the encoding's own mark: no text the page shows (as page_visibility)
+    open_ = [(r['at']['byte_start'], r['at']['byte_end_exclusive']) for r in (vis.page or {}).get('unresolved') or []] if vis.paged else []  # runs the visibility verdict never reached: already said, theirs
+    out = []
+    for k, (_, chars, hidden, ok) in enumerate(runs):
+        glyphs = _glyphs(raw, chars)[1]
+        if not glyphs: continue  # white space only: nothing to bind it by, nothing a strike shows on
+        d = decor.get(str(k)) if usable else None
+        if chars[-1][1] <= bom: continue
+        if hidden: verdict = 'excluded'
+        elif any(x <= chars[0][0] and chars[-1][1] <= y for x, y in open_): verdict = 'unresolved: visibility'  # its visibility itself is unknown (page_visibility's own unresolved)
+        elif not ok: verdict = 'unresolved: literal text'
+        elif not usable: verdict = 'unresolved: no decoration'
+        elif str(k) not in decor: verdict = 'unresolved: unbound' if got['marks'].get(str(k), False) is None or str(k) in (got.get('plain') or '').split(',') else 'unresolved: no mark'
+        elif not (isinstance(d, list) and len(d) == 2 and isinstance(d[0], str) and d[0] and isinstance(d[1], str)): verdict = 'unresolved: no decoration'
+        elif not _bound(glyphs, d[1]): verdict = 'unresolved: unbound'
+        elif 'line-through' in d[0].split(): verdict = 'unresolved: paint' if vis.paint_uncertain else 'struck'
+        else: verdict = 'unstruck'
+        out.append([chars[0][0], chars[-1][1], verdict])
+    return out
 
 
 def _char(b):  # one source character's text as the parser decodes it (anchor.text_reference); None where its bytes are not UTF-8 (never kept as Unicode)
@@ -383,7 +414,7 @@ def _offline_page(browser, asked=None, document=None):
     page.route('**/*', answer); return page
 
 
-def measure(marked_html, browser, prefix=None, every=False):
+def measure(marked_html, browser, prefix=None, every=False, decorate=False):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window; the document's scripts never run). Only
     table cells are read: a source element that writes the mark itself (`<div data-g="2">`) is no cell and measured nothing in its place (Codex,
     MEASURE_ALIAS_BASELINE); on a cell the step's own mark stands first and the browser keeps the first. With a symbol-mark `prefix`, the same page's
@@ -391,7 +422,7 @@ def measure(marked_html, browser, prefix=None, every=False):
     page = _offline_page(browser)
     try:
         page.set_content(marked_html.decode('utf-8', 'replace'), wait_until='load'); got = page.evaluate(JS) if prefix is None else page.evaluate(JS, prefix)
-        try: sym = page.evaluate(SYMBOLS_JS, [prefix, every]) if prefix is not None else None
+        try: sym = page.evaluate(SYMBOLS_JS, [prefix, every, decorate]) if prefix is not None else None
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: sym = {'error': repr(e)[:200]}  # the symbols alone: the geometry measured stays (the step says why)
     finally:
@@ -463,10 +494,11 @@ def step(raw, route, browser):
 
 def _step(raw, route, browser, vis, t0=None):  # `step` on a reading already made of the route's own bytes (html_route.prepare, which checked them): the one the route was made with
     if vis.page != route.get('page_visibility'): raise ValueError('the screen step reads the source as the route was read (its page visibility), not another reading')
+    decorate = vis.paged or not vis.struck_certain  # strike-through the scanner cannot certify (a browser-read page never is): this render decides it
     t0 = time.time() if t0 is None else t0; gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []  # a reading made before the step is not its time
     (runs, unread), prefix = symbol_runs(raw, vis), marker_prefix(raw)
     marked, spans = tag_cells(raw, vis, gaps + endpoints, [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], prefix)
-    try: measured, boxes, got = measure(marked, browser, prefix)
+    try: measured, boxes, got = measure(marked, browser, prefix, decorate=True) if decorate else measure(marked, browser, prefix)
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e:
         if not browser.is_connected(): raise
@@ -479,6 +511,14 @@ def _step(raw, route, browser, vis, t0=None):  # `step` on a reading already mad
     n = apply(route['units'], spans, measured); join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline', parts='apart on one baseline'))
     route['source_inline'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, **inline(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}  # the owners' final text: after the re-grid and the joins
     edited = {id(x): x for x, *_ in gaps}.values()
+    formatting = None
+    if decorate:  # the source-formatting owner, on the final units (joins and parts done), from this render's own verdict per source run
+        from driver.prepare.convert import source_formatting
+        n_struck, undecided = source_formatting.rendered(vis, route, None if 'error' in got else decorations(raw, vis, runs, got))
+        if undecided: route['source_formatting'] = {'unresolved': undecided}
+        k = sum(r[2] != 'unresolved: visibility' for r in undecided or [])  # a run whose visibility is itself unresolved is said once, by the visibility verdict
+        formatting = 'source formatting: no native decoration verdict' if n_struck is None else 'source formatting: %d text run%s without a native decoration verdict' % (k, '' if k == 1 else 's') if k else None
     return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
             'boundaries_the_tool_dropped': sum(a == b for _, a, b, _, _ in gaps), 'parted': sum(len(x.get('parts', ())) for x in edited), 'seconds': round(time.time() - t0, 1),
-            **({'error': 'symbols: ' + got['error']} if 'error' in got else {})}  # html_route marks the route PARTIAL with it
+            **({'source_formatting': n_struck} if decorate else {}),  # items the render's own decoration proved struck (None: no verdict)
+            **({'error': '; '.join(x for x in ('symbols: ' + got['error'] if 'error' in got else None, formatting) if x)} if 'error' in got or formatting else {})}  # html_route marks the route PARTIAL with it

@@ -1,8 +1,8 @@
 """Every own row of a table reaches the route (Root, extraction closeout, Oct 10): EdgarTools 5.60.0 reads only the first own <tbody> when a table has
 one, so the rows of later bodies, a footer and rows standing straight in the table became one flat `uncovered` run with status OK. Expected cells -
 (row, column, rows, columns, text) - come from each fixture's own markup and Chromium's table order (a footer is shown last; a second <thead> keeps its
-place); every one must stand in the route with an anchor whose source bytes hold its text. Nothing is left uncovered but a caption, which the route
-keeps as its table's caption text with no anchor, as it did before. Row retention only: not complete-table scoring."""
+place); every one must stand in the route with an anchor whose source bytes hold its text. Nothing is left uncovered: a caption is its table's own
+caption unit (caption design v2; before it, the caption was the table's caption text with no anchor, left uncovered). Row retention only: not complete-table scoring."""
 import hashlib
 import re
 import unittest
@@ -66,9 +66,14 @@ class EveryOwnRow(unittest.TestCase):
     def test_every_case_is_ok_and_only_the_known_caption_range_stays_uncovered(self):
         for name in self.routes:
             raw = CASES[name][0] if name in CASES else NESTED
-            at = raw.find(b'<caption>Results') + len(b'<caption>')  # a caption is kept as the table's caption text, with no anchor: uncovered as before this change
+            at = raw.find(b'<caption>Results') + len(b'<caption>')  # the known caption range: before caption design v2 it stayed uncovered (the table's caption text had no anchor)
             caption = [{'byte_start': at, 'byte_end_exclusive': at + len('Results'), 'text': 'Results'}] if b'<caption>' in raw else []
-            with self.subTest(name): self.assertEqual((self.routes[name]['status'], self.routes[name]['uncovered']), ('OK', caption))
+            with self.subTest(name):
+                route = self.routes[name]; self.assertEqual((route['status'], route['uncovered']), ('OK', []))  # its own caption unit covers it now
+                if caption:  # and only that unit: without it, exactly the known caption range is uncovered again
+                    from benchmarks.prepare.grader import grade
+                    gone = dict(route, units=[u for u in route['units'] if u['kind'] != 'caption']); g = grade.gates_for_file(grade.RouteFile(gone, raw, 'html'), gone['status'])
+                    self.assertEqual([(x['byte_start'], x['byte_end_exclusive'], x['text']) for x in g['uncovered']], [(c['byte_start'], c['byte_end_exclusive'], c['text']) for c in caption])
 
     def test_the_complete_occupied_inventory_and_coordinates(self):
         for name, (raw, expected) in CASES.items():
@@ -89,8 +94,9 @@ class EveryOwnRow(unittest.TestCase):
                 self.assertEqual((pic['cell']['r'], pic['cell']['c']), rc)
 
     def test_a_caption_and_header_flags_are_kept(self):
-        t = next(u for u in self.routes['caption_and_header (control)']['units'] if u['kind'] == 'table')
-        self.assertEqual(t['caption'], ['Results'])
+        r, raw = self.routes['caption_and_header (control)'], CASES['caption_and_header (control)'][0]; t = next(u for u in r['units'] if u['kind'] == 'table')
+        self.assertEqual((t['caption'], [(u['text'], raw[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']], u['source_table'] == t['source_table']) for u in r['units'] if u['kind'] == 'caption']),
+                         ([], [('Results', b'Results', True)]))  # the table's own caption unit, once, at its own source bytes; no bare copy (caption design v2)
         self.assertEqual({c['text']: c['header'] for c in t['cells'] if c['text'] in ('Region', 'Revenue')}, {'Region': True, 'Revenue': True})
 
     def test_a_later_outer_row_is_kept_and_nested_rows_never_become_outer_rows(self):  # not the inner table's relationships (a separate known defect)

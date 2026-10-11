@@ -45,6 +45,14 @@ neither the table's extent nor its geometry. Unknown source identity is `None`;
 older adapters without table identity omit the field. Unbound cells likewise
 keep unknown source evidence explicit.
 
+`struck` lists an item's struck phrases and `struck_at` their character places in
+its text. Where a stylesheet could change decoration, the existing screen render
+reads the browser's effective decoration per source text run (settings
+`source_formatting: 'rendered'`; `facts['screen']['source_formatting']` counts
+struck items). Runs without a native verdict are listed in
+`source_formatting.unresolved` and make the route `PARTIAL`; an item holding one
+keeps the converter's claim and gets no places.
+
 PDF pages use the same archive, workers and picture records:
 
 ```python

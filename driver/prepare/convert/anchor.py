@@ -328,6 +328,7 @@ class Visible:
         told = sorted([(a, b, True) for a, b in page['hidden']] + [(a, b, False) for a, b in page['shown']]) if page else []; told_at = [a for a, _, _ in told]
         computed = '\x00' in s or (not raw.isascii() and (blen is len or raw.startswith(b'\xef\xbb\xbf') or _META.search(raw) is not None))  # the reading cannot be certified: a hiding property with a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes), markup it does not follow — a null character, which the parser drops or replaces by where it stands (Codex R18-C1) — or bytes beyond ASCII that are not plainly UTF-8: the browser decodes them by the mark, the <meta> or a guess of its own (every one of 22,483 real documents is ASCII)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
+        paint = False  # of those reasons, one that may leave a drawn line unseen (a line colour, or letters with no room): a browser's effective decoration does not settle it
         told_pictures = (page or {}).get('pictures')  # the browser's verdict on picture tags (`page_visibility`): {'hidden', 'shown', 'unbound'} first bytes; none in an older verdict
         self.picture_tags = []  # every <img>/<svg> opening tag the parser sees, shown or hidden, with or without a `src`: what the browser is asked about
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
@@ -341,6 +342,7 @@ class Visible:
         marks = {}  # id(open element) -> its link and target records, which get their end when it ends
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
         self.table_tags = []  # for each table of `tables`, the first byte of its start tag, shown or hidden: a fact of the source (whether the page shows its content is the text's own reading); the adapter names a table by it (edgartools_html.codes)
+        self.table_captions, caps = [], {}  # every <caption> the parser makes a part of an open table: [its first byte, where it ends (as a cell's end), the first byte of that table's start tag]; `caps`: the open ones, by depth
         self.table_spans, self.cell_closes = [], {}  # read by the grader's source-ownership checks. table_spans: every table's [start, end] - after its own closing tag, else where the parser ends it. cell_closes: ONLY cells their own explicit closing tag ends (cell's first byte -> the byte after that tag); for any other ending a caller keeps the cell's pre-close interval in `tables`
         lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
         line = seen = 0; after = fresh = eat = dimmed = False  # where the current line starts in `chars` (after the last break), where its last word ends, and whether a box that must have its line to itself ended on it; `fresh`: the last thing read was a tag, so white space alone after it may be a text of its own; `eat`: the last thing read was a start tag after which the parser drops a line feed; `dimmed`: the file holds a zero opacity
@@ -373,6 +375,7 @@ class Visible:
                 if d in spans:
                     cell = spans.pop(d); cell[1] = start
                     if closing and d == k: self.cell_closes[cell[0]] = pos
+                if d in caps: caps.pop(d)[1] = start
                 if stack[d].name == 'table': grid.pop()[2][1] = pos if closing and d == k else start
                 elif grid and stack[d].name == 'tr': grid[-1][1] = None
             ended = stack[k:]; del stack[k:]
@@ -415,7 +418,7 @@ class Visible:
                 disp, v, op = (None if x == UNKNOWN else x for x in (disp, v, op))
                 deco, strong = None, False  # the decoration in force: the last valid text-decoration / text-decoration-line declaration wins, !important beats a later plain one
                 for n, val, important in decls:
-                    if n in _LINE and unpaints(n, val): struck_computed = True  # a line in this colour may not be seen, and letters inside may be coloured again: no strike is certified in this file
+                    if n in _LINE and unpaints(n, val): struck_computed = paint = True  # a line in this colour may not be seen, and letters inside may be coloured again: no strike is certified in this file
                     if n in ('text-decoration', 'text-decoration-line') and (important or not strong):
                         d = decoration(val, n)
                         if d == INVALID: continue  # the grammar proves the browser drops this declaration and keeps the one before it
@@ -430,7 +433,7 @@ class Visible:
                 if name in ('html', 'head', 'body'):  # the document's own elements: the parser keeps one of each wherever their tags stand, and merges a repeated tag's attributes into the first — none opens, closes or breaks anything here, and one that hides, strikes or is given a display other than block is not followed
                     if not t.startswith('</') and (dim or ua_hidden or v in ('hidden', 'collapse') or disp not in (None, 'block')): computed = True  # (a body laid out as a flex row or a table sets its children as that box does; a repeated tag's `hidden` is merged without its style)
                     if not t.startswith('</') and (name in STRUCK if deco in (None, 'default') else deco): struck_computed = True
-                    if not t.startswith('</') and any(n in _ROOM and unpaints(n, val) for n, val, _ in decls): struck_computed = True  # root styles reach descendants; roots are not held on this stack
+                    if not t.startswith('</') and any(n in _ROOM and unpaints(n, val) for n, val, _ in decls): struck_computed = paint = True  # root styles reach descendants; roots are not held on this stack
                     continue
                 if t.startswith('</'):
                     i = next((k for k in range(len(stack) - 1, -1, -1) if stack[k].name == name), None)
@@ -500,6 +503,7 @@ class Visible:
                     if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing
                         inside = name if name in _PARTS or name == 'table' else top.inside if top else None  # the innermost table, row group, row or cell this element stands in
                         pre = white in _KEPT or (white in (None, 'inherit', 'unset') and ((white is None and name in _PRE) or (bool(top) and top.pre and name != 'table')))  # outside standards mode the browser's own sheet resets white-space at a table: what a table inherits is not taken as kept
+                        paint = paint or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)
                         stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre, (bool(top) and top.loose) or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                         if recs: marks[id(stack[-1])] = recs  # they end with it
                         if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
@@ -507,6 +511,7 @@ class Visible:
                         elif grid and name in ('tr', 'thead', 'tbody', 'tfoot'): grid[-1][1] = None  # a row or a group of rows starts: the row before it has ended
                         if grid and name in ('tr', 'td', 'th') and grid[-1][1] is None: grid[-1][1] = []; grid[-1][0].append(grid[-1][1])
                         if grid and name in ('td', 'th'): spans[len(stack) - 1] = [start, len(raw)]; grid[-1][1].append(spans[len(stack) - 1])
+                        if grid and name == 'caption': caps[len(stack) - 1] = [start, len(raw), grid[-1][2][0]]; self.table_captions.append(caps[len(stack) - 1])  # the innermost open table's own caption
                         if inside in _TABLE and name not in _PARTS and name != 'table': f = stack[-1]; computed |= f.declares or f.pre != top.pre or (name in _FORMATTING and bool(f.block or f.edge)); struck_computed |= f.struck != top.struck  # no part of a table, standing in one outside any cell: the parser moves the element out and leaves the rows behind — what it hides, strikes or keeps of white space does not reach them, and a formatting element it opens again inside the cells: one with a box of its own is not followed
                 hidden = bool(stack) and (stack[-1].gone or stack[-1].unseen)
                 if brk: chars.append(' '); starts.append(start); ends.append(pos); struck_chars.append(0); line, after = len(chars), False  # only a visible block boundary separates words: a hidden block, or a hidden <br>, breaks nothing
@@ -557,8 +562,9 @@ class Visible:
         self.hidden_pictures = (set(told_pictures['hidden']) if told_pictures else {a for a, _ in self.picture_tags} - {a for a, _ in self.pictures} if self.certain else set())  # picture tags positively
         # proved hidden: by the browser's verdict, or by a certified reading (no browser asked); an uncertain reading with no picture verdict (an older one) proves none
         # stylesheet rules or unevaluated values: visibility is reported as uncertain, never certified; nor by the browser's verdict, which proves text, not tags or layout
-        struck_computed = struck_computed or any(unpaints(m.group(1).lower(), m.group(2)) for x in sheets if x for m in _PAINT.finditer(x))  # a sheet may colour a line so that it is not seen, or leave struck letters no room
+        sheet_paint = any(unpaints(m.group(1).lower(), m.group(2)) for x in sheets if x for m in _PAINT.finditer(x)); paint = paint or sheet_paint; struck_computed = struck_computed or sheet_paint  # a sheet may colour a line so that it is not seen, or leave struck letters no room
         self.struck_certain = self.certain and not struck_computed and not any(_DECO_RULE.search(x) for x in sheets)  # a struck run is certified only when the reading is, no sheet rule touches decorations (a rule can remove a strike), nothing was left unevaluated and no formatting element was reopened
+        self.paint_uncertain = paint  # a drawn line may be unseen somewhere in this file: no native decoration verdict certifies a strike here
         self.plain_certain = self.certain and not struck_computed and not any(sheet_can_strike(x) for x in sheets)  # "nothing struck here" needs, besides, that no sheet rule can add or force a strike (line-through, inherit, revert, a function, !important or any token this scanner does not know)
         self.idx = array('Q', (i for i, c in enumerate(chars) if not _WS.match(c)))  # text index of each search-form character
         self.flat = ''.join(chars[i] for i in self.idx).translate(_FOLD)
@@ -704,9 +710,14 @@ def link(raw, units, xml=False, vis=None):
     for k, key in enumerate(keys): same_text.setdefault(key, []).append(k)
     confined = {id(c) for u, c in items if c is not u and 'tag' in u}  # the cells of a table its adapter names: every path below keeps them in that table (table_places)
     (allowed, reserved), anywhere = table_places(vis, items, keys), (None, 0, len(vis.flat))
+    exact = set()  # the table captions bound to their own source element: read there exactly, or not placed
+    for (u, c), key in zip(items, keys):  # a table's own caption (`source`: the source caption element the adapter's code names) stands only at that element's text; None: no proved element, no place
+        if c is u and u.get('kind') == 'caption' and 'source' in u:
+            s = u['source']; lo, hi = (bisect_left(vis.s, s['byte_start']), bisect_left(vis.s, s['byte_end_exclusive'])) if s else (0, 0)
+            allowed[id(u)] = (range(lo, hi), lo, hi - len(key)) if key and hi - lo >= len(key) else NOWHERE; reserved[key].update(range(lo, hi)); exact.add(id(u))
     tags, claims = {s for s in vis.table_tags if s is not None}, Counter(u['tag'] for u in units if u.get('kind') == 'table' and u.get('tag') is not None)
-    for u in units:  # the table's own start tag has decided where its cells may stand (table_places); it stays as the point of its source occurrence:
-        if u.get('kind') == 'table' and 'tag' in u:  # {tag_start: the byte of its <table tag, claims: how many route tables name that tag} - not its extent;
+    for u in units:  # the table's own start tag has decided where its cells may stand (table_places); it stays as the point of its source occurrence (its own caption names it too):
+        if u.get('kind') in ('table', 'caption') and 'tag' in u:  # {tag_start: the byte of its <table tag, claims: how many route tables name that tag} - not its extent;
             t = u.pop('tag'); u['source_table'] = {'tag_start': t, 'claims': claims[t]} if t in tags else None   # None: no table start tag of this source (an older reading may list None)
     cell, edge = array('i', [-1]) * len(vis.flat), {}  # the innermost table cell each search-form character stands in (-1: none) and each cell's first and last character
     for n, (a, b) in enumerate(sorted((a, b) for table in vis.tables for row in table for a, b in row)):
@@ -729,7 +740,7 @@ def link(raw, units, xml=False, vis=None):
         margin = 0 if id(obj) in confined else len(allm)  # a named table's marks cannot extend beyond its source bounds
         ok, first, final = allowed.get(id(obj), anywhere); lo, hi = max(lo, first - margin), min(hi, final + len(n) + margin)  # a cell of a table that is one table of the source: only at its places there
         free = ok.__contains__ if ok else lambda j, held=reserved.get(n, ()): j not in held  # any other item: never at a place kept for such a cell
-        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i}  # copies of this text other units already hold
+        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i} if id(obj) not in exact else set()  # copies of this text other units already hold (a bound caption's own element is its own, even where a holder cell's flattened text reads it too)
         before, after = [next((keys[k] for k in ks if keys[k]), '') for ks in (range(i - 1, -1, -1), range(i + 1, len(keys)))]
         apart = lambda j, m: ((not cut(j - 1) or any(t and vis.flat.endswith(t, 0, j) for t in [before] + marks))
                               and (not cut(j + m - 1) or any(t and vis.flat.startswith(t, j + m) for t in [after] + marks)))
@@ -767,6 +778,7 @@ def link(raw, units, xml=False, vis=None):
         The blocks become a list anchor; the text's characters outside them are the tool's insertions (`inserted_chars`); the source's
         characters between them stay uncovered."""
         obj, n = items[i][1], keys[i]
+        if id(obj) in exact: return None  # a bound caption is never pieced together from elsewhere
         if id(obj) in confined:  # a cell of a named table: only inside its own table
             ok, first, final = allowed.get(id(obj), NOWHERE)
             if ok is NOWHERE[0]: return None
@@ -879,19 +891,21 @@ def spans(anchor):
     return anchor if isinstance(anchor, list) else [anchor] if isinstance(anchor, dict) else []
 
 
-def struck_at(vis, item):
+def struck_at(vis, item, struck=None):
     """Where the source strikes the item's text: ranges [start, end) of the text's characters (code points) the source prints struck through, [] when
     none is — or None when that cannot be said exactly: the decoration is not certified (`struck_certain`, which the scanner gives only where
     `plain_certain` holds too), a place of the item is no byte span or its places overlap, or its text is not the source's text at its places (same
     characters in the comparison form, so a reported mark or an inserted character leaves the places unsaid). A range never covers white space: a
-    struck run of words is one range per word."""
+    struck run of words is one range per word. `struck`: the struck flag of each search-form character proved another way (the browser's own decoration of
+    source-bound runs: `source_formatting.rendered`), used instead of the scanner's - only for an item the caller proved whole."""
     byte = [a for a in spans(item.get('anchor')) if 'byte_start' in a]
-    if not vis.struck_certain or len(byte) != len(spans(item.get('anchor'))) or any(a['byte_end_exclusive'] > b['byte_start'] for a, b in zip(byte, byte[1:])): return None
+    if struck is not None and len(struck) != len(vis.flat): raise ValueError('a struck mask must flag every search-form character')
+    if (struck is None and not vis.struck_certain) or len(byte) != len(spans(item.get('anchor'))) or any(a['byte_end_exclusive'] > b['byte_start'] for a, b in zip(byte, byte[1:])): return None
     piece, flags = [], []
     for a in byte:
         lo, hi = bisect_left(vis.s, a['byte_start']), bisect_left(vis.s, a['byte_end_exclusive'])
         if hi > lo and max(vis.e[lo:hi]) > a['byte_end_exclusive']: return None  # a character whose bytes run past the place's end: the place is no whole reading
-        piece.append(vis.flat[lo:hi]); flags.append(vis.struck_flat[lo:hi])
+        piece.append(vis.flat[lo:hi]); flags.append((vis.struck_flat if struck is None else struck)[lo:hi])
     text = item.get('text', ''); own, out = None, []
     if ''.join(piece) != squash(text): return None
     for m in re.finditer(b'\x01+', b''.join(flags)):  # each run of struck characters, split where the text puts white space between them

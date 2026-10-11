@@ -52,7 +52,9 @@ class InTheBrowser(unittest.TestCase):
                                          b'<tr><td>x</td><td><table><tr><td><svg width="40" height="20"></svg><img class="h" src="t3.png" width="40" height="20"></td></tr></table></td></tr></table>')
         t = [u['id'] for u in r['units'] if u['kind'] == 'table']
         self.assertEqual([(u.get('src'), at(u)[:4], u['cell'].get('table')) for u in pics], [('t2.png', b'<img', t[0]), (None, b'<svg', t[1])])
-        self.assertEqual([u['caption'] for u in r['units'] if u['kind'] == 'table'][0], ['Brands'])
+        tb = next(u for u in r['units'] if u['kind'] == 'table')
+        self.assertEqual((tb['caption'], [(u['text'], raw[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']], u['source_table'] == tb['source_table']) for u in r['units'] if u['kind'] == 'caption']),
+                         ([], [('Brands', b'Brands', True)]))  # the first table's own caption unit, once, at its own source bytes; no bare copy (caption design v2)
 
     def test_size_is_not_visibility(self):  # no area (an empty alt, a zero size) or a broken-image box: still a shown picture
         _, _, _, pics, at = self.route(b'<p>a</p><img src="z1.png" alt=""><img src="z2.png" width="0" height="0"><img src="z3.png"><p>b</p>')

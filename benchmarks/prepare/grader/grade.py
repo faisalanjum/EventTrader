@@ -992,7 +992,10 @@ class Grader:
         value = self.rf.source_cell(self.t.get('anchor')) if context else None
         declared = {self.rf.source_cell(a) for a in context}
         for item in items:
-            if item is None or '_table_anchor' not in item: continue
+            if item is None: continue
+            if item.get('kind') == 'caption' and item.get('source_table') and self.rf.vis is not None and any('byte_start' in a for a in spans(item.get('anchor'))) and not own_caption(self.rf, item):
+                return 'source_table'  # a caption naming its table stands outside that table's own source caption (the gate's own check): a proved contradiction; no anchor or no reading proves none
+            if '_table_anchor' not in item: continue
             source = self.rf.source_cell(item.get('anchor'))
             if source is None: continue
             parent = spans(item['_table_anchor'])
@@ -1103,9 +1106,10 @@ class Grader:
 
     def table_title(self, value, alt, tb, vr):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'table_title', alt)
-        if norm(' '.join(tb.get('caption') or [])) == norm(' '.join(pieces)): return 'pass', None, 'caption'
         cars = self.carriers(anchors, pieces, tb)
-        usable = [k for k in cars if (k['table'] is tb and k['cell']['r'] < vr) or (k['table'] is not tb and k['order'] < tb['_order'])]
+        mine = tb.get('source_table') or {}  # the table's own caption unit may stand after it (a caption printed after the rows): named by this table and standing in its own source caption
+        own = lambda k: k['unit'] is not None and k['unit'].get('kind') == 'caption' and mine.get('claims') == 1 and (k['unit'].get('source_table') or {}).get('tag_start') == mine.get('tag_start') and own_caption(self.rf, k['unit'])
+        usable = [k for k in cars if (k['table'] is tb and k['cell']['r'] < vr) or (k['table'] is not tb and k['order'] < tb['_order']) or own(k)]
         if not usable: return ('fail', 'placement', None) if cars else ('fail', 'missing', None)
         ok, flag = match_pieces([k['text'] for k in usable], pieces, self.markers, self.own + self.table_context)
         got = ' '.join(k['text'] for k in usable)
@@ -1494,6 +1498,14 @@ def picture_at(rf, byte):
     return not squash(rf.vis.at_any(byte)) and any(a['byte_start'] <= s < a['byte_end_exclusive'] for a in byte for s, _ in rf.vis.pictures)
 
 
+def own_caption(rf, u):
+    """A caption unit that names its table (`source_table`) stands in that table's own source caption: every byte anchor inside a <caption> the scanner makes a
+    part of that table (Visible.table_captions) - never merely somewhere in the table. The route's own claim of its element is not the evidence."""
+    owner, parts = (u.get('source_table') or {}).get('tag_start'), [a for a in spans(u.get('anchor')) if 'byte_start' in a]
+    return (owner is not None and bool(parts) and rf.vis is not None
+            and all(any(t == owner and s <= a['byte_start'] < a['byte_end_exclusive'] <= e for s, e, t in rf.vis.table_captions) for a in parts))
+
+
 def gates_for_file(rf, status, excluded=()):
     """Per-file P14 facts: dishonest or missing anchors, duplicate ids, order breaks, uncovered visible text. A check that cannot be
     made (no text layer, no page sizes, stylesheet-dependent visibility, a PARTIAL route) is reported as None = not measured. `excluded`: the
@@ -1515,6 +1527,7 @@ def gates_for_file(rf, status, excluded=()):
         for x in items:
             if x.get('_bad_anchor'):  # a position that cannot be true (RouteFile), for every kind of unit and of anchor (Codex R14-3, R15-3): text there is a false claim; an item with no text (a picture the linker gave an empty gap) claims nothing — counted apart, covering nothing; impossible boxes stay visible as such
                 g['dishonest' if squash(x.get('text', '')) else 'unplaced'] += 1; g['bounds_inconsistent'] += any(isinstance(a, dict) and 'region' in a for a in spans(x.get('_claimed'))); continue
+            if x.get('kind') == 'caption' and x.get('source_table') and spans(x.get('anchor')) and rf.vis is not None and not own_caption(rf, x): g['dishonest'] += 1; continue  # it claims its table's own caption: false unless it stands in that caption
             parts = spans(x.get('anchor'))
             if x.get('link_flag') == 'gap' and not squash(x.get('text', '')): continue  # a picture placed between its neighbours: the derived location certifies nothing, covers nothing; text under that flag is certified like any other
             if not parts:

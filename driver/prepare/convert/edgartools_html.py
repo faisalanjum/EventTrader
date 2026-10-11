@@ -23,6 +23,7 @@ BRANCH = ('DocumentNode', 'ContainerNode', 'SectionNode', 'ListNode')
 BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode', 'ImageNode')  # children that make their parent a branch; a picture has no text to merge into a run: flattened with its paragraph it was lost (Codex's worktree)
 TABLE = 'data-prepare-table'  # the attribute that carries a table's code (`codes`) through the tool to its table node
 CELL = 'data-prepare-cell'  # the same for each table cell, to the tool's own cell
+CAPTION = 'data-prepare-caption'  # the same for each table's <caption>, to the caption element the tool reads for its table (TableProcessor._own_section)
 NO_CODE = object()  # a dumped cell with no `code` field at all (a dump made before cells had codes), unlike a code lost on the way (None)
 _NO_FORMAT = str.maketrans('', '', _CF)
 
@@ -48,6 +49,7 @@ def dump(node):
     if kind == 'TableNode':
         rows = list(node.headers or []) + [getattr(r, 'cells', r) for r in node.rows or []]
         d['caption'] = node.caption
+        if (getattr(node, 'metadata', None) or {}).get(CAPTION): d['caption_code'] = node.metadata[CAPTION]  # the source caption element the tool read it from
         code = (getattr(node, 'metadata', None) or {}).get(TABLE)
         if code: d['code'] = code  # the source table it came from (`codes`)
         held = {id(c): (code, kids) for c, code, kids in (getattr(node, 'metadata', None) or {}).get('held_tables', [])}  # parse's cell codes and tables in cells
@@ -94,7 +96,8 @@ def codes(raw, vis):
     tags that name one resource, one of them hidden, stood for each other (Codex G3-C2); two copies of one table took each other's cells (A3)."""
     sha = anchor.sha256(raw)[:16]
     return ({sha + str(start): (start, name) for start, (_, name) in vis.picture_names.items()} | {sha + str(start): (start, None) for start in vis.table_tags if start is not None}
-            | {sha + 'c' + str(a): (a, ('cell', b)) for table in vis.tables for row in table for a, b in row})  # a cell: its span, as the scanner reads it
+            | {sha + 'c' + str(a): (a, ('cell', b)) for table in vis.tables for row in table for a, b in row}  # a cell: its span, as the scanner reads it
+            | {sha + 'k' + str(a): (a, ('caption', b, owner)) for a, b, owner in vis.table_captions})  # a table's caption: its span and its table's start tag
 
 
 def named(raw, vis, codes):
@@ -102,8 +105,9 @@ def named(raw, vis, codes):
     first: no attribute the source writes is changed), and the text the page hides left out (where the scanner's reading is certain; where it is not, only
     the text the browser proved hidden, each whole source token: Visible's `page`). Every tag the source
     has, the tool sees — an empty anchor too: it may be laid out as a block and break the line (Codex R3-A)."""
-    edits = [((start + 3, start + 3), f' {CELL}="{code}"'.encode()) if isinstance(name, tuple) else (vis.picture_names[start][0], code.encode()) if name is not None
-             else ((start + 6, start + 6), f' {TABLE}="{code}"'.encode()) for code, (start, name) in codes.items()]  # after "<td"/"<th", the picture's name, after "<table"
+    part = lambda start, name, code: ((start + 8, start + 8), f' {CAPTION}="{code}"'.encode()) if name[0] == 'caption' else ((start + 3, start + 3), f' {CELL}="{code}"'.encode())  # after "<caption", after "<td"/"<th"
+    edits = [part(start, name, code) if isinstance(name, tuple) else (vis.picture_names[start][0], code.encode()) if name is not None
+             else ((start + 6, start + 6), f' {TABLE}="{code}"'.encode()) for code, (start, name) in codes.items()]  # a table part, the picture's name, after "<table"
     edits += [(span, b'') for span in (vis.hidden if vis.certain else vis.browser_hidden)]  # only what is proved hidden: an uncertain scan's own spans stay, a sheet can show them again (Codex, CODEX_DESIGN_REVIEW 2); text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
     out, at = [], 0
     for (a, b), piece in sorted(edits):
@@ -136,12 +140,20 @@ def to_units(tree, codes=None, shown=(), hidden=frozenset()):
                 kids += [(k, cells[-1]) for k in cell.get('tables') or []]
                 for k in range(c, c + cs): until[k] = r + rs
                 c += cs
+        own = codes.get(t.get('caption_code')) if codes is not None and t.get('caption') else None  # the tool's caption, read from a source caption element of THIS table (its code; never a place in the table): one caption unit, no copy kept by the table
+        own = own if own and isinstance(own[1], tuple) and own[1][0] == 'caption' and t.get('code') in codes and codes[t['code']][1] is None and codes[t['code']][0] == own[1][2] else None
+        caption = lambda: {'id': f'u{len(units)}', 'kind': 'caption', 'text': t['caption'], 'tag': own[1][2], 'source': {'byte_start': own[0], 'byte_end_exclusive': own[1][1]}}
         if holder or any((x['text'] or '').strip() or 'tables' in x or pictured(x) for x in cells):  # a table with text or a shown picture, or standing in a cell (its relation is structure): every own cell, blank too
-            u = {'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') else [], **({'tag': codes[t['code']][0] if t.get('code') in codes and codes[t['code']][1] is None else None} if codes is not None else {})}  # `tag`: the source table it came from (None: no table of this source - it stands nowhere), for the linker; a table with no text and no shown picture in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
+            first = min((codes[x['_code']][0] for x in cells if isinstance(x['_code'], str) and x['_code'] in codes), default=None) if own else None
+            before = own and (first is None or own[0] < first)  # the caption stands at its source place: before its table's first cell, else after the table and the tables in its cells
+            if before: units.append(caption())
+            u = {'id': f't{len(units)}', 'kind': 'table', 'cells': cells, 'caption': [t['caption']] if t.get('caption') and not own else [], **({'tag': codes[t['code']][0] if t.get('code') in codes and codes[t['code']][1] is None else None} if codes is not None else {})}  # `tag`: the source table it came from (None: no table of this source - it stands nowhere), for the linker; a table with no text and no shown picture in any cell (a spacer, a rule) is nothing to read: no unit (764 such units in 60 files stood between titles and their tables)
             if holder: u['cell'] = {'table': holder[0]['id'], **{k: holder[1][k] for k in ('r', 'c', 'rs', 'cs')}}; holders.append((u, holder[1]))  # its holder, as a picture names one; the screen step regrids it
             units.append(u)
-            for k, h in kids: h['tables'].append(f't{len(units)}'); table_unit(k, (u, h))  # each child right after its parent and its earlier children, in source order
-        elif t.get('caption'): units.append({'id': f'u{len(units)}', 'kind': 'caption', 'text': t['caption']})  # no text in any cell, but a caption: that is read (Codex R2-C4)
+            for k, h in kids: h['tables'].append(table_unit(k, (u, h))['id'])  # each child right after its parent and its earlier children, in source order, named by the unit it became (its own caption may stand first)
+            if own and not before: units.append(caption())
+            return u
+        elif t.get('caption'): units.append(caption() if own else {'id': f'u{len(units)}', 'kind': 'caption', 'text': t['caption']})  # no text in any cell, but a caption: that is read (Codex R2-C4)
 
     def walk(n):
         first = len(units); visit(n)
@@ -572,7 +584,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell'}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell', 'table_captions': "each table's own caption a caption unit, bound to its source caption"}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def settings(vis):
@@ -610,6 +622,8 @@ def parse(raw, vis):
             try: table = super().process(element)
             finally: held, self._held = self._held, outer
             if element.get(TABLE): table.set_metadata(TABLE, element.get(TABLE))  # the builder names the tables it meets; a table in a cell it never meets
+            cap = self._own_section(element, 'caption')  # the caption element the tool's own lookup read this table's caption from
+            if cap is not None and cap.get(CAPTION): table.set_metadata(CAPTION, cap.get(CAPTION))
             if held: table.set_metadata('held_tables', held)
             return table
 

@@ -81,7 +81,9 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual(['cell' in u for u in pictures(r)], [False, True, True])  # one file three times: three occurrences, only two in the table
         self.assertEqual([place(u) for u in pictures(r)[1:]], [(t[0], 0, 0), (t[0], 0, 1)])
         raw, r, t = self.route(b'<table><caption>Our brands</caption><tr><td><img src="a.png"></td><td><img src="chart.svg"></td></tr></table>')
-        self.assertEqual(([u['caption'] for u in r['units'] if u['kind'] == 'table'], [u['kind'] for u in r['units']].count('caption')), ([['Our brands']], 0))  # the caption stays the table's
+        tb = next(u for u in r['units'] if u['kind'] == 'table')
+        self.assertEqual(([u['caption'] for u in r['units'] if u['kind'] == 'table'], [(u['text'], raw[u['anchor']['byte_start']:u['anchor']['byte_end_exclusive']], u['source_table']) for u in r['units'] if u['kind'] == 'caption']),
+                         ([[]], [('Our brands', b'Our brands', tb['source_table'])]))  # the caption is the table's own caption unit, once, at its own source bytes; no bare copy (caption design v2)
         self.assertEqual([(u['src'], place(u)) for u in pictures(r)], [('a.png', (t[0], 0, 0)), ('chart.svg', (t[0], 0, 1))])
         raw, r, t = self.route(b'<table><tr><td><svg width="40" height="20"><rect width="40" height="20"></rect></svg></td></tr></table>')  # inline SVG: a picture tag the scanner lists, no new support
         self.assertEqual((len(t), [place(u) for u in pictures(r)]), (1, [(t[0], 0, 0)]))

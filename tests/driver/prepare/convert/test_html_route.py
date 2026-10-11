@@ -4,6 +4,7 @@ The tool call and the browser's measurement are stand-ins; everything else is th
 import contextlib
 import copy
 import hashlib
+import re
 import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -29,9 +30,20 @@ class Prepare(unittest.TestCase):
         self.assertEqual((facts['formatting'], route['units'][0]['struck']), (1, ['10']))
         self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'joined', 'parted', 'seconds', 'spaces_the_tool_added'])
         raw = b'<style>.x{text-decoration:line-through}</style><p>10 20</p>'  # a sheet rule could add a strike: the formatting step certifies nothing and says so
-        with patch.object(eh, 'convert', side_effect=parsed), patch.object(sg, 'measure', return_value=({}, {}, {'marks': {}, 'faces': []})):
+        claimed = lambda *a, **k: (lambda r: r['units'][0].update(struck=['10']) or r)(parsed(*a, **k))  # a converter's own claim, standing in for a tool that reports strikes
+        with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', return_value=({}, {}, {'marks': {}, 'faces': []})):  # a render with no decoration answer
             route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())
-        self.assertEqual((route['status'], facts['formatting'], route['route']['name']), ('OK', None, 'edgartools-html+source-formatting+screen'))
+        self.assertEqual((route['status'], facts['formatting'], route['route']['name']), ('PARTIAL', None, 'edgartools-html+source-formatting+screen'))  # unknown required text is said, never certified
+        self.assertEqual(route['error'], 'screen step: source formatting: 1 text run without a native decoration verdict')
+        a = raw.index(b'10 20'); self.assertEqual(route['source_formatting'], {'unresolved': [[a, a + 5, 'unresolved: no decoration']]})
+        self.assertEqual((route['units'][0]['text'], route['units'][0]['struck'], 'struck_at' in route['units'][0], facts['screen']['source_formatting']), ('10 20', ['10'], False, 0))  # the claim stays, no places
+        def bound(marked, used, prefix=None, decorate=False):  # a browser that reached every mark and draws no decoration (the source has none)
+            reached = re.findall(r'<!--%ss:(\d+)-->([^<]*)' % re.escape(prefix), marked.decode() if isinstance(marked, bytes) else marked)
+            return {}, {}, {'marks': {}, 'faces': [], **({'decor': {k: ['none', t] for k, t in reached}, 'decorations': 'none'} if decorate else {})}
+        with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', side_effect=bound):
+            route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())
+        self.assertEqual((route['status'], route['error'], 'source_formatting' in route, facts['screen']['source_formatting']), ('OK', None, False, 0))  # proved unstruck: no error
+        self.assertEqual((route['units'][0]['text'], 'struck' in route['units'][0], 'struck_at' in route['units'][0]), ('10 20', False, False))  # the converter's claim goes
 
     def test_a_failed_conversion_stops_before_the_steps(self):
         def crash(raw, vis): raise ValueError('cannot parse this content')
