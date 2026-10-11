@@ -196,8 +196,11 @@ JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAl
   return {cells: out, boxes}; }"""
 
 
-SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
+SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, color = {}, color_pseudo = {}, tints = new Map(), lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
   for (const f of document.fonts) faces.push(f.family.replace(/^["']|["']$/g, '').toUpperCase());  // typefaces the document defines itself (@font-face)
+  const tint = el => { if (!el) return []; if (tints.has(el)) return tints.get(el);  // an element's and its ancestors' first-letter / first-line colours that differ from their own (nearest first), each element read once: which characters they paint is layout's, so they stay an uncertainty
+    const own = getComputedStyle(el).color, got = ['::first-letter', '::first-line'].map(ps => [ps, getComputedStyle(el, ps).color]).filter(([, c]) => c !== own).concat(tint(el.parentElement));
+    tints.set(el, got); return got; };
   const lift = el => { if (!el) return null; if (lifts.has(el)) return lifts.get(el);  // an element's and its ancestors' raised or lowered evidence, nearest first (null: none), each element's style read once:
     const cs = getComputedStyle(el), tag = el.localName, up = lift(el.parentElement);  // a sup or sub, whatever its computed style; a plain inline box whose computed vertical-align is not baseline; any other inline box
     const got = tag === 'sup' || tag === 'sub' || (cs.display.startsWith('inline') && cs.verticalAlign !== 'baseline' && (cs.display === 'inline' ||  // only where it is super, sub or a number (Typed OM: a length, percentage, calc or zero), never
@@ -209,6 +212,7 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
     for (; n && (n.nodeType === Node.TEXT_NODE || (n.nodeType === Node.COMMENT_NODE && !mark.test(n.data))); n = n.nextSibling) if (n.nodeType === Node.TEXT_NODE) { text += n.data; el = n.parentElement; first = first || n; last = n; }
     if (!el) { marks[m[1]] = null; continue; }  // the parser moved the run away from its mark (a table's foster parent): unbound
     const cs = getComputedStyle(el), fam = cs.fontFamily.toUpperCase(), chars = Array.from(text);
+    if (every) { color[m[1]] = cs.color; const t = tint(el); if (t.length) color_pseudo[m[1]] = t; }  // every run measured: the foreground colour the browser computes for the element holding its text (inherited and sheet rules applied), as Chrome writes it; a first-letter / first-line colour that may paint some of its characters, beside it
     if (decorate) decor[m[1]] = [cs.getPropertyValue('-webkit-text-decorations-in-effect'), text];  // asked for (strike-through the scanner cannot certify): the decorations the browser applies to this text, inherited ones too (not the element's own `text-decoration-line`), with the text to bind it
     const face = lib.faces.find(f => { const k = f.indexOf(' ') < 0 ? f : '"' + f + '"'; return fam === k || fam.startsWith(k + ', '); }) || null;  // the primary family, as Chrome writes it
     const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text), lifted = lift(el);
@@ -225,7 +229,7 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
       pseudo: !!face && (() => { for (let a = el; a; a = a.parentElement) { const own = getComputedStyle(a); for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(a, ps);  // a block's first letter or line set another way
         if (q.fontFamily !== own.fontFamily || q.textTransform !== own.textTransform || q.fontVariant !== own.fontVariant || q.fontFeatureSettings !== own.fontFeatureSettings) return true; } } return false; })(),
       decoded: face ? chars.map(ch => { let k = ch.codePointAt(0); if (k >= 0xF020 && k <= 0xF0FF) k -= 0xF000; const r = k <= 0xFF ? lib.codePoint(face, k) : undefined; return r ? r.codePoint : null; }) : null}; }
-  return Object.assign({marks, faces, plain: plain.join(','), inline}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
+  return Object.assign({marks, faces, plain: plain.join(','), inline, color, color_pseudo}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
 
 
 def marker_prefix(raw):
@@ -348,16 +352,13 @@ def symbols(raw, vis, runs, got, units):
     return out
 
 
-def inline(raw, vis, runs, got, units):
-    """`source_inline` records from the page's marks (`SYMBOLS_JS`'s `inline`): each source run the page sets under a sup or sub element, whatever its
-    computed style, or an inline box whose computed vertical-align is not baseline (other than a plain one: super, sub or a number) - that evidence
-    nearest-first (`ancestors`), the run's exact bytes
-    and source text and, where it shows and its owners (`_holders`) hold every character of it and read it whole (each owner's text the source's own at
-    ordered whole-byte places, `anchor._reading`, read once per owner), the code-point ranges of their final text it stands at (`text_at`). Declared tags
-    and computed styles only, evidence and never a measured position (a relatively positioned raise is not seen; an inline block's or table's alignment
-    keyword is not counted), nothing read as a footnote or an exponent, no text changed. A run its mark does not reach whole, or that may not carry one (literal text), is `unresolved`, never matched by text."""
-    held, owner, _ = edgartools_html._holders(units, vis); found, marks, plain = got.get('inline') or {}, got.get('marks') or {}, set(got.get('plain', '').split(','))
-    item, readings, records, unresolved = {(u['id'], None): u for u in units if u.get('kind') not in ('table', 'image')}, {}, [], []
+def _owners(vis, units, spaced=False):
+    """owners(s, e) for a source run's bytes: (each owner (`_holders`) with the code-point ranges of its final text the run's characters stand at
+    (`text_at`, consecutive positions only), or None; why not) - every character held, each owner's text the source's own at ordered whole-byte
+    places (`anchor._reading`, read once per owner) and every character read. One run-to-owner rule for every per-run record (`inline`, `colors`).
+    `spaced`: two ranges with only white space CSS collapses between them in the owner's text are one (a run's words, not a map of each word)."""
+    held, owner, _ = edgartools_html._holders(units, vis)
+    item, readings = {(u['id'], None): u for u in units if u.get('kind') not in ('table', 'image')}, {}
     for u in (u for u in units if u.get('kind') == 'table'):
         for c in u.get('cells') or []:
             a = [x for x in anchor.spans(c.get('anchor')) if 'byte_start' in x]
@@ -381,9 +382,27 @@ def inline(raw, vis, runs, got, units):
             for p in sorted(at[k] for k in range(lo, hi) if k in at):  # consecutive positions only: a range never spans text the run does not hold
                 if ranges and ranges[-1][1] == p: ranges[-1][1] = p + 1
                 else: ranges.append([p, p + 1])
+            if spaced:  # the run's ranges joined across white space only: no character of other text is ever inside one
+                text, joined = item[key].get('text') or '', []
+                for a, b in ranges:
+                    if joined and not text[joined[-1][1]:a].strip(anchor._SPACE): joined[-1][1] = b
+                    else: joined.append([a, b])
+                ranges = joined
             read.update(k for k in range(lo, hi) if k in at); out.append(dict(owner(key), text_at=ranges))
         return (out, None) if len(read) == hi - lo else (None, 'not every character read')
+    return owners
 
+
+def inline(raw, vis, runs, got, units):
+    """`source_inline` records from the page's marks (`SYMBOLS_JS`'s `inline`): each source run the page sets under a sup or sub element, whatever its
+    computed style, or an inline box whose computed vertical-align is not baseline (other than a plain one: super, sub or a number) - that evidence
+    nearest-first (`ancestors`), the run's exact bytes
+    and source text and, where it shows and its owners (`_holders`) hold every character of it and read it whole (each owner's text the source's own at
+    ordered whole-byte places, `anchor._reading`, read once per owner), the code-point ranges of their final text it stands at (`text_at`). Declared tags
+    and computed styles only, evidence and never a measured position (a relatively positioned raise is not seen; an inline block's or table's alignment
+    keyword is not counted), nothing read as a footnote or an exponent, no text changed. A run its mark does not reach whole, or that may not carry one (literal text), is `unresolved`, never matched by text."""
+    found, marks, plain = got.get('inline') or {}, got.get('marks') or {}, set(got.get('plain', '').split(','))
+    owners, records, unresolved = _owners(vis, units), [], []
     for k, (_, chars, hidden, marked) in enumerate(runs):
         key = str(k); m = found.get(key) if marked else None
         if m is None and marked and (key in plain or marks.get(key) is not None): continue  # bound and not raised: nothing to say (almost every run)
@@ -395,6 +414,31 @@ def inline(raw, vis, runs, got, units):
             if not hidden: unresolved.append(dict(where, why='literal text' if not marked else 'unbound' if m is not None or key in marks else 'mark not found'))
             continue
         rec = dict(where, ancestors=m['ancestors'])
+        if m['visibility'] != 'shown': rec.update(visibility=m['visibility'], owners=None)  # hidden, or boxes of no area: no text of an owner stands for it
+        else:
+            rec['owners'], why = owners(s0, e0)
+            if why: rec['why'] = why
+        records.append(rec)
+    return {'records': records, 'unresolved': unresolved}
+
+
+def colors(raw, vis, runs, got, units):
+    """`source_color` records from the same render's marks (`SYMBOLS_JS`'s `color`, read with `every`): for every source run its mark reaches whole,
+    the foreground colour the browser computes for the element holding its text (inherited and sheet rules applied; as Chrome writes it, never
+    interpreted - a default colour is a reading too), its exact bytes and, where it shows, its owners' `text_at` (`_owners`, as `inline`). A hidden
+    run keeps its reading with no owner. A run its mark does not reach whole, or that may not carry one (literal text), is `unresolved` with its source
+    text beside it, never matched by text; no record repeats a run's text (its bytes and owners locate it)."""
+    found, marks, owners, records, unresolved = got.get('color') or {}, got.get('marks') or {}, _owners(vis, units, spaced=True), [], []
+    tinted = got.get('color_pseudo') or {}  # a first-letter / first-line colour of the element or an ancestor: some characters may be painted so (layout decides which)
+    for k, (_, chars, hidden, marked) in enumerate(runs):
+        every, glyphs = _glyphs(raw, chars)
+        if not glyphs: continue
+        key, s0, e0 = str(k), glyphs[0][0][0], glyphs[-1][0][1]; m = marks.get(key) if marked else None
+        where = {'at': {'byte_start': s0, 'byte_end_exclusive': e0}, **({} if vis.certain else {'certain': False})}
+        if m is None or key not in found or not _bound(glyphs, m['text']):  # what kept the run from being read
+            if not hidden: unresolved.append(dict(where, raw=''.join(g if g is not None else '�' for (x, g) in every if s0 <= x[0] < e0), why='literal text' if not marked else 'unbound' if m is not None or key in marks else 'mark not found'))
+            continue
+        rec = dict(where, color=found[key], **({'pseudo': tinted[key]} if key in tinted else {}))  # the element's colour, and beside it what may paint some characters otherwise: not every character's proved colour
         if m['visibility'] != 'shown': rec.update(visibility=m['visibility'], owners=None)  # hidden, or boxes of no area: no text of an owner stands for it
         else:
             rec['owners'], why = owners(s0, e0)
@@ -586,6 +630,7 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     except Exception as e:
         if not browser.is_connected(): raise
         err = repr(e)[:200]; route['source_symbols'], route['source_inline'] = {'read': False, 'error': err}, {'read': False, 'error': err}  # content and anchors stay; the failure is said, never an empty success
+        route['source_color'] = {'read': False, 'error': err}  # no render, no colour: a fallback page's is never a proved original style
         return {'error': repr(e)[:200]}
     if 'error' in got and not browser.is_connected(): raise RuntimeError('browser disconnected: ' + got['error'])
     marks = None if 'error' in got else got['marks']  # each marked run's own text as this render shows it (`every`)
@@ -602,6 +647,9 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     n = 0
     if proved: n = apply(route['units'], spans, measured); join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline', parts='apart on one baseline'))
     route['source_inline'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, **inline(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}  # the owners' final text: after the re-grid and the joins (where the geometry applies)
+    seen = None if 'error' in got else {**colors(raw, vis, runs, dict(got, marks=marks), route['units']), **({'unread': unread} if unread else {})}  # every bound run's own colour, on the same final text (every run's mark, ordinary ones too)
+    route['source_color'] = ({'read': False, 'error': got['error']} if seen is None else {'read': True, **seen} if not refused else  # what the page names and no evidence answered may set any colour: the render's is kept as a fallback reading, never the proved original
+                             {'read': False, 'error': repr(RuntimeError('what the page names cannot be read offline, so its colours are unproved: ' + ', '.join(refused)[:150]))[:200], 'fallback': seen})
     edited = {id(x): x for x, *_ in gaps}.values()
     formatting = None
     if decorate:  # the source-formatting owner, on the final units (joins and parts done), from this render's own verdict per source run
