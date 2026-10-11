@@ -1,0 +1,374 @@
+{
+  "synthetic/T01": {
+    "display_value": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 564,
+          "byte_end_exclusive": 612
+        }
+      ]
+    },
+    "row_label": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 494,
+          "byte_end_exclusive": 564
+        }
+      ]
+    },
+    "header_path": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 113,
+          "byte_end_exclusive": 186
+        },
+        {
+          "byte_start": 259,
+          "byte_end_exclusive": 325
+        }
+      ]
+    },
+    "segment_or_basis": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 415,
+          "byte_end_exclusive": 485
+        }
+      ]
+    },
+    "row_context": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 325,
+          "byte_end_exclusive": 391
+        },
+        {
+          "byte_start": 612,
+          "byte_end_exclusive": 658
+        }
+      ]
+    }
+  },
+  "synthetic/T02": {
+    "display_value": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 612,
+          "byte_end_exclusive": 658
+        }
+      ]
+    },
+    "row_label": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 494,
+          "byte_end_exclusive": 564
+        }
+      ]
+    },
+    "header_path": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 113,
+          "byte_end_exclusive": 186
+        },
+        {
+          "byte_start": 325,
+          "byte_end_exclusive": 391
+        }
+      ]
+    },
+    "segment_or_basis": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 415,
+          "byte_end_exclusive": 485
+        }
+      ]
+    },
+    "row_context": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 259,
+          "byte_end_exclusive": 325
+        },
+        {
+          "byte_start": 564,
+          "byte_end_exclusive": 612
+        }
+      ]
+    }
+  },
+  "synthetic/T03": {
+    "display_value": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 785,
+          "byte_end_exclusive": 831
+        }
+      ]
+    },
+    "row_label": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 721,
+          "byte_end_exclusive": 785
+        }
+      ]
+    },
+    "header_path": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 113,
+          "byte_end_exclusive": 186
+        },
+        {
+          "byte_start": 259,
+          "byte_end_exclusive": 325
+        }
+      ]
+    },
+    "segment_or_basis": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 415,
+          "byte_end_exclusive": 485
+        }
+      ]
+    }
+  },
+  "synthetic/T04": {
+    "display_value": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1463,
+          "byte_end_exclusive": 1511
+        }
+      ]
+    },
+    "row_label": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1393,
+          "byte_end_exclusive": 1463
+        }
+      ]
+    },
+    "header_path": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1027,
+          "byte_end_exclusive": 1100
+        },
+        {
+          "byte_start": 1173,
+          "byte_end_exclusive": 1239
+        }
+      ]
+    },
+    "segment_or_basis": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1314,
+          "byte_end_exclusive": 1384
+        }
+      ]
+    },
+    "row_context": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1239,
+          "byte_end_exclusive": 1305
+        },
+        {
+          "byte_start": 1511,
+          "byte_end_exclusive": 1559
+        }
+      ]
+    }
+  },
+  "synthetic/T05": {
+    "display_value": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1511,
+          "byte_end_exclusive": 1559
+        }
+      ]
+    },
+    "row_label": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1393,
+          "byte_end_exclusive": 1463
+        }
+      ]
+    },
+    "header_path": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1027,
+          "byte_end_exclusive": 1100
+        },
+        {
+          "byte_start": 1239,
+          "byte_end_exclusive": 1305
+        }
+      ]
+    },
+    "segment_or_basis": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1314,
+          "byte_end_exclusive": 1384
+        }
+      ]
+    },
+    "row_context": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1173,
+          "byte_end_exclusive": 1239
+        },
+        {
+          "byte_start": 1463,
+          "byte_end_exclusive": 1511
+        }
+      ]
+    }
+  },
+  "synthetic/T06": {
+    "display_value": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1682,
+          "byte_end_exclusive": 1730
+        }
+      ]
+    },
+    "row_label": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1618,
+          "byte_end_exclusive": 1682
+        }
+      ]
+    },
+    "header_path": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1027,
+          "byte_end_exclusive": 1100
+        },
+        {
+          "byte_start": 1173,
+          "byte_end_exclusive": 1239
+        }
+      ]
+    },
+    "segment_or_basis": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1314,
+          "byte_end_exclusive": 1384
+        }
+      ]
+    },
+    "row_context": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1239,
+          "byte_end_exclusive": 1305
+        },
+        {
+          "byte_start": 1730,
+          "byte_end_exclusive": 1778
+        }
+      ]
+    }
+  },
+  "synthetic/T07": {
+    "display_value": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1730,
+          "byte_end_exclusive": 1778
+        }
+      ]
+    },
+    "row_label": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1618,
+          "byte_end_exclusive": 1682
+        }
+      ]
+    },
+    "header_path": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1027,
+          "byte_end_exclusive": 1100
+        },
+        {
+          "byte_start": 1239,
+          "byte_end_exclusive": 1305
+        }
+      ]
+    },
+    "segment_or_basis": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1314,
+          "byte_end_exclusive": 1384
+        }
+      ]
+    },
+    "row_context": {
+      "how": "reviewed",
+      "anchors": [
+        {
+          "byte_start": 1173,
+          "byte_end_exclusive": 1239
+        },
+        {
+          "byte_start": 1682,
+          "byte_end_exclusive": 1730
+        }
+      ]
+    }
+  }
+}

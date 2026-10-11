@@ -1,0 +1,125 @@
+{
+ "schema": "prepare-route-output/1",
+ "file_id": "public-invented/qualifier.htm",
+ "sha256": "e44ed6429d9585ed1c44c405ee47731fd5728319274111c64b44da0194261c6e",
+ "status": "OK",
+ "error": null,
+ "seconds": 0.0,
+ "route": {
+  "name": "edgartools-html+source-formatting+screen",
+  "tool": "edgartools",
+  "version": "edgartools 5.60.0",
+  "settings": {
+   "parse_html": "defaults",
+   "retain_pictures": true,
+   "retain_native_heading_evidence": true,
+   "picture_names": "codes",
+   "hidden_text": "left out",
+   "headings": "detected blocks read whole",
+   "inline_facts": "read whole",
+   "page_number_candidates": "kept",
+   "ix_exclude": "read as shown",
+   "inline_fact_spaces": "kept",
+   "table_identity": "own start tag, shown or hidden",
+   "style_values": "independent",
+   "heading_boundaries": "source matched",
+   "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+   "table_rows": "every own row group",
+   "nested_tables": "each a table unit naming its holder cell",
+   "table_cells": "every own cell, bound to its source cell",
+   "pictures": "every shown tag",
+   "source_lines": "certified <br> breaks",
+   "source_formatting": true,
+   "screen_grid": true,
+   "joins": "touching on one baseline",
+   "parts": "apart on one baseline"
+  },
+  "adapter": "driver/prepare/convert/edgartools_html.py",
+  "linker": "driver/prepare/convert/anchor.py"
+ },
+ "units": [
+  {
+   "id": "t0",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 2,
+     "text": "Capacity summary (unaudited) Preliminary",
+     "header": true,
+     "source": {
+      "byte_start": 48,
+      "byte_end_exclusive": 170
+     },
+     "anchor": {
+      "byte_start": 98,
+      "byte_end_exclusive": 163
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 1,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Crates",
+     "header": true,
+     "source": {
+      "byte_start": 184,
+      "byte_end_exclusive": 205
+     },
+     "anchor": {
+      "byte_start": 199,
+      "byte_end_exclusive": 205
+     },
+     "link_flag": "out_of_order",
+     "grid": "screen"
+    },
+    {
+     "r": 1,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "43",
+     "header": true,
+     "source": {
+      "byte_start": 210,
+      "byte_end_exclusive": 227
+     },
+     "anchor": {
+      "byte_start": 225,
+      "byte_end_exclusive": 227
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 27,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 98,
+    "byte_end_exclusive": 227
+   }
+  }
+ ],
+ "uncovered": [],
+ "source_links": [],
+ "source_relations": {
+  "read": false,
+  "error": "syntax error: line 1, column 0"
+ },
+ "source_symbols": {
+  "read": true,
+  "decoder": "dingbat-to-unicode 1.0.2",
+  "records": []
+ },
+ "source_inline": {
+  "read": true,
+  "records": [],
+  "unresolved": []
+ }
+}

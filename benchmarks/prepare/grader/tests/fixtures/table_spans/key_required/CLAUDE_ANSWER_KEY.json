@@ -1,0 +1,199 @@
+[
+  {
+    "key_id": "synthetic/T01",
+    "id": "T01",
+    "file_id": "synthetic/grid.htm",
+    "type": "cell",
+    "fields": {
+      "printed_value": "12",
+      "display_value": "12",
+      "row_label": "Revenue",
+      "header_path": [
+        "Actual",
+        "2026"
+      ],
+      "segment_or_basis": [
+        "North"
+      ],
+      "row_context": [
+        {
+          "header": "2025",
+          "text": "9"
+        }
+      ]
+    },
+    "alternatives": {},
+    "decided": [],
+    "pending": [],
+    "reason": null,
+    "evidence": "Independent public whole-table control"
+  },
+  {
+    "key_id": "synthetic/T02",
+    "id": "T02",
+    "file_id": "synthetic/grid.htm",
+    "type": "cell",
+    "fields": {
+      "printed_value": "9",
+      "display_value": "9",
+      "row_label": "Revenue",
+      "header_path": [
+        "Actual",
+        "2025"
+      ],
+      "segment_or_basis": [
+        "North"
+      ],
+      "row_context": [
+        {
+          "header": "2026",
+          "text": "12"
+        }
+      ]
+    },
+    "alternatives": {},
+    "decided": [],
+    "pending": [],
+    "reason": null,
+    "evidence": "Independent public whole-table control"
+  },
+  {
+    "key_id": "synthetic/T03",
+    "id": "T03",
+    "file_id": "synthetic/grid.htm",
+    "type": "cell",
+    "fields": {
+      "printed_value": "7",
+      "display_value": "7",
+      "row_label": "Cost",
+      "header_path": [
+        "Actual",
+        "2026"
+      ],
+      "segment_or_basis": [
+        "North"
+      ]
+    },
+    "alternatives": {},
+    "decided": [],
+    "pending": [],
+    "reason": null,
+    "evidence": "Independent public whole-table control"
+  },
+  {
+    "key_id": "synthetic/T04",
+    "id": "T04",
+    "file_id": "synthetic/grid.htm",
+    "type": "cell",
+    "fields": {
+      "printed_value": "20",
+      "display_value": "20",
+      "row_label": "Revenue",
+      "header_path": [
+        "Actual",
+        "2026"
+      ],
+      "segment_or_basis": [
+        "South"
+      ],
+      "row_context": [
+        {
+          "header": "2025",
+          "text": "18"
+        }
+      ]
+    },
+    "alternatives": {},
+    "decided": [],
+    "pending": [],
+    "reason": null,
+    "evidence": "Independent public whole-table control"
+  },
+  {
+    "key_id": "synthetic/T05",
+    "id": "T05",
+    "file_id": "synthetic/grid.htm",
+    "type": "cell",
+    "fields": {
+      "printed_value": "18",
+      "display_value": "18",
+      "row_label": "Revenue",
+      "header_path": [
+        "Actual",
+        "2025"
+      ],
+      "segment_or_basis": [
+        "South"
+      ],
+      "row_context": [
+        {
+          "header": "2026",
+          "text": "20"
+        }
+      ]
+    },
+    "alternatives": {},
+    "decided": [],
+    "pending": [],
+    "reason": null,
+    "evidence": "Independent public whole-table control"
+  },
+  {
+    "key_id": "synthetic/T06",
+    "id": "T06",
+    "file_id": "synthetic/grid.htm",
+    "type": "cell",
+    "fields": {
+      "printed_value": "11",
+      "display_value": "11",
+      "row_label": "Cost",
+      "header_path": [
+        "Actual",
+        "2026"
+      ],
+      "segment_or_basis": [
+        "South"
+      ],
+      "row_context": [
+        {
+          "header": "2025",
+          "text": "10"
+        }
+      ]
+    },
+    "alternatives": {},
+    "decided": [],
+    "pending": [],
+    "reason": null,
+    "evidence": "Independent public whole-table control"
+  },
+  {
+    "key_id": "synthetic/T07",
+    "id": "T07",
+    "file_id": "synthetic/grid.htm",
+    "type": "cell",
+    "fields": {
+      "printed_value": "10",
+      "display_value": "10",
+      "row_label": "Cost",
+      "header_path": [
+        "Actual",
+        "2025"
+      ],
+      "segment_or_basis": [
+        "South"
+      ],
+      "row_context": [
+        {
+          "header": "2026",
+          "text": "11"
+        }
+      ]
+    },
+    "alternatives": {},
+    "decided": [],
+    "pending": [],
+    "reason": null,
+    "evidence": "Independent public whole-table control"
+  }
+]

@@ -1,0 +1,336 @@
+{
+  "schema": "prepare-route-output/1",
+  "file_id": "synthetic/grid.htm",
+  "sha256": "162503aff43a2154b40d5c44ebc73438b99201ef48cae8d2290a573358bd8245",
+  "status": "OK",
+  "error": null,
+  "seconds": 1,
+  "route": {
+    "name": "hand",
+    "tool": "hand",
+    "version": "a",
+    "settings": {},
+    "adapter": "synthetic",
+    "linker": null
+  },
+  "units": [
+    {
+      "id": "whole",
+      "kind": "table",
+      "anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      },
+      "cells": [
+        {
+          "r": 0,
+          "c": 0,
+          "rs": 2,
+          "cs": 1,
+          "text": "Metric",
+          "anchor": {
+            "byte_start": 45,
+            "byte_end_exclusive": 113
+          }
+        },
+        {
+          "r": 0,
+          "c": 1,
+          "rs": 1,
+          "cs": 2,
+          "text": "Actual",
+          "anchor": {
+            "byte_start": 113,
+            "byte_end_exclusive": 186
+          }
+        },
+        {
+          "r": 0,
+          "c": 3,
+          "rs": 2,
+          "cs": 1,
+          "text": "Note",
+          "anchor": {
+            "byte_start": 186,
+            "byte_end_exclusive": 250
+          }
+        },
+        {
+          "r": 1,
+          "c": 1,
+          "rs": 1,
+          "cs": 1,
+          "text": "2026",
+          "anchor": {
+            "byte_start": 259,
+            "byte_end_exclusive": 325
+          }
+        },
+        {
+          "r": 1,
+          "c": 2,
+          "rs": 1,
+          "cs": 1,
+          "text": "2025",
+          "anchor": {
+            "byte_start": 325,
+            "byte_end_exclusive": 391
+          }
+        },
+        {
+          "r": 2,
+          "c": 0,
+          "rs": 1,
+          "cs": 4,
+          "text": "North",
+          "anchor": {
+            "byte_start": 415,
+            "byte_end_exclusive": 485
+          }
+        },
+        {
+          "r": 3,
+          "c": 0,
+          "rs": 1,
+          "cs": 1,
+          "text": "Revenue",
+          "anchor": {
+            "byte_start": 494,
+            "byte_end_exclusive": 564
+          }
+        },
+        {
+          "r": 3,
+          "c": 1,
+          "rs": 1,
+          "cs": 1,
+          "text": "12",
+          "anchor": {
+            "byte_start": 564,
+            "byte_end_exclusive": 612
+          }
+        },
+        {
+          "r": 3,
+          "c": 2,
+          "rs": 1,
+          "cs": 1,
+          "text": "9",
+          "anchor": {
+            "byte_start": 612,
+            "byte_end_exclusive": 658
+          }
+        },
+        {
+          "r": 3,
+          "c": 3,
+          "rs": 1,
+          "cs": 1,
+          "text": "",
+          "anchor": {
+            "byte_start": 658,
+            "byte_end_exclusive": 712
+          }
+        },
+        {
+          "r": 4,
+          "c": 0,
+          "rs": 1,
+          "cs": 1,
+          "text": "Cost",
+          "anchor": {
+            "byte_start": 721,
+            "byte_end_exclusive": 785
+          }
+        },
+        {
+          "r": 4,
+          "c": 1,
+          "rs": 1,
+          "cs": 1,
+          "text": "7",
+          "anchor": {
+            "byte_start": 785,
+            "byte_end_exclusive": 831
+          }
+        },
+        {
+          "r": 4,
+          "c": 2,
+          "rs": 1,
+          "cs": 1,
+          "text": "",
+          "anchor": {
+            "byte_start": 831,
+            "byte_end_exclusive": 885
+          }
+        },
+        {
+          "r": 4,
+          "c": 3,
+          "rs": 1,
+          "cs": 1,
+          "text": "a",
+          "anchor": {
+            "byte_start": 885,
+            "byte_end_exclusive": 935
+          }
+        },
+        {
+          "r": 5,
+          "c": 0,
+          "rs": 2,
+          "cs": 1,
+          "text": "Metric",
+          "anchor": {
+            "byte_start": 959,
+            "byte_end_exclusive": 1027
+          }
+        },
+        {
+          "r": 5,
+          "c": 1,
+          "rs": 1,
+          "cs": 2,
+          "text": "Actual",
+          "anchor": {
+            "byte_start": 1027,
+            "byte_end_exclusive": 1100
+          }
+        },
+        {
+          "r": 5,
+          "c": 3,
+          "rs": 2,
+          "cs": 1,
+          "text": "Note",
+          "anchor": {
+            "byte_start": 1100,
+            "byte_end_exclusive": 1164
+          }
+        },
+        {
+          "r": 6,
+          "c": 1,
+          "rs": 1,
+          "cs": 1,
+          "text": "2026",
+          "anchor": {
+            "byte_start": 1173,
+            "byte_end_exclusive": 1239
+          }
+        },
+        {
+          "r": 6,
+          "c": 2,
+          "rs": 1,
+          "cs": 1,
+          "text": "2025",
+          "anchor": {
+            "byte_start": 1239,
+            "byte_end_exclusive": 1305
+          }
+        },
+        {
+          "r": 7,
+          "c": 0,
+          "rs": 1,
+          "cs": 4,
+          "text": "South",
+          "anchor": {
+            "byte_start": 1314,
+            "byte_end_exclusive": 1384
+          }
+        },
+        {
+          "r": 8,
+          "c": 0,
+          "rs": 1,
+          "cs": 1,
+          "text": "Revenue",
+          "anchor": {
+            "byte_start": 1393,
+            "byte_end_exclusive": 1463
+          }
+        },
+        {
+          "r": 8,
+          "c": 1,
+          "rs": 1,
+          "cs": 1,
+          "text": "20",
+          "anchor": {
+            "byte_start": 1463,
+            "byte_end_exclusive": 1511
+          }
+        },
+        {
+          "r": 8,
+          "c": 2,
+          "rs": 1,
+          "cs": 1,
+          "text": "18",
+          "anchor": {
+            "byte_start": 1511,
+            "byte_end_exclusive": 1559
+          }
+        },
+        {
+          "r": 8,
+          "c": 3,
+          "rs": 1,
+          "cs": 1,
+          "text": "b",
+          "anchor": {
+            "byte_start": 1559,
+            "byte_end_exclusive": 1609
+          }
+        },
+        {
+          "r": 9,
+          "c": 0,
+          "rs": 1,
+          "cs": 1,
+          "text": "Cost",
+          "anchor": {
+            "byte_start": 1618,
+            "byte_end_exclusive": 1682
+          }
+        },
+        {
+          "r": 9,
+          "c": 1,
+          "rs": 1,
+          "cs": 1,
+          "text": "11",
+          "anchor": {
+            "byte_start": 1682,
+            "byte_end_exclusive": 1730
+          }
+        },
+        {
+          "r": 9,
+          "c": 2,
+          "rs": 1,
+          "cs": 1,
+          "text": "10",
+          "anchor": {
+            "byte_start": 1730,
+            "byte_end_exclusive": 1778
+          }
+        },
+        {
+          "r": 9,
+          "c": 3,
+          "rs": 1,
+          "cs": 1,
+          "text": "",
+          "anchor": {
+            "byte_start": 1778,
+            "byte_end_exclusive": 1832
+          }
+        }
+      ]
+    }
+  ]
+}

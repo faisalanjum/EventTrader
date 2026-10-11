@@ -19,7 +19,7 @@ import re
 import unicodedata
 import xml.etree.ElementTree as ET
 
-from driver.prepare.convert.anchor import Visible, norm, sha256, spans, squash, struck_at, tool_spaces, xml_parser
+from driver.prepare.convert.anchor import Visible, norm, sha256, spans, squash, struck_at, tool_spaces, xml_parser, _TAG, _NAME, attribute_span
 from driver.prepare.compare import _TOKEN_NUMBERS, _TOKEN_WORDS, boundary_equal, critical, reading_units, spacing_only, tokens, wer_counts  # shared with production
 
 T4 = ('value_kind', 'sign', 'marker_meaning', 'measure', 'unit_interpretation')  # meaning: Step 8, not graded here
@@ -36,6 +36,12 @@ local = lambda name: name.rsplit('}', 1)[-1]
 
 # ----------------------------------------------------------------------------------------------------- key loading
 KEY_FILES = ('CLAUDE_ANSWER_KEY.json', 'CLAUDE_KEY_FLAGS.json', 'KEY_SUPPORT_MAP.json', 'converter_checks/REGRESSION_CASES.json')  # what grading reads from a key package
+
+
+def source_format(file_id):
+    """Use the existing XML checks for XML Schema sources as well as .xml."""
+    ext = Path(file_id).suffix.lower().lstrip('.')
+    return {'html': 'htm', 'xsd': 'xml'}.get(ext, ext)
 
 
 def manifest(key_dir):
@@ -84,7 +90,7 @@ def load_key(key_dir, catalog=None):
                             'table_anchor': c['table_anchor'], 'excluded': set(),
                             'support': {f: {'how': 'model', 'anchors': a} for f, a in c.get('field_support', {}).items() if a}})
     for t in targets:
-        ext = Path(t['file_id']).suffix.lower().lstrip('.'); t['format'] = f"{t['type']}/{'htm' if ext == 'html' else ext}"
+        t['format'] = f"{t['type']}/{source_format(t['file_id'])}"
     missing = sorted({t['file_id'] for t in targets if t['split'] == 'unknown'})
     if missing: raise ValueError(f'no split assignment in {catalog} for: ' + ', '.join(missing))  # never let an unassigned file become public
     declare(key_dir, targets)
@@ -228,7 +234,7 @@ class RouteFile:
         for i, u in enumerate(self.units): u['_order'] = i
         self.cells = [(u, c) for u in self.units if u.get('kind') == 'table' for c in u.get('cells') or []]
         self.by_id = {u['id']: u for u in self.units if 'id' in u}
-        ext = '.' + fmt.lower().lstrip('.') if fmt else Path(data['file_id']).suffix.lower()  # the key's declared format decides the checking mode
+        ext = '.' + source_format('source.' + fmt.lower().lstrip('.') if fmt else data['file_id'])  # the key's declared format decides the checking mode
         self.vis = Visible(raw, xml=ext == '.xml') if raw is not None and ext in ('.htm', '.html', '.xml', '.txt') else None  # PDFs/pictures: geometry only
         self.raw, self.raw_len, self.paged = raw, (len(raw) if raw is not None else None), ext == '.pdf'  # a PDF's boxes always name their page (contract)
         decl = data.get('pages'); self.pages_declared = decl is not None and decl != {}  # the route declares its page sizes: a box must then lie on a page it validly declares — an unusable declaration never reads as none, an empty list, a false or a zero included; absent, null and an empty object declare nothing (Codex R17-C1, R18-C4)
@@ -244,6 +250,32 @@ class RouteFile:
         self._starts, self._byte_cells = [x[0] for x in byte_cells], byte_cells
         self._max_len = max([e - b for b, e, _, _ in byte_cells], default=0)
         self._box_cells = [(u, c) for u, c in self.cells if any('region' in a for a in spans(c.get('anchor')))]
+        for table, cell in self.cells: cell['_table_anchor'] = table.get('anchor')
+        self._plain_tables = {}
+        ts = self.vis.table_spans if self.vis is not None else []   # source tables lying inside another source table: only there can a cell hold another cell
+        self._nested = [(a, b) for a, b in ts if any((x, y) != (a, b) and x <= a and b <= y for x, y in ts)]
+
+    def source_cell(self, anchor, literal=False):
+        """The innermost native source cell containing all the anchored characters, if uniquely proved. literal: by the source's own cell byte
+        intervals alone - which cell's bytes hold the anchor's bytes, through its own closing tag - whatever the page shows (ownership, never visibility)."""
+        if self.vis is None or not (literal or self.vis.certain): return None
+        parts = spans(anchor)
+        if not parts or any('byte_start' not in a for a in parts): return None
+        places = [(bisect_left(self.vis.s, a['byte_start']), bisect_left(self.vis.s, a['byte_end_exclusive'])) for a in parts]
+        if not literal and any(a == b for a, b in places): return None
+        found = [(n, r, c, lo, hi) for n, table in enumerate(self.vis.tables) for r, row in enumerate(table) for c, (lo, hi) in enumerate(row)
+                 if (all(lo <= a['byte_start'] and a['byte_end_exclusive'] <= self.vis.cell_closes.get(lo, hi) for a in parts) if literal else all(lo <= self.vis.s[a] <= self.vis.s[b - 1] < hi for a, b in places))]
+        inner = [x for x in found if not any(x[3] <= y[3] and y[4] <= x[4] and x[3:] != y[3:] for y in found)]
+        return inner[0] if len(inner) == 1 else None
+
+    def plain_table(self, n):
+        """Native cell order proves columns only without source row/column spans; do not build another grid parser."""
+        if n not in self._plain_tables:
+            tags = [_TAG.match(self.raw[a:b].decode('utf-8', 'replace')).group()
+                    for row in self.vis.tables[n] for a, b in row]
+            self._plain_tables[n] = all(attribute_span(tag, _NAME.match(tag).group(1), name) is None
+                                         for tag in tags for name in ('rowspan', 'colspan'))
+        return self._plain_tables[n]
 
     def possible(self, a):
         """Can this place be true? A byte span: integers, 0 <= start < end <= the source's length. A box: four numbers, left < right and top < bottom
@@ -277,6 +309,10 @@ class RouteFile:
         hits = [(overlap_ratio(c.get('anchor'), anchor), c) for u, c in pool if table is None or u is table]
         hits = [(r, c) for r, c in hits if r >= 0.5]
         if hits and 'region' in first: hits = [(r, c) for r, c in hits if r == max(r for r, _ in hits)]
+        own = self.source_cell(anchor, literal=True) if hits and 'byte_start' in first and any(x <= lo and hi <= y for x, y in self._nested) else None
+        if own is not None:  # inside a nested source table: a cell the source's own intervals prove to hold the anchor's own cell (an outer layout cell) owns none of it
+            hits = [(r, c) for r, c in hits if not (any(x['byte_start'] < own[3] or self.vis.cell_closes.get(own[3], own[4]) < x['byte_end_exclusive'] for x in spans(c.get('anchor')))   # only a cell reaching outside own (through its own close) can hold it
+                                                     and (h := self.source_cell(c.get('anchor'), literal=True)) and h[3] <= own[3] and own[4] <= h[4] and h[3:] != own[3:])]
         return [c for _, c in hits]
 
     def table_of(self, cell):
@@ -784,6 +820,8 @@ class Grader:
             if r[0] != 'pass': return r, False
             anchors = anchors_of(self.t, name, alt)  # struck words the key marks must still be struck where the route carries them
             items = self.matched or ([c for a in anchors for c in self.rf.cells_at(a)] + [c for a in anchors for u in self.rf.units_at(a, exclude=('clutter',)) for c in ([x for x in self.rf.cells_in(u) if any(overlap(x.get('anchor'), b) for b in anchors)] if u.get('kind') == 'table' else [u])] if anchors else (self.rf.cells_in(self.tb) if getattr(self, 'tb', None) else []))  # the matched carriers; else a table at the anchor contributes only the cells at this field's support, never another row's strikes
+            placement = self.placement(items, context=anchors if name in ('unit_printed', 'segment_or_basis') else ())
+            if placement: return ('fail', placement, None), True
             kept = struck_kept(strings_in(value), list({id(x): x for x in items if x is not None}.values()), anchors, self.rf.vis, self.markers)
             return (r if kept is True else ('fail' if kept is False else 'unresolved', 'struck', None)), True
         results = []
@@ -807,6 +845,8 @@ class Grader:
         if t['format'].endswith('/xml'): return self.grade_xml()
         hits = rf.cells_at(t['anchor'])
         if not hits: return None
+        if len({id(rf.table_of(c)) for c in owners(hits)}) > 1:  # the same bytes claimed by cells of several tables: an ambiguity to report, never the first table (as grade_xml)
+            self.row('value', 'unresolved', 'ambiguous'); self.row('row_label', 'unresolved', 'ambiguous'); return rf.table_of(hits[0])
         tb = rf.table_of(hits[0]); V = [c for c in hits if rf.table_of(c) is tb]
         vr, vcols = V[0]['r'], (min(c['c'] for c in V), max(c['c'] + c.get('cs', 1) for c in V))
         self.tb, self.V, self.vr, self.vcols, self.ctx_orders = tb, V, vr, vcols, set()
@@ -947,8 +987,30 @@ class Grader:
         if k['table'] is tb: return k['cell']['r'] == vr or (k['cell']['r'] < vr) == source_before(k['anchor'], self.t['anchor'])
         return k['order'] < tb['_order']
 
+    def placement(self, items, context=()):
+        """Reject proved source-parent/column contradictions, without inferring unrecorded governing meaning."""
+        value = self.rf.source_cell(self.t.get('anchor')) if context else None
+        declared = {self.rf.source_cell(a) for a in context}
+        for item in items:
+            if item is None or '_table_anchor' not in item: continue
+            source = self.rf.source_cell(item.get('anchor'))
+            if source is None: continue
+            parent = spans(item['_table_anchor'])
+            envelopes = [(lo, hi) for lo, hi in self.rf.vis.table_spans if parent and
+                         all('byte_start' in a and lo <= a['byte_start'] < a['byte_end_exclusive'] <= hi for a in parent)]
+            if envelopes:
+                lo, hi = min(envelopes, key=lambda p: p[1] - p[0])
+                if not lo <= source[3] < source[4] <= hi: return 'source_table'
+            else: continue  # no proved source-table identity: keep the old literal duty, not new governing credit
+            if (value is not None and source in declared and value[0] == source[0] and value[2] == source[2]
+                    and len(self.rf.vis.tables[source[0]][source[1]]) > 1 and self.rf.plain_table(source[0])
+                    and not col_hit(item, self.vcols)): return 'column'
+        return None
+
     def value(self, tb, V, vr):
         t = self.t; printed, display = t['fields'].get('printed_value'), t['fields'].get('display_value') or t['fields'].get('printed_value')
+        placement = self.placement(V)
+        if placement: return self.row('value', 'fail', placement)
         cells = sorted(V, key=lambda c: c['c']); texts = [c.get('text', '') for c in cells]
         if self.spell(cells, printed) is not True and any(fused(texts, printed + m) or fused(texts, m + printed) for m in self.markers): return self.row('value', 'fail', 'marker_glued')
         danch = anchors_of(t, 'display_value')
@@ -1047,12 +1109,28 @@ class Grader:
         if not usable: return ('fail', 'placement', None) if cars else ('fail', 'missing', None)
         ok, flag = match_pieces([k['text'] for k in usable], pieces, self.markers, self.own + self.table_context)
         got = ' '.join(k['text'] for k in usable)
+        if not ok and len(usable) == 1 and (whole := self.whole_carrier(usable[0], anchors, ' '.join(pieces))):  # the title inside a larger faithful carrier (a title and a separate note in one cell)
+            if whole == 'unresolved': return 'unresolved', 'source_reading', norm(got)
+            ok, flag = True, 'carried'
         if not ok and match_pieces([spaced(k, ' '.join(pieces)) for k in usable], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', norm(got)
         if not ok: return 'fail', 'spacing' if spacing_only(got, ' '.join(pieces)) else 'text', norm(got)
         orders = {k['order'] for k in usable}
         if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not (continued(u, tb) and all(source_before(k['anchor'], u.get('anchor')) for k in usable) and source_before(u.get('anchor'), tb.get('anchor'))) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break)
         self.ctx_orders.update(orders); self.matched = objects(usable)
         return 'pass', None, flag or ('anchor_unknown' if not anchors else None)
+
+    def whole_carrier(self, k, anchors, want):
+        """A carrier larger than the field: the field is carried where the source prints `want` at the key's own place, that place lies inside the
+        carrier's one place, and the carrier's text is the source's own text over its whole place - so the field's part of it is known, never found
+        by searching the carrier. 'pass' on a certain reading of the source, 'unresolved' on an uncertain one, None otherwise (a plain mismatch)."""
+        vis, place = self.rf.vis, [x for x in spans(k['anchor']) if 'byte_start' in x]
+        keys = [x for a in anchors for x in spans(a) if 'byte_start' in x]
+        if vis is None or len(place) != 1 or not keys: return None
+        lo, hi = place[0]['byte_start'], place[0]['byte_end_exclusive']
+        i, j = bisect_left(vis.starts, min(x['byte_start'] for x in keys)), bisect_left(vis.starts, max(x['byte_end_exclusive'] for x in keys))
+        if i >= j or not (lo <= vis.starts[i] and vis.ends[j - 1] <= hi): return None   # the key's printed characters are not all inside the carrier's place
+        if not all(boundary_equal(vis.at(x['byte_start'], x['byte_end_exclusive']), w) for x, w in [(dict(byte_start=vis.starts[i], byte_end_exclusive=vis.ends[j - 1]), want), (place[0], k['text'])]): return None
+        return 'pass' if vis.certain else 'unresolved'
 
     def corner_text(self, value, alt, tb, vr):
         pieces = pieces_of(value)  # one stub column's head, or several joined by the key's ' | '
@@ -1083,40 +1161,48 @@ class Grader:
 
     def section_path(self, value, alt, target_order, tb=None):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'section_path', alt)
-        cars = [k for k in self.carriers(anchors, pieces) if k['order'] < target_order and (tb is None or k['table'] is not tb)]
-        found, matched_cars, i, run_in = [], [], 0, False  # matched_cars: every carrier the match used (a heading laid out in pieces, a run-in window), for the struck check
+        every = [k for k in self.carriers(anchors, pieces) if k['order'] < target_order and (tb is None or k['table'] is not tb)
+                 or tb is not None and k['table'] is tb and k['cell']['r'] < self.vr and self.in_order(k, tb, self.vr)]  # or in an earlier row of the value's own table, in source order (lead_in's rule)
+        found, matched_cars, i, run_in, doubt = [], [], 0, False, False  # matched_cars: every carrier the match used (a heading laid out in pieces, a run-in window), for the struck check
         while i < len(pieces):
-            win = None; hit = next((k for k in cars if heading_eq(k['text'], pieces[i])), None)
-            if hit is None:  # a heading laid out as adjacent cells or pieces, however many (E12), until the window outgrows the heading
-                goal, open_ = len(squash(_CONTINUED.sub('', pieces[i]))), False
-                for a in range(len(cars)):
-                    for b in range(a + 2, len(cars) + 1):
-                        if sum(len(squash(_CONTINUED.sub('', k['text']))) for k in cars[a:b]) > goal: break
-                        ok = self.pieces_match([_CONTINUED.sub('', k['text']) for k in cars[a:b]], _CONTINUED.sub('', pieces[i]), [anchor_of(k) for k in cars[a:b]])[0]
-                        if ok: hit, win = cars[b - 1], cars[a:b]; break
-                        if ok is None: open_ = True  # the pieces touch where the heading prints a space: the page may space them
-                    if hit: break
-                if hit is None and open_: return 'unresolved', 'adjacency', pieces[i]
-            if hit is None and i + 1 < len(pieces):  # E9: two levels printed on one line
+            start = max((n + 1 for n, k in enumerate(every) if any(k is m for m in matched_cars)), default=0); cars = every[start:]  # each level after the one above it: one printed occurrence never serves two levels
+            opts, unsure = [], []  # single-level options as (end, branch order, carriers used); unsure: ends of joins only the page can settle
+            hit = next((n for n, k in enumerate(cars) if heading_eq(k['text'], pieces[i])), None)
+            if hit is not None: opts.append((hit, 0, [cars[hit]]))
+            cap = hit  # the best completion so far: a later start can only end later
+            goal = len(squash(_CONTINUED.sub('', pieces[i])))
+            for a in range(len(cars)):  # a heading laid out as adjacent cells or pieces, however many (E12), until the window outgrows the heading
+                if cap is not None and a + 1 > cap: break  # a window from here ends after the best
+                for b in range(a + 2, len(cars) + 1):
+                    if sum(len(squash(_CONTINUED.sub('', k['text']))) for k in cars[a:b]) > goal: break
+                    ok = self.pieces_match([_CONTINUED.sub('', k['text']) for k in cars[a:b]], _CONTINUED.sub('', pieces[i]), [anchor_of(k) for k in cars[a:b]],
+                                           [k['cell'] for k in cars[a:b]] if all(k['cell'] for k in cars[a:b]) else None)[0]  # cells: two cells show two words (pieces_match's own rule)
+                    if ok: opts.append((b - 1, 1, cars[a:b])); cap = b - 1 if cap is None else min(cap, b - 1); break
+                    if ok is None: unsure.append(b - 1)  # the pieces touch where the heading prints a space: the page may space them
+            if not opts and unsure: return 'unresolved', 'adjacency', pieces[i]
+            if not opts and i + 1 < len(pieces):  # E9: two levels printed on one line - as before, only where no exact or split form exists, ahead of a run-in
                 hit2 = next((k for k in cars if heading_eq(k['text'], pieces[i] + ' ' + pieces[i + 1])), None)
-                if hit2 is not None: found.append(hit2); matched_cars.append(hit2); i += 2; continue
-            if hit is None and anchors:  # a run-in heading: the block at the heading's own anchor starts with it (guide V18); the heading may be printed in pieces (E12), spacing by the boundary rule
-                want = _CONTINUED.sub('', norm(pieces[i])).strip(); sw, tw = squash(want), tokens(want); open_run = False
+                if hit2 is not None: doubt = doubt or 'joined_levels'  # the joined heading's role (one heading's number line and its own title) is unproved: never a completion by itself; a later failure stays unresolved
+            if anchors:  # a run-in heading: the block at the heading's own anchor starts with it (guide V18); the heading may be printed in pieces (E12), spacing by the boundary rule
+                want = _CONTINUED.sub('', norm(pieces[i])).strip(); sw, tw = squash(want), tokens(want)
                 starts = lambda text: len(squash(text)) > len(sw) and squash(norm(text)).startswith(sw) and tokens(text)[:len(tw)] == tw
                 for a in range(len(cars)):
+                    if cap is not None and a >= cap: break  # a run-in from here cannot end before the best
                     text, apart, used = cars[a]['text'], [' '.join(sp[x:]) for sp in [spaced(cars[a], want, True)] for x in range(len(sp))], [cars[a]]
                     for b in range(a + 1, len(cars)):
                         if len(squash(text)) > len(sw): break
                         text += ('' if self.adjacent(anchor_of(cars[b - 1]), anchor_of(cars[b])) else ' ') + cars[b]['text']  # read as the source prints the pieces
                         apart = [x + ' ' + spaced(cars[b], want) for x in apart]; used.append(cars[b])  # the other reading of every touching join (the run may begin at any part of its first carrier), for the unresolved verdict only
-                    if starts(text): hit, run_in, win = cars[a], True, used; break
-                    if any(starts(x) for x in apart): open_run = True  # the pieces touch where the heading prints a space: the page may space them
-                if hit is None and open_run: return 'unresolved', 'adjacency', pieces[i]
-            if hit is None:
-                if any(heading_eq(x, pieces[i]) for k in cars for x in runs(k, pieces[i])): return 'unresolved', 'adjacency', pieces[i]  # the pieces touch where the heading prints a space: the page may space them
+                    if starts(text): opts.append((a + len(used) - 1, 3, used)); cap = a + len(used) - 1 if cap is None else min(cap, a + len(used) - 1)
+                    elif any(starts(x) for x in apart): unsure.append(a + len(used) - 1)  # the pieces touch where the heading prints a space: the page may space them
+            unsure += [n for n, k in enumerate(cars if cap is None else cars[:cap]) if any(heading_eq(x, pieces[i]) for x in runs(k, pieces[i]))]  # the pieces touch where the heading prints a space: the page may space them
+            best = min(opts, key=lambda o: o[:2], default=None)  # the earliest completion among the single-level forms; equal ends keep the existing order (exact, pieces, run-in)
+            if best is None:
+                if unsure or doubt: return 'unresolved', doubt or 'adjacency', pieces[i]  # a join only the page can settle, or a joined heading's unproved role, here or passed over for an earlier level
                 near = next((k for k in cars if spacing_only(k['text'], pieces[i])), None)
                 return ('fail', 'spacing', pieces[i]) if near else ('fail', 'missing', pieces[i])
-            found.append(hit); matched_cars.extend(win or [hit]); i += 1
+            doubt = doubt or (bool(unsure) and min(unsure) < best[0] and 'adjacency')  # an earlier uncertain join was passed over: a later failure stays unresolved
+            run_in = run_in or best[1] == 3; found.append(best[2][0] if best[1] == 3 else best[2][-1]); matched_cars.extend(best[2]); i += 1
         self.matched = objects(matched_cars)
         self.row('heading_recognised', 'pass' if not run_in and all(k['unit'] is not None and k['unit'].get('kind') in ('heading', 'title') for k in found) else 'fail')
         return 'pass', None, 'run_in' if run_in else (None if anchors else 'anchor_unknown')
@@ -1374,6 +1460,32 @@ class Grader:
 
 
 # --------------------------------------------------------------------------------------------------------- gates
+def span_collisions(rf):
+    """Declared row spans that cover a DIFFERENT nonempty cell of the same source table, inside one candidate table: the route states a row or
+    heading relationship the source does not (root's ROOT_TABLE_ORDER, Oct 9). Counted only where both cells' source cells are uniquely proved
+    (`RouteFile.source_cell`: certain readings) in one native source table - fragments of one source cell, nested source tables, separate candidate
+    tables (split or continued) and unproved identities never count; empty cells are not graded. Only the table's existing row keys inside a span are
+    visited (bisect), never the declared span itself. Returns the FIRST proved collision in the file - a failure witness, not a count (root's
+    ROOT_TABLE_V1_REVIEW) - or [] when none is proved. Failure-only: no collision proves no whole grid."""
+    known = {}
+    def source(cell):  # cached per cell, the cell kept alive beside its result
+        if id(cell) not in known: known[id(cell)] = (cell, rf.source_cell(cell.get('anchor')))
+        return known[id(cell)][1]
+    for u in rf.units:
+        if u.get('kind') != 'table': continue
+        rows = {}
+        for c in rf.cells_in(u):
+            if squash(c.get('text', '')): rows.setdefault(c['r'], []).append(c)
+        keys = sorted(rows)
+        for r in keys:
+            for x in rows[r]:
+                for k in keys[bisect_left(keys, r + 1):bisect_left(keys, r + x.get('rs', 1))]:
+                    for y in rows[k]:
+                        if col_hit(x, (y['c'], y['c'] + y.get('cs', 1))) and source(x) and source(y) and source(x) != source(y) and source(x)[0] == source(y)[0]:
+                            return [{'table': u.get('id'), 'spanning': [x['r'], x['c'], x.get('rs', 1)], 'covered': [y['r'], y['c']]}]
+    return []
+
+
 def picture_at(rf, byte):
     """Does the source hold a picture element and no text at these bytes? Then a unit's text there is a reading of the picture — approximate evidence
     the bytes cannot certify — whatever the route calls the unit: the source decides, never the output kind (Codex R14-3). A picture element is one
@@ -1445,6 +1557,7 @@ def gates_for_file(rf, status, excluded=()):
         raw_loss, g['uncovered'] = rf.vis.uncovered(ranges), rf.vis.uncovered(ranges + excl)  # raw coverage kept; required-content coverage subtracts the declared bytes only
         g['excluded_chars'] = sum(len(squash(x['text'])) for x in raw_loss) - sum(len(squash(x['text'])) for x in g['uncovered'])
     g['pictures'] = len(rf.vis.pictures) if rf.vis is not None and rf.vis.certain else None  # the picture elements in shown subtrees (the scanner's inventory, certain visibility only): their content is never measured by the text map
+    g['span_collisions'] = span_collisions(rf)
     return g
 
 
@@ -1525,6 +1638,8 @@ def run(key_dir, route_dir, out_dir, catalog=None, heldout_detail=False):
         'nothing_lost': {'pass': not uncovered and not cov_unmeasured, 'measured_pass': not uncovered, 'uncovered': uncovered, 'not_measured': cov_unmeasured,
                          'excluded_chars': {f: g['excluded_chars'] for f, g in per_file.items() if g.get('excluded_chars')},  # characters of declared exclusions (page numbers) no unit covers: counted apart, never required loss
                          'measures': 'visible source text; declared exclusions counted apart; picture content is not measured', 'pictures_not_measured': {f: g['pictures'] for f, g in per_file.items() if g.get('pictures')}},
+        'table_spans': {'pass': not any(g['span_collisions'] for g in per_file.values()), 'collisions': {f: g['span_collisions'] for f, g in per_file.items() if g['span_collisions']},  # failure-only: never not measured
+                        'measures': 'the first proved collision per file (a failure witness, not a count): a declared row span over a different proved nonempty source cell of the same table; passing proves no whole grid'},
     }
     shown = [t for t in targets if heldout_detail or t['split'] != 'heldout']
     report = {

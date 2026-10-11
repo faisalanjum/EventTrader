@@ -1,0 +1,104 @@
+{
+  "sources": [
+    {
+      "file_id": "synthetic/grid.htm",
+      "path": "source.htm",
+      "source": {
+        "sha256": "162503aff43a2154b40d5c44ebc73438b99201ef48cae8d2290a573358bd8245"
+      }
+    }
+  ],
+  "targets": [
+    {
+      "id": "T01",
+      "kind": "cell",
+      "file_id": "synthetic/grid.htm",
+      "cell_anchor": {
+        "byte_start": 564,
+        "byte_end_exclusive": 612
+      },
+      "table_anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      }
+    },
+    {
+      "id": "T02",
+      "kind": "cell",
+      "file_id": "synthetic/grid.htm",
+      "cell_anchor": {
+        "byte_start": 612,
+        "byte_end_exclusive": 658
+      },
+      "table_anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      }
+    },
+    {
+      "id": "T03",
+      "kind": "cell",
+      "file_id": "synthetic/grid.htm",
+      "cell_anchor": {
+        "byte_start": 785,
+        "byte_end_exclusive": 831
+      },
+      "table_anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      }
+    },
+    {
+      "id": "T04",
+      "kind": "cell",
+      "file_id": "synthetic/grid.htm",
+      "cell_anchor": {
+        "byte_start": 1463,
+        "byte_end_exclusive": 1511
+      },
+      "table_anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      }
+    },
+    {
+      "id": "T05",
+      "kind": "cell",
+      "file_id": "synthetic/grid.htm",
+      "cell_anchor": {
+        "byte_start": 1511,
+        "byte_end_exclusive": 1559
+      },
+      "table_anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      }
+    },
+    {
+      "id": "T06",
+      "kind": "cell",
+      "file_id": "synthetic/grid.htm",
+      "cell_anchor": {
+        "byte_start": 1682,
+        "byte_end_exclusive": 1730
+      },
+      "table_anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      }
+    },
+    {
+      "id": "T07",
+      "kind": "cell",
+      "file_id": "synthetic/grid.htm",
+      "cell_anchor": {
+        "byte_start": 1730,
+        "byte_end_exclusive": 1778
+      },
+      "table_anchor": {
+        "byte_start": 27,
+        "byte_end_exclusive": 1853
+      }
+    }
+  ]
+}

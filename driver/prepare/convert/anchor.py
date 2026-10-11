@@ -341,6 +341,7 @@ class Visible:
         marks = {}  # id(open element) -> its link and target records, which get their end when it ends
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
         self.table_tags = []  # for each table of `tables`, the first byte of its start tag, shown or hidden: a fact of the source (whether the page shows its content is the text's own reading); the adapter names a table by it (edgartools_html.codes)
+        self.table_spans, self.cell_closes = [], {}  # read by the grader's source-ownership checks. table_spans: every table's [start, end] - after its own closing tag, else where the parser ends it. cell_closes: ONLY cells their own explicit closing tag ends (cell's first byte -> the byte after that tag); for any other ending a caller keeps the cell's pre-close interval in `tables`
         lead = touch = tail = veil = None  # places in `chars`: where an inline box opened right after a word (white space next would be dropped by the browser), where a word right after such a box would touch its last word, where collapsible white space was last written, where invisible text last ended with white space (the browser drops the white space that follows it)
         line = seen = 0; after = fresh = eat = dimmed = False  # where the current line starts in `chars` (after the last break), where its last word ends, and whether a box that must have its line to itself ended on it; `fresh`: the last thing read was a tag, so white space alone after it may be a text of its own; `eat`: the last thing read was a start tag after which the parser drops a line feed; `dimmed`: the file holds a zero opacity
 
@@ -369,8 +370,10 @@ class Visible:
                     rec['end'] = start
                     if 'href' in rec and not (f is stack[k] and closing == 'a'): rec['whole'] = False  # ended by another tag: the browser opens the link again after it, or has cut it short
             for d in range(len(stack) - 1, k - 1, -1):  # the tables, rows and cells that end here, innermost first
-                if d in spans: spans.pop(d)[1] = start
-                if stack[d].name == 'table': grid.pop()
+                if d in spans:
+                    cell = spans.pop(d); cell[1] = start
+                    if closing and d == k: self.cell_closes[cell[0]] = pos
+                if stack[d].name == 'table': grid.pop()[2][1] = pos if closing and d == k else start
                 elif grid and stack[d].name == 'tr': grid[-1][1] = None
             ended = stack[k:]; del stack[k:]
             if any(f.name in _FORMATTING and f.loose for f in ended[1:]): struck_computed = True  # a formatting element left open under a spacing or a containment: the browser opens it again for what follows (after a paragraph, a list item, a table), and struck text there may stand under it — which text is not followed
@@ -500,7 +503,7 @@ class Visible:
                         stack.append(Open(name, off, unseen, block, (top.struck if top and not (out or disp in _ATOMIC) else False) or struck, struck, inside, edge, disp, len(chars), gone or dim or v is not None, pre, (bool(top) and top.loose) or any(n in _ROOM and unpaints(n, val) for n, val, _ in decls)))  # an atomic inline-level or out-of-flow box: a parent's decoration does not reach into it
                         if recs: marks[id(stack[-1])] = recs  # they end with it
                         if struck and not block and disp is None and shown: apart.append((len(chars), start, pos))
-                        if name == 'table': self.tables.append([]); self.table_tags.append(start); grid.append([self.tables[-1], None])
+                        if name == 'table': self.tables.append([]); self.table_tags.append(start); self.table_spans.append([start, len(raw)]); grid.append([self.tables[-1], None, self.table_spans[-1]])
                         elif grid and name in ('tr', 'thead', 'tbody', 'tfoot'): grid[-1][1] = None  # a row or a group of rows starts: the row before it has ended
                         if grid and name in ('tr', 'td', 'th') and grid[-1][1] is None: grid[-1][1] = []; grid[-1][0].append(grid[-1][1])
                         if grid and name in ('td', 'th'): spans[len(stack) - 1] = [start, len(raw)]; grid[-1][1].append(spans[len(stack) - 1])

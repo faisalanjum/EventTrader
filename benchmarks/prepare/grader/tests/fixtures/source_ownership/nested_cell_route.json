@@ -1,0 +1,185 @@
+{
+  "error": null,
+  "file_id": "root-public/nested-cell.htm",
+  "route": {
+    "adapter": "driver/prepare/convert/edgartools_html.py",
+    "linker": "driver/prepare/convert/anchor.py",
+    "name": "edgartools-html+source-formatting+screen",
+    "settings": {
+      "heading_boundaries": "source matched",
+      "headings": "detected blocks read whole",
+      "hidden_text": "left out",
+      "inline_fact_spaces": "kept",
+      "inline_facts": "read whole",
+      "ix_exclude": "read as shown",
+      "joins": "touching on one baseline",
+      "nested_tables": "each a table unit naming its holder cell",
+      "page_number_candidates": "kept",
+      "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+      "parse_html": "defaults",
+      "parts": "apart on one baseline",
+      "picture_names": "codes",
+      "pictures": "every shown tag",
+      "retain_native_heading_evidence": true,
+      "retain_pictures": true,
+      "screen_grid": true,
+      "source_formatting": true,
+      "source_lines": "certified <br> breaks",
+      "style_values": "independent",
+      "table_cells": "every own cell, bound to its source cell",
+      "table_identity": "own start tag, shown or hidden",
+      "table_rows": "every own row group"
+    },
+    "tool": "edgartools",
+    "version": "edgartools 5.60.0"
+  },
+  "schema": "prepare-route-output/1",
+  "seconds": 0.0,
+  "sha256": "c54193e070c700a0390e6ebed46a129e44cb419e14f96ccdae00bfce4a949d5d",
+  "source_inline": {
+    "read": true,
+    "records": [],
+    "unresolved": []
+  },
+  "source_links": [],
+  "source_relations": {
+    "error": "syntax error: line 1, column 0",
+    "read": false
+  },
+  "source_symbols": {
+    "decoder": "dingbat-to-unicode 1.0.2",
+    "read": true,
+    "records": []
+  },
+  "status": "OK",
+  "uncovered": [],
+  "units": [
+    {
+      "anchor": {
+        "byte_end_exclusive": 251,
+        "byte_start": 66
+      },
+      "caption": [],
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 251,
+            "byte_start": 66
+          },
+          "c": 0,
+          "cs": 1,
+          "grid": "screen",
+          "header": true,
+          "r": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 251,
+            "byte_start": 50
+          },
+          "tables": [
+            "t1"
+          ],
+          "text": "Outer introduction\n\n\n\n\nCategory\n\n2031\n\n\n\n\n\nInventory\n\n37\n\n\n\n\nOuter closing text"
+        }
+      ],
+      "id": "t0",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 27
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 215,
+        "byte_start": 124
+      },
+      "caption": [],
+      "cell": {
+        "byte_end_exclusive": 251,
+        "byte_start": 50,
+        "c": 0,
+        "cs": 1,
+        "r": 0,
+        "rs": 1,
+        "table": "t0"
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 132,
+            "byte_start": 124
+          },
+          "c": 0,
+          "cs": 1,
+          "grid": "screen",
+          "header": true,
+          "r": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 132,
+            "byte_start": 105
+          },
+          "text": "Category"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 155,
+            "byte_start": 151
+          },
+          "c": 1,
+          "cs": 1,
+          "grid": "screen",
+          "header": true,
+          "r": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 155,
+            "byte_start": 137
+          },
+          "text": "2031"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 193,
+            "byte_start": 184
+          },
+          "c": 0,
+          "cs": 1,
+          "grid": "screen",
+          "header": false,
+          "r": 1,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 193,
+            "byte_start": 169
+          },
+          "text": "Inventory"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 215,
+            "byte_start": 213
+          },
+          "c": 1,
+          "cs": 1,
+          "grid": "screen",
+          "header": false,
+          "r": 1,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 215,
+            "byte_start": 198
+          },
+          "text": "37"
+        }
+      ],
+      "id": "t1",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 84
+      }
+    }
+  ]
+}

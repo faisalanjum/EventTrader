@@ -219,6 +219,35 @@ class InvisibleStyleTests(unittest.TestCase):
         self.assertEqual(v.hidden_chars, 0)
 
 
+class SourceElementEndTests(unittest.TestCase):
+    """Where a table and a cell end as elements (`table_spans`, `cell_closes`): after their own explicit closing tag, else where the parser
+    ends them; the pre-close cell intervals (`tables`) and `table_tags` stay as they were."""
+    def ends(self, raw):
+        v = anchor.Visible(raw); return v, {raw[lo:hi].decode(): raw[lo:v.cell_closes[lo]].decode() if lo in v.cell_closes else None for t in v.tables for row in t for lo, hi in row}
+
+    def test_own_explicit_closes_end_after_the_tag_and_intervals_stay_pre_close(self):
+        raw = b'<table id="t"><tr><td>a</td><th>b</TH\n></tr></table>'
+        v, cells = self.ends(raw)
+        self.assertEqual(cells, {'<td>a': '<td>a</td>', '<th>b': '<th>b</TH\n>'})
+        self.assertEqual(v.table_spans, [[0, len(raw)]]); self.assertEqual(v.table_tags, [0])
+
+    def test_implied_parent_and_unclosed_ends_add_nothing(self):
+        for raw in (b'<table><tr><td>a<td>b</table>', b'<table><tr><td>a</tr></table>', b'<table><tr><td>a'):
+            v, cells = self.ends(raw)
+            self.assertTrue(all(end is None for end in cells.values()), raw)
+            self.assertEqual(v.table_spans[0][1], len(raw), raw)
+        v, _ = self.ends(b'<div><table><tr><td>a</td></tr></div>after')
+        self.assertEqual(v.table_spans[0][1], len(b'<div><table><tr><td>a</td></tr>'))  # ended by a parent's tag: at that tag's start
+
+    def test_nested_tables_and_the_scanners_own_reading_of_a_spaced_close(self):
+        raw = b'<table><tr><td>L<table><tr><td>37</ td></tr></table>T</td></tr></table>'
+        v, cells = self.ends(raw)
+        self.assertEqual(cells['<td>37'], '<td>37</ td>')  # the scanner's own close (it marks this reading uncertain)
+        self.assertFalse(v.certain)
+        inner = v.table_spans[1]; self.assertEqual(raw[inner[0]:inner[1]], b'<table><tr><td>37</ td></tr></table>')
+        self.assertTrue(raw[slice(*v.table_spans[0])].endswith(b'</table>') and v.table_spans[0][0] == 0)
+
+
 class NormTests(unittest.TestCase):
     def test_norm_collapses_whitespace_folds_glyphs_and_drops_struck_marks(self):
         self.assertEqual(anchor.norm('  Three\xa0Months\n\u200bEnded ~~not~~ \u2018a\u2019 \u2013 \u201cb\u201d '), 'Three Months Ended not \'a\' - "b"')

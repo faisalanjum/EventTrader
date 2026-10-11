@@ -1,0 +1,52 @@
+{
+  "error": null,
+  "file_id": "public-invented/section-heading.htm",
+  "schema": "prepare-route-output/1",
+  "sha256": "8ca0aab1503cd415f0bfa7ff317c22576e70e6b727490d7512a94fef81c4d1f0",
+  "status": "OK",
+  "units": [
+    {
+      "anchor": {
+        "byte_end_exclusive": 216,
+        "byte_start": 180
+      },
+      "id": "heading",
+      "kind": "heading",
+      "level": 2,
+      "text": "Equipment overview"
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 180,
+        "byte_start": 27
+      },
+      "caption": [],
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 145,
+            "byte_start": 116
+          },
+          "c": 0,
+          "cs": 1,
+          "r": 1,
+          "rs": 1,
+          "text": "Inventory"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 167,
+            "byte_start": 145
+          },
+          "c": 1,
+          "cs": 1,
+          "r": 1,
+          "rs": 1,
+          "text": "37"
+        }
+      ],
+      "id": "panel",
+      "kind": "table"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "state": "SEALED_CONTROL",
+  "evidence_root": "../evidence",
+  "contract_declarations": "CONTRACT.json",
+  "catalog_sha256": "5d1dc67e62ef20b28464fb9b303b9fe9277dcc74e435fb6c1188eb700497bcba",
+  "files_sha256": {
+    "KEY_SUPPORT_MAP.json": "3cb1728f2f6706d146ae2f4a9aa6865e4cfd864edfe69265f388563b299db4c8",
+    "CONTRACT.json": "7478e7d941cd6bd87aba625cd1c5f9901e6c207371a2008ec945a356b3f7839f",
+    "CLAUDE_ANSWER_KEY.json": "44e65fb867a3c7ec4980868f9dacc2c95e28f80d321cf07376925671439ab52f",
+    "CLAUDE_KEY_FLAGS.json": "e9239d7c9231db3c8dd0ddd4a13b99cd8e7f32055be4b6f5110a4591c0ab4657",
+    "SCORING_SCOPE.json": "24565586d8d9e18fb680865f046614998df915b3e4119174704cb980f485a9f8"
+  },
+  "packets_sha256": {
+    "packets/synthetic": {
+      "targets_sha256": "9fb7278b9efc4f8447d1d1ba7ee617659e6050bbe0ccff43849364125729a10e"
+    }
+  }
+}
