@@ -384,11 +384,15 @@ def source_links(units, vis):
     out = []
     for l in vis.links:
         rec = {'href': l['href'], 'tag': {'byte_start': l['start'], 'byte_end_exclusive': l['tag_end']}, **({'hidden': True} if l['hidden'] else {}), **({} if vis.certain else {'certain': False})}
-        whole = vis.certain and not l['hidden'] and l['whole'] and l['end'] is not None
+        proved = not vis.certain and l['start'] in ((vis.page or {}).get('links') or {}).get('proved', ())  # an uncertain reading: the page's own render proved this link's runs and pictures (screen_grid._link_owners)
+        whole = (vis.certain or proved) and not l['hidden'] and l['whole'] and l['end'] is not None
+        held_by = owners(l['tag_end'], l['end']) if whole else None
+        if proved and held_by and (not held_by[0] or held_by[2]): whole, held_by = False, None  # the page's proof names extracted text and pictures held - never that nothing else shows (no []), never with text no unit holds: left as unproved
         rec['extent'] = {'byte_start': l['start'], 'byte_end_exclusive': l['end']} if whole else None
         if whole:
-            rec['owners'], _, unheld = owners(l['tag_end'], l['end'])
+            rec['owners'], _, unheld = held_by
             if unheld: rec['unheld'] = unheld  # shown characters of it that no unit holds (the linker left them uncovered): said, not dropped
+            if proved: rec['owners_by'] = 'page'  # the extracted units, cells and pictures it holds: never a claim that nothing else shows
         else: rec['owners'] = None
         rec['destination'] = destination(l['href']); out.append(rec)
     return out

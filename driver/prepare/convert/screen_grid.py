@@ -555,6 +555,38 @@ def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=
     return (by_table, got['boxes']) if prefix is None else (by_table, got['boxes'], sym)
 
 
+LINKS_JS = """p => { const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), tags = new Map(), out = {links: {}, runs: {}, pictures: {}, reconstructed: 0}, mark = new RegExp('^' + p + '([sqa]):([0-9]+)$');
+  const marks = []; for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (m) marks.push([m[1], m[2], c]); }
+  for (const [kind, k, c] of marks) if (kind === 'a') { const e = c.parentNode; if (e && e.nodeType === 1 && e.localName === 'a' && e.firstChild === c && !tags.has(e)) { tags.set(e, k); out.links[k] = {href: e.getAttribute('href')}; } else out.links[k] = null; }  // the mark stands first inside the element made for its own tag
+  for (const a of document.querySelectorAll('a[href]')) if (!tags.has(a)) out.reconstructed++;  // an <a href> the parser made with no source tag of its own (a reconstruction)
+  const near = el => { const a = el && el.closest('a[href]'); return a ? (tags.has(a) ? tags.get(a) : 'reconstructed') : null; };
+  for (const [kind, k, c] of marks) {
+    if (kind === 'q') { const e = c.nextSibling; out.pictures[k] = e && e.nodeType === 1 && (e.localName === 'img' || e.localName === 'svg') ? near(e) : 'unbound'; }  // PICTURES_JS's own rule: the <img>/<svg> right after its mark, else nothing (a moved picture binds no link)
+    if (kind === 's') { let el = null; for (let n = c.nextSibling; n && (n.nodeType === Node.TEXT_NODE || (n.nodeType === Node.COMMENT_NODE && !mark.test(n.data))); n = n.nextSibling) if (n.nodeType === Node.TEXT_NODE) { el = n.parentElement; break; }
+      out.runs[k] = el ? near(el) : 'unbound'; } }
+  return out; }"""  # each source link's own tag, and the nearest such link of every run and picture mark (closest a[href]), in the visibility render
+
+
+def _link_owners(raw, vis, runs, near, unsure):  # {'proved': [link starts], 'unproved': {start: [why]}}: a link's owners are proved only where the scan's extent is whole, its tag binds the browser's <a>
+    # (href equal), every marked run and picture in that extent stands in it and none outside does, every such run has a verdict, and the parser made no <a href> of its own
+    out = {'proved': [], 'unproved': {}}
+    for l in vis.links:
+        key, end = str(l['start']), l['end']; inside = lambda a, b: end is not None and l['tag_end'] <= a and b <= end
+        within = [k for k, (_, chars, _, ok) in enumerate(runs) if ok and inside(chars[0][0], chars[-1][1])]
+        literal = any(not ok and inside(chars[0][0], chars[-1][1]) and _glyphs(raw, chars)[1] for _, chars, _, ok in runs)  # a run no mark can reach (raw text, RCDATA): never bound
+        got = near['links'].get(key) or {}; holds = any(_glyphs(raw, runs[k][1])[1] for k in within) or any(inside(a, b) for a, b in vis.picture_tags)
+        why = [w for w, bad in (('extent', not (l['whole'] and end is not None)), ('tag', got.get('href') != l['href']),
+                                 ('no text or picture of its own: that nothing else shows is not proved', not holds),  # never [] on this path (Root: zero own area does not prove an empty link)
+                                 ('literal text in it', literal),
+                                 ('a run in it stands elsewhere', any(_glyphs(raw, runs[k][1])[1] and near['runs'].get(str(k)) != key for k in within)),
+                                 ('a run outside stands in it', any(v == key and int(k) not in within for k, v in near['runs'].items())),
+                                 ('a picture in it stands elsewhere', any(inside(a, b) and near['pictures'].get(str(k)) != key for k, (a, b) in enumerate(vis.picture_tags))),
+                                 ('a picture outside stands in it', any(v == key and not inside(*vis.picture_tags[int(k)]) for k, v in near['pictures'].items())),
+                                 ('a run in it has no verdict', any(k in unsure for k in within if _glyphs(raw, runs[k][1])[1])), ('reconstructed', near['reconstructed'] > 0)) if bad]
+        (out['unproved'].__setitem__(key, why) if why else out['proved'].append(l['start']))
+    return out
+
+
 PICTURES_JS = """p => { const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), out = {};
   while (w.nextNode()) { const c = w.currentNode, e = c.nextSibling;  // a picture mark binds only the <img>/<svg> right after it; one the parser moved binds nothing (null)
     if (c.data.startsWith(p)) out[c.data.slice(p.length)] = e && e.nodeType === 1 && (e.localName === 'img' || e.localName === 'svg') ? e.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}) : null; }
@@ -579,32 +611,33 @@ def page_visibility(raw, vis, browser, source=None):
     runs, _ = symbol_runs(raw, vis); prefix = marker_prefix(raw); asked = []; address = 'http://%s.invalid/' % prefix  # an address the source nowhere writes
     if source is not None: address = source.at(address, raw)
     bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # a byte order mark stays first: the browser decodes by it
-    marked, _ = tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok and a >= bom] + [(a, b'<!--%sq:%d-->' % (prefix.encode(), k)) for k, (a, _) in enumerate(vis.picture_tags) if a >= bom], prefix, cells=False)  # comments only: no attribute a sheet could select
+    marked, _ = tag_cells(raw, vis, (), [(l['tag_end'], b'<!--%sa:%d-->' % (prefix.encode(), l['start'])) for l in vis.links if l['start'] >= bom] + [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok and a >= bom] + [(a, b'<!--%sq:%d-->' % (prefix.encode(), k)) for k, (a, _) in enumerate(vis.picture_tags) if a >= bom], prefix, cells=False)  # comments only: no attribute a sheet could select
     page = _offline_page(browser, asked, (address, raw), source)  # first the original bytes as they are: how the browser itself decodes them, and what they ask for
     try: page.goto(address, wait_until='load'); charset = page.evaluate('document.characterSet')
     finally: page.close()
     if source is not None: source.charset = charset  # read once: every later render of this document reads it so
     if asked: raise RuntimeError('style sheets the page names cannot be read offline: ' + ', '.join(asked)[:150])  # every sheet the page names is requested from a page with an address, and refused: what it shows or hides is not known, no verdict at all
     page = _offline_page(browser, None, (address, marked, charset), source)  # then the marked bytes in that charset: a comment cannot move a <meta> out of the browser's reach
-    try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True]); seen = page.evaluate(PICTURES_JS, prefix + 'q:')
+    try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True]); seen = page.evaluate(PICTURES_JS, prefix + 'q:'); near = page.evaluate(LINKS_JS, prefix)
     finally: page.close()
-    out, unresolved = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}, []
+    out, unresolved = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}, []; unsure = set()  # the runs no verdict reached (unbound, unproven)
     for k, (_, chars, hidden, ok) in enumerate(runs):
         glyphs = _glyphs(raw, chars)[1]; m = got['marks'].get(str(k)) if ok else None
         if not glyphs: continue  # white space only: nothing to bind it by
         if m is None or not _bound(glyphs, m['text']):  # listed: text the parser moved, literal or misread, kept as the scanner reads it - and its source beside it
-            s, e = chars[0][0], chars[-1][1]; out['unbound'].append([s, e])
+            s, e = chars[0][0], chars[-1][1]; out['unbound'].append([s, e]); unsure.add(k)
             try: fragment = {'raw': raw[s:e].decode('utf-8')}
             except UnicodeDecodeError: fragment = {'bytes': raw[s:e].hex()}
             unresolved.append({'at': {'byte_start': s, 'byte_end_exclusive': e}, **fragment,
                                'why': 'byte order mark' if e <= bom else 'literal text' if not ok else 'unbound' if str(k) in got['marks'] else 'mark not found'})  # as `symbols` says it; the encoding's own mark is no text the page shows
         elif m['visibility'] == 'hidden': out['hidden'].append([chars[0][0], chars[-1][1]])
-        elif m['visibility'] == 'unproven': out['unproven'] += 1
+        elif m['visibility'] == 'unproven': out['unproven'] += 1; unsure.add(k)
         elif hidden: out['shown'].append([chars[0][0], chars[-1][1]])
     if unresolved: out['unresolved'] = unresolved
     if vis.picture_tags: out['pictures'] = {'hidden': [], 'shown': [], 'unbound': []}  # every picture tag (Visible.picture_tags) by its first byte: the page's verdict, or none reached it
     for k, (a, b) in enumerate(vis.picture_tags): out['pictures']['unbound' if seen.get(str(k)) is None else 'shown' if seen[str(k)] else 'hidden'].append(a)
     if vis.picture_tags and out['pictures']['unbound']: out['unresolved_pictures'] = [{'at': {'byte_start': a, 'byte_end_exclusive': b}, 'raw': raw[a:b].decode('utf-8', 'replace'), 'why': 'unbound'} for a, b in vis.picture_tags if a in out['pictures']['unbound']]  # the tag as written: the scanner's reading stays for it
+    if vis.links: out['links'] = _link_owners(raw, vis, runs, near, unsure)  # which link each run and picture stands in, as this render shows it
     return out
 
 
