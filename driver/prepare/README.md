@@ -45,6 +45,12 @@ neither the table's extent nor its geometry. Unknown source identity is `None`;
 older adapters without table identity omit the field. Unbound cells likewise
 keep unknown source evidence explicit.
 
+A native caption bound to its own HTML `<caption>` element is emitted as a
+separate `caption` unit in source order. Its `source` records that element,
+its `anchor` locates the text, and its `source_table` identifies the owning
+table. The table does not duplicate this text in its `caption` list. A retained
+table keeps an unbound native caption in that list.
+
 `struck` lists an item's struck phrases and `struck_at` their character places in
 its text. Where a stylesheet could change decoration, the existing screen render
 reads the browser's effective decoration per source text run (settings
