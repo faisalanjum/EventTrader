@@ -67,9 +67,11 @@ stamina==26.1.0
 tabulate==0.10.0
 tenacity==9.2.1
 textdistance==4.6.3
+tinycss2==1.4.0
 tqdm==4.70.1
 truststore==0.10.4
 typing-extensions==4.16.0
 typing-inspection==0.4.4
 unidecode==1.4.0
 urllib3==2.8.0
+webencodings==0.5.1

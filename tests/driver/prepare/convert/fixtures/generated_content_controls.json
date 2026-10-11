@@ -1,0 +1,61 @@
+{
+ "what": "Generated-content and native-list controls (2026-10-11): Root's public review sources, byte-exact as UTF-8 text; formatting_sources are the four strike/raise sources as given",
+ "sources_sha256": {
+  "inline_quote": "5e6863f4a2dc289992d475c3cf77a2657042bed88f58dc0f03b66e6abaf5bf88",
+  "list_stray_text": "c39c7f84ec6bbcab289c98fe17485fe34589145f03e447d461ddd816f510d548",
+  "transparent_shadow": "e7ec30e4157ec55d12980f8c168215d31740c041fb6ed7dfbbd4f1c8383d98a5",
+  "unmarked_text_owner": "1dfa4646163849b3c7165ab70420e42605dba86ef5e21c813799c463daf8d7d1",
+  "ordinary": "0d8c591f83d87f2ef8438d024e65603b20294db555fc6e8c119bca4d263ad061",
+  "empty_quote": "672f70762b2a7a8bb03ac0f5702b12a0beec86aa15009c21ae5d165ef2e9aff7",
+  "inline_list_item": "cf82b464010e390ae7e1e15ae91532071287fea94d9f9acf7d887ff6acb234c3",
+  "opacity_ancestor": "1776ffc554b5a124c1d5784938fd294a2f5bc6045c734b24a4dca2ecc36601aa",
+  "summary": "33ee65b213a9df4ec978502d4f84562a29269045ebd68bd1034302a6d52633bb",
+  "empty_generated": "7ca5e19ce6c2e6a1698e2841e8c6484bde0c0a6cd7433b213fc26d9180d257f0",
+  "first_letter": "aff745aaf2459ee2a45b908a36a27aefe46848d53f94905b99c37b41c76d8a8a",
+  "plain_before": "59da0456d79576417facf42dc9f4f283fe0d7f0a8ee6d5f0e94ac33104434d1f",
+  "hidden_owner_visible_before": "e2d45a7d9eabc9f3593a5bcdebe61558d1965fbfb5b4f2bc747ac136b2957807",
+  "opacity_parent": "e9a9cd8b2a481768c1135ad8dd141a98f8c66de41f20fadf0d313b510dff423c",
+  "nested_quotes": "00b043be433bc8f09adae61fbd3c1c2514b7449d7c5c69040331680e7d19c5cc",
+  "whole_generated_first_letter": "8918cb594d9594a4197e0a92e99d1925f4e4044ad560770fd3747a31be49f618",
+  "partial_generated_first_letter": "3b3925549ae3599a6acd96b1a50c4bbeba99d3b20d1e528bd7bd210cd25089f3",
+  "ordinary_source_first_letter": "3be3d210953214381ff30e1e418785fe1b02effd40e2716fc915f0f2159f55ec",
+  "hidden_format_letter": "a7c8ccfdcd296522dc48ac336cb32f52d28dd286f09c0721cb3b3aa65437a092",
+  "transparent_format_letter": "4a3f891fcae1041399f6ab2168395e8c93bf8e4461790ea50bee335ad271e0b6",
+  "ordinary_format_letter": "3be3d210953214381ff30e1e418785fe1b02effd40e2716fc915f0f2159f55ec"
+ },
+ "formatting_sources_sha256": {
+  "own_strike": "07c8b90c5adfbf08d7b62622641769ca850844b728035910882cd95b53f51ba6",
+  "ancestor_strike": "ac0417cde0e511be42f929cf76fbcad8a9cb75bf854065c553cc06cf5e5617a2",
+  "raised": "1b0e4ac3a66f2bd47ac42ce4e260e53ab90d5d11407938f087ae60b456167ede",
+  "ordinary": "f52ad7493666f2e8fcefeb61e59d55df67bf6a26003d42d7bd7139af99d659c8"
+ },
+ "cases": {
+  "inline_quote": "<p>The <q>quoted</q> text</p>",
+  "list_stray_text": "<ul>Outside<li>Inside</li></ul>",
+  "transparent_shadow": "<style>p::before{content:\"Read this \";color:transparent;text-shadow:0 0 0 black}</style><p>Body</p>",
+  "unmarked_text_owner": "<style>div::before{content:\"Before \";}</style><div><textarea>Original</textarea><p>Body</p></div>",
+  "ordinary": "<p>Body</p>",
+  "empty_quote": "<q></q>",
+  "inline_list_item": "<p style=\"display:list-item;list-style-type:decimal\">Body</p>",
+  "opacity_ancestor": "<style>p::before{content:\"Ghost\"}</style><div style=\"opacity:0\"><p>Body</p></div>",
+  "summary": "<details open><summary>Choice</summary>Body</details>",
+  "empty_generated": "<style>i::before{content:\"First\"}i::after{content:\"Last\"}</style><i></i><p>Body</p>",
+  "first_letter": "<!doctype html><meta charset=\"utf-8\"><style>p::first-letter{color:red;font-size:30px}</style><p>Alpha body</p>",
+  "plain_before": "<!doctype html><meta charset=\"utf-8\"><style>p::before{content:\"Added \"}</style><p>Alpha body</p>",
+  "hidden_owner_visible_before": "<!doctype html><meta charset=\"utf-8\"><style>p{visibility:hidden}p::before{visibility:visible;content:\"Visible generated text\"}</style><p>Hidden original</p>",
+  "opacity_parent": "<!doctype html><meta charset=\"utf-8\"><style>p{opacity:0}p::before{content:\"Invisible generated text\"}</style><p>Invisible original</p>",
+  "nested_quotes": "<!doctype html><meta charset=\"utf-8\"><p>The <q>A <q>B</q> C</q> text.</p>",
+  "whole_generated_first_letter": "<!doctype html><meta charset=\"utf-8\"><style>p::before{content:\"Z\"}p::first-letter{color:red}</style><p>Body</p>",
+  "partial_generated_first_letter": "<!doctype html><meta charset=\"utf-8\"><style>p::before{content:\"ZX\"}p::first-letter{color:red}</style><p>Body</p>",
+  "ordinary_source_first_letter": "<!doctype html><meta charset=\"utf-8\"><style>p::first-letter{color:red}</style><p>Body</p>",
+  "hidden_format_letter": "<!doctype html><meta charset=\"utf-8\"><style>p::first-letter{visibility:hidden}</style><p>Body</p>",
+  "transparent_format_letter": "<!doctype html><meta charset=\"utf-8\"><style>p::first-letter{color:transparent}</style><p>Body</p>",
+  "ordinary_format_letter": "<!doctype html><meta charset=\"utf-8\"><style>p::first-letter{color:red}</style><p>Body</p>"
+ },
+ "formatting_sources": {
+  "own_strike": "<style>p::before{content:\"Loss \";text-decoration:line-through}</style><p>9</p>",
+  "ancestor_strike": "<style>p{ text-decoration:line-through }p::before{content:\"Loss \"}</style><p>9</p>",
+  "raised": "<style>p::before{content:\"2\";vertical-align:super}</style><p>9</p>",
+  "ordinary": "<style>p::before{content:\"Loss \"}</style><p>9</p>"
+ }
+}

@@ -15,7 +15,8 @@ RAW = b'<p><s>10</s> 20</p>'; SHA = hashlib.sha256(RAW).hexdigest()
 
 
 def shown(raw):  # a stand-in render's every-run reading (SYMBOLS_JS with `every`, the screen step's agreement proof): the page shows each marked source run exactly as the scan reads it
-    runs, _ = sg.symbol_runs(raw, anchor.Visible(raw)); return {'marks': {str(k): {'text': ''.join(g or '' for _, g in sg._glyphs(raw, chars)[0]), 'visibility': 'shown'} for k, (_, chars, _, ok) in enumerate(runs) if ok}, 'faces': []}
+    runs, _ = sg.symbol_runs(raw, anchor.Visible(raw)); return {'marks': {str(k): {'text': ''.join(g or '' for _, g in sg._glyphs(raw, chars)[0]), 'visibility': 'shown'} for k, (_, chars, _, ok) in enumerate(runs) if ok}, 'faces': [],
+                                                             'generated': {'read': True, 'records': []}}  # and its native generated-content reading: none on these pages
 TREE = {'type': 'DocumentNode', 'children': [{'type': 'ParagraphNode', 'text': '10 20'}]}
 _convert = eh.convert
 convert = lambda parse: (lambda raw, file_id, sha256, vis=None: _convert(raw, file_id, sha256, parse, vis))  # the production conversion with the tool call replaced
@@ -43,7 +44,7 @@ class Prepare(unittest.TestCase):
         self.assertEqual((route['units'][0]['text'], route['units'][0]['struck'], 'struck_at' in route['units'][0], facts['screen']['source_formatting']), ('10 20', ['10'], False, 0))  # the claim stays, no places
         def bound(marked, used, prefix=None, decorate=False, **reading):  # a browser that reached every mark and draws no decoration (the source has none)
             reached = re.findall(r'<!--%ss:(\d+)-->([^<]*)' % re.escape(prefix), marked.decode() if isinstance(marked, bytes) else marked)
-            return {}, {}, {'marks': {k: {'text': t, 'visibility': 'shown'} for k, t in reached}, 'faces': [], **({'decor': {k: ['none', t] for k, t in reached}, 'decorations': 'none'} if decorate else {})}  # every mark reached: its text too (the agreement reading)
+            return {}, {}, {'marks': {k: {'text': t, 'visibility': 'shown'} for k, t in reached}, 'faces': [], 'generated': {'read': True, 'records': []}, **({'decor': {k: ['none', t] for k, t in reached}, 'decorations': 'none'} if decorate else {})}  # every mark reached: its text too (the agreement reading); no generated content
         with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', side_effect=bound):
             route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())
         self.assertEqual((route['status'], route['error'], 'source_formatting' in route, facts['screen']['source_formatting']), ('OK', None, False, 0))  # proved unstruck: no error

@@ -528,6 +528,145 @@ def _document(browser, raw, body, source):
     return page, address, first
 
 
+GENERATED_STYLES = ['display', 'visibility', 'color', 'opacity', 'content', 'list-style-image', '-webkit-text-decorations-in-effect', 'vertical-align']  # the last two: the existing strike (as SYMBOLS_JS reads it, ancestors' too) and raise readings
+PSEUDO_ROLE = {'marker': 'inserts', 'before': 'inserts', 'after': 'inserts', 'first-letter': 'formats'}  # the native pseudo types: generated content, or a format of text already there; any other type is kept raw
+TEXT_CONTENT = {'function': {'counter', 'counters'}, 'ident': {'open-quote', 'close-quote'}}  # the CSS content items that name text (with a non-empty string); Chrome's computed content resolves attr() to a string
+NO_CONTENT = {'no-open-quote', 'no-close-quote', 'normal', 'none'}  # the CSS content keywords that name nothing
+
+
+def _generated(page, prefix):
+    """The page's own layout of generated content (CDP DOMSnapshot.captureSnapshot of this very page, no rects): per pseudo element (before, after,
+    marker, first-letter, any other), in tree order (CSS's own places: an element's marker, its before, its children, its after), its layout text
+    fragments in native order with their bounds, its computed readings, its own visibility by the existing rule (checkVisibility called on the pseudo
+    element itself: its inherited or overridden visibility, opacity, box), the source runs under its owner (their marks) and whether native text
+    there follows no source run mark. Raw readings only: nothing here proves that a fragment paints, or where it stands in a unit."""
+    cdp = page.context.new_cdp_session(page)
+    snap = cdp.send('DOMSnapshot.captureSnapshot', {'computedStyles': GENERATED_STYLES})
+    S, d = snap['strings'], snap['documents'][0]; N, L = d['nodes'], d['layout']
+    parent, ntype, nval = N['parentIndex'], N['nodeType'], N.get('nodeValue') or []
+    pseudo = dict(zip(N.get('pseudoType', {}).get('index', []), N.get('pseudoType', {}).get('value', [])))
+    mark = re.compile('^' + re.escape(prefix) + r's:(\d+)$'); run = {}
+    for i, t in enumerate(ntype):
+        m = mark.match(S[nval[i]]) if t == 8 and i < len(nval) and nval[i] >= 0 else None
+        if m: run[i] = int(m.group(1))
+    kids = {}
+    for i, p in enumerate(parent): kids.setdefault(p, []).append(i)
+    groups = {}
+    for k, ni in enumerate(L['nodeIndex']):
+        if ni not in pseudo: continue  # a pseudo element's box, text and image layout objects all name the pseudo node itself
+        g = groups.setdefault(ni, {'pseudo': S[pseudo[ni]], 'owner': parent[ni], 'fragments': [], 'bounds': [], 'computed': dict(zip(GENERATED_STYLES, (S[x] for x in L['styles'][k])))})
+        t = L['text'][k] if k < len(L['text']) else -1
+        if t >= 0 and S[t]: g['fragments'].append(S[t]); g['bounds'].append(L['bounds'][k])
+    def below(o):  # the owner's descendants, its own pseudo elements apart
+        out, todo = [], list(kids.get(o, []))
+        while todo:
+            i = todo.pop(); out.append(i)
+            if i not in pseudo: todo.extend(kids.get(i, []))
+        return [i for i in out if i not in pseudo]
+    def follows_mark(i):  # a text node the source run reading reaches: after its run's mark, across text and other comments only (as SYMBOLS_JS reads a run)
+        sib = kids.get(parent[i], []); j = sib.index(i)
+        while j > 0:
+            j -= 1; q = sib[j]
+            if q in run: return True
+            if not (ntype[q] == 3 or (ntype[q] == 8 and q not in run)): return False
+        return False
+    order, todo = {}, kids.get(-1, [])[::-1]  # tree order: an element's marker, its before and any other pseudo, its children, its after
+    while todo:
+        i = todo.pop()
+        if i in pseudo: order[i] = len(order); continue
+        ps = [k for k in kids.get(i, []) if k in pseudo]
+        todo += [k for k in ps if S[pseudo[k]] == 'after'] + [k for k in kids.get(i, []) if k not in pseudo][::-1] + sorted((k for k in ps if S[pseudo[k]] != 'after'), key=lambda k: S[pseudo[k]] != 'marker')[::-1]
+    records = []
+    for ni, g in sorted(groups.items(), key=lambda x: order.get(x[0], len(order))):  # records at one place in a unit apply in this order
+        o = g['owner']; desc = below(o); rec = {k: g[k] for k in ('pseudo', 'fragments', 'bounds', 'computed')}
+        rec.update(owner=o, runs=sorted(run[i] for i in desc if i in run), unknown_text=any(ntype[i] == 3 and i < len(nval) and nval[i] >= 0 and S[nval[i]].strip() and not follows_mark(i) for i in desc))
+        try:
+            obj = cdp.send('DOM.resolveNode', {'backendNodeId': N['backendNodeId'][ni]})['object']['objectId']  # the pseudo element itself, not its owner
+            rec['visible'] = cdp.send('Runtime.callFunctionOn', {'objectId': obj, 'returnByValue': True, 'functionDeclaration': 'function () { return this.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}); }'})['result']['value']
+        except (OSError, StorageError, ImportError, MemoryError): raise  # a process, storage or dependency failure is no content verdict (the step's own policy)
+        except Exception as e: rec['visible'], rec['visible_error'] = None, repr(e)[:200]  # unknown: never a hidden verdict, never a shown one
+        records.append(rec)
+    return {'read': True, 'records': records}
+
+
+def _content(c, marker):
+    """The computed content as the pinned native tokenizer (tinycss2) reads it: whether it names text (a non-empty string, a counter, a quote: what a
+    first-letter may take whole, so its own fragments cannot say) and each item that is no text - an image (url, image-set, a gradient), any other item,
+    or what it could not read; a marker's list-style-image too where its content is normal. Raw, as written; the alternative text after '/' is never shown."""
+    import tinycss2  # only here: the rest of the package (pictures, Source) needs no CSS parser
+    text, out = False, []
+    for t in tinycss2.parse_component_value_list(c.get('content') or ''):
+        if t.type == 'literal' and t.value == '/': break
+        name = getattr(t, 'lower_name', None) or getattr(t, 'lower_value', None)
+        if t.type == 'string' or name in TEXT_CONTENT.get(t.type, ()): text = text or t.type != 'string' or t.value != ''
+        elif t.type != 'whitespace' and not (t.type == 'ident' and name in NO_CONTENT): out.append('unread: ' + t.message if t.type == 'error' else t.serialize())
+    if marker and (c.get('content') or 'normal') == 'normal' and (c.get('list-style-image') or 'none') != 'none': out.append(c['list-style-image'])
+    return text, out
+
+
+def _generated_owners(raw, vis, runs, marks, gen, units):
+    """`generated_content` from the page's own readings (`_generated`), in their tree order: each pseudo element's fragments and computed readings and
+    its `role` by native pseudo type (PSEUDO_ROLE). One that formats text already there (first-letter) inserts nothing and is never placed; where the
+    units carry the source text it formats (`_holders`), its strike or raise, a hidden or unproved visibility or an unproved paint is not carried (PARTIAL). One of any other type is kept raw (PARTIAL where it shows content). One that inserts is `required` unless
+    checkVisibility on the pseudo element proves it hidden - a transparent colour leaves paint `uncertain`, never hidden - and, where its owner's whole
+    source content is proved (every source run under the owner marked, the page's own (`_bound`), contiguous with no foreign or literal run inside,
+    no native text outside a run, all held by units, no first-letter over a before that names text), `at`: the unit or cell and the character offset in its text
+    where it stands (before/marker: before the owner's first character a unit holds; after: after its last), from the existing source-to-text
+    reading (anchor._reading) - else `unbound_because` (one not shown is given no place); records at one offset apply in their order. `status` complete only where it was read and
+    every required one is bound, no non-text item among them (`non_text`, by the native tokens of its computed content: `_content`); else PARTIAL with `why`."""
+    if not gen or not gen.get('read'): return {'read': False, **({'error': gen['error']} if gen else {}), 'records': [], 'status': 'PARTIAL', 'why': ['generated content: no native reading']}
+    held, owner_key, _ = edgartools_html._holders(units, vis); item = {}
+    for u in units:
+        for x in ([c for c in u.get('cells') or []] if u.get('kind') == 'table' else [u]):
+            sp = [a for a in anchor.spans(x.get('anchor')) if 'byte_start' in a]
+            if sp: item[(u['id'], sp[0]['byte_start'] if u.get('kind') == 'table' else None)] = x
+    formats, out, why = {r['owner']: r['pseudo'] for r in gen['records'] if PSEUDO_ROLE.get(r['pseudo']) == 'formats'}, [], set()
+    for r in gen['records']:
+        role = PSEUDO_ROLE.get(r['pseudo'])
+        text, non = _content(r['computed'], r['pseudo'] == 'marker')
+        rec = {k: r[k] for k in ('pseudo', 'fragments', 'bounds', 'computed')}; rec.update(role=role, non_text=non, visible=r.get('visible'))
+        if r.get('visible_error'): rec['visible_error'] = r['visible_error']
+        c = r['computed']; rec['required'] = role != 'formats' and r.get('visible') is not False and bool(r['fragments'] or non or (text and r['owner'] in formats))  # text a first-letter took whole leaves no fragment of its own
+        if c.get('opacity') == '0' or re.match(r'rgba\(.*,\s*0\)$', c.get('color', '')) or c.get('color') == 'transparent': rec['paint'] = 'uncertain'  # a shadow or stroke may still paint it
+        struck, lift = 'line-through' in (c.get('-webkit-text-decorations-in-effect') or '').split(), c.get('vertical-align') or 'baseline'
+        if struck or lift != 'baseline': rec['formatting'] = {**({'struck': True} if struck else {}), **({'vertical_align': lift} if lift != 'baseline' else {})}  # the existing meanings, kept with the text: decorations in effect (own or an ancestor's), raise or lower
+        mine = [k for k in r['runs'] if runs[k][3] and _glyphs(raw, runs[k][1])[1]]; reason = None
+        if role != 'inserts' or not rec['required']:  # kept raw, never placed: no place is given to text that is not shown
+            rec.update(bound=False, unbound_because='its native pseudo type is not handled' if not role else 'it formats text already there' if role == 'formats' else 'not shown' if r.get('visible') is False else 'it shows nothing')
+            carried = role == 'formats' and bool(mine) and bool(held(runs[mine[0]][1][0][0], runs[mine[-1]][1][-1][1])[0])  # the source text it formats is in the units as written (none there, as when all of it is hidden: nothing to say)
+            if carried and rec.get('formatting'): why.add('source text formatting by ::%s not carried' % r['pseudo'])
+            if carried and r.get('visible') is False: why.add('source text in the units is hidden by ::%s' % r['pseudo'])
+            elif carried and r.get('visible') is None: why.add('source text in the units: its visibility under ::%s is not proved' % r['pseudo'])
+            elif carried and rec.get('paint') == 'uncertain': why.add('source text in the units: its paint under ::%s is not proved' % r['pseudo'])  # a transparent letter: never hidden, never proved
+            if not role and rec['required']: why.add('native pseudo element ::%s not handled' % r['pseudo'])
+            out.append(rec); continue
+        if r['pseudo'] == 'before' and r['owner'] in formats and (r['fragments'] or text): reason = '::%s may format part of it' % formats[r['owner']]  # its first letter may be this text's, or all of it: which is not proved
+        elif r['unknown_text']: reason = 'native text under the owner follows no source run'
+        elif not mine: reason = 'the owner has no proved source text'
+        elif any(not (marks or {}).get(str(k)) or not _bound(_glyphs(raw, runs[k][1])[1], marks[str(k)]['text']) for k in mine): reason = "a run under the owner is not the page's"
+        elif any(k not in mine and (_glyphs(raw, runs[k][1])[1] or not runs[k][3]) for k in range(mine[0], mine[-1] + 1)): reason = 'a foreign or literal run stands inside the owner'
+        else:
+            lo, hi = runs[mine[0]][1][0][0], runs[mine[-1]][1][-1][1]; got, n, unheld = held(lo, hi)
+            edge = lo if r['pseudo'] != 'after' else hi
+            glyphs = [g for k in mine for g in runs[k][1]]  # its first (after: last) glyph a unit holds: a collapsed edge space no unit holds is no text (the whole-owner check counts no white space unheld)
+            near = next((h for h in (held(a, b)[0] for a, b in (glyphs if r['pseudo'] != 'after' else glyphs[::-1])) if h), {})
+            if unheld or len(near) != 1: reason = 'the owner text is not held by one unit at its edge'
+            else:
+                key = next(iter(near)); reading = anchor._reading(vis, item.get(key, {}))
+                pos = None if reading is None else [i for i, k in enumerate(reading[2]) if (vis.s[k] >= edge if r['pseudo'] != 'after' else vis.e[k] <= edge)]
+                if not pos: reason = 'its place in the unit text is not proved'
+                else:
+                    i = pos[0] if r['pseudo'] != 'after' else pos[-1]
+                    rec['at'] = {**owner_key(key), 'offset': reading[1][i] if r['pseudo'] != 'after' else reading[1][i] + 1}
+        rec['bound'] = 'at' in rec
+        if not rec['bound']: rec['unbound_because'] = reason
+        if rec['required'] and rec['non_text']: why.add('generated non-text content not extracted')
+        if rec['required'] and not rec['bound']: why.add('generated text not bound: ' + reason)
+        if rec['required'] and r.get('visible') is None: why.add('generated text: its visibility is not proved')  # shown or hidden unproved: its raw reading and error kept
+        out.append(rec)
+    return {'read': True, 'records': out, 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why)}
+
+
 def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window; the document's scripts never run). Only
     table cells are read: a source element that writes the mark itself (`<div data-g="2">`) is no cell and measured nothing in its place (Codex,
@@ -548,6 +687,11 @@ def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=
         try: sym = page.evaluate(SYMBOLS_JS, [prefix, every, decorate]) if prefix is not None else None
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: sym = {'error': repr(e)[:200]}  # the symbols alone: the geometry measured stays (the step says why)
+        if prefix is not None:  # the page's own layout of generated content (pseudo elements, list markers), read once in this same page
+            try: gen = _generated(page, prefix)
+            except (OSError, StorageError, ImportError, MemoryError): raise
+            except Exception as e: gen = {'read': False, 'error': repr(e)[:200]}
+            sym = dict(sym, generated=gen)
     finally:
         page.close()
     by_table = {}
@@ -680,6 +824,9 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     n = 0
     if proved: n = apply(route['units'], spans, measured); join(gaps, boxes, vis); route['route'] = dict(route['route'], name=route['route']['name'] + '+screen', settings=dict(route['route'].get('settings') or {}, screen_grid=True, joins='touching on one baseline', parts='apart on one baseline'))
     route['source_inline'] = {'read': False, 'error': got['error']} if 'error' in got else {'read': True, **inline(raw, vis, runs, got, route['units']), **({'unread': unread} if unread else {})}  # the owners' final text: after the re-grid and the joins (where the geometry applies)
+    route['generated_content'] = _generated_owners(raw, vis, runs, marks, got.get('generated'), route['units'])  # the page's own generated content, on the final units
+    route['route'] = dict(route['route'], settings=dict(route['route'].get('settings') or {}, generated_content='native layout (DOMSnapshot); proved whole owners'))
+    generated = None if route['generated_content']['status'] == 'complete' else 'generated: ' + '; '.join(route['generated_content']['why'])
     seen = None if 'error' in got else {**colors(raw, vis, runs, dict(got, marks=marks), route['units']), **({'unread': unread} if unread else {})}  # every bound run's own colour, on the same final text (every run's mark, ordinary ones too)
     route['source_color'] = ({'read': False, 'error': got['error']} if seen is None else {'read': True, **seen} if not refused else  # what the page names and no evidence answered may set any colour: the render's is kept as a fallback reading, never the proved original
                              {'read': False, 'error': repr(RuntimeError('what the page names cannot be read offline, so its colours are unproved: ' + ', '.join(refused)[:150]))[:200], 'fallback': seen})
@@ -694,4 +841,4 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
             'boundaries_the_tool_dropped': sum(a == b for _, a, b, _, _ in gaps), 'parted': sum(len(x.get('parts', ())) for x in edited), 'seconds': round(time.time() - t0, 1),
             **({'source_formatting': n_struck} if decorate else {}),  # items the render's own decoration proved struck (None: no verdict)
-            **({'error': '; '.join(x for x in ('symbols: ' + got['error'] if 'error' in got else None, unproved, formatting) if x)} if 'error' in got or unproved or formatting else {})}  # html_route marks the route PARTIAL with it
+            **({'error': '; '.join(x for x in ('symbols: ' + got['error'] if 'error' in got else None, unproved, formatting, generated) if x)} if 'error' in got or unproved or formatting or generated else {})}  # html_route marks the route PARTIAL with it

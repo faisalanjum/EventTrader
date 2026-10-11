@@ -39,6 +39,8 @@ def dump(node):
     kind = type(node).__name__
     d = {'type': kind}
     if kind == 'ParagraphNode': d['paragraph'] = True  # the tool's paragraph, kept for the units it becomes (to_units, route_for)
+    if kind == 'ListItemNode': d['item'] = True  # the parser's own list item, kept through the dump (a container of blocks keeps it too): only these are list items
+    if kind == 'ListNode': d['ordered'] = bool(node.ordered)  # the parser's own list type (<ol> or <ul>); its text() numbering counts children, not the source's start/value: not kept
     if kind == 'HeadingNode':  # the tool's own evidence for its heading claim, kept as a claim: a style or a confidence certifies no heading (Codex's worktree)
         native = {'metadata': dict(getattr(node, 'metadata', None) or {})}
         if getattr(node, 'style', None) is not None: native['style'] = asdict(node.style)
@@ -122,7 +124,7 @@ def to_units(tree, codes=None, shown=(), hidden=frozenset()):
     code of this source — the tool's own, from a tag the scanner does not list — names no tag) and keeps its code as `src` until `route_for` gives the name back;
     every table names the table it came from the same way (`tag`, None when the tool's table carries no code of this source: it then stands nowhere). `shown`:
     the sorted first bytes of the picture tags the page shows (`Visible.pictures`); a table with no text whose own cell holds one is kept for it."""
-    units, paragraphs, holders = [], count(), []
+    units, paragraphs, holders, lists = [], count(), [], count()
 
     def pictured(x):  # a shown picture tag stands in this cell's own source span (its code's): the tool keeps the cell, not the picture (EdgarTools 5.60.0 cells are text)
         a = codes.get(x['_code']) if codes is not None and isinstance(x['_code'], str) else None
@@ -164,6 +166,13 @@ def to_units(tree, codes=None, shown=(), hidden=frozenset()):
     def visit(n):
         kind = n['type']
         if kind == 'TableNode': table_unit(n)
+        elif kind == 'ListNode':  # each unit made from one of the list's own items says which (a split item's units share it; a nested list's units name each list, outer first); any other child names none
+            key, item = next(lists), 0
+            for k in n.get('children') or []:
+                first = len(units); walk(k)
+                if k.get('item'):
+                    for u in units[first:]: u.setdefault('lists', []).insert(0, {'list': key, 'ordered': n.get('ordered'), 'item': item})  # ordered None: a dump without the parser's type says none
+                    item += 1
         elif kind in BRANCH:
             for k in n.get('children') or []: walk(k)
         elif n.get('heading'):  # a paragraph the tool marks as (or starting/ending with) a heading
@@ -588,7 +597,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell', 'table_captions': "each table's own caption a caption unit, bound to its source caption"}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'lists': "the parser's own list items: list, ordered, item", 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell', 'table_captions': "each table's own caption a caption unit, bound to its source caption"}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def settings(vis):

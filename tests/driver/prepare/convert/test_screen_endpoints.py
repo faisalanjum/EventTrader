@@ -69,7 +69,8 @@ class Faults(unittest.TestCase):  # each catch tells the document's own failure 
 
     def test_a_symbol_reading_that_fails_keeps_the_measured_geometry_and_says_why(self):  # measure's catch round SYMBOLS_JS
         closed = []; tables, boxes, sym = screen_grid.measure(self.RAW, offline(RuntimeError('symbols failed'), closed=closed), prefix='p')
-        self.assertEqual((tables, boxes, sym, closed), ({}, GEOMETRY['boxes'], {'error': "RuntimeError('symbols failed')"}, [1, 1]))  # both pages closed: the charset read's and the measure's
+        gen = sym.pop('generated')  # the fake page has no native layout snapshot: said as no reading, never an empty success
+        self.assertEqual((tables, boxes, sym, closed, gen['read']), ({}, GEOMETRY['boxes'], {'error': "RuntimeError('symbols failed')"}, [1, 1], False))  # both pages closed: the charset read's and the measure's
 
     def test_a_machine_fault_while_reading_symbols_stops_the_measure(self):
         for error in MACHINE():
