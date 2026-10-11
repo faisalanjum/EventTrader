@@ -1113,9 +1113,7 @@ class Grader:
     def table_title(self, value, alt, tb, vr):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'table_title', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         cars = self.carriers(anchors, pieces, tb)
-        mine = tb.get('source_table') or {}  # the table's own caption unit may stand after it (a caption printed after the rows): named by this table and standing in its own source caption
-        own = lambda k: k['unit'] is not None and k['unit'].get('kind') == 'caption' and mine.get('claims') == 1 and (k['unit'].get('source_table') or {}).get('tag_start') == mine.get('tag_start') and own_caption(self.rf, k['unit'])
-        usable = [k for k in cars if (k['table'] is tb and k['cell']['r'] < vr) or (k['table'] is not tb and k['order'] < tb['_order']) or own(k)]
+        usable = [k for k in cars if (k['table'] is tb and k['cell']['r'] < vr) or (k['table'] is not tb and k['order'] < tb['_order']) or self.own_caption_of(k, tb)]
         if not usable: return ('fail', 'placement', None) if cars else ('fail', 'missing', None)
         ok, flag = match_pieces([k['text'] for k in usable], pieces, self.markers, self.own + self.table_context)
         got = ' '.join(k['text'] for k in usable)
@@ -1183,9 +1181,23 @@ class Grader:
             else: return 'fail', 'spacing' if any(spacing_only(k['text'], value) for k in cars) or spacing_only(got, value) else 'text', got
         self.matched = objects(cars)  # a lead-in may be spread over several pieces; strikes outside its text do not count (struck_kept scopes by the key text)
         if hit['table'] is tb: return 'pass', None, flag
-        between = [u for u in self.rf.units if hit['order'] < u['_order'] < tb['_order'] and u.get('kind') not in ('clutter', 'image') and u['_order'] not in self.ctx_orders
-                   and not (source_before(hit['anchor'], u.get('anchor')) and source_before(u.get('anchor'), tb.get('anchor')))]  # what the source prints between them (page furniture) is not a displacement
-        return ('pass', None, flag) if not between else ('fail', 'placement', None)
+        return ('pass', None, flag) if not self.displaced(hit, tb) else ('fail', 'placement', None)
+
+    def own_caption_of(self, k, tb):
+        """Is the carrier the value's table's own caption unit: named by this table and standing in its own source caption (`own_caption`)? It may stand
+        after the table (a caption printed after the rows)."""
+        mine = tb.get('source_table') or {}
+        return k['unit'] is not None and k['unit'].get('kind') == 'caption' and mine.get('claims') == 1 and (k['unit'].get('source_table') or {}).get('tag_start') == mine.get('tag_start') and own_caption(self.rf, k['unit'])
+
+    def between(self, k, tb):
+        """The units the route lists between a carrier outside the value's table and that table, on either side of it (C6's own filter)."""
+        lo, hi = sorted((k['order'], tb['_order']))
+        return [u for u in self.rf.units if lo < u['_order'] < hi and u.get('kind') not in ('clutter', 'image') and u['_order'] not in self.ctx_orders]
+
+    def displaced(self, k, tb):
+        """Of those, the units the source does not print between them (C6): what the source prints there (page furniture) is no displacement."""
+        first, last = (k['anchor'], tb.get('anchor')) if k['order'] < tb['_order'] else (tb.get('anchor'), k['anchor'])
+        return [u for u in self.between(k, tb) if not (source_before(first, u.get('anchor')) and source_before(u.get('anchor'), last))]
 
     def section_path(self, value, alt, target_order, tb=None):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'section_path', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
@@ -1261,6 +1273,14 @@ class Grader:
         if good:
             k = good[0]; self.matched = objects(cars)
             if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', None
+            if k['table'] is not tb and anchors and not self.own_caption_of(k, tb):  # the key's unit line outside its table: on the source's own side of it, nothing displaced between (C6)
+                def frame(a):  # every place of it in one frame
+                    kinds = {'bytes' if 'byte_start' in x else 'page' if 'region' in x and x.get('page') is not None else None for x in spans(a)}
+                    return kinds.pop() if len(kinds) == 1 and None not in kinds else None
+                f = frame(k['anchor'])
+                if f is None or frame(tb.get('anchor')) != f: return 'unresolved', 'source_order', None  # no place the source can order: never a guessed side
+                if source_before(k['anchor'], tb.get('anchor')) != (k['order'] < tb['_order']) or any(frame(u.get('anchor')) == f for u in self.displaced(k, tb)): return 'fail', 'placement', None
+                if any(frame(u.get('anchor')) != f for u in self.between(k, tb)): return 'unresolved', 'source_order', None  # a unit between them the source cannot place
             return 'pass', None, None
         if squash(value) and self.printed(' '.join(c.get('text', '') for c in V), value, anchors, at_place(V, lambda cs: [' '.join(c.get('text', '') for c in cs)])): self.matched = list(V); return 'pass', None, 'in_value_cell'  # printed inside the value's own cells, as whole words (Codex R15-1 class)
         if any(self.same(x, value)[0] for k in cars for x in runs(k, value)): return 'unresolved', 'adjacency', None
