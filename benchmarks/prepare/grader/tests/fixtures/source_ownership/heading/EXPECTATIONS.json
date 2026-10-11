@@ -2,8 +2,8 @@
   "before_execution_utc": "2026-10-11T03:15:12.832285+00:00",
   "derivation": "Invented source and hand-authored equivalent saved routes fixed before grader calls. Same table header is above the value and preserves its source identity; separating it into a prior heading unit preserves the same heading relationship. Missing, altered, wrong-source and later headings are material negative controls.",
   "expected_section_path": {
-    "correct_same_table_heading": "pass",
-    "correct_same_table_shifted_grid": "pass",
+    "correct_same_table_heading": "unresolved",
+    "correct_same_table_shifted_grid": "unresolved",
     "equivalent_separate_heading": "pass",
     "heading_moved_after_value": "fail",
     "missing_heading": "fail",

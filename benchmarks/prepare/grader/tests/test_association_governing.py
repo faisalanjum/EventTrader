@@ -81,17 +81,17 @@ class GoverningAssociation(unittest.TestCase):
 
     def test_header_path_at_its_governing_place(self):
         gov = {'header_path': {'pieces': [search(STACK, '2026', 2, 1)]}}
-        self.assertEqual(outcome(STACK, [STACK_T], '9', 'header_path', ['2026'], gov), PASS)
+        self.assertEqual(outcome(STACK, [STACK_T], '9', 'header_path', ['2026'], gov), ('unresolved', 'source_order', None))  # semantic truth unchanged (correct); automatic: its cross-row order is byte order only, unproved (table-order-conservative)
         self.assertEqual(outcome(STACK, [without([STACK_T], 't', 2, 2)[0]], '9', 'header_path', ['2026'], gov), ('fail', 'missing', None))
         moved = copy.deepcopy(STACK_T); next(c for c in moved['cells'] if (c['r'], c['c']) == (2, 2))['c'] = 1  # own heading over another column
         self.assertEqual(outcome(STACK, [moved], '9', 'header_path', ['2026'], gov), ('fail', 'column', None))
         two = {'header_path': {'pieces': [search(LEVELS, 'Three Months', 2, 1), search(LEVELS, '2026', 2, 1)]}}  # two pieces, each at its own block's governing place
-        self.assertEqual(outcome(LEVELS, [LEVELS_T], '9', 'header_path', ['Three Months', '2026'], two), PASS)
+        self.assertEqual(outcome(LEVELS, [LEVELS_T], '9', 'header_path', ['Three Months', '2026'], two), ('unresolved', 'source_order', None))  # semantic truth unchanged (correct); automatic: its cross-row order is byte order only, unproved (table-order-conservative)
         self.assertNotEqual(outcome(LEVELS, [without([LEVELS_T], 't', 3, 1)[0]], '9', 'header_path', ['Three Months', '2026'], two)[0], 'pass')  # one governing piece lost
 
     def test_corner_text_at_its_governing_place(self):
         gov = {'corner_text': {'pieces': [search(CORNER, U, 2, 1)]}}
-        self.assertEqual(outcome(CORNER, [CORNER_T], '9', 'corner_text', U, gov), PASS)
+        self.assertEqual(outcome(CORNER, [CORNER_T], '9', 'corner_text', U, gov), ('unresolved', 'source_order', None))  # semantic truth unchanged (correct); automatic: its cross-row order is byte order only, unproved (table-order-conservative)
         self.assertEqual(outcome(CORNER, [without([CORNER_T], 't', 2, 0)[0]], '9', 'corner_text', U, gov), ('fail', 'missing', None))
 
     def test_lead_in_at_its_governing_place(self):
@@ -128,7 +128,7 @@ class GoverningAssociation(unittest.TestCase):
         self.assertEqual(outcome(UNITS, [u for u in UNITS_R if u['id'] != 'u2'], '9', 'unit_printed', U, {'unit_printed': {'pieces': [search(UNITS, U, 2)]}}), PASS)
         self.assertEqual(outcome(UNITS, [u for u in UNITS_R if u['id'] != 'u2'], '9', 'unit_printed', U, {'unit_printed': {'anchors': [at(UNITS, U, 0), at(UNITS, U, 1)]}}), PASS)
         self.assertEqual(outcome(LEADS, [u for u in LEADS_R if u['id'] != 'l2'], '9', 'lead_in', LEAD, {'lead_in': {'anchors': [at(LEADS, LEAD, 0), at(LEADS, LEAD, 1)]}}), PASS)
-        self.assertEqual(outcome(STACK, [without([STACK_T], 't', 2, 2)[0]], '9', 'header_path', ['2026'], {'header_path': {'anchors': [at(STACK, '2026', 0), at(STACK, '2026', 1)]}}), PASS)
+        self.assertEqual(outcome(STACK, [without([STACK_T], 't', 2, 2)[0]], '9', 'header_path', ['2026'], {'header_path': {'anchors': [at(STACK, '2026', 0), at(STACK, '2026', 1)]}}), ('unresolved', 'source_order', None))  # semantic truth unchanged (correct); automatic: its cross-row order is byte order only, unproved (table-order-conservative)
 
     def test_another_copys_own_duties_stay_with_their_owners(self):
         gov = {'unit_printed': {'pieces': [search(UNITS, U, 2, 1)]}}

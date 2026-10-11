@@ -97,7 +97,7 @@ class UnitOrder(unittest.TestCase):
     def test_an_in_table_unit_keeps_the_existing_row_rule(self):
         raw = b'<table><tr><td>' + U.encode() + b'</td><td>2026</td></tr><tr><td>Costs</td><td>9</td></tr></table>'
         t = table(raw, 't', 0, [[U, '2026'], ['Costs', '9']]); next(c for c in t['cells'] if c['text'] == U)['r'] = 2  # the route puts the unit cell below the value row
-        self.assertEqual(unit(raw, [t], governing(raw, 1, 0)), MOVED)
+        self.assertEqual(unit(raw, [t], governing(raw, 1, 0)), ('unresolved', 'source_order', None))  # semantic truth unchanged (moved: wrong); automatic: only byte order says so, unproved - never a pass (table-order-conservative)
 
     def test_the_tables_own_caption_is_in_the_table(self):
         tb = table(CAP, 't', 0, [['Costs', '9']]); p = text(CAP, 'p', 'Costs')

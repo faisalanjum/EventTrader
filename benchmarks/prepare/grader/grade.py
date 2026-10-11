@@ -214,6 +214,12 @@ def order_key(a):
     return (0, a['byte_start']) if 'byte_start' in a else (a.get('page') or 0, a['region'][1] if 'region' in a else 0)
 
 
+def frame(a):
+    """The one frame every place of an anchor is in ('bytes', or 'page' boxes with a page), or None: no order the source can give it."""
+    kinds = {'bytes' if 'byte_start' in x else 'page' if 'region' in x and x.get('page') is not None else None for x in spans(a)}
+    return kinds.pop() if len(kinds) == 1 and None not in kinds else None
+
+
 def source_before(a, b):
     """Is a printed before b? Bytes by offset; boxes sharing a row left to right, otherwise page then top to bottom."""
     a, b = (spans(a) or [{}])[0], (spans(b) or [{}])[0]
@@ -756,6 +762,7 @@ def screen_boundary(left, right, tol=0.75):
 class Grader:
     def __init__(self, t, rf):
         self.t, self.rf, self.rows = t, rf, []
+        self.order_doubt = self.order_relaxed = False  # a cross-row order only bytes could tell (`order_holds`): said, and read as the route keeps it only on a field's order-relaxed attempt
         self.lenient = self.undecided = False  # the dash question (`printed`): is an undecided dash read as no sign; did the strict reading meet one
         self.touching, self.unsure = True, False  # the join question (`adjacent`): how a join the source cannot settle is read; did the grading meet one
         self.markers = [m['marker_text'] for _, v in alternatives(t, 'footnote_markers') for m in (v or [])]
@@ -830,10 +837,22 @@ class Grader:
         for alt, value in alts:
             if value in (None, [], {}): return self.row(name, 'na')
             n, self.lenient, self.undecided = len(self.rows), False, False
+            self.order_doubt = False
             r, found = once(value, alt)  # first only what is proved counts: a dash the text and the source leave undecided prints nothing
             if not found and self.undecided:  # not proved — would it hold if those dashes are no signs? Then the value is open, neither failed nor passed (Codex R17-C5, R18-C3)
                 del self.rows[n:]; self.lenient = True; r2, _ = once(value, alt); self.lenient = False
                 r = ('unresolved', 'numeric_boundary', r2[2]) if r2[0] == 'pass' else r if r[0] == 'unresolved' else r2  # a failure stands only when both readings fail — a strike lost or invented fails either way
+            if self.order_doubt and not (r[0] == 'fail' and found):  # the reading leaned on a cross-row order only bytes could tell (a contradiction proved after its own check passed - found - stands)
+                if r[0] == 'pass':  # byte agreement awards no pass: open, and so is every side check it passed
+                    r = ('unresolved', 'source_order', r[2]); self.rows[n:] = [dict(x, verdict='unresolved', reason='source_order', detail=None) if x['verdict'] == 'pass' else x for x in self.rows[n:]]
+                elif r[0] == 'fail':  # not proved: would it hold were the route's order kept? (a content or identity failure fails then too)
+                    kept = (self.rows[n:], set(self.ctx_orders), self.matched, self.unsure, self.undecided, self.lenient); del self.rows[n:]
+                    self.order_relaxed = True; r2, f2 = once(value, alt)
+                    if r2[0] != 'pass' and self.undecided: del self.rows[n:]; self.lenient = True; r2, f2 = once(value, alt)  # the dash reading too: each doubt its own flag
+                    side = [dict(x, verdict='unresolved', reason='source_order', detail=None) if x['verdict'] == 'pass' else x for x in self.rows[n:]]
+                    self.order_relaxed = False; self.rows[n:], self.ctx_orders, self.matched, self.unsure, self.undecided, self.lenient = kept  # nothing of the relaxed reading stays but the verdict
+                    if r2[0] == 'pass': r = ('unresolved', 'source_order', r2[2]); self.rows[n:] = side
+                    elif r2[0] == 'unresolved' or f2: r = r2  # another doubt, or a contradiction proved with the order granted, stands on its own
             results.append((r, self.rows[n:])); del self.rows[n:]
             if r[0] == 'pass': break
         (verdict, reason, detail), side = next((x for x in results if x[0][0] == 'pass'), None) or next((x for x in results if x[0][0] == 'unresolved'), results[0])
@@ -986,8 +1005,18 @@ class Grader:
 
     def in_order(self, k, tb, vr):
         """A carrier inside the value's table keeps the source order of rows; outside, it comes before the table."""
-        if k['table'] is tb: return k['cell']['r'] == vr or (k['cell']['r'] < vr) == source_before(k['anchor'], self.t['anchor'])
+        if k['table'] is tb: return k['cell']['r'] == vr or self.order_holds(k['anchor'], self.t['anchor'], k['cell']['r'] < vr)
         return k['order'] < tb['_order']
+
+    def order_holds(self, a, b, before=True):
+        """Does the source print a before b (`before`; else after) - two places on different rows? Page boxes are printed places: they decide.
+        Bytes are written order only: a table's own header group written after its body, or footer group before it, is drawn in its own place,
+        so in byte frames neither agreement nor disagreement proves it. Read as written, and that doubt said (`order_doubt`): a field's pass
+        that leaned on it is UNRESOLVED, never PASS; an unproved failure gets one order-relaxed reading (`field`). Other frames: as before."""
+        if frame(a) == frame(b) == 'bytes':
+            self.order_doubt = True
+            if self.order_relaxed: return True  # the order as the route keeps it
+        return source_before(a, b) == before  # as written (bytes) or printed (page boxes)
 
     def placement(self, items, context=()):
         """Reject proved source-parent/column contradictions, without inferring unrecorded governing meaning."""
@@ -1105,6 +1134,10 @@ class Grader:
                 if match_pieces([spaced(k, ' '.join(pieces)) for k in cands], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', None
                 continue
             if any(not col_hit(k['cell'], vcols) for k in cands): return 'fail', 'column', None
+            if anchors:  # every key-placed label listed above the value - in its own table or an earlier continued one - must be printed before it, in one frame the source can order
+                fr = frame(self.t.get('anchor'))
+                if fr is None or any(frame(k['anchor']) != fr for k in cands): return 'unresolved', 'source_order', None  # no single frame: never a guessed side
+                if not all(self.order_holds(k['anchor'], self.t.get('anchor')) for k in cands): return 'fail', 'placement', None  # page boxes: printed after the value; bytes: unproved (`order_holds`)
             self.ctx_orders.update(k['order'] for k in cands); self.matched = objects(cands)
             return 'pass', None, flag or f or ('anchor_unknown' if not anchors else None)
         if not cars: return 'fail', 'missing', None
@@ -1274,9 +1307,6 @@ class Grader:
             k = good[0]; self.matched = objects(cars)
             if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', None
             if k['table'] is not tb and anchors and not self.own_caption_of(k, tb):  # the key's unit line outside its table: on the source's own side of it, nothing displaced between (C6)
-                def frame(a):  # every place of it in one frame
-                    kinds = {'bytes' if 'byte_start' in x else 'page' if 'region' in x and x.get('page') is not None else None for x in spans(a)}
-                    return kinds.pop() if len(kinds) == 1 and None not in kinds else None
                 f = frame(k['anchor'])
                 if f is None or frame(tb.get('anchor')) != f: return 'unresolved', 'source_order', None  # no place the source can order: never a guessed side
                 if source_before(k['anchor'], tb.get('anchor')) != (k['order'] < tb['_order']) or any(frame(u.get('anchor')) == f for u in self.displaced(k, tb)): return 'fail', 'placement', None
@@ -1305,9 +1335,9 @@ class Grader:
                         continue  # the compared columns' headings, in the value's own group above it; the change column itself is proven by header_path
                     if free:  # a time row in the label column governs the rows after it; the route must keep that group intact (E15)
                         r0, head = max(c['r'] for c in free), max(free, key=lambda c: c['r'])
-                        if r0 > vr or not source_before(head.get('anchor'), self.V[0].get('anchor')): return 'fail', 'order', part['text']
+                        if r0 > vr or not self.order_holds(head.get('anchor'), self.V[0].get('anchor')): return 'fail', 'order', part['text']
                         between = [c for c in self.rf.cells_in(tb) if r0 < c['r'] < vr and squash(c.get('text', '')) and spans(c.get('anchor'))]
-                        if any(not (source_before(head.get('anchor'), c['anchor']) and source_before(c['anchor'], self.V[0].get('anchor'))) for c in between):
+                        if any(not (self.order_holds(head.get('anchor'), c['anchor']) and self.order_holds(c['anchor'], self.V[0].get('anchor'))) for c in between):
                             return 'fail', 'scope', part['text']  # a row the route placed in this group comes from elsewhere in the source
                     continue
                 cars = self.carriers([a], [part['text']], tb, equal=False) if a else [{'text': u.get('text', ''), 'unit': u} for u in self.rf.placed if u.get('kind') not in ('table', 'clutter')]

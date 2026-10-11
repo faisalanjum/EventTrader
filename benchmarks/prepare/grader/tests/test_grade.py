@@ -258,7 +258,7 @@ class GraderFixture(unittest.TestCase):
 class CorrectOutputTests(GraderFixture):
     def test_every_target_passes_and_every_gate_holds(self):
         res = self.run_grader()
-        self.assertTrue(all(v['verdict'] == 'PASS' for v in res['targets'].values()), res['targets'])
+        self.assertTrue(all(v['verdict'] == ('UNRESOLVED' if k in ('pkt/T01', 'pkt/T02', 'pkt/T03') else 'PASS') for k, v in res['targets'].items()), res['targets'])  # T01-T03: correct output whose table order is byte order only, unproved (table-order-conservative); every other target PASS
         g = res['gates']
         for name in ('ids_and_run_facts', 'reading_order', 'markers_apart'): self.assertTrue(g[name]['pass'], (name, g[name]))
         self.assertTrue(g['honest_anchors']['measured_pass'])
@@ -274,7 +274,7 @@ class CorrectOutputTests(GraderFixture):
 
     def test_summary_counts_targets_by_split_and_format(self):
         s = self.run_grader()['summary']['by_split_format']
-        self.assertEqual(s['development']['cell/htm'], {'targets': 4, 'PASS': 4, 'FAIL': 0, 'UNRESOLVED': 0, 'NOT_CONVERTED': 0, 'EXCLUDED': 0, 'APPROXIMATE': 0})
+        self.assertEqual(s['development']['cell/htm'], {'targets': 4, 'PASS': 1, 'FAIL': 0, 'UNRESOLVED': 3, 'NOT_CONVERTED': 0, 'EXCLUDED': 0, 'APPROXIMATE': 0})  # aggregate of the order-unproved targets below (table-order-conservative); no target became PASS
         self.assertEqual(s['development']['structure/htm']['PASS'], 4)
         self.assertEqual(s['stratified_control']['cell/xml']['PASS'], 1)
         self.assertEqual(s['heldout']['cell/pdf']['PASS'], 1)
@@ -387,7 +387,7 @@ class CorrectOutputTests(GraderFixture):
             self.cell(r, 'v1').update(text='796'); self.cells(r).remove(self.cell(r, 'v3'))
         s = self.run_grader(two_faults)['summary']
         self.assertEqual(s['failures_by_reason'], {'value': {'text': 1}})
-        self.assertEqual(s['unresolved'], ['pkt/T03'])
+        self.assertEqual(s['unresolved'], ['pkt/T02', 'pkt/T03'])  # T02 joins: its table order is byte order only (table-order-conservative)
 
     def test_writes_results_and_summaries(self):
         self.run_grader(); out = self.root / 'out'
@@ -622,7 +622,7 @@ class PlantedFaultTests(GraderFixture):
                 t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span('1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
                      'support': {field: {'how': 'model', 'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', field: value}}
                 g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
-                self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == field), 'pass', (field, form))
+                self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == field), 'unresolved' if field in ('header_path', 'corner_text', 'unit_printed', 'segment_or_basis') else 'pass', (field, form))  # truth unchanged; these four rest on byte row order only, unproved (table-order-conservative)
         for number, pieces in (('1234', ['12', '34']), ('12.34', ['12.', '34']), ('1,234', ['1,', '234']), ('$1234', ['$', '1234'])):
             for separate in (False, True):
                 raw = ('<table><tr><td>' + number + '</td></tr></table>').encode(); start = raw.index(number.encode()); offset = start; cells = []
@@ -1050,7 +1050,7 @@ class PlantedFaultTests(GraderFixture):
     def test_changed_digit_fails_the_value_only(self):
         res = self.run_grader(lambda r: self.cell(r, 'v1').update(text='796'))
         self.assertEqual(self.check(res, 'pkt/T01', 'value')['verdict'], 'fail')
-        self.assertEqual(self.verdict(res, 'pkt/T02'), 'PASS')
+        self.assertEqual(self.verdict(res, 'pkt/T02'), 'UNRESOLVED')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_dropped_value_cell_is_unresolved(self):
         res = self.run_grader(lambda r: self.cells(r).remove(self.cell(r, 'v1')))
@@ -1088,7 +1088,7 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader(lambda r: self.cell(r, 'l2').update(text='Free cash flow(1)', markers=[]))
         row = self.check(res, 'pkt/T02', 'row_label')
         self.assertEqual((row['verdict'], row['detail']), ('pass', 'marker_in_label'))
-        self.assertEqual(self.verdict(res, 'pkt/T02'), 'PASS')
+        self.assertEqual(self.verdict(res, 'pkt/T02'), 'UNRESOLVED')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_dropped_note_fails_footnotes(self):
         res = self.run_grader(lambda r: self.html(r).remove(next(u for u in self.html(r) if u['id'] == 'u5')))
@@ -1139,8 +1139,8 @@ class PlantedFaultTests(GraderFixture):
             u = self.html(r); n = next(x for x in u if x['id'] == 'u4'); u.remove(n)
             self.cells(r).append({'r': 6, 'c': 0, 'rs': 1, 'cs': 5, 'text': n['text'], 'anchor': n['anchor']})
         res = self.run_grader(note_row)
-        self.assertEqual(self.check(res, 'pkt/T02', 'footnote_markers')['verdict'], 'pass')
-        self.assertEqual(self.check(res, 'pkt/T02', 'note_linked')['verdict'], 'pass')
+        self.assertEqual(self.check(res, 'pkt/T02', 'footnote_markers')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
+        self.assertEqual(self.check(res, 'pkt/T02', 'note_linked')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_mark_glued_to_a_title_or_header_is_tolerated_and_flagged(self):
         res = self.run_grader(lambda r: self.cell(r, 'ttl').update(text='Free Cash Flow(1)'))
@@ -1150,7 +1150,7 @@ class PlantedFaultTests(GraderFixture):
     def test_header_with_a_trailing_bracketed_unit_phrase_matches_the_split_key_header(self):
         res = self.run_grader(lambda r: self.cell(r, 'hb').update(text='Three Months Ended (in millions)'))
         row = self.check(res, 'pkt/T01', 'header_path')
-        self.assertEqual((row['verdict'], row['detail']), ('pass', 'unit_phrase_split'))
+        self.assertEqual((row['verdict'], row['detail']), ('unresolved', 'unit_phrase_split'))  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_title_block_with_own_pieces_before_and_a_mark_in_front_still_matches(self):
         # a PDF tool merged "(Unaudited) (1) Title Current Year-to-Date vs. Prior Year-to-Date" into one block
@@ -1168,16 +1168,16 @@ class PlantedFaultTests(GraderFixture):
             cells = self.cells(r); hb, h24 = self.cell(r, 'hb'), self.cell(r, 'h24')
             cells.remove(h24); hb.update(text='Three Months Ended December 28, 2024', rs=2, cs=3, anchor=[elem('hb'), elem('h24')])
         res = self.run_grader(merge)
-        self.assertEqual(self.check(res, 'pkt/T01', 'header_path')['verdict'], 'pass')
+        self.assertEqual(self.check(res, 'pkt/T01', 'header_path')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
         self.assertTrue(res['gates']['honest_anchors']['measured_pass']); self.assertEqual(res['gates']['honest_anchors']['dishonest'], {})  # the merged cell's list anchor is honest
-        self.assertEqual(self.check(res, 'pkt/T01', 'unit_printed')['verdict'], 'pass')  # the corner cell is untouched
+        self.assertEqual(self.check(res, 'pkt/T01', 'unit_printed')['verdict'], 'unresolved')  # the corner cell is untouched
 
     def test_symbol_cells_merged_into_the_value_cell_keep_the_unit_sign(self):
         def merge(r):
             cells = self.cells(r); s2, v2, c2 = self.cell(r, 's2'), self.cell(r, 'v2'), self.cell(r, 'c2')
             cells.remove(s2); cells.remove(c2); v2.update(text='$(506)', c=1, cs=3, anchor=[elem('s2'), elem('v2'), elem('c2')])
         res = self.run_grader(merge)
-        self.assertEqual(self.verdict(res, 'pkt/T02'), 'PASS')
+        self.assertEqual(self.verdict(res, 'pkt/T02'), 'UNRESOLVED')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_key_pieces_align_to_tool_cells_one_to_many_with_marks_and_unit_phrases(self):
         self.assertEqual(grade.match_pieces(['Change', 'Excluding', 'Foreign Currency Impact (1)'], ['Change Excluding Foreign Currency Impact'], ['(1)']), (True, 'marker_in_text'))
@@ -1227,8 +1227,8 @@ class PlantedFaultTests(GraderFixture):
             u.insert(u.index(tb), {'id': 'u3a', 'kind': 'table', 'anchor': {'byte_start': elem('tbl')['byte_start'], 'byte_end_exclusive': elem('h23')['byte_end_exclusive']}, 'cells': head})
         res = self.run_grader(split)
         row = self.check(res, 'pkt/T02', 'header_path')
-        self.assertEqual((row['verdict'], row['detail']), ('pass', 'continued_table'))
-        self.assertEqual(self.verdict(res, 'pkt/T02'), 'PASS')
+        self.assertEqual((row['verdict'], row['detail']), ('unresolved', 'continued_table'))  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
+        self.assertEqual(self.verdict(res, 'pkt/T02'), 'UNRESOLVED')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
         res = self.run_grader(lambda r: (split(r), self.cell(r, 'v2').update(c=4)))
         self.assertEqual(self.check(res, 'pkt/T02', 'header_path')['reason'], 'column')
 
@@ -1238,7 +1238,7 @@ class PlantedFaultTests(GraderFixture):
             cells.remove(s2); cells.remove(c2); v2.update(text='$(506)', c=1, cs=3, anchor=[elem('s2'), elem('v2'), elem('c2')])
             self.cell(r, 'h24').update(c=2, cs=2)
         res = self.run_grader(merge)
-        self.assertEqual(self.check(res, 'pkt/T02', 'header_path')['verdict'], 'pass')
+        self.assertEqual(self.check(res, 'pkt/T02', 'header_path')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_qualifier_inside_the_table_must_keep_its_source_row_order(self):
         def move_up(r):  # the note row sits after the value in the source; a tool putting it above the value misorders the table
@@ -1246,7 +1246,7 @@ class PlantedFaultTests(GraderFixture):
             for c in cells[:-1]: c['r'] += 1
             self.html(r).remove(self.unit(r, 'u4'))
         res = self.run_grader(move_up)
-        self.assertEqual(self.check(res, 'pkt/T02', 'footnote_markers')['reason'], 'placement')
+        self.assertEqual(self.check(res, 'pkt/T02', 'footnote_markers')['reason'], 'source_order')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def sub(self, id_, piece):
         """Byte span of a piece of text inside the element id_ (the original's own bytes decide the join)."""
@@ -1311,7 +1311,7 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader(merged)
         row = self.check(res, 'pkt/T02', 'table_title')
         self.assertEqual(row['verdict'], 'pass'); self.assertIn(row['detail'], ('joined_with_own_pieces', 'unit_phrase_split'))  # both explain the extra words
-        self.assertEqual(self.check(res, 'pkt/T02', 'unit_printed')['verdict'], 'pass')
+        self.assertEqual(self.check(res, 'pkt/T02', 'unit_printed')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_title_cell_holding_title_and_the_records_own_basis_words_passes_flagged_but_an_extra_qualifier_fails(self):
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook\nexclude discontinued operations'))
@@ -1383,7 +1383,7 @@ class PlantedFaultTests(GraderFixture):
                 if c['r'] >= 3: c['r'] += 1
             cells.append({'r': 3, 'c': 0, 'rs': 1, 'cs': 1, 'text': 'Three Months Ended', 'anchor': elem('after')})
         res = self.run_grader(other_group)
-        self.assertEqual(self.check(res, 'pkt/T01', 'periods')['reason'], 'scope')
+        self.assertEqual(self.check(res, 'pkt/T01', 'periods')['reason'], 'source_order')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_an_unrelated_label_row_between_the_time_row_and_the_value_does_not_end_its_scope(self):
         def sub_label(r):  # E15: a lower-level subheading or unrelated label does not by itself end the containing time scope
@@ -1392,7 +1392,7 @@ class PlantedFaultTests(GraderFixture):
                 if c['r'] >= 3: c['r'] += 1
             cells.append({'r': 3, 'c': 0, 'rs': 1, 'cs': 1, 'text': 'Operating activities:', 'anchor': self.sub('h23', 'December 30, 2023')})  # printed between them in the source
         res = self.run_grader(sub_label)
-        self.assertEqual(self.check(res, 'pkt/T01', 'periods')['verdict'], 'pass')
+        self.assertEqual(self.check(res, 'pkt/T01', 'periods')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_swapped_note_markers_fail_the_note_link(self):
         def swap(r): self.unit(r, 'u4')['marker'] = '4'; self.unit(r, 'u5')['marker'] = '(1)'
@@ -1419,7 +1419,7 @@ class PlantedFaultTests(GraderFixture):
             rf = grade.RouteFile({'file_id': target['file_id'], 'units': [{'id': 't', 'kind': 'table', 'anchor': target['table_anchor'], 'cells': cs}]}, raw, 'htm')
             g = grade.Grader(target, rf); g.grade_cell()
             per = next(r for r in g.rows if r['check'] == 'periods')
-            self.assertEqual((per['verdict'], per['reason']), ('fail', 'scope') if shifted else ('pass', None))
+            self.assertEqual((per['verdict'], per['reason']), ('unresolved', 'source_order'))  # truth unchanged (shifted: wrong; faithful: right); both rest on byte row order only, unproved (table-order-conservative)
 
     def test_xml_leaf_in_another_namespace_fails(self):
         res = self.run_grader(lambda r: r[XML_ID]['units'][4].update(name='{urn:wrong}sharedDispositivePower'))
@@ -1565,7 +1565,7 @@ class PlantedFaultTests(GraderFixture):
         def section_row(r):  # the period phrase printed as a section row above the value, in the label column
             cells = self.cells(r); hb = self.cell(r, 'hb'); hb.update(c=0, cs=1)
         res = self.run_grader(section_row)
-        self.assertEqual(self.check(res, 'pkt/T01', 'periods')['verdict'], 'pass')
+        self.assertEqual(self.check(res, 'pkt/T01', 'periods')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_run_in_heading_at_the_start_of_a_paragraph_counts_as_present_but_not_recognised(self):
         def run_in(r):  # the tool merged the heading into the paragraph that follows it (guide V18: a run-in section label contains what follows)
@@ -1645,7 +1645,7 @@ class PlantedFaultTests(GraderFixture):
         (self.pkt / 'sources' / XML_ID).write_bytes(XML + b'\n')
         res = self.run_grader()
         self.assertEqual(self.verdict(res, 'pkt/X01'), 'INPUT_MISMATCH')
-        self.assertEqual(self.verdict(res, 'pkt/T01'), 'PASS')
+        self.assertEqual(self.verdict(res, 'pkt/T01'), 'UNRESOLVED')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     # ---- Codex round 11: the strike check over the field's own run, every matched carrier, the value's own cells; XML instances; word error rate
     def synthetic_cell(self, raw, units, fields, support, tb=None, value=b'1234', alternatives=None):
@@ -1900,7 +1900,7 @@ class PlantedFaultTests(GraderFixture):
         res = self.run_grader(lambda r: self.unit(r, 'u9').update(anchor={'byte_start': 5}, link_flag='gap'))
         self.assertEqual(res['gates']['honest_anchors']['dishonest'], {HTM_ID: 1})  # a route flag never hides an impossible position
         res = self.run_grader(lambda r: self.unit(r, 'u3').update(anchor={'byte_start': 5}))
-        self.assertEqual((res['gates']['honest_anchors']['dishonest'], self.verdict(res, 'pkt/T01')), ({HTM_ID: 1}, 'PASS'))  # a table's own envelope is a claim too; its placed cells still carry their values
+        self.assertEqual((res['gates']['honest_anchors']['dishonest'], self.verdict(res, 'pkt/T01')), ({HTM_ID: 1}, 'UNRESOLVED'))  # a table's own envelope is a claim too; its placed cells still carry their values
         empty_gap = lambda text: lambda r: self.html(r).append({'id': 'pic2', 'kind': 'image', 'text': text, 'anchor': {'byte_start': 10, 'byte_end_exclusive': 10}, 'link_flag': 'gap'})
         res = self.run_grader(empty_gap(''))
         self.assertEqual((res['gates']['honest_anchors']['dishonest'], res['gates']['honest_anchors']['unplaced']), ({}, {HTM_ID: 1}))  # a picture the linker could not place claims no text: counted apart, never dishonest, never covering
@@ -2377,7 +2377,7 @@ class PlantedFaultTests(GraderFixture):
             self.assertIn(sha(HTML), text); path.write_text(text.replace(sha(HTML), sha(styled)))
         res = self.run_grader(lambda r: r[HTM_ID].update(sha256=sha(styled))); rows = lambda x: sorted((r['key_id'], r['check'], r['verdict'], r['reason']) for r in x['results'])
         self.assertEqual(({k: v['verdict'] for k, v in res['targets'].items()}, rows(res)), ({k: v['verdict'] for k, v in plain['targets'].items()}, rows(plain)))
-        self.assertEqual(set(v['verdict'] for v in plain['targets'].values()), {'PASS'})
+        self.assertEqual(set(v['verdict'] for v in plain['targets'].values()), {'PASS', 'UNRESOLVED'})  # the join judgment is unchanged; UNRESOLVED here comes from byte-only row order (table-order-conservative)
         # a recognition row the two readings judge differently is left open and decides nothing (D3): the heading 'Item 7.' + 'Management's Discussion' in two units, the
         # first called a heading, the second text — read as one it is a heading, read apart its last piece is not
         raw = b'<style>br{display:none}</style><div><span>Item 7.</span><br><span>Management\'s Discussion</span></div><p>Revenue rose.</p>'
@@ -2549,7 +2549,7 @@ class PlantedFaultTests(GraderFixture):
         # only a carrier that holds the phrase is asked about its place: a cell the tool put in the wrong row is not excused by another unit at the key's places (mutation check, second pass)
         raw = b'<p>Amounts shown</p><table><tr><td>in thousands</td><td></td></tr><tr><td>Revenue</td><td>1234</td></tr></table>'
         swapped = [C(1, 0, 'in thousands', at(raw, b'in thousands')), C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]; shown = [{'id': 'u', 'kind': 'text', 'text': 'Amounts shown', 'anchor': at(raw, b'Amounts shown')}]
-        self.assertEqual(cell(raw, shown, {'segment_or_basis': ['in thousands']}, {'segment_or_basis': {'anchors': [at(raw, b'in thousands'), at(raw, b'Amounts shown')]}}, swapped)['segment_or_basis'], ('fail', 'placement'))
+        self.assertEqual(cell(raw, shown, {'segment_or_basis': ['in thousands']}, {'segment_or_basis': {'anchors': [at(raw, b'in thousands'), at(raw, b'Amounts shown')]}}, swapped)['segment_or_basis'], ('unresolved', 'source_order'))  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
         # a check only one of the two readings writes was judged differently too (second review): a heading recognised only when the pieces are read apart stays open with its path
         raw = b'<style>.x{display:none}</style><h2><span>Liquidity and</span><span>Capital</span></h2><p>Revenue rose.</p>'
         t = {'key_id': 'syn/S', 'file_id': 'syn/a.htm', 'type': 'structure', 'format': 'structure/htm', 'split': 'development', 'anchor': at(raw, b'Revenue rose.'), 'fields': {'printed_text': 'Revenue rose.', 'kind': 'paragraph', 'section_path': ['Liquidity and Capital']},

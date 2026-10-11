@@ -76,7 +76,7 @@ class Fixture(unittest.TestCase):
         self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'table_title'), ('fail', 'placement'))  # a same-header table listed between the title and its table, its source place after the table: no continuation
 
     def test_a_corner_of_two_stub_columns_is_the_keys_pieces(self):
-        self.assertEqual(self.grade({'corner_text': 'Name | Type', 'row_label': 'Total'})['corner_text'], ('pass', None))
+        self.assertEqual(self.grade({'corner_text': 'Name | Type', 'row_label': 'Total'})['corner_text'], ('unresolved', 'source_order'))  # semantic truth unchanged (correct); automatic: its cross-row order is byte order only, unproved (table-order-conservative)
         self.assertEqual(self.grade({'corner_text': 'Name | Kind', 'row_label': 'Total'})['corner_text'][0], 'fail')
 
     def test_a_row_label_piece_carried_down_a_block_labels_the_row(self):

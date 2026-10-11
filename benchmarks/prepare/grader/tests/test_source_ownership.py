@@ -41,7 +41,7 @@ class NestedCellOwnershipTests(unittest.TestCase):
         for anchor in (at(NESTED, b'37'), at(NESTED, b'<td id="value">37'), at(NESTED, b'<td id="value">37</td>'),
                        [at(NESTED, b'<td id="value">'), at(NESTED, b'37</td>')]):
             self.assertEqual({k: v for k, v in verdicts(NESTED_ROUTE, NESTED, nested_target(anchor)).items() if k in ('value', 'row_label', 'header_path')},
-                             {'value': 'pass', 'row_label': 'pass', 'header_path': 'pass'}, anchor)
+                             {'value': 'pass', 'row_label': 'pass', 'header_path': 'unresolved'}, anchor)  # header_path: semantic truth unchanged (correct); its cross-row order is byte order only, unproved (table-order-conservative)
 
     def test_a_wrong_inner_value_fails_and_never_borrows_the_holders_text(self):
         bad = copy.deepcopy(NESTED_ROUTE); [c.update(text='38') for c in inner_table(bad)['cells'] if grade.overlap(c.get('anchor'), at(NESTED, b'37'))]

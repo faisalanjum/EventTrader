@@ -170,7 +170,7 @@ class ContextTests(GraderFixture):
                     (self.pkg / 'KEY_SUPPORT_MAP.json').write_text(json.dumps(s))
                 kid, check = ('pkt/T01', 'unit_printed') if name == 'fallback_unit' else ('pkt/X01', 'row_context' if name == 'xml_person' else 'unit_printed')
                 baseline = self.run_grader()
-                self.assertEqual(next(r['verdict'] for r in baseline['results'] if r['key_id'] == kid and r['check'] == check), 'pass')
+                self.assertEqual(next(r['verdict'] for r in baseline['results'] if r['key_id'] == kid and r['check'] == check), 'unresolved' if name == 'fallback_unit' else 'pass')  # fallback_unit: the correct unit line's table order is byte order only, unproved (table-order-conservative); the invalid-context mutation below must still never pass
                 def mutate(routes):
                     if name.startswith('xml'):
                         field = 'reportingPersonName' if name == 'xml_person' else 'securitiesClassTitle'
