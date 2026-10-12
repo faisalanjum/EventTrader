@@ -26,6 +26,20 @@ in the raw records. Repeated image bytes share worker results while their occurr
 keep separate source context. The caller's source/version identity must remain with
 these outputs when they are serialized or moved.
 
+The HTML route's evidence members are listed below. Members appear where applicable;
+keep their `read`, `error`, `fallback` and unresolved states with the values.
+
+| Member | Evidence retained |
+|---|---|
+| `schema`, `file_id`, `sha256`, `route` | Payload schema, source identity, tool version and conversion settings. The schema alone is not a code-version identity. |
+| `source_links` | Written links, source occurrences, destinations and proved owners; unknown ownership stays explicit. |
+| `source_relations` | Explicit Inline XBRL references and continuation chains. An unread source is not evidence that it has no relationships. |
+| `source_symbols` | Raw symbol-font readings, decoder results, source places and unknown codes. |
+| `source_inline` | Native raised/lowered text evidence and its source-bound owners. |
+| `page_visibility` | Browser visibility evidence used for conversion, including unbound source fragments. |
+| `resources` | When a `Source` is supplied: document/bundle identity and the exact dependency responses or refusals used by the renders. |
+| `source_style`, `generated_content` | Native style, position and generated-content readings, described below. |
+
 HTML records retain ordered units, table cells and source anchors, picture occurrences,
 native paragraph/heading evidence, explicit source links and available style evidence.
 XML keeps literal source structure. Native heading claims are evidence, not an inferred

@@ -362,7 +362,7 @@ def symbols(raw, vis, runs, got, units):
 def _owners(vis, units, spaced=False):
     """owners(s, e) for a source run's bytes: (each owner (`_holders`) with the code-point ranges of its final text the run's characters stand at
     (`text_at`, consecutive positions only), or None; why not) - every character held, each owner's text the source's own at ordered whole-byte
-    places (`anchor._reading`, read once per owner) and every character read. One run-to-owner rule for every per-run record (`inline`, `colors`).
+    places (`anchor._reading`, read once per owner) and every character read. One run-to-owner rule for every per-run record (`inline`, `styles`).
     `spaced`: two ranges with only white space CSS collapses between them in the owner's text are one (a run's words, not a map of each word)."""
     held, owner, _ = edgartools_html._holders(units, vis)
     item, readings = {(u['id'], None): u for u in units if u.get('kind') not in ('table', 'image')}, {}

@@ -105,7 +105,7 @@ class EveryOwnRow(unittest.TestCase):
                          ([], [('Results', b'Results', True)]))  # the table's own caption unit, once, at its own source bytes; no bare copy (caption design v2)
         self.assertEqual({c['text']: c['header'] for c in t['cells'] if c['text'] in ('Region', 'Revenue')}, {'Region': True, 'Revenue': True})
 
-    def test_a_later_outer_row_is_kept_and_nested_rows_never_become_outer_rows(self):  # not the inner table's relationships (a separate known defect)
+    def test_a_later_outer_row_is_kept_and_nested_rows_never_become_outer_rows(self):  # inner-table cells and both holder links are checked in test_nested_tables
         outer = next(u for u in self.routes['nested']['units'] if u['kind'] == 'table')
         rows = {(c['r'], c['c']): c['text'].strip() for c in outer['cells']}
         self.assertEqual((rows.get((1, 0)), rows.get((1, 1))), ('Outer2', '8'))

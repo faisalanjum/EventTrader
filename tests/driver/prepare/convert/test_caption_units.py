@@ -149,7 +149,7 @@ class CaptionUnitTests(unittest.TestCase):
         self.assertEqual(title(lost, raw, '~~Service parts~~'), ('fail', 'struck'))
         raw, plain = CASES['plain'], self.routes['plain']
         bare = copy.deepcopy(plain); bare['units'] = [u for u in bare['units'] if u['kind'] != 'caption']; tabs(bare)[0]['caption'] = ['Service parts']  # a caption string with no place
-        self.assertNotEqual(title(bare, raw, 'Service parts')[0], 'pass'); self.assertEqual(gates(bare, raw), (['Service parts'], 0))
+        self.assertEqual(title(bare, raw, 'Service parts'), ('fail', 'missing')); self.assertEqual(gates(bare, raw), (['Service parts'], 0))
         twin = self.routes['repeated']; wrong = copy.deepcopy(twin); a, b = caps(wrong); b['source_table'] = dict(a['source_table'])  # names the other table
         self.assertEqual(gates(wrong, CASES['repeated'])[1], 1)
         moved = copy.deepcopy(plain); c = caps(moved)[0]; cell = next(x for x in tabs(moved)[0]['cells'] if x['text'] == 'Washer'); c['anchor'] = dict(cell['anchor'])
