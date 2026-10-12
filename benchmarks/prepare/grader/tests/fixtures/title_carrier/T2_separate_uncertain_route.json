@@ -1,0 +1,140 @@
+{
+  "error": {
+    "reason": "invented unavailable stylesheet; not fetched",
+    "stage": "source"
+  },
+  "file_id": "public/T2_separate_uncertain.htm",
+  "route": {
+    "adapter": "released test schema",
+    "linker": null,
+    "name": "invented-public-fixture",
+    "settings": {},
+    "tool": "hand",
+    "version": "1"
+  },
+  "schema": "prepare-route-output/1",
+  "seconds": 0,
+  "sha256": "085d8bfca0502c3c0005cfd86c8888cd60525ceb81e272152b53acf73a77c51a",
+  "status": "PARTIAL",
+  "units": [
+    {
+      "anchor": {
+        "byte_end_exclusive": 339,
+        "byte_start": 71
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 317,
+            "byte_start": 300
+          },
+          "c": 0,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "tables": [
+            "east",
+            "west"
+          ],
+          "text": "End of inventory."
+        }
+      ],
+      "id": "frame",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 71
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 128,
+        "byte_start": 101
+      },
+      "id": "heading",
+      "kind": "heading",
+      "text": "Compass stock (preliminary)"
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 173,
+        "byte_start": 136
+      },
+      "id": "scope",
+      "kind": "text",
+      "text": "Both panels belong to this inventory."
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 237,
+        "byte_start": 177
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 208,
+            "byte_start": 202
+          },
+          "c": 0,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "Copper"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 219,
+            "byte_start": 217
+          },
+          "c": 1,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "17"
+        }
+      ],
+      "id": "east",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 177
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 297,
+        "byte_start": 237
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 268,
+            "byte_start": 262
+          },
+          "c": 0,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "Silver"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 279,
+            "byte_start": 277
+          },
+          "c": 1,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "29"
+        }
+      ],
+      "id": "west",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 237
+      }
+    }
+  ]
+}

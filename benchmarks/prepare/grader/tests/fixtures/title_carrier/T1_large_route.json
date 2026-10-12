@@ -1,0 +1,119 @@
+{
+  "error": null,
+  "file_id": "public/T1_large.htm",
+  "route": {
+    "adapter": "released test schema",
+    "linker": null,
+    "name": "invented-public-fixture",
+    "settings": {},
+    "tool": "hand",
+    "version": "1"
+  },
+  "schema": "prepare-route-output/1",
+  "seconds": 0,
+  "sha256": "5e647f1c689b1c94ceeab1a8318908ee32e2e0eb0a16e8783154c3f4cea2b21b",
+  "status": "OK",
+  "units": [
+    {
+      "anchor": {
+        "byte_end_exclusive": 293,
+        "byte_start": 25
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 280,
+            "byte_start": 47
+          },
+          "c": 0,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "tables": [
+            "east",
+            "west"
+          ],
+          "text": "Compass stock (preliminary) Both panels belong to this inventory. Copper 17 Silver 29 End of inventory."
+        }
+      ],
+      "id": "frame",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 25
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 191,
+        "byte_start": 131
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 162,
+            "byte_start": 156
+          },
+          "c": 0,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "Copper"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 173,
+            "byte_start": 171
+          },
+          "c": 1,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "17"
+        }
+      ],
+      "id": "east",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 131
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 251,
+        "byte_start": 191
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 222,
+            "byte_start": 216
+          },
+          "c": 0,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "Silver"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 233,
+            "byte_start": 231
+          },
+          "c": 1,
+          "cs": 1,
+          "r": 0,
+          "rs": 1,
+          "text": "29"
+        }
+      ],
+      "id": "west",
+      "kind": "table",
+      "source_table": {
+        "claims": 1,
+        "tag_start": 191
+      }
+    }
+  ]
+}

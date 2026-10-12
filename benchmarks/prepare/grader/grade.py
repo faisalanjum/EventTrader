@@ -1181,15 +1181,15 @@ class Grader:
         usable = [k for k in cars if self.own_caption_of(k, tb) or any(k is x for x in unsure) or k['table'] is tb and anchors and self.own_row(k, vr) or before(k)]  # intrinsic membership first: no order is read for it
         if not usable: return ('fail', 'placement', None) if cars else ('fail', 'missing', None)
         ok, flag = match_pieces([k['text'] for k in usable], pieces, self.markers, self.own + self.table_context)
-        got = ' '.join(k['text'] for k in usable)
+        got, carried = ' '.join(k['text'] for k in usable), None
         if not ok and len(usable) == 1 and (whole := self.whole_carrier(usable[0], anchors, ' '.join(pieces))):  # the title inside a larger faithful carrier (a title and a separate note in one cell)
-            if whole == 'unresolved': self.reading_doubt = norm(got)  # said, not decided here: a strike the route lost is still checked (`field`)
-            ok, flag = True, 'carried'
+            if whole[0] == 'unresolved': self.reading_doubt = norm(got)  # said, not decided here: a strike the route lost is still checked (`field`)
+            ok, flag, carried = True, 'carried', whole[1]
         if not ok and match_pieces([spaced(k, ' '.join(pieces)) for k in usable], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', norm(got)
         if not ok: return 'fail', 'spacing' if spacing_only(got, ' '.join(pieces)) else 'text', norm(got)
         orders = {k['order'] for k in usable}
         if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not (continued(u, tb) and all(self.order_holds(k['anchor'], u.get('anchor')) for k in usable) and self.order_holds(u.get('anchor'), tb.get('anchor')))
-               and not (anchors and self.kept_between(u, usable, tb, anchors)) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break) or, for the key's own title, the source's own separate table at its own place between them
+               and not (anchors and self.kept_between(u, usable, tb, anchors, carried)) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break) or, for the key's own title, the source's own separate table at its own place between them
         if any(k is x for k in usable for x in unsure): self.reading_doubt = 'own_row'  # said, not decided here: `field` opens the pass only after its placement and strike checks
         self.ctx_orders.update(orders); self.matched = objects(usable)
         return 'pass', None, flag or ('anchor_unknown' if not anchors else None)
@@ -1204,7 +1204,7 @@ class Grader:
         c0, c1 = k['cell']['c'], k['cell']['c'] + k['cell'].get('cs', 1)  # one <tr> proves membership, not which side shows (a dir or layout can turn it): the route's side against written order is an order doubt
         return (c1 <= self.vcols[0] or c0 >= self.vcols[1]) and self.order_holds(k['anchor'], self.t.get('anchor'), c1 <= self.vcols[0])
 
-    def kept_between(self, u, usable, tb, places):
+    def kept_between(self, u, usable, tb, places, carried=None):
         """Is table u, listed between the title and its table, the source's own separate table at its own place? The scanner proves both tables
         (each names its own start tag, claimed once, every printed cell anchored inside that table's extent); u lies wholly after the title and
         wholly before the table; no title place the key lists between them is lost. The route then keeps the source's arrangement: preservation
@@ -1218,9 +1218,11 @@ class Grader:
             if st.get('claims') != 1 or st.get('tag_start') is None or st['tag_start'] not in vis.table_tags or not printed: return None
             s, e = vis.table_spans[vis.table_tags.index(st['tag_start'])]
             return (s, e) if all(spans(c.get('anchor')) and all('byte_start' in x and s <= x['byte_start'] < x['byte_end_exclusive'] <= e for x in spans(c.get('anchor'))) for c in printed) else None
-        mine, other, kept = extent(u), extent(tb), [x for k in usable for x in spans(k['anchor']) if 'byte_start' in x]
+        mine, other, held = extent(u), extent(tb), [x for k in usable for x in spans(k['anchor']) if 'byte_start' in x]
+        kept = [carried] if carried else held  # a field `whole_carrier` proved inside a larger faithful carrier is kept at its own place, not the carrier's envelope
         if not mine or not other or not kept: return False  # identity and ownership: proved by the bytes or not, whatever the reading
         if any('byte_start' in p and mine[0] <= p['byte_start'] and p['byte_end_exclusive'] <= other[0] and not any(overlap(p, x) for x in kept) for p in places): return False  # a listed title place nearer the table is lost
+        if carried and any(x['byte_start'] < mine[1] and mine[0] < x['byte_end_exclusive'] and not x['byte_start'] <= mine[0] < mine[1] <= x['byte_end_exclusive'] for x in held): return False  # the carrier holds u whole (its own child, its text the source's own) or not at all
         if mine[0] < other[1] and other[0] < mine[1] or any(mine[0] < x['byte_end_exclusive'] and x['byte_start'] < mine[1] for x in kept): return False  # one holds the other (nesting, a title inside the table): ownership, not order
         written = mine[1] <= other[0] and max(x['byte_end_exclusive'] for x in kept) <= mine[0]
         self.order_doubt = True; return written or self.order_relaxed  # byte order is written order, never where the tables show (a certain reading certifies text and visibility, not layout order): said
@@ -1228,7 +1230,8 @@ class Grader:
     def whole_carrier(self, k, anchors, want):
         """A carrier larger than the field: the field is carried where the source prints `want` at the key's own place, that place lies inside the
         carrier's one place, and the carrier's text is the source's own text over its whole place - so the field's part of it is known, never found
-        by searching the carrier. 'pass' on a certain reading of the source, 'unresolved' on an uncertain one, None otherwise (a plain mismatch)."""
+        by searching the carrier. 'pass' on a certain reading of the source, 'unresolved' on an uncertain one, None otherwise (a plain mismatch); with the
+        verdict, the field's own place in the carrier (the key's printed characters), which `kept_between` reads in place of the carrier's envelope."""
         vis, place = self.rf.vis, [x for x in spans(k['anchor']) if 'byte_start' in x]
         keys = [x for a in anchors for x in spans(a) if 'byte_start' in x]
         if vis is None or len(place) != 1 or not keys: return None
@@ -1236,7 +1239,7 @@ class Grader:
         i, j = bisect_left(vis.starts, min(x['byte_start'] for x in keys)), bisect_left(vis.starts, max(x['byte_end_exclusive'] for x in keys))
         if i >= j or not (lo <= vis.starts[i] and vis.ends[j - 1] <= hi): return None   # the key's printed characters are not all inside the carrier's place
         if not all(boundary_equal(vis.at(x['byte_start'], x['byte_end_exclusive']), w) for x, w in [(dict(byte_start=vis.starts[i], byte_end_exclusive=vis.ends[j - 1]), want), (place[0], k['text'])]): return None
-        return 'pass' if vis.certain else 'unresolved'
+        return ('pass' if vis.certain else 'unresolved'), dict(byte_start=vis.starts[i], byte_end_exclusive=vis.ends[j - 1])  # and the field's own place in it
 
     def corner_text(self, value, alt, tb, vr):
         pieces = pieces_of(value)  # one stub column's head, or several joined by the key's ' | '
