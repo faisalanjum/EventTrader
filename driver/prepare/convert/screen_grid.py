@@ -183,9 +183,12 @@ def apply(units, spans, measured_by_table):
 
 
 JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAll('table')); const out = []; const gap = new RegExp('^' + p + 'j:([0-9]+[.][01])$');
+  const shown = new Map();  // each row's place in its table as the page shows it: rows by their own box's top (equal tops in DOM order); a row with no box stays after the one before it
+  for (const t of tables) { let top = -Infinity; const keyed = Array.from(t.rows, tr => { if (tr.getClientRects().length) top = tr.getBoundingClientRect().top; return [top, tr.rowIndex, tr]; });
+    keyed.sort((a, b) => a[0] - b[0] || a[1] - b[1]).forEach(([, , tr], i) => shown.set(tr, i)); }
   for (const el of document.querySelectorAll('td[data-g], th[data-g]')) { const r = el.getBoundingClientRect(); const t = el.closest('table'); const tr = el.parentElement;
     const rest = tr && tr.parentElement && tr.parentElement.rows ? tr.parentElement.rows.length - tr.sectionRowIndex : 1;  // the rows left in its row group, where the table model ends a cell: rowspan="0" runs to there, a larger one stops there
-    out.push({g: +el.dataset.g, table: tables.indexOf(t), row: tr ? tr.rowIndex : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest)}); }
+    out.push({g: +el.dataset.g, table: tables.indexOf(t), row: tr && shown.has(tr) ? shown.get(tr) : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest)}); }
   const boxes = {}; const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
   for (let c = w.nextNode(); c; c = w.nextNode()) { const m = gap.exec(c.data); if (!m) continue; let t = c.nextSibling; while (t && t.nodeType === Node.COMMENT_NODE) t = t.nextSibling;  // one character can end one gap and begin the next: its two marks stand side by side
     if (!t || t.nodeType !== Node.TEXT_NODE || !t.data.length) continue;
