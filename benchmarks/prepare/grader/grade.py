@@ -1303,8 +1303,8 @@ class Grader:
                     if ok: opts.append((b - 1, 1, cars[a:b])); cap = b - 1 if cap is None else min(cap, b - 1); break
                     if ok is None: unsure.append(b - 1)  # the pieces touch where the heading prints a space: the page may space them
             if not opts and unsure: return 'unresolved', 'adjacency', pieces[i]
-            if not opts and i + 1 < len(pieces):  # E9: two levels printed on one line - as before, only where no exact or split form exists, ahead of a run-in
-                hit2 = next((k for k in cars if heading_eq(k['text'], pieces[i] + ' ' + pieces[i + 1])), None)
+            if not opts and i + 1 < len(pieces):  # E9: consecutive levels printed on one line - as before, only where no exact or split form exists, ahead of a run-in
+                hit2 = next((k for k in cars for j in range(i + 2, len(pieces) + 1) if heading_eq(k['text'], ' '.join(pieces[i:j]))), None)
                 if hit2 is not None: doubt = doubt or 'joined_levels'  # the joined heading's role (one heading's number line and its own title) is unproved: never a completion by itself; a later failure stays unresolved
             if anchors:  # a run-in heading: the block at the heading's own anchor starts with it (guide V18); the heading may be printed in pieces (E12), spacing by the boundary rule
                 want = _CONTINUED.sub('', norm(pieces[i])).strip(); sw, tw = squash(want), tokens(want)

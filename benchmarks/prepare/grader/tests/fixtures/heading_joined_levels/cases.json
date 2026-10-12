@@ -1,0 +1,5006 @@
+{
+  "faithful_1_": {
+    "raw": "<html><body><h1>Canopy atlas</h1><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 36,
+        "byte_end_exclusive": 84
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "0d8008399586c47d5fed629d40cfce808b88ffd73cf374051995b989535ef21b",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 36,
+            "byte_end_exclusive": 84
+          }
+        }
+      ]
+    },
+    "expected": [
+      "pass"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1
+    ]
+  },
+  "damaged_1_missing": {
+    "raw": "<html><body><h1>Canopy atlas</h1><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 36,
+        "byte_end_exclusive": 84
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "0d8008399586c47d5fed629d40cfce808b88ffd73cf374051995b989535ef21b",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 36,
+            "byte_end_exclusive": 84
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "missing",
+    "group_lengths": [
+      1
+    ]
+  },
+  "damaged_1_wrong_source": {
+    "raw": "<html><body><h1>Canopy atlas</h1><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 36,
+        "byte_end_exclusive": 84
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "0d8008399586c47d5fed629d40cfce808b88ffd73cf374051995b989535ef21b",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 36,
+            "byte_end_exclusive": 84
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 36,
+            "byte_end_exclusive": 84
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "wrong_source",
+    "group_lengths": [
+      1
+    ]
+  },
+  "damaged_1_damaged_text": {
+    "raw": "<html><body><h1>Canopy atlas</h1><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 36,
+        "byte_end_exclusive": 84
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "0d8008399586c47d5fed629d40cfce808b88ffd73cf374051995b989535ef21b",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "A different heading",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 36,
+            "byte_end_exclusive": 84
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "damaged_text",
+    "group_lengths": [
+      1
+    ]
+  },
+  "faithful_2_0": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 59,
+        "byte_end_exclusive": 107
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "bcaf943bcc10f6e9c733ee44b1ea7c443c3603207d915abc5057f7e8787a8485",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 59,
+            "byte_end_exclusive": 107
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2
+    ]
+  },
+  "faithful_2_1": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 59,
+        "byte_end_exclusive": 107
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "bcaf943bcc10f6e9c733ee44b1ea7c443c3603207d915abc5057f7e8787a8485",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 59,
+            "byte_end_exclusive": 107
+          }
+        }
+      ]
+    },
+    "expected": [
+      "pass"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1
+    ]
+  },
+  "damaged_2_missing": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 59,
+        "byte_end_exclusive": 107
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "bcaf943bcc10f6e9c733ee44b1ea7c443c3603207d915abc5057f7e8787a8485",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 59,
+            "byte_end_exclusive": 107
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "missing",
+    "group_lengths": [
+      1,
+      1
+    ]
+  },
+  "damaged_2_wrong_source": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 59,
+        "byte_end_exclusive": 107
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "bcaf943bcc10f6e9c733ee44b1ea7c443c3603207d915abc5057f7e8787a8485",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 59,
+            "byte_end_exclusive": 107
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 59,
+            "byte_end_exclusive": 107
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "wrong_source",
+    "group_lengths": [
+      1,
+      1
+    ]
+  },
+  "damaged_2_damaged_text": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 59,
+        "byte_end_exclusive": 107
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "bcaf943bcc10f6e9c733ee44b1ea7c443c3603207d915abc5057f7e8787a8485",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "A different heading",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 59,
+            "byte_end_exclusive": 107
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "damaged_text",
+    "group_lengths": [
+      1,
+      1
+    ]
+  },
+  "damaged_2_reverse": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 59,
+        "byte_end_exclusive": 107
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "bcaf943bcc10f6e9c733ee44b1ea7c443c3603207d915abc5057f7e8787a8485",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 59,
+            "byte_end_exclusive": 107
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "reverse",
+    "group_lengths": [
+      1,
+      1
+    ]
+  },
+  "faithful_3_00": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      3
+    ]
+  },
+  "faithful_3_01": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2,
+      1
+    ]
+  },
+  "faithful_3_10": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      2
+    ]
+  },
+  "faithful_3_11": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "pass"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_3_missing": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "missing",
+    "group_lengths": [
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_3_wrong_source": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "wrong_source",
+    "group_lengths": [
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_3_damaged_text": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "A different heading",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "damaged_text",
+    "group_lengths": [
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_3_reverse": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 82,
+        "byte_end_exclusive": 130
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "ac8c29312d83ad693429e8246bb20e6a1c3ae0fc76c19af1ec9beb7487d5f141",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 82,
+            "byte_end_exclusive": 130
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "reverse",
+    "group_lengths": [
+      1,
+      1,
+      1
+    ]
+  },
+  "faithful_4_000": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand\nRiver corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      4
+    ]
+  },
+  "faithful_4_001": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      3,
+      1
+    ]
+  },
+  "faithful_4_010": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2,
+      2
+    ]
+  },
+  "faithful_4_011": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2,
+      1,
+      1
+    ]
+  },
+  "faithful_4_100": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand\nRiver corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      3
+    ]
+  },
+  "faithful_4_101": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      2,
+      1
+    ]
+  },
+  "faithful_4_110": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1,
+      2
+    ]
+  },
+  "faithful_4_111": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "pass"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_4_missing": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "missing",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_4_wrong_source": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "wrong_source",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_4_damaged_text": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "A different heading",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "damaged_text",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_4_reverse": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 105,
+        "byte_end_exclusive": 153
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "57bf53e30cb31873fe822e9d331d62dbe4566d5100626a8a5ae07f37c35db7f8",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 105,
+            "byte_end_exclusive": 153
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "reverse",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "faithful_5_0000": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand\nRiver corridor\nSlope transect\nEvening count",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      5
+    ]
+  },
+  "faithful_5_0001": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand\nRiver corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      4,
+      1
+    ]
+  },
+  "faithful_5_0010": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect\nEvening count",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      3,
+      2
+    ]
+  },
+  "faithful_5_0011": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      3,
+      1,
+      1
+    ]
+  },
+  "faithful_5_0100": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor\nSlope transect\nEvening count",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2,
+      3
+    ]
+  },
+  "faithful_5_0101": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2,
+      2,
+      1
+    ]
+  },
+  "faithful_5_0110": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect\nEvening count",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2,
+      1,
+      2
+    ]
+  },
+  "faithful_5_0111": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas\nNorthern stand",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      2,
+      1,
+      1,
+      1
+    ]
+  },
+  "faithful_5_1000": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand\nRiver corridor\nSlope transect\nEvening count",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      4
+    ]
+  },
+  "faithful_5_1001": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand\nRiver corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      3,
+      1
+    ]
+  },
+  "faithful_5_1010": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect\nEvening count",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      2,
+      2
+    ]
+  },
+  "faithful_5_1011": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand\nRiver corridor",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      2,
+      1,
+      1
+    ]
+  },
+  "faithful_5_1100": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor\nSlope transect\nEvening count",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1,
+      3
+    ]
+  },
+  "faithful_5_1101": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor\nSlope transect",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1,
+      2,
+      1
+    ]
+  },
+  "faithful_5_1110": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect\nEvening count",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "unresolved"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1,
+      1,
+      2
+    ]
+  },
+  "faithful_5_1111": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "pass"
+    ],
+    "source_truth": "faithful",
+    "change": null,
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_5_missing": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "missing",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_5_wrong_source": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "wrong_source",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_5_damaged_text": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "A different heading",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "damaged_text",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "damaged_5_reverse": {
+    "raw": "<html><body><h1>Canopy atlas</h1><h2>Northern stand</h2><h3>River corridor</h3><h4>Slope transect</h4><h5>Evening count</h5><p>The recorded canopy coverage was thirty percent.</p></body></html>",
+    "key": {
+      "key_id": "invented/root-duty",
+      "file_id": "public/forest-observations.html",
+      "type": "structure",
+      "format": "structure/html",
+      "split": "public",
+      "anchor": {
+        "byte_start": 127,
+        "byte_end_exclusive": 175
+      },
+      "fields": {
+        "printed_text": "The recorded canopy coverage was thirty percent.",
+        "kind": "paragraph",
+        "section_path": [
+          "Canopy atlas",
+          "Northern stand",
+          "River corridor",
+          "Slope transect",
+          "Evening count"
+        ]
+      },
+      "support": {
+        "section_path": {
+          "how": "reviewed",
+          "anchors": [
+            {
+              "byte_start": 16,
+              "byte_end_exclusive": 28
+            },
+            {
+              "byte_start": 37,
+              "byte_end_exclusive": 51
+            },
+            {
+              "byte_start": 60,
+              "byte_end_exclusive": 74
+            },
+            {
+              "byte_start": 83,
+              "byte_end_exclusive": 97
+            },
+            {
+              "byte_start": 106,
+              "byte_end_exclusive": 119
+            }
+          ]
+        }
+      },
+      "alternatives": {},
+      "excluded": []
+    },
+    "route": {
+      "file_id": "public/forest-observations.html",
+      "schema": "prepare-route-output/1",
+      "sha256": "8e05ea79621b913e3492036ce8da36a7d18aac7b36d183d60cfcc5878223c933",
+      "status": "OK",
+      "error": null,
+      "units": [
+        {
+          "id": "group-4",
+          "kind": "heading",
+          "text": "Evening count",
+          "anchor": {
+            "byte_start": 106,
+            "byte_end_exclusive": 119
+          }
+        },
+        {
+          "id": "group-3",
+          "kind": "heading",
+          "text": "Slope transect",
+          "anchor": {
+            "byte_start": 83,
+            "byte_end_exclusive": 97
+          }
+        },
+        {
+          "id": "group-2",
+          "kind": "heading",
+          "text": "River corridor",
+          "anchor": {
+            "byte_start": 60,
+            "byte_end_exclusive": 74
+          }
+        },
+        {
+          "id": "group-1",
+          "kind": "heading",
+          "text": "Northern stand",
+          "anchor": {
+            "byte_start": 37,
+            "byte_end_exclusive": 51
+          }
+        },
+        {
+          "id": "group-0",
+          "kind": "heading",
+          "text": "Canopy atlas",
+          "anchor": {
+            "byte_start": 16,
+            "byte_end_exclusive": 28
+          }
+        },
+        {
+          "id": "observation",
+          "kind": "text",
+          "text": "The recorded canopy coverage was thirty percent.",
+          "anchor": {
+            "byte_start": 127,
+            "byte_end_exclusive": 175
+          }
+        }
+      ]
+    },
+    "expected": [
+      "fail",
+      "unresolved"
+    ],
+    "source_truth": "damaged",
+    "change": "reverse",
+    "group_lengths": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  }
+}
