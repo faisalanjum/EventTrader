@@ -715,6 +715,15 @@ def link(raw, units, xml=False, vis=None):
         if c is u and u.get('kind') == 'caption' and 'source' in u:
             s = u['source']; lo, hi = (bisect_left(vis.s, s['byte_start']), bisect_left(vis.s, s['byte_end_exclusive'])) if s else (0, 0)
             allowed[id(u)] = (range(lo, hi), lo, hi - len(key)) if key and hi - lo >= len(key) else NOWHERE; reserved[key].update(range(lo, hi)); exact.add(id(u))
+    own, why = set(), {}  # the table cells bound to their own source cell (`source`, to_units): read only inside that cell, whoever else reads the same text
+    for (u, c), key in zip(items, keys):  # the cell narrows its table's places (table_places), never widens them: an unknown or another table stays a failure;
+        if c is not u and u.get('kind') == 'table' and 'source' in c and key:  # None: no proved own cell (a lost or repeated code); no `source` field: as before
+            s, (ok, first, final) = c['source'], allowed.get(id(c), anywhere) if 'tag' in u else anywhere; own.add(id(c))  # a named table's places narrow it; a text tie never overrides the cell's own source
+            if allowed.get(id(c)) is NOWHERE or not s: allowed[id(c)] = NOWHERE; why[id(c)] = 'unknown_source_table' if s else 'unbound_source_cell'; continue
+            lo, hi = max(first, bisect_left(vis.s, s['byte_start'])), min(final + len(key), bisect_left(vis.s, s['byte_end_exclusive']))  # the cell's own end is every path's end
+            allowed[id(c)] = (range(lo, hi), lo, hi - len(key)) if lo < hi else NOWHERE
+            if lo >= hi: why[id(c)] = 'foreign_source_cell'  # its own cell is not in its table's source table
+    confined |= own  # a cell bound to its own source cell is kept there on every path (marks, piecing), whether or not its adapter names its table
     tags, claims = {s for s in vis.table_tags if s is not None}, Counter(u['tag'] for u in units if u.get('kind') == 'table' and u.get('tag') is not None)
     for u in units:  # the table's own start tag has decided where its cells may stand (table_places); it stays as the point of its source occurrence (its own caption names it too):
         if u.get('kind') in ('table', 'caption') and 'tag' in u:  # {tag_start: the byte of its <table tag, claims: how many route tables name that tag} - not its extent;
@@ -735,12 +744,12 @@ def link(raw, units, xml=False, vis=None):
         unless the tool parted the word there itself: what the source prints on the other side is the text of the item next to it (pictures and
         empty units aside) or a mark of its own. A whole copy is evidence, not proof: with none, the first copy, as before."""
         obj, n = items[i][1], keys[i]
-        if allowed.get(id(obj)) is NOWHERE: obj['anchor'], obj['link_error'] = None, 'unknown_source_table'; return None  # its table is named by no table of the source
+        if allowed.get(id(obj)) is NOWHERE: obj['anchor'], obj['link_error'] = None, why.get(id(obj), 'unknown_source_table'); return None  # its table is named by no table of the source / no own source cell / a cell of another table
         marks = [squash(m) for m in obj.get('markers') or () if squash(m)]; allm = ''.join(marks)
         margin = 0 if id(obj) in confined else len(allm)  # a named table's marks cannot extend beyond its source bounds
         ok, first, final = allowed.get(id(obj), anywhere); lo, hi = max(lo, first - margin), min(hi, final + len(n) + margin)  # a cell of a table that is one table of the source: only at its places there
         free = ok.__contains__ if ok else lambda j, held=reserved.get(n, ()): j not in held  # any other item: never at a place kept for such a cell
-        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i} if id(obj) not in exact else set()  # copies of this text other units already hold (a bound caption's own element is its own, even where a holder cell's flattened text reads it too)
+        taken = {pos[k][0] for k in same_text[n] if pos[k] and k != i} if id(obj) not in exact and id(obj) not in own else set()  # copies of this text other units already hold (a bound caption's own element is its own, even where a holder cell's flattened text reads it too)
         before, after = [next((keys[k] for k in ks if keys[k]), '') for ks in (range(i - 1, -1, -1), range(i + 1, len(keys)))]
         apart = lambda j, m: ((not cut(j - 1) or any(t and vis.flat.endswith(t, 0, j) for t in [before] + marks))
                               and (not cut(j + m - 1) or any(t and vis.flat.startswith(t, j + m) for t in [after] + marks)))

@@ -23,6 +23,7 @@ BRANCH = ('DocumentNode', 'ContainerNode', 'SectionNode', 'ListNode')
 BLOCKY = ('HeadingNode', 'ParagraphNode', 'ContainerNode', 'SectionNode', 'ListNode', 'TableNode', 'ListItemNode', 'ImageNode')  # children that make their parent a branch; a picture has no text to merge into a run: flattened with its paragraph it was lost (Codex's worktree)
 TABLE = 'data-prepare-table'  # the attribute that carries a table's code (`codes`) through the tool to its table node
 CELL = 'data-prepare-cell'  # the same for each table cell, to the tool's own cell
+ROWS = 'prepare-rows'  # a table node's own rows as the tool read them, in the table model's order with their groups (parse's EveryRowGroup), for `dump`
 CAPTION = 'data-prepare-caption'  # the same for each table's <caption>, to the caption element the tool reads for its table (TableProcessor._own_section)
 NO_CODE = object()  # a dumped cell with no `code` field at all (a dump made before cells had codes), unlike a code lost on the way (None)
 _NO_FORMAT = str.maketrans('', '', _CF)
@@ -50,12 +51,17 @@ def dump(node):
         d['native'] = native
     if kind == 'TableNode':
         rows = list(node.headers or []) + [getattr(r, 'cells', r) for r in node.rows or []]
+        record = (getattr(node, 'metadata', None) or {}).get(ROWS)  # parse's own record of every row the tool read: its cells (none for an empty row), drawn
+        if record is not None:  # place and row group. The tool keeps no empty row, no group and reads a header row it promotes or an early tfoot out of the
+            kept = {id(r) for r in rows}  # table model's order (EdgarTools 5.60.0); a dump without the record keeps headers, then rows
+            if sorted(id(c) for c, _ in record if c) != sorted(kept): raise ValueError('a table row the tool kept is not its read record')
+            rows, d['row_groups'] = [c for c, _ in record], [g for _, g in record]
         d['caption'] = node.caption
         if (getattr(node, 'metadata', None) or {}).get(CAPTION): d['caption_code'] = node.metadata[CAPTION]  # the source caption element the tool read it from
         code = (getattr(node, 'metadata', None) or {}).get(TABLE)
         if code: d['code'] = code  # the source table it came from (`codes`)
         held = {id(c): (code, kids) for c, code, kids in (getattr(node, 'metadata', None) or {}).get('held_tables', [])}  # parse's cell codes and tables in cells
-        d['rows'] = [[{'text': (c.text() if callable(c.text) else c.text) or '', 'colspan': c.colspan or 1, 'rowspan': c.rowspan or 1, 'is_header': bool(c.is_header),
+        d['rows'] = [[{'text': (c.text() if callable(c.text) else c.text) or '', 'colspan': c.colspan or 1, 'rowspan': c.rowspan if c.rowspan is not None else 1, 'is_header': bool(c.is_header),
                        **({'code': held[id(c)][0]} if id(c) in held else {}),  # present for every cell this parse read: None where its code was lost
                        **({'tables': [dump(k) for k in held[id(c)][1]]} if id(c) in held and held[id(c)][1] else {})}
                       for c in row] for row in rows]
@@ -133,11 +139,13 @@ def to_units(tree, codes=None, shown=(), hidden=frozenset()):
 
     def table_unit(t, holder=None):  # holder: (its table unit, the cell) where this table stands in a cell
         cells, until, kids = [], {}, []  # until[column] = the first row at which that column is free again: a rowspan expires by row, whatever later rows hold
+        groups = t.get('row_groups'); end = {g: r + 1 for r, g in enumerate(groups or [])}  # each group's first row after it (the HTML table model's span bound)
         for r, row in enumerate(t.get('rows') or []):
             c = 0
             for cell in row:
                 while until.get(c, 0) > r: c += 1
                 cs, rs = cell.get('colspan') or 1, cell.get('rowspan') or 1
+                if groups: rs = end[groups[r]] - r if cell.get('rowspan') == 0 else min(rs, end[groups[r]] - r)  # the raw span stays in the dump; this is the grid's
                 cells.append({'r': r, 'c': c, 'rs': rs, 'cs': cs, 'text': cell['text'], 'header': bool(cell.get('is_header')), '_code': cell.get('code', NO_CODE), **({'tables': []} if cell.get('tables') else {})})
                 kids += [(k, cells[-1]) for k in cell.get('tables') or []]
                 for k in range(c, c + cs): until[k] = r + rs
@@ -597,7 +605,7 @@ def whole_headings():
     db.DocumentBuilder._whole_headings = True
 
 
-SETTINGS = {'parse_html': 'defaults', 'source_style': 'per source run: colour, weight, font style, decorations in effect, raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)', 'lists': "the parser's own list items: list, ordered, item", 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell', 'table_captions': "each table's own caption a caption unit, bound to its source caption"}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
+SETTINGS = {'parse_html': 'defaults', 'source_style': 'per source run: colour, weight, font style, decorations in effect, raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)', 'lists': "the parser's own list items: list, ordered, item", 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell, in its row\'s source order', 'table_captions': "each table's own caption a caption unit, bound to its source caption"}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
 def settings(vis):
@@ -631,19 +639,43 @@ def parse(raw, vis):
             return None if name == 'tbody' else super()._own_section(container, name)
 
         def process(self, element):
-            outer, self._held = getattr(self, '_held', []), []
+            (outer, self._held), (outer_read, self._read) = (getattr(self, '_held', []), []), (getattr(self, '_read', []), [])
             try: table = super().process(element)
-            finally: held, self._held = self._held, outer
+            finally: (held, self._held), (read, self._read) = (self._held, outer), (self._read, outer_read)
             if element.get(TABLE): table.set_metadata(TABLE, element.get(TABLE))  # the builder names the tables it meets; a table in a cell it never meets
             cap = self._own_section(element, 'caption')  # the caption element the tool's own lookup read this table's caption from
             if cap is not None and cap.get(CAPTION): table.set_metadata(CAPTION, cap.get(CAPTION))
             if held: table.set_metadata('held_tables', held)
+            table.set_metadata(ROWS, self._model(element, read))
             return table
 
         def _process_cell(self, elem, is_header):
             cell = super()._process_cell(elem, is_header)
             if cell is not None: self._held.append((cell, elem.get(CELL), [self.process(t) for t in elem.iterdescendants('table') if next(t.iterancestors('td', 'th'), None) is elem]))
             return cell  # kept: its own code, and the tables whose nearest cell is this one, in source order
+
+        def _model(self, element, read):
+            # Every own row the tool read, once per element (the footer loop reads a tfoot row again: its first reading is the one kept), with its own
+            # row group (thead/tbody/tfoot, or a run of rows straight in the table), in the HTML table model's order: the tool's own thead first, its own
+            # tfoot last, every other row as written. Elements are held, so their identity is the parser's own node.
+            head, foot, seen, rows, run = self._own_section(element, 'thead'), self._own_section(element, 'tfoot'), {}, [], 0
+            for tr, cells in read:
+                if id(tr) in seen: continue
+                seen[id(tr)] = tr
+                group = next((a for a in tr.iterancestors() if a is element or a.tag in ('thead', 'tbody', 'tfoot')), element)
+                if group is element: run += bool(rows) and rows[-1][2] is not element  # a run of rows straight in the table is one group
+                else: run += 1
+                rows.append((cells, (group, run) if group is element else group, group))
+            key = lambda x: 0 if head is not None and x[2] is head else 2 if foot is not None and x[2] is foot else 1
+            ordered = sorted(rows, key=key)  # stable: rows keep their reading order within each place
+            ids = {}
+            return [(cells, ids.setdefault(id(g) if not isinstance(g, tuple) else ('run', g[1]), len(ids))) for cells, g, _ in ordered]
+
+        def _process_row(self, tr, is_header):  # the tool's own cells (`_own_cells`, source order) each read by its own `_process_cell` with its own header rule;
+            # EdgarTools 5.60.0 reads a row's td cells first and its th cells after them, so a th row label stood in another column
+            cells = [cell for cell in (self._process_cell(c, is_header or c.tag == 'th') for c in self._own_cells(tr)) if cell]
+            self._read.append((tr, cells))  # the row and its cells, as read (its group and drawn place: `_model`)
+            return cells
 
     whole_headings(); t0 = time.time(); parser = HTMLParser(ParserConfig())  # what parse_html builds
     parser.strategies['table_processing'] = EveryRowGroup(parser.config)
