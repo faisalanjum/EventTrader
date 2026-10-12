@@ -35,7 +35,7 @@ class SourceColor(unittest.TestCase):
     def colours(self, route, word, n=0):  # the colours recorded over the n-th occurrence of `word` in the owners' final text; it must be covered whole
         found = [(o, i) for o, t in self.owners(route) for i in range(len(t)) if t.startswith(word, i)]
         (o, i), span, got, covered = found[n], set(range(found[n][1], found[n][1] + len(word))), set(), set()
-        for r in route['source_color']['records']:
+        for r in route['source_style']['records']:
             for w in r.get('owners') or []:
                 if w.get('unit') == o['unit'] and w.get('cell') == o.get('cell'):
                     for a, b in w['text_at']:
@@ -62,7 +62,7 @@ class SourceColor(unittest.TestCase):
         declared = self.prepare(raw, {'s.css': b'.neg{color:#c00000}'})
         self.assertEqual(declared['status'], 'OK'); self.assertEqual(self.colours(declared, '(1)'), {DARK}); self.assertEqual(self.colours(declared, 'Sheet'), {BLACK})
         missing = self.prepare(raw)  # the same page, its sheet answered by no evidence: the fallback render's colour is no proved original style
-        self.assertEqual(missing['status'], 'PARTIAL'); self.assertFalse(missing['source_color']['read']); self.assertNotIn('records', missing['source_color'])
+        self.assertEqual(missing['status'], 'PARTIAL'); self.assertFalse(missing['source_style']['read']); self.assertNotIn('records', missing['source_style'])
 
     def test_repeated_text_keeps_its_own_occurrence(self):
         route = self.prepare(b'<html><body><p><span style="color:red">7</span> and 7</p></body></html>')
@@ -76,10 +76,10 @@ class SourceColor(unittest.TestCase):
     def test_hidden_and_misread_runs_claim_no_owner_colour(self):
         route = self.prepare(b'<html><body><p>Seen</p><p style="display:none"><span style="color:red">Gone</span></p></body></html>')
         self.assertEqual(self.colours(route, 'Seen'), {BLACK}); self.assertNotIn('Gone', ''.join(t for _, t in self.owners(route)))
-        self.assertFalse([r for r in route['source_color']['records'] if r['color'] == RED and r.get('owners')])
+        self.assertFalse([r for r in route['source_style']['records'] if r['color'] == RED and r.get('owners')])
         misread = self.prepare(b'<html><body><p>Caf\xc3\xa9 <span style="color:red">net</span></p></body></html>')  # no declaration: the browser reads windows-1252
         self.assertEqual(misread['status'], 'PARTIAL'); self.assertEqual(self.colours(misread, 'Caf'), ('not covered whole', set()))
-        self.assertTrue(misread['source_color']['unresolved'])
+        self.assertTrue(misread['source_style']['unresolved'])
 
     def test_prior_inline_and_formatting_records_stay(self):
         route = self.prepare(b'<html><body><p>Area x<sup>2</sup> and <s>old</s> text</p></body></html>')

@@ -89,7 +89,7 @@ class TitleCarrierTests(unittest.TestCase):
         r = copy.deepcopy(self.ROUTE); next(u for u in r['units'] if u.get('kind') == 'table')['cells'][0]['text'] = text; return r
 
     def test_a_title_inside_a_larger_faithful_carrier_is_carried(self):
-        self.assertEqual(verdicts(self.ROUTE, self.RAW, self.target('Capacity summary (unaudited)'), 'table_title'), 'pass')
+        self.assertEqual(verdicts(self.ROUTE, self.RAW, self.target('Capacity summary (unaudited)'), 'table_title'), 'unresolved')  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_an_altered_missing_or_invented_qualifier_or_a_wrong_title_is_not_carried(self):
         for text in ('Capacity summary Preliminary', 'Capacity summary (audited) Preliminary', 'Capacity summary (unaudited, restated) Preliminary'):

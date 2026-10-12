@@ -1,0 +1,967 @@
+{
+ "schema": "prepare-route-output/1",
+ "file_id": "invented/title_placement.htm",
+ "sha256": "57651a02d989d8b33d50af70495266299e28e242aac0ab82e7dafbc5de5ed001",
+ "status": "OK",
+ "error": null,
+ "seconds": 0.01,
+ "route": {
+  "name": "edgartools-html+source-formatting+screen",
+  "tool": "edgartools",
+  "version": "edgartools 5.60.0",
+  "settings": {
+   "parse_html": "defaults",
+   "retain_pictures": true,
+   "retain_native_heading_evidence": true,
+   "picture_names": "codes",
+   "hidden_text": "left out as the browser proved it 4f53cda18c2baa0c",
+   "headings": "detected blocks read whole",
+   "inline_facts": "read whole",
+   "page_number_candidates": "kept",
+   "ix_exclude": "read as shown",
+   "inline_fact_spaces": "kept",
+   "table_identity": "own start tag, shown or hidden",
+   "style_values": "independent",
+   "heading_boundaries": "source matched",
+   "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+   "table_rows": "every own row group",
+   "nested_tables": "each a table unit naming its holder cell",
+   "table_cells": "every own cell, bound to its source cell",
+   "table_captions": "each table's own caption a caption unit, bound to its source caption",
+   "pictures": "every shown tag",
+   "source_lines": "certified <br> breaks",
+   "source_formatting": "rendered",
+   "screen_grid": true,
+   "joins": "touching on one baseline",
+   "parts": "apart on one baseline"
+  },
+  "adapter": "driver/prepare/convert/edgartools_html.py",
+  "linker": "driver/prepare/convert/anchor.py"
+ },
+ "units": [
+  {
+   "id": "u0",
+   "kind": "text",
+   "text": "Dock tariffs (draft)",
+   "anchor": {
+    "byte_start": 153,
+    "byte_end_exclusive": 177
+   },
+   "struck": [
+    "Dock tariffs"
+   ],
+   "struck_at": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     12
+    ]
+   ]
+  },
+  {
+   "id": "t1",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Pilots",
+     "header": false,
+     "source": {
+      "byte_start": 201,
+      "byte_end_exclusive": 211
+     },
+     "anchor": {
+      "byte_start": 205,
+      "byte_end_exclusive": 211
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "5",
+     "header": false,
+     "source": {
+      "byte_start": 216,
+      "byte_end_exclusive": 221
+     },
+     "anchor": {
+      "byte_start": 220,
+      "byte_end_exclusive": 221
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 182,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 205,
+    "byte_end_exclusive": 221
+   }
+  },
+  {
+   "id": "t2",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Moorings",
+     "header": false,
+     "source": {
+      "byte_start": 258,
+      "byte_end_exclusive": 270
+     },
+     "anchor": {
+      "byte_start": 262,
+      "byte_end_exclusive": 270
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "14",
+     "header": false,
+     "source": {
+      "byte_start": 275,
+      "byte_end_exclusive": 281
+     },
+     "anchor": {
+      "byte_start": 279,
+      "byte_end_exclusive": 281
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 240,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 262,
+    "byte_end_exclusive": 281
+   }
+  },
+  {
+   "id": "u3",
+   "kind": "text",
+   "text": "Harbor fees",
+   "anchor": {
+    "byte_start": 306,
+    "byte_end_exclusive": 317
+   },
+   "struck": [
+    "Harbor fees"
+   ],
+   "struck_at": [
+    [
+     0,
+     6
+    ],
+    [
+     7,
+     11
+    ]
+   ]
+  },
+  {
+   "id": "t4",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Tugs",
+     "header": false,
+     "source": {
+      "byte_start": 345,
+      "byte_end_exclusive": 353
+     },
+     "anchor": {
+      "byte_start": 349,
+      "byte_end_exclusive": 353
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "2",
+     "header": false,
+     "source": {
+      "byte_start": 358,
+      "byte_end_exclusive": 363
+     },
+     "anchor": {
+      "byte_start": 362,
+      "byte_end_exclusive": 363
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 326,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 349,
+    "byte_end_exclusive": 363
+   }
+  },
+  {
+   "id": "t5",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Berths",
+     "header": false,
+     "source": {
+      "byte_start": 400,
+      "byte_end_exclusive": 410
+     },
+     "anchor": {
+      "byte_start": 404,
+      "byte_end_exclusive": 410
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "9",
+     "header": false,
+     "source": {
+      "byte_start": 415,
+      "byte_end_exclusive": 420
+     },
+     "anchor": {
+      "byte_start": 419,
+      "byte_end_exclusive": 420
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 382,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 404,
+    "byte_end_exclusive": 420
+   }
+  },
+  {
+   "id": "u6",
+   "kind": "text",
+   "text": "Quay rents (draft)",
+   "anchor": {
+    "byte_start": 445,
+    "byte_end_exclusive": 467
+   },
+   "struck": [
+    "Quay rents"
+   ],
+   "struck_at": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     10
+    ]
+   ]
+  },
+  {
+   "id": "t7",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Cranes",
+     "header": false,
+     "source": {
+      "byte_start": 490,
+      "byte_end_exclusive": 500
+     },
+     "anchor": {
+      "byte_start": 494,
+      "byte_end_exclusive": 500
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "6",
+     "header": false,
+     "source": {
+      "byte_start": 505,
+      "byte_end_exclusive": 510
+     },
+     "anchor": {
+      "byte_start": 509,
+      "byte_end_exclusive": 510
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 472,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 494,
+    "byte_end_exclusive": 510
+   }
+  },
+  {
+   "id": "u8",
+   "kind": "text",
+   "text": "Slip fees",
+   "anchor": {
+    "byte_start": 535,
+    "byte_end_exclusive": 544
+   },
+   "struck": [
+    "Slip fees"
+   ],
+   "struck_at": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     9
+    ]
+   ]
+  },
+  {
+   "id": "t9",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Rafts",
+     "header": false,
+     "source": {
+      "byte_start": 571,
+      "byte_end_exclusive": 580
+     },
+     "anchor": {
+      "byte_start": 575,
+      "byte_end_exclusive": 580
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "8",
+     "header": false,
+     "source": {
+      "byte_start": 585,
+      "byte_end_exclusive": 590
+     },
+     "anchor": {
+      "byte_start": 589,
+      "byte_end_exclusive": 590
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 553,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 575,
+    "byte_end_exclusive": 590
+   }
+  },
+  {
+   "id": "t10",
+   "kind": "table",
+   "cells": [
+    {
+     "r": 0,
+     "c": 0,
+     "rs": 1,
+     "cs": 1,
+     "text": "Later",
+     "header": false,
+     "source": {
+      "byte_start": 627,
+      "byte_end_exclusive": 636
+     },
+     "anchor": {
+      "byte_start": 631,
+      "byte_end_exclusive": 636
+     },
+     "grid": "screen"
+    },
+    {
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "text": "1",
+     "header": false,
+     "source": {
+      "byte_start": 641,
+      "byte_end_exclusive": 646
+     },
+     "anchor": {
+      "byte_start": 645,
+      "byte_end_exclusive": 646
+     },
+     "grid": "screen"
+    }
+   ],
+   "caption": [],
+   "source_table": {
+    "tag_start": 609,
+    "claims": 1
+   },
+   "anchor": {
+    "byte_start": 631,
+    "byte_end_exclusive": 646
+   }
+  }
+ ],
+ "uncovered": [],
+ "source_links": [],
+ "source_relations": {
+  "read": false,
+  "error": "syntax error: line 1, column 0"
+ },
+ "page_visibility": {
+  "hidden": [],
+  "shown": [],
+  "unproven": 0,
+  "unbound": []
+ },
+ "screen_endpoints": {
+  "start": {
+   "153": {
+    "shown": true,
+    "x": 8,
+    "r": 19.5625,
+    "t": 16,
+    "b": 33
+   },
+   "306": {
+    "shown": true,
+    "x": 8,
+    "r": 19.5625,
+    "t": 114,
+    "b": 131
+   },
+   "445": {
+    "shown": true,
+    "x": 8,
+    "r": 19.5625,
+    "t": 212,
+    "b": 229
+   },
+   "535": {
+    "shown": true,
+    "x": 8,
+    "r": 16.90625,
+    "t": 286,
+    "b": 303
+   }
+  },
+  "end": {
+   "177": {
+    "shown": true,
+    "x": 124.109375,
+    "r": 129.4375,
+    "t": 16,
+    "b": 33
+   },
+   "317": {
+    "shown": true,
+    "x": 76.84375,
+    "r": 83.078125,
+    "t": 114,
+    "b": 131
+   },
+   "467": {
+    "shown": true,
+    "x": 117.296875,
+    "r": 122.625,
+    "t": 212,
+    "b": 229
+   },
+   "544": {
+    "shown": true,
+    "x": 57.328125,
+    "r": 63.5625,
+    "t": 286,
+    "b": 303
+   }
+  }
+ },
+ "source_symbols": {
+  "read": true,
+  "decoder": "dingbat-to-unicode 1.0.2",
+  "records": []
+ },
+ "source_inline": {
+  "read": true,
+  "records": [],
+  "unresolved": []
+ },
+ "source_color": {
+  "read": true,
+  "records": [
+   {
+    "at": {
+     "byte_start": 153,
+     "byte_end_exclusive": 165
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "u0",
+      "text_at": [
+       [
+        0,
+        12
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 170,
+     "byte_end_exclusive": 177
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "u0",
+      "text_at": [
+       [
+        13,
+        20
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 205,
+     "byte_end_exclusive": 211
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t1",
+      "cell": 205,
+      "text_at": [
+       [
+        0,
+        6
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 220,
+     "byte_end_exclusive": 221
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t1",
+      "cell": 220,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 262,
+     "byte_end_exclusive": 270
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t2",
+      "cell": 262,
+      "text_at": [
+       [
+        0,
+        8
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 279,
+     "byte_end_exclusive": 281
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t2",
+      "cell": 279,
+      "text_at": [
+       [
+        0,
+        2
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 306,
+     "byte_end_exclusive": 317
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "u3",
+      "text_at": [
+       [
+        0,
+        11
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 349,
+     "byte_end_exclusive": 353
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t4",
+      "cell": 349,
+      "text_at": [
+       [
+        0,
+        4
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 362,
+     "byte_end_exclusive": 363
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t4",
+      "cell": 362,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 404,
+     "byte_end_exclusive": 410
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t5",
+      "cell": 404,
+      "text_at": [
+       [
+        0,
+        6
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 419,
+     "byte_end_exclusive": 420
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t5",
+      "cell": 419,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 445,
+     "byte_end_exclusive": 455
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "u6",
+      "text_at": [
+       [
+        0,
+        10
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 460,
+     "byte_end_exclusive": 467
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "u6",
+      "text_at": [
+       [
+        11,
+        18
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 494,
+     "byte_end_exclusive": 500
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t7",
+      "cell": 494,
+      "text_at": [
+       [
+        0,
+        6
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 509,
+     "byte_end_exclusive": 510
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t7",
+      "cell": 509,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 535,
+     "byte_end_exclusive": 544
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "u8",
+      "text_at": [
+       [
+        0,
+        9
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 575,
+     "byte_end_exclusive": 580
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t9",
+      "cell": 575,
+      "text_at": [
+       [
+        0,
+        5
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 589,
+     "byte_end_exclusive": 590
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t9",
+      "cell": 589,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 631,
+     "byte_end_exclusive": 636
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t10",
+      "cell": 631,
+      "text_at": [
+       [
+        0,
+        5
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_start": 645,
+     "byte_end_exclusive": 646
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "unit": "t10",
+      "cell": 645,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ]
+     }
+    ]
+   }
+  ],
+  "unresolved": []
+ },
+ "resources": {
+  "document": {
+   "path": "",
+   "base": null,
+   "bundle": null,
+   "sha256": "57651a02d989d8b33d50af70495266299e28e242aac0ab82e7dafbc5de5ed001"
+  },
+  "dependencies": []
+ }
+}

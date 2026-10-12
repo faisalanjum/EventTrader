@@ -81,7 +81,7 @@ Tool outputs will change shape (owner, 2026-10-03). The grader therefore reads *
 | `printed_value` / `display_value` | value text rule above | — | — |
 | `row_label`, `row_context` texts | each piece | same table, same row (`r`); a wrapped or two-column label may be one cell or two | — |
 | `header_path` pieces | each piece (stacked fragments joined or separate) | same table, above the value, column span covers the value's column | E1 |
-| `table_title` lines, `corner_text`, `lead_in`, `unit_printed` | each piece | title: table caption, a top in-table row, or a unit before the table with no table between; corner: header area of the same table; lead-in: unit directly before the table; unit line: in the table or before it | E1, E2 |
+| `table_title` lines, `corner_text`, `lead_in`, `unit_printed` | each piece | title: the table's own caption or own cell/row, or a unit or row on the side of the table the source relates it to (2026-10-11 title-native-order: written or route order alone leaves the side unresolved, never pass or fail; was "a top in-table row, or a unit before the table with no table between"), any table listed between being the source's own; corner: header area of the same table; lead-in: unit directly before the table; unit line: in the table or before it | E1, E2 |
 | `section_path` headings | each heading unit, before the target | order kept; **recognised** as `heading` counted separately | E1, E2, E9 |
 | `segment_or_basis` phrases | each phrase | inside the table → same table, above the value; else before the table or in its note | — |
 | `periods` parts | each phrase | header-type parts: column coverage as headers; prose parts: preserved only | E4, E7 |

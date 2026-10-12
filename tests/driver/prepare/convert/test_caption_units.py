@@ -124,10 +124,10 @@ class CaptionUnitTests(unittest.TestCase):
 
     def test_a_title_reviewed_at_a_heading_needs_that_heading_not_an_equal_caption(self):  # Root's early review, defect 2: the field's own occurrence
         raw, route = CASES['root_title'], self.routes['root_title']
-        self.assertEqual(title(route, raw, 'Service parts', 0)[0], 'pass')  # reviewed at the <h2>: the heading is there
+        self.assertEqual(title(route, raw, 'Service parts', 0), ('unresolved', 'source_order'))  # reviewed at the <h2>: the heading is there, before its table on written and route order only - never an automatic pass (title-native-order, Root-approved)
         gone = copy.deepcopy(route); gone['units'] = [u for u in gone['units'] if not (u['kind'] == 'heading' and u.get('text') == 'Service parts')]
-        self.assertNotEqual(title(gone, raw, 'Service parts', 0)[0], 'pass')  # the heading removed; the equal own caption elsewhere does not stand for it
-        self.assertEqual(title(gone, raw, 'Service parts', 1)[0], 'pass')  # reviewed at the caption itself: the caption is the title
+        self.assertEqual(title(gone, raw, 'Service parts', 0), ('fail', 'missing'))  # the heading removed: its reviewed occurrence is gone; the equal own caption elsewhere does not stand for it
+        self.assertEqual(title(gone, raw, 'Service parts', 1), ('pass', None))  # reviewed at the caption itself: the table's own caption is the title (intrinsic, no order read)
 
     def test_a_caption_carrier_that_names_another_table_carries_no_field(self):  # Root, caption field ownership: the shared placement check, every field
         raw, route = CASES['plain'], self.routes['plain']

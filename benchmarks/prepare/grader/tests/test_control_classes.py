@@ -48,11 +48,11 @@ class Fixture(unittest.TestCase):
         return {r['check']: (r['verdict'], r.get('reason')) for r in g.rows}
 
     def test_a_table_continued_over_a_page_break_keeps_its_title_and_an_unrelated_table_displaces_it(self):
-        self.assertEqual(self.grade({'table_title': ['Results of operations'], 'row_label': 'Total'})['table_title'], ('pass', None))
+        self.assertEqual(self.grade({'table_title': ['Results of operations'], 'row_label': 'Total'})['table_title'], ('unresolved', 'source_order'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
         other = lambda a: dict(a, cells=[dict(c, text={'Name': 'Location', 'Type': 'Size'}.get(c['text'], c['text'])) for c in a['cells']])  # another table's header row between
         self.assertEqual(self.grade({'table_title': ['Results of operations'], 'row_label': 'Total'}, self.units(other))['table_title'], ('fail', 'placement'))
         empty = lambda a: dict(a, cells=[], anchor=None)  # a table unit with nothing in it (no adapter makes one now; a route may still carry one)
-        self.assertEqual(self.grade({'table_title': ['Results of operations'], 'row_label': 'Total'}, self.units(empty))['table_title'], ('pass', None))
+        self.assertEqual(self.grade({'table_title': ['Results of operations'], 'row_label': 'Total'}, self.units(empty))['table_title'], ('unresolved', 'source_order'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_a_title_displaced_before_an_unrelated_table_with_the_same_header_fails(self):  # Codex R2-C3: equal header rows alone do not make a continuation; the source order must agree
         raw = b'<p>Total assets</p><table id="a"><tr><td>Name</td><td>2024</td></tr><tr><td>Cash</td><td>100</td></tr></table><p>Current debt</p><table id="b"><tr><td>Name</td><td>2024</td></tr><tr><td>Loans</td><td>20</td></tr></table>'
@@ -68,12 +68,12 @@ class Fixture(unittest.TestCase):
         def title(order):
             g = grade.Grader(t, grade.RouteFile({'file_id': t['file_id'], 'units': [dict(u) for u in order]}, raw)); g.grade_cell(); return next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'table_title')
         self.assertTrue(grade.continued(units[1], units[3]))  # the two tables share a header row: the excuse alone would call them one table
-        self.assertEqual(title(units), ('pass', None)); self.assertEqual(title([units[0], units[2], units[1], units[3]]), ('fail', 'placement'))  # the title listed before the other table, its source place after it
+        self.assertEqual(title(units), ('unresolved', 'source_order')); self.assertEqual(title([units[0], units[2], units[1], units[3]]), ('unresolved', 'source_order'))  # the title listed before the other table, its source place after it [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         raw2 = raw + b'<table id="c"><tr><td>Name</td><td>2024</td></tr><tr><td>Bonds</td><td>30</td></tr></table>'; start = raw2.index(b'id="c"')
         c = {'id': 'c', 'kind': 'table', 'anchor': {'byte_start': raw2.rfind(b'<table', 0, start), 'byte_end_exclusive': raw2.index(b'</table>', start) + 8},
              'cells': [{'r': r, 'c': k, 'rs': 1, 'cs': 1, 'text': s, 'anchor': {'byte_start': raw2.index(s.encode(), start), 'byte_end_exclusive': raw2.index(s.encode(), start) + len(s)}, 'header': r == 0} for r, row in enumerate([['Name', '2024'], ['Bonds', '30']]) for k, s in enumerate(row)]}
         g = grade.Grader(t, grade.RouteFile({'file_id': t['file_id'], 'units': [dict(u) for u in (units[0], units[1], units[2], c, units[3])]}, raw2)); g.grade_cell()
-        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'table_title'), ('fail', 'placement'))  # a same-header table listed between the title and its table, its source place after the table: no continuation
+        self.assertEqual(next((r['verdict'], r.get('reason')) for r in g.rows if r['check'] == 'table_title'), ('unresolved', 'source_order'))  # a same-header table listed between the title and its table, its source place after the table: no continuation [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
 
     def test_a_corner_of_two_stub_columns_is_the_keys_pieces(self):
         self.assertEqual(self.grade({'corner_text': 'Name | Type', 'row_label': 'Total'})['corner_text'], ('unresolved', 'source_order'))  # semantic truth unchanged (correct); automatic: its cross-row order is byte order only, unproved (table-order-conservative)

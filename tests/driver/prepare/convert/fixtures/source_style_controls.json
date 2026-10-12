@@ -1,0 +1,23 @@
+{
+ "what": "Root's public style review sources (2026-10-11: public and design reviews, candidate review), byte-exact as UTF-8 text",
+ "sources_sha256": {
+  "public_review": "0e25c51b1f3d0c3d7c6335fb4d3aa99589ebbf77ef80e506755add37e2031aff",
+  "design_review": "69ce7390487927d75e2c38152ee90e3913cee7a3db482b5bf7a0f16bed9b9383",
+  "available_background_image": "5fb40cd19fdadc863ff98f174d2565fb4ceed69fc953191dc38fd031cabddf88",
+  "colour_control": "3bc196a80bd524050a3fb7f4e146389579324834d44531d0ad8ea9b9763def9e",
+  "generated_empty_owner": "6bb297b67012d55b44134b3be0e0cbc222b255c29dbb9fd8a0ca164dc5225d5e",
+  "opacity_without_background": "556fd3aaa6daa1b5dff023ad9c60149fc2f27ad128e9f6a71bee4875b37446c5",
+  "plain_background_control": "9eabe908429e146b44f7d80805c12eac91e4c927f3e61a91ef6ee3f5816dedd6",
+  "pseudo_bold_control": "d625db77703ff66420697a49075265599a3c68fc75231a524f7735c5474a1582"
+ },
+ "cases": {
+  "public_review": "<style>.heavy{font-weight:700}.under{text-decoration:underline}.mark{background-color:yellow}.parent{font-weight:700}.normal{font-weight:400}</style><p>Left <b id=\"b\">cargo</b> and <strong id=\"strong\">cargo</strong>; <u id=\"u\">cargo</u>; <span class=\"mark\" id=\"mark\">cargo</span>; <span id=\"plain\">cargo</span>.</p><p class=\"parent\"><span id=\"inherit\">cargo</span> <span class=\"normal\" id=\"override\">cargo</span></p><table><tr><td><span id=\"cell\" class=\"heavy under mark\">cargo</span></td><td>31</td></tr></table><p><s id=\"strike\">old</s> <sup id=\"raise\">2</sup> <span id=\"color\" style=\"color:red\">cargo</span></p>",
+  "design_review": "<div style=\"background:yellow\"><span id=\"wide\" style=\"background:color(display-p3 1 0 0 / .3)\">wide</span><span id=\"alpha\" style=\"background:rgba(255,0,0,.3)\">alpha</span><span id=\"opacity\" style=\"background:red;opacity:.3\">opacity</span><i id=\"italic\">italic</i><em id=\"em\">emphasis</em></div>",
+  "available_background_image": "<p id=\"target\" style=\"width:220px;height:80px;background-repeat:no-repeat;background-position:0 30px;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMjAiIGhlaWdodD0iNTAiPjxyZWN0IHdpZHRoPSIyMjAiIGhlaWdodD0iNTAiIGZpbGw9InllbGxvdyIvPjx0ZXh0IHg9IjEwIiB5PSIzNSIgZm9udC1zaXplPSIyMCI+QmFsYW5jZSA5ODwvdGV4dD48L3N2Zz4=)\">Cargo</p>",
+  "colour_control": "<div style=\"background:yellow\"><span id=\"target\" style=\"background:red;opacity:.3\">cargo</span></div>",
+  "generated_empty_owner": "<style>#target::before{content:\"cargo\";font-weight:700}</style><div style=\"background:yellow\"><span id=\"target\"></span></div>",
+  "opacity_without_background": "<div style=\"background:yellow\"><span style=\"opacity:.3\"><b id=\"target\">cargo</b></span></div>",
+  "plain_background_control": "<p id=\"target\" style=\"background:yellow\">Cargo</p>",
+  "pseudo_bold_control": "<style>#target::first-letter{font-weight:700}</style><p id=\"target\">Cargo</p>"
+ }
+}

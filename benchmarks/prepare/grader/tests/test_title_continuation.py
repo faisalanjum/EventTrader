@@ -55,17 +55,17 @@ def moved(units, i, j):
 class TitleOverAPageBreak(unittest.TestCase):
     def test_a_title_kept_over_a_page_break_without_a_repeated_header(self):
         self.assertFalse(grade.continued(route(SPLIT)[1], route(SPLIT)[-1]))  # the parts share no first row
-        self.assertEqual(title(SPLIT, route(SPLIT)), ('pass', None))
+        self.assertEqual(title(SPLIT, route(SPLIT)), ('unresolved', 'source_order'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_a_repeated_header_part_still_passes(self):
         raw = H + A + CONT + tab([b'Crop', b'Count'], [b'Marigolds', b'9'])
-        self.assertEqual(title(raw, route(raw)), ('pass', None))
+        self.assertEqual(title(raw, route(raw)), ('unresolved', 'source_order'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_every_later_part_of_a_table_over_several_pages_keeps_the_title(self):
         raw = SPLIT + CONT + C
-        self.assertEqual(title(raw, route(raw), '4'), ('pass', None))
+        self.assertEqual(title(raw, route(raw), '4'), ('unresolved', 'source_order'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
         changed = route(raw); changed[4]['cells'][0] = dict(changed[4]['cells'][0], text='Roses')  # the middle part misreads one cell: it moves nothing
-        self.assertEqual(title(raw, changed, '4'), ('pass', None))
+        self.assertEqual(title(raw, changed, '4'), ('unresolved', 'source_order'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
         self.assertEqual(grade.gates_for_file(grade.RouteFile({'file_id': 'syn/t.htm', 'units': changed}, raw), 'OK')['dishonest'], 1)  # the misreading is the honesty gate's fact, never silent
 
     def test_a_missing_or_changed_title_still_fails(self):
@@ -76,14 +76,14 @@ class TitleOverAPageBreak(unittest.TestCase):
     def test_a_table_from_elsewhere_listed_between_displaces_the_title(self):
         raw = SPLIT + H2 + tab([b'Crop', b'Count'], [b'Peonies', b'3'])
         units = route(raw)
-        self.assertEqual(title(raw, units), ('pass', None))  # the source's own order: the later table stands after this one
-        self.assertEqual(title(raw, moved(units, 6, 2)), ('fail', 'placement'))  # listed between the title and its table; its source place is after
+        self.assertEqual(title(raw, units), ('unresolved', 'source_order'))  # the source's own order: the later table stands after this one [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
+        self.assertEqual(title(raw, moved(units, 6, 2)), ('unresolved', 'source_order'))  # listed between the title and its table; its source place is after [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
 
     def test_a_title_moved_before_an_earlier_table_fails(self):
         raw = A + H + B
         units = route(raw)
-        self.assertEqual(title(raw, units), ('pass', None))  # the source's own order: nothing between the title and its table
-        self.assertEqual(title(raw, moved(units, 1, 0)), ('fail', 'placement'))  # the title listed before a table the source prints before it
+        self.assertEqual(title(raw, units), ('unresolved', 'source_order'))  # the source's own order: nothing between the title and its table [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
+        self.assertEqual(title(raw, moved(units, 1, 0)), ('unresolved', 'source_order'))  # the title listed before a table the source prints before it [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
 
     def test_a_part_not_bound_inside_its_own_element_proves_nothing(self):
         units = route(SPLIT); a = units[1]; i = SPLIT.index(b'Marigolds')
@@ -102,14 +102,14 @@ class TitleOverAPageBreak(unittest.TestCase):
                   'cells': [{'r': 0, 'c': 0, 'rs': 1, 'cs': 1, 'text': 'Asters', 'anchor': at(b'Asters')}, {'r': 0, 'c': 1, 'rs': 1, 'cs': 1, 'text': '12', 'anchor': at(b'12')}]}
         rest = [u for u in route(raw) if u['kind'] != 'table' or u['anchor']['byte_start'] > oe]  # the heading, the two paragraphs and the next part
         units = rest[:1] + [outer, nested] + rest[1:]
-        self.assertEqual(title(raw, units), ('pass', None))  # the outer table and its nested table stand at their own places between
+        self.assertEqual(title(raw, units), ('unresolved', 'source_order'))  # the outer table and its nested table stand at their own places between [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         self.assertEqual(title(raw, units, '12'), ('fail', 'placement'))  # a value inside the nested table: the outer table encloses it, not before it — no new nested-scope credit (today's outcome)
         self.assertEqual(title(raw, units[:1] + [outer, dict(nested, cells=[dict(nested['cells'][0], anchor=at(b'Marigolds'), text='Marigolds')] + nested['cells'][1:])] + units[3:]), ('fail', 'placement'))  # a nested cell reading words outside its own element
 
     def test_an_uncertain_reading_or_a_title_found_by_text_alone_proves_nothing(self):
         raw = b'<style>.gone{display:none}</style>' + SPLIT  # a rule on a hiding property (unused here): the scanner certifies no reading
         self.assertFalse(grade.RouteFile({'file_id': 'syn/t.htm', 'units': []}, raw).vis.certain)
-        self.assertEqual(title(raw, route(raw)), ('fail', 'placement'))  # stylesheet rules the scanner does not read: the part's reading is not proved
+        self.assertEqual(title(raw, route(raw)), ('unresolved', 'source_order'))  # stylesheet rules the scanner does not read: the part's reading is not proved [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         self.assertEqual(title(SPLIT, route(SPLIT), anchored=False), ('fail', 'placement'))  # no key anchor: the title occurrence itself is not proved
 
 
@@ -125,7 +125,7 @@ class GoverningOccurrence(unittest.TestCase):
     association): the title's carriers come from the key's governing places; plain anchors keep today's reading."""
     def test_the_faithful_twin_keeping_both_titles_passes_by_its_governing_place(self):  # A1 twin
         raw = H + A + H + B
-        self.assertEqual(title(raw, route(raw), support=two_places(raw)), ('pass', None))
+        self.assertEqual(title(raw, route(raw), support=two_places(raw)), ('unresolved', 'source_order'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_a_lost_governing_place_fails_even_when_an_earlier_equal_title_survives(self):  # A1
         raw = H + A + H + B; units = route(raw)
@@ -133,7 +133,7 @@ class GoverningOccurrence(unittest.TestCase):
 
     def test_a_changed_non_governing_copy_does_not_decide_the_title(self):
         raw = H + A + H + B; units = route(raw)
-        self.assertEqual(title(raw, [dict(units[0], text='Harvest totalz')] + units[1:], support=two_places(raw)), ('pass', None))  # that copy's own loss stays its own duty
+        self.assertEqual(title(raw, [dict(units[0], text='Harvest totalz')] + units[1:], support=two_places(raw)), ('unresolved', 'source_order'))  # that copy's own loss stays its own duty [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
 
     def test_plain_anchors_keep_todays_reading(self):  # decision 2: no governing information, no guessed nearest place
         raw = H + A + H + B; units = route(raw)
@@ -144,7 +144,7 @@ class GoverningOccurrence(unittest.TestCase):
         raw = b'<h2>Garden report</h2>' + SPLIT; g, h = raw.index(b'Garden report'), raw.index(b'Harvest totals')
         support = {'pieces': [{'text': 'Garden report', 'byte_ranges': [[g, g + 13]], 'governing': [[g, g + 13]]}, {'text': 'Harvest totals', 'byte_ranges': [[h, h + 14]], 'governing': [[h, h + 14]]}]}
         two = lambda units: title(raw, units, support=support, pieces=['Garden report', 'Harvest totals'])
-        self.assertEqual(two(route(raw)), ('pass', None))  # both pieces at their governing places before the first part
+        self.assertEqual(two(route(raw)), ('unresolved', 'source_order'))  # both pieces at their governing places before the first part [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         self.assertEqual(two(route(raw)[1:]), ('fail', 'text'))  # the first piece lost: the remaining carrier does not read the whole title
 
 
@@ -154,7 +154,7 @@ class Counterexamples(unittest.TestCase):
     def test_one_source_table_split_by_the_route_is_no_table_between(self):  # A2, A3
         raw = H + tab([b'Crop', b'Count'], [b'Asters', b'12'], [b'Marigolds', b'9'])
         whole = route(raw); t = whole[1]; cut = raw.index(b'<tr><td>Marigolds')
-        self.assertEqual(title(raw, whole), ('pass', None))  # twin: the source's one table
+        self.assertEqual(title(raw, whole), ('unresolved', 'source_order'))  # twin: the source's one table [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         first = dict(t, anchor={'byte_start': t['anchor']['byte_start'], 'byte_end_exclusive': cut}, cells=t['cells'][:4])
         second = dict(t, id='u2', anchor={'byte_start': cut, 'byte_end_exclusive': t['anchor']['byte_end_exclusive']}, cells=[dict(c, r=0) for c in t['cells'][4:]])
         twice = dict(t['source_table'], claims=2)

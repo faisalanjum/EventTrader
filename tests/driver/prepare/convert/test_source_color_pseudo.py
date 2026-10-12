@@ -24,7 +24,7 @@ class FirstLetterLine(unittest.TestCase):
     def records(self, raw, word):  # the colour records over `word` in its text unit's final text
         route = html_route.prepare(raw, 'doc', hashlib.sha256(raw).hexdigest(), self.browser, source=Source('doc.htm', {'doc.htm': raw}))[0]
         unit = next(u for u in route['units'] if word in (u.get('text') or '')); i = unit['text'].index(word); span = set(range(i, i + len(word)))
-        return [r for r in route['source_color']['records'] for o in r.get('owners') or [] if o['unit'] == unit['id'] and any(span & set(range(a, b)) for a, b in o['text_at'])]
+        return [r for r in route['source_style']['records'] for o in r.get('owners') or [] if o['unit'] == unit['id'] and any(span & set(range(a, b)) for a, b in o['text_at'])]
 
     def test_a_first_line_or_first_letter_colour_is_kept_beside_as_uncertainty(self):
         raw = b'<html><head><style>p.a::first-line{color:red} p.b::first-letter{color:blue}</style></head><body><p class="a">Alpha beta</p><p class="b">Gamma</p></body></html>'

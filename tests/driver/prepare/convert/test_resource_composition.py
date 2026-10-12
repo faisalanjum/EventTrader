@@ -219,6 +219,25 @@ class Boundary(unittest.TestCase):
         self.assertIn({'member': 'sub/g.css', 'sha256': sha(b'p{}'), 'status': 200, 'kind': 'stylesheet'}, route['resources']['dependencies'])
         self.assertEqual(json.loads(json.dumps(route)), route)
 
+    def test_a_marked_page_that_fails_to_load_is_closed_and_its_error_propagates(self):  # inventory gap (current_inventory_reconciliation_v1): _document's close-and-reraise
+        real, made = screen_grid._offline_page, []
+        def opening(fail):
+            def make(browser, asked=None, document=None, source=None):
+                page = real(browser, asked, document, source); made.append(page)
+                if fail is not None and document is not None and len(document) == 3:  # the marked page (address, body, charset); the charset page is read first
+                    def goto(*a, **k): raise fail('injected goto failure')
+                    page.goto = goto
+                return page
+            return make
+        with mock.patch.object(screen_grid, '_offline_page', opening(None)): page, address, first = screen_grid._document(self.browser, DOC, DOC, Source('sub/doc.htm', SHEETS))
+        self.assertEqual((page.is_closed(), [p.is_closed() for p in made]), (False, [True, False]))  # the loaded page is returned open (the charset page was closed)
+        page.close()
+        for fail in (RuntimeError, MemoryError):  # an ordinary and a machine failure: either way the page is closed and the same error propagates
+            made.clear()
+            with self.subTest(error=fail.__name__), mock.patch.object(screen_grid, '_offline_page', opening(fail)), self.assertRaises(fail):
+                screen_grid._document(self.browser, DOC, DOC, Source('sub/doc.htm', SHEETS))
+            self.assertEqual([p.is_closed() for p in made], [True, True])
+
     def test_the_declared_address_never_silently_misresolves(self):
         for bad in (dict(path='doc.htm', base='https://example.test/dir'), dict(path='doc.htm', base='dir/'), dict(path='/doc.htm'), dict(path='doc.htm', members={'a.css': bytearray(b'x')}),
                     dict(path='doc.htm', observed={'https://example.test/a.css': {'status': 404}})):  # no trailing slash; not absolute; absolute path; mutable bytes; an observation without its time

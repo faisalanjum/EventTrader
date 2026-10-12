@@ -1,0 +1,1098 @@
+{
+ "error": null,
+ "file_id": "invented/own_title_uncertain.htm",
+ "page_visibility": {
+  "hidden": [],
+  "shown": [],
+  "unbound": [],
+  "unproven": 0
+ },
+ "resources": {
+  "dependencies": [],
+  "document": {
+   "base": null,
+   "bundle": null,
+   "path": "",
+   "sha256": "70a24083fc52b4e901ea9710b1672e8e936532e87c75d09720539220215fa687"
+  }
+ },
+ "route": {
+  "adapter": "driver/prepare/convert/edgartools_html.py",
+  "linker": "driver/prepare/convert/anchor.py",
+  "name": "edgartools-html+source-formatting+screen",
+  "settings": {
+   "heading_boundaries": "source matched",
+   "headings": "detected blocks read whole",
+   "hidden_text": "left out as the browser proved it 4f53cda18c2baa0c",
+   "inline_fact_spaces": "kept",
+   "inline_facts": "read whole",
+   "ix_exclude": "read as shown",
+   "joins": "touching on one baseline",
+   "nested_tables": "each a table unit naming its holder cell",
+   "page_number_candidates": "kept",
+   "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+   "parse_html": "defaults",
+   "parts": "apart on one baseline",
+   "picture_names": "codes",
+   "pictures": "every shown tag",
+   "retain_native_heading_evidence": true,
+   "retain_pictures": true,
+   "screen_grid": true,
+   "source_formatting": "rendered",
+   "source_lines": "certified <br> breaks",
+   "style_values": "independent",
+   "table_captions": "each table's own caption a caption unit, bound to its source caption",
+   "table_cells": "every own cell, bound to its source cell",
+   "table_identity": "own start tag, shown or hidden",
+   "table_rows": "every own row group"
+  },
+  "tool": "edgartools",
+  "version": "edgartools 5.60.0"
+ },
+ "schema": "prepare-route-output/1",
+ "screen_endpoints": {
+  "end": {
+   "174": {
+    "b": 33,
+    "r": 220.828125,
+    "shown": true,
+    "t": 16,
+    "x": 216.828125
+   },
+   "340": {
+    "b": 129,
+    "r": 132.84375,
+    "shown": true,
+    "t": 112,
+    "x": 128.84375
+   },
+   "726": {
+    "b": 319,
+    "r": 57,
+    "shown": true,
+    "t": 302,
+    "x": 50.765625
+   }
+  },
+  "start": {
+   "139": {
+    "b": 33,
+    "r": 13.328125,
+    "shown": true,
+    "t": 16,
+    "x": 8
+   },
+   "321": {
+    "b": 129,
+    "r": 18.671875,
+    "shown": true,
+    "t": 112,
+    "x": 8
+   },
+   "716": {
+    "b": 301,
+    "r": 36.125,
+    "shown": true,
+    "t": 284,
+    "x": 24.5625
+   }
+  }
+ },
+ "seconds": 0.0,
+ "sha256": "70a24083fc52b4e901ea9710b1672e8e936532e87c75d09720539220215fa687",
+ "source_color": {
+  "read": true,
+  "records": [
+   {
+    "at": {
+     "byte_end_exclusive": 174,
+     "byte_start": 139
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "text_at": [
+       [
+        0,
+        35
+       ]
+      ],
+      "unit": "u0"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 239,
+     "byte_start": 213
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 213,
+      "text_at": [
+       [
+        0,
+        26
+       ]
+      ],
+      "unit": "t1"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 254,
+     "byte_start": 248
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 248,
+      "text_at": [
+       [
+        0,
+        6
+       ]
+      ],
+      "unit": "t1"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 265,
+     "byte_start": 263
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 263,
+      "text_at": [
+       [
+        0,
+        2
+       ]
+      ],
+      "unit": "t1"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 288,
+     "byte_start": 283
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 283,
+      "text_at": [
+       [
+        0,
+        5
+       ]
+      ],
+      "unit": "t1"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 299,
+     "byte_start": 297
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 297,
+      "text_at": [
+       [
+        0,
+        2
+       ]
+      ],
+      "unit": "t1"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 340,
+     "byte_start": 321
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "text_at": [
+       [
+        0,
+        19
+       ]
+      ],
+      "unit": "u2"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 393,
+     "byte_start": 379
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 379,
+      "text_at": [
+       [
+        0,
+        14
+       ]
+      ],
+      "unit": "t3"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 417,
+     "byte_start": 411
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 411,
+      "text_at": [
+       [
+        0,
+        6
+       ]
+      ],
+      "unit": "t3"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 427,
+     "byte_start": 426
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 426,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ],
+      "unit": "t3"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 495,
+     "byte_start": 483
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 483,
+      "text_at": [
+       [
+        0,
+        12
+       ]
+      ],
+      "unit": "t4"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 513,
+     "byte_start": 508
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 508,
+      "text_at": [
+       [
+        0,
+        5
+       ]
+      ],
+      "unit": "t4"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 523,
+     "byte_start": 522
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 522,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ],
+      "unit": "t4"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 547,
+     "byte_start": 541
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 541,
+      "text_at": [
+       [
+        0,
+        6
+       ]
+      ],
+      "unit": "t4"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 557,
+     "byte_start": 556
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 556,
+      "text_at": [
+       [
+        0,
+        1
+       ]
+      ],
+      "unit": "t4"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 625,
+     "byte_start": 613
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 613,
+      "text_at": [
+       [
+        0,
+        12
+       ]
+      ],
+      "unit": "t5"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 637,
+     "byte_start": 630
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 613,
+      "text_at": [
+       [
+        13,
+        20
+       ]
+      ],
+      "unit": "t5"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 663,
+     "byte_start": 655
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 655,
+      "text_at": [
+       [
+        0,
+        8
+       ]
+      ],
+      "unit": "t5"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 674,
+     "byte_start": 672
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 672,
+      "text_at": [
+       [
+        0,
+        2
+       ]
+      ],
+      "unit": "t5"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 726,
+     "byte_start": 716
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "text_at": [
+       [
+        0,
+        10
+       ]
+      ],
+      "unit": "u6"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 750,
+     "byte_start": 744
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 744,
+      "text_at": [
+       [
+        0,
+        6
+       ]
+      ],
+      "unit": "t7"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 761,
+     "byte_start": 759
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 759,
+      "text_at": [
+       [
+        0,
+        2
+       ]
+      ],
+      "unit": "t7"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 828,
+     "byte_start": 802
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 802,
+      "text_at": [
+       [
+        0,
+        26
+       ]
+      ],
+      "unit": "t8"
+     }
+    ]
+   },
+   {
+    "at": {
+     "byte_end_exclusive": 839,
+     "byte_start": 837
+    },
+    "certain": false,
+    "color": "rgb(0, 0, 0)",
+    "owners": [
+     {
+      "cell": 837,
+      "text_at": [
+       [
+        0,
+        2
+       ]
+      ],
+      "unit": "t8"
+     }
+    ]
+   }
+  ],
+  "unresolved": []
+ },
+ "source_inline": {
+  "read": true,
+  "records": [],
+  "unresolved": []
+ },
+ "source_links": [],
+ "source_relations": {
+  "error": "syntax error: line 1, column 0",
+  "read": false
+ },
+ "source_symbols": {
+  "decoder": "dingbat-to-unicode 1.0.2",
+  "read": true,
+  "records": []
+ },
+ "status": "OK",
+ "uncovered": [],
+ "units": [
+  {
+   "anchor": {
+    "byte_end_exclusive": 174,
+    "byte_start": 139
+   },
+   "id": "u0",
+   "kind": "text",
+   "text": "Invented controls (no real filing)."
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 299,
+    "byte_start": 213
+   },
+   "caption": [],
+   "cells": [
+    {
+     "anchor": {
+      "byte_end_exclusive": 239,
+      "byte_start": 213
+     },
+     "c": 0,
+     "cs": 1,
+     "grid": "screen",
+     "header": true,
+     "link_flag": "out_of_order",
+     "r": 0,
+     "rs": 2,
+     "source": {
+      "byte_end_exclusive": 239,
+      "byte_start": 197
+     },
+     "text": "Fleet capacity (unaudited)"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 254,
+      "byte_start": 248
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": true,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 254,
+      "byte_start": 244
+     },
+     "text": "Crates"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 265,
+      "byte_start": 263
+     },
+     "c": 2,
+     "cs": 1,
+     "grid": "screen",
+     "header": true,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 265,
+      "byte_start": 259
+     },
+     "text": "43"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 288,
+      "byte_start": 283
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 288,
+      "byte_start": 279
+     },
+     "text": "Boxes"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 299,
+      "byte_start": 297
+     },
+     "c": 2,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 299,
+      "byte_start": 293
+     },
+     "text": "12"
+    }
+   ],
+   "id": "t1",
+   "kind": "table",
+   "source_table": {
+    "claims": 1,
+    "tag_start": 179
+   }
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 340,
+    "byte_start": 321
+   },
+   "id": "u2",
+   "kind": "text",
+   "text": "Between the tables."
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 427,
+    "byte_start": 379
+   },
+   "caption": [],
+   "cells": [
+    {
+     "anchor": {
+      "byte_end_exclusive": 393,
+      "byte_start": 379
+     },
+     "c": 0,
+     "cs": 2,
+     "grid": "screen",
+     "header": true,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 393,
+      "byte_start": 363
+     },
+     "text": "Harbor summary"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 417,
+      "byte_start": 411
+     },
+     "c": 0,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 417,
+      "byte_start": 407
+     },
+     "text": "Cranes"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 427,
+      "byte_start": 426
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 427,
+      "byte_start": 422
+     },
+     "text": "7"
+    }
+   ],
+   "id": "t3",
+   "kind": "table",
+   "source_table": {
+    "claims": 1,
+    "tag_start": 345
+   }
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 557,
+    "byte_start": 483
+   },
+   "caption": [],
+   "cells": [
+    {
+     "anchor": {
+      "byte_end_exclusive": 495,
+      "byte_start": 483
+     },
+     "c": 0,
+     "cs": 1,
+     "grid": "screen",
+     "header": true,
+     "link_flag": "out_of_order",
+     "r": 0,
+     "rs": 2,
+     "source": {
+      "byte_end_exclusive": 499,
+      "byte_start": 464
+     },
+     "struck": [
+      "Legacy fleet"
+     ],
+     "struck_at": [
+      [
+       0,
+       6
+      ],
+      [
+       7,
+       12
+      ]
+     ],
+     "text": "Legacy fleet"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 513,
+      "byte_start": 508
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": true,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 513,
+      "byte_start": 504
+     },
+     "text": "Rafts"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 523,
+      "byte_start": 522
+     },
+     "c": 2,
+     "cs": 1,
+     "grid": "screen",
+     "header": true,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 523,
+      "byte_start": 518
+     },
+     "text": "8"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 547,
+      "byte_start": 541
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 547,
+      "byte_start": 537
+     },
+     "text": "Skiffs"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 557,
+      "byte_start": 556
+     },
+     "c": 2,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 557,
+      "byte_start": 552
+     },
+     "text": "3"
+    }
+   ],
+   "id": "t4",
+   "kind": "table",
+   "source_table": {
+    "claims": 1,
+    "tag_start": 446
+   }
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 674,
+    "byte_start": 613
+   },
+   "caption": [],
+   "cells": [
+    {
+     "anchor": {
+      "byte_end_exclusive": 637,
+      "byte_start": 613
+     },
+     "c": 0,
+     "cs": 2,
+     "grid": "screen",
+     "header": true,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 637,
+      "byte_start": 594
+     },
+     "struck": [
+      "Dock tariffs"
+     ],
+     "struck_at": [
+      [
+       0,
+       4
+      ],
+      [
+       5,
+       12
+      ]
+     ],
+     "text": "Dock tariffs (draft)"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 663,
+      "byte_start": 655
+     },
+     "c": 0,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 663,
+      "byte_start": 651
+     },
+     "text": "Moorings"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 674,
+      "byte_start": 672
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 1,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 674,
+      "byte_start": 668
+     },
+     "text": "14"
+    }
+   ],
+   "id": "t5",
+   "kind": "table",
+   "source_table": {
+    "claims": 1,
+    "tag_start": 576
+   }
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 726,
+    "byte_start": 716
+   },
+   "id": "u6",
+   "kind": "caption",
+   "source": {
+    "byte_end_exclusive": 726,
+    "byte_start": 707
+   },
+   "source_table": {
+    "claims": 1,
+    "tag_start": 693
+   },
+   "text": "Dock rates"
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 761,
+    "byte_start": 744
+   },
+   "caption": [],
+   "cells": [
+    {
+     "anchor": {
+      "byte_end_exclusive": 750,
+      "byte_start": 744
+     },
+     "c": 0,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 750,
+      "byte_start": 740
+     },
+     "text": "Berths"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 761,
+      "byte_start": 759
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 761,
+      "byte_start": 755
+     },
+     "text": "21"
+    }
+   ],
+   "id": "t7",
+   "kind": "table",
+   "source_table": {
+    "claims": 1,
+    "tag_start": 693
+   }
+  },
+  {
+   "anchor": {
+    "byte_end_exclusive": 839,
+    "byte_start": 802
+   },
+   "caption": [],
+   "cells": [
+    {
+     "anchor": {
+      "byte_end_exclusive": 828,
+      "byte_start": 802
+     },
+     "c": 0,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 828,
+      "byte_start": 798
+     },
+     "text": "Fleet capacity (unaudited)"
+    },
+    {
+     "anchor": {
+      "byte_end_exclusive": 839,
+      "byte_start": 837
+     },
+     "c": 1,
+     "cs": 1,
+     "grid": "screen",
+     "header": false,
+     "r": 0,
+     "rs": 1,
+     "source": {
+      "byte_end_exclusive": 839,
+      "byte_start": 833
+     },
+     "text": "99"
+    }
+   ],
+   "id": "t8",
+   "kind": "table",
+   "source_table": {
+    "claims": 1,
+    "tag_start": 780
+   }
+  }
+ ]
+}

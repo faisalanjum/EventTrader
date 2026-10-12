@@ -762,6 +762,7 @@ def screen_boundary(left, right, tol=0.75):
 class Grader:
     def __init__(self, t, rf):
         self.t, self.rf, self.rows = t, rf, []
+        self.reading_doubt = False  # what a pass leaned on that only an uncertain reading of the source could settle (a same-row title's <tr> by its bytes alone; a larger carrier's text over its place): said by the check, opened by `field` only after its placement and strike checks
         self.order_doubt = self.order_relaxed = False  # a cross-row order only bytes could tell (`order_holds`): said, and read as the route keeps it only on a field's order-relaxed attempt
         self.lenient = self.undecided = False  # the dash question (`printed`): is an undecided dash read as no sign; did the strict reading meet one
         self.touching, self.unsure = True, False  # the join question (`adjacent`): how a join the source cannot settle is read; did the grading meet one
@@ -837,11 +838,13 @@ class Grader:
         for alt, value in alts:
             if value in (None, [], {}): return self.row(name, 'na')
             n, self.lenient, self.undecided = len(self.rows), False, False
-            self.order_doubt = False
+            self.order_doubt = self.reading_doubt = False
             r, found = once(value, alt)  # first only what is proved counts: a dash the text and the source leave undecided prints nothing
             if not found and self.undecided:  # not proved — would it hold if those dashes are no signs? Then the value is open, neither failed nor passed (Codex R17-C5, R18-C3)
                 del self.rows[n:]; self.lenient = True; r2, _ = once(value, alt); self.lenient = False
                 r = ('unresolved', 'numeric_boundary', r2[2]) if r2[0] == 'pass' else r if r[0] == 'unresolved' else r2  # a failure stands only when both readings fail — a strike lost or invented fails either way
+            if self.reading_doubt and r[0] == 'pass':  # only after the value's own text, placement and strike checks passed: what only an uncertain reading could settle is open, and so is every side check it passed
+                r = ('unresolved', 'source_reading', self.reading_doubt); self.rows[n:] = [dict(x, verdict='unresolved', reason='source_reading', detail=None) if x['verdict'] == 'pass' else x for x in self.rows[n:]]
             if self.order_doubt and not (r[0] == 'fail' and found):  # the reading leaned on a cross-row order only bytes could tell (a contradiction proved after its own check passed - found - stands)
                 if r[0] == 'pass':  # byte agreement awards no pass: open, and so is every side check it passed
                     r = ('unresolved', 'source_order', r[2]); self.rows[n:] = [dict(x, verdict='unresolved', reason='source_order', detail=None) if x['verdict'] == 'pass' else x for x in self.rows[n:]]
@@ -1146,37 +1149,63 @@ class Grader:
     def table_title(self, value, alt, tb, vr):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'table_title', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
         cars = self.carriers(anchors, pieces, tb)
-        usable = [k for k in cars if (k['table'] is tb and k['cell']['r'] < vr) or (k['table'] is not tb and k['order'] < tb['_order']) or self.own_caption_of(k, tb)]
+        unsure = [k for k in cars if anchors and k['table'] is tb and not k['cell']['r'] < vr and self.rf.vis is not None and not self.rf.vis.certain and self.own_row(k, vr, literal=True)]  # the target's <tr> by the source's bytes only (an uncertain reading)
+        def before(k):  # the side the route lists the carrier on (an earlier or later row of its table; ahead of or after the table) must be where the source shows it: only written order tells (`order_holds`)
+            if k['table'] is tb:
+                cell, value = self.rf.source_cell(k['anchor'], literal=True), self.rf.source_cell(self.t.get('anchor'), literal=True)
+                if k['cell']['r'] == vr or None not in (cell, value) and self.rf.vis.certain and cell[:2] == value[:2]: return False  # one route row with the target needs proved own-row membership; one source <tr> listed apart is a moved cell where the reading certifies no layout rule (an uncertain one may render a row's cells apart)
+                return self.order_holds(k['anchor'], self.t.get('anchor'), k['cell']['r'] < vr)
+            vis = self.rf.vis
+            if k['cell'] is not None and vis is not None and any('byte_start' in x for x in spans(k['anchor'])):  # a cell of another table: whose source cell its bytes are, whatever the order
+                cell, claim = self.rf.source_cell(k['anchor'], literal=True), (k['table'].get('source_table') or {}).get('tag_start')
+                if cell is None or claim in vis.table_tags and vis.table_tags.index(claim) != cell[0]: return False  # no source cell, or one of a table other than the one its route table claims: ownership the source refutes
+            return self.order_holds(k['anchor'], tb.get('anchor'), k['order'] < tb['_order'])
+        usable = [k for k in cars if self.own_caption_of(k, tb) or any(k is x for x in unsure) or k['table'] is tb and anchors and self.own_row(k, vr) or before(k)]  # intrinsic membership first: no order is read for it
         if not usable: return ('fail', 'placement', None) if cars else ('fail', 'missing', None)
         ok, flag = match_pieces([k['text'] for k in usable], pieces, self.markers, self.own + self.table_context)
         got = ' '.join(k['text'] for k in usable)
         if not ok and len(usable) == 1 and (whole := self.whole_carrier(usable[0], anchors, ' '.join(pieces))):  # the title inside a larger faithful carrier (a title and a separate note in one cell)
-            if whole == 'unresolved': return 'unresolved', 'source_reading', norm(got)
+            if whole == 'unresolved': self.reading_doubt = norm(got)  # said, not decided here: a strike the route lost is still checked (`field`)
             ok, flag = True, 'carried'
         if not ok and match_pieces([spaced(k, ' '.join(pieces)) for k in usable], pieces, self.markers, self.own + self.table_context)[0]: return 'unresolved', 'adjacency', norm(got)
         if not ok: return 'fail', 'spacing' if spacing_only(got, ' '.join(pieces)) else 'text', norm(got)
         orders = {k['order'] for k in usable}
-        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not (continued(u, tb) and all(source_before(k['anchor'], u.get('anchor')) for k in usable) and source_before(u.get('anchor'), tb.get('anchor')))
+        if any(u.get('kind') == 'table' and u['_order'] not in orders and min(orders) < u['_order'] < tb['_order'] and u.get('cells') and not (continued(u, tb) and all(self.order_holds(k['anchor'], u.get('anchor')) for k in usable) and self.order_holds(u.get('anchor'), tb.get('anchor')))
                and not (anchors and self.kept_between(u, usable, tb, anchors)) for u in self.rf.units): return 'fail', 'placement', None  # another table with cells between — unless it is this table's earlier part (one table over a page break) or, for the key's own title, the source's own separate table at its own place between them
+        if any(k is x for k in usable for x in unsure): self.reading_doubt = 'own_row'  # said, not decided here: `field` opens the pass only after its placement and strike checks
         self.ctx_orders.update(orders); self.matched = objects(usable)
         return 'pass', None, flag or ('anchor_unknown' if not anchors else None)
+
+    def own_row(self, k, vr, literal=False):
+        """A title the key places in the target's own row: the route keeps its cell on the target's row, and the source proves (the scanner's native
+        cells, on a certain reading) that it is printed in the target's own row of the same source table - or is the target's own cell. Source-defined
+        membership: never text, route order or painted order alone; anything unproved keeps the earlier-row rule."""
+        title, value = self.rf.source_cell(k['anchor'], literal), self.rf.source_cell(self.t.get('anchor'), literal)
+        if not (row_hit(k['cell'], vr) and None not in (title, value) and title[:2] == value[:2]): return False
+        if literal or title[2] == value[2]: return True  # its own cell; or bytes only (an uncertain reading): the painted order in the row is unproved, admitted only as open (`unsure`)
+        c0, c1 = k['cell']['c'], k['cell']['c'] + k['cell'].get('cs', 1)  # one <tr> proves membership, not which side shows (a dir or layout can turn it): the route's side against written order is an order doubt
+        return (c1 <= self.vcols[0] or c0 >= self.vcols[1]) and self.order_holds(k['anchor'], self.t.get('anchor'), c1 <= self.vcols[0])
 
     def kept_between(self, u, usable, tb, places):
         """Is table u, listed between the title and its table, the source's own separate table at its own place? The scanner proves both tables
         (each names its own start tag, claimed once, every printed cell anchored inside that table's extent); u lies wholly after the title and
         wholly before the table; no title place the key lists between them is lost. The route then keeps the source's arrangement: preservation
         only, never proof that the title governs the later table. A cell reading other words is the honesty gate's fact (dishonest), not a move.
-        An uncertain reading proves nothing."""
+        On an uncertain reading the scanner still proves both tables and the title's place by their bytes, but not where they show: their written order
+        is said (`order_doubt`) and read as the route keeps it only on the field's order-relaxed attempt (`field`), as for a table's own rows."""
         vis = self.rf.vis
-        if vis is None or not vis.certain: return False
+        if vis is None: return False
         def extent(t):  # the route's claim of its source table, proved by the scanner (the own_caption principle: the claim alone is not the evidence)
             st, printed = t.get('source_table') or {}, [c for c in t.get('cells') or [] if squash(c.get('text', ''))]
             if st.get('claims') != 1 or st.get('tag_start') is None or st['tag_start'] not in vis.table_tags or not printed: return None
             s, e = vis.table_spans[vis.table_tags.index(st['tag_start'])]
             return (s, e) if all(spans(c.get('anchor')) and all('byte_start' in x and s <= x['byte_start'] < x['byte_end_exclusive'] <= e for x in spans(c.get('anchor'))) for c in printed) else None
         mine, other, kept = extent(u), extent(tb), [x for k in usable for x in spans(k['anchor']) if 'byte_start' in x]
-        if not mine or not other or mine[1] > other[0] or not kept or max(x['byte_end_exclusive'] for x in kept) > mine[0]: return False
-        return not any('byte_start' in p and mine[0] <= p['byte_start'] and p['byte_end_exclusive'] <= other[0] and not any(overlap(p, x) for x in kept) for p in places)  # a listed title place nearer the table is lost
+        if not mine or not other or not kept: return False  # identity and ownership: proved by the bytes or not, whatever the reading
+        if any('byte_start' in p and mine[0] <= p['byte_start'] and p['byte_end_exclusive'] <= other[0] and not any(overlap(p, x) for x in kept) for p in places): return False  # a listed title place nearer the table is lost
+        if mine[0] < other[1] and other[0] < mine[1] or any(mine[0] < x['byte_end_exclusive'] and x['byte_start'] < mine[1] for x in kept): return False  # one holds the other (nesting, a title inside the table): ownership, not order
+        written = mine[1] <= other[0] and max(x['byte_end_exclusive'] for x in kept) <= mine[0]
+        self.order_doubt = True; return written or self.order_relaxed  # byte order is written order, never where the tables show (a certain reading certifies text and visibility, not layout order): said
 
     def whole_carrier(self, k, anchors, want):
         """A carrier larger than the field: the field is carried where the source prints `want` at the key's own place, that place lies inside the

@@ -94,7 +94,7 @@ class Failures(unittest.TestCase):
             facts = sg.step(RAW, doc, SimpleNamespace(is_connected=lambda: True))
         self.assertIn('one page cannot be measured', facts['error'])
         self.assertEqual(doc, dict(before, source_symbols={'read': False, 'error': "RuntimeError('one page cannot be measured')"}, source_inline={'read': False, 'error': "RuntimeError('one page cannot be measured')"},
-                                   source_color={'read': False, 'error': "RuntimeError('one page cannot be measured')"}))  # content kept; only the failure added, for the colour reading too
+                                   source_style={'read': False, 'error': "RuntimeError('one page cannot be measured')"}))  # content kept; only the failure added, for the colour reading too
 
 class ResultOwnership(unittest.TestCase):
     def test_xml_results_do_not_share_route_metadata_with_other_documents(self):

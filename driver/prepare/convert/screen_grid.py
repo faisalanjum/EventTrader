@@ -196,11 +196,17 @@ JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAl
   return {cells: out, boxes}; }"""
 
 
-SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, color = {}, color_pseudo = {}, tints = new Map(), lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
+SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, color = {}, color_pseudo = {}, style = {}, style_pseudo = {}, tints = new Map(), grounds = new Map(), lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
   for (const f of document.fonts) faces.push(f.family.replace(/^["']|["']$/g, '').toUpperCase());  // typefaces the document defines itself (@font-face)
-  const tint = el => { if (!el) return []; if (tints.has(el)) return tints.get(el);  // an element's and its ancestors' first-letter / first-line colours that differ from their own (nearest first), each element read once: which characters they paint is layout's, so they stay an uncertainty
-    const own = getComputedStyle(el).color, got = ['::first-letter', '::first-line'].map(ps => [ps, getComputedStyle(el, ps).color]).filter(([, c]) => c !== own).concat(tint(el.parentElement));
-    tints.set(el, got); return got; };
+  const STYLED = ['font-weight', 'font-style', '-webkit-text-decorations-in-effect', 'background-color', 'background-image'];
+  const tint = el => { if (!el) return [[], []]; if (tints.has(el)) return tints.get(el);  // an element's and its ancestors' first-letter / first-line readings that differ from their own (nearest first), each element's own and pseudo styles read once: colours [pseudo, colour] as before, and the style readings named [pseudo, property, value] (a pseudo's unset background - initial: transparent, none - covers nothing behind it); which characters they paint is layout's, so they stay an uncertainty
+    const own = getComputedStyle(el), up = tint(el.parentElement), c = [], s = [];
+    for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(el, ps); if (q.color !== own.color) c.push([ps, q.color]);
+      for (const k of STYLED) { const v = q.getPropertyValue(k); if (v !== own.getPropertyValue(k) && !(k.startsWith('background') && (v === 'rgba(0, 0, 0, 0)' || v === 'none'))) s.push([ps, k, v]); } }
+    const got = [c.concat(up[0]), s.concat(up[1])]; tints.set(el, got); return got; };
+  const ground = el => { if (!el) return []; if (grounds.has(el)) return grounds.get(el);  // the raw background stack of an element and its ancestors: [depth, colour, image, opacity] wherever a colour or image is set or the opacity is not 1, nearest first, no cutoff and no compositing (none observed: [], never "no highlight"), each element read once
+    const cs = getComputedStyle(el), got = (cs.backgroundColor !== 'rgba(0, 0, 0, 0)' || cs.backgroundImage !== 'none' || cs.opacity !== '1' ? [[0, cs.backgroundColor, cs.backgroundImage, cs.opacity]] : []).concat(ground(el.parentElement).map(([d, ...x]) => [d + 1, ...x]));
+    grounds.set(el, got); return got; };
   const lift = el => { if (!el) return null; if (lifts.has(el)) return lifts.get(el);  // an element's and its ancestors' raised or lowered evidence, nearest first (null: none), each element's style read once:
     const cs = getComputedStyle(el), tag = el.localName, up = lift(el.parentElement);  // a sup or sub, whatever its computed style; a plain inline box whose computed vertical-align is not baseline; any other inline box
     const got = tag === 'sup' || tag === 'sub' || (cs.display.startsWith('inline') && cs.verticalAlign !== 'baseline' && (cs.display === 'inline' ||  // only where it is super, sub or a number (Typed OM: a length, percentage, calc or zero), never
@@ -212,7 +218,8 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
     for (; n && (n.nodeType === Node.TEXT_NODE || (n.nodeType === Node.COMMENT_NODE && !mark.test(n.data))); n = n.nextSibling) if (n.nodeType === Node.TEXT_NODE) { text += n.data; el = n.parentElement; first = first || n; last = n; }
     if (!el) { marks[m[1]] = null; continue; }  // the parser moved the run away from its mark (a table's foster parent): unbound
     const cs = getComputedStyle(el), fam = cs.fontFamily.toUpperCase(), chars = Array.from(text);
-    if (every) { color[m[1]] = cs.color; const t = tint(el); if (t.length) color_pseudo[m[1]] = t; }  // every run measured: the foreground colour the browser computes for the element holding its text (inherited and sheet rules applied), as Chrome writes it; a first-letter / first-line colour that may paint some of its characters, beside it
+    if (every) { color[m[1]] = cs.color; const [t, q] = tint(el); if (t.length) color_pseudo[m[1]] = t;
+      style[m[1]] = [cs.fontWeight, cs.fontStyle, cs.getPropertyValue('-webkit-text-decorations-in-effect'), ground(el)]; if (q.length) style_pseudo[m[1]] = q; }  // the same element's weight, style, decorations in effect (inherited too) and raw background stack  // every run measured: the foreground colour the browser computes for the element holding its text (inherited and sheet rules applied), as Chrome writes it; a first-letter / first-line colour that may paint some of its characters, beside it
     if (decorate) decor[m[1]] = [cs.getPropertyValue('-webkit-text-decorations-in-effect'), text];  // asked for (strike-through the scanner cannot certify): the decorations the browser applies to this text, inherited ones too (not the element's own `text-decoration-line`), with the text to bind it
     const face = lib.faces.find(f => { const k = f.indexOf(' ') < 0 ? f : '"' + f + '"'; return fam === k || fam.startsWith(k + ', '); }) || null;  // the primary family, as Chrome writes it
     const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text), lifted = lift(el);
@@ -229,7 +236,7 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
       pseudo: !!face && (() => { for (let a = el; a; a = a.parentElement) { const own = getComputedStyle(a); for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(a, ps);  // a block's first letter or line set another way
         if (q.fontFamily !== own.fontFamily || q.textTransform !== own.textTransform || q.fontVariant !== own.fontVariant || q.fontFeatureSettings !== own.fontFeatureSettings) return true; } } return false; })(),
       decoded: face ? chars.map(ch => { let k = ch.codePointAt(0); if (k >= 0xF020 && k <= 0xF0FF) k -= 0xF000; const r = k <= 0xFF ? lib.codePoint(face, k) : undefined; return r ? r.codePoint : null; }) : null}; }
-  return Object.assign({marks, faces, plain: plain.join(','), inline, color, color_pseudo}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
+  return Object.assign({marks, faces, plain: plain.join(','), inline, color, color_pseudo, style, style_pseudo}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
 
 
 def marker_prefix(raw):
@@ -422,13 +429,16 @@ def inline(raw, vis, runs, got, units):
     return {'records': records, 'unresolved': unresolved}
 
 
-def colors(raw, vis, runs, got, units):
-    """`source_color` records from the same render's marks (`SYMBOLS_JS`'s `color`, read with `every`): for every source run its mark reaches whole,
-    the foreground colour the browser computes for the element holding its text (inherited and sheet rules applied; as Chrome writes it, never
-    interpreted - a default colour is a reading too), its exact bytes and, where it shows, its owners' `text_at` (`_owners`, as `inline`). A hidden
+def styles(raw, vis, runs, got, units):
+    """`source_style` records from the same render's marks (`SYMBOLS_JS`'s `color` and `style`, read with `every`): for every source run its mark
+    reaches whole, the foreground colour, font weight, font style and decorations in effect the browser computes for the element holding its text
+    (inherited and sheet rules applied; as Chrome writes them, never interpreted - a default is a reading too), its raw `background` stack where one
+    is observed ([depth, colour, image, opacity]: no paint, coverage or image-content claim; none observed: no key), first-letter / first-line values
+    that differ (`pseudo` for colour, `style_pseudo` named by property), its exact bytes and, where it shows, its owners' `text_at` (`_owners`, as `inline`). A hidden
     run keeps its reading with no owner. A run its mark does not reach whole, or that may not carry one (literal text), is `unresolved` with its source
     text beside it, never matched by text; no record repeats a run's text (its bytes and owners locate it)."""
     found, marks, owners, records, unresolved = got.get('color') or {}, got.get('marks') or {}, _owners(vis, units, spaced=True), [], []
+    styled, shaded = got.get('style') or {}, got.get('style_pseudo') or {}
     tinted = got.get('color_pseudo') or {}  # a first-letter / first-line colour of the element or an ancestor: some characters may be painted so (layout decides which)
     for k, (_, chars, hidden, marked) in enumerate(runs):
         every, glyphs = _glyphs(raw, chars)
@@ -438,7 +448,8 @@ def colors(raw, vis, runs, got, units):
         if m is None or key not in found or not _bound(glyphs, m['text']):  # what kept the run from being read
             if not hidden: unresolved.append(dict(where, raw=''.join(g if g is not None else '�' for (x, g) in every if s0 <= x[0] < e0), why='literal text' if not marked else 'unbound' if m is not None or key in marks else 'mark not found'))
             continue
-        rec = dict(where, color=found[key], **({'pseudo': tinted[key]} if key in tinted else {}))  # the element's colour, and beside it what may paint some characters otherwise: not every character's proved colour
+        rec = dict(where, color=found[key], **({'pseudo': tinted[key]} if key in tinted else {}))
+        if key in styled: w, f, d, g = styled[key]; rec.update(weight=w, font_style=f, decorations=d, **({'background': g} if g else {}), **({'style_pseudo': shaded[key]} if key in shaded else {}))  # the element's colour, and beside it what may paint some characters otherwise: not every character's proved colour
         if m['visibility'] != 'shown': rec.update(visibility=m['visibility'], owners=None)  # hidden, or boxes of no area: no text of an owner stands for it
         else:
             rec['owners'], why = owners(s0, e0)
@@ -528,7 +539,7 @@ def _document(browser, raw, body, source):
     return page, address, first
 
 
-GENERATED_STYLES = ['display', 'visibility', 'color', 'opacity', 'content', 'list-style-image', '-webkit-text-decorations-in-effect', 'vertical-align']  # the last two: the existing strike (as SYMBOLS_JS reads it, ancestors' too) and raise readings
+GENERATED_STYLES = ['display', 'visibility', 'color', 'opacity', 'content', 'list-style-image', '-webkit-text-decorations-in-effect', 'vertical-align', 'font-weight', 'font-style', 'background-color', 'background-image']  # the last two: the existing strike (as SYMBOLS_JS reads it, ancestors' too) and raise readings
 PSEUDO_ROLE = {'marker': 'inserts', 'before': 'inserts', 'after': 'inserts', 'first-letter': 'formats'}  # the native pseudo types: generated content, or a format of text already there; any other type is kept raw
 TEXT_CONTENT = {'function': {'counter', 'counters'}, 'ident': {'open-quote', 'close-quote'}}  # the CSS content items that name text (with a non-empty string); Chrome's computed content resolves attr() to a string
 NO_CONTENT = {'no-open-quote', 'no-close-quote', 'normal', 'none'}  # the CSS content keywords that name nothing
@@ -557,6 +568,19 @@ def _generated(page, prefix):
         g = groups.setdefault(ni, {'pseudo': S[pseudo[ni]], 'owner': parent[ni], 'fragments': [], 'bounds': [], 'computed': dict(zip(GENERATED_STYLES, (S[x] for x in L['styles'][k])))})
         t = L['text'][k] if k < len(L['text']) else -1
         if t >= 0 and S[t]: g['fragments'].append(S[t]); g['bounds'].append(L['bounds'][k])
+    lay = {}
+    for k, ni in enumerate(L['nodeIndex']):
+        if len(L['styles'][k]) == len(GENERATED_STYLES): lay.setdefault(ni, k)  # a node's first layout object that carries its computed styles (some carry none)
+    styled = lambda k: dict(zip(GENERATED_STYLES, (S[x] for x in L['styles'][k])))
+    def ground(i):  # this snapshot's own raw background stack from a node up ([depth, colour, image, opacity], as SYMBOLS_JS reads a run's); a node with no layout object says nothing (never guessed)
+        out, d = [], 0
+        while i is not None and i >= 0:
+            c = styled(lay[i]) if i in lay else None
+            if c and (c['background-color'] != 'rgba(0, 0, 0, 0)' or c['background-image'] != 'none' or c['opacity'] != '1'): out.append([d, c['background-color'], c['background-image'], c['opacity']])
+            i, d = parent[i], d + 1
+        return out
+    images = [{'node': '::' + S[pseudo[ni]] if ni in pseudo else S[N['nodeName'][ni]], 'value': c['background-image'], 'visibility': c['visibility']}
+              for ni, k in sorted(lay.items()) if ntype[ni] == 1 for c in [styled(k)] if c['background-image'] != 'none']  # elements and pseudo elements: a text node only repeats its parent's style  # every laid-out element or pseudo element painting a background image (an owner with no text too): its content is never read here
     def below(o):  # the owner's descendants, its own pseudo elements apart
         out, todo = [], list(kids.get(o, []))
         while todo:
@@ -578,7 +602,8 @@ def _generated(page, prefix):
         todo += [k for k in ps if S[pseudo[k]] == 'after'] + [k for k in kids.get(i, []) if k not in pseudo][::-1] + sorted((k for k in ps if S[pseudo[k]] != 'after'), key=lambda k: S[pseudo[k]] != 'marker')[::-1]
     records = []
     for ni, g in sorted(groups.items(), key=lambda x: order.get(x[0], len(order))):  # records at one place in a unit apply in this order
-        o = g['owner']; desc = below(o); rec = {k: g[k] for k in ('pseudo', 'fragments', 'bounds', 'computed')}
+        o = g['owner']; desc = below(o); rec = {k: g[k] for k in ('pseudo', 'fragments', 'bounds', 'computed')}; b = ground(ni)
+        if b: rec['background'] = b
         rec.update(owner=o, runs=sorted(run[i] for i in desc if i in run), unknown_text=any(ntype[i] == 3 and i < len(nval) and nval[i] >= 0 and S[nval[i]].strip() and not follows_mark(i) for i in desc))
         try:
             obj = cdp.send('DOM.resolveNode', {'backendNodeId': N['backendNodeId'][ni]})['object']['objectId']  # the pseudo element itself, not its owner
@@ -586,7 +611,7 @@ def _generated(page, prefix):
         except (OSError, StorageError, ImportError, MemoryError): raise  # a process, storage or dependency failure is no content verdict (the step's own policy)
         except Exception as e: rec['visible'], rec['visible_error'] = None, repr(e)[:200]  # unknown: never a hidden verdict, never a shown one
         records.append(rec)
-    return {'read': True, 'records': records}
+    return {'read': True, 'records': records, 'background_images': images}
 
 
 def _content(c, marker):
@@ -624,7 +649,7 @@ def _generated_owners(raw, vis, runs, marks, gen, units):
     for r in gen['records']:
         role = PSEUDO_ROLE.get(r['pseudo'])
         text, non = _content(r['computed'], r['pseudo'] == 'marker')
-        rec = {k: r[k] for k in ('pseudo', 'fragments', 'bounds', 'computed')}; rec.update(role=role, non_text=non, visible=r.get('visible'))
+        rec = {k: r[k] for k in ('pseudo', 'fragments', 'bounds', 'computed', 'background') if k in r}; rec.update(role=role, non_text=non, visible=r.get('visible'))
         if r.get('visible_error'): rec['visible_error'] = r['visible_error']
         c = r['computed']; rec['required'] = role != 'formats' and r.get('visible') is not False and bool(r['fragments'] or non or (text and r['owner'] in formats))  # text a first-letter took whole leaves no fragment of its own
         if c.get('opacity') == '0' or re.match(r'rgba\(.*,\s*0\)$', c.get('color', '')) or c.get('color') == 'transparent': rec['paint'] = 'uncertain'  # a shadow or stroke may still paint it
@@ -664,7 +689,9 @@ def _generated_owners(raw, vis, runs, marks, gen, units):
         if rec['required'] and not rec['bound']: why.add('generated text not bound: ' + reason)
         if rec['required'] and r.get('visible') is None: why.add('generated text: its visibility is not proved')  # shown or hidden unproved: its raw reading and error kept
         out.append(rec)
-    return {'read': True, 'records': out, 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why)}
+    images = gen.get('background_images') or []
+    if any(x['visibility'] == 'visible' for x in images): why.add('background image content not read')  # a picture the page paints behind or without text: kept raw, never read here
+    return {'read': True, 'records': out, **({'background_images': images} if images else {}), 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why)}
 
 
 def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None):
@@ -807,7 +834,7 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     except Exception as e:
         if not browser.is_connected(): raise
         err = repr(e)[:200]; route['source_symbols'], route['source_inline'] = {'read': False, 'error': err}, {'read': False, 'error': err}  # content and anchors stay; the failure is said, never an empty success
-        route['source_color'] = {'read': False, 'error': err}  # no render, no colour: a fallback page's is never a proved original style
+        route['source_style'] = {'read': False, 'error': err}  # no render, no style: a fallback page's is never a proved original style
         return {'error': repr(e)[:200]}
     if 'error' in got and not browser.is_connected(): raise RuntimeError('browser disconnected: ' + got['error'])
     marks = None if 'error' in got else got['marks']  # each marked run's own text as this render shows it (`every`)
@@ -827,8 +854,8 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     route['generated_content'] = _generated_owners(raw, vis, runs, marks, got.get('generated'), route['units'])  # the page's own generated content, on the final units
     route['route'] = dict(route['route'], settings=dict(route['route'].get('settings') or {}, generated_content='native layout (DOMSnapshot); proved whole owners'))
     generated = None if route['generated_content']['status'] == 'complete' else 'generated: ' + '; '.join(route['generated_content']['why'])
-    seen = None if 'error' in got else {**colors(raw, vis, runs, dict(got, marks=marks), route['units']), **({'unread': unread} if unread else {})}  # every bound run's own colour, on the same final text (every run's mark, ordinary ones too)
-    route['source_color'] = ({'read': False, 'error': got['error']} if seen is None else {'read': True, **seen} if not refused else  # what the page names and no evidence answered may set any colour: the render's is kept as a fallback reading, never the proved original
+    seen = None if 'error' in got else {**styles(raw, vis, runs, dict(got, marks=marks), route['units']), **({'unread': unread} if unread else {})}  # every bound run's own colour, on the same final text (every run's mark, ordinary ones too)
+    route['source_style'] = ({'read': False, 'error': got['error']} if seen is None else {'read': True, **seen} if not refused else  # what the page names and no evidence answered may set any colour: the render's is kept as a fallback reading, never the proved original
                              {'read': False, 'error': repr(RuntimeError('what the page names cannot be read offline, so its colours are unproved: ' + ', '.join(refused)[:150]))[:200], 'fallback': seen})
     edited = {id(x): x for x, *_ in gaps}.values()
     formatting = None

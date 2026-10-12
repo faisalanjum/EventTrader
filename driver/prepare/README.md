@@ -59,6 +59,28 @@ struck items). Runs without a native verdict are listed in
 `source_formatting.unresolved` and make the route `PARTIAL`; an item holding one
 keeps the converter's claim and gets no places.
 
+`source_style` has one record per source text run, bound by its source bytes and
+its owners' text places (cells included); repeated text is never matched by text.
+Each record keeps the browser's raw computed values: `color`, `weight`,
+`font_style`, `decorations` (in effect, inherited too) and, where any is
+observed, `background` — `[depth, colour, image, opacity]` from the element
+holding the text up its ancestors. These are readings, not a paint or coverage
+verdict: an empty stack means none observed on that chain. A first-letter or
+first-line value that differs stays uncertainty (`pseudo` for colour,
+`style_pseudo` named by property). Hidden runs keep their reading with no owner;
+unread or literal runs stay `unresolved`.
+
+`generated_content` keeps the page's own pseudo-element readings (before, after,
+marker, first-letter): raw fragments, computed values and, from the same
+snapshot, a raw background stack. A record is placed (`at`: unit or cell and
+character offset) only where its owner's whole source text is proved; records
+at one offset apply in their order. A first-letter only formats existing text.
+Unplaced required text, non-text content, unknown visibility and any background
+image (`background_images`, its content never read here) make it `PARTIAL`.
+Units made from the parser's own list items keep `lists`: `[{list, ordered,
+item}]`, the outer list first. These are source-order records; no universal
+display order is claimed.
+
 PDF pages use the same archive, workers and picture records:
 
 ```python

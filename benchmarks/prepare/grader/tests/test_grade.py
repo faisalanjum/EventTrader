@@ -258,7 +258,7 @@ class GraderFixture(unittest.TestCase):
 class CorrectOutputTests(GraderFixture):
     def test_every_target_passes_and_every_gate_holds(self):
         res = self.run_grader()
-        self.assertTrue(all(v['verdict'] == ('UNRESOLVED' if k in ('pkt/T01', 'pkt/T02', 'pkt/T03') else 'PASS') for k, v in res['targets'].items()), res['targets'])  # T01-T03: correct output whose table order is byte order only, unproved (table-order-conservative); every other target PASS
+        self.assertTrue(all(v['verdict'] == ('UNRESOLVED' if k in ('pkt/T01', 'pkt/T02', 'pkt/T03', 'pkt/T05', 'fx/R01') else 'PASS') for k, v in res['targets'].items()), res['targets'])  # T01-T03: correct output whose table order is byte order only, unproved (table-order-conservative); every other target PASS [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         g = res['gates']
         for name in ('ids_and_run_facts', 'reading_order', 'markers_apart'): self.assertTrue(g[name]['pass'], (name, g[name]))
         self.assertTrue(g['honest_anchors']['measured_pass'])
@@ -274,11 +274,11 @@ class CorrectOutputTests(GraderFixture):
 
     def test_summary_counts_targets_by_split_and_format(self):
         s = self.run_grader()['summary']['by_split_format']
-        self.assertEqual(s['development']['cell/htm'], {'targets': 4, 'PASS': 1, 'FAIL': 0, 'UNRESOLVED': 3, 'NOT_CONVERTED': 0, 'EXCLUDED': 0, 'APPROXIMATE': 0})  # aggregate of the order-unproved targets below (table-order-conservative); no target became PASS
+        self.assertEqual(s['development']['cell/htm'], {'targets': 4, 'PASS': 0, 'FAIL': 0, 'UNRESOLVED': 4, 'NOT_CONVERTED': 0, 'EXCLUDED': 0, 'APPROXIMATE': 0})  # aggregate of the order-unproved targets below (table-order-conservative); no target became PASS [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         self.assertEqual(s['development']['structure/htm']['PASS'], 4)
         self.assertEqual(s['stratified_control']['cell/xml']['PASS'], 1)
         self.assertEqual(s['heldout']['cell/pdf']['PASS'], 1)
-        self.assertEqual(self.run_grader()['summary']['supplement']['PASS'], 1)
+        self.assertEqual(self.run_grader()['summary']['supplement']['PASS'], 0)  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_package_declarations_exclude_targets_and_report_pictures_approximately(self):
         # package 3 (owner decisions (a) and (d), Codex R13 E10 R4): the manifest names the declarations; a declared page-number target is EXCLUDED (never a pass,
@@ -387,7 +387,7 @@ class CorrectOutputTests(GraderFixture):
             self.cell(r, 'v1').update(text='796'); self.cells(r).remove(self.cell(r, 'v3'))
         s = self.run_grader(two_faults)['summary']
         self.assertEqual(s['failures_by_reason'], {'value': {'text': 1}})
-        self.assertEqual(s['unresolved'], ['pkt/T02', 'pkt/T03'])  # T02 joins: its table order is byte order only (table-order-conservative)
+        self.assertEqual(s['unresolved'], ['fx/R01', 'pkt/T02', 'pkt/T03', 'pkt/T05'])  # T02 joins: its table order is byte order only (table-order-conservative) [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
 
     def test_writes_results_and_summaries(self):
         self.run_grader(); out = self.root / 'out'
@@ -622,7 +622,7 @@ class PlantedFaultTests(GraderFixture):
                 t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span('1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
                      'support': {field: {'how': 'model', 'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', field: value}}
                 g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': [tb]}, raw, 'htm')); g.grade_cell()
-                self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == field), 'unresolved' if field in ('header_path', 'corner_text', 'unit_printed', 'segment_or_basis') else 'pass', (field, form))  # truth unchanged; these four rest on byte row order only, unproved (table-order-conservative)
+                self.assertEqual(next(x['verdict'] for x in g.rows if x['check'] == field), 'unresolved' if field in ('header_path', 'corner_text', 'unit_printed', 'segment_or_basis', 'table_title') else 'pass', (field, form))  # truth unchanged; these four rest on byte row order only, unproved (table-order-conservative) [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         for number, pieces in (('1234', ['12', '34']), ('12.34', ['12.', '34']), ('1,234', ['1,', '234']), ('$1234', ['$', '1234'])):
             for separate in (False, True):
                 raw = ('<table><tr><td>' + number + '</td></tr></table>').encode(); start = raw.index(number.encode()); offset = start; cells = []
@@ -754,7 +754,7 @@ class PlantedFaultTests(GraderFixture):
                 t = {'key_id': 'syn/T1', 'file_id': 'syn/f.htm', 'format': 'cell/htm', 'type': 'cell', 'split': 'development', 'anchor': span('1234'), 'table_anchor': tb['anchor'], 'alternatives': {}, 'excluded': set(),
                      'support': {field: {'anchors': [evidence]}}, 'fields': {'printed_value': '1234', 'display_value': '1234', field: value}}
                 g = grade.Grader(t, grade.RouteFile({'file_id': 'syn/f.htm', 'units': units + [tb]}, raw, 'htm')); g.grade_cell()
-                self.assertEqual(next(r['verdict'] for r in g.rows if r['check'] == field), 'pass', (field, n))
+                self.assertEqual(next(r['verdict'] for r in g.rows if r['check'] == field), 'unresolved' if field == 'table_title' else 'pass', (field, n))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_a_run_in_heading_printed_in_pieces_is_found_at_its_anchor(self):
         # tool test 3 (contract exhibits): "Section 1.01 Defined Terms." runs into its paragraph; tools emit it as pieces, glued ("1.01Defined") or split by
@@ -1044,7 +1044,7 @@ class PlantedFaultTests(GraderFixture):
         p = self.root / 'case_catalog.csv'; p.write_text(p.read_text().replace('development,FX', 'heldout,FX', 1))  # the HTML file becomes held-out
         res = self.run_grader(lambda r: self.cells(r).remove(self.cell(r, 'p1')), heldout_detail=False)
         self.assertEqual(set(res['gates']['nothing_lost']['uncovered'][HTM_ID]), {'spans', 'chars'})  # counts only, no text, no bytes
-        self.assertEqual(res['summary']['unresolved'], []); self.assertNotIn('pkt/T01', res['targets'])
+        self.assertEqual(res['summary']['unresolved'], ['fx/R01']); self.assertNotIn('pkt/T01', res['targets'])  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
         self.assertTrue(res['run_facts']['key_sha256'])
 
     def test_changed_digit_fails_the_value_only(self):
@@ -1145,7 +1145,7 @@ class PlantedFaultTests(GraderFixture):
     def test_mark_glued_to_a_title_or_header_is_tolerated_and_flagged(self):
         res = self.run_grader(lambda r: self.cell(r, 'ttl').update(text='Free Cash Flow(1)'))
         row = self.check(res, 'pkt/T02', 'table_title')
-        self.assertEqual((row['verdict'], row['detail']), ('pass', 'marker_in_text'))
+        self.assertEqual((row['verdict'], row['detail']), ('unresolved', 'marker_in_text'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_header_with_a_trailing_bracketed_unit_phrase_matches_the_split_key_header(self):
         res = self.run_grader(lambda r: self.cell(r, 'hb').update(text='Three Months Ended (in millions)'))
@@ -1208,8 +1208,8 @@ class PlantedFaultTests(GraderFixture):
             for c in tb2['cells']: c['r'] -= 1
             u.insert(u.index(tb2), {'id': 'u6t', 'kind': 'table', 'anchor': elem('t2t'), 'cells': [dict(title, r=0, c=0, cs=1)]})
         res = self.run_grader(split_title)
-        self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'pass')
-        self.assertEqual(self.verdict(res, 'pkt/T05'), 'PASS')
+        self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'unresolved')  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
+        self.assertEqual(self.verdict(res, 'pkt/T05'), 'UNRESOLVED')  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
 
     def test_note_laid_out_as_a_one_cell_table_passes(self):
         def as_table(r):
@@ -1310,13 +1310,13 @@ class PlantedFaultTests(GraderFixture):
             cells = self.cells(r); cells.remove(self.cell(r, 'unit')); self.cell(r, 'ttl').update(text='Free Cash Flow (in millions)', anchor=[elem('ttl'), elem('unit')])
         res = self.run_grader(merged)
         row = self.check(res, 'pkt/T02', 'table_title')
-        self.assertEqual(row['verdict'], 'pass'); self.assertIn(row['detail'], ('joined_with_own_pieces', 'unit_phrase_split'))  # both explain the extra words
+        self.assertEqual(row['verdict'], 'unresolved'); self.assertIn(row['detail'], ('joined_with_own_pieces', 'unit_phrase_split'))  # both explain the extra words [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         self.assertEqual(self.check(res, 'pkt/T02', 'unit_printed')['verdict'], 'unresolved')  # table-order-conservative: semantic truth unchanged; this automatic outcome rests on byte row order only, unproved
 
     def test_title_cell_holding_title_and_the_records_own_basis_words_passes_flagged_but_an_extra_qualifier_fails(self):
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook\nexclude discontinued operations'))
         row = self.check(res, 'pkt/T05', 'table_title')
-        self.assertEqual(row['verdict'], 'pass'); self.assertIn(row['detail'], ('joined_with_own_pieces', 'unit_phrase_split'))
+        self.assertEqual(row['verdict'], 'unresolved'); self.assertIn(row['detail'], ('joined_with_own_pieces', 'unit_phrase_split'))  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook\nexclude discontinued operations\n(unaudited)'))
         self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'fail')  # "(unaudited)" is not one of this record's pieces (E13)
 
@@ -1324,7 +1324,7 @@ class PlantedFaultTests(GraderFixture):
         # E13 ruling (Codex round 3): table context is admitted only when the key declares it with a source anchor inside this table
         def with_unit_line(r): self.cell(r, 'ttl').update(text='Free Cash Flow (in millions)')
         res = self.run_grader(with_unit_line)
-        self.assertEqual(self.check(res, 'pkt/T02', 'table_title')['verdict'], 'pass')  # "(in millions)" is T02's own unit line
+        self.assertEqual(self.check(res, 'pkt/T02', 'table_title')['verdict'], 'unresolved')  # "(in millions)" is T02's own unit line [title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved]
         # T05's table (tb2) has no declared context: a sibling's basis words may not be borrowed, an invented qualifier fails
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook (unaudited)'))
         self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'fail')
@@ -1335,7 +1335,7 @@ class PlantedFaultTests(GraderFixture):
             (self.pkg / 'KEY_SUPPORT_MAP.json').write_text(json.dumps(sup))
         declare(elem('t2c'))
         res = self.run_grader(lambda r: self.cell(r, 't2t', 'u6').update(text='Fiscal 2026 Outlook (unaudited)'))
-        self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'pass')
+        self.assertEqual(self.check(res, 'pkt/T05', 'table_title')['verdict'], 'unresolved')  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
         for bad in (elem('tb2'), elem('t2t'), elem('after'), {'byte_start': 0, 'byte_end_exclusive': len(HTML)}):  # Codex R4-6: a container, another cell's text,
             declare(bad)                                                                                              # a phrase outside the table, the whole document
             with self.assertRaises(ValueError): self.run_grader()                                                     # are key defects, refused — never admitted
@@ -2320,7 +2320,7 @@ class PlantedFaultTests(GraderFixture):
             self.assertEqual((path([h1, par, h2]), path([h1, upto, h2]), path([h1, h2])), (OPEN,) * 3 if head else (P,) * 3, head)  # with the route's paragraph between the two headings or without it: only markup the sheet may change stands between them
             raw = head + b'<div>Free Cash Flow</div>\n<div>Three Months Ended</div>' + TABLE; whole = [all_of(raw, b'<div>Free', b'\n<div>Three'), all_of(raw, b'<div>Three', b'<table>')]  # places that span the whole elements: a line feed stands between them
             units = [{'id': 'a', 'kind': 'text', 'text': 'Free Cash Flow', 'anchor': whole[0]}, {'id': 'b', 'kind': 'text', 'text': 'Three Months Ended', 'anchor': whole[1]}]
-            self.assertEqual(self.synthetic_cell(raw, units, {'table_title': ['Free Cash Flow', 'Three Months Ended']}, {'table_title': {'anchors': whole}})['table_title'], P, head)
+            self.assertEqual(self.synthetic_cell(raw, units, {'table_title': ['Free Cash Flow', 'Three Months Ended']}, {'table_title': {'anchors': whole}})['table_title'], ('unresolved', 'source_order'), head)  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
             raw = head + b'<p>oper ating</p>'  # the space of one text run stands between the two pieces, whatever a sheet says; so does a character written as a reference
             self.assertEqual((block(raw, U(raw, ['oper', 'ating']), 'operating'), block(raw, U(raw, ['oper', 'ating']), 'oper ating')), (('fail', 'word_split'), P), head)
             raw = head + b'<p>oper&nbsp;ating</p>'; self.assertEqual(block(raw, U(raw, ['oper', 'ating']), 'operating'), ('fail', 'word_split'), head)
@@ -2334,7 +2334,7 @@ class PlantedFaultTests(GraderFixture):
             # two pieces of the key in two units with nothing but markup between them: the key has no say in how their join is read (Codex R9-1) — proved apart in the
             # certain file; unknown in the other, where read as touching they would be one text (as the last case of this test shows for a proved touching join)
             raw = head + b'<p>Free Cash Flow</p><p>Three Months Ended</p>' + TABLE
-            self.assertEqual(self.synthetic_cell(raw, U(raw, ['Free Cash Flow', 'Three Months Ended']), {'table_title': ['Free Cash Flow', 'Three Months Ended']}, {'table_title': {'anchors': [at(raw, b'Free Cash Flow'), at(raw, b'Three Months Ended')]}})['table_title'], OPEN if head else P, head)
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['Free Cash Flow', 'Three Months Ended']), {'table_title': ['Free Cash Flow', 'Three Months Ended']}, {'table_title': {'anchors': [at(raw, b'Free Cash Flow'), at(raw, b'Three Months Ended')]}})['table_title'], OPEN if head else ('unresolved', 'source_order'), head)  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
             raw = head + b'<p><span>Unaudited, in mil</span><span>lions, except per share</span></p>' + TABLE  # each unit holds a whole phrase of the key and the join runs through a third: proved touching, or unknown — never a failure
             self.assertEqual(self.synthetic_cell(raw, U(raw, ['Unaudited, in mil', 'lions, except per share']), {'segment_or_basis': ['Unaudited', 'millions', 'except per share']}, {'segment_or_basis': {'anchors': [all_of(raw, b'<span>Unaudited', b'</p>')]}})['segment_or_basis'], OPEN if head else P, head)
             raw = head + b'<table><tr><td><span>Net sales</span><br><span>Total</span></td><td>1234</td></tr></table>'
@@ -2350,7 +2350,7 @@ class PlantedFaultTests(GraderFixture):
             self.assertEqual(self.synthetic_cell(raw, U(raw, ['1.', 'Busi', 'ness overview of the year.']), {'section_path': ['Business']}, {'section_path': {'anchors': [all_of(raw, b'<span>1.', b'</p>')]}})['section_path'], OPEN if head else P, head)
             # one piece of the key put together from two route pieces: there the join is read — proved apart in the certain file, unknown in the other
             raw = head + b'<p>Free Cash</p><p>Flow</p>' + TABLE
-            self.assertEqual(self.synthetic_cell(raw, U(raw, ['Free Cash', 'Flow']), {'table_title': ['Free Cash Flow']}, {'table_title': {'anchors': [at(raw, b'Free Cash'), at(raw, b'Flow')]}})['table_title'], OPEN if head else P, head)
+            self.assertEqual(self.synthetic_cell(raw, U(raw, ['Free Cash', 'Flow']), {'table_title': ['Free Cash Flow']}, {'table_title': {'anchors': [at(raw, b'Free Cash'), at(raw, b'Flow')]}})['table_title'], OPEN if head else ('unresolved', 'source_order'), head)  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
             raw = head + b'<table><tr><td><span>Net</span><br><span>sales</span></td><td>1234</td></tr></table>'
             self.assertEqual(self.synthetic_cell(raw, [], {'row_label': 'Net sales'}, {'row_label': {'anchors': [all_of(raw, b'<span>Net', b'</td>')]}}, table(raw, ['Net', 'sales']))['row_label'], OPEN if head else P, head)
             # a text wrong under every reading of its joins fails, whatever each reading calls the fault (D1): a space the tool put inside a piece
@@ -2512,7 +2512,7 @@ class PlantedFaultTests(GraderFixture):
         self.assertEqual(cell(raw, [], {'row_label': 'Net sales'}, {'row_label': {'anchors': [span(raw, b'<span>Net', b'</td><td>1234')]}}, cells)['row_label'], ('pass', None))
         # an unknown join with a whole piece of the key on one side only is still read: the pieces 'Total' and 'Total assets' from the units 'Total', 'Total', 'assets' —
         # the second piece is put together across the last join
-        for head, want in ((b'', ('pass', None)), (b'<style>.x{display:none}</style>', OPEN)):
+        for head, want in ((b'', ('unresolved', 'source_order')), (b'<style>.x{display:none}</style>', OPEN)):  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
             raw = head + b'<p>Total</p><p>Total</p><p>assets</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; a1 = at(raw, b'Total'); places = [a1, at(raw, b'Total', a1['byte_end_exclusive']), at(raw, b'assets')]
             units = [{'id': 'u%d' % i, 'kind': 'text', 'text': x, 'anchor': a} for i, (x, a) in enumerate(zip(('Total', 'Total', 'assets'), places))]
             self.assertEqual(cell(raw, units, {'table_title': ['Total', 'Total assets']}, {'table_title': {'anchors': places}}, [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))])['table_title'], want, head)
@@ -2524,7 +2524,7 @@ class PlantedFaultTests(GraderFixture):
         u1, u2 = ({'id': i, 'kind': 'text', 'text': x, 'anchor': at(raw, x.encode())} for i, x in (('a', 'Free Cash Flow'), ('b', 'Our Free Cash Flow rose')))
         by_text = lambda units, field: cell(raw, units, {field: ['Free Cash Flow']}, {}, cells)[field][:2]
         self.assertEqual([by_text([u1, u2], 'table_title'), by_text([u2], 'table_title'), by_text([dict(u1, kind='clutter'), u2], 'table_title'), by_text([u2], 'segment_or_basis'), by_text([dict(u2, kind='clutter')], 'segment_or_basis')],
-                         [('pass', None), ('fail', 'missing'), ('fail', 'missing'), ('pass', None), ('fail', 'missing')])
+                         [('unresolved', 'source_order'), ('fail', 'missing'), ('fail', 'missing'), ('pass', None), ('fail', 'missing')])  # title-native-order (Root-approved 2026-10-11): truth unchanged; before/after rests on byte or route order only, unproved
         # the dash arbiter: a place of the phrase the source proves stands whatever another place says, in either order; and nothing before the phrase is no dash
         raw = b'<p>A - 10 shares</p><p>B 10 shares</p><table><tr><td>Revenue</td><td>1234</td></tr></table>'; cells = [C(0, 0, 'Revenue', at(raw, b'Revenue')), C(0, 1, '1234', at(raw, b'1234'))]
         pins = [at(raw, b'10 shares'), at(raw, b'10 shares', raw.index(b'B 10'))]; basis = lambda units, p: cell(raw, units, {'segment_or_basis': ['10 shares']}, {'segment_or_basis': {'anchors': p}}, cells)['segment_or_basis']

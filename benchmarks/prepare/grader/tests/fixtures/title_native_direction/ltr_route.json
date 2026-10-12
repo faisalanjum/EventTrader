@@ -1,0 +1,173 @@
+{
+  "schema": "prepare-route-output/1",
+  "file_id": "ltr.htm",
+  "sha256": "2f8ca15cbab93855736d61fa7242846df4867dba7701b4efd2958751cd9b03fd",
+  "status": "OK",
+  "error": null,
+  "seconds": 0.0,
+  "route": {
+    "name": "edgartools-html+source-formatting+screen",
+    "tool": "edgartools",
+    "version": "edgartools 5.60.0",
+    "settings": {
+      "parse_html": "defaults",
+      "lists": "the parser's own list items: list, ordered, item",
+      "retain_pictures": true,
+      "retain_native_heading_evidence": true,
+      "picture_names": "codes",
+      "hidden_text": "left out",
+      "headings": "detected blocks read whole",
+      "inline_facts": "read whole",
+      "page_number_candidates": "kept",
+      "ix_exclude": "read as shown",
+      "inline_fact_spaces": "kept",
+      "table_identity": "own start tag, shown or hidden",
+      "style_values": "independent",
+      "heading_boundaries": "source matched",
+      "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+      "table_rows": "every own row group",
+      "nested_tables": "each a table unit naming its holder cell",
+      "table_cells": "every own cell, bound to its source cell",
+      "table_captions": "each table's own caption a caption unit, bound to its source caption",
+      "pictures": "every shown tag",
+      "source_lines": "certified <br> breaks",
+      "source_formatting": true,
+      "screen_grid": true,
+      "joins": "touching on one baseline",
+      "parts": "apart on one baseline",
+      "generated_content": "native layout (DOMSnapshot); proved whole owners"
+    },
+    "adapter": "driver/prepare/convert/edgartools_html.py",
+    "linker": "driver/prepare/convert/anchor.py"
+  },
+  "units": [
+    {
+      "id": "t0",
+      "kind": "table",
+      "cells": [
+        {
+          "r": 0,
+          "c": 0,
+          "rs": 1,
+          "cs": 1,
+          "text": "Dock charges",
+          "header": false,
+          "source": {
+            "byte_start": 11,
+            "byte_end_exclusive": 34
+          },
+          "anchor": {
+            "byte_start": 18,
+            "byte_end_exclusive": 30
+          },
+          "struck": [
+            "Dock charges"
+          ],
+          "struck_at": [
+            [
+              0,
+              4
+            ],
+            [
+              5,
+              12
+            ]
+          ],
+          "grid": "screen"
+        },
+        {
+          "r": 0,
+          "c": 1,
+          "rs": 1,
+          "cs": 1,
+          "text": "37",
+          "header": false,
+          "source": {
+            "byte_start": 39,
+            "byte_end_exclusive": 45
+          },
+          "anchor": {
+            "byte_start": 43,
+            "byte_end_exclusive": 45
+          },
+          "grid": "screen"
+        }
+      ],
+      "caption": [],
+      "source_table": {
+        "tag_start": 0,
+        "claims": 1
+      },
+      "anchor": {
+        "byte_start": 18,
+        "byte_end_exclusive": 45
+      }
+    }
+  ],
+  "uncovered": [],
+  "source_links": [],
+  "source_relations": {
+    "read": true,
+    "relationships": []
+  },
+  "source_symbols": {
+    "read": true,
+    "decoder": "dingbat-to-unicode 1.0.2",
+    "records": []
+  },
+  "source_inline": {
+    "read": true,
+    "records": [],
+    "unresolved": []
+  },
+  "generated_content": {
+    "read": true,
+    "records": [],
+    "status": "complete",
+    "why": []
+  },
+  "source_color": {
+    "read": true,
+    "records": [
+      {
+        "at": {
+          "byte_start": 18,
+          "byte_end_exclusive": 30
+        },
+        "color": "rgb(0, 0, 0)",
+        "owners": [
+          {
+            "unit": "t0",
+            "cell": 18,
+            "text_at": [
+              [
+                0,
+                12
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "at": {
+          "byte_start": 43,
+          "byte_end_exclusive": 45
+        },
+        "color": "rgb(0, 0, 0)",
+        "owners": [
+          {
+            "unit": "t0",
+            "cell": 43,
+            "text_at": [
+              [
+                0,
+                2
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "unresolved": []
+  }
+}

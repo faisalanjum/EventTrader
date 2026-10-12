@@ -165,6 +165,24 @@ class Generated(unittest.TestCase):
                 r = self.check(raw, 'PARTIAL', ['Count 17'], ['generated text: its visibility is not proved'])  # its raw reading and error kept
                 self.assertEqual([(x['visible'], x['visible_error']) for x in r['generated_content']['records']], [(None, "RuntimeError('injected')")])
 
+    def test_a_failed_native_snapshot(self):  # inventory gap (current_inventory_reconciliation_v1): the whole DOMSnapshot read fails, outside its per-record calls
+        from playwright.sync_api import CDPSession
+        from driver.prepare.get.acquire import StorageError
+        raw, real = b'<style>p::before{content:"Count "}</style><p>17</p>', CDPSession.send
+        r = self.check(raw, 'complete', ['Count 17'])  # the real native snapshot
+        self.assertTrue(r['generated_content']['read'])
+        def failing(cls):
+            def send(session, m, params=None):
+                if m == 'DOMSnapshot.captureSnapshot': raise cls('injected')
+                return real(session, m, params)
+            return send
+        for cls in (OSError, StorageError, ImportError, MemoryError):  # a process, storage or dependency failure is no content verdict: it propagates
+            with self.subTest(error=cls.__name__), mock.patch.object(CDPSession, 'send', failing(cls)), self.assertRaises(cls): self.route(raw)
+        with mock.patch.object(CDPSession, 'send', failing(RuntimeError)): r = self.route(raw)  # an ordinary failure: no native reading, said, never a verdict
+        g = r['generated_content']
+        self.assertEqual((g['read'], g['status'], g['why'], g['records'], g['error']), (False, 'PARTIAL', ['generated content: no native reading'], [], "RuntimeError('injected')"))
+        self.assertEqual(r['status'], 'PARTIAL')
+
     def test_an_unknown_native_pseudo_type_stays_raw_and_partial(self):  # this Chromium's snapshot shows no other type: a real ::before reading, its type renamed
         real = screen_grid._generated
         def renamed(page, prefix):
