@@ -78,6 +78,41 @@ class SourceStyle(unittest.TestCase):
                 r = self.read(raw)[0]; g = r['generated_content']
                 self.assertEqual((r['status'], I in g['why'], [x['node'] for x in g['background_images']]), ('PARTIAL', True, [node]))
 
+    def test_runs_keep_their_native_boxes_and_one_frame(self):  # raw [x, y, width, height] CSS-pixel client rectangles as getClientRects gives them (no rounding, no sort), one frame per page; source order unchanged
+        def page(raw):
+            route, recs, got = self.read(raw); s = route['source_style']; fr = (s if 'frame' in s else s['fallback'])['frame']
+            self.assertEqual((sorted(fr), fr['scroll']), (['device_pixel_ratio', 'scroll', 'viewport'], [0, 0])); return route, recs, {t: x.get('boxes') for (t, *_), x in zip(got, recs)}
+        _, recs, b = page(src('flex_order'))  # written: Rafts before Later; displayed: Later above Rafts
+        self.assertEqual([r['at']['byte_start'] for r in recs], sorted(r['at']['byte_start'] for r in recs)); self.assertLess(b['Later'][0][1], b['Rafts'][0][1])
+        _, _, b = page(b'<p>First para</p><p>Second para</p>'); self.assertLess(b['First para'][0][1], b['Second para'][0][1])
+        _, _, b = page('<meta charset="utf-8"><p dir="rtl">שלום עולם</p><p>after</p>'.encode()); self.assertGreater(b['שלום עולם'][0][0], 100)  # right-aligned (declared charset: undeclared non-ASCII stays unbound, as before)
+        _, _, b = page(b'<p style="width:60px">one two three four five</p>'); self.assertGreater(len(b['one two three four five']), 1)  # one run, several line boxes
+        _, _, b = page(b'<div style="column-count:2;width:300px"><p>Alpha</p><p>Beta</p><p>Gamma</p><p>Delta</p></div>'); self.assertTrue(b['Gamma'][0][1] < b['Beta'][0][1] and b['Gamma'][0][0] > b['Beta'][0][0])
+        _, _, b = page(b'<p><span style="float:right">Right</span>Left text</p>'); self.assertGreater(b['Right'][0][0], b['Left text'][0][0])
+        _, _, b = page(b'<p>Top written</p><p style="transform:translateY(-60px)">Moved up</p>'); self.assertLess(b['Moved up'][0][1], b['Top written'][0][1])
+        _, recs, b = page(b'<p>Shown <span style="visibility:hidden">gone</span> end</p>')  # hidden: its raw boxes kept, never a visibility proof; no owner
+        hidden = recs[[t for t in b].index('gone')]; self.assertEqual((hidden['visibility'], hidden['owners'], bool(b['gone'])), ('hidden', None, True))
+        r, _, b = page(b'<style>p::before{content:"Note: "}</style><p>Body</p>')  # the snapshot's document coordinates meet the client frame at scroll (0, 0)
+        g = r['generated_content']['records'][0]['bounds'][0]; self.assertAlmostEqual(g[0] + g[2], b['Body'][0][0], delta=1)
+        r, recs, b = page(b'<link rel="stylesheet" href="missing.css"><p>Body</p>')  # refused: the readings stay a fallback, unproved
+        self.assertEqual((r['source_style']['read'], bool(b['Body'])), (False, True))
+
+    def test_boxes_equal_the_native_ranges_and_say_their_own_source(self):  # Root's six originals (checked in): every record's boxes are the native Range rectangles of its whole run, exactly (Root's independent readings, literal)
+        NATIVE = {"preserved_edge_space": [["  Cargo  \n  ", "visible", [[8, 13, 70.453125, 15], [78.453125, 13, 0, 15], [8, 28, 15.65625, 15]]]], "entity_multiline": [["Crates & cases & cartons", "visible", [[8, 16, 57.328125, 17], [8, 34, 50.203125, 17], [8, 52, 46.203125, 17]]]], "bidi_transform": [["אבג 234 XYZ", "visible", [[1294.859375, 25.375, 32.890625, 17], [1327.75, 25.375, 4, 17], [1331.75, 25.375, 24, 17], [1355.75, 25.375, 31, 17]]]], "first_letter_float": [["Crates and bags and cases", "visible", [[8, 17, 28.015625, 46], [36.015625, 16, 57.3125, 17], [36.015625, 34, 56.4375, 17], [36.015625, 52, 33.765625, 17]]]], "repeat_occurrences": [["Cargo", "visible", [[8, 16, 38.8125, 17]]], ["Cargo", "visible", [[98, 50, 38.8125, 17]]]], "hidden_positive": [["Shown", "visible", [[8, 16, 44.453125, 17]]], ["Hidden", "hidden", [[8, 50, 47.109375, 17]]]]}
+        for k, runs in NATIVE.items():
+            with self.subTest(k):
+                raw = src(k); route, recs, got = self.read(raw); fr = route['source_style']['frame']
+                self.assertEqual((route['status'], fr), ('OK', {'viewport': [1400, 1000], 'scroll': [0, 0], 'device_pixel_ratio': 1}))
+                measured = [(raw[x['boxes_at']['byte_start']:x['boxes_at']['byte_end_exclusive']] if 'boxes_at' in x else raw[x['at']['byte_start']:x['at']['byte_end_exclusive']]).decode() for x in recs]
+                got = [(t, x.get('visibility', 'visible'), x['boxes']) for t, x in zip(measured, recs)]
+                if k == 'first_letter_float':  # the route's own marked render splits the last line at a text-node boundary: as returned, never collapsed; its union is the native line exactly
+                    *head, (x0, y0, w0, h0), (x1, y1, w1, h1) = got[0][2]; self.assertEqual((y1, h1, x1), (y0, h0, x0 + w0))  # one line: the same top and height, exactly contiguous
+                    got = [(got[0][0], got[0][1], head + [[x0, y0, w0 + w1, h0]])]  # then their union must be the native line (truth unchanged; nothing normalized at runtime)
+                self.assertEqual(got, [(t.replace('&', '&amp;') if k == 'entity_multiline' else t, v, b) for t, v, b in runs])
+        recs = self.read(src('preserved_edge_space'))[1]  # the boxes measure "  Cargo  \n  ", the record's `at` and owner place stay "Cargo"
+        self.assertEqual((recs[0]['owners'][0]['text_at'], recs[0]['at']['byte_end_exclusive'] - recs[0]['at']['byte_start'], recs[0]['boxes_at']['byte_end_exclusive'] - recs[0]['boxes_at']['byte_start']), ([[1, 6]], 5, 12))
+        recs = self.read(src('hidden_positive'))[1]; self.assertEqual([x.get('owners') is None for x in recs], [False, True])  # hidden boxes never become shown content
+
     def test_generated_text_carries_the_same_readings(self):  # the same native properties in the generated-content capture
         raw = b'<style>p::before{content:"Note: ";font-weight:700;font-style:italic;background-color:#ff0}</style><p>Body</p>'
         route, _ = html_route.prepare(raw, 'g.htm', hashlib.sha256(raw).hexdigest(), self.browser)

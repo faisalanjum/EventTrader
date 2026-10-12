@@ -8,7 +8,14 @@
   "generated_empty_owner": "6bb297b67012d55b44134b3be0e0cbc222b255c29dbb9fd8a0ca164dc5225d5e",
   "opacity_without_background": "556fd3aaa6daa1b5dff023ad9c60149fc2f27ad128e9f6a71bee4875b37446c5",
   "plain_background_control": "9eabe908429e146b44f7d80805c12eac91e4c927f3e61a91ef6ee3f5816dedd6",
-  "pseudo_bold_control": "d625db77703ff66420697a49075265599a3c68fc75231a524f7735c5474a1582"
+  "pseudo_bold_control": "d625db77703ff66420697a49075265599a3c68fc75231a524f7735c5474a1582",
+  "flex_order": "11ace5f2c27d86bdd362325f464d69bf8431ef4fc11d7d49e0da610d948537d1",
+  "preserved_edge_space": "0e9b9da278dab52bee098f74158b1627f6c9b788c4c1590368e510eec567d879",
+  "entity_multiline": "56e29dc2fff45f6a3c06d8a415fe6f421f2c6ac8754094c767801af29c6b194f",
+  "bidi_transform": "545d9148d42d7edfc3169edb5d8f157d3bfa9622b381c177cf67265821380e74",
+  "first_letter_float": "4289c75530146534696d6bf2001d3f34f84acf83da8266c6e3043edd1d6e5960",
+  "repeat_occurrences": "3890df1b2d1ffa378ae9c792358a943da5e455273c82a01cf4925a714a936ad6",
+  "hidden_positive": "240685a58e83aef4e48f17481d542ff536c8d0cbb3c85cda56bd9abecfa45278"
  },
  "cases": {
   "public_review": "<style>.heavy{font-weight:700}.under{text-decoration:underline}.mark{background-color:yellow}.parent{font-weight:700}.normal{font-weight:400}</style><p>Left <b id=\"b\">cargo</b> and <strong id=\"strong\">cargo</strong>; <u id=\"u\">cargo</u>; <span class=\"mark\" id=\"mark\">cargo</span>; <span id=\"plain\">cargo</span>.</p><p class=\"parent\"><span id=\"inherit\">cargo</span> <span class=\"normal\" id=\"override\">cargo</span></p><table><tr><td><span id=\"cell\" class=\"heavy under mark\">cargo</span></td><td>31</td></tr></table><p><s id=\"strike\">old</s> <sup id=\"raise\">2</sup> <span id=\"color\" style=\"color:red\">cargo</span></p>",
@@ -18,6 +25,13 @@
   "generated_empty_owner": "<style>#target::before{content:\"cargo\";font-weight:700}</style><div style=\"background:yellow\"><span id=\"target\"></span></div>",
   "opacity_without_background": "<div style=\"background:yellow\"><span style=\"opacity:.3\"><b id=\"target\">cargo</b></span></div>",
   "plain_background_control": "<p id=\"target\" style=\"background:yellow\">Cargo</p>",
-  "pseudo_bold_control": "<style>#target::first-letter{font-weight:700}</style><p id=\"target\">Cargo</p>"
+  "pseudo_bold_control": "<style>#target::first-letter{font-weight:700}</style><p id=\"target\">Cargo</p>",
+  "flex_order": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Invented reordered controls</title></head><body>\n<div style=\"display:flex;flex-direction:column\">\n<p style=\"order:1\"><s>Slip fees</s></p>\n<table id=\"M\" style=\"order:3\"><tr><td>Rafts</td><td>8</td></tr></table>\n<table id=\"Z\" style=\"order:2\"><tr><td>Later</td><td>1</td></tr></table>\n</div>\n</body></html>\n",
+  "preserved_edge_space": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><pre id=\"target\">  Cargo  \n  </pre></body></html>",
+  "entity_multiline": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p id=\"target\" style=\"width:70px\">Crates &amp; cases &amp; cartons</p></body></html>",
+  "bidi_transform": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p dir=\"rtl\" id=\"target\" style=\"transform:translate(-5.25px,8.375px)\">אבג 234 XYZ</p></body></html>",
+  "first_letter_float": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><style>p::first-letter{float:left;font-size:42px}</style><p id=\"target\" style=\"width:110px\">Crates and bags and cases</p></body></html>",
+  "repeat_occurrences": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p id=\"target\">Cargo</p><p id=\"other\" style=\"margin-left:90px\">Cargo</p></body></html>",
+  "hidden_positive": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><p id=\"target\">Shown</p><p id=\"other\" style=\"visibility:hidden\">Hidden</p></body></html>"
  }
 }

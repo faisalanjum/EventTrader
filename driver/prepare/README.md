@@ -68,7 +68,19 @@ holding the text up its ancestors. These are readings, not a paint or coverage
 verdict: an empty stack means none observed on that chain. A first-letter or
 first-line value that differs stays uncertainty (`pseudo` for colour,
 `style_pseudo` named by property). Hidden runs keep their reading with no owner;
-unread or literal runs stay `unresolved`.
+unread or literal runs stay `unresolved`. Each record also keeps `boxes`: the raw
+`[x, y, width, height]` CSS-pixel client rectangles the browser returns for the
+whole native run (Range.getClientRects, unrounded, in its returned order), in the
+section's one `frame` (`viewport`, `scroll` origin, `device_pixel_ratio`) of the
+same render. The boxes cover the entire run, preserved white space included; where
+that source extent differs from `at`, `boxes_at` names it. Boxes are positions:
+not a reading order, not a visibility proof (hidden runs keep theirs, with no
+owner); a missing box is no proof of missing content. Generated-content `bounds`
+come from the DOMSnapshot layout of the same page: the pinned browser's protocol
+declares `LayoutTreeSnapshot.bounds` "the absolute position bounding box"
+(document coordinates), while `Range.getClientRects` returns client (viewport)
+coordinates. They are equal only at scroll origin (0, 0); otherwise document =
+client + the recorded `scroll` (measured: +400 at a vertical scroll of 400).
 
 `generated_content` keeps the page's own pseudo-element readings (before, after,
 marker, first-letter): raw fragments, computed values and, from the same

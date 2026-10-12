@@ -223,20 +223,20 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
     if (decorate) decor[m[1]] = [cs.getPropertyValue('-webkit-text-decorations-in-effect'), text];  // asked for (strike-through the scanner cannot certify): the decorations the browser applies to this text, inherited ones too (not the element's own `text-decoration-line`), with the text to bind it
     const face = lib.faces.find(f => { const k = f.indexOf(' ') < 0 ? f : '"' + f + '"'; return fam === k || fam.startsWith(k + ', '); }) || null;  // the primary family, as Chrome writes it
     const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text), lifted = lift(el);
-    const shows = () => { const r = document.createRange(); r.setStart(first, 0); r.setEnd(last, last.length); const rs = Array.from(r.getClientRects());  // the glyphs' own boxes, not the element's
+    let boxes = null; const shows = () => { const r = document.createRange(); r.setStart(first, 0); r.setEnd(last, last.length); const rs = Array.from(r.getClientRects()); boxes = rs.map(q => [q.x, q.y, q.width, q.height]);  // the glyphs' own boxes, not the element's: kept raw ([x, y, width, height], CSS pixels, client frame), never a visibility or order verdict
       let seen = getComputedStyle(el).visibility === 'visible'; for (let a = el; a && seen; a = a.parentElement) if (+getComputedStyle(a).opacity === 0) seen = false;  // the gap marks' rule
       return !rs.length || !seen ? 'hidden' : rs.some(q => q.width > 0 && q.height > 0) ? 'shown' : 'unproven'; };
     let visibility = lifted ? shows() : null;
     if (lifted) inline[m[1]] = {text, visibility, ancestors: lifted};  // raised or lowered: kept apart from the symbol records, before the ordinary-font exit
     if (ordinary && !every) { plain.push(m[1]); continue; }  // ordinary text: nothing a symbol record could say (its id only: a large result is slow to leave the page)
     visibility = visibility || shows();
-    if (ordinary) { marks[m[1]] = {text, visibility}; continue; }  // every run measured: an ordinary one says only its text and whether it shows
-    marks[m[1]] = {text, family: cs.fontFamily, face, visibility,
+    if (ordinary) { marks[m[1]] = {text, visibility, boxes}; continue; }  // every run measured: an ordinary one says only its text and whether it shows
+    marks[m[1]] = {text, family: cs.fontFamily, face, visibility, boxes,
       changed: cs.textTransform !== 'none' || cs.fontVariant !== 'normal' || cs.fontFeatureSettings !== 'normal',
       pseudo: !!face && (() => { for (let a = el; a; a = a.parentElement) { const own = getComputedStyle(a); for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(a, ps);  // a block's first letter or line set another way
         if (q.fontFamily !== own.fontFamily || q.textTransform !== own.textTransform || q.fontVariant !== own.fontVariant || q.fontFeatureSettings !== own.fontFeatureSettings) return true; } } return false; })(),
       decoded: face ? chars.map(ch => { let k = ch.codePointAt(0); if (k >= 0xF020 && k <= 0xF0FF) k -= 0xF000; const r = k <= 0xFF ? lib.codePoint(face, k) : undefined; return r ? r.codePoint : null; }) : null}; }
-  return Object.assign({marks, faces, plain: plain.join(','), inline, color, color_pseudo, style, style_pseudo}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
+  return Object.assign({marks, faces, plain: plain.join(','), inline, color, color_pseudo, style, style_pseudo, frame: {viewport: [innerWidth, innerHeight], scroll: [scrollX, scrollY], device_pixel_ratio: devicePixelRatio}}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
 
 
 def marker_prefix(raw):
@@ -448,14 +448,15 @@ def styles(raw, vis, runs, got, units):
         if m is None or key not in found or not _bound(glyphs, m['text']):  # what kept the run from being read
             if not hidden: unresolved.append(dict(where, raw=''.join(g if g is not None else '�' for (x, g) in every if s0 <= x[0] < e0), why='literal text' if not marked else 'unbound' if m is not None or key in marks else 'mark not found'))
             continue
-        rec = dict(where, color=found[key], **({'pseudo': tinted[key]} if key in tinted else {}))
+        rec = dict(where, color=found[key], **({'pseudo': tinted[key]} if key in tinted else {}), **({'boxes': m['boxes']} if m.get('boxes') is not None else {}))  # the whole native run's raw client boxes in this render's `frame`: positions, never an order or a visibility proof
+        if 'boxes' in rec and (chars[0][0], chars[-1][1]) != (s0, e0): rec['boxes_at'] = {'byte_start': chars[0][0], 'byte_end_exclusive': chars[-1][1]}  # the source the boxes measure (the whole run, preserved white space too) where it differs from `at`
         if key in styled: w, f, d, g = styled[key]; rec.update(weight=w, font_style=f, decorations=d, **({'background': g} if g else {}), **({'style_pseudo': shaded[key]} if key in shaded else {}))  # the element's colour, and beside it what may paint some characters otherwise: not every character's proved colour
         if m['visibility'] != 'shown': rec.update(visibility=m['visibility'], owners=None)  # hidden, or boxes of no area: no text of an owner stands for it
         else:
             rec['owners'], why = owners(s0, e0)
             if why: rec['why'] = why
         records.append(rec)
-    return {'records': records, 'unresolved': unresolved}
+    return {'records': records, 'unresolved': unresolved, **({'frame': got['frame']} if got.get('frame') else {})}  # the one frame of every box: viewport, scroll origin, device pixel ratio
 
 
 class Source:
