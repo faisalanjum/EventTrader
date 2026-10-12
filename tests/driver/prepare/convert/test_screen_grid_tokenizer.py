@@ -17,7 +17,7 @@ class CellTokenizerTests(unittest.TestCase):
                 real = b'<table><tr><td>real</td></tr></table>'
                 raw = fake + real
                 marked, spans = sg.tag_cells(raw)
-                self.assertEqual(marked, fake + real.replace(b'<td>', b'<td data-g="0">'))
+                self.assertEqual(marked, fake + real.replace(b'<td>', b'<td><!--g:0-->'))
                 self.assertEqual([raw[s:e] for s, e in spans], [b'<td>real</td>'])
 
     def test_nested_cell_does_not_end_outer_cell(self):
@@ -26,7 +26,7 @@ class CellTokenizerTests(unittest.TestCase):
         raw = b'<table><tr>' + outer + b'<td>next</td></tr></table>'
         marked, spans = sg.tag_cells(raw)
         self.assertEqual([raw[s:e] for s, e in spans], [outer, b'<th>inner</th>', b'<td>next</td>'])
-        self.assertEqual(marked.count(b'data-g="'), 3)
+        self.assertEqual(marked.count(b'<!--g:'), 3)
         cells = [{'text': text, 'r': 9, 'c': 9,
                   'anchor': {'byte_start': raw.index(text.encode()),
                              'byte_end_exclusive': raw.index(text.encode()) + len(text)}}
@@ -50,7 +50,7 @@ class CellTokenizerTests(unittest.TestCase):
         real = b'<table><tr><td>real</td></tr></table>'
         literal = b'<plaintext><table><td>fake</td></table></plaintext><table><td>also fake</td></table>'
         marked, spans = sg.tag_cells(real + literal)
-        self.assertEqual(marked, real.replace(b'<td>', b'<td data-g="0">') + literal)
+        self.assertEqual(marked, real.replace(b'<td>', b'<td><!--g:0-->') + literal)
         self.assertEqual(len(spans), 1)
 
     def test_omitted_cell_ends_stop_at_next_cell_row_or_table(self):
@@ -62,7 +62,7 @@ class CellTokenizerTests(unittest.TestCase):
         raw = '<p>€</p>\r\n<table><tr><TD title="a > b">é</TD><td>x</td></tr></table>'.encode()
         marked, spans = sg.tag_cells(raw)
         self.assertEqual([raw[s:e] for s, e in spans], ['<TD title="a > b">é</TD>'.encode(), b'<td>x</td>'])
-        self.assertEqual(marked.replace(b' data-g="0"', b'').replace(b' data-g="1"', b''), raw)
+        self.assertEqual(marked.replace(b'<!--g:0-->', b'').replace(b'<!--g:1-->', b''), raw)
 
     def test_non_cell_markup_and_outside_text_are_not_regridded(self):
         raw = b'<table><tr><td>inside</td></tr></table><p>outside</p>'

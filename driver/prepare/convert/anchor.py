@@ -340,6 +340,7 @@ class Visible:
         self.picture_descriptions = {}  # the `alt` and `title` each shown picture tag writes, as the parser reads them (decoded once, the first of duplicates; an empty value kept, an absent one absent), by the tag's first byte: what the source says of the picture, evidence beside it, never its text (Codex, PICTURE_CONTEXT_ORDER)
         style_cache, sheet_tokens = {}, []
         marks = {}  # id(open element) -> its link and target records, which get their end when it ends
+        self.cell_tag_ends = {}  # each table cell's start tag: where it ends, by where it starts (the parser's own tag end; a quoted '>' is no end)
         self.tables, grid, spans = [], [], {}  # every table of the source in order: its rows, each the byte spans of its own cells (a nested table is a table of its own; a cell outside any row stands in the row the parser makes for it). `grid`: for each table open now, its rows and the row that takes the next cell; `spans`: the open cells by their depth on the stack — a cell ends where its element ends, an unclosed one with the source
         self.table_tags = []  # for each table of `tables`, the first byte of its start tag, shown or hidden: a fact of the source (whether the page shows its content is the text's own reading); the adapter names a table by it (edgartools_html.codes)
         self.table_captions, caps = [], {}  # every <caption> the parser makes a part of an open table: [its first byte, where it ends (as a cell's end), the first byte of that table's start tag]; `caps`: the open ones, by depth
@@ -510,7 +511,7 @@ class Visible:
                         if name == 'table': self.tables.append([]); self.table_tags.append(start); self.table_spans.append([start, len(raw)]); grid.append([self.tables[-1], None, self.table_spans[-1]])
                         elif grid and name in ('tr', 'thead', 'tbody', 'tfoot'): grid[-1][1] = None  # a row or a group of rows starts: the row before it has ended
                         if grid and name in ('tr', 'td', 'th') and grid[-1][1] is None: grid[-1][1] = []; grid[-1][0].append(grid[-1][1])
-                        if grid and name in ('td', 'th'): spans[len(stack) - 1] = [start, len(raw)]; grid[-1][1].append(spans[len(stack) - 1])
+                        if grid and name in ('td', 'th'): spans[len(stack) - 1] = [start, len(raw)]; grid[-1][1].append(spans[len(stack) - 1]); self.cell_tag_ends[start] = pos
                         if grid and name == 'caption': caps[len(stack) - 1] = [start, len(raw), grid[-1][2][0]]; self.table_captions.append(caps[len(stack) - 1])  # the innermost open table's own caption
                         if inside in _TABLE and name not in _PARTS and name != 'table': f = stack[-1]; computed |= f.declares or f.pre != top.pre or (name in _FORMATTING and bool(f.block or f.edge)); struck_computed |= f.struck != top.struck  # no part of a table, standing in one outside any cell: the parser moves the element out and leaves the rows behind — what it hides, strikes or keeps of white space does not reach them, and a formatting element it opens again inside the cells: one with a box of its own is not followed
                 hidden = bool(stack) and (stack[-1].gone or stack[-1].unseen)

@@ -65,17 +65,19 @@ def endpoints_of(vis, units):
 
 
 def tag_cells(raw, vis=None, gaps=(), marks=(), prefix='', cells=True):
-    """A copy with data-g="n" on every <td>/<th> (document order) and the byte span of each cell in the original; and, for each gap, a comment <!--j:n.0-->
+    """A copy with a comment <!--g:n--> right after every <td>/<th> start tag (document order; the scanner's own tag end) and the byte span of each cell in
+    the original - a comment, never an attribute: a sheet can select an attribute, none sees a comment, :empty and structural selectors ignore it (Root,
+    render-mark boundary); and, for each gap, a comment <!--j:n.0-->
     / <!--j:n.1--> right before the character before and after it — a comment is no element: no stylesheet rule and no structural selector sees it, the
     page lays out exactly as before (Codex C2), and the page's own range over the character that follows it is measured. `cells`: False for a copy
-    with no attribute added (comments only: a sheet can select an attribute; spans then none). `marks`: (byte, comment) pairs
+    with no cell marks (spans then none). `marks`: (byte, comment) pairs
     set in as given (the symbol runs' marks); `prefix` (`marker_prefix`) begins every comment the step writes, so none the source writes stands for one."""
     vis = Visible(raw) if vis is None else vis
     spans = sorted((a, b) for table in vis.tables for row in table for a, b in row) if cells else []  # the scanner's cells: the parser's own, where a plain search for the tags ran a cell with no end tag on to the next cell anywhere (Codex G2-C3)
     edits = []
     for n, (start, end) in enumerate(spans):
         close = _CELL_END.match(raw, end); spans[n] = (start, close.end() if close else end)  # with its own end tag, where it has one
-        edits.append((start + 3, b' data-g="%d"' % n))
+        edits.append((vis.cell_tag_ends[start], b'<!--%sg:%d-->' % (prefix.encode(), n)))
     for n, (_, _, _, k, l) in enumerate(gaps):
         for side, c in ((0, k), (1, l)): edits.append((vis.s[c], b'<!--%sj:%d.%d-->' % (prefix.encode(), n, side)))
     edits.extend(marks)
@@ -182,13 +184,15 @@ def apply(units, spans, measured_by_table):
     return n
 
 
-JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAll('table')); const out = []; const gap = new RegExp('^' + p + 'j:([0-9]+[.][01])$');
+JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAll('table')); const out = []; const gap = new RegExp('^' + p + 'j:([0-9]+[.][01])$'), cell = new RegExp('^' + p + 'g:([0-9]+)$');
   const shown = new Map();  // each row's place in its table as the page shows it: rows by their own box's top (equal tops in DOM order); a row with no box stays after the one before it
   for (const t of tables) { let top = -Infinity; const keyed = Array.from(t.rows, tr => { if (tr.getClientRects().length) top = tr.getBoundingClientRect().top; return [top, tr.rowIndex, tr]; });
     keyed.sort((a, b) => a[0] - b[0] || a[1] - b[1]).forEach(([, , tr], i) => shown.set(tr, i)); }
-  for (const el of document.querySelectorAll('td[data-g], th[data-g]')) { const r = el.getBoundingClientRect(); const t = el.closest('table'); const tr = el.parentElement;
+  const named = new Set(), cw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);  // a cell's own mark is the first in it, a cell being a native HTML cell (a <td> in SVG or MathML is a foreign element); one the parser moved out of a cell, or a second in one cell (a start tag it ignored), names nothing
+  for (let c = cw.nextNode(); c; c = cw.nextNode()) { const m = cell.exec(c.data), el = c.parentElement; if (!m || !(el instanceof HTMLTableCellElement) || named.has(el)) continue; named.add(el);
+    const r = el.getBoundingClientRect(); const t = el.closest('table'); const tr = el.parentElement;
     const rest = tr && tr.parentElement && tr.parentElement.rows ? tr.parentElement.rows.length - tr.sectionRowIndex : 1;  // the rows left in its row group, where the table model ends a cell: rowspan="0" runs to there, a larger one stops there
-    out.push({g: +el.dataset.g, table: tables.indexOf(t), row: tr && shown.has(tr) ? shown.get(tr) : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest)}); }
+    out.push({g: +m[1], table: tables.indexOf(t), row: tr && shown.has(tr) ? shown.get(tr) : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest)}); }
   const boxes = {}; const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
   for (let c = w.nextNode(); c; c = w.nextNode()) { const m = gap.exec(c.data); if (!m) continue; let t = c.nextSibling; while (t && t.nodeType === Node.COMMENT_NODE) t = t.nextSibling;  // one character can end one gap and begin the next: its two marks stand side by side
     if (!t || t.nodeType !== Node.TEXT_NODE || !t.data.length) continue;
@@ -201,7 +205,7 @@ JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAl
 
 SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, color = {}, color_pseudo = {}, style = {}, style_pseudo = {}, tints = new Map(), grounds = new Map(), lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
   for (const f of document.fonts) faces.push(f.family.replace(/^["']|["']$/g, '').toUpperCase());  // typefaces the document defines itself (@font-face)
-  const STYLED = ['font-weight', 'font-style', '-webkit-text-decorations-in-effect', 'background-color', 'background-image'];
+  const STYLED = ['font-weight', 'font-style', '-webkit-text-decorations-in-effect', 'background-color', 'background-image', 'text-transform'];
   const tint = el => { if (!el) return [[], []]; if (tints.has(el)) return tints.get(el);  // an element's and its ancestors' first-letter / first-line readings that differ from their own (nearest first), each element's own and pseudo styles read once: colours [pseudo, colour] as before, and the style readings named [pseudo, property, value] (a pseudo's unset background - initial: transparent, none - covers nothing behind it); which characters they paint is layout's, so they stay an uncertainty
     const own = getComputedStyle(el), up = tint(el.parentElement), c = [], s = [];
     for (const ps of ['::first-letter', '::first-line']) { const q = getComputedStyle(el, ps); if (q.color !== own.color) c.push([ps, q.color]);
@@ -222,7 +226,7 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
     if (!el) { marks[m[1]] = null; continue; }  // the parser moved the run away from its mark (a table's foster parent): unbound
     const cs = getComputedStyle(el), fam = cs.fontFamily.toUpperCase(), chars = Array.from(text);
     if (every) { color[m[1]] = cs.color; const [t, q] = tint(el); if (t.length) color_pseudo[m[1]] = t;
-      style[m[1]] = [cs.fontWeight, cs.fontStyle, cs.getPropertyValue('-webkit-text-decorations-in-effect'), ground(el)]; if (q.length) style_pseudo[m[1]] = q; }  // the same element's weight, style, decorations in effect (inherited too) and raw background stack  // every run measured: the foreground colour the browser computes for the element holding its text (inherited and sheet rules applied), as Chrome writes it; a first-letter / first-line colour that may paint some of its characters, beside it
+      style[m[1]] = [cs.fontWeight, cs.fontStyle, cs.getPropertyValue('-webkit-text-decorations-in-effect'), ground(el), cs.textTransform]; if (q.length) style_pseudo[m[1]] = q; }  // the same element's weight, style, decorations in effect (inherited too) and raw background stack  // every run measured: the foreground colour the browser computes for the element holding its text (inherited and sheet rules applied), as Chrome writes it; a first-letter / first-line colour that may paint some of its characters, beside it
     if (decorate) decor[m[1]] = [cs.getPropertyValue('-webkit-text-decorations-in-effect'), text];  // asked for (strike-through the scanner cannot certify): the decorations the browser applies to this text, inherited ones too (not the element's own `text-decoration-line`), with the text to bind it
     const face = lib.faces.find(f => { const k = f.indexOf(' ') < 0 ? f : '"' + f + '"'; return fam === k || fam.startsWith(k + ', '); }) || null;  // the primary family, as Chrome writes it
     const ordinary = !face && !/[\\uE000-\\uF8FF\\u{F0000}-\\u{10FFFD}]/u.test(text), lifted = lift(el);
@@ -434,7 +438,7 @@ def inline(raw, vis, runs, got, units):
 
 def styles(raw, vis, runs, got, units):
     """`source_style` records from the same render's marks (`SYMBOLS_JS`'s `color` and `style`, read with `every`): for every source run its mark
-    reaches whole, the foreground colour, font weight, font style and decorations in effect the browser computes for the element holding its text
+    reaches whole, the foreground colour, font weight, font style, decorations in effect and text transform the browser computes for the element holding its text
     (inherited and sheet rules applied; as Chrome writes them, never interpreted - a default is a reading too), its raw `background` stack where one
     is observed ([depth, colour, image, opacity]: no paint, coverage or image-content claim; none observed: no key), first-letter / first-line values
     that differ (`pseudo` for colour, `style_pseudo` named by property), its exact bytes and, where it shows, its owners' `text_at` (`_owners`, as `inline`). A hidden
@@ -453,7 +457,7 @@ def styles(raw, vis, runs, got, units):
             continue
         rec = dict(where, color=found[key], **({'pseudo': tinted[key]} if key in tinted else {}), **({'boxes': m['boxes']} if m.get('boxes') is not None else {}))  # the whole native run's raw client boxes in this render's `frame`: positions, never an order or a visibility proof
         if 'boxes' in rec and (chars[0][0], chars[-1][1]) != (s0, e0): rec['boxes_at'] = {'byte_start': chars[0][0], 'byte_end_exclusive': chars[-1][1]}  # the source the boxes measure (the whole run, preserved white space too) where it differs from `at`
-        if key in styled: w, f, d, g = styled[key]; rec.update(weight=w, font_style=f, decorations=d, **({'background': g} if g else {}), **({'style_pseudo': shaded[key]} if key in shaded else {}))  # the element's colour, and beside it what may paint some characters otherwise: not every character's proved colour
+        if key in styled: w, f, d, g, t = styled[key]; rec.update(weight=w, font_style=f, decorations=d, text_transform=t, **({'background': g} if g else {}), **({'style_pseudo': shaded[key]} if key in shaded else {}))  # the element's colour, and beside it what may paint some characters otherwise: not every character's proved colour
         if m['visibility'] != 'shown': rec.update(visibility=m['visibility'], owners=None)  # hidden, or boxes of no area: no text of an owner stands for it
         else:
             rec['owners'], why = owners(s0, e0)
@@ -700,8 +704,8 @@ def _generated_owners(raw, vis, runs, marks, gen, units):
 
 def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window; the document's scripts never run). Only
-    table cells are read: a source element that writes the mark itself (`<div data-g="2">`) is no cell and measured nothing in its place (Codex,
-    MEASURE_ALIAS_BASELINE); on a cell the step's own mark stands first and the browser keeps the first. With a symbol-mark `prefix`, the same page's
+    table cells are read: a mark names the td/th it stands first in; one the parser moved out of its cell, or a second in one cell, names nothing,
+    and the source never writes the step's own prefix (`marker_prefix`; Codex MEASURE_ALIAS_BASELINE). With a symbol-mark `prefix`, the same page's
     symbol marks (`SYMBOLS_JS`) come third: with `every`, each run's, an ordinary one's too. The page is read as every render reads it: at the
     `source`'s address (none given: the step's own, with no evidence), in the browser's charset for the original `raw` (the bytes given, without
     it), its references answered from that evidence only; one nothing answers raises: the geometry is not proved the original's. Its geometry is the

@@ -50,9 +50,9 @@ class Tagging(unittest.TestCase):
     def test_the_two_characters_of_each_gap_get_a_span_of_their_own_beside_the_cell_marks(self):
         raw = b'<table><tr><td>CORP<i>ORATION</i></td></tr></table>'; vis = Visible(raw); cell = {'id': 'c', 'kind': 'text', 'text': 'CORP ORATION', 'anchor': {'byte_start': 15, 'byte_end_exclusive': 30}}
         gaps = sg.gaps_of(vis, [cell]); marked, spans = sg.tag_cells(raw, vis, gaps)
-        self.assertEqual(marked, b'<table><tr><td data-g="0">COR<!--j:0.0-->P<i><!--j:0.1-->ORATION</i></td></tr></table>')  # comments, not elements: the page's structure and styles are untouched (Codex C2)
-        self.assertEqual(re.sub(rb'<!--j:[\d.]+-->', b'', marked).replace(b' data-g="0"', b''), raw)
-        self.assertEqual(sg.tag_cells(raw)[0], b'<table><tr><td data-g="0">CORP<i>ORATION</i></td></tr></table>')  # without gaps, as before
+        self.assertEqual(marked, b'<table><tr><td><!--g:0-->COR<!--j:0.0-->P<i><!--j:0.1-->ORATION</i></td></tr></table>')  # comments, not elements: the page's structure and styles are untouched (Codex C2)
+        self.assertEqual(re.sub(rb'<!--[jg]:[\d.]+-->', b'', marked), raw)
+        self.assertEqual(sg.tag_cells(raw)[0], b'<table><tr><td><!--g:0-->CORP<i>ORATION</i></td></tr></table>')  # without gaps, as before
 
 
 class Joining(unittest.TestCase):

@@ -123,9 +123,9 @@ class ScreenGridTests(unittest.TestCase):
     def test_every_cell_gets_a_marker_and_its_byte_span(self):
         raw = b'<table><tr><td colspan="2">Title</td></tr><tr><TH>a</TH><td>b</td></tr></table><table><tr><td>x</td></tr></table>'
         marked, spans = sg.tag_cells(raw)
-        self.assertEqual(marked.count(b'data-g="'), 4); self.assertEqual(len(spans), 4)  # Title, a, b, x
+        self.assertEqual(marked.count(b'<!--g:'), 4); self.assertEqual(len(spans), 4)  # Title, a, b, x
         self.assertEqual(raw[spans[0][0]:spans[0][1]], b'<td colspan="2">Title</td>'); self.assertEqual(raw[spans[3][0]:spans[3][1]], b'<td>x</td>')
-        self.assertTrue(marked.startswith(b'<table><tr><td data-g="0" colspan="2">'))
+        self.assertTrue(marked.startswith(b'<table><tr><td colspan="2"><!--g:0-->'))
 
     def test_screen_columns_come_from_pixel_edges_not_from_colspan(self):
         # DOM says the header spans 2 columns; on screen the value sits under it, a spacer column pushed its DOM index away

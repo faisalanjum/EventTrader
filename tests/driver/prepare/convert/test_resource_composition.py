@@ -87,8 +87,8 @@ class Boundary(unittest.TestCase):
     def test_geometry_reads_the_same_sheets(self):  # direction: rtl lays the first cell out to the right of the second
         vis = anchor.Visible(DOC); prefix = screen_grid.marker_prefix(DOC); marked, _ = screen_grid.tag_cells(DOC, vis, (), (), prefix)
         x = lambda by_table: {c['g']: c['x'] for cells in by_table.values() for c in cells}
-        with self.assertRaisesRegex(RuntimeError, 'geometry is unproved'): screen_grid.measure(marked, self.browser, raw=DOC)  # no evidence: the sheets are not drawn, so nothing is certified
-        now = x(screen_grid.measure(marked, self.browser, raw=DOC, source=Source('sub/doc.htm', SHEETS))[0])
+        with self.assertRaisesRegex(RuntimeError, 'geometry is unproved'): screen_grid.measure(marked, self.browser, prefix, raw=DOC)  # no evidence: the sheets are not drawn, so nothing is certified
+        now = x(screen_grid.measure(marked, self.browser, prefix, raw=DOC, source=Source('sub/doc.htm', SHEETS))[0])
         self.assertGreater(now[0], now[1])
 
     def test_a_non_utf8_page_is_read_in_the_browsers_charset(self):
@@ -97,7 +97,7 @@ class Boundary(unittest.TestCase):
         try: self.assertEqual((source.charset, page.evaluate('document.body.innerText').split()), ('windows-1252', ['Café', '“q”']))
         finally: page.close()
         vis = anchor.Visible(raw); prefix = screen_grid.marker_prefix(raw); marked, _ = screen_grid.tag_cells(raw, vis, (), (), prefix)
-        self.assertEqual(len([c for t in screen_grid.measure(marked, self.browser, raw=raw, source=Source('doc.htm', {}))[0].values() for c in t]), 2)
+        self.assertEqual(len([c for t in screen_grid.measure(marked, self.browser, prefix, raw=raw, source=Source('doc.htm', {}))[0].values() for c in t]), 2)
 
     def test_a_picture_is_the_member_at_the_address_the_page_resolves(self):  # sub/doc.htm's img/a.png is sub/img/a.png, never a namesake at the root
         raw = b'<html><body><p>Logo</p><img src="img/a.png" width="8" height="8"></body></html>'
@@ -250,7 +250,7 @@ class Boundary(unittest.TestCase):
         members = dict(SHEETS); source = Source('sub/doc.htm', members); self.prepare(DOC, source)
         members['sub/g.css'] = b'table{direction:ltr}'  # the caller's mapping changes after the first render
         vis = anchor.Visible(DOC); prefix = screen_grid.marker_prefix(DOC); marked, _ = screen_grid.tag_cells(DOC, vis, (), (), prefix)
-        x = {c['g']: c['x'] for t in screen_grid.measure(marked, self.browser, raw=DOC, source=source)[0].values() for c in t}
+        x = {c['g']: c['x'] for t in screen_grid.measure(marked, self.browser, prefix, raw=DOC, source=source)[0].values() for c in t}
         self.assertGreater(x[0], x[1])  # still the bytes the source was given (rtl), the bytes its record names
         self.assertIn({'member': 'sub/g.css', 'sha256': sha(SHEETS['sub/g.css']), 'status': 200, 'kind': 'stylesheet'}, source.identity()['dependencies'])
 

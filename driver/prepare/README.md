@@ -76,12 +76,15 @@ keeps the converter's claim and gets no places.
 `source_style` has one record per source text run, bound by its source bytes and
 its owners' text places (cells included); repeated text is never matched by text.
 Each record keeps the browser's raw computed values: `color`, `weight`,
-`font_style`, `decorations` (in effect, inherited too) and, where any is
+`font_style`, `decorations` (in effect, inherited too), `text_transform` and, where any is
 observed, `background` — `[depth, colour, image, opacity]` from the element
 holding the text up its ancestors. These are readings, not a paint or coverage
 verdict: an empty stack means none observed on that chain. A first-letter or
 first-line value that differs stays uncertainty (`pseudo` for colour,
-`style_pseudo` named by property). Hidden runs keep their reading with no owner;
+`style_pseudo` named by property). `text_transform` is the CSS property as computed
+(`none` included), never the printed string: language-dependent case mapping, `capitalize`
+word boundaries, fonts and a first-letter / first-line value's character reach are not
+claimed, and the source text is never rewritten. Hidden runs keep their reading with no owner;
 unread or literal runs stay `unresolved`. Each record also keeps `boxes`: the raw
 `[x, y, width, height]` CSS-pixel client rectangles the browser returns for the
 whole native run (Range.getClientRects, unrounded, in its returned order), in the

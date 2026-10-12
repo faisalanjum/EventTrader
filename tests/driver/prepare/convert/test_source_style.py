@@ -1,5 +1,5 @@
 """`source_style` (the widened source-run record, formerly `source_color`): for every source run, the page's own computed foreground colour, font
-weight, font style, decorations in effect and the raw background stack of the element holding its text and its ancestors ([depth, colour, image,
+weight, font style, decorations in effect, text transform (the computed property, never a printed string) and the raw background stack of the element holding its text and its ancestors ([depth, colour, image,
 opacity], as Chrome writes them; none observed: no key - never a paint or coverage claim), bound to its source bytes and owners as colour was; a
 first-letter / first-line value that differs stays property-named uncertainty beside colour's own. Controls: Root's public style sources (checked
 in, byte-exact: fixtures/source_style_controls.json) and invented ones; truths literal."""
@@ -53,6 +53,22 @@ class SourceStyle(unittest.TestCase):
         self.assertEqual([(t, w, x.get('visibility'), x.get('owners') is None) for (t, _, w, _, _, _), x in zip(got, recs)], [('Shown', '400', None, False), ('gone', '400', 'hidden', True)])  # hidden: reading kept, no owner
         r, recs, got = self.read(b'<p style="background-image:url(missing.png)">Body</p>')  # a named picture nothing answers: raw value, the step says it is unproved
         self.assertEqual((r['status'], r['source_style']['read'], got[0][5][0][:2], got[0][5][0][3]), ('PARTIAL', False, [0, 'rgba(0, 0, 0, 0)'], '1')); self.assertRegex(got[0][5][0][2], r'^url\(".*missing\.png"\)$')
+
+    def test_text_transform_is_the_native_computed_property(self):  # Root, display-property finding: the property as the browser computes it for each run's own element, never a printed string
+        def tt(raw): _, recs, got = self.read(raw); return [(t, x.get('text_transform'), x.get('style_pseudo')) for (t, *_), x in zip(got, recs)]
+        for raw, want in ((b'<p style="text-transform:uppercase">Amber kites drift</p>', [('Amber kites drift', 'uppercase', None)]),  # direct
+                          (b'<div style="text-transform:uppercase"><p>Copper lanterns glow</p></div>', [('Copper lanterns glow', 'uppercase', None)]),  # inherited
+                          (b'<style>.c{text-transform:capitalize}</style><p class="c">velvet river stones</p>', [('velvet river stones', 'capitalize', None)]),  # a sheet rule
+                          (b'<p style="text-transform:uppercase">Quiet <span style="text-transform:none">harbor</span> bells</p>', [('Quiet', 'uppercase', None), ('harbor', 'none', None), ('bells', 'uppercase', None)]),  # a child overrides
+                          (b'<style>p.f::first-line{text-transform:uppercase}</style><p class="f">opening words here</p>', [('opening words here', 'none', [['::first-line', 'text-transform', 'uppercase']])]),  # pseudo only: named uncertainty, no character reach
+                          (b'<p><b>Plain meadow text</b></p>', [('Plain meadow text', 'none', None)])):  # untransformed: the browser's own 'none'
+            with self.subTest(raw=raw[:48]): self.assertEqual(tt(raw), want)
+        raw = b'<p style="text-transform:lowercase">Silver Pine</p><p>Silver Pine</p>'; _, recs, got = self.read(raw)  # repeated identical text: each its own source and value
+        self.assertEqual([(t, x['text_transform'], x['at']['byte_start']) for (t, *_), x in zip(got, recs)], [('Silver Pine', 'lowercase', raw.index(b'Silver')), ('Silver Pine', 'none', raw.rindex(b'Silver'))])
+        r, recs, got = self.read('<meta charset="utf-8"><p lang="tr" style="text-transform:uppercase">istanbul straße</p>'.encode())  # language-sensitive: the raw text and its source stay, only the property is claimed
+        self.assertEqual(([u['text'] for u in r['units'] if u['kind'] == 'text'], [(t, x['text_transform']) for (t, *_), x in zip(got, recs)]), (['istanbul straße'], [('istanbul straße', 'uppercase')]))
+        r, recs, _ = self.read(b'<link rel="stylesheet" href="missing.css"><p class="x">distant shore</p>')  # a sheet nothing answers: unproved, the render's reading only as fallback
+        self.assertEqual((r['status'], r['source_style']['read'], 'records' in r['source_style'], [x.get('text_transform') for x in recs]), ('PARTIAL', False, False, ['none']))
 
     def test_root_candidate_review_sources(self):  # Root's six controls (checked in)
         Y2, I = [2, 'rgb(255, 255, 0)', 'none', '1'], 'background image content not read'
