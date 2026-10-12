@@ -1007,9 +1007,27 @@ class Grader:
         return (None, 'adjacency', frag) if boundary_equal(page, nw) else (False, 'spacing', frag)
 
     def in_order(self, k, tb, vr):
-        """A carrier inside the value's table keeps the source order of rows; outside, it comes before the table."""
-        if k['table'] is tb: return k['cell']['r'] == vr or self.order_holds(k['anchor'], self.t['anchor'], k['cell']['r'] < vr)
+        """A carrier inside the value's table keeps the source order of rows; outside, it comes before the table. A carrier in another route part of
+        the value's own native source table (`native_part`) is inside it (`row_rel`), by the same order rule."""
+        rel = self.row_rel(k, tb, vr)
+        if rel: return rel[0] or self.order_holds(k['anchor'], self.t['anchor'], rel[1])
         return k['order'] < tb['_order']
+
+    def row_rel(self, k, tb, vr):
+        """(same row, listed above) of a carrier inside the value's table, as the route states it: by the table's own rows; in another route part of
+        the value's native source table (`native_part`), the same native source row, and above when its part is listed first (the route's only
+        claim across parts; part row indexes are local). None outside the table."""
+        if k['table'] is tb: return k['cell']['r'] == vr, k['cell']['r'] < vr
+        part = self.native_part(k, tb)
+        return (part[0] == part[1], k['order'] < tb['_order']) if part else None
+
+    def native_part(self, k, tb):
+        """(carrier's native row, value's native row) when the carrier's cell is in another route table but the same native source table as the
+        value's cell (`source_cell`, the source's own cell bytes); else None. A table split into route parts is one source table."""
+        v = self.t.get('anchor')
+        if k['table'] is tb or k.get('cell') is None or v is None: return None
+        a, b = self.rf.source_cell(k['cell'].get('anchor'), literal=True), self.rf.source_cell(v, literal=True)
+        return (a[1], b[1]) if a is not None and b is not None and a[0] == b[0] else None
 
     def order_holds(self, a, b, before=True):
         """Does the source print a before b (`before`; else after) - two places on different rows? Page boxes are printed places: they decide.
@@ -1222,7 +1240,7 @@ class Grader:
 
     def corner_text(self, value, alt, tb, vr):
         pieces = pieces_of(value)  # one stub column's head, or several joined by the key's ' | '
-        cars = [k for k in self.carriers(anchors_of(self.t, 'corner_text', alt, governing=True), pieces, tb) if k['cell'] is not None and self.in_order(k, tb, vr) and k['cell']['r'] != vr]  # governing places (DESIGN §3)
+        cars = [k for k in self.carriers(anchors_of(self.t, 'corner_text', alt, governing=True), pieces, tb) if k['cell'] is not None and self.in_order(k, tb, vr) and not (self.row_rel(k, tb, vr) or [k['cell']['r'] == vr])[0]]  # governing places (DESIGN §3); not the value's own row
         if not cars: return 'fail', 'missing', None
         ok, flag = match_pieces([k['text'] for k in cars], pieces, self.markers, self.own + self.table_context)
         if ok: self.ctx_orders.update(k['order'] for k in cars); self.matched = objects(cars)
@@ -1231,7 +1249,7 @@ class Grader:
 
     def lead_in(self, value, alt, tb, vr):
         anchors = anchors_of(self.t, 'lead_in', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
-        cars = [k for k in self.carriers(anchors, [value], tb) if self.in_order(k, tb, vr) and (k['table'] is not tb or k['cell']['r'] < vr)]
+        cars = [k for k in self.carriers(anchors, [value], tb) if self.in_order(k, tb, vr) and ((rel := self.row_rel(k, tb, vr)) is None or not rel[0] and rel[1])]  # inside the table: an earlier row
         if not cars: return 'fail', 'missing', None
         hit = next((k for k in cars if boundary_equal(k['text'], value)), None)
         if hit is None and self.pieces_match([k['text'] for k in cars], value, [anchor_of(k) for k in cars])[0]: hit = cars[-1]
@@ -1263,8 +1281,8 @@ class Grader:
 
     def section_path(self, value, alt, target_order, tb=None):
         pieces, anchors = pieces_of(value), anchors_of(self.t, 'section_path', alt, governing=True)  # association by the key's governing places (DESIGN §3); plain anchors stay as listed
-        every = [k for k in self.carriers(anchors, pieces) if k['order'] < target_order and (tb is None or k['table'] is not tb)
-                 or tb is not None and k['table'] is tb and k['cell']['r'] < self.vr and self.in_order(k, tb, self.vr)]  # or in an earlier row of the value's own table, in source order (lead_in's rule)
+        every = [k for k in self.carriers(anchors, pieces) for rel in [tb is not None and self.row_rel(k, tb, self.vr)] if k['order'] < target_order and not rel
+                 or rel and not rel[0] and rel[1] and self.in_order(k, tb, self.vr)]  # or in an earlier row of the value's own table (any of its route parts), in source order (lead_in's rule)
         found, matched_cars, i, run_in, doubt = [], [], 0, False, False  # matched_cars: every carrier the match used (a heading laid out in pieces, a run-in window), for the struck check
         while i < len(pieces):
             start = max((n + 1 for n, k in enumerate(every) if any(k is m for m in matched_cars)), default=0); cars = every[start:]  # each level after the one above it: one printed occurrence never serves two levels
@@ -1334,8 +1352,9 @@ class Grader:
         good = [k for k in cars if self.same(k['text'], value)[0]] or ([cars[-1]] if cars and self.same(' '.join(k['text'] for k in cars), value)[0] else [])
         if good:
             k = good[0]; self.matched = objects(cars)
-            if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', None
-            if k['table'] is not tb and anchors and not self.own_caption_of(k, tb):  # the key's unit line outside its table: on the source's own side of it, nothing displaced between (C6)
+            part = self.native_part(k, tb)
+            if (k['table'] is tb or part) and not self.in_order(k, tb, vr): return 'fail', 'placement', None
+            if k['table'] is not tb and not part and anchors and not self.own_caption_of(k, tb):  # the key's unit line outside its table: on the source's own side of it, nothing displaced between (C6)
                 f = frame(k['anchor'])
                 if f is None or frame(tb.get('anchor')) != f: return 'unresolved', 'source_order', None  # no place the source can order: never a guessed side
                 if source_before(k['anchor'], tb.get('anchor')) != (k['order'] < tb['_order']) or any(frame(u.get('anchor')) == f for u in self.displaced(k, tb)): return 'fail', 'placement', None
@@ -1410,9 +1429,9 @@ class Grader:
                 k = notes[0]; self.matched = (self.matched or []) + objects([k])
                 declared = (k['unit'] or {}).get('marker')
                 if declared and norm(declared) != norm(mark): return 'fail', 'wrong_note_link', mark  # an explicit wrong mark-to-note assignment
-                if k['table'] is tb and not self.in_order(k, tb, vr): return 'fail', 'placement', mark
+                if self.row_rel(k, tb, vr) and not self.in_order(k, tb, vr): return 'fail', 'placement', mark  # a note row of the table (any of its route parts)
                 carrier_ids = {(k['unit'] or k['table']).get('id')}
-                linked.append(k['table'] is tb or bool(carrier_ids & set(tb.get('notes') or [])) or (k['unit'] is not None and k['unit'].get('marker') == mark))
+                linked.append(self.row_rel(k, tb, vr) is not None or bool(carrier_ids & set(tb.get('notes') or [])) or (k['unit'] is not None and k['unit'].get('marker') == mark))  # the table's own note row (any of its route parts), or an explicit link
         if linked: self.row('note_linked', 'pass' if all(linked) else 'fail')
         return 'pass', None, None
 
