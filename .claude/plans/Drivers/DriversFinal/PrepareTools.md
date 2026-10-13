@@ -1,6 +1,6 @@
 # Preparation tools and extraction closeout
 
-*Current handoff — 13 October 2026, after milestone 1 acceptance. Update at accepted milestones; exact pins, commands and evidence belong in the linked records. Historical work orders do not override current scope.*
+*Current handoff — 13 October 2026, after milestone 1 acceptance and the first milestone 2 checkpoint. Update at reviewed milestones; exact pins, commands and evidence belong in the linked records. Historical work orders do not override current scope.*
 
 ## Goal and standing requirements
 
@@ -26,7 +26,7 @@ The other 15,296 original automatic passes have possible exposure or missing dec
 
 Keep the sample unchanged: **300 probability documents + 30 challenges** (262 HTML / 68 XML, no PDF), plus **300 picture slots** (292 available). The 622 generated inputs are not 622 independent reports. The probability frame covers 1,098,271 eligible saved members of 1,596,310; selected regions and inventories do not certify every outside-selected word. Any database estimate needs original weights and filing/issuer/region/image dependence, with challenges separate. No informative, qualified 95% interval exists for the requested all-required fraction; native bounds for other measures are not substitutes. Do not invent a margin or change the sample.
 
-The same **129 HTML documents** still have reported failures (117 random / 12 challenge), with zero newly failing documents. Approved comparison: **1,030 primary failing groups + 242 derived summaries**; these are not independent defect counts or diagnosed causes. Investigation order by distinct documents: column headings 54, sections 45, row labels 27, footnote markers 17, periods 10, references 6, titles 1; counts overlap. None has a complete current source-backed cause classification yet. Earlier partial diagnoses, including 41 runtime-column duties in two regions, remain evidence. All 330 document cases retain unsupported checks. See [current evidence](../../../../../prepare_work/extraction_closeout_20261010/ACTIVE.md) and [historical snapshot](ExtractionSnapshot.md).
+The same **129 HTML documents** still have reported failures (117 random / 12 challenge), with zero newly failing documents. Approved comparison: **1,030 primary failing groups + 242 derived summaries**; these are not independent defect counts or diagnosed causes. Investigation order by distinct documents: column headings 54, sections 45, row labels 27, footnote markers 17, periods 10, references 6, titles 1; counts overlap. At M2's 90-minute checkpoint (06:04:45 UTC), Test had examined **12 documents: nine fully cause-diagnosed, three with meaning holds; 117 unstarted**. Of 102 examined primary failures, 99 trace to checker mechanisms and three remain held. The largest early mechanism excludes required own headings: 34 groups in eight documents. These provisional findings, from six random and six challenge documents, certify no full-field correctness or accuracy gain. The complete taxonomy remains pending. Earlier partial diagnoses, including 41 runtime-column duties in two regions, remain evidence. All 330 document cases retain unsupported checks. See [current evidence](../../../../../prepare_work/extraction_closeout_20261010/ACTIVE.md) and [historical snapshot](ExtractionSnapshot.md).
 
 ## Next actions
 
@@ -39,7 +39,7 @@ Only exception to a defect seen on a real document: a checker gap that could cre
 | Milestone | Work cap | Acceptance output |
 |---|---:|---|
 |1. Current baseline and pass audit|4h|DONE in 3h20m through Root acceptance: current outputs, conservative 4.5659238% baseline, complete passing-population accounting and explicit unknown dependency/estimate limits. No code change.|
-|2. All129document diagnoses|12h|Current source-backed per-document causes, new-failure reconciliation, distinct-document root ranking, reserved real validation documents and numerical potential gain before implementation.|
+|2. All129document diagnoses|12h|ACTIVE: 12 examined at the first90-minute checkpoint; full taxonomy/gain counts pending. Root accepted aggregate accounting only. Next decision07:34:45UTC; hard freeze16:34:45UTC13October unchanged. Prioritize widespread causes and reuse qualified source evidence. Current pace puts completion within the cap at risk; no extension or code release.|
 |3. Largest demonstrated shared causes|12h|Native-first minimal common fixes covering each whole class; independent reserved-document and full affected-population validation, regressions and current-output comparison. Budget roughly two complete cause packages; no per-owner patch queue.|
 |4. Remaining non-OCR proof|12h|Original HTML/XML/content/order/relationship/source/picture-connection duties assessed using existing automatic checks plus approved complete private review. First90minutes gives actual rate/remaining forecast; no guarantee that12hcloses all proof.|
 |6. Organization, freeze and final independent evaluation|4h|Native reuse/minimal organization/recovery accepted; non-OCR prerequisite reconciliation; gated final test on unchanged sample and the declared current-scope progress measure.|
