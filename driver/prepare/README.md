@@ -13,7 +13,7 @@ original package -> get -> exact member bytes
 | Code | Responsibility and entry point |
 |---|---|
 | `get/` | Verified acquisition, member inventory and lossless storage. See [usage](get/README.md). |
-| `convert/html_route.py` | `prepare(raw, file_id, sha256, browser)` returns `(route, facts)` using EdgarTools and the existing browser measurements. |
+| `convert/html_route.py` | `prepare(raw, file_id, sha256, browser, source=None)` returns `(route, facts)` using EdgarTools and the existing browser measurements. |
 | `convert/xml_fields.py` | `convert(raw, file_id, sha256)` returns ordered fields and XML elements, with attributes, namespaces, parents and mixed content. |
 | `pictures/pdf.py` | `pages(raw, file_id, sha256)` uses PDFium to return a source-bound route and page pictures for the existing `join` function. |
 | `pictures/join.py` | `read_pictures(raw, route, members, browser, folder, make_readers)` returns the complete route and one entry per picture occurrence. |
@@ -25,6 +25,8 @@ name. A packet is only a presentation of the readings: it can omit evidence reta
 in the raw records. Repeated image bytes share worker results while their occurrences
 keep separate source context. The caller's source/version identity must remain with
 these outputs when they are serialized or moved.
+For packaged HTML, pass the same `screen_grid.Source` through HTML conversion and
+picture preparation; it binds the document address, package and dependency evidence.
 
 The HTML route's evidence members are listed below. Members appear where applicable;
 keep their `read`, `error`, `fallback` and unresolved states with the values.
@@ -134,9 +136,26 @@ independently checked. Inspect `uncovered`, unresolved source evidence, picture 
 errors and reader statuses. `PARTIAL` and `FAILED` preserve their reasons. Broken source
 identity and storage/resource faults stop the caller instead of becoming a success.
 
+Before use, retain the exact inputs, code, dependencies, browser and settings with
+the outputs. Use bounded batches and record every input's outcome, including failures
+before an output exists and inputs never started. An absent reading is unobserved;
+it does not prove that the source lacks content. Keep partial results and their reasons.
+
+After interruption, preserve the incomplete attempt and start a fresh attempt only
+after checking its input and version identity. Reuse requires a valid completion and
+verified output bytes. Rollback requires retained earlier code, outputs **and environment**;
+hashes detect changes but cannot restore missing software. Same-host interruption
+controls do not establish power-loss or off-host recovery.
+
+Production stays automatic. After the release gates, expand use in bounded batches,
+retain failure and uncertainty signals, and stop expansion on a new material regression.
+Independent source review belongs to release validation and separate periodic audits,
+not a required step for each production document. Fix a demonstrated class at its
+existing owner and rerun the relevant controls before resuming expansion.
+
 Use the pinned [offline test environment and both regression commands](../../tests/driver/prepare/README.md).
 Those checks make no model calls; independent scoring and actual-worker qualification
-remain separate gates. The [extraction handover](../../.claude/plans/Drivers/DriversFinal/PrepareExtractionHandover.md)
+remain separate gates. The [current extraction plan](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md)
 records the current scope and release requirements. The native PDF connection
 has offline regression coverage; actual OCR and worker qualification remain
 open. Semantic document trees and downstream drivers are outside this package.
