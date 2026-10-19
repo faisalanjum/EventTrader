@@ -13,7 +13,7 @@ original package -> get -> exact member bytes
 | Code | Responsibility and entry point |
 |---|---|
 | `get/` | Verified acquisition, member inventory and lossless storage. See [usage](get/README.md). |
-| `convert/html_route.py` | `prepare(raw, file_id, sha256, browser, source=None)` returns `(route, facts)` using EdgarTools and the existing browser measurements. |
+| `convert/html_route.py` | `prepare(raw, file_id, sha256, browser, source=None, parse=None)` returns `(route, facts)` using EdgarTools and the existing browser measurements. `parse` is the tool call `convert` makes (default `edgartools_html.parse`); a caller that must keep the raw reading wraps it and stores the returned plain dump and version itself, before the route is built. `prepare` stores nothing. EdgarTools 5.60.0's own exports (`Document.to_json`, `TableNode.to_dict`) drop cell spans, header flags and row groups, so the dump is the raw reading to keep. |
 | `convert/xml_fields.py` | `convert(raw, file_id, sha256)` returns ordered fields and XML elements, with attributes, namespaces, parents and mixed content. |
 | `pictures/pdf.py` | `pages(raw, file_id, sha256)` uses PDFium to return a source-bound route and page pictures for the existing `join` function. |
 | `pictures/join.py` | `read_pictures(raw, route, members, browser, folder, make_readers)` returns the complete route and one entry per picture occurrence. |

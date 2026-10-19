@@ -146,6 +146,60 @@ class Readings(unittest.TestCase):
 
 
 
+class Kept(unittest.TestCase):
+    """A caller may take the tool's own reading (`parse`'s plain dump) on its way into the route (Root, FABLE_HTML_RAW_RETENTION_IMPLEMENTATION): the
+    real tool and offline Chrome, the caller's `parse` the production one with a recorder around it; without it nothing changes."""
+    @classmethod
+    def setUpClass(cls):
+        from playwright.sync_api import sync_playwright
+        cls.pw = sync_playwright().start(); cls.browser = cls.pw.chromium.launch()
+
+    @classmethod
+    def tearDownClass(cls): cls.browser.close(); cls.pw.stop()
+
+    def keeper(self):
+        kept = []
+        def keep(raw, vis):
+            got = eh.parse(raw, vis); kept.append((raw, vis, copy.deepcopy(got))); return got
+        return kept, keep
+
+    def test_the_caller_gets_the_tools_own_reading_and_the_route_is_the_default_one(self):  # failed before: prepare took no parse
+        for raw in (CERTAIN, UNCERTAIN):
+            with self.subTest(raw=raw[:20]):
+                kept, keep = self.keeper(); sha = hashlib.sha256(raw).hexdigest()
+                route, facts = html_route.prepare(raw, 'r.htm', sha, self.browser, parse=keep)
+                self.assertEqual(len(kept), 1); got, vis, (tree, seconds, made_by) = kept[0]
+                self.assertIs(got, raw); self.assertEqual((made_by, route['route']['version'], route['route']['settings']['parse_html']), (eh.version(), eh.version(), 'defaults'))
+                self.assertEqual(tree, eh.parse(raw, vis)[0])  # the reading of these bytes as the route read them
+                if vis.paged: self.assertIs(vis.page, route['page_visibility'])
+                self.assertEqual(timeless(route, facts), timeless(*html_route.prepare(raw, 'r.htm', sha, self.browser)))  # every field but the two elapsed times
+
+    def test_the_reading_is_handed_over_before_a_later_stage_fails(self):
+        kept, keep = self.keeper()
+        with patch.object(eh, 'route_for', side_effect=ValueError('adaptation stops')), self.assertRaises(ValueError):
+            html_route.prepare(CERTAIN, 'r.htm', hashlib.sha256(CERTAIN).hexdigest(), self.browser, parse=keep)
+        self.assertEqual(len(kept), 1)
+
+    def test_bytes_the_hash_does_not_name_are_never_read(self):
+        kept, keep = self.keeper()
+        with self.assertRaises(ValueError): html_route.prepare(CERTAIN, 'r.htm', hashlib.sha256(b'other').hexdigest(), self.browser, parse=keep)
+        self.assertEqual(kept, [])
+
+    def test_a_storage_failure_propagates_and_a_content_failure_is_a_failed_route(self):
+        for error in (OSError('disk full'), MemoryError('out of memory')):
+            def fail(raw, vis, error=error): raise error
+            with self.subTest(type=type(error).__name__), self.assertRaises(type(error)):
+                html_route.prepare(CERTAIN, 'r.htm', hashlib.sha256(CERTAIN).hexdigest(), self.browser, parse=fail)
+        def unreadable(raw, vis): raise ValueError('cannot parse this content')
+        route, facts = html_route.prepare(CERTAIN, 'r.htm', hashlib.sha256(CERTAIN).hexdigest(), self.browser, parse=unreadable)
+        self.assertEqual((route['status'], route['units'], facts), ('FAILED', [], {})); self.assertIn('cannot parse this content', route['error'])
+
+    def test_two_documents_with_one_file_id_keep_their_own_readings(self):
+        kept, keep = self.keeper()
+        for raw in (UNCERTAIN, CERTAIN): html_route.prepare(raw, 'same.htm', hashlib.sha256(raw).hexdigest(), self.browser, parse=keep)
+        self.assertEqual([k[0] for k in kept], [UNCERTAIN, CERTAIN]); self.assertEqual([v.raw_len for _, v, _ in kept], [len(UNCERTAIN), len(CERTAIN)])
+
+
 class Compared(unittest.TestCase):
     def test_only_the_two_elapsed_times_are_set_aside(self):  # Root's comparison probe (ROOT_COMPARE_PROBE): a source value named "seconds" is content
         route, facts = {'seconds': 1.0, 'units': [{'id': 'u0', 'attributes': {'seconds': '5'}}]}, {'screen': {'seconds': 0.4, 'joined': 0}, 'formatting': None}

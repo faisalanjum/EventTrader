@@ -26,7 +26,7 @@ def unresolved(vis):
     return (['page visibility: %d text run%s without a browser verdict' % (n, '' if n == 1 else 's')] if n else []) + (['page visibility: %d picture tag%s without a browser verdict' % (p, '' if p == 1 else 's')] if p else [])
 
 
-def prepare(raw, file_id, sha256, browser, source=None):
+def prepare(raw, file_id, sha256, browser, source=None, parse=None):
     """(route, facts) for one HTML document: the caller's bytes, their SHA-256 and a browser the caller owns and may reuse. `facts` holds each step's own
     result - `formatting` its count (None where nothing can be certified), `screen` its facts, `visibility` (a file the scanner cannot certify) the
     browser's counts or why it could not read them. A failed conversion stops there (no step runs, `facts` empty). A page that cannot be measured keeps
@@ -34,12 +34,13 @@ def prepare(raw, file_id, sha256, browser, source=None):
     cannot be read, which keeps the scanner's reading. A disconnected browser's error propagates so the caller can stop and restart it. Source-identity,
     storage, dependency and resource errors propagate. The bytes are read once as written and, where the scanner cannot certify them, once as the
     browser shows them: formatting reads the first, the conversion and the screen step the reading the route is made with (each step called alone
-    reads its own)."""
+    reads its own). `parse`: the tool call `convert` makes (`edgartools_html.parse` when None), so a caller can keep the tool's own reading - the plain
+    dump with its version - before the route is made of it; nothing here stores it."""
     anchor.check_source(raw, sha256)
     given = source; source = source or screen_grid.Source('', {})  # one document's evidence for every render (none given: nothing answers), its charset read once
     source.bind(raw)  # the evidence is this document's, before any render
     original = anchor.Visible(raw); vis, failed = visibility(raw, original, browser, source)
-    route = edgartools_html.convert(raw, file_id, sha256, vis=vis)  # one scan: a certain file is not read twice
+    route = edgartools_html.convert(raw, file_id, sha256, vis=vis, **({} if parse is None else {'parse': parse}))  # one scan: a certain file is not read twice
     if route['status'] != 'OK':
         if given is not None: route['resources'] = source.identity()  # what the renders before the failed conversion used
         return route, {}
