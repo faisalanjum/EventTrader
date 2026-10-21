@@ -1,6 +1,6 @@
 # Extraction — current scope and working plan
 
-**Owner direction, 21 October 2026:** work backward from production readiness, using complete-document AI reviews, shared generic fixes and minimal reporting. The [bounded production-decision plan](ManualExtractionReviewPlan.md) replaces chasing the old checklist percentage. **Execution remains paused during discussion:** no extraction, source reviews, repairs or final exam. Only planning is active. No additional permission ceremony is needed once the owner resumes work.
+**Owner direction, 21 October 2026:** work backward from production readiness, using complete-document AI reviews, shared generic fixes and minimal reporting. The [bounded production-decision plan](ManualExtractionReviewPlan.md) replaces chasing the old checklist percentage. **Owner resumed execution:** start21Oct13:00:11UTC; milestone1 due21Oct19:00:11UTC (3p.m. Toronto), initial decision23Oct13:00:11UTC. The [actual assignments](../../../../../prepare_work/extraction_closeout_20261010/MANUAL_CAMPAIGN_M1_20261021.md) release only the first milestone: Fable annual report/collator, OCR quarterly/table connections, Test private final reservation plus public earnings-release pilot, Smart hard integration/clean-section checks. No final exam before its freeze/regression gate.
 
 ## Goal and method
 

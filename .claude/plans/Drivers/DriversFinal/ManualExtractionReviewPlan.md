@@ -1,6 +1,6 @@
 # Extraction: bounded production decision
 
-Owner direction, 21 October 2026: work backward from production readiness, gain practical confidence through complete-document AI comparisons, and bound all work, including repairs. This replaces pursuit of the old checklist percentage. Planning is active; extraction runs, repairs and document reviews remain paused during the owner's discussion. The clock below starts on resumption, not publication.
+Owner direction, 21 October 2026: work backward from production readiness, gain practical confidence through complete-document AI comparisons, and bound all work, including repairs. This replaces pursuit of the old checklist percentage. **The owner has resumed execution.** Start2026-10-21 13:00:11UTC; first milestone closes19:00:11UTC today (3p.m. Toronto); initial decision due2026-10-23 13:00:11UTC (9a.m. Toronto). The [milestone1 work order](../../../../../prepare_work/extraction_closeout_20261010/MANUAL_CAMPAIGN_M1_20261021.md) assigns each existing agent an exact task and effort cap. Preserve partial work; any continuation needs a named bounded allocation, not a restarted review.
 
 ## Outcome and scope
 
