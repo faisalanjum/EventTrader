@@ -72,9 +72,10 @@ class Route(unittest.TestCase):
                                ('1', [SUP], ['1']), ('7', [SUB, SUP], ['7'])])
         self.assertEqual([o['text_at'] for r in self.inline('nested')['records'] for o in r['owners']], [[[1, 3]], [[5, 7]], [[9, 11]], [[13, 15]], [[17, 18]], [[19, 20]]])
 
-    def test_css_only_raises_are_recorded_cell_and_box_alignment_and_relative_position_are_not(self):  # a relative offset is geometry only, an inline block's or table's alignment moves a box of lines: the unmeasured boundary
+    def test_css_raises_and_positioned_insets_are_recorded_cell_and_box_alignment_are_not(self):  # round 2: a positioned inline box keeps its raw computed insets (browser readings, test_relative_position_v2); an inline block's or table's alignment still moves a box of lines
         got = [(r['raw'], r['ancestors']) for r in self.inline('css')['records']]
-        self.assertEqual(got, [('13', [{'tag': 'span', 'display': 'inline', 'vertical_align': '4px'}]), ('14', [dict(SUP, tag='span')]), ('15', [dict(SUB, tag='span')])])
+        self.assertEqual(got, [('13', [{'tag': 'span', 'display': 'inline', 'vertical_align': '4px'}]), ('14', [dict(SUP, tag='span')]), ('15', [dict(SUB, tag='span')]),
+                               ('16', [{'tag': 'span', 'display': 'inline', 'vertical_align': 'baseline', 'position': 'relative', 'top': '-6.4px', 'bottom': '6.4px', 'left': '0px', 'right': '0px'}])])
 
     def test_other_inline_boxes_count_super_sub_and_numbers_never_an_alignment_keyword(self):  # root's 21 controls: a raised number in a box, zero kept as evidence
         recs = self.inline('controls')['records']

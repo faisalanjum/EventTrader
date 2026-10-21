@@ -216,8 +216,9 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
     grounds.set(el, got); return got; };
   const lift = el => { if (!el) return null; if (lifts.has(el)) return lifts.get(el);  // an element's and its ancestors' raised or lowered evidence, nearest first (null: none), each element's style read once:
     const cs = getComputedStyle(el), tag = el.localName, up = lift(el.parentElement);  // a sup or sub, whatever its computed style; a plain inline box whose computed vertical-align is not baseline; any other inline box
-    const got = tag === 'sup' || tag === 'sub' || (cs.display.startsWith('inline') && cs.verticalAlign !== 'baseline' && (cs.display === 'inline' ||  // only where it is super, sub or a number (Typed OM: a length, percentage, calc or zero), never
-      cs.verticalAlign === 'super' || cs.verticalAlign === 'sub' || el.computedStyleMap().get('vertical-align') instanceof CSSNumericValue)) ? [{tag, display: cs.display, vertical_align: cs.verticalAlign}].concat(up || []) : up;  // an alignment keyword (a whole inline table set text-bottom; root, ROOT_NATIVE_PREDICATE)
+    const placed = cs.position !== 'static';  // a positioned box: its own raw computed inset declarations are its evidence (never a measured or judged displacement)
+    const got = tag === 'sup' || tag === 'sub' || (cs.display.startsWith('inline') && placed) || (cs.display.startsWith('inline') && cs.verticalAlign !== 'baseline' && (cs.display === 'inline' ||  // only where it is super, sub or a number (Typed OM: a length, percentage, calc or zero), never
+      cs.verticalAlign === 'super' || cs.verticalAlign === 'sub' || el.computedStyleMap().get('vertical-align') instanceof CSSNumericValue)) ? [Object.assign({tag, display: cs.display, vertical_align: cs.verticalAlign}, placed ? {position: cs.position, top: cs.top, bottom: cs.bottom, left: cs.left, right: cs.right} : {})].concat(up || []) : up;  // an alignment keyword (a whole inline table set text-bottom; root, ROOT_NATIVE_PREDICATE)
     lifts.set(el, got); return got; };
   const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
   for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (!m) continue;
@@ -409,12 +410,13 @@ def _owners(vis, units, spaced=False):
 
 def inline(raw, vis, runs, got, units):
     """`source_inline` records from the page's marks (`SYMBOLS_JS`'s `inline`): each source run the page sets under a sup or sub element, whatever its
-    computed style, or an inline box whose computed vertical-align is not baseline (other than a plain one: super, sub or a number) - that evidence
+    computed style, an inline box whose computed vertical-align is not baseline (other than a plain one: super, sub or a number), or an inline box whose
+    computed position is not static (its record also carries the raw computed position, top, bottom, left and right) - that evidence
     nearest-first (`ancestors`), the run's exact bytes
     and source text and, where it shows and its owners (`_holders`) hold every character of it and read it whole (each owner's text the source's own at
     ordered whole-byte places, `anchor._reading`, read once per owner), the code-point ranges of their final text it stands at (`text_at`). Declared tags
-    and computed styles only, evidence and never a measured position (a relatively positioned raise is not seen; an inline block's or table's alignment
-    keyword is not counted), nothing read as a footnote or an exponent, no text changed. A run its mark does not reach whole, or that may not carry one (literal text), is `unresolved`, never matched by text."""
+    and computed styles only, evidence and never a measured position (a zero or auto inset is evidence too, never a claim of displacement; transforms and
+    pseudo-element positioning are not read; an inline block's or table's alignment keyword is not counted), nothing read as a footnote or an exponent, no text changed. A run its mark does not reach whole, or that may not carry one (literal text), is `unresolved`, never matched by text."""
     found, marks, plain = got.get('inline') or {}, got.get('marks') or {}, set(got.get('plain', '').split(','))
     owners, records, unresolved = _owners(vis, units), [], []
     for k, (_, chars, hidden, marked) in enumerate(runs):

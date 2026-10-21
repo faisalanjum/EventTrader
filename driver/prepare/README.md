@@ -60,7 +60,7 @@ keep their `read`, `error`, `fallback` and unresolved states with the values.
 | `source_links` | Written links, source occurrences, destinations and proved owners; unknown ownership stays explicit. |
 | `source_relations` | Explicit Inline XBRL references and continuation chains. An unread source is not evidence that it has no relationships. |
 | `source_symbols` | Raw symbol-font readings, decoder results, source places and unknown codes. |
-| `source_inline` | Native raised/lowered text evidence and its source-bound owners. |
+| `source_inline` | Native raised/lowered text evidence and its source-bound owners: sup/sub, a plain inline box with any non-baseline vertical-align (other inline boxes: super, sub or a number), and positioned inline boxes with their raw computed position, top, bottom, left and right. |
 | `page_visibility` | Browser visibility evidence used for conversion, including unbound source fragments. |
 | `resources` | When a `Source` is supplied: document/bundle identity and the exact dependency responses or refusals used by the renders. |
 | `source_style`, `generated_content` | Native style, position and generated-content readings, described below. |
