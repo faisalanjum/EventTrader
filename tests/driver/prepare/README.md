@@ -10,8 +10,8 @@ scoring, source coverage and actual-machine execution remain separate.
 The extraction command uses `prepare-closeout-20261011`: all 74 checked-in package
 pins were verified there on 21 October. The older `prepare-tests` environment lacks
 the pinned `tinycss2` and `webencodings`; it remains the retained grader environment.
-The latest unchanged runtime passed 888 extraction and 543 grader tests using these
-respective environments. Do not repeat the missing-dependency failure or install
+The reviewed `4e47c9e48` runtime passed 940 extraction and 543 grader tests without
+skips using these environments. Do not repeat the missing-dependency failure or install
 into an environment another agent is using; use the qualified environment below.
 
 **Historical migration receipt (7 October 2026, branch `ocr-fixture-tests`).** Integrated base
