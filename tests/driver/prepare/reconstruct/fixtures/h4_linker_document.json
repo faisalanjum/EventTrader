@@ -1,0 +1,257 @@
+{
+ "raw_sha256": "5191f2838a253a494c26b1efb2285b54f68a07cfa3a5055087d612fd90b60778",
+ "raw": "<p>Item 2. Overview</p><p>Free cash flow is not GAAP<sup>(1)</sup>. See <a href=\"#tbl\">the table</a>.</p><table><tr><td colspan=\"2\">Title</td></tr><tr><td rowspan=\"2\"></td><td colspan=\"3\">Three Months Ended</td></tr><tr><td>Free cash flow<sup>(1)</sup></td><td>$</td><td>(506</td><td>)</td></tr></table><ul><li>First point</li></ul><img src=\"x.jpg\"><p>(1) Note text.</p>",
+ "route": {
+  "schema": "prepare-route-output/1",
+  "file_id": "h4_linker_document.htm",
+  "sha256": "5191f2838a253a494c26b1efb2285b54f68a07cfa3a5055087d612fd90b60778",
+  "status": "OK",
+  "error": null,
+  "seconds": 0.0,
+  "route": {
+   "name": "edgartools-html",
+   "tool": "edgartools",
+   "version": "edgartools 5.60.0",
+   "settings": {
+    "parse_html": "defaults",
+    "source_style": "per source run: colour, weight, font style, decorations in effect, text transform (the computed property, never a printed string), raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)",
+    "lists": "the parser's own list items: list, ordered, item",
+    "retain_pictures": true,
+    "retain_native_heading_evidence": true,
+    "picture_names": "codes",
+    "hidden_text": "left out",
+    "headings": "detected blocks read whole",
+    "inline_facts": "read whole",
+    "page_number_candidates": "kept",
+    "ix_exclude": "read as shown",
+    "inline_fact_spaces": "kept",
+    "table_identity": "own start tag, shown or hidden",
+    "style_values": "independent",
+    "heading_boundaries": "source matched",
+    "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+    "table_rows": "every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group",
+    "nested_tables": "each a table unit naming its holder cell",
+    "table_cells": "every own cell, bound to its source cell, in its row's source order",
+    "table_captions": "each table's own caption a caption unit, bound to its source caption",
+    "pictures": "every shown tag",
+    "source_lines": "certified <br> breaks"
+   },
+   "adapter": "driver/prepare/convert/edgartools_html.py",
+   "linker": "driver/prepare/convert/anchor.py"
+  },
+  "units": [
+   {
+    "id": "u0",
+    "kind": "text",
+    "text": "Item 2. Overview",
+    "anchor": {
+     "byte_start": 3,
+     "byte_end_exclusive": 19
+    }
+   },
+   {
+    "id": "u1",
+    "kind": "text",
+    "text": "Free cash flow is not GAAP(1). See the table.",
+    "links": [
+     {
+      "text": "the table",
+      "href": "#tbl",
+      "to": null
+     }
+    ],
+    "anchor": {
+     "byte_start": 26,
+     "byte_end_exclusive": 101
+    }
+   },
+   {
+    "id": "t2",
+    "kind": "table",
+    "cells": [
+     {
+      "r": 0,
+      "c": 0,
+      "rs": 1,
+      "cs": 2,
+      "text": "Title",
+      "header": false,
+      "source": {
+       "byte_start": 116,
+       "byte_end_exclusive": 137
+      },
+      "anchor": {
+       "byte_start": 132,
+       "byte_end_exclusive": 137
+      }
+     },
+     {
+      "r": 1,
+      "c": 0,
+      "rs": 2,
+      "cs": 1,
+      "text": "",
+      "header": false,
+      "source": {
+       "byte_start": 151,
+       "byte_end_exclusive": 167
+      }
+     },
+     {
+      "r": 1,
+      "c": 1,
+      "rs": 1,
+      "cs": 3,
+      "text": "Three Months Ended",
+      "header": false,
+      "source": {
+       "byte_start": 172,
+       "byte_end_exclusive": 206
+      },
+      "anchor": {
+       "byte_start": 188,
+       "byte_end_exclusive": 206
+      }
+     },
+     {
+      "r": 2,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "Free cash flow(1)",
+      "header": false,
+      "source": {
+       "byte_start": 220,
+       "byte_end_exclusive": 252
+      },
+      "anchor": {
+       "byte_start": 224,
+       "byte_end_exclusive": 246
+      }
+     },
+     {
+      "r": 2,
+      "c": 2,
+      "rs": 1,
+      "cs": 1,
+      "text": "$",
+      "header": false,
+      "source": {
+       "byte_start": 257,
+       "byte_end_exclusive": 262
+      },
+      "anchor": {
+       "byte_start": 261,
+       "byte_end_exclusive": 262
+      }
+     },
+     {
+      "r": 2,
+      "c": 3,
+      "rs": 1,
+      "cs": 1,
+      "text": "(506",
+      "header": false,
+      "source": {
+       "byte_start": 267,
+       "byte_end_exclusive": 275
+      },
+      "anchor": {
+       "byte_start": 271,
+       "byte_end_exclusive": 275
+      }
+     },
+     {
+      "r": 2,
+      "c": 4,
+      "rs": 1,
+      "cs": 1,
+      "text": ")",
+      "header": false,
+      "source": {
+       "byte_start": 280,
+       "byte_end_exclusive": 285
+      },
+      "anchor": {
+       "byte_start": 284,
+       "byte_end_exclusive": 285
+      }
+     }
+    ],
+    "caption": [],
+    "source_table": {
+     "tag_start": 105,
+     "claims": 1
+    },
+    "anchor": {
+     "byte_start": 132,
+     "byte_end_exclusive": 285
+    }
+   },
+   {
+    "id": "u3",
+    "kind": "list_item",
+    "text": "First point",
+    "lists": [
+     {
+      "list": 0,
+      "ordered": false,
+      "item": 0
+     }
+    ],
+    "anchor": {
+     "byte_start": 311,
+     "byte_end_exclusive": 322
+    }
+   },
+   {
+    "id": "u4",
+    "kind": "image",
+    "text": "",
+    "src": "x.jpg",
+    "anchor": {
+     "byte_start": 332,
+     "byte_end_exclusive": 349
+    },
+    "link_flag": "source_picture"
+   },
+   {
+    "id": "u5",
+    "kind": "text",
+    "text": "(1) Note text.",
+    "anchor": {
+     "byte_start": 352,
+     "byte_end_exclusive": 366
+    }
+   }
+  ],
+  "uncovered": [],
+  "source_links": [
+   {
+    "href": "#tbl",
+    "tag": {
+     "byte_start": 72,
+     "byte_end_exclusive": 87
+    },
+    "extent": {
+     "byte_start": 72,
+     "byte_end_exclusive": 96
+    },
+    "owners": [
+     {
+      "unit": "u1"
+     }
+    ],
+    "destination": {
+     "kind": "same_document",
+     "targets": [],
+     "status": "none"
+    }
+   }
+  ],
+  "source_relations": {
+   "read": false,
+   "error": "junk after document element: line 1, column 23"
+  }
+ }
+}

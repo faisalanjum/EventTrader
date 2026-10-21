@@ -1,0 +1,252 @@
+{
+ "raw_sha256": "6220e03f2c9c8fdea5a451fccc6c02f948733a9240f475ab68823e06625efce1",
+ "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><table><tr><td>Europe</td><td>10</td></tr><tr><td>Asia</td><td><table><tr><td>mid</td><td><table><tr><td>deep</td><td>7</td></tr></table></td></tr></table></td></tr></table></body></html>",
+ "route": {
+  "schema": "prepare-route-output/1",
+  "file_id": "h1_two_levels.htm",
+  "sha256": "6220e03f2c9c8fdea5a451fccc6c02f948733a9240f475ab68823e06625efce1",
+  "status": "OK",
+  "error": null,
+  "seconds": 0.0,
+  "route": {
+   "name": "edgartools-html",
+   "tool": "edgartools",
+   "version": "edgartools 5.60.0",
+   "settings": {
+    "parse_html": "defaults",
+    "source_style": "per source run: colour, weight, font style, decorations in effect, text transform (the computed property, never a printed string), raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)",
+    "lists": "the parser's own list items: list, ordered, item",
+    "retain_pictures": true,
+    "retain_native_heading_evidence": true,
+    "picture_names": "codes",
+    "hidden_text": "left out",
+    "headings": "detected blocks read whole",
+    "inline_facts": "read whole",
+    "page_number_candidates": "kept",
+    "ix_exclude": "read as shown",
+    "inline_fact_spaces": "kept",
+    "table_identity": "own start tag, shown or hidden",
+    "style_values": "independent",
+    "heading_boundaries": "source matched",
+    "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+    "table_rows": "every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group",
+    "nested_tables": "each a table unit naming its holder cell",
+    "table_cells": "every own cell, bound to its source cell, in its row's source order",
+    "table_captions": "each table's own caption a caption unit, bound to its source caption",
+    "pictures": "every shown tag",
+    "source_lines": "certified <br> breaks"
+   },
+   "adapter": "driver/prepare/convert/edgartools_html.py",
+   "linker": "driver/prepare/convert/anchor.py"
+  },
+  "units": [
+   {
+    "id": "t0",
+    "kind": "table",
+    "cells": [
+     {
+      "r": 0,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "Europe",
+      "header": false,
+      "source": {
+       "byte_start": 73,
+       "byte_end_exclusive": 83
+      },
+      "anchor": {
+       "byte_start": 77,
+       "byte_end_exclusive": 83
+      }
+     },
+     {
+      "r": 0,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "10",
+      "header": false,
+      "source": {
+       "byte_start": 88,
+       "byte_end_exclusive": 94
+      },
+      "anchor": {
+       "byte_start": 92,
+       "byte_end_exclusive": 94
+      }
+     },
+     {
+      "r": 1,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "Asia",
+      "header": false,
+      "source": {
+       "byte_start": 108,
+       "byte_end_exclusive": 116
+      },
+      "anchor": {
+       "byte_start": 112,
+       "byte_end_exclusive": 116
+      }
+     },
+     {
+      "r": 1,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "mid\n\n\n\n\n\n\ndeep\n\n7",
+      "header": false,
+      "tables": [
+       "t1"
+      ],
+      "source": {
+       "byte_start": 121,
+       "byte_end_exclusive": 217
+      },
+      "link_flag": "out_of_order",
+      "anchor": {
+       "byte_start": 140,
+       "byte_end_exclusive": 181
+      }
+     }
+    ],
+    "caption": [],
+    "source_table": {
+     "tag_start": 62,
+     "claims": 1
+    },
+    "anchor": {
+     "byte_start": 77,
+     "byte_end_exclusive": 181
+    }
+   },
+   {
+    "id": "t1",
+    "kind": "table",
+    "cells": [
+     {
+      "r": 0,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "mid",
+      "header": false,
+      "source": {
+       "byte_start": 136,
+       "byte_end_exclusive": 143
+      },
+      "link_flag": "out_of_order",
+      "anchor": {
+       "byte_start": 140,
+       "byte_end_exclusive": 143
+      }
+     },
+     {
+      "r": 0,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "deep\n\n7",
+      "header": false,
+      "tables": [
+       "t2"
+      ],
+      "source": {
+       "byte_start": 148,
+       "byte_end_exclusive": 199
+      },
+      "link_flag": "out_of_order",
+      "anchor": {
+       "byte_start": 167,
+       "byte_end_exclusive": 181
+      }
+     }
+    ],
+    "caption": [],
+    "cell": {
+     "table": "t0",
+     "r": 1,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "byte_start": 121,
+     "byte_end_exclusive": 217
+    },
+    "source_table": {
+     "tag_start": 125,
+     "claims": 1
+    },
+    "anchor": {
+     "byte_start": 140,
+     "byte_end_exclusive": 181
+    }
+   },
+   {
+    "id": "t2",
+    "kind": "table",
+    "cells": [
+     {
+      "r": 0,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "deep",
+      "header": false,
+      "source": {
+       "byte_start": 163,
+       "byte_end_exclusive": 171
+      },
+      "link_flag": "out_of_order",
+      "anchor": {
+       "byte_start": 167,
+       "byte_end_exclusive": 171
+      }
+     },
+     {
+      "r": 0,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "7",
+      "header": false,
+      "source": {
+       "byte_start": 176,
+       "byte_end_exclusive": 181
+      },
+      "anchor": {
+       "byte_start": 180,
+       "byte_end_exclusive": 181
+      }
+     }
+    ],
+    "caption": [],
+    "cell": {
+     "table": "t1",
+     "r": 0,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "byte_start": 148,
+     "byte_end_exclusive": 199
+    },
+    "source_table": {
+     "tag_start": 152,
+     "claims": 1
+    },
+    "anchor": {
+     "byte_start": 167,
+     "byte_end_exclusive": 181
+    }
+   }
+  ],
+  "uncovered": [],
+  "source_links": [],
+  "source_relations": {
+   "read": false,
+   "error": "syntax error: line 1, column 0"
+  }
+ }
+}

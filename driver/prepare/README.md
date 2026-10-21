@@ -19,6 +19,7 @@ original package -> get -> exact member bytes
 | `pictures/join.py` | `read_pictures(raw, route, members, browser, folder, make_readers)` returns the complete route and one entry per picture occurrence. |
 | `pictures/worker.py` | Stores and reuses one reading per input hash and reader settings, with locking, validation and retry behavior. |
 | `compare.py` | Shared text/number comparison; imported by conversion and picture code. |
+| `reconstruct.py` | `readback(route, prepared=None)` composes saved records, relationships and bound assets without reopening the original. `preserved` checks exact records and body structure; `annotations` checks retained uncertainty. |
 
 Keep the returned route, facts, picture entries and the source/archive files they
 name. A packet is only a presentation of the readings: it can omit evidence retained
@@ -27,6 +28,28 @@ keep separate source context. The caller's source/version identity must remain w
 these outputs when they are serialized or moved.
 For packaged HTML, pass the same `screen_grid.Source` through HTML conversion and
 picture preparation; it binds the document address, package and dependency evidence.
+
+For a saved attempt containing `ROUTE.json`, `COMPLETE.json` and its named archives:
+
+```bash
+python -m driver.prepare.reconstruct ATTEMPT OUTPUT.json
+python -m driver.prepare.reconstruct verify ATTEMPT OUTPUT.json
+```
+
+The second command must pass before accepting preservation. Node `ordinal` keeps
+the original extracted stream's order alongside containment; it does not certify
+browser reading order. Unknown or unrepresented material remains explicit, and a
+faithfully reconstructed partial result is still partial. Originals are needed
+for independent fidelity review, never to fill reconstruction gaps.
+
+Table cells keep two kinds of evidence apart. `header` is EdgarTools' own header-row
+guess (`TableProcessor`), read unchanged; it is not a source statement. A cell's `tag`
+(`td`/`th`), its `id`/`scope`/`headers` values as the parser reads them (`attrs`;
+character references decoded, so not always the exact source spelling) and its own
+`row_group` are what the source declares. `row_group` indexes the table's `row_group_tags`
+(`thead`, `tbody`, `tfoot`, or `table` for rows straight in the table) and stays with
+the cell when the screen step re-grids rows. A `headers` value that names no `id` stays as
+written. An absent `tag`, `attrs` entry or group, as in an older saved reading, is unknown.
 
 The HTML route's evidence members are listed below. Members appear where applicable;
 keep their `read`, `error`, `fallback` and unresolved states with the values.

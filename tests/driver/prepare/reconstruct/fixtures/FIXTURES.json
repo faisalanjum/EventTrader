@@ -1,0 +1,43 @@
+{
+ "sources": {
+  "test_nested_tables.py": "d3a15e1087fd931dae5b7f5e5248b403387468c19e3705d869a6d305638c3601",
+  "test_xml_route_reading.py": "937bbf1ba1bbf1b5d124e08641000d0924873ca836c9d472595162b80b09cc18",
+  "test_adapters.py": "f8b69f601fb781bc7c6d4238023496ebbd10ae23089fe3a9c5c119151923b9bd"
+ },
+ "conversions": {
+  "html": 4,
+  "xml": 2
+ },
+ "fixtures": {
+  "h1_two_levels": {
+   "raw_sha256": "6220e03f2c9c8fdea5a451fccc6c02f948733a9240f475ab68823e06625efce1",
+   "bytes": 249,
+   "status": "OK"
+  },
+  "h2_repeated_siblings": {
+   "raw_sha256": "7371c517938cc109849610cde3826cf773c65980857b60667b9cc95cfa1c0f12",
+   "bytes": 254,
+   "status": "OK"
+  },
+  "h3_child_caption": {
+   "raw_sha256": "1ed3071067cbff5cc50b069fd4fa624ece4ae123793c6df735577a7f7104442e",
+   "bytes": 182,
+   "status": "OK"
+  },
+  "h4_linker_document": {
+   "raw_sha256": "5191f2838a253a494c26b1efb2285b54f68a07cfa3a5055087d612fd90b60778",
+   "bytes": 370,
+   "status": "OK"
+  },
+  "x1_structure": {
+   "raw_sha256": "63de71dce789fbc7e34b33e9bd3b52baf6d80b55d0b9fb707651d86380e46b08",
+   "bytes": 314,
+   "status": "OK"
+  },
+  "x2_qname_value": {
+   "raw_sha256": "2eeb6a48b421643c49c7018113f0d5a0d138fa833d8ee9c11f8b5860ee7b6e89",
+   "bytes": 47,
+   "status": "OK"
+  }
+ }
+}

@@ -1,0 +1,258 @@
+{
+ "raw_sha256": "63de71dce789fbc7e34b33e9bd3b52baf6d80b55d0b9fb707651d86380e46b08",
+ "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><r xmlns=\"urn:a\" xmlns:u=\"urn:unit\" x=\"A &amp; B\" e=\"\"><holding u:amount=\"10\" unit=\"shares\"/><scope xmlns=\"urn:b\"><n>5</n><n>6</n><none xmlns=\"\"/></scope><note>not <b>zero</b>, <!--c-->a&amp;b<![CDATA[ <c> ]]><?pi x?>.\n</note><t xmlns:u=\"urn:other\" u:k=\" a\tb \" w=\"&#10;\"/></r>",
+ "route": {
+  "schema": "prepare-route-output/1",
+  "file_id": "x1_structure.xml",
+  "sha256": "63de71dce789fbc7e34b33e9bd3b52baf6d80b55d0b9fb707651d86380e46b08",
+  "status": "OK",
+  "error": null,
+  "route": {
+   "name": "xml-fields",
+   "tool": "python xml.parsers.expat",
+   "version": "expat_2.6.3",
+   "settings": {
+    "namespaces": true,
+    "recover": false
+   },
+   "adapter": "driver/prepare/convert/xml_fields.py",
+   "linker": null
+  },
+  "units": [
+   {
+    "id": "f0",
+    "kind": "field",
+    "name": "{urn:b}n",
+    "path": [
+     "{urn:a}r",
+     "{urn:b}scope"
+    ],
+    "group": {
+     "index": 1,
+     "count": 1,
+     "at": 38
+    },
+    "siblings": {
+     "index": 1,
+     "count": 2
+    },
+    "text": "5",
+    "anchor": {
+     "byte_start": 152,
+     "byte_end_exclusive": 156
+    }
+   },
+   {
+    "id": "f1",
+    "kind": "field",
+    "name": "{urn:b}n",
+    "path": [
+     "{urn:a}r",
+     "{urn:b}scope"
+    ],
+    "group": {
+     "index": 1,
+     "count": 1,
+     "at": 38
+    },
+    "siblings": {
+     "index": 2,
+     "count": 2
+    },
+    "text": "6",
+    "anchor": {
+     "byte_start": 160,
+     "byte_end_exclusive": 164
+    }
+   },
+   {
+    "id": "f2",
+    "kind": "field",
+    "name": "{urn:a}note",
+    "path": [
+     "{urn:a}r"
+    ],
+    "group": {
+     "index": 1,
+     "count": 1,
+     "at": 38
+    },
+    "siblings": {
+     "index": 1,
+     "count": 1
+    },
+    "text": "not zero, a&b <c> .",
+    "anchor": {
+     "byte_start": 192,
+     "byte_end_exclusive": 257
+    },
+    "mixed": true
+   },
+   {
+    "id": "f3",
+    "kind": "field",
+    "name": "{urn:a}b",
+    "path": [
+     "{urn:a}r",
+     "{urn:a}note"
+    ],
+    "group": {
+     "index": 1,
+     "count": 1,
+     "at": 38
+    },
+    "siblings": {
+     "index": 1,
+     "count": 1
+    },
+    "text": "zero",
+    "anchor": {
+     "byte_start": 202,
+     "byte_end_exclusive": 209
+    },
+    "within": "f2"
+   }
+  ],
+  "xml_elements": [
+   {
+    "name": "{urn:a}r",
+    "parent": null,
+    "anchor": {
+     "byte_start": 38,
+     "byte_end_exclusive": 310
+    },
+    "attributes": {
+     "x": "A & B",
+     "e": ""
+    },
+    "namespaces": {
+     "": "urn:a",
+     "u": "urn:unit"
+    },
+    "content": [
+     {
+      "child": 93
+     },
+     {
+      "child": 131
+     },
+     {
+      "child": 192
+     },
+     {
+      "child": 264
+     }
+    ]
+   },
+   {
+    "name": "{urn:a}holding",
+    "parent": 38,
+    "anchor": {
+     "byte_start": 93,
+     "byte_end_exclusive": 131
+    },
+    "attributes": {
+     "{urn:unit}amount": "10",
+     "unit": "shares"
+    }
+   },
+   {
+    "name": "{urn:b}scope",
+    "parent": 38,
+    "anchor": {
+     "byte_start": 131,
+     "byte_end_exclusive": 184
+    },
+    "namespaces": {
+     "": "urn:b"
+    },
+    "content": [
+     {
+      "child": 152
+     },
+     {
+      "child": 160
+     },
+     {
+      "child": 168
+     }
+    ]
+   },
+   {
+    "name": "{urn:b}n",
+    "parent": 131,
+    "anchor": {
+     "byte_start": 152,
+     "byte_end_exclusive": 156
+    },
+    "content": [
+     "5"
+    ]
+   },
+   {
+    "name": "{urn:b}n",
+    "parent": 131,
+    "anchor": {
+     "byte_start": 160,
+     "byte_end_exclusive": 164
+    },
+    "content": [
+     "6"
+    ]
+   },
+   {
+    "name": "none",
+    "parent": 131,
+    "anchor": {
+     "byte_start": 168,
+     "byte_end_exclusive": 184
+    },
+    "namespaces": {
+     "": ""
+    }
+   },
+   {
+    "name": "{urn:a}note",
+    "parent": 38,
+    "anchor": {
+     "byte_start": 192,
+     "byte_end_exclusive": 257
+    },
+    "content": [
+     "not ",
+     {
+      "child": 202
+     },
+     ", a&b <c> .\n"
+    ]
+   },
+   {
+    "name": "{urn:a}b",
+    "parent": 192,
+    "anchor": {
+     "byte_start": 202,
+     "byte_end_exclusive": 209
+    },
+    "content": [
+     "zero"
+    ]
+   },
+   {
+    "name": "{urn:a}t",
+    "parent": 38,
+    "anchor": {
+     "byte_start": 264,
+     "byte_end_exclusive": 310
+    },
+    "attributes": {
+     "{urn:other}k": " a b ",
+     "w": "\n"
+    },
+    "namespaces": {
+     "u": "urn:other"
+    }
+   }
+  ],
+  "seconds": 0.0
+ }
+}

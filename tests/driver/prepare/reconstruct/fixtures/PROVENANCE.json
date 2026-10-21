@@ -1,0 +1,13 @@
+{
+ "origin": "/home/faisal/prepare_work/extraction_closeout_20261010/early_reconstruction_20261020_v1/fable/fixtures (frozen R2 fixtures, FIXTURES.json pins the six raw sources) and amg_image_before_holder.json (derived as its provenance states)",
+ "sha256": {
+  "FIXTURES.json": "e25d5df8b8f72fae18a420a01706288578be2d085c73d1f841900ec34176ddc6",
+  "h1_two_levels.json": "85f25374dcc805ad2490fc008d5235b54533c410bd28f36a3ca62a94b6e071ec",
+  "h2_repeated_siblings.json": "3ceee7658c6bc10d0791b36c988e0996f2c1b7c86ca33dd02d02ea6c73ad56e9",
+  "h3_child_caption.json": "5b9f011de00d663f4e709a00da0f8cf096ffde14012792bb17834819e76fd333",
+  "h4_linker_document.json": "3edbd8ddab4bee99df50eecaa6e7515a0626fddef36b57136aac4bd2a8a83591",
+  "x1_structure.json": "48ddd9c0f97d71660f4e8d2e992c3e64d5062cb8fddf063b8d2de281f5ca6c78",
+  "x2_qname_value.json": "f55be019a4cd7a745686045d3b888104ef64e08b4c43df49757e073f867eb605",
+  "amg_image_before_holder.json": "cef967d6cd59654d8a0babdb18eed9da8dfb561f0748fc166506e41cf0e85716"
+ }
+}

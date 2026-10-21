@@ -1,0 +1,247 @@
+{
+ "raw_sha256": "7371c517938cc109849610cde3826cf773c65980857b60667b9cc95cfa1c0f12",
+ "raw": "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><table><tr><td>Total</td><td>10</td></tr><tr><td>Asia</td><td><table><tr><td>Total</td><td>10</td></tr></table><table><tr><td>Total</td><td>10</td></tr></table></td></tr></table></body></html>",
+ "route": {
+  "schema": "prepare-route-output/1",
+  "file_id": "h2_repeated_siblings.htm",
+  "sha256": "7371c517938cc109849610cde3826cf773c65980857b60667b9cc95cfa1c0f12",
+  "status": "OK",
+  "error": null,
+  "seconds": 0.0,
+  "route": {
+   "name": "edgartools-html",
+   "tool": "edgartools",
+   "version": "edgartools 5.60.0",
+   "settings": {
+    "parse_html": "defaults",
+    "source_style": "per source run: colour, weight, font style, decorations in effect, text transform (the computed property, never a printed string), raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)",
+    "lists": "the parser's own list items: list, ordered, item",
+    "retain_pictures": true,
+    "retain_native_heading_evidence": true,
+    "picture_names": "codes",
+    "hidden_text": "left out",
+    "headings": "detected blocks read whole",
+    "inline_facts": "read whole",
+    "page_number_candidates": "kept",
+    "ix_exclude": "read as shown",
+    "inline_fact_spaces": "kept",
+    "table_identity": "own start tag, shown or hidden",
+    "style_values": "independent",
+    "heading_boundaries": "source matched",
+    "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+    "table_rows": "every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group",
+    "nested_tables": "each a table unit naming its holder cell",
+    "table_cells": "every own cell, bound to its source cell, in its row's source order",
+    "table_captions": "each table's own caption a caption unit, bound to its source caption",
+    "pictures": "every shown tag",
+    "source_lines": "certified <br> breaks"
+   },
+   "adapter": "driver/prepare/convert/edgartools_html.py",
+   "linker": "driver/prepare/convert/anchor.py"
+  },
+  "units": [
+   {
+    "id": "t0",
+    "kind": "table",
+    "cells": [
+     {
+      "r": 0,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "Total",
+      "header": false,
+      "source": {
+       "byte_start": 73,
+       "byte_end_exclusive": 82
+      },
+      "anchor": {
+       "byte_start": 77,
+       "byte_end_exclusive": 82
+      }
+     },
+     {
+      "r": 0,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "10",
+      "header": false,
+      "source": {
+       "byte_start": 87,
+       "byte_end_exclusive": 93
+      },
+      "anchor": {
+       "byte_start": 91,
+       "byte_end_exclusive": 93
+      }
+     },
+     {
+      "r": 1,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "Asia",
+      "header": false,
+      "source": {
+       "byte_start": 107,
+       "byte_end_exclusive": 115
+      },
+      "anchor": {
+       "byte_start": 111,
+       "byte_end_exclusive": 115
+      }
+     },
+     {
+      "r": 1,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "Total\n\n10\n\n\n\n\n\n\n\n\n\nTotal\n\n10",
+      "header": false,
+      "tables": [
+       "t1",
+       "t2"
+      ],
+      "source": {
+       "byte_start": 120,
+       "byte_end_exclusive": 222
+      },
+      "anchor": {
+       "byte_start": 139,
+       "byte_end_exclusive": 204
+      }
+     }
+    ],
+    "caption": [],
+    "source_table": {
+     "tag_start": 62,
+     "claims": 1
+    },
+    "anchor": {
+     "byte_start": 77,
+     "byte_end_exclusive": 204
+    }
+   },
+   {
+    "id": "t1",
+    "kind": "table",
+    "cells": [
+     {
+      "r": 0,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "Total",
+      "header": false,
+      "source": {
+       "byte_start": 135,
+       "byte_end_exclusive": 144
+      },
+      "link_flag": "out_of_order",
+      "anchor": {
+       "byte_start": 139,
+       "byte_end_exclusive": 144
+      }
+     },
+     {
+      "r": 0,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "10",
+      "header": false,
+      "source": {
+       "byte_start": 149,
+       "byte_end_exclusive": 155
+      },
+      "anchor": {
+       "byte_start": 153,
+       "byte_end_exclusive": 155
+      }
+     }
+    ],
+    "caption": [],
+    "cell": {
+     "table": "t0",
+     "r": 1,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "byte_start": 120,
+     "byte_end_exclusive": 222
+    },
+    "source_table": {
+     "tag_start": 124,
+     "claims": 1
+    },
+    "anchor": {
+     "byte_start": 139,
+     "byte_end_exclusive": 155
+    }
+   },
+   {
+    "id": "t2",
+    "kind": "table",
+    "cells": [
+     {
+      "r": 0,
+      "c": 0,
+      "rs": 1,
+      "cs": 1,
+      "text": "Total",
+      "header": false,
+      "source": {
+       "byte_start": 184,
+       "byte_end_exclusive": 193
+      },
+      "anchor": {
+       "byte_start": 188,
+       "byte_end_exclusive": 193
+      }
+     },
+     {
+      "r": 0,
+      "c": 1,
+      "rs": 1,
+      "cs": 1,
+      "text": "10",
+      "header": false,
+      "source": {
+       "byte_start": 198,
+       "byte_end_exclusive": 204
+      },
+      "anchor": {
+       "byte_start": 202,
+       "byte_end_exclusive": 204
+      }
+     }
+    ],
+    "caption": [],
+    "cell": {
+     "table": "t0",
+     "r": 1,
+     "c": 1,
+     "rs": 1,
+     "cs": 1,
+     "byte_start": 120,
+     "byte_end_exclusive": 222
+    },
+    "source_table": {
+     "tag_start": 173,
+     "claims": 1
+    },
+    "anchor": {
+     "byte_start": 188,
+     "byte_end_exclusive": 204
+    }
+   }
+  ],
+  "uncovered": [],
+  "source_links": [],
+  "source_relations": {
+   "read": false,
+   "error": "syntax error: line 1, column 0"
+  }
+ }
+}

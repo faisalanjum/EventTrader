@@ -1,0 +1,53 @@
+{
+ "raw_sha256": "2eeb6a48b421643c49c7018113f0d5a0d138fa833d8ee9c11f8b5860ee7b6e89",
+ "raw": "<r xmlns:p=\"urn:AAA\"><member ref=\"p:item\"/></r>",
+ "route": {
+  "schema": "prepare-route-output/1",
+  "file_id": "x2_qname_value.xml",
+  "sha256": "2eeb6a48b421643c49c7018113f0d5a0d138fa833d8ee9c11f8b5860ee7b6e89",
+  "status": "OK",
+  "error": null,
+  "route": {
+   "name": "xml-fields",
+   "tool": "python xml.parsers.expat",
+   "version": "expat_2.6.3",
+   "settings": {
+    "namespaces": true,
+    "recover": false
+   },
+   "adapter": "driver/prepare/convert/xml_fields.py",
+   "linker": null
+  },
+  "units": [],
+  "xml_elements": [
+   {
+    "name": "r",
+    "parent": null,
+    "anchor": {
+     "byte_start": 0,
+     "byte_end_exclusive": 43
+    },
+    "namespaces": {
+     "p": "urn:AAA"
+    },
+    "content": [
+     {
+      "child": 21
+     }
+    ]
+   },
+   {
+    "name": "member",
+    "parent": 0,
+    "anchor": {
+     "byte_start": 21,
+     "byte_end_exclusive": 43
+    },
+    "attributes": {
+     "ref": "p:item"
+    }
+   }
+  ],
+  "seconds": 0.0
+ }
+}

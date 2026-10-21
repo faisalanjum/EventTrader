@@ -1,0 +1,730 @@
+{
+ "route": {
+  "error": null,
+  "file_id": "0001004434-23-000015/amgq12023ex991.htm",
+  "route": {
+   "adapter": "driver/prepare/convert/edgartools_html.py",
+   "linker": "driver/prepare/convert/anchor.py",
+   "name": "edgartools-html+source-formatting+screen",
+   "settings": {
+    "generated_content": "native layout (DOMSnapshot); proved whole owners",
+    "heading_boundaries": "source matched",
+    "headings": "detected blocks read whole",
+    "hidden_text": "left out",
+    "inline_fact_spaces": "kept",
+    "inline_facts": "read whole",
+    "ix_exclude": "read as shown",
+    "joins": "touching on one baseline",
+    "lists": "the parser's own list items: list, ordered, item",
+    "nested_tables": "each a table unit naming its holder cell",
+    "page_number_candidates": "kept",
+    "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+    "parse_html": "defaults",
+    "parts": "apart on one baseline",
+    "picture_names": "codes",
+    "pictures": "every shown tag",
+    "retain_native_heading_evidence": true,
+    "retain_pictures": true,
+    "screen_grid": true,
+    "source_formatting": true,
+    "source_lines": "certified <br> breaks",
+    "source_style": "per source run: colour, weight, font style, decorations in effect, text transform (the computed property, never a printed string), raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)",
+    "style_values": "independent",
+    "table_captions": "each table's own caption a caption unit, bound to its source caption",
+    "table_cells": "every own cell, bound to its source cell, in its row's source order",
+    "table_identity": "own start tag, shown or hidden",
+    "table_rows": "every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group"
+   },
+   "tool": "edgartools",
+   "version": "edgartools 5.60.0"
+  },
+  "schema": "prepare-route-output/1",
+  "seconds": 0.12,
+  "sha256": "29d91f8e1ee2c61c95cc03f6a2bce509bfabc774d760ca02e41d5526400bd87a",
+  "status": "OK",
+  "units": [
+   {
+    "alt": "amglogoa78a.jpg",
+    "anchor": {
+     "byte_end_exclusive": 1192,
+     "byte_start": 1067
+    },
+    "cell": {
+     "byte_end_exclusive": 1198,
+     "byte_start": 987,
+     "c": 0,
+     "cs": 3,
+     "r": 1,
+     "rs": 3,
+     "table": "t0"
+    },
+    "from": "source",
+    "id": "p1067",
+    "input": {
+     "how": "member",
+     "input_sha256": "d2f170393d3ae90aca6757a9e727caa19e5e4ef9cbf80fcf7daa0bbdeaccabf5",
+     "member_sha256": "d2f170393d3ae90aca6757a9e727caa19e5e4ef9cbf80fcf7daa0bbdeaccabf5"
+    },
+    "kind": "image",
+    "src": "amglogoa78a.jpg",
+    "text": ""
+   },
+   {
+    "anchor": {
+     "byte_end_exclusive": 2474,
+     "byte_start": 1429
+    },
+    "caption": [],
+    "cells": [
+     {
+      "c": 0,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 547,
+       "byte_start": 524
+      },
+      "text": ""
+     },
+     {
+      "c": 1,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 578,
+       "byte_start": 552
+      },
+      "text": ""
+     },
+     {
+      "c": 2,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 606,
+       "byte_start": 583
+      },
+      "text": ""
+     },
+     {
+      "c": 3,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 634,
+       "byte_start": 611
+      },
+      "text": ""
+     },
+     {
+      "c": 4,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 665,
+       "byte_start": 639
+      },
+      "text": ""
+     },
+     {
+      "c": 5,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 693,
+       "byte_start": 670
+      },
+      "text": ""
+     },
+     {
+      "c": 5,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 721,
+       "byte_start": 698
+      },
+      "text": ""
+     },
+     {
+      "c": 6,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 752,
+       "byte_start": 726
+      },
+      "text": ""
+     },
+     {
+      "c": 7,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 780,
+       "byte_start": 757
+      },
+      "text": ""
+     },
+     {
+      "c": 8,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 808,
+       "byte_start": 785
+      },
+      "text": ""
+     },
+     {
+      "c": 9,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 838,
+       "byte_start": 813
+      },
+      "text": ""
+     },
+     {
+      "c": 10,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 866,
+       "byte_start": 843
+      },
+      "text": ""
+     },
+     {
+      "c": 11,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 894,
+       "byte_start": 871
+      },
+      "text": ""
+     },
+     {
+      "c": 12,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 925,
+       "byte_start": 899
+      },
+      "text": ""
+     },
+     {
+      "c": 13,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 953,
+       "byte_start": 930
+      },
+      "text": ""
+     },
+     {
+      "c": 0,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 1,
+      "rs": 3,
+      "source": {
+       "byte_end_exclusive": 1198,
+       "byte_start": 987
+      },
+      "text": ""
+     },
+     {
+      "c": 3,
+      "cs": 2,
+      "grid": "screen",
+      "header": false,
+      "r": 1,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 1241,
+       "byte_start": 1203
+      },
+      "text": ""
+     },
+     {
+      "anchor": {
+       "byte_end_exclusive": 1441,
+       "byte_start": 1429
+      },
+      "c": 5,
+      "cs": 9,
+      "grid": "screen",
+      "header": false,
+      "r": 1,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 1448,
+       "byte_start": 1246
+      },
+      "text": "Exhibit 99.1"
+     },
+     {
+      "c": 3,
+      "cs": 2,
+      "grid": "screen",
+      "header": false,
+      "r": 2,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 1520,
+       "byte_start": 1482
+      },
+      "text": ""
+     },
+     {
+      "anchor": {
+       "byte_end_exclusive": 1966,
+       "byte_start": 1755
+      },
+      "c": 5,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 2,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 1979,
+       "byte_start": 1525
+      },
+      "text": "Investor Relations:\nMedia Relations:"
+     },
+     {
+      "c": 8,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 2,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 2189,
+       "byte_start": 1984
+      },
+      "text": ""
+     },
+     {
+      "anchor": {
+       "byte_end_exclusive": 2474,
+       "byte_start": 2388
+      },
+      "c": 11,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 2,
+      "rs": 2,
+      "source": {
+       "byte_end_exclusive": 2485,
+       "byte_start": 2194
+      },
+      "text": "Patricia Figueroa\n\n\nAnn Imes\n\n\n+1 (617) 747-3300\n\n\nir@amg.com\n\n\npr@amg.com"
+     },
+     {
+      "c": 3,
+      "cs": 2,
+      "grid": "screen",
+      "header": false,
+      "r": 3,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 2670,
+       "byte_start": 2519
+      },
+      "text": ""
+     },
+     {
+      "c": 5,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 3,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 2713,
+       "byte_start": 2675
+      },
+      "text": ""
+     },
+     {
+      "c": 8,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 3,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 2923,
+       "byte_start": 2718
+      },
+      "text": ""
+     }
+    ],
+    "id": "t0",
+    "kind": "table",
+    "source_table": {
+     "claims": 1,
+     "tag_start": 400
+    }
+   },
+   {
+    "alt": "image5.jpg",
+    "anchor": {
+     "byte_end_exclusive": 4637,
+     "byte_start": 4522
+    },
+    "cell": {
+     "byte_end_exclusive": 4643,
+     "byte_start": 4428,
+     "c": 0,
+     "cs": 3,
+     "r": 2,
+     "rs": 1,
+     "table": "t4"
+    },
+    "from": "source",
+    "id": "p4522",
+    "input": {
+     "how": "member",
+     "input_sha256": "2f0fbc8a03b8f6e207e1f1e5c3ea4df427b404ced81d970f8518bb11fce6a8eb",
+     "member_sha256": "2f0fbc8a03b8f6e207e1f1e5c3ea4df427b404ced81d970f8518bb11fce6a8eb"
+    },
+    "kind": "image",
+    "src": "image5.jpg",
+    "text": ""
+   },
+   {
+    "anchor": {
+     "byte_end_exclusive": 6012,
+     "byte_start": 4857
+    },
+    "caption": [],
+    "cells": [
+     {
+      "c": 0,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4105,
+       "byte_start": 4082
+      },
+      "text": ""
+     },
+     {
+      "c": 1,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4135,
+       "byte_start": 4110
+      },
+      "text": ""
+     },
+     {
+      "c": 2,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4163,
+       "byte_start": 4140
+      },
+      "text": ""
+     },
+     {
+      "c": 3,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4191,
+       "byte_start": 4168
+      },
+      "text": ""
+     },
+     {
+      "c": 4,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4222,
+       "byte_start": 4196
+      },
+      "text": ""
+     },
+     {
+      "c": 5,
+      "cs": 1,
+      "grid": "screen",
+      "header": false,
+      "r": 0,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4250,
+       "byte_start": 4227
+      },
+      "text": ""
+     },
+     {
+      "c": 0,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 1,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4346,
+       "byte_start": 4283
+      },
+      "text": ""
+     },
+     {
+      "c": 3,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 1,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4414,
+       "byte_start": 4351
+      },
+      "text": ""
+     },
+     {
+      "c": 0,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 2,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4643,
+       "byte_start": 4428
+      },
+      "text": ""
+     },
+     {
+      "anchor": {
+       "byte_end_exclusive": 4943,
+       "byte_start": 4857
+      },
+      "c": 3,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 2,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 4950,
+       "byte_start": 4648
+      },
+      "text": "Net Income (controlling interest) of $135 million, Economic Net Income of $158 million"
+     },
+     {
+      "c": 0,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 3,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 5179,
+       "byte_start": 4964
+      },
+      "text": ""
+     },
+     {
+      "anchor": {
+       "byte_end_exclusive": 5465,
+       "byte_start": 5393
+      },
+      "c": 3,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 3,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 5472,
+       "byte_start": 5184
+      },
+      "text": "Adjusted EBITDA of $217 million and Economic Earnings per share of $4.18"
+     },
+     {
+      "c": 0,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 4,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 5701,
+       "byte_start": 5486
+      },
+      "text": ""
+     },
+     {
+      "anchor": {
+       "byte_end_exclusive": 6012,
+       "byte_start": 5915
+      },
+      "c": 3,
+      "cs": 3,
+      "grid": "screen",
+      "header": false,
+      "r": 4,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 6019,
+       "byte_start": 5706
+      },
+      "text": "Continued execution of $225 million accelerated share repurchase program entered into at year-end"
+     },
+     {
+      "c": 0,
+      "cs": 3,
+      "header": false,
+      "r": 5,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 6070,
+       "byte_start": 6033
+      },
+      "text": ""
+     },
+     {
+      "c": 3,
+      "cs": 3,
+      "header": false,
+      "r": 5,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 6112,
+       "byte_start": 6075
+      },
+      "text": ""
+     },
+     {
+      "c": 0,
+      "cs": 3,
+      "header": false,
+      "r": 6,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 6163,
+       "byte_start": 6126
+      },
+      "text": ""
+     },
+     {
+      "c": 3,
+      "cs": 3,
+      "header": false,
+      "r": 6,
+      "rs": 1,
+      "source": {
+       "byte_end_exclusive": 6205,
+       "byte_start": 6168
+      },
+      "text": ""
+     }
+    ],
+    "id": "t4",
+    "kind": "table",
+    "source_table": {
+     "claims": 1,
+     "tag_start": 3957
+    }
+   }
+  ]
+ },
+ "provenance": {
+  "source_route": "test_public/attempt0/ROUTE.json (AMG 8-K exhibit amgq12023ex991.htm, Test public pilot, M1)",
+  "source_route_sha256": "e776b6515158c26fe17ba28b6bfe2b76e27bccc83b20c5765cd9fbb420d84787",
+  "kept_units": [
+   0,
+   1,
+   5,
+   6
+  ],
+  "kept_keys": [
+   "error",
+   "file_id",
+   "route",
+   "schema",
+   "seconds",
+   "sha256",
+   "status",
+   "units"
+  ],
+  "why": "the real containment failure: each image is saved immediately before the table whose cell holds it; v10 reconstruction failed this round trip"
+ }
+}
