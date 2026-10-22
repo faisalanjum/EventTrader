@@ -1,5 +1,7 @@
 # Extraction: bounded production decision
 
+**22 October 2026 owner extension:** this 18-document campaign is completed history. New production qualification, including the 1,000-document final run, follows [ProductionQualificationPlan.md](ProductionQualificationPlan.md). Its scope and bounded work orders supersede this document's earlier no-new-run/HOLD instructions; preserve every earlier result and private boundary.
+
 Owner direction, 21 October 2026: gain practical confidence through complete-document comparisons and generic repairs, with bounded work and an actual calling-path decision. The campaign started at 13:00:11 UTC on 21 October and finished on 22 October, before its initial 48-hour decision boundary. The initial plan and amendments below are retained history; the current decision is above the detailed plan.
 
 **22 October 2026: the agreed non-OCR readiness campaign is complete (100% of its work). Qualified for controlled use on the tested host; deployment is not performed.** All 18 source/reconstruction comparisons are accepted: 13 HTML and 5 XML. The independent final six include three ordinary and three challenge files, with the retained affected retest and first failures disclosed. No unresolved required content, meaningful-order, relationship or provenance finding remains in these reviews. This is not a 100% or 99% population-accuracy claim.
