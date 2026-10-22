@@ -1,0 +1,37 @@
+{
+  "authorship": "Wholly invented field-station content and card layout; independently authored before browser observations. No private source values or layout.",
+  "source": "child.html",
+  "source_root": "station-page",
+  "declared_target": "sheet-larch",
+  "activating_control_id": null,
+  "owner": "activating control's entry section; immediate sibling adjacency is not required",
+  "required_content": {
+    "title": "Field observations",
+    "summary": "Keep trays shaded.",
+    "strong": ["shaded"],
+    "notes": "Check trays from the east door.",
+    "ordered_list": ["Amber tray", "Silver tray"],
+    "reference": {"text": "Field guide", "href": "https://reference.invalid/field-guide#trays"},
+    "table": {"caption": "Stored samples", "headers": ["Material", "Count"], "rows": [["Slate", "8"], ["Birch", "13"]]},
+    "picture": {"src": "/assets/public-plan.png", "alt": "Public test plan", "caption": "Storage plan", "sha256": "6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115", "bytes": 100, "dimensions": [40, 24]}
+  },
+  "required_order": ["title", "summary", "notes-group", "counts-group"],
+  "within_notes": ["paragraph", "ordered-list", "reference-link"],
+  "within_counts": ["table-caption-and-rows", "picture-and-caption"],
+  "states": [
+    {"name": "initial", "copy_exists": false},
+    {"name": "outer_open_00", "outer_shown": true, "groups": [true, false, false], "labels": ["Overview", "Open notes", "Open counts"]},
+    {"name": "visible_noop_00", "outer_shown": true, "groups": [true, false, false], "labels": ["Overview", "Open notes", "Open counts"]},
+    {"name": "notes_only_10", "outer_shown": true, "groups": [true, true, false], "labels": ["Overview", "Close notes", "Open counts"]},
+    {"name": "both_open_11", "outer_shown": true, "groups": [true, true, true], "labels": ["Overview", "Close notes", "Close counts"]},
+    {"name": "closed_11", "outer_shown": false, "groups": [true, true, true]},
+    {"name": "repeat_outer_reuse_11", "outer_shown": true, "groups": [true, true, true], "same_copy": true},
+    {"name": "counts_only_01", "outer_shown": true, "groups": [true, false, true], "labels": ["Overview", "Open notes", "Close counts"]},
+    {"name": "collapsed_again_00", "outer_shown": true, "groups": [true, false, false], "labels": ["Overview", "Open notes", "Open counts"]}
+  ],
+  "negative_controls": {
+    "content_damage": "A copied count changes from the authored 8 to 999. Correct origin alone does not qualify content.",
+    "scope_identity": "An identical parent-owned target shadows the child target ID. Identical contents, ID and structure do not establish the selected child's own occurrence."
+  },
+  "scope": "Required source content, internal order, group ownership, conditional relationships, raw state and asset connection. No requirement for identical animations, global displayed order or permanent quiescence. This is not a new checker."
+}

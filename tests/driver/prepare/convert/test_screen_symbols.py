@@ -57,8 +57,9 @@ class Route(unittest.TestCase):
                 cls.route, cls.facts = html_route.prepare(PAGE_T, 'symbols.htm', hashlib.sha256(PAGE_T).hexdigest(), browser, sg.Source('', {'w.woff': font}))  # the positive: its own declared font, UTF-8 declared
                 cls.seen = html_route.prepare(SEEN_T, 'seen.htm', hashlib.sha256(SEEN_T).hexdigest(), browser)[0]
                 v = Visible(JOIN); cls.unit = {'id': 'u', 'kind': 'text', 'text': 'CORP ORATION end Z Y', 'anchor': {'byte_start': 0, 'byte_end_exclusive': len(JOIN)}}  # the tool's added space
-                gaps = sg.gaps_of(v, [cls.unit]); k = sg.marker_prefix(JOIN); marked, _ = sg.tag_cells(JOIN, v, gaps, prefix=k)
-                cls.joined = sg.join(gaps, sg.measure(marked, browser, k)[1], v)
+                gaps = sg.gaps_of(v, [cls.unit]); k = sg.marker_prefix(JOIN); runs, _ = sg.symbol_runs(JOIN, v)  # migration: run marks only; each gap side's character by native Range in its own run (gap_chars), no gap comment
+                marked = sg.tag_cells(JOIN, v, (), [(a, b'<!--%ss:%d-->' % (k.encode(), n)) for n, (a, _, _, ok) in enumerate(runs) if ok], k)[0]; want, _ = sg.gap_chars(JOIN, v, runs, gaps)
+                cls.joined = sg.join(gaps, sg.measure(marked, browser, k, gap_chars=want)[1], v)
             finally: browser.close()
         cls.sym = cls.route['source_symbols']; cls.by = {(r['at']['byte_start'], r['at']['byte_end_exclusive']): r for r in cls.sym['records']}
         cls.items = {(u['id'], None): u for u in cls.route['units']}

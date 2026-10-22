@@ -178,6 +178,18 @@ def _format_hint(data):
     return 'unknown'
 
 
+DOCUMENT_BLOCK = re.compile(rb'<DOCUMENT>\r?\n(.*?)<TEXT>\r?\n(.*?)</TEXT>\r?\n</DOCUMENT>\r?\n', re.S)  # the one SEC framing rule (was local to parse_package)
+
+
+def document_parts(data, start):
+    """(before, after): a member's exact <DOCUMENT> envelope around its TEXT, as parse_package hands them to _prove; `start` = the member's manifest
+    package_range start. AcquisitionError if no block starts there."""
+    match = DOCUMENT_BLOCK.match(data, start)
+    if not match:
+        raise AcquisitionError('No <DOCUMENT> block at the recorded package range')
+    return data[match.start():match.start(2)], data[match.end(2):match.end()]
+
+
 def parse_package(data, accession, cik, form, proofs=None, fetch=None):
     """Return deterministic manifest and filename-to-bytes map; ranges are half-open. A file needing proof uses its
     recorded member entry in `proofs` (package offset -> entry; replay, no network), else SEC's copy from `fetch(url)`
@@ -213,7 +225,7 @@ def parse_package(data, accession, cik, form, proofs=None, fetch=None):
         # LF/CRLF lines outside every TEXT block are skipped; spaces or any other byte there still fail.
         blank_lines = re.compile(rb'(?:\r?\n)*')
         cursor = blank_lines.match(data, header.end()).end()
-        document = re.compile(rb'<DOCUMENT>\r?\n(.*?)<TEXT>\r?\n(.*?)</TEXT>\r?\n</DOCUMENT>\r?\n', re.S)
+        document = DOCUMENT_BLOCK
         while data.startswith(b'<DOCUMENT>', cursor):
             match = document.match(data, cursor)
             if (not match

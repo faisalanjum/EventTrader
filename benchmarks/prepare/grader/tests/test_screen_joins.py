@@ -7,6 +7,7 @@ from benchmarks.prepare.grader import grade
 from benchmarks.prepare.grader.adapters import source_formatting
 from benchmarks.prepare.grader.adapters import screen_grid as sg
 from driver.prepare.convert.anchor import Visible
+from driver.prepare.convert.screen_grid import gap_chars, marker_prefix, symbol_runs  # migration: the native gap path (the grader adapter does not re-export it)
 
 
 def unit(raw, text, start=None, end=None, **more):
@@ -49,9 +50,10 @@ class ToolSpaces(unittest.TestCase):
 class Tagging(unittest.TestCase):
     def test_the_two_characters_of_each_gap_get_a_span_of_their_own_beside_the_cell_marks(self):
         raw = b'<table><tr><td>CORP<i>ORATION</i></td></tr></table>'; vis = Visible(raw); cell = {'id': 'c', 'kind': 'text', 'text': 'CORP ORATION', 'anchor': {'byte_start': 15, 'byte_end_exclusive': 30}}
-        gaps = sg.gaps_of(vis, [cell]); marked, spans = sg.tag_cells(raw, vis, gaps)
-        self.assertEqual(marked, b'<table><tr><td><!--g:0-->COR<!--j:0.0-->P<i><!--j:0.1-->ORATION</i></td></tr></table>')  # comments, not elements: the page's structure and styles are untouched (Codex C2)
-        self.assertEqual(re.sub(rb'<!--[jg]:[\d.]+-->', b'', marked), raw)
+        gaps = sg.gaps_of(vis, [cell]); self.assertTrue(gaps)  # migration (mechanism only): gap comments are retired (Root CONTEXT_RANGE_AND_STATE_IMPLEMENTATION); the same two characters are located natively
+        with self.assertRaises(ValueError): sg.tag_cells(raw, vis, gaps)
+        runs, _ = symbol_runs(raw, vis); want, unmapped = gap_chars(raw, vis, runs, gaps)
+        self.assertEqual((unmapped, [w[2:] for w in want]), ([], [(3, 1), (0, 1)]))  # each gap side's own character: P (run 0, 4th code point), O (run 1, 1st)
         self.assertEqual(sg.tag_cells(raw)[0], b'<table><tr><td><!--g:0-->CORP<i>ORATION</i></td></tr></table>')  # without gaps, as before
 
 
@@ -99,13 +101,15 @@ class Measuring(unittest.TestCase):
     def tearDown(self):
         self.browser.close(); self.pw.stop()
 
-    def boxes(self, marked):
-        self.page.set_content(marked.decode(), wait_until='load'); return self.page.evaluate(sg.JS)['boxes']
+    def boxes(self, raw, vis, gaps):  # migration: run marks only; each gap side's character measured by native Range in its own run (gap_chars), no gap comment
+        runs, _ = symbol_runs(raw, vis); p = marker_prefix(raw); want, unmapped = gap_chars(raw, vis, runs, gaps)
+        body = sg.tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (p.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], p)[0]
+        self.page.set_content(body.decode(), wait_until='load'); return self.page.evaluate(sg.JS, [p, [list(x) for x in want]])['boxes'], unmapped
 
     def test_a_character_that_ends_one_gap_and_begins_the_next_is_measured_for_both(self):
         raw = b'<p>Pol<font style="letter-spacing:0.016em">i</font>cy</p>'; vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, 'Pol i cy')])
-        marked, _ = sg.tag_cells(raw, vis, gaps); self.assertIn(b'<!--j:0.1--><!--j:1.0-->i', marked)  # the i's two marks stand side by side
-        boxes = self.boxes(marked); self.assertEqual(sorted(boxes), ['0.0', '0.1', '1.0', '1.1'])
+        boxes, unmapped = self.boxes(raw, vis, gaps); self.assertEqual(unmapped, [])  # migration (mechanism only): was the i's two adjacent j comments; now both gaps' sides placed in their runs
+        self.assertEqual(sorted(boxes), ['0.0', '0.1', '1.0', '1.1'])
         self.assertEqual(boxes['0.1'], boxes['1.0'])  # the one character, measured once for each gap
         self.assertAlmostEqual(boxes['0.1']['x'], boxes['0.0']['r'], places=3); self.assertAlmostEqual(boxes['1.1']['x'], boxes['1.0']['r'], places=3)  # touching: both joined
         self.assertEqual(sg.join(gaps, boxes), 2); self.assertEqual(gaps[0][0]['text'], 'Policy')
@@ -115,7 +119,7 @@ class Measuring(unittest.TestCase):
                                 (b'<p style="font-size:10pt">2.<span style="margin-left:24px">4.650% Notes</span></p>', '2. 4.650% Notes', '2. 4.650% Notes')):
             with self.subTest(text=text):
                 vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, text, start=0)]); self.assertTrue(gaps)
-                boxes = self.boxes(sg.tag_cells(raw, vis, gaps)[0]); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
+                boxes, _ = self.boxes(raw, vis, gaps); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
 
     def test_small_capitals_are_joined_and_raised_or_lowered_marks_keep_their_space(self):  # one baseline, a smaller font: tops differ, bottoms agree; a mark is raised or lowered
         for raw, text, want in ((b'<p style="font-family:serif;font-weight:700"><span style="font-size:10pt">S</span><span style="font-size:8pt">IGNIFICANT</span></p>', 'S IGNIFICANT', 'SIGNIFICANT'),
@@ -123,7 +127,7 @@ class Measuring(unittest.TestCase):
                                 (b'<p style="font-size:10pt">CO<sub>2</sub> and NO<sub>x</sub></p>', 'CO 2 and NO x', 'CO 2 and NO x')):
             with self.subTest(text=text):
                 vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, text, start=0)]); self.assertTrue(gaps)
-                boxes = self.boxes(sg.tag_cells(raw, vis, gaps)[0]); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
+                boxes, _ = self.boxes(raw, vis, gaps); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
 
 
 if __name__ == '__main__':

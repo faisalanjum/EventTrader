@@ -1,0 +1,8 @@
+body { font-family: sans-serif; }
+.entry { border: 1px solid #687; padding: 8px; }
+.specimen-sheet { border: 2px solid #687; padding: 6px; max-width: 480px; }
+.sheet-body { max-height: 180px; overflow: auto; }
+.section-switch { display: block; margin-top: 8px; }
+table { border-collapse: collapse; }
+th, td { border: 1px solid #687; padding: 3px; }
+figure { margin: 8px 0; }

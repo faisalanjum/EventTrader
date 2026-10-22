@@ -121,9 +121,6 @@ class SourceStyle(unittest.TestCase):
                 self.assertEqual((route['status'], fr), ('OK', {'viewport': [1400, 1000], 'scroll': [0, 0], 'device_pixel_ratio': 1}))
                 measured = [(raw[x['boxes_at']['byte_start']:x['boxes_at']['byte_end_exclusive']] if 'boxes_at' in x else raw[x['at']['byte_start']:x['at']['byte_end_exclusive']]).decode() for x in recs]
                 got = [(t, x.get('visibility', 'visible'), x['boxes']) for t, x in zip(measured, recs)]
-                if k == 'first_letter_float':  # the route's own marked render splits the last line at a text-node boundary: as returned, never collapsed; its union is the native line exactly
-                    *head, (x0, y0, w0, h0), (x1, y1, w1, h1) = got[0][2]; self.assertEqual((y1, h1, x1), (y0, h0, x0 + w0))  # one line: the same top and height, exactly contiguous
-                    got = [(got[0][0], got[0][1], head + [[x0, y0, w0 + w1, h0]])]  # then their union must be the native line (truth unchanged; nothing normalized at runtime)
                 self.assertEqual(got, [(t.replace('&', '&amp;') if k == 'entity_multiline' else t, v, b) for t, v, b in runs])
         recs = self.read(src('preserved_edge_space'))[1]  # the boxes measure "  Cargo  \n  ", the record's `at` and owner place stay "Cargo"
         self.assertEqual((recs[0]['owners'][0]['text_at'], recs[0]['at']['byte_end_exclusive'] - recs[0]['at']['byte_start'], recs[0]['boxes_at']['byte_end_exclusive'] - recs[0]['boxes_at']['byte_start']), ([[1, 6]], 5, 12))

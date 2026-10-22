@@ -1,0 +1,22 @@
+{
+  "authorship": "Wholly invented museum board, authored independently before browser observations; no private example, strings or layout used.",
+  "source": "child.html",
+  "associations": [
+    {"trigger": "map-link", "owner": "map-card", "target": "note-amber", "target_text": "Use the east stair."},
+    {"trigger": "label-link", "owner": "label-card", "target": "note-indigo", "target_text": "Keep paper dry."}
+  ],
+  "structured_controls": [
+    {"trigger": "plain-link", "attribute": "href", "target": "native-note"},
+    {"trigger": "aria-control", "attribute": "aria-controls", "target": "native-panel"}
+  ],
+  "cases": {
+    "parent": {"qualified_associations": 2, "matched": [true, true], "parent_css_applies": true},
+    "cosmetic": {"qualified_associations": 2, "matched": [true, true], "parent_css_applies": true},
+    "ui_only": {"qualified_associations": 2, "matched": [true, true], "parent_css_applies": true},
+    "swapped": {"qualified_associations": 0, "matched": [false, false], "parent_css_applies": true},
+    "missing_target": {"qualified_associations": 1, "matched": [true, false], "parent_css_applies": true},
+    "standalone": {"qualified_associations": 0, "matched": [false, false], "parent_css_applies": false},
+    "iframe": {"qualified_associations": 0, "matched": [false, false], "parent_css_applies": false}
+  },
+  "limits": "Direct/iframe absence of a working action is a proof limit here, not a semantic answer change. Swapped/missing-target fixtures are deliberately damaged controls. An unknown automatic association is not a pass. UI reproduction and cosmetic equality are not semantic requirements."
+}

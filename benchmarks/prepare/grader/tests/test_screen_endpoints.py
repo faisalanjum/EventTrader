@@ -5,6 +5,7 @@ import unittest
 from benchmarks.prepare.grader import grade
 from driver.prepare.convert import anchor
 from benchmarks.prepare.grader.adapters import screen_grid
+from driver.prepare.convert.screen_grid import gap_chars, marker_prefix, symbol_runs  # migration: the native gap path (the grader adapter does not re-export it)
 
 
 class Offline(unittest.TestCase):
@@ -35,7 +36,9 @@ class EndpointBoxes(unittest.TestCase):
     def check(self, html, texts, expected):
         raw = html.encode(); vis = anchor.Visible(raw); self.assertFalse(vis.certain)
         units = anchor.link(raw, [{'id': str(i), 'kind': 'text', 'text': t} for i, t in enumerate(texts)], vis=vis)['units']
-        ends = screen_grid.endpoints_of(vis, units); marked, _ = screen_grid.tag_cells(raw, vis, ends); _, boxes = screen_grid.measure(marked, self.browser)
+        ends = screen_grid.endpoints_of(vis, units); runs, _ = symbol_runs(raw, vis); p = marker_prefix(raw)  # migration: endpoint characters by native Range (gap_chars), as the screen step does
+        marked = screen_grid.tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (p.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], p)[0]; want, _ = gap_chars(raw, vis, runs, ends)
+        boxes = screen_grid.measure(marked, self.browser, p, gap_chars=want)[1]
         proof = {side: {str(g[0][side]): boxes[f'{n}.{ix}'] for n, g in enumerate(ends) if f'{n}.{ix}' in boxes} for ix, side in enumerate(('start', 'end'))}
         g = grade.Grader({'fields': {}, 'support': {}, 'alternatives': {}}, grade.RouteFile({'file_id': 'fixture.htm', 'units': units, 'screen_endpoints': proof}, raw))
         result = g.adjacent(units[0]['anchor'], units[-1]['anchor'])

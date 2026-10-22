@@ -6,6 +6,7 @@ import http.client
 import signal
 import time
 from urllib.parse import urlsplit
+import urllib.request
 import zlib
 
 HEADERS = {'User-Agent': 'EventMarketDB faianjum@gmail.com', 'Accept-Encoding': 'identity'}
@@ -30,10 +31,12 @@ def http_request(url, headers, connect_timeout, read_timeout, wall_timeout):
     connection = None
     try:
         parsed = urlsplit(url)
+        if parsed.scheme != 'https' or parsed.port not in (None, 443) or parsed.fragment:  # only a request this client sends exactly
+            raise ValueError('Expected an https URL on the default port without a fragment')
         connection = http.client.HTTPSConnection(parsed.hostname, timeout=connect_timeout)
         connection.connect()
         connection.sock.settimeout(read_timeout)
-        connection.request('GET', parsed.path, headers=headers)
+        connection.request('GET', urllib.request.Request(url).selector, headers=headers)  # stdlib's own request target: path and query, as written
         response = connection.getresponse()
         headers = {key.lower(): value for key, value in response.getheaders()}
         # A body's end is proven only by exactly one framing that Python's reader itself accepted (a length or

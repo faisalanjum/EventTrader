@@ -1,0 +1,1113 @@
+{
+ "assets": {
+  "old_label_failure/ROUTES.json": {
+   "bytes": 175630,
+   "provenance": {
+    "note": "label_slice_run3 initial + state routes, 2026-10-22: v2 observed_controls records while the acted link records are still null (old failure evidence)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/evidence/label_slice_run3/ROUTES.json"
+   },
+   "role": "input",
+   "sha256": "e1437975ca0b4d0175cfcf722e8cc392c52bbc74265500fa14e3fb2ff29c9a6b"
+  },
+  "root_ownership_cases/CASES.json": {
+   "bytes": 29259,
+   "provenance": {
+    "note": "six readback ownership damage cases, 2026-10-22; records predate lineage.occurrences (the test adds the producer's single occurrence, documented)",
+    "owner": "Root",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/root_context_gate/reconstruction_owner_contract_red/CASES.json"
+   },
+   "role": "input",
+   "sha256": "0971d651161cb8c8ee5e1029d8df3104123cc31b74fcef9872173bce24554e2e"
+  },
+  "saved_state_graph_0118/activated@175+1062+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "fce3f02c3ed74e6d9586548e9f92e697e54cbfb77234276e74ddb659c45874c4"
+  },
+  "saved_state_graph_0118/activated@175+1062+1062/CONTEXT_RENDERS.json": {
+   "bytes": 48517,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "0b7beeac8ac456488c0bc0c36c652e0c084828f2b285ee327e9b530b6203e859"
+  },
+  "saved_state_graph_0118/activated@175+1062+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "4e1484c63c47369609df170f0148cbdfbb6d0183fb14cf10576d3a8185220536"
+  },
+  "saved_state_graph_0118/activated@175+1062+1062/ROUTE.json": {
+   "bytes": 31145,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "9f1e01d7c0639ab8bfe7e706d632f29d43d8a0678fb07e5f0facb94b6cd3bdbf"
+  },
+  "saved_state_graph_0118/activated@175+1062+1062/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869": {
+   "bytes": 3450,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062+1062/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869.gz"
+   },
+   "role": "input",
+   "sha256": "191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869"
+  },
+  "saved_state_graph_0118/activated@175+1062/COMPLETE.json": {
+   "bytes": 694,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "a065e8d1e4dd1240c123fb7e498484aef28782309a8a889b06c8a10dfeda30d6"
+  },
+  "saved_state_graph_0118/activated@175+1062/CONTEXT_RENDERS.json": {
+   "bytes": 57181,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "34b1557cae97e8b3ea858bdc67e0d17269f3b6968a3a692d7233e44e42d4d480"
+  },
+  "saved_state_graph_0118/activated@175+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "c02f21edfd50b59288ecc192a8836c7c70e81b97f33090bded67993c377d8410"
+  },
+  "saved_state_graph_0118/activated@175+1062/ROUTE.json": {
+   "bytes": 37855,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "705dbf1e227ba05bb9fe6eefa4375e197dc30731e7e27b8087e3f7c75f0fb5cd"
+  },
+  "saved_state_graph_0118/activated@175+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115": {
+   "bytes": 100,
+   "provenance": {
+    "note": "prepared picture input blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115.gz"
+   },
+   "role": "input",
+   "sha256": "6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115"
+  },
+  "saved_state_graph_0118/activated@175+1062/raw_reading/ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c": {
+   "bytes": 3590,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+1062/raw_reading/ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c.gz"
+   },
+   "role": "input",
+   "sha256": "ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c"
+  },
+  "saved_state_graph_0118/activated@175+488+1062+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "081c8da502da79253f603f88ede77d5dd2e11362ea88d714e6da12092cef5cf5"
+  },
+  "saved_state_graph_0118/activated@175+488+1062+1062/CONTEXT_RENDERS.json": {
+   "bytes": 52741,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "7b3e50bd78cef01335b34f6bde5fb79a85ded1bf3219c42feeeadc82e73e9a2c"
+  },
+  "saved_state_graph_0118/activated@175+488+1062+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "9554ee6467038c27e31db2331d82b5384ba54b3713ea35967e30397d4f8eeeb3"
+  },
+  "saved_state_graph_0118/activated@175+488+1062+1062/ROUTE.json": {
+   "bytes": 25246,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "ace0744f03d9f31e7e332c8e728e71c13a162bb4d3132bbcc82f91501ac3625b"
+  },
+  "saved_state_graph_0118/activated@175+488+1062+1062/raw_reading/921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb": {
+   "bytes": 2620,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062+1062/raw_reading/921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb.gz"
+   },
+   "role": "input",
+   "sha256": "921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb"
+  },
+  "saved_state_graph_0118/activated@175+488+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "b1b8285bfc266294581c7ca1dd145cc5b97f4836264e594016181c51f09617b7"
+  },
+  "saved_state_graph_0118/activated@175+488+1062/CONTEXT_RENDERS.json": {
+   "bytes": 47851,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "403737c7aeb72aad86b834e0146f37b4a502ad7a76781dde241fd88537644e47"
+  },
+  "saved_state_graph_0118/activated@175+488+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "9554ee6467038c27e31db2331d82b5384ba54b3713ea35967e30397d4f8eeeb3"
+  },
+  "saved_state_graph_0118/activated@175+488+1062/ROUTE.json": {
+   "bytes": 25050,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "f4dd5e9337d92c5fdddb9b0ce8fff2cb7f0030e145eb66a073270560b5336ff2"
+  },
+  "saved_state_graph_0118/activated@175+488+1062/raw_reading/921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb": {
+   "bytes": 2620,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+1062/raw_reading/921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb.gz"
+   },
+   "role": "input",
+   "sha256": "921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "af88a93ec0eb15391268a37153fbd9e59a9649658084d9baeab69874ab2f91df"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062+1062/CONTEXT_RENDERS.json": {
+   "bytes": 57976,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "83234b130b761058e916aedf7862623ad912d35fe2ebd733be2a5510a5071574"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "1f4b3dacc03d06d1c48a6900b81bce39b8201a32ebff77a8ebf99e44f6b5bd1f"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062+1062/ROUTE.json": {
+   "bytes": 26689,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "b46274fb0eeb175d02486038991568c5625a6bb507ef3b16840c62461e8f9057"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75": {
+   "bytes": 2729,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75.gz"
+   },
+   "role": "input",
+   "sha256": "768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "c2547e386426069309d16efe33f91aaabd9a14486afb268133a9f45b1e183b25"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062/CONTEXT_RENDERS.json": {
+   "bytes": 52962,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "308aeeb9e8610104fa06f5e67b9889424f830acd5842665897ab5d53978a2da4"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "1f4b3dacc03d06d1c48a6900b81bce39b8201a32ebff77a8ebf99e44f6b5bd1f"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062/ROUTE.json": {
+   "bytes": 26472,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "ba1d0976cb21e2149069228f56246c6bb2bfa5b411d750f40a7ac821e8e8617d"
+  },
+  "saved_state_graph_0118/activated@175+488+774+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75": {
+   "bytes": 2729,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75.gz"
+   },
+   "role": "input",
+   "sha256": "768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "6fb563826b3060ffeb3fe5eef6470d580f610a99761b73cde90f4b36d5a3b302"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062+1062/CONTEXT_RENDERS.json": {
+   "bytes": 62482,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "9933cda407e845df40159dc9441ae6a385b5b5ef23aa4a7ddd93fee48af7756b"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "1f4b3dacc03d06d1c48a6900b81bce39b8201a32ebff77a8ebf99e44f6b5bd1f"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062+1062/ROUTE.json": {
+   "bytes": 26898,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "12fe94eab297237a004abe277ac09d011245b8dc4220d519c3616d7e0d038d98"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75": {
+   "bytes": 2729,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75.gz"
+   },
+   "role": "input",
+   "sha256": "768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "4ac2043168c39dbc8c450b6ed287480dad804e9cc53e7702584c26e4dac2de0c"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062/CONTEXT_RENDERS.json": {
+   "bytes": 57964,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "7c863fa99bd4d641376557bbccbe8712e967b159c3901247301e99c7e85b0302"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "1f4b3dacc03d06d1c48a6900b81bce39b8201a32ebff77a8ebf99e44f6b5bd1f"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062/ROUTE.json": {
+   "bytes": 26681,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "824bb7042b6f0dcdbca8a81aa42064161782830294397cc99ffd657b215b2c5f"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75": {
+   "bytes": 2729,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75.gz"
+   },
+   "role": "input",
+   "sha256": "768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "fb97b8ae5fe74aa2f606dd7e4722af83b490193141a981b7a2a343416d155896"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774/CONTEXT_RENDERS.json": {
+   "bytes": 52714,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "7784842414d3a1d9c06f7ed29a8d19643fe6fecd43ee533bf71af73198a2b266"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "e678778650794831179916528ca172090d46b02deef6c56492502f57bddc0d34"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774/ROUTE.json": {
+   "bytes": 25226,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "3d659e494d25e00488d62144f93bbe0b3d3cbde3b39f9f5fb89f26bb98c34f18"
+  },
+  "saved_state_graph_0118/activated@175+488+774+774/raw_reading/38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553": {
+   "bytes": 2618,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774+774/raw_reading/38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553.gz"
+   },
+   "role": "input",
+   "sha256": "38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553"
+  },
+  "saved_state_graph_0118/activated@175+488+774/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "ca85533a161fbb7f0e07a88d69212dcbd4d6d8ecdf3d9df59131e78ed6ca9792"
+  },
+  "saved_state_graph_0118/activated@175+488+774/CONTEXT_RENDERS.json": {
+   "bytes": 47836,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "630c4b1906e1b3e39cb8c91bbd0c318214a10b1cf4768b3b42e4c541231c1a95"
+  },
+  "saved_state_graph_0118/activated@175+488+774/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "e678778650794831179916528ca172090d46b02deef6c56492502f57bddc0d34"
+  },
+  "saved_state_graph_0118/activated@175+488+774/ROUTE.json": {
+   "bytes": 25036,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "3bcc7a08f3acbef0cb32b625313304fa6f8363f8e796952b3c88cdad0bc0d368"
+  },
+  "saved_state_graph_0118/activated@175+488+774/raw_reading/38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553": {
+   "bytes": 2618,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488+774/raw_reading/38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553.gz"
+   },
+   "role": "input",
+   "sha256": "38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553"
+  },
+  "saved_state_graph_0118/activated@175+488/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "548472ea54c50fa41d39a2d2ba8c42838eb508bfe07405eadaf03ad5f93b3f32"
+  },
+  "saved_state_graph_0118/activated@175+488/CONTEXT_RENDERS.json": {
+   "bytes": 42725,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "6984a2a9224cb176bbd34228507324cdd9dfc17c434f4a8ed25a5741bd74ade5"
+  },
+  "saved_state_graph_0118/activated@175+488/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "93fa0a9530afa254d0c8e49d308deb633e1299f8d611b50bea47948b642a174f"
+  },
+  "saved_state_graph_0118/activated@175+488/ROUTE.json": {
+   "bytes": 23197,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "b1444cde9509e54e89099c3860ab2261a1df2809ec25a4b8ce74f6afda87bbe3"
+  },
+  "saved_state_graph_0118/activated@175+488/raw_reading/b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca": {
+   "bytes": 2509,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+488/raw_reading/b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca.gz"
+   },
+   "role": "input",
+   "sha256": "b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca"
+  },
+  "saved_state_graph_0118/activated@175+774+1062+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "f4f6d0545a70ee754c9b8a114fb601bb65911ac1aa14493a8b11f23c7053e067"
+  },
+  "saved_state_graph_0118/activated@175+774+1062+1062/CONTEXT_RENDERS.json": {
+   "bytes": 53619,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "45312ed2ae87264d1b3193c2c897dd0c0ee39443eb4d77b9f7ca80adc349c8e0"
+  },
+  "saved_state_graph_0118/activated@175+774+1062+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "ba7f49eb3b4a87998bc3e6e12479320cb930fb8be051dbd046e8a427d2131537"
+  },
+  "saved_state_graph_0118/activated@175+774+1062+1062/ROUTE.json": {
+   "bytes": 37491,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "f46db0ee222c465fc34c9294290a407bac4ffb311b903455c0657d2b88686040"
+  },
+  "saved_state_graph_0118/activated@175+774+1062+1062/raw_reading/2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2": {
+   "bytes": 3696,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062+1062/raw_reading/2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2.gz"
+   },
+   "role": "input",
+   "sha256": "2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2"
+  },
+  "saved_state_graph_0118/activated@175+774+1062/COMPLETE.json": {
+   "bytes": 694,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "a9feef01015cebde71e50df7b038a2fb881136273b0713aaaa0bed5c52d1aebf"
+  },
+  "saved_state_graph_0118/activated@175+774+1062/CONTEXT_RENDERS.json": {
+   "bytes": 63729,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "4c1b01957abd4fd37cb54efc2195ccee8f0b0d87978f778f934a1a2c785e9c58"
+  },
+  "saved_state_graph_0118/activated@175+774+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "a2e7ee731aa32a1ebbdf179cd6f70b1c1fae5d29459a2071da723ee9231b9369"
+  },
+  "saved_state_graph_0118/activated@175+774+1062/ROUTE.json": {
+   "bytes": 44178,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "d6e141bacc9e206bfaac5affbcb7aab58a74e940fe6b5eeba21c42ef654f9047"
+  },
+  "saved_state_graph_0118/activated@175+774+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115": {
+   "bytes": 100,
+   "provenance": {
+    "note": "prepared picture input blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115.gz"
+   },
+   "role": "input",
+   "sha256": "6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115"
+  },
+  "saved_state_graph_0118/activated@175+774+1062/raw_reading/623967fa042e68e53c7d32fb24e20e12ce0d65268b0ff8dda62c4e942aee607e": {
+   "bytes": 3836,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+1062/raw_reading/623967fa042e68e53c7d32fb24e20e12ce0d65268b0ff8dda62c4e942aee607e.gz"
+   },
+   "role": "input",
+   "sha256": "623967fa042e68e53c7d32fb24e20e12ce0d65268b0ff8dda62c4e942aee607e"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062+1062/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "dc6af7e1dcf58a271699257473828f8ea2dcec5e14d51995b50b24635424a4f7"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062+1062/CONTEXT_RENDERS.json": {
+   "bytes": 58615,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "85b05aef86b41edbabde9be716a0fa20a0ed3751232a91c9c2b8007387075fa7"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "4e1484c63c47369609df170f0148cbdfbb6d0183fb14cf10576d3a8185220536"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062+1062/ROUTE.json": {
+   "bytes": 32713,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "b2e2d000cdb3bcdbf5809d4ac2c9f8fd60dca988538856879fba752a2d7d6eb9"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062+1062/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869": {
+   "bytes": 3450,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062+1062/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869.gz"
+   },
+   "role": "input",
+   "sha256": "191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062/COMPLETE.json": {
+   "bytes": 694,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "22e500800ff53399286b17e885c9441fb29975d757ca341f0e49996ac1cdc182"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062/CONTEXT_RENDERS.json": {
+   "bytes": 70721,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "62efc1853cdef805cf2339f821b5a7245051ced9aaedfe0553956d110376fa97"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "c02f21edfd50b59288ecc192a8836c7c70e81b97f33090bded67993c377d8410"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062/ROUTE.json": {
+   "bytes": 39402,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "706d0435e15bab10593975bf6fce449aa3d85e4d19ef31697dc8f29fb5262f48"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115": {
+   "bytes": 100,
+   "provenance": {
+    "note": "prepared picture input blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115.gz"
+   },
+   "role": "input",
+   "sha256": "6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115"
+  },
+  "saved_state_graph_0118/activated@175+774+774+1062/raw_reading/ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c": {
+   "bytes": 3590,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774+1062/raw_reading/ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c.gz"
+   },
+   "role": "input",
+   "sha256": "ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c"
+  },
+  "saved_state_graph_0118/activated@175+774+774/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "2136ed4762c4ef5cd11a71ce931ce155970dd4f5ceb8632bfa0f54a24b4d34d2"
+  },
+  "saved_state_graph_0118/activated@175+774+774/CONTEXT_RENDERS.json": {
+   "bytes": 48490,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "5e417c2217df4dd2028a779cf8ec3e3cb35752e0bba4f0848e048b665a34094d"
+  },
+  "saved_state_graph_0118/activated@175+774+774/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "4e1484c63c47369609df170f0148cbdfbb6d0183fb14cf10576d3a8185220536"
+  },
+  "saved_state_graph_0118/activated@175+774+774/ROUTE.json": {
+   "bytes": 31120,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "2b7c4d6d8416c2a81d76135bc6264b9a728c591a6b7b5309d0755194fe7a7eae"
+  },
+  "saved_state_graph_0118/activated@175+774+774/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869": {
+   "bytes": 3450,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774+774/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869.gz"
+   },
+   "role": "input",
+   "sha256": "191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869"
+  },
+  "saved_state_graph_0118/activated@175+774/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "eba406af2806d6a49a67aa3affe0919724b696becdd8111e3b02b7fa7c972e4c"
+  },
+  "saved_state_graph_0118/activated@175+774/CONTEXT_RENDERS.json": {
+   "bytes": 43866,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "36b499e69c399dedd817c4ace5d594fea497b97b7fa7480bbe0b7e3a69361213"
+  },
+  "saved_state_graph_0118/activated@175+774/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "ba7f49eb3b4a87998bc3e6e12479320cb930fb8be051dbd046e8a427d2131537"
+  },
+  "saved_state_graph_0118/activated@175+774/ROUTE.json": {
+   "bytes": 35916,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "68909e8a1de596e0e5836294dfd224ca088eb49da706945c1920586e6dd4f20a"
+  },
+  "saved_state_graph_0118/activated@175+774/raw_reading/2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2": {
+   "bytes": 3696,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175+774/raw_reading/2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2.gz"
+   },
+   "role": "input",
+   "sha256": "2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2"
+  },
+  "saved_state_graph_0118/activated@175/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "d9e54e1fbb3102d752fbe67c862b7b489e5a405e0a6b13d83a7d71a4e40d9261"
+  },
+  "saved_state_graph_0118/activated@175/CONTEXT_RENDERS.json": {
+   "bytes": 38813,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "be18967dec9855846e6f13387cacfed249d09eae1951b1e1d312c0a5144ac90e"
+  },
+  "saved_state_graph_0118/activated@175/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "4e1484c63c47369609df170f0148cbdfbb6d0183fb14cf10576d3a8185220536"
+  },
+  "saved_state_graph_0118/activated@175/ROUTE.json": {
+   "bytes": 29594,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "5c434b3eb3273f20bbd35f78fc6586328fdced4d9836a0cdf330c3cfca263976"
+  },
+  "saved_state_graph_0118/activated@175/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869": {
+   "bytes": 3450,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/states/activated@175/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869.gz"
+   },
+   "role": "input",
+   "sha256": "191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869"
+  },
+  "saved_state_graph_0118/initial/COMPLETE.json": {
+   "bytes": 620,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/COMPLETE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "af4a441a8b8ddd46ccf8e58bdabaa788846210bce7739febff2e66b1446a4416"
+  },
+  "saved_state_graph_0118/initial/CONTEXT_RENDERS.json": {
+   "bytes": 17627,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/CONTEXT_RENDERS.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "f960cc6abd5e2c385d29a686c4413ce1db67c020fcf0f58933571cab76ddde5c"
+  },
+  "saved_state_graph_0118/initial/RAW_READING.json": {
+   "bytes": 2785,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/RAW_READING.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "93fa0a9530afa254d0c8e49d308deb633e1299f8d611b50bea47948b642a174f"
+  },
+  "saved_state_graph_0118/initial/ROUTE.json": {
+   "bytes": 202232,
+   "provenance": {
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/ROUTE.json",
+    "run": "saved_state_graph_run_20261022T0118 (producer context.py with the link-record fill; reader c00034e4 at generation)"
+   },
+   "role": "input",
+   "sha256": "89dc1b815bf61289aa573251441f5023fb6542b53a704bce32c7fd04e219cfe6"
+  },
+  "saved_state_graph_0118/initial/raw_reading/b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca": {
+   "bytes": 2509,
+   "provenance": {
+    "note": "raw reading blob (decompressed content; its sha256 is the pin)",
+    "owner": "Fable",
+    "path": "/home/faisal/prepare_work/extraction_closeout_20261010/manual_review_20261021/context_candidate/saved_state_graph_run_20261022T0118/attempt_0/raw_reading/b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca.gz"
+   },
+   "role": "input",
+   "sha256": "b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca"
+  }
+ },
+ "groups": {
+  "old_label_failure": [
+   "old_label_failure/ROUTES.json"
+  ],
+  "root_ownership_cases": [
+   "root_ownership_cases/CASES.json"
+  ],
+  "saved_state_graph_0118": [
+   "saved_state_graph_0118/initial/ROUTE.json",
+   "saved_state_graph_0118/initial/COMPLETE.json",
+   "saved_state_graph_0118/initial/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/initial/RAW_READING.json",
+   "saved_state_graph_0118/initial/raw_reading/b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca",
+   "saved_state_graph_0118/activated@175/ROUTE.json",
+   "saved_state_graph_0118/activated@175/COMPLETE.json",
+   "saved_state_graph_0118/activated@175/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175/RAW_READING.json",
+   "saved_state_graph_0118/activated@175/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869",
+   "saved_state_graph_0118/activated@175+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+1062/raw_reading/ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c",
+   "saved_state_graph_0118/activated@175+1062+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+1062+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+1062+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+1062+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+1062+1062/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869",
+   "saved_state_graph_0118/activated@175+488/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488/raw_reading/b333a2d69b895e38456bb07f22741753f26cb94b3bff654dddfb1eee8ebdffca",
+   "saved_state_graph_0118/activated@175+488+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+1062/raw_reading/921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb",
+   "saved_state_graph_0118/activated@175+488+1062+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+1062+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+1062+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+1062+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+1062+1062/raw_reading/921d34f4152156937253268bc10f30a09ed51ea454e1221ffeb3fc12285b52cb",
+   "saved_state_graph_0118/activated@175+488+774/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+774/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+774/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+774/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+774/raw_reading/38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553",
+   "saved_state_graph_0118/activated@175+488+774+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+774+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+774+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+774+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+774+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75",
+   "saved_state_graph_0118/activated@175+488+774+1062+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+774+1062+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+774+1062+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+774+1062+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+774+1062+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75",
+   "saved_state_graph_0118/activated@175+488+774+774/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+774+774/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+774+774/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+774+774/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+774+774/raw_reading/38b7205600b452289f7ee20811866aca46fa4ede7b024ecae727ed84569d9553",
+   "saved_state_graph_0118/activated@175+488+774+774+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75",
+   "saved_state_graph_0118/activated@175+488+774+774+1062+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+488+774+774+1062+1062/raw_reading/768a38fec1fd2ff3bdb794f5fada5007ae02ced1c27720b7782aaad1de07fc75",
+   "saved_state_graph_0118/activated@175+774/ROUTE.json",
+   "saved_state_graph_0118/activated@175+774/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+774/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+774/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+774/raw_reading/2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2",
+   "saved_state_graph_0118/activated@175+774+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+774+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+774+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+774+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+774+1062/raw_reading/623967fa042e68e53c7d32fb24e20e12ce0d65268b0ff8dda62c4e942aee607e",
+   "saved_state_graph_0118/activated@175+774+1062+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+774+1062+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+774+1062+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+774+1062+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+774+1062+1062/raw_reading/2ee3b8e75487432ee233663ab836ad077deb8f4445499a6def7177f54290eed2",
+   "saved_state_graph_0118/activated@175+774+774/ROUTE.json",
+   "saved_state_graph_0118/activated@175+774+774/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+774+774/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+774+774/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+774+774/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869",
+   "saved_state_graph_0118/activated@175+774+774+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+774+774+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+774+774+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+774+774+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+774+774+1062/raw_reading/ea19649ea18bc77fbb13cf3edb6eca2b51d86563d4d1aba72cac0bb630ad8c1c",
+   "saved_state_graph_0118/activated@175+774+774+1062+1062/ROUTE.json",
+   "saved_state_graph_0118/activated@175+774+774+1062+1062/COMPLETE.json",
+   "saved_state_graph_0118/activated@175+774+774+1062+1062/CONTEXT_RENDERS.json",
+   "saved_state_graph_0118/activated@175+774+774+1062+1062/RAW_READING.json",
+   "saved_state_graph_0118/activated@175+774+774+1062+1062/raw_reading/191d7e33f364e7ba3e485e4c733c556e37fd7d77dbae0ac080be08f1afcf3869",
+   "saved_state_graph_0118/activated@175+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115",
+   "saved_state_graph_0118/activated@175+774+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115",
+   "saved_state_graph_0118/activated@175+774+774+1062/prepared/6d811fd7070cde013062f8d8b739309f0c0cf0088ecf264230a3c1cd49528115"
+  ]
+ },
+ "schema": "prepare-test-fixtures/1"
+}

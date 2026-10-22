@@ -12,6 +12,15 @@ from .archive import load_blob, store_blob
 from .transport import download, DownloadError, http_request
 
 
+class OfflineCacheMiss(AcquisitionError):
+    """The exact URL has no selected response in this offline campaign (live=False): nothing was requested. The only acquisition error a
+    caller may treat as an ordinary unavailable resource; every other AcquisitionError is custody, stop or input failure. `receipt`: the
+    URL's latest recorded failed attempt (its HTTP status, as DownloadError.receipt), or None when it was never attempted."""
+    def __init__(self, message, receipt=None):
+        super().__init__(message)
+        self.receipt = receipt
+
+
 class Campaign:
     """Transactional receipts select exact response versions; replay is offline.
 
@@ -122,21 +131,25 @@ class Campaign:
                 raise AcquisitionError('HTTP 403; stop marker could not be saved') from exc
         return result
 
-    def fetch(self, url):
-        """Return exact bytes and receipt with cache_hit; never guess a version."""
+    def fetch(self, url, declared_by=None):
+        """Return exact bytes and receipt with cache_hit; never guess a version. `declared_by` (proposal): an official reference outside the package rule,
+        with the evidence that declared it (the filing's index link, or a recorded official response's own native request); kept in its receipt."""
         try:
-            return self._fetch(url)
+            return self._fetch(url, declared_by)
         except DownloadError:
             raise  # A recorded HTTP failure need not stop unrelated filings.
         except (StorageError, OSError, sqlite3.Error) as exc:
             self.stopped = True
             raise StorageError('Campaign storage failure: ' + str(exc)) from exc
 
-    def _fetch(self, url):
+    def _fetch(self, url, declared_by=None):
         parsed = urlsplit(url)
-        if (parsed.scheme != 'https' or parsed.netloc != 'www.sec.gov'
+        if declared_by is None and (parsed.scheme != 'https' or parsed.netloc != 'www.sec.gov'
                 or not parsed.path.startswith('/Archives/') or parsed.query or parsed.fragment):
             raise AcquisitionError('Expected an exact SEC Archives URL without query/fragment')
+        if declared_by is not None and (not isinstance(declared_by, dict) or parsed.scheme != 'https' or parsed.netloc != 'www.sec.gov' or parsed.fragment):
+            raise AcquisitionError('Expected a declared exact official https://www.sec.gov reference without fragment')
+        declared = {} if declared_by is None else {'declared_by': declared_by}
         if self.stopped or (self.root / 'STOP.json').exists():
             raise AcquisitionError('Campaign stopped; see the initial failure or STOP.json')
         saved = self.db.execute('SELECT receipt FROM responses WHERE url=?', (url,)).fetchone()
@@ -151,7 +164,12 @@ class Campaign:
                 raise AcquisitionError('Cached response size differs; cache is not repaired')
             return data, dict(record, cache_hit=True)
         if not self.live:
-            raise AcquisitionError('Uncached URL; live acquisition was not enabled')
+            failed = self.db.execute("SELECT name FROM sqlite_master WHERE name='failures'").fetchone() and self.db.execute(
+                'SELECT receipt FROM failures WHERE url=? ORDER BY rowid DESC LIMIT 1', (url,)).fetchone()
+            failure = json.loads(failed[0]) if failed else None
+            if failure is not None and (not isinstance(failure, dict) or failure.get('url') != url):
+                raise AcquisitionError('Invalid recorded failure identity; cache is not repaired')
+            raise OfflineCacheMiss('Uncached URL; live acquisition was not enabled', failure)
         started = self.now()
         try:
             data, receipt = download(url, sender=self._request, now=self.now, sleep=self.sleep,
@@ -160,12 +178,12 @@ class Campaign:
             with self.db:  # created on first failure, so replays never alter older evidence
                 self.db.execute('CREATE TABLE IF NOT EXISTS failures (url TEXT NOT NULL, receipt TEXT NOT NULL)')
                 self.db.execute('INSERT INTO failures VALUES (?, ?)', (url, json.dumps(
-                    dict(exc.receipt, error=str(exc), elapsed_seconds=self.now() - started))))
+                    dict(exc.receipt, error=str(exc), elapsed_seconds=self.now() - started, **declared))))
             raise
         # Cookies do not establish filing provenance and are not needed for replay.
         for attempt in receipt['attempts']:
             attempt.get('headers', {}).pop('set-cookie', None)
         record = dict(receipt, sha256=store_blob(self.root / 'blobs', data),
-                      bytes=len(data), elapsed_seconds=self.now() - started)
+                      bytes=len(data), elapsed_seconds=self.now() - started, **declared)
         self._record(url, record)
         return data, dict(record, cache_hit=False)

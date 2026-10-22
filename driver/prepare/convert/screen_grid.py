@@ -64,12 +64,30 @@ def endpoints_of(vis, units):
     return gaps
 
 
+def gap_chars(raw, vis, runs, gaps):
+    """Each gap side's source character located in its own bound run, by position, never by a comment inside the text: [(key, run, j, n)] with j the
+    character's first non-white-space code point in the run and n its code points (a non-BMP character or a reference of several code points whole);
+    the page's run walk (JS) measures that extent only where the run is bound (the screen step's `proved`). A side whose character is white space or
+    in no marked run stays unmapped: [keys], listed, never guessed."""
+    at = {}
+    for k, (_, chars, _, marked) in enumerate(runs):
+        if not marked: continue
+        j = 0
+        for (s, _), g in _glyphs(raw, chars)[1]: n = len(g if g is not None else '\ufffd'); at[s] = (k, j, n); j += n
+    want, unmapped = [], []
+    for g, (_, _, _, k, l) in enumerate(gaps):
+        for side, c in ((0, k), (1, l)):
+            key, hit = '%d.%d' % (g, side), at.get(vis.s[c])
+            if hit: want.append((key,) + hit)
+            else: unmapped.append(key)
+    return want, unmapped
+
+
 def tag_cells(raw, vis=None, gaps=(), marks=(), prefix='', cells=True):
     """A copy with a comment <!--g:n--> right after every <td>/<th> start tag (document order; the scanner's own tag end) and the byte span of each cell in
     the original - a comment, never an attribute: a sheet can select an attribute, none sees a comment, :empty and structural selectors ignore it (Root,
-    render-mark boundary); and, for each gap, a comment <!--j:n.0-->
-    / <!--j:n.1--> right before the character before and after it — a comment is no element: no stylesheet rule and no structural selector sees it, the
-    page lays out exactly as before (Codex C2), and the page's own range over the character that follows it is measured. `cells`: False for a copy
+    render-mark boundary). Gaps take no comment: a comment inside text splits its text node, and the browser then lays the glyphs out differently
+    (Root CONTEXT_RANGE_AND_STATE_IMPLEMENTATION_20261021); `gap_chars` locates their characters in their own bound runs instead. `cells`: False for a copy
     with no cell marks (spans then none). `marks`: (byte, comment) pairs
     set in as given (the symbol runs' marks); `prefix` (`marker_prefix`) begins every comment the step writes, so none the source writes stands for one."""
     vis = Visible(raw) if vis is None else vis
@@ -78,8 +96,7 @@ def tag_cells(raw, vis=None, gaps=(), marks=(), prefix='', cells=True):
     for n, (start, end) in enumerate(spans):
         close = _CELL_END.match(raw, end); spans[n] = (start, close.end() if close else end)  # with its own end tag, where it has one
         edits.append((vis.cell_tag_ends[start], b'<!--%sg:%d-->' % (prefix.encode(), n)))
-    for n, (_, _, _, k, l) in enumerate(gaps):
-        for side, c in ((0, k), (1, l)): edits.append((vis.s[c], b'<!--%sj:%d.%d-->' % (prefix.encode(), n, side)))
+    if gaps: raise ValueError('gap comments are retired: measure gap characters in their runs (gap_chars)')
     edits.extend(marks)
     out, pos = [], 0
     for at, piece in sorted(edits, key=lambda e: e[0]): out += [raw[pos:at], piece]; pos = at
@@ -184,26 +201,33 @@ def apply(units, spans, measured_by_table):
     return n
 
 
-JS = """(p) => { p = p || ''; const tables = Array.from(document.querySelectorAll('table')); const out = []; const gap = new RegExp('^' + p + 'j:([0-9]+[.][01])$'), cell = new RegExp('^' + p + 'g:([0-9]+)$');
+JS = """(arg) => { const [p0, want] = Array.isArray(arg) ? arg : [arg, []]; const p = p0 || ''; const twice = (() => { const n = new Map(), tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT); for (let c = tw.nextNode(); c; c = tw.nextNode()) if (c.data.startsWith(p)) n.set(c.data, (n.get(c.data) || 0) + 1); return new Set([...n].filter(([, k]) => k > 1).map(([d]) => d)); })();  // the shared run-binding rule: a mark of ours the page holds twice (a cloned or re-inserted block) binds nothing, for every reader
+  const tables = Array.from(document.querySelectorAll('table')); const out = []; const cell = new RegExp('^' + p + 'g:([0-9]+)$');
   const shown = new Map();  // each row's place in its table as the page shows it: rows by their own box's top (equal tops in DOM order); a row with no box stays after the one before it
   for (const t of tables) { let top = -Infinity; const keyed = Array.from(t.rows, tr => { if (tr.getClientRects().length) top = tr.getBoundingClientRect().top; return [top, tr.rowIndex, tr]; });
     keyed.sort((a, b) => a[0] - b[0] || a[1] - b[1]).forEach(([, , tr], i) => shown.set(tr, i)); }
   const named = new Set(), cw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);  // a cell's own mark is the first in it, a cell being a native HTML cell (a <td> in SVG or MathML is a foreign element); one the parser moved out of a cell, or a second in one cell (a start tag it ignored), names nothing
-  for (let c = cw.nextNode(); c; c = cw.nextNode()) { const m = cell.exec(c.data), el = c.parentElement; if (!m || !(el instanceof HTMLTableCellElement) || named.has(el)) continue; named.add(el);
+  for (let c = cw.nextNode(); c; c = cw.nextNode()) { const m = cell.exec(c.data), el = c.parentElement; if (!m || twice.has(c.data) || !(el instanceof HTMLTableCellElement) || named.has(el)) continue; named.add(el);
     const r = el.getBoundingClientRect(); const t = el.closest('table'); const tr = el.parentElement;
     const rest = tr && tr.parentElement && tr.parentElement.rows ? tr.parentElement.rows.length - tr.sectionRowIndex : 1;  // the rows left in its row group, where the table model ends a cell: rowspan="0" runs to there, a larger one stops there
     out.push({g: +m[1], table: tables.indexOf(t), row: tr && shown.has(tr) ? shown.get(tr) : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest)}); }
-  const boxes = {}; const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
-  for (let c = w.nextNode(); c; c = w.nextNode()) { const m = gap.exec(c.data); if (!m) continue; let t = c.nextSibling; while (t && t.nodeType === Node.COMMENT_NODE) t = t.nextSibling;  // one character can end one gap and begin the next: its two marks stand side by side
-    if (!t || t.nodeType !== Node.TEXT_NODE || !t.data.length) continue;
-    let shown = getComputedStyle(t.parentElement).visibility === 'visible';
-    for (let el = t.parentElement; el && shown; el = el.parentElement) if (+getComputedStyle(el).opacity === 0) shown = false;
-    const r = document.createRange(); r.setStart(t, 0); r.setEnd(t, 1); const rs = r.getClientRects();
-    if (rs.length === 1) boxes[m[1]] = {shown, x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom}; }
+  const boxes = {}, runs = new Map(), run = new RegExp('^' + p + 's:([0-9]+)$'), SP = ' \\t\\n\\r\\f';  // each gap side: [key, run, first non-white-space code point, code points]
+  for (const [key, k, j, n] of want || []) { if (!runs.has(k)) runs.set(k, []); runs.get(k).push([key, j, n]); }
+  const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
+  for (let c = w.nextNode(); c && runs.size; c = w.nextNode()) { const m = run.exec(c.data); if (!m || twice.has(c.data) || !runs.has(+m[1])) continue; const asked = runs.get(+m[1]); runs.delete(+m[1]);
+    const at = [];  // SYMBOLS_JS's own walk: the run's text nodes after its mark, across inserted comments, to an element or the next run's mark; each non-white-space code point [node, start, end]
+    for (let x = c.nextSibling; x && (x.nodeType === Node.TEXT_NODE || (x.nodeType === Node.COMMENT_NODE && !run.test(x.data))); x = x.nextSibling)
+      if (x.nodeType === Node.TEXT_NODE) { let i = 0; for (const ch of x.data) { if (!SP.includes(ch)) at.push([x, i, i + ch.length]); i += ch.length; } }
+    for (const [key, j, n] of asked) { const a = at[j], b = at[j + n - 1]; if (!a || !b) continue;  // the character's whole extent: a non-BMP character or a reference of several code points is never sliced
+      let shown = getComputedStyle(a[0].parentElement).visibility === 'visible';
+      for (let el = a[0].parentElement; el && shown; el = el.parentElement) if (+getComputedStyle(el).opacity === 0) shown = false;
+      const r = document.createRange(); r.setStart(a[0], a[1]); r.setEnd(b[0], b[2]); const rs = r.getClientRects();
+      if (rs.length === 1) boxes[key] = {shown, x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom}; } }
   return {cells: out, boxes}; }"""
 
 
-SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, color = {}, color_pseudo = {}, style = {}, style_pseudo = {}, tints = new Map(), grounds = new Map(), lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
+SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const twice = (() => { const n = new Map(), tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT); for (let c = tw.nextNode(); c; c = tw.nextNode()) if (c.data.startsWith(p)) n.set(c.data, (n.get(c.data) || 0) + 1); return new Set([...n].filter(([, k]) => k > 1).map(([d]) => d)); })();  // the shared run-binding rule: a mark of ours the page holds twice (a cloned or re-inserted block) binds nothing, for every reader
+ const marks = {}, faces = [], plain = [], inline = {}, decor = {}, color = {}, color_pseudo = {}, style = {}, style_pseudo = {}, tints = new Map(), grounds = new Map(), lifts = new Map(), mark = new RegExp('^' + p + 's:([0-9]+)$');  // every: each run measured, an ordinary one too (page_visibility)
   for (const f of document.fonts) faces.push(f.family.replace(/^["']|["']$/g, '').toUpperCase());  // typefaces the document defines itself (@font-face)
   const STYLED = ['font-weight', 'font-style', '-webkit-text-decorations-in-effect', 'background-color', 'background-image', 'text-transform'];
   const tint = el => { if (!el) return [[], []]; if (tints.has(el)) return tints.get(el);  // an element's and its ancestors' first-letter / first-line readings that differ from their own (nearest first), each element's own and pseudo styles read once: colours [pseudo, colour] as before, and the style readings named [pseudo, property, value] (a pseudo's unset background - initial: transparent, none - covers nothing behind it); which characters they paint is layout's, so they stay an uncertainty
@@ -221,7 +245,7 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
       cs.verticalAlign === 'super' || cs.verticalAlign === 'sub' || el.computedStyleMap().get('vertical-align') instanceof CSSNumericValue)) ? [Object.assign({tag, display: cs.display, vertical_align: cs.verticalAlign}, placed ? {position: cs.position, top: cs.top, bottom: cs.bottom, left: cs.left, right: cs.right} : {})].concat(up || []) : up;  // an alignment keyword (a whole inline table set text-bottom; root, ROOT_NATIVE_PREDICATE)
     lifts.set(el, got); return got; };
   const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
-  for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (!m) continue;
+  for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (!m || twice.has(c.data)) continue;
     let text = '', el = null, first = null, last = null, n = c.nextSibling;  // the run's text: the text nodes after its mark, across inserted comments, to an element or the next run's mark
     for (; n && (n.nodeType === Node.TEXT_NODE || (n.nodeType === Node.COMMENT_NODE && !mark.test(n.data))); n = n.nextSibling) if (n.nodeType === Node.TEXT_NODE) { text += n.data; el = n.parentElement; first = first || n; last = n; }
     if (!el) { marks[m[1]] = null; continue; }  // the parser moved the run away from its mark (a table's foster parent): unbound
@@ -245,6 +269,43 @@ SYMBOLS_JS = "([p, every, decorate]) => { " + _decoder_js() + """ const marks = 
         if (q.fontFamily !== own.fontFamily || q.textTransform !== own.textTransform || q.fontVariant !== own.fontVariant || q.fontFeatureSettings !== own.fontFeatureSettings) return true; } } return false; })(),
       decoded: face ? chars.map(ch => { let k = ch.codePointAt(0); if (k >= 0xF020 && k <= 0xF0FF) k -= 0xF000; const r = k <= 0xFF ? lib.codePoint(face, k) : undefined; return r ? r.codePoint : null; }) : null}; }
   return Object.assign({marks, faces, plain: plain.join(','), inline, color, color_pseudo, style, style_pseudo, frame: {viewport: [innerWidth, innerHeight], scroll: [scrollX, scrollY], device_pixel_ratio: devicePixelRatio}}, decorate ? {decor, decorations: getComputedStyle(document.documentElement).getPropertyValue('-webkit-text-decorations-in-effect')} : {}); }"""
+
+
+CAPTURE_OPTIONS = {'full_page': True, 'type': 'png', 'caret': 'initial', 'animations': 'allow'}  # Root CONTEXT_NATIVE_STATE_GUARD_DECISION_20261021: no clip, mask, style or scale change
+NATIVE_STATE_JS = """(p) => { const c = document.documentElement.cloneNode(true), w = document.createTreeWalker(c, NodeFilter.SHOW_COMMENT), drop = []; let n;
+  while ((n = w.nextNode())) if (n.nodeValue.startsWith(p)) drop.push(n); drop.forEach(x => x.remove()); const b = document.body || {}, e = document.documentElement;
+  return {document: c.outerHTML, ratio: devicePixelRatio, page: [Math.max(b.scrollWidth || 0, e.scrollWidth, b.offsetWidth || 0, e.offsetWidth, b.clientWidth || 0, e.clientWidth),
+          Math.max(b.scrollHeight || 0, e.scrollHeight, b.offsetHeight || 0, e.offsetHeight, b.clientHeight || 0, e.clientHeight)]}; }"""
+
+
+class CaptureError(RuntimeError):
+    """The native full-page capture failed or is incomplete: a refusal of that reading, never a viewport-only fallback."""
+
+
+def native_state(page, prefix, blobs=None):
+    """The one native-state read every context path shares (Root CONTEXT_NATIVE_STATE_GUARD_DECISION_20261021): the whole document serialization
+    without our comments (`prefix`) and the pinned browser's native full-page capture (Page.captureScreenshot beyond the viewport; caret 'initial',
+    animations 'allow'; no clip, mask or style). Returns ({document_sha256, capture: {sha256, options, browser, viewport, device_scale_factor, width,
+    height, page_size}}, png); with `blobs` the capture is also kept once there by its digest (archive.store_blob). One bounded instant: no claim of
+    quiescence or rendering fidelity."""
+    s = page.evaluate(NATIVE_STATE_JS, prefix)
+    from playwright.sync_api import Error as PlaywrightError  # the native capture's own error type (its timeout included)
+    try:
+        png = page.screenshot(**CAPTURE_OPTIONS)
+    except PlaywrightError as e:  # only this is a capture refusal; storage, memory, OS, import and programming errors propagate (html_route's policy)
+        if not page.context.browser.is_connected(): raise  # a lost browser is a failure, not a refusal
+        raise CaptureError('native full-page capture failed: ' + repr(e)[:200]) from e
+    if png[:8] != b'\x89PNG\r\n\x1a\n': raise CaptureError('native full-page capture is not a PNG')
+    w, h, r = int.from_bytes(png[16:20], 'big'), int.from_bytes(png[20:24], 'big'), s['ratio']
+    if w < round(s['page'][0] * r) or h < round(s['page'][1] * r): raise CaptureError(f"incomplete native full-page capture: {w}x{h} for a {s['page'][0]}x{s['page'][1]} page at ratio {r}")
+    d = hashlib.sha256(png).hexdigest()
+    if blobs is not None:
+        from driver.prepare.get import archive
+        if archive.store_blob(blobs, png) != d: raise CaptureError('capture blob identity mismatch')
+    vp = page.viewport_size
+    return {'document_sha256': hashlib.sha256(s['document'].encode('utf-8', 'surrogatepass')).hexdigest(),
+            'capture': {'sha256': d, 'options': dict(CAPTURE_OPTIONS), 'browser': page.context.browser.version, 'viewport': [vp['width'], vp['height']] if vp else None,
+                        'device_scale_factor': r, 'width': w, 'height': h, 'page_size': s['page']}}, png
 
 
 def marker_prefix(raw):
@@ -476,7 +537,7 @@ class Source:
     @import); a URL is answered only by the member at exactly that path under `base` or by its own observation - a 200 only with the bytes its
     sha256 names. One document's: bound to its bytes at first use (the declared member, where it is one, must be those bytes). `records`: one per
     URL asked (member path and sha256, observation status and time, or 'refused' and why); `charset`: the browser's for the document, read once."""
-    def __init__(self, path, members, base=None, observed=None, bundle=None):
+    def __init__(self, path, members, base=None, observed=None, bundle=None, context=None):  # `context`: a context.Context - every render is made in that observed parent state
         split = urllib.parse.urlsplit(base) if base is not None else None
         if split is not None and not (split.scheme and split.netloc and base.endswith('/')): raise ValueError('base: an absolute address ending in "/", or None')
         if path.startswith('/') or urllib.parse.urlsplit(path).scheme: raise ValueError("path: the document's member path, relative to base")
@@ -485,6 +546,7 @@ class Source:
         self.path, self.base, self.bundle = path, base, bundle  # the evidence as given, unchangeable afterwards: a record always names the bytes every render used
         self.members, self.observed = types.MappingProxyType(dict(members)), types.MappingProxyType({u: types.MappingProxyType(dict(o)) for u, o in (observed or {}).items()})
         self.records, self.refusals, self.root, self.document, self.charset = {}, [], None, None, None
+        self.context = context
 
     def bind(self, raw):  # ValueError unless `raw` is this source's document: its declared member (where it is one), the bytes it was first used for
         digest = hashlib.sha256(raw).hexdigest()
@@ -497,7 +559,7 @@ class Source:
 
     def identity(self):  # what the route keeps: the document and the evidence its renders used
         return {'document': {'path': self.path, 'base': self.base, 'bundle': self.bundle, 'sha256': self.document},
-                'dependencies': sorted(self.records.values(), key=lambda r: json.dumps(r, sort_keys=True))}
+                'dependencies': sorted(self.records.values(), key=lambda r: json.dumps(r, sort_keys=True)), **({'context': self.context.identity()} if self.context is not None else {})}
 
     def _refuse(self, url, key, name, kind, why=None):
         self.refusals.append((url, kind)); self.records.setdefault(key, {('path' if key == name else 'url'): key, 'status': 'refused', 'kind': kind, **({'why': why} if why else {})})
@@ -509,7 +571,10 @@ class Source:
         if name in self.members:
             body = self.members[name]; self.records.setdefault(key, {'member': name, 'sha256': hashlib.sha256(body).hexdigest(), 'status': 200, 'kind': kind})
             return 200, mimetypes.guess_type(name)[0] or 'application/octet-stream', body
-        seen = self.observed.get(url)
+        return self.observation(url, kind, key, name)
+
+    def observation(self, url, kind, key=None, name=None):  # an exact recorded response by its recorded identity (never a package member): answer()'s own rule
+        key = url if key is None else key; seen = self.observed.get(url)
         if seen is None: return self._refuse(url, key, name, kind)
         body = seen.get('body')
         if seen['status'] == 200 and (body is None or hashlib.sha256(body).hexdigest() != seen.get('sha256')): return self._refuse(url, key, name, kind, 'observed bytes are not the recorded sha256')
@@ -524,6 +589,7 @@ def _offline_page(browser, asked=None, document=None, source=None):
     sends a page that names none, so the browser decodes the bytes by its own rules (a byte order mark, a <meta>, its default); with one, in that
     charset. `source` (a Source): a request that is no navigation is answered from its evidence only. Every other request is refused - a later
     navigation (a refresh, a frame, a redirect) as cancelled, so that the page stays the one loaded."""
+    if source is not None and source.context is not None: return source.context.page(browser, asked, document, source)  # a contextual state: its own qualified page
     page = browser.new_page(viewport={'width': 1400, 'height': 1000}, java_script_enabled=False); first = [document]
     def answer(route):
         r = route.request
@@ -704,7 +770,7 @@ def _generated_owners(raw, vis, runs, marks, gen, units):
     return {'read': True, 'records': out, **({'background_images': images} if images else {}), 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why)}
 
 
-def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None):
+def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None, gap_chars=()):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window; the document's scripts never run). Only
     table cells are read: a mark names the td/th it stands first in; one the parser moved out of its cell, or a second in one cell, names nothing,
     and the source never writes the step's own prefix (`marker_prefix`; Codex MEASURE_ALIAS_BASELINE). With a symbol-mark `prefix`, the same page's
@@ -720,7 +786,7 @@ def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=
         unproved = [url for url, kind in source.refusals[first:] if kind != 'navigation']  # a sheet, font or picture no evidence answered
         if unproved and refused is None: raise RuntimeError('what the page names cannot be read offline, so its geometry is unproved: ' + ', '.join(unproved)[:150])
         if refused is not None: refused.extend(unproved)
-        got = page.evaluate(JS) if prefix is None else page.evaluate(JS, prefix)
+        got = page.evaluate(JS) if prefix is None and not gap_chars else page.evaluate(JS, [prefix or '', [list(x) for x in gap_chars]])  # gap characters by native Range in their own runs (gap_chars)
         try: sym = page.evaluate(SYMBOLS_JS, [prefix, every, decorate]) if prefix is not None else None
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: sym = {'error': repr(e)[:200]}  # the symbols alone: the geometry measured stays (the step says why)
@@ -736,10 +802,11 @@ def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=
     return (by_table, got['boxes']) if prefix is None else (by_table, got['boxes'], sym)
 
 
-LINKS_JS = """p => { const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), tags = new Map(), out = {links: {}, runs: {}, pictures: {}, reconstructed: 0}, mark = new RegExp('^' + p + '([sqa]):([0-9]+)$');
-  const marks = []; for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (m) marks.push([m[1], m[2], c]); }
+LINKS_JS = """p => { const twice = (() => { const n = new Map(), tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT); for (let c = tw.nextNode(); c; c = tw.nextNode()) if (c.data.startsWith(p)) n.set(c.data, (n.get(c.data) || 0) + 1); return new Set([...n].filter(([, k]) => k > 1).map(([d]) => d)); })();  // the shared run-binding rule: a mark of ours the page holds twice (a cloned or re-inserted block) binds nothing, for every reader
+  const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), tags = new Map(), out = {links: {}, runs: {}, pictures: {}, reconstructed: 0}, mark = new RegExp('^' + p + '([sqa]):([0-9]+)$');
+  const marks = []; for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (m && !twice.has(c.data)) marks.push([m[1], m[2], c]); }
   for (const [kind, k, c] of marks) if (kind === 'a') { const e = c.parentNode; if (e && e.nodeType === 1 && e.localName === 'a' && e.firstChild === c && !tags.has(e)) { tags.set(e, k); out.links[k] = {href: e.getAttribute('href')}; } else out.links[k] = null; }  // the mark stands first inside the element made for its own tag
-  for (const a of document.querySelectorAll('a[href]')) if (!tags.has(a)) out.reconstructed++;  // an <a href> the parser made with no source tag of its own (a reconstruction)
+  for (const a of document.querySelectorAll('a[href]')) if (!tags.has(a) && !(window.__sourceScope && window.__sourceScope.outside(a))) out.reconstructed++;  // a context state names its proved parent/hidden-original nodes; none elsewhere  // an <a href> the parser made with no source tag of its own (a reconstruction)
   const near = el => { const a = el && el.closest('a[href]'); return a ? (tags.has(a) ? tags.get(a) : 'reconstructed') : null; };
   for (const [kind, k, c] of marks) {
     if (kind === 'q') { const e = c.nextSibling; out.pictures[k] = e && e.nodeType === 1 && (e.localName === 'img' || e.localName === 'svg') ? near(e) : 'unbound'; }  // PICTURES_JS's own rule: the <img>/<svg> right after its mark, else nothing (a moved picture binds no link)
@@ -768,9 +835,10 @@ def _link_owners(raw, vis, runs, near, unsure):  # {'proved': [link starts], 'un
     return out
 
 
-PICTURES_JS = """p => { const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), out = {};
+PICTURES_JS = """p => { const twice = (() => { const n = new Map(), tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT); for (let c = tw.nextNode(); c; c = tw.nextNode()) if (c.data.startsWith(p)) n.set(c.data, (n.get(c.data) || 0) + 1); return new Set([...n].filter(([, k]) => k > 1).map(([d]) => d)); })();  // the shared run-binding rule: a mark of ours the page holds twice (a cloned or re-inserted block) binds nothing, for every reader
+  const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), out = {};
   while (w.nextNode()) { const c = w.currentNode, e = c.nextSibling;  // a picture mark binds only the <img>/<svg> right after it; one the parser moved binds nothing (null)
-    if (c.data.startsWith(p)) out[c.data.slice(p.length)] = e && e.nodeType === 1 && (e.localName === 'img' || e.localName === 'svg') ? e.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}) : null; }
+    if (c.data.startsWith(p) && !twice.has(c.data)) out[c.data.slice(p.length)] = e && e.nodeType === 1 && (e.localName === 'img' || e.localName === 'svg') ? e.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}) : null; }
   return out; }"""  # the native verdict: no box, CSS visibility other than visible, or opacity 0 on it or an ancestor hide it; its size is not asked (painting is another matter)
 
 
@@ -802,9 +870,12 @@ def page_visibility(raw, vis, browser, source=None):
     try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True]); seen = page.evaluate(PICTURES_JS, prefix + 'q:'); near = page.evaluate(LINKS_JS, prefix)
     finally: page.close()
     out, unresolved = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}, []; unsure = set()  # the runs no verdict reached (unbound, unproven)
+    replaced = {k: v for k, v in (source.context.observed_labels(raw).items() if source is not None and getattr(source, 'context', None) is not None else ()) if v['shown']}  # acted controls shown with their label replaced
     for k, (_, chars, hidden, ok) in enumerate(runs):
         glyphs = _glyphs(raw, chars)[1]; m = got['marks'].get(str(k)) if ok else None
         if not glyphs: continue  # white space only: nothing to bind it by
+        if (m is None or not _bound(glyphs, m['text'])) and any(x0 <= chars[0][0] and chars[-1][1] <= x1 for x0, x1 in replaced):  # present in its shown control, its text replaced by the action
+            out.setdefault('replaced', []).append([chars[0][0], chars[-1][1]]); continue  # a verdict of its own: anchored, never called shown text
         if m is None or not _bound(glyphs, m['text']):  # listed: text the parser moved, literal or misread, kept as the scanner reads it - and its source beside it
             s, e = chars[0][0], chars[-1][1]; out['unbound'].append([s, e]); unsure.add(k)
             try: fragment = {'raw': raw[s:e].decode('utf-8')}
@@ -837,9 +908,10 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     decorate = vis.paged or not vis.struck_certain  # strike-through the scanner cannot certify (a browser-read page never is): this render decides it
     t0 = time.time() if t0 is None else t0; gaps = gaps_of(vis, route['units']); endpoints = endpoints_of(vis, route['units']) if not vis.certain else []  # a reading made before the step is not its time
     (runs, unread), prefix = symbol_runs(raw, vis), marker_prefix(raw)
-    marked, spans = tag_cells(raw, vis, gaps + endpoints, [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], prefix)
+    want, unmapped = gap_chars(raw, vis, runs, gaps + endpoints)  # gap and endpoint characters in their own runs (no comment inside text)
+    marked, spans = tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (prefix.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], prefix)
     refused = []  # what the page names and no evidence answered: the geometry is withheld, the readings of the same render kept
-    try: measured, boxes, got = measure(marked, browser, prefix, every=True, decorate=True, raw=raw, source=source, refused=refused) if decorate else measure(marked, browser, prefix, every=True, raw=raw, source=source, refused=refused)
+    try: measured, boxes, got = measure(marked, browser, prefix, every=True, decorate=True, raw=raw, source=source, refused=refused, gap_chars=want) if decorate else measure(marked, browser, prefix, every=True, raw=raw, source=source, refused=refused, gap_chars=want)
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e:
         if not browser.is_connected(): raise
@@ -849,7 +921,8 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     if 'error' in got and not browser.is_connected(): raise RuntimeError('browser disconnected: ' + got['error'])
     marks = None if 'error' in got else got['marks']  # each marked run's own text as this render shows it (`every`)
     bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # the encoding's own mark: no text the page shows (as page_visibility and decorations)
-    off = None if marks is None else sum(1 for k, (_, chars, _, ok) in enumerate(runs) if ok and chars[-1][1] > bom and (g := [(x, c if c is not None else vis.at(*x) or None) for x, c in _glyphs(raw, chars)[1]]) and not (marks.get(str(k)) and _bound(g, marks[str(k)]['text'])))  # where `_char` cannot decode bytes, the text the scan already keeps for them (anchor.Visible: one cp1252 character per byte for a file that is not UTF-8)
+    skip = source.context.label_spans(raw) if source is not None and source.context is not None else ()  # a contextual state reports a control's own replaced label apart
+    off = None if marks is None else sum(1 for k, (_, chars, _, ok) in enumerate(runs) if ok and chars[-1][1] > bom and not any(a <= chars[0][0] and chars[-1][1] <= b for a, b in skip) and (g := [(x, c if c is not None else vis.at(*x) or None) for x, c in _glyphs(raw, chars)[1]]) and not (marks.get(str(k)) and _bound(g, marks[str(k)]['text'])))  # where `_char` cannot decode bytes, the text the scan already keeps for them (anchor.Visible: one cp1252 character per byte for a file that is not UTF-8)
     if marks is not None:  # the readers below take an ordinary run by its id only, as a reading without `every` gives it
         plain = {k for k, m in marks.items() if m is not None and 'family' not in m}; got = dict(got, plain=','.join(sorted(plain)), marks={k: m for k, m in marks.items() if k not in plain})
     proved = off == 0 and not refused  # the geometry is the page's: it applies only where the page shows every marked source run exactly as the scan reads it - a run missing, moved or read otherwise (another decoding too), or no reading of the runs at all, leaves it unproved; every reading below is kept either way, each bound run by run
@@ -873,9 +946,10 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
         from driver.prepare.convert import source_formatting
         n_struck, undecided = source_formatting.rendered(vis, route, None if 'error' in got else decorations(raw, vis, runs, got))
         if undecided: route['source_formatting'] = {'unresolved': undecided}
-        k = sum(r[2] != 'unresolved: visibility' for r in undecided or [])  # a run whose visibility is itself unresolved is said once, by the visibility verdict
+        k = sum(r[2] != 'unresolved: visibility' and not any(a <= r[0] and r[1] <= b for a, b in skip) for r in undecided or [])  # a run whose visibility is itself unresolved is said once, by the visibility verdict;
+        # an acted control's replaced label (context) has no mark by design: still listed in source_formatting, not counted (its original text is not what this state shows)
         formatting = 'source formatting: no native decoration verdict' if n_struck is None else 'source formatting: %d text run%s without a native decoration verdict' % (k, '' if k == 1 else 's') if k else None
-    return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
+    return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'gap_sides_unmapped': unmapped, 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
             'boundaries_the_tool_dropped': sum(a == b for _, a, b, _, _ in gaps), 'parted': sum(len(x.get('parts', ())) for x in edited), 'seconds': round(time.time() - t0, 1),
             **({'source_formatting': n_struck} if decorate else {}),  # items the render's own decoration proved struck (None: no verdict)
             **({'error': '; '.join(x for x in ('symbols: ' + got['error'] if 'error' in got else None, unproved, formatting, generated) if x)} if 'error' in got or unproved or formatting or generated else {})}  # html_route marks the route PARTIAL with it

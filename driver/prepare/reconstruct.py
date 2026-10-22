@@ -3,7 +3,19 @@ Every saved record is carried verbatim exactly once inside the composed body; re
 holder placement, caption placement, owner attachments, the XML tree). `preserved` is the saved content/structure boundary: the body's inverse must equal E
 under type-preserving JSON equality, every body edge must be the one its own records state, and every emitted key is consumed, an annotation, or
 an explicit unrepresented family. `annotations` is the uncertainty boundary (a dropped, added or changed unknown fails there); `verify` needs custody, preserved and annotations together. Inputs: the saved route and its bound prepared/ archive
-(archive.load_blob); never the original, a reparse, or the raw parser reading. Preservation does not certify fidelity to the original document."""
+(archive.load_blob); never the original, a reparse, or the raw parser reading. Preservation does not certify fidelity to the original document.
+Observed controls (a contextual state route's `observed_controls`, OBSERVED_CONTROLS_CONTRACT v2): one record per acted source-owned control whose own
+label the action replaced, carried verbatim as a body family and attached, like every other owner record, to the units/cells its owners name, each
+owner with the control's own code-point slices (`text_at`) of that owner's saved text. The composition rule for a view is stated here once: the record's
+`observed.label` stands in place of its owners' slices exactly once, at the first owner's first slice; every other owned slice contributes no text;
+text outside the slices, every saved unit text, anchor and raw native label stay as saved. A record composes only where `_controls` finds nothing wrong
+(complete and shown, one source link record whose own extent AND exact owned intervals it carries, qualified slices, the route context's own state and
+control sequence, every recorded label-changing occurrence of its control in action order chaining from the first native before-label to the last
+recorded change — a reverse action may return to the source label — and slices overlapping no other composing record); `observed.shown` is the FINAL
+native visibility, never equated with an action's reading (a later action may hide or show the control), and `verify` binds it to the pinned final
+observation; an incomplete or inconsistent record stays listed with its reason and is attached nowhere. A route
+without `observed_controls` reads back exactly as before (schema v11 unchanged). `verify` additionally binds each composed record to the state's own saved
+render record (CONTEXT_RENDERS.json beside ROUTE.json): state, canonical capture digest and the native labels before/after the action."""
 from collections import Counter
 import copy
 import graphlib
@@ -17,6 +29,7 @@ SCHEMA = 'fable-readback/11'  # v11: every unit node carries 'ordinal', its inde
 CUSTODY_KEYS = {'route_sha256', 'complete_sha256', 'prepared', 'raw_reading_sha256', 'raw_reading_receipt_sha256'}
 COMPLETE_KEYS = {'file_id', 'source_sha256', 'route_sha256', 'native_status', 'prepared_input_sha256', 'reader_called'}  # every producer (recipe v1, v3, v4)
 RAW_KEYS = {'raw_reading_sha256', 'raw_reading_receipt_sha256'}  # recipe v4 adds both (None when it kept no raw reading)
+RENDERS_KEY = 'context_renders_sha256'  # the caller's finish pins the state folder's CONTEXT_RENDERS.json here (context routes only; agreed with Fable 2026-10-22): the native render evidence a state route's labels are bound to
 HEXPIN = lambda x: isinstance(x, str) and re.fullmatch('[0-9a-f]{64}', x) is not None
 IDENTITY = ('schema', 'file_id', 'sha256', 'route', 'status', 'error', 'seconds')
 NOT_REPRESENTED_XML = ('comments', 'processing_instructions', 'xml_declaration', 'doctype', 'source_spelling')  # immutable; each readback emits its own list
@@ -24,10 +37,11 @@ REQUIRED_TOP = {'readback_schema', 'identity', 'kind', 'unknowns', 'not_composed
 UNIT_KEYS, CELL_KEYS = {'record', 'ordinal', 'cells', 'captions', 'attached', 'asset', 'holder', 'position'}, {'record', 'children', 'attached', 'aggregate'}
 LIST_KEYS, ITEM_KEYS = {'kind', 'list', 'ordered', 'items'}, {'item', 'members'}
 canon = lambda x: json.dumps(x, sort_keys=True, ensure_ascii=False)  # JSON keeps True != 1, null != absent and every list order
-ATTACHED = ('source_links', 'source_style', 'source_inline', 'source_symbols')  # families whose saved records name body owners: one owner rule (_owner_site), one stated-vs-body check
-RUNS = ('source_style', 'source_inline')  # run-record families: their owners also need a qualified saved final-text range (_placed)
-RECORDS = RUNS + ('source_symbols',)  # {read, records} families: body only when read is true and records is a list; read:false readings stay carried; failure lists reported (screen_grid.py :858-866)
-_records = lambda k, v: v if k == 'source_links' else v['records']
+ATTACHED = ('source_links', 'source_style', 'source_inline', 'source_symbols', 'observed_controls')  # families whose saved records name body owners: one owner rule (_owner_site), one stated-vs-body check
+RUNS = ('source_style', 'source_inline', 'observed_controls')  # run-record families: their owners also need a qualified saved final-text range (_placed)
+LISTS = ('source_links', 'observed_controls')  # list families (one record per link / per acted control); the others are {read, records} readings
+RECORDS = ('source_style', 'source_inline', 'source_symbols')  # {read, records} families: body only when read is true and records is a list; read:false readings stay carried; failure lists reported (screen_grid.py :858-866)
+_records = lambda k, v: v if k in LISTS else v['records']
 
 
 def _xml_identity(elements):
@@ -162,6 +176,75 @@ def _placed(f, o, units, by_id):  # (site, None) or (None, why): the one placeme
     return site, None
 
 
+def _control_shape(r):  # None, or why this observed control record is not the contract shape (an incomplete record needs only its listing fields)
+    if not isinstance(r, dict): return 'record is not an object'
+    if type(r.get('control')) is not int: return 'record is not the contract shape: control'
+    if r.get('status') not in ('complete', 'incomplete'): return 'record is not the contract shape: status'
+    reasons = r.get('reasons')
+    if not (isinstance(reasons, list) and all(isinstance(x, str) for x in reasons)) or (r['status'] == 'complete') != (not reasons): return 'record is not the contract shape: reasons'
+    if r['status'] == 'incomplete': return 'incomplete: ' + '; '.join(reasons)
+    ext = r.get('extent')
+    if not (isinstance(ext, dict) and type(ext.get('byte_start')) is int and type(ext.get('byte_end_exclusive')) is int and ext['byte_start'] < ext['byte_end_exclusive']): return 'record is not the contract shape: extent'
+    if not isinstance(r.get('state'), str): return 'record is not the contract shape: state'
+    if not (isinstance(r.get('owners'), list) and r['owners'] and all(isinstance(o, dict) for o in r['owners'])): return 'record is not the contract shape: owners'
+    if r.get('owners_by') != 'action': return 'record is not the contract shape: owners_by'
+    if not (isinstance(r.get('original'), dict) and isinstance(r['original'].get('label'), str)): return 'record is not the contract shape: original.label'
+    obs = r.get('observed')
+    if not (isinstance(obs, dict) and isinstance(obs.get('label'), str) and type(obs.get('shown')) is bool and isinstance(obs.get('by'), str)): return 'record is not the contract shape: observed'
+    if obs['shown'] is not True: return 'complete record with the control not shown'  # the FINAL native visibility (producer: final_controls), never an action's reading
+    lin = r.get('lineage')
+    if not (isinstance(lin, dict) and isinstance(lin.get('controls'), list) and all(type(c) is int for c in lin['controls']) and type(lin.get('action_index')) is int and type(lin.get('render')) is int and HEXPIN(lin.get('state_capture_sha256'))):
+        return 'record is not the contract shape: lineage'
+    occ = lin.get('occurrences')  # every label-changing action of this control, in action order: first before = the source label, final after/shown = the state's
+    if not (isinstance(occ, list) and occ and all(isinstance(x, dict) and type(x.get('action_index')) is int and isinstance(x.get('before'), str) and isinstance(x.get('after'), str) and type(x.get('shown')) is bool for x in occ)):
+        return 'record is not the contract shape: lineage.occurrences'
+    if any(b['action_index'] <= a['action_index'] for a, b in zip(occ, occ[1:])): return 'occurrences are not in action order'
+    if any(b['before'] != a['after'] for a, b in zip(occ, occ[1:])): return 'occurrences do not chain (a label changed without a recorded occurrence)'
+    if occ[-1]['action_index'] != lin['action_index']: return 'action index is not the final recorded occurrence'
+    if r['original']['label'] != occ[0]['before']: return 'original label is not the first occurrence\'s label before the action'
+    if obs['label'] != occ[-1]['after']: return 'observed label is not the last recorded change'  # an accepted later action may hide or show this control, never change another control's label; visibility is NOT equated with any action's reading here: the final native observation decides it (verify)
+    return None
+
+
+def _control_fit(r, links, context, units, by_id):  # None, or why a well-shaped complete record does not fit the route's own records
+    ls = links.get(r['control']) or []
+    if len(ls) != 1: return 'control names no single source link record'
+    l = ls[0]
+    if canon(l.get('extent')) != canon(r['extent']): return "extent is not the link record's own extent"
+    if not isinstance(l.get('owners'), list) or not l['owners']: return 'the link record has no proved owners'
+    if canon(r['owners']) != canon(l['owners']): return "owners differ from the link record's own owned intervals"  # omitted, reordered, extra or other slices: one class
+    for o in r['owners']:
+        site, why = _placed('observed_controls', o, units, by_id)
+        if site is None: return why
+    lin = r['lineage']
+    if not isinstance(context.get('controls'), list): return 'route context has no control sequence'
+    if lin['controls'] != context['controls']: return 'lineage controls differ from the route context'
+    if context.get('state') != r['state']: return 'state differs from the route context'
+    if any(not (0 <= x['action_index'] < len(lin['controls']) and lin['controls'][x['action_index']] == r['control']) for x in lin['occurrences']): return 'an occurrence does not name the control in the action sequence'
+    return None
+
+
+def _controls(E, by_id):
+    """The one rule for observed control records, for builder and checker alike: {record index: None where the record composes, else why}. Reads only E."""
+    recs, units = E.get('observed_controls'), E.get('units') or []
+    if not isinstance(recs, list): return {}
+    links = {}
+    for l in E.get('source_links') or []:
+        if isinstance(l, dict) and isinstance(l.get('tag'), dict): links.setdefault(l['tag'].get('byte_start'), []).append(l)
+    res = E.get('resources'); context = (res.get('context') or {}) if isinstance(res, dict) and isinstance(res.get('context'), dict) else {}
+    out = {j: _control_shape(r) or _control_fit(r, links, context, units, by_id) for j, r in enumerate(recs)}
+    taken = {}  # owner site -> [(record, start, end)]: two composing records never own one character
+    for j, r in enumerate(recs):
+        if out[j]: continue
+        for o in r['owners']:
+            site = _owner_site(o, units, by_id)
+            for s, e in o['text_at']:
+                for j2, s2, e2 in taken.get(site, []):
+                    if s < e2 and s2 < e: out[j] = out[j] or f'owned slice overlaps record {j2}'; out[j2] = out[j2] or f'owned slice overlaps record {j}'
+                taken.setdefault(site, []).append((j, s, e))
+    return out
+
+
 def _group(seq):
     """Saved list membership (`lists`, outer first) groups consecutive members of any kind, in saved order."""
     out, stack = [], []
@@ -222,7 +305,9 @@ def _html(route, prepared, R, families):
         R[f] = route[f]
         for key in ('unresolved', 'unread') if f in RECORDS else ():  # the producer's two failure lists (screen_grid.py :861, :865), kept raw in the family
             if route[f].get(key): R['unknowns'].append({'family': f, 'why': f'saved {key} entries'})
+        skip = _controls(route, by_id) if f == 'observed_controls' else {}  # an observed control record composes only where the one rule finds nothing wrong
         for j, rec in enumerate(_records(f, route[f])):
+            if skip.get(j): R['unknowns'].append({'family': f, 'record': j, 'why': skip[j]}); continue
             owners = rec.get('owners') if isinstance(rec, dict) else None
             for o in owners or []:
                 site, why = _placed(f, o, units, by_id)
@@ -238,7 +323,7 @@ def _roles(E):
     units = isinstance(E.get('units'), list) and all(isinstance(u, dict) for u in E['units'])
     def body(k, v):
         if k == 'units': return units and fmt == 'html'  # XML field units: verbatim copies are carry-through, never a body slot
-        if k == 'source_links': return fmt == 'html' and units and isinstance(v, list)
+        if k in LISTS: return fmt == 'html' and units and isinstance(v, list)
         if k in RECORDS: return fmt == 'html' and units and isinstance(v, dict) and v.get('read') is True and isinstance(v.get('records'), list)
         return fmt == 'xml' and k == 'xml_elements' and _xml_identity(v) is None
     return fmt, {k: 'identity' if k in IDENTITY else 'body' if body(k, v) else 'carry' for k, v in E.items()}
@@ -307,8 +392,8 @@ def preserved(route, R):
         if set(R) - {'custody'} != S['top']: problems.append(f'top-level keys differ from the owners E implies: {sorted(set(R) ^ S["top"] - {"custody"})}')
         if 'custody' in R:
             c, hexpin = R['custody'], HEXPIN
-            if not (isinstance(c, dict) and set(c) == CUSTODY_KEYS and type(c['prepared']) is bool and hexpin(c['route_sha256']) and hexpin(c['complete_sha256'])
-                    and all(c[k] is None or hexpin(c[k]) for k in ('raw_reading_sha256', 'raw_reading_receipt_sha256'))):
+            if not (isinstance(c, dict) and set(c) in (CUSTODY_KEYS, CUSTODY_KEYS | {RENDERS_KEY}) and type(c['prepared']) is bool and hexpin(c['route_sha256']) and hexpin(c['complete_sha256'])
+                    and all(c[k] is None or hexpin(c[k]) for k in ('raw_reading_sha256', 'raw_reading_receipt_sha256')) and (RENDERS_KEY not in c or hexpin(c[RENDERS_KEY]))):
                 problems.append('custody is not the exact custody record (keys and JSON types)')
         for part in ('identity', 'carry'):
             got_keys = R.get('identity' if part == 'identity' else 'not_composed')
@@ -343,7 +428,8 @@ def preserved(route, R):
         problems += _lists_ok(R.get('sequence', []))
         for f in ATTACHED:  # one stated-vs-body check for every attached family, from the records R itself carries (their equality to E is checked above)
             recs_f = _records(f, R[f]) if f in R else []
-            stated = Counter((j, _placed(f, o, recs, by_id)[0]) for j, rec in enumerate(recs_f) for o in (rec.get('owners') if isinstance(rec, dict) else None) or [])
+            skip = _controls(dict(got, units=recs), by_id) if f == 'observed_controls' else {}  # the same one rule, on the records R carries
+            stated = Counter((j, _placed(f, o, recs, by_id)[0]) for j, rec in enumerate(recs_f) if not skip.get(j) for o in (rec.get('owners') if isinstance(rec, dict) else None) or [])
             stated = Counter({k: v for k, v in stated.items() if k[1] is not None})
             idx = [j for n, _, _ in flat for a in [n.get('attached', {})] + [c.get('attached', {}) for c in n.get('cells', [])] for j in a.get(f, [])]
             if any(type(j) is not int or not 0 <= j < len(recs_f) for j in idx): problems.append('an attachment index is not a valid int')
@@ -378,6 +464,43 @@ def annotations(route, R, prepared=None):
     except (KeyError, TypeError, AttributeError) as error: return [f'R is malformed: {type(error).__name__}: {error}']
 
 
+def observed(attempt_dir, route, custody):
+    """The saved native binding of every composed observed control record: the state's own render record (CONTEXT_RENDERS.json beside ROUTE.json, bound
+    by the completion's pin, checked by _custody) at `lineage.render` must carry the record's state, the canonical capture digest and, at this record's
+    recorded occurrences (the render's inner actions are the tail of the state's control sequence; the outer activation has no inner record), exactly the
+    native label-changing actions of this control, each with the native labels before and after and the visibility the record keeps (history), and its
+    `final_controls` entry — the end-of-actions reading of the control's proved native node — equal to the record's observed label and visibility (final:
+    a later action may have hidden or shown an earlier changed control). Reads nothing outside the attempt; [] where nothing is composed."""
+    recs = route.get('observed_controls')
+    if not isinstance(recs, list) or not recs: return []
+    if not HEXPIN((custody or {}).get(RENDERS_KEY)): return ['not checked: CONTEXT_RENDERS.json is not bound by the completion']
+    p = Path(attempt_dir) / 'CONTEXT_RENDERS.json'
+    try: renders = json.loads(p.read_bytes())
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError): return ['CONTEXT_RENDERS.json is not readable JSON']
+    if not isinstance(renders, list): return ['CONTEXT_RENDERS.json is not a list of render records']
+    by_id, _, _ = _resolve(route.get('units') or []); why_by = _controls(route, by_id); out = []
+    for j, r in enumerate(recs):
+        if why_by.get(j): continue  # listed, not composed: nothing bound
+        lin, k = r['lineage'], r['lineage']['render']
+        if not (0 <= k < len(renders) and isinstance(renders[k], dict)): out.append(f'record {j}: lineage names no render record'); continue
+        rd = renders[k]
+        if rd.get('state') != r['state']: out.append(f'record {j}: state differs from the render record')
+        cap = ((rd.get('native') or {}).get('capture') or {}).get('sha256') if isinstance(rd.get('native'), dict) and isinstance(rd['native'].get('capture'), dict) else None
+        if cap != lin['state_capture_sha256']: out.append(f'record {j}: capture digest differs from the render record')
+        inner = rd.get('inner') if isinstance(rd.get('inner'), list) else []; offset = len(lin['controls']) - len(inner)  # the render's inner actions are the tail of the state's control sequence (the outer activation has no inner record)
+        if offset < 0 or [i.get('control') if isinstance(i, dict) else None for i in inner] != lin['controls'][offset:]: out.append(f'record {j}: the render record\'s inner actions are not the state\'s control sequence'); continue
+        changed = lambda i: isinstance(i, dict) and isinstance(i.get('effects'), dict) and any(isinstance(m, dict) and m.get('where') == 'control label' for m in i['effects'].get('records') or [])
+        native = [n + offset for n, i in enumerate(inner) if i.get('control') == r['control'] and changed(i)]  # every native label-changing action of this control, in action order
+        if native != [x['action_index'] for x in lin['occurrences']]: out.append(f'record {j}: recorded occurrences differ from the native label-changing actions of this control'); continue
+        bad = next((x for x in lin['occurrences'] if (lambda i: (i.get('label_before'), i.get('label_after'), i.get('control_shown_after') is True))(inner[x['action_index'] - offset]) != (x['before'], x['after'], x['shown'])), None)  # each recorded occurrence is its own native action reading: first original and every change, raw history
+        if bad: out.append(f'record {j}: occurrence {bad["action_index"]} differs from its native action reading'); continue
+        order = list(dict.fromkeys(i.get('control') for i in inner)); fins = rd.get('final_controls')  # producer contract: one {label, shown} per acted control, in order of each control's first action, read right after the canonical snapshot from the same proved nodes
+        fin = fins[order.index(r['control'])] if isinstance(fins, list) and len(fins) == len(order) and r['control'] in order and isinstance(fins[order.index(r['control'])], dict) else None
+        if fin is None: out.append(f'record {j}: no final native observation for this control'); continue
+        if (fin.get('label'), fin.get('shown') is True) != (r['observed']['label'], r['observed']['shown']): out.append(f'record {j}: observed label or visibility differs from the final native observation')
+    return out
+
+
 def _custody(attempt_dir):
     """The one custody gate (main and verify): ROUTE.json bound by COMPLETE.json, known identity, reader proved unused. Returns (route, prepared, custody)."""
     a = Path(attempt_dir)
@@ -385,7 +508,7 @@ def _custody(attempt_dir):
     except FileNotFoundError as error: raise ValueError(f'attempt file missing: {Path(error.filename).name}')
     complete, route = json.loads(cbody), json.loads(body)
     if not isinstance(complete, dict) or not isinstance(route, dict): raise ValueError('attempt files are not JSON objects')
-    if set(complete) not in (COMPLETE_KEYS, COMPLETE_KEYS | RAW_KEYS): raise ValueError('completion keys are not a producer contract')
+    if set(complete) - {RENDERS_KEY} not in (COMPLETE_KEYS, COMPLETE_KEYS | RAW_KEYS): raise ValueError('completion keys are not a producer contract')
     if complete.get('route_sha256') != hashlib.sha256(body).hexdigest(): raise ValueError('ROUTE.json is not the route its completion names')
     if not all(isinstance(x, str) and x for x in (complete.get('file_id'), complete.get('source_sha256'))): raise ValueError('completion identity is unknown')
     if (complete.get('file_id'), complete.get('source_sha256')) != (route.get('file_id'), route.get('sha256')): raise ValueError('completion names another document')
@@ -411,9 +534,13 @@ def _custody(attempt_dir):
         r = json.loads(rfile.read_bytes())
         if not isinstance(r, dict) or r.get('raw_reading_sha256') != raw or r.get('source_sha256') != complete['source_sha256']: raise ValueError('raw reading receipt does not bind this completion')
         restore(a / 'raw_reading', raw, 'the raw reading')
+    renders, rpath = complete.get(RENDERS_KEY), a / 'CONTEXT_RENDERS.json'
+    if RENDERS_KEY in complete:  # the state's render evidence is bound like the raw reading: the pinned bytes must be beside the route
+        if not (HEXPIN(renders) and rpath.is_file() and hashlib.sha256(rpath.read_bytes()).hexdigest() == renders): raise ValueError('CONTEXT_RENDERS.json missing or not the completion pin')
+    elif 'observed_controls' in route: raise ValueError('a context route needs its render evidence bound: ' + RENDERS_KEY + ' missing from the completion')
     prepared = p if p.is_dir() else None
     return route, prepared, {'route_sha256': complete['route_sha256'], 'complete_sha256': hashlib.sha256(cbody).hexdigest(), 'prepared': prepared is not None,
-                             'raw_reading_sha256': complete.get('raw_reading_sha256'), 'raw_reading_receipt_sha256': complete.get('raw_reading_receipt_sha256')}  # identity only
+                             'raw_reading_sha256': complete.get('raw_reading_sha256'), 'raw_reading_receipt_sha256': complete.get('raw_reading_receipt_sha256'), **({RENDERS_KEY: renders} if RENDERS_KEY in complete else {})}  # identity only
 
 
 def main(argv):
@@ -431,10 +558,12 @@ def verify(attempt_dir, r_json):
         return {'custody': [f'custody not proved: {error}'], 'preserved': ['not checked: custody failed'], 'unrepresented': [], 'annotations': ['not checked: custody failed']}
     if not isinstance(R, dict) or canon(R.get('custody')) != canon(custody): return {'custody': ['R.custody differs from the custody this attempt proves'], 'preserved': preserved(route, R) if isinstance(R, dict) else ['R is not an object'], 'unrepresented': [], 'annotations': ['not checked: custody failed']}
     unrepresented = sorted(set(R.get('not_composed') or {}) | set((R.get('xml') or {}).get('not_represented') or []) | {u.get('family') for u in R.get('unknowns') or [] if isinstance(u, dict)})
-    return {'custody': [], 'preserved': preserved(route, R), 'unrepresented': unrepresented, 'annotations': annotations(route, R, prepared)}
+    out = {'custody': [], 'preserved': preserved(route, R), 'unrepresented': unrepresented, 'annotations': annotations(route, R, prepared)}
+    if 'observed_controls' in route: out['observed'] = observed(attempt_dir, route, custody)  # a contextual state route: its composed labels bound to the pinned native render record
+    return out
 
 
-if __name__ == '__main__':  # from the repository root: python -m driver.prepare.reconstruct <attempt_dir> <out_json> | verify <attempt_dir> <R.json> (exit 0 only if custody, preserved and annotations are all empty)
+if __name__ == '__main__':  # from the repository root: python -m driver.prepare.reconstruct <attempt_dir> <out_json> | verify <attempt_dir> <R.json> (exit 0 only if custody, preserved, annotations and, for a state route, observed are all empty)
     if sys.argv[1] == 'verify':
-        result = verify(sys.argv[2], sys.argv[3]); print(json.dumps(result, indent=1)); sys.exit(1 if result['custody'] or result['preserved'] or result['annotations'] else 0)
+        result = verify(sys.argv[2], sys.argv[3]); print(json.dumps(result, indent=1)); sys.exit(1 if result['custody'] or result['preserved'] or result['annotations'] or result.get('observed') else 0)
     main(sys.argv[1:])

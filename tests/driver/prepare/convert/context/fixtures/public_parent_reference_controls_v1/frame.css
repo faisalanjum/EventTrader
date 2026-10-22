@@ -1,0 +1,5 @@
+#museum-board { font-family: sans-serif; }
+#museum-board > section { border: 1px solid #555; padding: 8px; margin: 6px; }
+#museum-board a { color: rgb(22, 66, 110); }
+#museum-board .museum-note { border-left: 3px solid #555; }
+.muted { color: #555; }

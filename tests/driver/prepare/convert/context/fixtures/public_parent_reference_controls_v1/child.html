@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Visitor board</title>
+<link rel="stylesheet" href="theme/leaf.css"><script src="actions.js"></script></head>
+<body><article id="museum-board"><h1>Visitor board</h1>
+<section id="map-card"><h2>Gallery</h2><a id="map-link" href="javascript:void(0)" onclick="MuseumCards.reveal(this, 'note-amber')">Gallery map</a></section>
+<section id="label-card"><h2>Cabinet</h2><a id="label-link" href="javascript:void(0)" onclick="MuseumCards.reveal(this, 'note-indigo')">Cabinet label</a></section>
+<div id="reference-store" style="display:none">
+<aside class="museum-note" id="note-amber"><p>Use the east stair.</p></aside>
+<aside class="museum-note" id="note-indigo"><p>Keep paper dry.</p></aside>
+</div>
+<button id="paint-control" onclick="document.body.classList.toggle('muted')">Change ink</button>
+<details id="help-control"><summary>About this board</summary><p>Welcome to the museum.</p></details>
+<p><a id="plain-link" href="#native-note">Access information</a></p>
+<section id="native-note">A ramp is beside the entrance.</section>
+<button id="aria-control" aria-controls="native-panel">Panel control</button>
+<section id="native-panel">Opening hours are posted here.</section>
+</article></body></html>

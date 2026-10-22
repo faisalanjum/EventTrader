@@ -325,7 +325,7 @@ class Visible:
         self.hidden_chars = 0  # non-space characters inside hidden subtrees (reported, never graded)
         self.hidden = []  # the byte spans of the text in hidden subtrees, as written (text tokens and references), for an adapter that hands a tool the source without it
         self.browser_hidden, self.paged, self.page = [], page is not None, page  # the text tokens the browser proved hidden (`page`): all an adapter may leave out where the reading is not certain; the verdict itself, for the route
-        told = sorted([(a, b, True) for a, b in page['hidden']] + [(a, b, False) for a, b in page['shown']]) if page else []; told_at = [a for a, _, _ in told]
+        told = sorted([(a, b, True) for a, b in page['hidden']] + [(a, b, False) for a, b in page['shown']] + [(a, b, False) for a, b in page.get('replaced') or []]) if page else []; told_at = [a for a, _, _ in told]  # replaced: present at its place (its control shown), its text the action's
         computed = '\x00' in s or (not raw.isascii() and (blen is len or raw.startswith(b'\xef\xbb\xbf') or _META.search(raw) is not None))  # the reading cannot be certified: a hiding property with a value this scanner does not evaluate (unknown keyword, var(), calc(), escapes), markup it does not follow — a null character, which the parser drops or replaces by where it stands (Codex R18-C1) — or bytes beyond ASCII that are not plainly UTF-8: the browser decodes them by the mark, the <meta> or a guess of its own (every one of 22,483 real documents is ASCII)
         struck_computed = False  # struck text cannot be certified: an unevaluated decoration value, or a formatting element the browser would reopen
         paint = False  # of those reasons, one that may leave a drawn line unseen (a line colour, or letters with no room): a browser's effective decoration does not settle it
@@ -334,6 +334,7 @@ class Visible:
         self.pictures = []  # byte spans of the <img>/<svg> opening tags in subtrees the contract's hiding rules leave shown: the grader's picture inventory, from the same visibility state as the text (Codex R15-4). Whether a picture paints (its size, clipping, transforms) is beyond this scanner: a reading of one is never measured (R17-C4)
         self.picture_names = {}  # every <img>/<svg> opening tag that writes a `src`, shown or hidden: its first byte -> (the byte span of the value as written, the name as the parser reads it) — for an adapter that hands a tool the source with a name it cannot alter
         self.picture_sources = {}  # the `src` of each of those tags as the parser reads it (references decoded once), by the tag's first byte: which picture a tool's unit is, where the tool names its resource (Codex's worktree)
+        self.declared = []  # every other start tag that declares an on* attribute (an <a href> is a link above): {'start', 'tag_end', 'tag', 'on_attributes', 'hidden'}; raw, the pinned browser decides (html_route.declarations)
         self.links = []  # every <a href> start tag the parser sees (none in a comment, a raw body or a template), in order: {'start', 'tag_end', 'href' (as the parser reads it: decoded once, nothing trimmed), 'hidden' (it stands in a removed subtree: nothing of it shows), 'end' (where the element ends; None: never), 'whole' (closed by its own </a>, no <a> opened inside it, not standing in a table outside a cell: the page reads it as written)} (Codex HREF_DESIGN_REVIEW)
         self.ids, self.names = {}, {}  # what a fragment can name: every id and every <a name>, by value (decoded once) -> [{'start', 'end'}] in document order, hidden ones too
         self.base = None  # the first <base href>, hidden or not (a template's is never read): {'start', 'end', 'href'}
@@ -496,10 +497,14 @@ class Visible:
                     brk = brk or (shown and block)
                     recs = []  # its link and target records
                     if 'id' in attrs: recs.append({'start': start, 'end': pos if name in VOID else None}); self.ids.setdefault(attribute_value(attrs['id']), []).append(recs[-1])
+                    on = sorted(x for x in attrs if x.startswith('on'))
+                    if on and not (name == 'a' and 'href' in attrs): self.declared.append({'start': start, 'tag_end': pos, 'tag': name, 'on_attributes': on, 'hidden': off})  # a declaration outside the supported link path (Root CONTEXT_DECLARED_ACTION_BOUNDARY_20261022)
                     if name == 'a':
                         for r in (r for rs in marks.values() for r in rs if 'href' in r): r['whole'] = False  # an <a> inside an open one: the parser ends that one here
                         if 'name' in attrs: recs.append({'start': start, 'end': None}); self.names.setdefault(attribute_value(attrs['name']), []).append(recs[-1])
-                        if 'href' in attrs: recs.append({'start': start, 'tag_end': pos, 'href': attribute_value(attrs['href']), 'hidden': off, 'end': None, 'whole': not (top and top.inside in _TABLE)}); self.links.append(recs[-1])  # standing in a table outside any cell, the parser moves it out
+                        if 'href' in attrs:
+                            recs.append({'start': start, 'tag_end': pos, 'href': attribute_value(attrs['href']), 'hidden': off, 'end': None, 'whole': not (top and top.inside in _TABLE)}); self.links.append(recs[-1])  # standing in a table outside any cell, the parser moves it out
+                            if on: recs[-1]['on_attributes'] = on  # raw declaration at the link's own start tag; the pinned browser decides it and the href's protocol (html_route.declarations)
                     if name == 'base' and 'href' in attrs and self.base is None: self.base = {'start': start, 'end': pos, 'href': attribute_value(attrs['href'])}
                     if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing
                         inside = name if name in _PARTS or name == 'table' else top.inside if top else None  # the innermost table, row group, row or cell this element stands in
@@ -557,6 +562,14 @@ class Visible:
         if keep: chars, starts, ends, struck_chars = spliced(chars, ' ' * len(keep)), spliced(starts, [m[1] for m in keep]), spliced(ends, [m[2] for m in keep]), spliced(struck_chars, [0] * len(keep))
         for r in (r for rs in marks.values() for r in rs if 'href' in r): r['whole'] = False  # never closed: it runs to wherever the parser ends it
         self.text, self.starts, self.ends, self.struck_chars = ''.join(chars), starts, ends, struck_chars
+        if page:  # a link the scan reads hidden takes the page's verdict where the page's own link proof (`_link_owners`: page['links']['proved']) holds it and a part
+            proved = set((page.get('links') or {}).get('proved') or ()); shown_pics = set((told_pictures or {}).get('shown') or ())  # of it is shown - a text run or a picture;
+            for l in self.links:  # its hidden parts stay hidden (`partly_hidden`); an unproved, moved, ambiguous or empty link keeps the scan's reading
+                if not l['hidden'] or l['end'] is None or l['start'] not in proved: continue
+                said = [t for t in told[bisect_left(told_at, l['tag_end']):] if t[0] < l['end']]
+                if any(not h for _, _, h in said) or any(l['tag_end'] <= x < l['end'] for x in shown_pics):
+                    l['hidden'], l['scan_hidden'] = False, True
+                    if any(h for _, _, h in said): l['partly_hidden'] = True
         sheets = stylesheets(sheet_tokens)
         sheet = any(x is None or _PROP.search(x) for x in sheets)  # an external or imported sheet, or a rule on a hiding property (escapes decoded)
         self.certain = not computed and not sheet and page is None

@@ -1,6 +1,5 @@
 """A word or number the tool printed in two (a space the source does not have, across inline markup) is joined by the screen step when Chrome shows the two
 characters touching on one baseline — never on the text alone (the page's styles may space them), never where the source itself spaces or breaks them."""
-import re
 import unittest
 
 from driver.prepare.convert import anchor
@@ -46,13 +45,23 @@ class ToolSpaces(unittest.TestCase):
         self.assertEqual([(a, b) for a, b, _, _ in anchor.tool_spaces(Visible(raw), unit(raw, '~~old~~new CORP ORATION'))], [(15, 16)])  # the text's own position, the marks counted
 
 
+def marked(raw, vis):  # the screen step's own body: cell and run marks only, no comment inside any text
+    runs, _ = sg.symbol_runs(raw, vis); p = sg.marker_prefix(raw)
+    return sg.tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (p.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], p)[0], runs, p
+
+UNMARKED = """([needle, nth]) => { const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let t, seen = 0;  // the character by its own UTF-16 place in the unmarked page
+  while ((t = w.nextNode())) { let i = -1; while ((i = t.data.indexOf(needle, i + 1)) >= 0) { if (seen++ === nth) { const r = document.createRange(); r.setStart(t, i); r.setEnd(t, i + needle.length);
+    const rs = r.getClientRects(); return rs.length === 1 ? {x: rs[0].left, r: rs[0].right, t: rs[0].top, b: rs[0].bottom} : null; } } } return null; }"""
+
+
 class Tagging(unittest.TestCase):
-    def test_the_two_characters_of_each_gap_get_a_span_of_their_own_beside_the_cell_marks(self):
+    def test_gap_comments_are_refused_and_cell_marks_unchanged(self):
         raw = b'<table><tr><td>CORP<i>ORATION</i></td></tr></table>'; vis = Visible(raw); cell = {'id': 'c', 'kind': 'text', 'text': 'CORP ORATION', 'anchor': {'byte_start': 15, 'byte_end_exclusive': 30}}
-        gaps = sg.gaps_of(vis, [cell]); marked, spans = sg.tag_cells(raw, vis, gaps)
-        self.assertEqual(marked, b'<table><tr><td><!--g:0-->COR<!--j:0.0-->P<i><!--j:0.1-->ORATION</i></td></tr></table>')  # comments, not elements: the page's structure and styles are untouched (Codex C2)
-        self.assertEqual(re.sub(rb'<!--[jg]:[\d.]+-->', b'', marked), raw)
-        self.assertEqual(sg.tag_cells(raw)[0], b'<table><tr><td><!--g:0-->CORP<i>ORATION</i></td></tr></table>')  # without gaps, as before
+        gaps = sg.gaps_of(vis, [cell]); self.assertTrue(gaps)
+        with self.assertRaises(ValueError): sg.tag_cells(raw, vis, gaps)
+        self.assertEqual(sg.tag_cells(raw)[0], b'<table><tr><td><!--g:0-->CORP<i>ORATION</i></td></tr></table>')
+        runs, _ = sg.symbol_runs(raw, vis); want, unmapped = sg.gap_chars(raw, vis, runs, gaps)
+        self.assertEqual((unmapped, [w[2:] for w in want]), ([], [(3, 1), (0, 1)]))  # P: run 0, 4th code point; O: run 1, 1st
 
 
 class Joining(unittest.TestCase):
@@ -90,40 +99,54 @@ class Joining(unittest.TestCase):
 
 
 class Measuring(unittest.TestCase):
-    """The measuring script itself, in Chrome (offline: every request aborted); playwright is required (a missing install fails, never skips)."""
     def setUp(self):
-        from playwright.sync_api import sync_playwright  # required: a missing install fails the suite
+        from playwright.sync_api import sync_playwright
         self.pw = sync_playwright().start(); self.browser = self.pw.chromium.launch(); self.page = self.browser.new_page(); self.page.route('**/*', lambda r: r.abort())
+    def tearDown(self): self.browser.close(); self.pw.stop()
 
-    def tearDown(self):
-        self.browser.close(); self.pw.stop()
-
-    def boxes(self, marked):
-        self.page.set_content(marked.decode(), wait_until='load'); return self.page.evaluate(sg.JS)['boxes']
+    def boxes(self, raw, vis, gaps):
+        body, runs, p = marked(raw, vis); self.assertNotIn(b'j:', body); want, unmapped = sg.gap_chars(raw, vis, runs, gaps)
+        self.page.set_content(body.decode(), wait_until='load'); return self.page.evaluate(sg.JS, [p, [list(x) for x in want]])['boxes'], unmapped
+    def unmarked(self, raw, needle, nth=0):
+        self.page.set_content(raw.decode(), wait_until='load'); return self.page.evaluate(UNMARKED, [needle, nth])
 
     def test_a_character_that_ends_one_gap_and_begins_the_next_is_measured_for_both(self):
         raw = b'<p>Pol<font style="letter-spacing:0.016em">i</font>cy</p>'; vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, 'Pol i cy')])
-        marked, _ = sg.tag_cells(raw, vis, gaps); self.assertIn(b'<!--j:0.1--><!--j:1.0-->i', marked)  # the i's two marks stand side by side
-        boxes = self.boxes(marked); self.assertEqual(sorted(boxes), ['0.0', '0.1', '1.0', '1.1'])
-        self.assertEqual(boxes['0.1'], boxes['1.0'])  # the one character, measured once for each gap
-        self.assertAlmostEqual(boxes['0.1']['x'], boxes['0.0']['r'], places=3); self.assertAlmostEqual(boxes['1.1']['x'], boxes['1.0']['r'], places=3)  # touching: both joined
+        boxes, unmapped = self.boxes(raw, vis, gaps); self.assertEqual((sorted(boxes), unmapped), (['0.0', '0.1', '1.0', '1.1'], []))
+        self.assertEqual(boxes['0.1'], boxes['1.0'])
+        self.assertAlmostEqual(boxes['0.1']['x'], boxes['0.0']['r'], places=3); self.assertAlmostEqual(boxes['1.1']['x'], boxes['1.0']['r'], places=3)
         self.assertEqual(sg.join(gaps, boxes), 2); self.assertEqual(gaps[0][0]['text'], 'Policy')
+        self.assertEqual({k: boxes['0.1'][k] for k in 'xrtb'}, self.unmarked(raw, 'i'))  # independent: the same character on the unmarked page
 
     def test_a_numbers_separator_set_in_its_own_run_is_joined_and_a_list_number_set_apart_keeps_its_space(self):
         for raw, text, want in ((b'<p style="font-family:Calibri,sans-serif;font-size:11pt">was $0<font style="font-weight:bold">.</font>69, a year</p>', 'was $0. 69, a year', 'was $0.69, a year'),
                                 (b'<p style="font-size:10pt">2.<span style="margin-left:24px">4.650% Notes</span></p>', '2. 4.650% Notes', '2. 4.650% Notes')):
             with self.subTest(text=text):
                 vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, text, start=0)]); self.assertTrue(gaps)
-                boxes = self.boxes(sg.tag_cells(raw, vis, gaps)[0]); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
+                boxes, unmapped = self.boxes(raw, vis, gaps); self.assertEqual(unmapped, []); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
 
-    def test_small_capitals_are_joined_and_raised_or_lowered_marks_keep_their_space(self):  # one baseline, a smaller font: tops differ, bottoms agree; a mark is raised or lowered
+    def test_small_capitals_are_joined_and_raised_or_lowered_marks_keep_their_space(self):
         for raw, text, want in ((b'<p style="font-family:serif;font-weight:700"><span style="font-size:10pt">S</span><span style="font-size:8pt">IGNIFICANT</span></p>', 'S IGNIFICANT', 'SIGNIFICANT'),
                                 (b'<p style="font-size:10pt">$5<sup>1</sup> million</p>', '$5 1 million', '$5 1 million'),
                                 (b'<p style="font-size:10pt">CO<sub>2</sub> and NO<sub>x</sub></p>', 'CO 2 and NO x', 'CO 2 and NO x')):
             with self.subTest(text=text):
                 vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, text, start=0)]); self.assertTrue(gaps)
-                boxes = self.boxes(sg.tag_cells(raw, vis, gaps)[0]); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
+                boxes, unmapped = self.boxes(raw, vis, gaps); self.assertEqual(unmapped, []); sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], want)
 
+    def test_non_bmp_and_two_code_point_reference_are_measured_whole(self):
+        for raw, text, needle in (('<p style="font-size:12pt">AB<b>\U0001D400C</b></p>'.encode(), 'AB \U0001D400C', '\U0001D400'),  # a surrogate pair: never half of it
+                                  (b'<p style="font-size:12pt">a<b>&fjlig;ord</b></p>', 'a fjord', 'fj')):  # one reference, two code points (letters, so the tool sees a word gap)
+            with self.subTest(text=text):
+                vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, text, start=0)]); self.assertTrue(gaps)
+                runs, _ = sg.symbol_runs(raw, vis); want, unmapped = sg.gap_chars(raw, vis, runs, gaps); self.assertEqual(unmapped, [])
+                self.assertEqual([w[3] for w in want if w[0] == '0.1'], [len(needle)])  # the right side's extent: the whole character in code points
+                boxes, _ = self.boxes(raw, vis, gaps); self.assertEqual({k: boxes['0.1'][k] for k in 'xrtb'}, self.unmarked(raw, needle))
+
+    def test_a_source_comment_and_white_space_inside_a_run(self):  # the native walk crosses the page's own comment; white space is not counted, its offsets are kept
+        raw = b'<p style="font-size:12pt">Rev<!-- authored -->enue \r\n  total<i>s</i></p>'; vis = Visible(raw); gaps = sg.gaps_of(vis, [unit(raw, 'Revenue total s', start=0)]); self.assertTrue(gaps)
+        boxes, unmapped = self.boxes(raw, vis, gaps); self.assertEqual(unmapped, [])
+        self.assertEqual({k: boxes['0.0'][k] for k in 'xrtb'}, self.unmarked(raw, 'l'))  # the last character of "total", across the comment and the CRLF
+        sg.join(gaps, boxes); self.assertEqual(gaps[0][0]['text'], 'Revenue totals')
 
 if __name__ == '__main__':
     unittest.main()

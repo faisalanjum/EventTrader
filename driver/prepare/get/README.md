@@ -1,7 +1,10 @@
 # Prepare Get
 
 Save one SEC submission as a compressed original, manifest and receipt. Decode
-its files once when needed. Standard library only; Python 3.10/3.11 tested.
+its files once when needed. Package acquisition uses the standard library only;
+Python 3.10/3.11 tested. Optional viewer-context acquisition in `context_acquire.py`
+also uses the pinned extraction environment's Playwright and lxml. It reuses this
+same campaign, package decoder, response receipts and stop policy.
 
 From the repository root, this offline example uses the included AMG fixture:
 

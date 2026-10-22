@@ -33,7 +33,7 @@ class Prepare(unittest.TestCase):
         self.assertEqual(calls, ['convert', 'formatting', ('screen', browser)]); self.assertIs(calls[2][1], browser)
         self.assertEqual((route['status'], route['error'], route['route']['name'], route['file_id'], route['sha256']), ('OK', None, 'edgartools-html+source-formatting+screen', 'a.htm', SHA))
         self.assertEqual((facts['formatting'], route['units'][0]['struck']), (1, ['10']))
-        self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'joined', 'parted', 'seconds', 'spaces_the_tool_added'])
+        self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'gap_sides_unmapped', 'joined', 'parted', 'seconds', 'spaces_the_tool_added']); self.assertEqual(facts['screen']['gap_sides_unmapped'], [])  # migration: the screen step's new diagnostic, empty on this positive
         raw = b'<style>.x{text-decoration:line-through}</style><p>10 20</p>'  # a sheet rule could add a strike: the formatting step certifies nothing and says so
         claimed = lambda *a, **k: (lambda r: r['units'][0].update(struck=['10']) or r)(parsed(*a, **k))  # a converter's own claim, standing in for a tool that reports strikes
         with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', return_value=({}, {}, shown(raw))):  # a render with no decoration answer

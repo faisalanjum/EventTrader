@@ -13,7 +13,9 @@ original package -> get -> exact member bytes
 | Code | Responsibility and entry point |
 |---|---|
 | `get/` | Verified acquisition, member inventory and lossless storage. See [usage](get/README.md). |
+| `get/context_acquire.py` | Uses the existing `Campaign` and package identity to acquire one proved viewer context and its required responses. Unknown alternatives remain recorded; multiple qualified contexts are ambiguous. |
 | `convert/html_route.py` | `prepare(raw, file_id, sha256, browser, source=None, parse=None)` returns `(route, facts)` using EdgarTools and the existing browser measurements. `parse` is the tool call `convert` makes (default `edgartools_html.parse`); a caller that must keep the raw reading wraps it and stores the returned plain dump and version itself, before the route is built. `prepare` stores nothing. EdgarTools 5.60.0's own exports (`Document.to_json`, `TableNode.to_dict`) drop cell spans, header flags and row groups, so the dump is the raw reading to keep. |
+| `convert/context.py` | `contextual_routes` reads the initial document and qualified states through the same HTML and picture helpers. Returns routes, raw trials and native captures; the caller stores them. |
 | `convert/xml_fields.py` | `convert(raw, file_id, sha256)` returns ordered fields and XML elements, with attributes, namespaces, parents and mixed content. |
 | `pictures/pdf.py` | `pages(raw, file_id, sha256)` uses PDFium to return a source-bound route and page pictures for the existing `join` function. |
 | `pictures/join.py` | `read_pictures(raw, route, members, browser, folder, make_readers)` returns the complete route and one entry per picture occurrence. |
@@ -28,6 +30,26 @@ keep separate source context. The caller's source/version identity must remain w
 these outputs when they are serialized or moved.
 For packaged HTML, pass the same `screen_grid.Source` through HTML conversion and
 picture preparation; it binds the document address, package and dependency evidence.
+
+HTML with declared script actions stays incomplete until those actions are qualified.
+`html_route.declarations` uses the pinned browser's URL and event properties; both
+the route status and the qualified caller use that one decision. Ordinary documents
+need no context campaign. The caller's job-level `context_campaign` enables automatic
+acquisition for packaged inputs; missing configuration or unqualified context keeps
+the ordinary output and an explicit incomplete result.
+
+Each contextual state retains its own source, raw reading, route, picture inputs
+and native observations. Changed control labels keep the original text, each action
+occurrence and final reading; reconstruction places them only at proved source
+owners. Native `Range` measurements avoid adding layout-changing gap comments.
+The initial document **and every saved state** must pass the caller's checks.
+Non-GET actions, handlers outside links, unproved copies, unexplored states beyond
+the recorded limits and unstable observations remain incomplete. Hidden controls
+not reached are retained as skipped trials. No job is retried automatically;
+each context reading permits at most three recorded observation attempts.
+The [current plan](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md) links the
+exact qualified caller, environment and usage; these library functions add no job
+runner or deployment entry point.
 
 For a saved attempt containing `ROUTE.json`, `COMPLETE.json` and its named archives:
 

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Museum selector</title>
+<link rel="stylesheet" href="/shared/frame.css">
+<script src="/vendor/jquery.min.js"></script><script src="/shared/panels.js"></script>
+</head><body><nav>
+<a id="open-welcome" href="javascript:void(0)" onclick="chooseSheet('welcome')">Portal introduction</a>
+<a id="open-board" href="javascript:void(0)" onclick="chooseSheet('board')">Open visitor board</a>
+</nav><div id="report-host"></div><script>
+const sheetAddresses = {welcome:'/bundle/welcome.html', board:'/bundle/item.html'};
+function chooseSheet(choice) {
+  return jQuery.ajax({url:sheetAddresses[choice],dataType:'text',success:function(data) {
+    jQuery('#report-host').empty().append(data);
+  }});
+}
+window.onload = function() { chooseSheet('welcome'); };
+</script></body></html>

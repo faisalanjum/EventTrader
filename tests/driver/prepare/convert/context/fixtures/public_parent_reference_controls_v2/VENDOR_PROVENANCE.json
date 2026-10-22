@@ -1,0 +1,8 @@
+{
+  "kind": "already downloaded public vendor library, not private document material",
+  "url": "https://www.sec.gov/js/third-party/jquery-latest.min.js",
+  "sha256": "fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a",
+  "bytes": 87533,
+  "no_new_request": true,
+  "license": "MIT; original upstream license header retained"
+}
