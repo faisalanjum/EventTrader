@@ -766,8 +766,9 @@ def _generated_owners(raw, vis, runs, marks, gen, units):
         if rec['required'] and r.get('visible') is None: why.add('generated text: its visibility is not proved')  # shown or hidden unproved: its raw reading and error kept
         out.append(rec)
     images = gen.get('background_images') or []
+    text_proved = not why  # every required generated text read and bound: the generated-text proof, taken before any unread picture is said
     if any(x['visibility'] == 'visible' for x in images): why.add('background image content not read')  # a picture the page paints behind or without text: kept raw, never read here
-    return {'read': True, 'records': out, **({'background_images': images} if images else {}), 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why)}
+    return {'read': True, 'records': out, **({'background_images': images} if images else {}), 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why), 'text_proved': text_proved}
 
 
 def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None, gap_chars=()):
@@ -952,4 +953,5 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     return {'cells_regridded': n, 'cells_measured': sum(len(v) for v in measured.values()), 'gap_sides_unmapped': unmapped, 'spaces_the_tool_added': sum(a < b for _, a, b, _, _ in gaps), 'joined': sum(len(x.get('joins', ())) for x in edited),
             'boundaries_the_tool_dropped': sum(a == b for _, a, b, _, _ in gaps), 'parted': sum(len(x.get('parts', ())) for x in edited), 'seconds': round(time.time() - t0, 1),
             **({'source_formatting': n_struck} if decorate else {}),  # items the render's own decoration proved struck (None: no verdict)
+            'text_proved': 'error' not in got and not unproved and not formatting and route['generated_content'].get('text_proved') is True,  # the screen-text proof: the step's own failures, an unread picture aside
             **({'error': '; '.join(x for x in ('symbols: ' + got['error'] if 'error' in got else None, unproved, formatting, generated) if x)} if 'error' in got or unproved or formatting or generated else {})}  # html_route marks the route PARTIAL with it

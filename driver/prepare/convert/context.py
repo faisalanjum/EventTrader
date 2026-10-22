@@ -334,17 +334,23 @@ class Context:
         return why
 
 
+def text_proof(route, ctx):
+    """Why this state's text is not proved for its local labels and target runs ([] when it is): the native state gate, read now (after every render,
+    the caller's picture step too), and the route's own affirmative text proof (`text_proved`, html_route; missing is false: no status fallback).
+    Aggregate status, error and unknowns are untouched."""
+    return ctx.gate() + ([] if route.get('text_proved') is True else ['state route text not proved'])
+
+
 def observed_controls(raw, route, ctx):
     """OBSERVED_CONTROLS_CONTRACT_v2_20261022: one record per acted control whose label an action replaced in this state, by the existing owner text
     slices (screen_grid._owners); bound to its exact final action occurrence (lineage.action_index, lineage.occurrences in action order)."""
     labels = ctx.observed_labels(raw) if ctx.records else {}
     if not labels: return
     pv = route.get('page_visibility'); vis = anchor.Visible(raw, page=pv) if pv else anchor.Visible(raw)
-    owned = sg._owners(vis, route['units'], spaced=True); rendered = [k for k, r in enumerate(ctx.records) if r.get('native')]
+    owned = sg._owners(vis, route['units'], spaced=True); rendered = [k for k, r in enumerate(ctx.records) if r.get('native')]; state = text_proof(route, ctx)
     for (x0, x1), o in sorted(labels.items()):
         owners, why = owned(x0, x1)  # each owner (unit, or a table cell by its anchor's first byte) with the label's own code-point ranges in its saved text
-        reasons = [w for w, bad in (('control not shown in the final state', not o['shown']), ('no final native reading of the control', o['after'] is None), ('the label is not owned whole: ' + str(why), owners is None),
-                                    ('state route not OK', route['status'] != 'OK')) if bad]
+        reasons = [w for w, bad in (('control not shown in the final state', not o['shown']), ('no final native reading of the control', o['after'] is None), ('the label is not owned whole: ' + str(why), owners is None)) if bad] + state
         ext = {'byte_start': o['control'], 'byte_end_exclusive': x1}  # the link record's own extent (edgartools_html: <a start .. label end); owners over the label text, as there
         lr = next((l for l in route.get('source_links') or [] if l['tag']['byte_start'] == o['control']), None)
         if not reasons and lr is not None and lr.get('extent') is None: lr.update(extent=ext, owners=owners, owners_by='action')  # action evidence; a page-proved record is never overwritten
@@ -370,7 +376,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
     of one proved target, or an in-place change inside it, or the same control reopening it) gets full per-state extraction. Every trial keeps its
     whole native record. Each acting link record of the initial route carries labelled activations: complete or not with reasons, or `refused` (no state
     built) with the trial's reasons; ordinary links keep their href and attempted outcome. Participants and coverage use the one ownership rule
-    (`edgartools_html._holders`); `coverage_across_states` counts a target run as shown only where a state route that is OK holds every visible character
+    (`edgartools_html._holders`); `coverage_across_states` counts a target run as shown only where a state route whose text is proved (`text_proof`) holds every visible character
     of it and its verdict is neither hidden nor unbound; unknowns stay listed. `prepare(route, source, label)` adds a caller's per-state step;
     `parse(label)` gives the tool call per state."""
     from . import html_route
@@ -379,6 +385,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         src = state_source(source, evidence, ctx)
         route, facts = html_route.prepare(raw, file_id, sha256, browser, src, **({} if parse is None else {'parse': parse(ctx.label)})); route['facts'] = facts
         if prepare: prepare(route, src, ctx.label)  # the caller's per-state step; its renders are gated by the same state gate there
+        if route.get('text_proved') is True and ctx.gate(): route['text_proved'] = False  # a later render failed the state gate: the prepare-time proof no longer holds
         observed_controls(raw, route, ctx)
         return route, src
     def trial(controls, label):  # one unmarked render: the whole native record, or why it was refused
@@ -480,7 +487,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         if graph['frontier']: act['status'] = 'incomplete'; act['reasons'] = act['reasons'] + [f"state graph: {len(graph['frontier'])} transition(s) left unexplored at the ceiling"]
         target_runs = [(chars[0][0], chars[-1][1]) for _, chars, _, ok in runs0 if ok and x0 <= chars[0][0] and chars[-1][1] <= x1 and sg._glyphs(raw, chars)[1]]  # white space only: nothing to show
         def shown(rt, cx, a, b):  # affirmative: an OK state route holds every visible character of the run, and its verdict is neither hidden nor unbound there
-            if rt['status'] != 'OK' or (rt.get('page_visibility') or {}).get('unproven'): return False
+            if text_proof(rt, cx) or (rt.get('page_visibility') or {}).get('unproven'): return False  # the state's gate and text proof, read now
             pv = rt.get('page_visibility') or {}
             if any(h0 <= a and b <= h1 for k in ('hidden', 'unbound') for h0, h1 in (pv.get(k) or [])): return False
             _, m, u = edgartools_html._holders(rt['units'], anchor.Visible(raw, page=rt.get('page_visibility')) if rt.get('page_visibility') else anchor.Visible(raw))[0](a, b)

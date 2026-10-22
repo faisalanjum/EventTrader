@@ -33,13 +33,15 @@ class Prepare(unittest.TestCase):
         self.assertEqual(calls, ['convert', 'formatting', ('screen', browser)]); self.assertIs(calls[2][1], browser)
         self.assertEqual((route['status'], route['error'], route['route']['name'], route['file_id'], route['sha256']), ('OK', None, 'edgartools-html+source-formatting+screen', 'a.htm', SHA))
         self.assertEqual((facts['formatting'], route['units'][0]['struck']), (1, ['10']))
-        self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'gap_sides_unmapped', 'joined', 'parted', 'seconds', 'spaces_the_tool_added']); self.assertEqual(facts['screen']['gap_sides_unmapped'], [])  # migration: the screen step's new diagnostic, empty on this positive
+        self.assertEqual(sorted(facts['screen']), ['boundaries_the_tool_dropped', 'cells_measured', 'cells_regridded', 'gap_sides_unmapped', 'joined', 'parted', 'seconds', 'spaces_the_tool_added', 'text_proved']); self.assertEqual(facts['screen']['gap_sides_unmapped'], [])
+        self.assertIs(route['text_proved'], True); self.assertIs(facts['screen']['text_proved'], True)  # the complete positive's new proof fact, checked rather than discarded
         raw = b'<style>.x{text-decoration:line-through}</style><p>10 20</p>'  # a sheet rule could add a strike: the formatting step certifies nothing and says so
         claimed = lambda *a, **k: (lambda r: r['units'][0].update(struck=['10']) or r)(parsed(*a, **k))  # a converter's own claim, standing in for a tool that reports strikes
         with patch.object(eh, 'convert', side_effect=claimed), patch.object(sg, 'measure', return_value=({}, {}, shown(raw))):  # a render with no decoration answer
             route, facts = html_route.prepare(raw, 'a.htm', hashlib.sha256(raw).hexdigest(), object())
         self.assertEqual((route['status'], facts['formatting'], route['route']['name']), ('PARTIAL', None, 'edgartools-html+source-formatting+screen'))  # unknown required text is said, never certified
         self.assertEqual(route['error'], 'screen step: source formatting: 1 text run without a native decoration verdict')
+        self.assertIs(route['text_proved'], False); self.assertIs(facts['screen']['text_proved'], False)
         a = raw.index(b'10 20'); self.assertEqual(route['source_formatting'], {'unresolved': [[a, a + 5, 'unresolved: no decoration']]})
         self.assertEqual((route['units'][0]['text'], route['units'][0]['struck'], 'struck_at' in route['units'][0], facts['screen']['source_formatting']), ('10 20', ['10'], False, 0))  # the claim stays, no places
         def bound(marked, used, prefix=None, decorate=False, **reading):  # a browser that reached every mark and draws no decoration (the source has none)
@@ -56,12 +58,14 @@ class Prepare(unittest.TestCase):
             route, facts = html_route.prepare(RAW, 'a.htm', SHA, object())
         self.assertEqual((route['status'], route['units'], facts), ('FAILED', [], {})); self.assertIn('cannot parse this content', route['error'])
         formatting.assert_not_called(); screen.assert_not_called()
+        self.assertNotIn('text_proved', route)  # no later producer ran; consumers must treat missing proof as false
 
     def test_a_page_that_cannot_be_measured_is_a_partial_route_with_its_content(self):
         with patch.object(eh, 'convert', side_effect=parsed), patch.object(sg, 'measure', side_effect=RuntimeError('one page cannot be measured')):
             route, facts = html_route.prepare(RAW, 'a.htm', SHA, SimpleNamespace(is_connected=lambda: True))
         self.assertEqual((route['status'], [u['text'] for u in route['units']], route['units'][0]['struck']), ('PARTIAL', ['10 20'], ['10']))
         self.assertIn('one page cannot be measured', route['error']); self.assertIn('one page cannot be measured', facts['screen']['error'])
+        self.assertIs(route['text_proved'], False)
         self.assertEqual(route['route']['name'], 'edgartools-html+source-formatting')  # the screen step did not finish, and the record says so
 
     def test_operational_errors_propagate(self):
@@ -87,6 +91,7 @@ UNCERTAIN = b'<style>.x{display:none}</style><p>ONE <span style="display:none">H
 
 def standalone(raw, fid, browser):  # the composition's stages one by one through their public, self-checking entries: the route before the reuse
     vis, _ = html_route.visibility(raw, anchor.Visible(raw), browser); route = eh.convert(raw, fid, hashlib.sha256(raw).hexdigest(), vis=vis)
+    route['text_proved'] = True  # expected composition metadata for these two complete positive fixtures; all stage payloads still compare exactly
     return route, {'formatting': sf.step(raw, route), 'screen': sg.step(raw, route, browser)}
 
 
@@ -122,6 +127,7 @@ class Readings(unittest.TestCase):
     def test_a_failed_verdict_keeps_the_original_reading_and_the_route_is_partial(self):
         with patch.object(sg, 'page_visibility', side_effect=RuntimeError('no visibility')): route, facts, made, formatting, screen = self.prepare(UNCERTAIN)
         self.assertEqual((route['status'], [v.paged for v in made]), ('PARTIAL', [False])); self.assertNotIn('page_visibility', route)
+        self.assertIs(route['text_proved'], False)
         self.assertIs(formatting.call_args.args[0], made[0]); self.assertIs(screen.call_args.args[3], made[0])
 
     def test_two_documents_with_one_file_id_keep_their_own_readings(self):  # nothing crosses calls: each route is its own bytes'

@@ -44,6 +44,13 @@ Each contextual state retains its own source, raw reading, route, picture inputs
 and native observations. Changed control labels keep the original text, each action
 occurrence and final reading; reconstruction places them only at proved source
 owners. Native `Range` measurements avoid adding layout-changing gap comments.
+Local labels and target coverage share the producer's affirmative `text_proved`
+fact and a fresh native state check. An unread background picture alone does not
+withhold proved text; other proof failures still block it. Missing proof is false,
+and a failed later render revokes it. This diagnostic is not a source-accuracy
+certificate and does not override aggregate status or picture uncertainty.
+The final `ROUTE.json` carries that later check; intermediate snapshots keep their
+own earlier stage's facts.
 The initial document **and every saved state** must pass the caller's checks.
 Non-GET actions, handlers outside links, unproved copies, unexplored states beyond
 the recorded limits and unstable observations remain incomplete. Hidden controls

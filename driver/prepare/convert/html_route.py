@@ -76,16 +76,19 @@ def prepare(raw, file_id, sha256, browser, source=None, parse=None):
     facts = {'formatting': source_formatting._step(original, route)}; del original  # the source as written is for formatting only: not kept through the screen work
     facts['screen'] = screen_grid._step(raw, route, browser, vis, source=source)
     if failed or vis.paged: facts['visibility'] = {'error': failed} if failed else {k: len(v) if isinstance(v, list) else v for k, v in vis.page.items()}
-    errors = (['page visibility: ' + failed] if failed else []) + unresolved(vis, source.context.label_spans(raw) if getattr(source, 'context', None) is not None else ()) + (['screen step: ' + facts['screen']['error']] if 'error' in facts['screen'] else [])
-    if getattr(source, 'context', None) is not None: errors += ['context: ' + w for w in source.context.gate()]  # every render reached the state and agrees
+    seen = (['page visibility: ' + failed] if failed else []) + unresolved(vis, source.context.label_spans(raw) if getattr(source, 'context', None) is not None else ())  # the visibility list
+    screen = ['screen step: ' + facts['screen']['error']] if 'error' in facts['screen'] else []
+    rest = ['context: ' + w for w in source.context.gate()] if getattr(source, 'context', None) is not None else []  # every render reached the state and agrees
     declared, outside = declarations(vis, browser)  # the one shared decision, carried on each source link record (route.source_links follows vis.links)
     for rec in route.get('source_links') or []:
         if rec['tag']['byte_start'] in declared: rec['script_action'] = declared[rec['tag']['byte_start']]
     scripted = len(declared) if getattr(source, 'context', None) is None else 0  # a context route's actions are qualified by its activations
-    if scripted: errors.append(f'context: {scripted} declared script action(s) not qualified (no context entered)')  # unknown, never standalone success
+    if scripted: rest.append(f'context: {scripted} declared script action(s) not qualified (no context entered)')  # unknown, never standalone success
     document = getattr(source, 'context', None) is None or source.context.control is None  # the document-level route: the default one, or a context's initial view
     if outside and document:  # declared outside the supported link path: never activated here, so the document stays explicitly incomplete, context or not
-        facts['declared_outside_link_path'] = outside; errors.append(f'context: {len(outside)} declared event handler(s) outside the supported link path (not activated)')
+        facts['declared_outside_link_path'] = outside; rest.append(f'context: {len(outside)} declared event handler(s) outside the supported link path (not activated)')
+    errors = seen + screen + rest
     if errors: route['status'], route['error'] = 'PARTIAL', '; '.join(errors)
+    route['text_proved'] = facts['screen'].get('text_proved') is True and not seen and not rest  # the route-text proof: the screen step's, and no visibility, context, script or handler failure (an unread picture alone may stand); absent (a failed conversion) is false
     if given is not None: route['resources'] = source.identity()  # the document, its bundle and every dependency the renders asked for, once
     return route, facts
