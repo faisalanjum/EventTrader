@@ -113,14 +113,16 @@ class Selection:
         h = page.evaluate_handle(LOCATE, [self.hrefs, i]).as_element()
         return (h, None) if h is not None else (None, 'document anchors do not correspond to the source anchors')
     def act(self, browser, i, marked=True):
+        from playwright.sync_api import Error as PlaywrightError  # the pinned library's public typed error (TimeoutError and TargetClosedError are subclasses)
         rec = {'log': [], 'errors': []}; ctx, page = self._page(browser, marked, rec); a = {'source_anchor': i, 'action': 'programmatic HTMLElement.click() (untrusted)', 'marked': marked}
+        step, pre, mark = 'locate', None, None  # how far this observation got; the facts read just before the click
         try:
             if not rec['initial_settled']: a['state'] = 'refused: initial state not settled'; a['pre_action_facts'] = facts(rec); return a  # no action ran: an initial reading
             h, why_loc = self._locate(page, i, rec)
             if h is None: a['state'] = 'refused: ' + why_loc; a['pre_action_facts'] = facts(rec); return a  # no action ran: an initial reading
-            a['control_shown'] = h.evaluate('e => e.checkVisibility()'); m0 = page.evaluate('() => window.__m'); mark, e0 = len(rec['log']), len(rec['errors'])
-            self.pre_refused = getattr(self, 'pre_refused', {}); self.pre_refused[marked] = facts(rec)['refused_get']
-            h.evaluate('e => e.click()'); settled = self._settle(page); after = rec['log'][mark:]; errs = rec['errors'][e0:]; why = []
+            step = 'pre-action reading'; a['control_shown'] = h.evaluate('e => e.checkVisibility()'); m0 = page.evaluate('() => window.__m'); mark, e0 = len(rec['log']), len(rec['errors'])
+            self.pre_refused = getattr(self, 'pre_refused', {}); pre = facts(rec); self.pre_refused[marked] = pre['refused_get']
+            step = 'click'; h.evaluate('e => e.click()'); step = 'settle'; settled = self._settle(page); step = 'after-action reading'; after = rec['log'][mark:]; errs = rec['errors'][e0:]; why = []
             hit = rec['source'].records.get(self.target)
             if not any(r[1] == self.target and r[0] == 'GET' and not r[2] for r in after): why.append('target not requested by GET after the action')
             elif marked and (not hit or hit.get('status') != 200 or hit.get('measured_sha256') != sha(self.body)): why.append('target not served its verified measurement body')
@@ -135,8 +137,14 @@ class Selection:
             doc, m1 = page.evaluate(SER, self.prefix)
             try: native = sg.native_state(page, self.prefix, blobs=self.blobs)[0]
             except sg.CaptureError as e: native = None; why = ['native capture refused: %s' % e]; a['capture_failed'] = True
-            a.update(state='qualified' if not why else 'refused: ' + '; '.join(why), requests=after, doc=doc, facts=f, native=native, mutations_before_action=m0, mutations_after_action=m1 - m0,
+            a.update(state='qualified' if not why else 'refused: ' + '; '.join(why), requests=after, doc=doc, facts=f, pre_action_facts=pre, native=native, mutations_before_action=m0, mutations_after_action=m1 - m0,
                      blocked_non_get_after_action=[r[:2] for r in after if r[0] != 'GET'], refused_by_source=sorted(k for k, v in rec['source'].records.items() if v.get('status') == 'refused'), extra_pages=len(rec['pages']) - 1)
+            return a
+        except PlaywrightError as e:  # ONE typed boundary for the whole action observation (Root CONTEXT_ACTION_OBSERVATION_REPAIR_20261022T0535): recorded, never qualified/missing/no-op
+            if page.is_closed() or not browser.is_connected(): raise  # page, context or browser loss stays fatal (native state, no class or message list)
+            a.update(state='failed: browser observation during ' + step, error={'type': type(e).__module__ + '.' + type(e).__qualname__, 'name': e.name, 'message': e.message, 'stack': e.stack},
+                     pre_action_facts=pre if pre is not None else facts(rec), requests=rec['log'], errors=rec['errors'], extra_pages=len(rec['pages']) - 1)  # only observed values
+            if pre is not None: a.update(facts=facts(rec), requests_after_action=rec['log'][mark:])  # after-action facts kept apart from the pre-action reading
             return a
         finally: ctx.close()
     attempts_per_reading = 3  # Root CONTEXT_CANONICAL_STATE_DECISION: at most 3 observation attempts per logical reading
@@ -149,7 +157,9 @@ class Selection:
         exhaustion = incomplete; a fatal observation (corrupt/unverified response, browser failure) = failed, never retried. `marked_first`: an
         already-made first marked observation (counts as attempt 1)."""
         n, log, ref = self.attempts_per_reading, [], None
-        def ident(o): return {'native': o.get('native'), 'settled': o.get('settled'), 'doc_sha256': sha(o['doc'].encode()) if o.get('doc') is not None else None, 'delivered': len((o.get('facts') or {}).get('delivered', [])), 'refused_get': (o.get('facts') or {}).get('refused_get'), 'outbound': (o.get('facts') or {}).get('outbound_attempts_refused'), 'why': o.get('why')}
+        def ident(o): return {'native': o.get('native'), 'settled': o.get('settled'), 'doc_sha256': sha(o['doc'].encode()) if o.get('doc') is not None else None, 'delivered': len((o.get('facts') or {}).get('delivered', [])), 'refused_get': (o.get('facts') or {}).get('refused_get'), 'outbound': (o.get('facts') or {}).get('outbound_attempts_refused'), 'why': o.get('why'),
+                              **({'failed_attempt': o['failed_attempt']} if o.get('failed_attempt') else {}),  # a failed repeat's whole raw record stays in the reading's log
+                              **{k: o[k] for k in ('facts', 'pre_action_facts') if o.get(k) is not None}}  # every reading's own received/refused facts, only when observed (Root 0558)
         for k in range(n):
             o = observe(False); e = dict(ident(o), attempt=k, marked=False)
             if o.get('fatal'): log.append(dict(e, outcome='fatal: ' + o['fatal'])); return {'state': 'failed: ' + o['fatal'], 'attempts': log}
@@ -202,22 +212,24 @@ class Selection:
         baseline = {'target_requested': any(r[1] == self.target for r in rec['log']), 'marks': len(post['marks']), 'errors': rec['errors'], 'blocked_non_get': [r[:2] for r in rec['log'] if r[0] != 'GET'], 'extra_pages': len(rec['pages']) - 1, 'facts': facts(rec)}  # the marked load before any action
         if baseline['target_requested'] and not baseline['errors']:  # the target is the parent's own initial selection: qualify that state, no action
             return {'source_anchors': len(self.hrefs), 'baseline': baseline, 'initial': self.initial(browser), 'attempts': [], 'actions': 'not attempted: the target is the initial selection',
-                    'verdict': None} | (lambda i: {'verdict': 'initial' if i['state'] == 'qualified' else 'missing'})(self.initial_result)
+                    'verdict': None} | (lambda i: {'verdict': 'initial' if i['state'] == 'qualified' else ('incomplete: initial reading ' + i['state']) if i['state'].startswith(('failed', 'incomplete')) else 'missing'})(self.initial_result)
         attempts = []
         for i in range(self.count()):
             a = self.act(browser, i, True)
             if a['state'] == 'qualified':  # canonical rule for the used reading of this action (the first marked act counts as attempt 1)
                 def obs(m, i=i):
-                    x = self.act(browser, i, m); return {'settled': 'not settled' not in x['state'], 'doc': x.get('doc'), 'facts': x.get('facts'), 'errors': x.get('errors'), 'native': x.get('native'),
-                                                       'why': [] if x['state'] == 'qualified' or not m else [x['state']], **({'fatal': x['state']} if x.get('capture_failed') else {})}
-                first = {'settled': True, 'doc': a.get('doc'), 'facts': a.get('facts'), 'errors': a.get('errors'), 'native': a.get('native'), 'why': []}
+                    x = self.act(browser, i, m); return {'settled': None if 'error' in x else 'not settled' not in x['state'], 'doc': x.get('doc'), 'facts': x.get('facts'), 'pre_action_facts': x.get('pre_action_facts'), 'errors': x.get('errors'), 'native': x.get('native'),
+                                                       'why': [] if x['state'] == 'qualified' or not m else [x['state']], **({'fatal': x['state']} if x.get('capture_failed') else {}),
+                                                       **({'fatal': x['state'].removeprefix('failed: '), 'failed_attempt': x} if 'error' in x else {})}  # a failed repeat stops this reading: never a reference, never retried
+                first = {'settled': True, 'doc': a.get('doc'), 'facts': a.get('facts'), 'pre_action_facts': a.get('pre_action_facts'), 'errors': a.get('errors'), 'native': a.get('native'), 'why': []}
                 c = self._canonical(obs, marked_first=first); a['canonical'] = {'state': c['state'], 'attempts': c['attempts']}; a['neutral'] = c['state'] == 'qualified'
                 if not a['neutral']: a['state'] = c['state'] if c['state'].startswith(('incomplete', 'failed')) else 'refused: ' + c['state']
             attempts.append(a)
         for a in attempts: a.pop('doc', None)
         ok = [a for a in attempts if a['state'] == 'qualified']; clean = not baseline['target_requested'] and not baseline['marks'] and not baseline['errors']
+        open_ = [a for a in attempts if a['state'].startswith(('failed', 'incomplete'))]  # undecided attempts: never 'missing' (one known qualified action still selects; two stay ambiguous)
         return {'source_anchors': len(self.hrefs), 'baseline': baseline, 'attempts': attempts,
-                'verdict': ('selected' if len(ok) == 1 else 'missing' if not ok else 'ambiguous') if clean else 'baseline_not_clean'}
+                'verdict': ('selected' if len(ok) == 1 else 'ambiguous' if ok else 'incomplete: %d action observation(s) not decided' % len(open_) if open_ else 'missing') if clean else 'baseline_not_clean'}
 
 
 NODES = """() => { const path = el => { const p = []; for (let n = el; n && n !== document.documentElement; n = n.parentElement) p.unshift(Array.prototype.indexOf.call(n.parentElement.children, n)); return p; };

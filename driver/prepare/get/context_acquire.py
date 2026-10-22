@@ -106,8 +106,9 @@ def _strip(r):  # selection result without native serializations
     return r
 
 def _reading_facts(r):  # (facts, initial?) of every reading a selection result carries; an action that never ran (pre_action_facts) is an initial reading
-    initial = [(r.get('baseline') or {}).get('facts')] + list(((r.get('initial') or {}).get('facts') or {}).values()) + [a.get('pre_action_facts') for a in r.get('attempts', [])]
-    return [(f, True) for f in initial if f] + [(a['facts'], False) for a in r.get('attempts', []) if a.get('facts')]
+    acts = [x for a in r.get('attempts', []) for x in [a] + list((a.get('canonical') or {}).get('attempts', []))]  # each action record and EVERY canonical reading of it, whatever its outcome (Root 0558)
+    initial = [(r.get('baseline') or {}).get('facts')] + list(((r.get('initial') or {}).get('facts') or {}).values()) + [e.get('facts') for e in (r.get('initial') or {}).get('attempts', [])] + [a.get('pre_action_facts') for a in acts]  # every initial canonical reading is initial
+    return [(f, True) for f in initial if f] + [(a['facts'], False) for a in acts if a.get('facts')]
 
 def _select(fetch, browser, parent, target, member, body, prefix, max_actions):
     """Selection with dependency closure of action-introduced requests (bounded): source anchors first, then native nodes of the recorded state."""

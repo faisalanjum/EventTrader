@@ -49,6 +49,10 @@ Non-GET actions, handlers outside links, unproved copies, unexplored states beyo
 the recorded limits and unstable observations remain incomplete. Hidden controls
 not reached are retained as skipped trials. No job is retried automatically;
 each context reading permits at most three recorded observation attempts.
+A browser failure during a selection action keeps the full error and available
+source facts; it cannot qualify that reading. All initial and action attempts,
+including refused or unmatched repeats, feed the same required-file check.
+Page/browser loss and source or storage failures remain fatal.
 The [current plan](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md) links the
 exact qualified caller, environment and usage; these library functions add no job
 runner or deployment entry point.
