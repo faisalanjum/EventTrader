@@ -36,7 +36,9 @@ HTML with declared script actions stays incomplete until those actions are quali
 the route status and the qualified caller use that one decision. Ordinary documents
 need no context campaign. The caller's job-level `context_campaign` enables automatic
 acquisition for packaged inputs; missing configuration or unqualified context keeps
-the ordinary output and an explicit incomplete result.
+the ordinary output and an explicit incomplete result. Its optional `max_actions`
+passes the native fallback-selection limit unchanged; omitting it keeps the native
+default. This operational setting changes no source or state acceptance rule.
 
 Each contextual state retains its own source, raw reading, route, picture inputs
 and native observations. Changed control labels keep the original text, each action
