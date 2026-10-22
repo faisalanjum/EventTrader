@@ -297,6 +297,30 @@ class FullRunTests(unittest.TestCase):
                     self.assertIn('injected package failure', summary['stop'])
                     self.assertEqual((summary['counts'], self.rows(), len(self.calls)), ({'PENDING': 2}, [], 1))
 
+    def test_a_failure_reason_is_saved_whole_at_any_length(self):  # Root 2026-10-22: full_run.py cut every reason at 300 characters
+        real = full_run._filing
+        long = 'cause ' + 'x' * 600 + ' -- the actual cause stays at the end'  # longer than the old cut, independent of any directory name
+        odd = dict(acc='0000000009-23-000009', form='8-K', cik='9')
+        for kind, error in (('short ordinary', ValueError('short cause')), ('long ordinary', ValueError(long)), ('long fatal', StorageError(long))):
+            with self.subTest(kind):
+                self.tearDown()
+                self.setUp()
+
+                def failing(campaign, output, reserve, accession, *rest, error=error):
+                    if accession == odd['acc']:
+                        raise error
+                    return real(campaign, output, reserve, accession, *rest)
+                with patch.object(full_run, '_filing', failing):
+                    summary = self.run_with([odd, AMG])
+                reason = f'{type(error).__name__}: {error}'
+                progress = json.loads((self.out / 'progress.json').read_text())
+                if isinstance(error, StorageError):  # run-wide: the whole reason in summary and progress; nothing recorded, both pending
+                    self.assertEqual((summary['stop'], progress['stop'], summary['counts'], self.rows()), (reason, reason, {'PENDING': 2}, []))
+                else:  # per filing: its FAILED row keeps the whole reason and the next filing still succeeds
+                    rows = self.rows()
+                    self.assertEqual(([r['status'] for r in rows], rows[0]['reason'], summary['stop'], summary['counts']),
+                                     (['FAILED', 'OK'], reason, None, {'FAILED': 1, 'OK': 1}))
+
     def test_a_file_without_sec_proof_makes_the_filing_unresolved_never_ok(self):
         copy = BASE + 'report.css'
         del self.responses[copy]  # SEC does not serve that file

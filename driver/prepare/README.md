@@ -12,6 +12,7 @@ original package -> get -> exact member bytes
 
 | Code | Responsibility and entry point |
 |---|---|
+| `job.py`, `document.py` | The existing batch and per-document callers: one pinned checkout and interpreter, complete input accounting, bounded children and saved-output verification. See the batch command below. |
 | `get/` | Verified acquisition, member inventory and lossless storage. See [usage](get/README.md). |
 | `get/context_acquire.py` | Uses the existing `Campaign` and package identity to acquire one proved viewer context and its required responses. Unknown alternatives remain recorded; multiple qualified contexts are ambiguous. |
 | `convert/html_route.py` | `prepare(raw, file_id, sha256, browser, source=None, parse=None)` returns `(route, facts)` using EdgarTools and the existing browser measurements. `parse` is the tool call `convert` makes (default `edgartools_html.parse`); a caller that must keep the raw reading wraps it and stores the returned plain dump and version itself, before the route is built. `prepare` stores nothing. EdgarTools 5.60.0's own exports (`Document.to_json`, `TableNode.to_dict`) drop cell spans, header flags and row groups, so the dump is the raw reading to keep. |
@@ -62,7 +63,7 @@ including refused or unmatched repeats, feed the same required-file check.
 Page/browser loss and source or storage failures remain fatal.
 The [current plan](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md) links the
 exact qualified caller, environment and usage; these library functions add no job
-runner or deployment entry point.
+runner themselves. The batch entry point below composes them; deployment remains separate.
 
 For a saved attempt containing `ROUTE.json`, `COMPLETE.json` and its named archives:
 
@@ -210,6 +211,21 @@ retain failure and uncertainty signals, and stop expansion on a new material reg
 Independent source review belongs to release validation and separate periodic audits,
 not a required step for each production document. Fix a demonstrated class at its
 existing owner and rerun the relevant controls before resuming expansion.
+
+## Running the batch caller
+
+Run from a frozen checkout. Its manifest must list every file under `driver/` (Python caches aside) with its sha256, and the plan must name
+that checkout as `runtime_root` with `runtime_manifest` {path, sha256}; otherwise the caller refuses before writing output. Start it with the
+qualified environment's interpreter (its package pins are checked separately). Generation, reconstruct and verify children use that same
+interpreter; HOME and CPU affinity come from the launch:
+
+    taskset -c <cpus> <qualified python> -I -S -B <checkout>/driver/prepare/job.py PLAN.json <PLAN sha256> <NEW_OUT> [<checkout>/driver/prepare/document.py SECONDS]
+
+Omitting the generator, or passing this checkout's own `document.py` (needed to set SECONDS: 900 for ordinary rows, 1800 with contextual rows),
+is production; any other generator path is test-only. `NEW_OUT` must not exist. `RESULT.json` keeps every row with its status (`unstarted`,
+`generating`, `composing`, `done`) and, when done, its outcome (`verified_saved_output`, `incomplete` with reasons, `generation_failed`,
+`identity_mismatch`); the job exits 0 only when every row is verified. Do not edit the checkout during a run. After an interruption keep the
+folder and rerun into a new one. `verified_saved_output` is preservation of saved output, not independently measured source recall.
 
 Use the pinned [offline test environment and both regression commands](../../tests/driver/prepare/README.md).
 Those checks make no model calls; independent scoring and actual-worker qualification

@@ -129,7 +129,7 @@ def run(inputs, output, *, live=False, every=1, limit=None, min_free_percent=16,
             try:
                 row = _filing(campaign, output, reserve, accession, cik, form, repair)
             except Exception as exc:  # record any per-filing error and continue; run-wide ones stop
-                reason = f'{type(exc).__name__}: {exc}'[:300]
+                reason = f'{type(exc).__name__}: {exc}'
                 if isinstance(exc, StorageError) or campaign.stopped or (campaign.root / 'STOP.json').exists():
                     stop = reason  # low disk, storage failure or HTTP 403: the filing stays PENDING
                 row = dict(status='FAILED', reason=reason)
