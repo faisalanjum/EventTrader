@@ -230,7 +230,8 @@ def main():
                             save(folder(label) / 'ROUTE_AFTER_INPUTS.json', route_)
                             save(folder(label) / 'CONTEXT_RENDERS.json', src.context.records)  # every render of this state: its native snapshot (strict gate), requests, proofs
                             keep_captures(folder(label), src.context.captures)
-                    res = context.contextual_routes(raw, row['file_id'], row['source_sha256'], browser, source, ev, parse=per_parse, prepare=per_prepare)  # the row's own Source evidence
+                    res = context.contextual_routes(raw, row['file_id'], row['source_sha256'], browser, source, ev, parse=per_parse, prepare=per_prepare,  # the row's own Source evidence
+                                                    explore=plan.get('context_explore', True))  # the one job-level choice: False = the initial view only (report controls not attempted)
                     for st in res['states']: finish(folder(st['label']), row, st['route'], prepared_by[st['label']], archive, save)  # each state finished once, after its route is whole (observed controls included)
                     route, prepared = res['initial'], prepared_by.get('initial', {})
                     for l in route['source_links']:

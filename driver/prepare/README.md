@@ -43,6 +43,12 @@ default. This operational setting changes no source or state acceptance rule.
 The package's native FilingSummary report title can prioritize that search; it
 does not establish source identity or qualify a view.
 
+The job-level boolean `context_explore` defaults to `true`. With `false`, a
+qualified context keeps its initial reading, raw evidence, picture inputs and
+source child, without trying report links or creating activated states. Declared
+actions and skipped visible links remain explicitly incomplete. Native parent
+acquisition still runs; this option does not certify complete report behavior.
+
 When the initial HTML reading identifies hidden source content, the caller also
 keeps one typed whole-source reading in `source_reading/`. It reuses the HTML
 parser, or the existing strict XML route for structured Inline XBRL content.

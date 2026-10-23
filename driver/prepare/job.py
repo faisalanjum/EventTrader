@@ -114,6 +114,7 @@ def check_output(folder, logs, expected, seconds, renv, row, result, record, wha
 def main(plan_path, pin, out_dir, generator=str(HERE / 'document.py'), seconds=900):  # common per-child time and file-size bounds
     body = Path(plan_path).read_bytes(); assert hashlib.sha256(body).hexdigest() == pin, 'plan pin mismatch'
     plan = json.loads(body)
+    assert isinstance(plan.get('context_explore', True), bool), 'context_explore must be true or false'  # refused before any row, never a silent other path
     assert Path(plan['runtime_root']).resolve() == ROOT, 'the plan runtime is not this job\'s own checkout'  # one reviewed runtime for job, generation and reconstruct
     manifest = Path(plan['runtime_manifest']['path']).read_bytes(); assert hashlib.sha256(manifest).hexdigest() == plan['runtime_manifest']['sha256'], 'runtime manifest mismatch'
     pins = json.loads(manifest)['files']; tree = {str(p.relative_to(ROOT)) for p in (ROOT / 'driver').rglob('*') if p.is_file() and '__pycache__' not in p.relative_to(ROOT).parts}

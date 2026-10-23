@@ -481,14 +481,16 @@ def state_source(source, evidence, ctx):
     return sg.Source(source.path, dict(source.members), base=source.base, observed=obs, bundle=source.bundle, context=ctx)
 
 
-def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=None, prepare=None, max_states=32, max_transitions=128):
+def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=None, prepare=None, max_states=32, max_transitions=128, explore=True):
     """The initial route, then each source-owned action once (finite): a trial render first; only an action that proves a useful state (an outer reveal
     of one proved target, or an in-place change inside it, or the same control reopening it) gets full per-state extraction. Every trial keeps its
     whole native record. Each acting link record of the initial route carries labelled activations: complete or not with reasons, or `refused` (no state
     built) with the trial's reasons; ordinary links keep their href and attempted outcome. Participants and coverage use the one ownership rule
     (`edgartools_html._holders`); `coverage_across_states` counts a target run as shown only where a state route whose text is proved (`text_proof`) holds every visible character
     of it and its verdict is neither hidden nor unbound; unknowns stay listed. `prepare(route, source, label)` adds a caller's per-state step;
-    `parse(label)` gives the tool call per state."""
+    `parse(label)` gives the tool call per state. `explore=False`: the initial view only - no source control is tried and no state is built (the
+    ceilings above bound only each proved target's own graph, never the outer trials); each declared scripted action stays unresolved (PARTIAL)."""
+    if not isinstance(explore, bool): raise TypeError(f'explore must be True or False, not {explore!r}')  # never a silently different path
     from . import html_route
     vis0 = sg.Visible(raw); runs0, _ = sg.symbol_runs(raw, vis0)
     def one(ctx):
@@ -557,6 +559,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
     unknown, deficits = [], []  # refused source-owned actions (ordinary navigation excepted); the document's required deficits
     for l in vis0.links:  # every source link record shown in the initial reading, once; one hidden there is reachable only inside a revealed target
         if l['hidden']: out['trials'].append({'label': None, 'controls': [l['start']], 'skipped': 'hidden in the initial reading'}); continue
+        if not explore: out['trials'].append({'label': None, 'controls': [l['start']], 'skipped': 'not attempted: report-control exploration disabled'}); continue
         r, probe, why = trial(l['start'], f"trial@{l['start']}")
         if probe and not any(probe.values()): continue  # located, clicked, nothing happened: a no-op, no state
         if why: refused(l['start'], f"trial@{l['start']}", r, why); continue  # an attempted action that proved no target state: its record kept, no extraction
@@ -607,6 +610,11 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         act['coverage_across_states'] = {'states': [lb for lb, _, _ in family], 'target_runs': len(target_runs), 'never_affirmatively_shown_runs': never, 'observed_control_label_runs': sorted(labels)}
         if never: deficits.append(f"{label}: {len(never)} target run(s) never affirmatively shown in any observed state (coverage_across_states)")
         if graph['frontier']: deficits.append(f"{label}: {len(graph['frontier'])} transition(s) left unexplored at the state ceiling")
+    if not explore:  # a context route's declared actions count as qualified only by their activations (html_route): none was attempted, each stays unresolved
+        scripted = sum(1 for r in initial.get('source_links') or [] if r.get('script_action'))
+        if scripted: deficits.append(f'{scripted} declared script action(s) not attempted (report-control exploration disabled)')
+        elif skipped := sum(1 for l in vis0.links if not l['hidden']):  # no inline declaration is no proof of no action (a parent/delegated listener): each skipped visible link stays unresolved
+            deficits.append(f'{skipped} visible source link(s) not attempted, action unresolved (report-control exploration disabled)')
     reached = {c for t in out['trials'] for c in t.get('controls', [])[1:]}
     out['unreached_links'] = [l['start'] for l in vis0.links if l['hidden'] and l['start'] not in reached]  # hidden, and inside no proved target: no observed state reaches them
     deficits += [f'{tl}: source-owned action refused, its state unknown (CONTEXT_TRIALS)' for tl in unknown]
