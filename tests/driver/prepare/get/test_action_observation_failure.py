@@ -110,10 +110,12 @@ class ActionObservationFailure(unittest.TestCase):
     def test_verdicts_zero_one_two_qualified_and_order(self):
         self.assertEqual(S([[('settle', None)]]).run(Browser())['verdict'], 'incomplete: 1 action observation(s) not decided')  # zero qualified, one failed: never missing
         self.assertEqual(S([[('no-target', 'D')]]).run(Browser())['verdict'], 'missing')  # zero qualified, all refused: unchanged
-        for script in ([[('settle', None)], [OK, OK]], [[OK, OK], [('settle', None)]]):  # one qualified beside a failed sibling, both orders
-            r = S(script).run(Browser()); self.assertEqual(r['verdict'], 'selected')
-            self.assertTrue(any(a['state'].startswith('failed: browser observation') and 'error' in a for a in r['attempts']))  # the sibling's failure retained
-        self.assertEqual(S([[OK, OK], [OK, OK]]).run(Browser())['verdict'], 'ambiguous')
+        r = S([[('settle', None)], [OK, OK]]).run(Browser()); self.assertEqual(r['verdict'], 'selected')  # a failed control before the qualified one
+        self.assertTrue(any(a['state'].startswith('failed: browser observation') and 'error' in a for a in r['attempts']))  # the sibling's failure retained
+        r = S([[OK, OK], [('settle', None)]]).run(Browser()); self.assertEqual(r['verdict'], 'selected')  # v3 (Root 1809): first fully qualified, the failing sibling is never run
+        self.assertEqual((len(r['attempts']), r['search']['untried'], r['search']['untried_reason']), (1, 1, 'stopped at the first fully qualified context'))
+        r = S([[OK, OK], [OK, OK]]).run(Browser())  # v3 (Root 1809): was 'ambiguous' (exhaustive); now the first qualified control, the second untried (not absent)
+        self.assertEqual((r['verdict'], [a['source_anchor'] for a in r['attempts']], r['search']['untried']), ('selected', [0], 1))
 
     def test_failed_unmarked_repeat_stops_the_reading_and_is_kept(self):
         r = S([[OK, ('settle', None)]]).run(Browser()); a = r['attempts'][0]
@@ -172,14 +174,14 @@ class FailedRepeatFacts(unittest.TestCase):  # Root CONTEXT_FAILED_REPEAT_PROJEC
     def test_actual_closure_with_a_healthy_selected_sibling(self):
         from driver.prepare.get import context_acquire as ca
         class Fetch: observed, log = {}, []
-        real = aq.Selection
+        real = aq.select_parent
         try:
             for name, script in CASES.items():
-                aq.Selection = lambda *a, script=script, **k: Declared(script)  # _select's own Selection, with the stand-in pages
+                aq.select_parent = lambda browser, *a, script=script, **k: (dict(Declared(script).run(browser), prepared_state={}), None)  # v3: _select's one selector, with the stand-in pages
                 r, s = ca._select(Fetch(), Browser(), PARENT, TARGET, None, None, 'zz', 200)
                 self.assertEqual((r['selection_verdict'], r['verdict']), ('selected', 'incomplete: pending navigation'), name)
                 self.assertTrue({PRE, POST} <= set(r['unobserved']), name); self.assertIn(NAV, r['navigations'], name)
-        finally: aq.Selection = real
+        finally: aq.select_parent = real
 
     def test_failed_repeat_is_neither_retried_nor_used_and_its_settling_is_unknown(self):
         for name in ('failed unmarked repeat', 'failed marked repeat'):
@@ -233,11 +235,11 @@ class AllReadingFacts(unittest.TestCase):  # Root CONTEXT_ALL_READING_FACTS_2026
         initial, after = roles(r); self.assertIn(CSS_AFTER, after); self.assertNotIn(CSS_AFTER, initial)
         from driver.prepare.get import context_acquire as ca
         class Fetch: observed, log = {}, []
-        real = aq.Selection
+        real = aq.select_parent
         try:
-            aq.Selection = lambda *a, **k: Reads(script)
+            aq.select_parent = lambda browser, *a, **k: (dict(Reads(script).run(browser), prepared_state={}), None)  # v3: _select's one selector, with the stand-in pages
             got, s = ca._select(Fetch(), Browser(), PARENT, TARGET, None, None, 'zz', 200)
-        finally: aq.Selection = real
+        finally: aq.select_parent = real
         self.assertEqual((got.get('selection_verdict'), got['verdict']), ('selected', 'incomplete: unobserved dependency')); self.assertIn(CSS_AFTER, got['unobserved'])
 
     def test_initial_and_action_phases_stay_separate(self):
@@ -246,7 +248,8 @@ class AllReadingFacts(unittest.TestCase):  # Root CONTEXT_ALL_READING_FACTS_2026
 
     def test_unmatched_marked_repeat_beside_two_qualified(self):
         r = Reads([[(None, 'D-first'), OK, ('css-after', 'D'), OK], [OK, OK]]).run(Browser())  # control 0: first marked unmatched, next marked refused, third used
-        self.assertEqual(r['verdict'], 'ambiguous'); self.assertEqual([a['state'] for a in r['attempts']], ['qualified', 'qualified'])
+        self.assertEqual(r['verdict'], 'selected'); self.assertEqual([a['state'] for a in r['attempts']], ['qualified'])  # v3 (Root 1809): was 'ambiguous' with both qualified; control 1 now untried
+        self.assertEqual(r['search']['untried'], 1)
         initial, after = roles(r); self.assertIn(CSS_AFTER, after)
 
     def test_canonical_initial_readings_are_initial(self):

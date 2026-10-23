@@ -59,7 +59,8 @@ class NativeSelectionReplay(unittest.TestCase):
     def test_source_anchors_find_nothing_native_node_selected(self):
         self.assertEqual(self.sent, 0)
         self.assertEqual(self.r['kind'], 'native_node', self.r.get('verdict'))
-        self.assertEqual(self.r['closure'][0]['source_anchor_result']['verdict'], 'missing')
+        self.assertNotIn('source_anchor_result', self.r['closure'][0])  # v3 (Root 1809): one native selector, no source-anchor pass (was: its verdict 'missing')
+        self.assertEqual((self.r['search']['domain'], self.r['search']['tried']), (2, 2))  # open-welcome refused, open-board qualified
         self.assertEqual(self.r['verdict'], 'selected', self.r.get('unobserved'))
         self.assertIn('native_node', self.sel); self.assertNotIn('source_anchor', self.sel)
 

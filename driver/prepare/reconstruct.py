@@ -29,6 +29,7 @@ SCHEMA = 'fable-readback/11'  # v11: every unit node carries 'ordinal', its inde
 CUSTODY_KEYS = {'route_sha256', 'complete_sha256', 'prepared', 'raw_reading_sha256', 'raw_reading_receipt_sha256'}
 COMPLETE_KEYS = {'file_id', 'source_sha256', 'route_sha256', 'native_status', 'prepared_input_sha256', 'reader_called'}  # every producer (recipe v1, v3, v4)
 RAW_KEYS = {'raw_reading_sha256', 'raw_reading_receipt_sha256'}  # recipe v4 adds both (None when it kept no raw reading)
+SOURCE_READING_KEY = 'source_reading_complete_sha256'  # the caller's finish pins the attempt's one typed source reading (source_reading/COMPLETE.json): verified as its own attempt
 RENDERS_KEY = 'context_renders_sha256'  # the caller's finish pins the state folder's CONTEXT_RENDERS.json here (context routes only; agreed with Fable 2026-10-22): the native render evidence a state route's labels are bound to
 HEXPIN = lambda x: isinstance(x, str) and re.fullmatch('[0-9a-f]{64}', x) is not None
 IDENTITY = ('schema', 'file_id', 'sha256', 'route', 'status', 'error', 'seconds')
@@ -37,10 +38,10 @@ REQUIRED_TOP = {'readback_schema', 'identity', 'kind', 'unknowns', 'not_composed
 UNIT_KEYS, CELL_KEYS = {'record', 'ordinal', 'cells', 'captions', 'attached', 'asset', 'holder', 'position'}, {'record', 'children', 'attached', 'aggregate'}
 LIST_KEYS, ITEM_KEYS = {'kind', 'list', 'ordered', 'items'}, {'item', 'members'}
 canon = lambda x: json.dumps(x, sort_keys=True, ensure_ascii=False)  # JSON keeps True != 1, null != absent and every list order
-ATTACHED = ('source_links', 'source_style', 'source_inline', 'source_symbols', 'observed_controls')  # families whose saved records name body owners: one owner rule (_owner_site), one stated-vs-body check
-RUNS = ('source_style', 'source_inline', 'observed_controls')  # run-record families: their owners also need a qualified saved final-text range (_placed)
+ATTACHED = ('source_links', 'source_style', 'source_inline', 'source_symbols', 'observed_controls', 'source_hidden')  # families whose saved records name body owners: one owner rule (_owner_site), one stated-vs-body check
+RUNS = ('source_style', 'source_inline', 'observed_controls', 'source_hidden')  # run-record families: their owners also need a qualified saved final-text range (_placed)
 LISTS = ('source_links', 'observed_controls')  # list families (one record per link / per acted control); the others are {read, records} readings
-RECORDS = ('source_style', 'source_inline', 'source_symbols')  # {read, records} families: body only when read is true and records is a list; read:false readings stay carried; failure lists reported (screen_grid.py :858-866)
+RECORDS = ('source_style', 'source_inline', 'source_symbols', 'source_hidden')  # source_hidden: a source reading's proved-hidden runs (html_route.source_reading)  # {read, records} families: body only when read is true and records is a list; read:false readings stay carried; failure lists reported (screen_grid.py :858-866)
 _records = lambda k, v: v if k in LISTS else v['records']
 
 
@@ -392,8 +393,8 @@ def preserved(route, R):
         if set(R) - {'custody'} != S['top']: problems.append(f'top-level keys differ from the owners E implies: {sorted(set(R) ^ S["top"] - {"custody"})}')
         if 'custody' in R:
             c, hexpin = R['custody'], HEXPIN
-            if not (isinstance(c, dict) and set(c) in (CUSTODY_KEYS, CUSTODY_KEYS | {RENDERS_KEY}) and type(c['prepared']) is bool and hexpin(c['route_sha256']) and hexpin(c['complete_sha256'])
-                    and all(c[k] is None or hexpin(c[k]) for k in ('raw_reading_sha256', 'raw_reading_receipt_sha256')) and (RENDERS_KEY not in c or hexpin(c[RENDERS_KEY]))):
+            if not (isinstance(c, dict) and set(c) - {RENDERS_KEY, SOURCE_READING_KEY} == CUSTODY_KEYS and type(c['prepared']) is bool and hexpin(c['route_sha256']) and hexpin(c['complete_sha256'])
+                    and all(c[k] is None or hexpin(c[k]) for k in ('raw_reading_sha256', 'raw_reading_receipt_sha256')) and all(k not in c or hexpin(c[k]) for k in (RENDERS_KEY, SOURCE_READING_KEY))):
                 problems.append('custody is not the exact custody record (keys and JSON types)')
         for part in ('identity', 'carry'):
             got_keys = R.get('identity' if part == 'identity' else 'not_composed')
@@ -508,7 +509,7 @@ def _custody(attempt_dir):
     except FileNotFoundError as error: raise ValueError(f'attempt file missing: {Path(error.filename).name}')
     complete, route = json.loads(cbody), json.loads(body)
     if not isinstance(complete, dict) or not isinstance(route, dict): raise ValueError('attempt files are not JSON objects')
-    if set(complete) - {RENDERS_KEY} not in (COMPLETE_KEYS, COMPLETE_KEYS | RAW_KEYS): raise ValueError('completion keys are not a producer contract')
+    if set(complete) - {RENDERS_KEY, SOURCE_READING_KEY} not in (COMPLETE_KEYS, COMPLETE_KEYS | RAW_KEYS): raise ValueError('completion keys are not a producer contract')
     if complete.get('route_sha256') != hashlib.sha256(body).hexdigest(): raise ValueError('ROUTE.json is not the route its completion names')
     if not all(isinstance(x, str) and x for x in (complete.get('file_id'), complete.get('source_sha256'))): raise ValueError('completion identity is unknown')
     if (complete.get('file_id'), complete.get('source_sha256')) != (route.get('file_id'), route.get('sha256')): raise ValueError('completion names another document')
@@ -538,9 +539,15 @@ def _custody(attempt_dir):
     if RENDERS_KEY in complete:  # the state's render evidence is bound like the raw reading: the pinned bytes must be beside the route
         if not (HEXPIN(renders) and rpath.is_file() and hashlib.sha256(rpath.read_bytes()).hexdigest() == renders): raise ValueError('CONTEXT_RENDERS.json missing or not the completion pin')
     elif 'observed_controls' in route: raise ValueError('a context route needs its render evidence bound: ' + RENDERS_KEY + ' missing from the completion')
+    child, cpin = a / 'source_reading', complete.get(SOURCE_READING_KEY)
+    if SOURCE_READING_KEY in complete:  # the typed source reading is a whole attempt of its own: bound by its COMPLETE.json, then held to this same gate
+        if not (HEXPIN(cpin) and (child / 'COMPLETE.json').is_file() and hashlib.sha256((child / 'COMPLETE.json').read_bytes()).hexdigest() == cpin): raise ValueError('source_reading/COMPLETE.json missing or not the completion pin')
+        croute, _, _ = _custody(child)
+        if (croute.get('file_id'), croute.get('sha256')) != (route.get('file_id'), route.get('sha256')): raise ValueError('the source reading names another document')
+    elif child.exists(): raise ValueError('a source reading exists but the completion does not bind it')
     prepared = p if p.is_dir() else None
     return route, prepared, {'route_sha256': complete['route_sha256'], 'complete_sha256': hashlib.sha256(cbody).hexdigest(), 'prepared': prepared is not None,
-                             'raw_reading_sha256': complete.get('raw_reading_sha256'), 'raw_reading_receipt_sha256': complete.get('raw_reading_receipt_sha256'), **({RENDERS_KEY: renders} if RENDERS_KEY in complete else {})}  # identity only
+                             'raw_reading_sha256': complete.get('raw_reading_sha256'), 'raw_reading_receipt_sha256': complete.get('raw_reading_receipt_sha256'), **({RENDERS_KEY: renders} if RENDERS_KEY in complete else {}), **({SOURCE_READING_KEY: cpin} if SOURCE_READING_KEY in complete else {})}  # identity only
 
 
 def main(argv):

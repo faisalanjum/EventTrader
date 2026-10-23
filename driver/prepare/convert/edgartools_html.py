@@ -118,7 +118,7 @@ def named(raw, vis, codes):
     part = lambda start, name, code: ((start + 8, start + 8), f' {CAPTION}="{code}"'.encode()) if name[0] == 'caption' else ((start + 3, start + 3), f' {CELL}="{code}"'.encode())  # after "<caption", after "<td"/"<th"
     edits = [part(start, name, code) if isinstance(name, tuple) else (vis.picture_names[start][0], code.encode()) if name is not None
              else ((start + 6, start + 6), f' {TABLE}="{code}"'.encode()) for code, (start, name) in codes.items()]  # a table part, the picture's name, after "<table"
-    edits += [(span, b'') for span in (vis.hidden if vis.certain else vis.browser_hidden)]  # only what is proved hidden: an uncertain scan's own spans stay, a sheet can show them again (Codex, CODEX_DESIGN_REVIEW 2); text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
+    edits += [] if getattr(vis, 'source', False) else [(span, b'') for span in (vis.hidden if vis.certain else vis.browser_hidden)]  # only what is proved hidden: an uncertain scan's own spans stay, a sheet can show them again (Codex, CODEX_DESIGN_REVIEW 2); text the page hides (display:none, visibility:hidden, …): the tool read it as text — a hidden "%" put beside "8.2" for alignment became "8.2 %" and its visible "%" cell a copy, and a whole table's cells were placed out of order (Codex C4); the scanner's reading of what hides must be certain
     out, at = [], 0
     for (a, b), piece in sorted(edits):
         out += [raw[at:a], piece]; at = b
@@ -287,7 +287,16 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
     base = {'source_base': {'tag': {'byte_start': vis.base['start'], 'byte_end_exclusive': vis.base['end']}, 'href': vis.base['href']}} if vis.base else {}
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'driver/prepare/convert/edgartools_html.py',
-                      'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered'], 'source_links': source_links(units, vis), 'source_relations': source_relations(raw, units, vis), **base}
+                      'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered'], 'source_links': source_links(units, vis), 'source_relations': source_relations(raw, units, vis),
+            'source_ids': source_ids(vis), **base}
+
+
+def source_ids(vis):
+    """The scanner's own target inventory (anchor.Visible `ids` and `names`: every id of any element and every <a name>, hidden, duplicate and empty ones
+    too), in source order: {read: true, records}, each {by: id|name, value as the parser decodes it, start: its element's start tag's first byte, end:
+    where the scanner ends that element, null where it records none}. Identity only: nothing that names it is resolved here."""
+    recs = [{'by': by, 'value': v, 'start': r['start'], 'end': r['end']} for by, found in (('id', vis.ids), ('name', vis.names)) for v, rs in found.items() for r in rs]
+    return {'read': True, 'records': sorted(recs, key=lambda r: (r['start'], r['by']))}
 
 
 def with_every_picture(units, vis):
@@ -404,7 +413,8 @@ def source_links(units, vis):
 
     out = []
     for l in vis.links:
-        rec = {'href': l['href'], 'tag': {'byte_start': l['start'], 'byte_end_exclusive': l['tag_end']}, **({'hidden': True} if l['hidden'] else {}), **({} if vis.certain else {'certain': False})}
+        rec = {'href': l['href'], 'tag': {'byte_start': l['start'], 'byte_end_exclusive': l['tag_end']}, **({'hidden': True} if l['hidden'] else {}), **({} if vis.certain else {'certain': False}),
+               **({'declarations': l['declarations']} if l.get('declarations') else {})}  # its tag's on* declarations as written (anchor.Visible): data, never run; what they name stays unresolved
         proved = not vis.certain and l['start'] in ((vis.page or {}).get('links') or {}).get('proved', ())  # an uncertain reading: the page's own render proved this link's runs and pictures (screen_grid._link_owners)
         whole = (vis.certain or proved) and not l['hidden'] and l['whole'] and l['end'] is not None
         held_by = owners(l['tag_end'], l['end']) if whole else None
@@ -616,9 +626,11 @@ SETTINGS = {'parse_html': 'defaults', 'source_inline': 'per source run under a s
 
 def settings(vis):
     """SETTINGS for one document; where the browser proved which of its text hides (Visible's `page`), that reading with a digest of the spans the tool
-    is given without, so that a parse saved for other input (a raw one, or another verdict) is never reused for this one."""
-    if not vis.paged: return SETTINGS
-    return dict(SETTINGS, hidden_text='left out as the browser proved it ' + anchor.sha256(str(vis.browser_hidden).encode())[:16],
+    is given without, so that a parse saved for other input (a raw one, or another verdict) is never reused for this one. A typed source reading
+    (Visible's `source`) gives the tool that text too, and says so."""
+    kept = 'kept in place (typed source reading)' if getattr(vis, 'source', False) else None
+    if not vis.paged: return dict(SETTINGS, hidden_text=kept) if kept else SETTINGS
+    return dict(SETTINGS, hidden_text=(kept + ', hidden as the browser proved it ' if kept else 'left out as the browser proved it ') + anchor.sha256(str(vis.browser_hidden).encode())[:16],
                 **({'picture_visibility': 'as the browser proved it (checkVisibility: opacity, CSS visibility) ' + anchor.sha256(str(vis.page['pictures']).encode())[:16]} if vis.page.get('pictures') else {}))
 
 

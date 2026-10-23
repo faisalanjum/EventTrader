@@ -23,7 +23,7 @@ import gzip, json
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 from playwright.sync_api import TimeoutError as PlaywrightTimeout
-from driver.prepare.get.acquire import _identity, _url, read_package, document_parts, _readings, _prove, AcquisitionError
+from driver.prepare.get.acquire import _identity, _url, read_package, document_parts, _readings, _prove, AcquisitionError, StorageError
 from driver.prepare.get.campaign import OfflineCacheMiss
 from driver.prepare.get.transport import DownloadError, RETRY
 from driver.prepare.convert import screen_grid as sg, overlay
@@ -110,27 +110,20 @@ def _reading_facts(r):  # (facts, initial?) of every reading a selection result 
     initial = [(r.get('baseline') or {}).get('facts')] + list(((r.get('initial') or {}).get('facts') or {}).values()) + [e.get('facts') for e in (r.get('initial') or {}).get('attempts', [])] + [a.get('pre_action_facts') for a in acts]  # every initial canonical reading is initial
     return [(f, True) for f in initial if f] + [(a['facts'], False) for a in acts if a.get('facts')]
 
-def _select(fetch, browser, parent, target, member, body, prefix, max_actions):
-    """Selection with dependency closure of action-introduced requests (bounded): source anchors first, then native nodes of the recorded state."""
-    from driver.prepare.get.acquisition import Selection, NativeSelection
-    closure, history = [], []  # history: every reading of every round and branch; a later result never erases an earlier required observation
+def _select(fetch, browser, parent, target, member, body, prefix, max_actions, title=None):
+    """acquisition.select_parent (the one native selector: first fully qualified context, at most max_actions controls tried) with dependency closure
+    of action-introduced requests (bounded)."""
+    from driver.prepare.get.acquisition import select_parent
+    closure, history = [], []  # history: every reading of every round; a later result never erases an earlier required observation
     for _ in range(3):
-        obs = dict(fetch.observed); s = Selection(parent, obs, target, member, body, prefix, offline=True); r = s.run(browser); kind = 'source_anchor'; first = None
-        history += _reading_facts(r)
-        if r['verdict'] not in ('initial', 'selected'):
-            first = _strip(r)  # the source-anchor result is kept even when native nodes are tried next
-            n = NativeSelection(parent, obs, target, member, body, prefix, offline=True); st = n.prepare(browser)
-            history.append((st.get('facts'), True))  # the native preparation is an unmarked initial load of the parent
-            if st['native_anchors'] > max_actions: return {'verdict': 'incomplete: action budget', 'native_anchors': st['native_anchors'], 'source_anchor_result': first, 'closure': closure}, None
-            r, kind, s = n.run(browser), 'native_node', n; history += _reading_facts(r)
-            if r['verdict'] == 'initial':  # this run's own baseline showed the target, the source-anchor baseline did not: never adopt a second reference
-                r = dict(r, verdict='incomplete: baseline differs between observations', native_verdict='initial')
+        obs = dict(fetch.observed); r, s = select_parent(browser, parent, obs, target, member, body, prefix, max_actions, offline=True, title=title); kind = 'native_node'; first = None
+        history.append((r['prepared_state'].get('facts'), True)); history += _reading_facts(r)  # the native preparation is an unmarked initial load of the parent
         # open = refused and not closed by a recorded response, or delivered with an open status unless a later recorded response closes it
         unknown = sorted({u for f, _ in history if f for u, k in f.get('refused_get') or [] if k != 'navigation' and not _closes(fetch.observed.get(u))}
                          | {d[0] for f, _ in history if f for d in f.get('delivered') or [] if isinstance(d[1], int) and not _closes(fetch.observed.get(d[0]) or {'status': d[1]})})
         navigations = sorted({u for f, initial in history if f and initial for u in f.get('refused_navigation') or []})  # initial readings only; an action's navigation stays its refusal
         refused = [u for u in unknown if _official_get(u) and not any(x['url'] == u for x in fetch.log)]
-        closure.append({'selection_kind': kind, 'verdict': r['verdict'], 'action_refused_gets': refused, 'unobserved': unknown, 'navigations': navigations, **({'source_anchor_result': first} if first is not None else {})})
+        closure.append({'selection_kind': kind, 'verdict': r['verdict'], 'search': r.get('search'), 'action_refused_gets': refused, 'unobserved': unknown, 'navigations': navigations, **({'source_anchor_result': first} if first is not None else {})})
         if not refused:  # a selected target never erases an unobserved dependency or a pending initial navigation of any reading
             return dict(_strip(r), kind=kind, closure=closure, **({'verdict': 'incomplete: pending navigation' if navigations else 'incomplete: unobserved dependency', 'selection_verdict': r['verdict'],
                                                                     'unobserved': unknown, 'navigations': navigations} if unknown or navigations else {})), s
@@ -139,6 +132,20 @@ def _select(fetch, browser, parent, target, member, body, prefix, max_actions):
                 return dict(_strip(r), kind=kind, closure=closure, verdict='incomplete: request budget reached', selection_verdict=r['verdict'], unfinished=refused), s
     return dict(_strip(r), kind=kind, closure=closure, verdict='incomplete: closure round bound reached', selection_verdict=r['verdict']), s
 
+def _report_title(files, filename):
+    """The member's declared report title (ShortName) from the verified package's own FilingSummary.xml, read by the installed native API
+    (edgar.sgml.filing_summary): (title, None) or (None, why). Used only to ORDER the native search. A storage, memory or import failure is no
+    metadata verdict and propagates; an absent member, unreadable XML or no report for the member gives no title (the recorded order)."""
+    from edgar.sgml.filing_summary import FilingSummary
+    raw = files.get('FilingSummary.xml')
+    if raw is None: return None, 'no FilingSummary.xml member'
+    try: report = FilingSummary.parse(raw.decode('utf-8')).reports.get_by_filename(filename)
+    except (OSError, MemoryError, ImportError, StorageError): raise
+    except Exception as e: return None, 'FilingSummary not read: ' + repr(e)[:200]
+    title = getattr(report, 'short_name', None) if report is not None else None
+    return (title, None) if isinstance(title, str) and title.strip() else (None, 'no report title for the member')
+
+
 def acquire_context(campaign, browser, version_dir, filename, marked, prefix, requested_cik=None, budget=80, max_actions=200):
     from driver.prepare.get.acquisition import index_parent_candidates
     manifest, files = read_package(version_dir); ident = manifest['identity']; fetch = _Fetcher(campaign, budget)
@@ -146,6 +153,7 @@ def acquire_context(campaign, browser, version_dir, filename, marked, prefix, re
     cik = requested_cik if requested_cik is not None else ident['ciks'][0] if len(ident['ciks']) == 1 else None
     if cik is None or cik not in ident['ciks']: return {'outcome': 'refused: no single requested CIK of the package', 'evidence': None, 'record': rec}
     member = files.get(filename); rows = [m for m in manifest['members'] if m['filename'] == filename]
+    title, why = _report_title(files, filename); rec['report_title'] = {'short_name': title, **({'unavailable': why} if why else {})}  # search order only (acquisition.NativeSelection._order)
     if member is None or not rows: return {'outcome': 'refused: member not in the verified package custody', 'evidence': None, 'record': rec}
     data = gzip.decompress((Path(version_dir) / 'submission.txt.gz').read_bytes())
     if sha(data) != manifest['package']['sha256']: raise AcquisitionError('package bytes differ from the verified manifest')
@@ -171,7 +179,7 @@ def acquire_context(campaign, browser, version_dir, filename, marked, prefix, re
         if fetch.get(parent, {'kind': 'index_link', 'declarer': index_url, 'declarer_sha256': sha(index)}) is None: rec['parents'][parent] = {'verdict': 'parent unavailable', 'request': fetch.log[-1]['outcome']}; continue
         dep = _startup_dependencies(fetch, browser, parent)
         if not dep['fixed_point']: rec['parents'][parent] = {'dependencies': dep, 'verdict': 'incomplete: ' + dep.get('incomplete', '')}; continue
-        r, s = _select(fetch, browser, parent, target, member, body, prefix, max_actions); rec['parents'][parent] = {'dependencies': dep, 'selection': r, 'verdict': r['verdict']}
+        r, s = _select(fetch, browser, parent, target, member, body, prefix, max_actions, title); rec['parents'][parent] = {'dependencies': dep, 'selection': r, 'verdict': r['verdict']}
         if r['verdict'] in ('initial', 'selected'): chosen.append((parent, r, s))
     rec['undecided_parents'] = sorted(p for p, v in rec['parents'].items() if v['verdict'] not in ('initial', 'selected', 'missing'))  # unavailable, unbudgeted, incomplete, unclean, ambiguous
     if len(chosen) > 1: return {'outcome': 'ambiguous', 'evidence': None, 'record': rec}
@@ -183,8 +191,8 @@ def acquire_context(campaign, browser, version_dir, filename, marked, prefix, re
         delivered = {d[0] for k in ('true', 'false', 'True', 'False', True, False) for d in (facts.get(k) or {}).get('delivered', [])}
     else:
         a = next(x for x in r['attempts'] if x['state'] == 'qualified'); delivered = {d[0] for d in (a.get('facts') or {}).get('delivered', [])}
-        i = a['source_anchor']
-        selection = {'source_anchor': i} if r['kind'] == 'source_anchor' else {'native_node': {'path': s.nodes[i][0], 'tags': s.nodes[i][1], 'outer_html_sha256': s.nodes[i][2]}, 'state_inputs': {'delivered': s.state_facts['delivered'], 'refused_get': s.state_facts['refused_get']}}
+        from driver.prepare.get.acquisition import selection_record
+        selection = selection_record(r, s)
     obs = fetch.observed; keep = (delivered | {parent, target}) & set(obs)
     evidence = {'parent_url': parent, 'target_url': target, 'observed': {u: obs[u] for u in sorted(keep)}, 'selection': selection, 'proof': fit[1], 'before': before, 'after': after}
     rec['evidence_identity'] = {'parent_url': parent, 'target_url': target, 'selection': selection, 'observed': {u: obs[u]['sha256'] for u in sorted(keep)}, 'proof': fit[1]}

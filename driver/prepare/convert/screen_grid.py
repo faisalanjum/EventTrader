@@ -621,7 +621,11 @@ TEXT_CONTENT = {'function': {'counter', 'counters'}, 'ident': {'open-quote', 'cl
 NO_CONTENT = {'no-open-quote', 'no-close-quote', 'normal', 'none'}  # the CSS content keywords that name nothing
 
 
-def _generated(page, prefix):
+SCOPE_OUTSIDE = """function () { const s = window.__sourceScope; if (!s) return null; const v = s.outside(this); if (v !== true) return v === false ? false : null;
+  const w = document.createTreeWalker(this, NodeFilter.SHOW_ALL); for (let n = w.nextNode(); n; n = w.nextNode()) { const u = s.outside(n); if (u !== true) return u === false ? false : null; } return true; }"""  # convert.context's scope (proved parent nodes + the bridged hidden original); no scope (no context): null
+
+
+def _generated(page, prefix, scope=None):  # scope: the Context's isolated-world source scope of this page (convert.context.Scope), else no ownership is asked
     """The page's own layout of generated content (CDP DOMSnapshot.captureSnapshot of this very page, no rects): per pseudo element (before, after,
     marker, first-letter, any other), in tree order (CSS's own places: an element's marker, its before, its children, its after), its layout text
     fragments in native order with their bounds, its computed readings, its own visibility by the existing rule (checkVisibility called on the pseudo
@@ -655,8 +659,21 @@ def _generated(page, prefix):
             if c and (c['background-color'] != 'rgba(0, 0, 0, 0)' or c['background-image'] != 'none' or c['opacity'] != '1'): out.append([d, c['background-color'], c['background-image'], c['opacity']])
             i, d = parent[i], d + 1
         return out
-    images = [{'node': '::' + S[pseudo[ni]] if ni in pseudo else S[N['nodeName'][ni]], 'value': c['background-image'], 'visibility': c['visibility']}
+    def on_node(ni, fn):  # one native call on this snapshot node (DOM.resolveNode by its backendNodeId, then Runtime.callFunctionOn): (value, None) or (None, why)
+        try:
+            obj = cdp.send('DOM.resolveNode', {'backendNodeId': N['backendNodeId'][ni]})['object']['objectId']
+            res = cdp.send('Runtime.callFunctionOn', {'objectId': obj, 'returnByValue': True, 'functionDeclaration': fn})
+            if res.get('exceptionDetails'): return None, repr((res['exceptionDetails'].get('exception') or {}).get('description') or res['exceptionDetails'].get('text'))[:200]
+            return res['result'].get('value'), None
+        except (OSError, StorageError, ImportError, MemoryError): raise  # a process, storage or dependency failure is no content verdict (the step's own policy)
+        except Exception as e: return None, repr(e)[:200]  # unknown: never a verdict
+    images = [{'node': '::' + S[pseudo[ni]] if ni in pseudo else S[N['nodeName'][ni]], 'value': c['background-image'], 'visibility': c['visibility'], 'index': ni}
               for ni, k in sorted(lay.items()) if ntype[ni] == 1 for c in [styled(k)] if c['background-image'] != 'none']  # elements and pseudo elements: a text node only repeats its parent's style  # every laid-out element or pseudo element painting a background image (an owner with no text too): its content is never read here
+    for x in images:  # ownership, raw: True only where the context's own scope predicate proves the painting element, and all it holds, outside the source; a pseudo element is not asked (stays required)
+        ni = x.pop('index')
+        if ni not in pseudo:
+            x['outside_source_scope'], err = scope.node(N['backendNodeId'][ni], SCOPE_OUTSIDE) if scope is not None else (None, 'no context scope')
+            if err: x['scope_error'] = err
     def below(o):  # the owner's descendants, its own pseudo elements apart
         out, todo = [], list(kids.get(o, []))
         while todo:
@@ -681,11 +698,8 @@ def _generated(page, prefix):
         o = g['owner']; desc = below(o); rec = {k: g[k] for k in ('pseudo', 'fragments', 'bounds', 'computed')}; b = ground(ni)
         if b: rec['background'] = b
         rec.update(owner=o, runs=sorted(run[i] for i in desc if i in run), unknown_text=any(ntype[i] == 3 and i < len(nval) and nval[i] >= 0 and S[nval[i]].strip() and not follows_mark(i) for i in desc))
-        try:
-            obj = cdp.send('DOM.resolveNode', {'backendNodeId': N['backendNodeId'][ni]})['object']['objectId']  # the pseudo element itself, not its owner
-            rec['visible'] = cdp.send('Runtime.callFunctionOn', {'objectId': obj, 'returnByValue': True, 'functionDeclaration': 'function () { return this.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}); }'})['result']['value']
-        except (OSError, StorageError, ImportError, MemoryError): raise  # a process, storage or dependency failure is no content verdict (the step's own policy)
-        except Exception as e: rec['visible'], rec['visible_error'] = None, repr(e)[:200]  # unknown: never a hidden verdict, never a shown one
+        rec['visible'], err = on_node(ni, 'function () { return this.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}); }')  # the pseudo element itself, not its owner
+        if err: rec['visible'], rec['visible_error'] = None, err  # unknown: never a hidden verdict, never a shown one
         records.append(rec)
     return {'read': True, 'records': records, 'background_images': images}
 
@@ -703,6 +717,11 @@ def _content(c, marker):
         elif t.type != 'whitespace' and not (t.type == 'ident' and name in NO_CONTENT): out.append('unread: ' + t.message if t.type == 'error' else t.serialize())
     if marker and (c.get('content') or 'normal') == 'normal' and (c.get('list-style-image') or 'none') != 'none': out.append(c['list-style-image'])
     return text, out
+
+
+def _scope_of(source, page):  # the Context-owned isolated-world scope of this page, or None (standalone, no context)
+    ctx = getattr(source, 'context', None) if source is not None else None
+    return ctx.scopes.get(id(page)) if ctx is not None and hasattr(ctx, 'scopes') else None
 
 
 def _generated_owners(raw, vis, runs, marks, gen, units):
@@ -767,7 +786,7 @@ def _generated_owners(raw, vis, runs, marks, gen, units):
         out.append(rec)
     images = gen.get('background_images') or []
     text_proved = not why  # every required generated text read and bound: the generated-text proof, taken before any unread picture is said
-    if any(x['visibility'] == 'visible' for x in images): why.add('background image content not read')  # a picture the page paints behind or without text: kept raw, never read here
+    if any(x['visibility'] == 'visible' and x.get('outside_source_scope') is not True for x in images): why.add('background image content not read')  # a picture the page paints behind or without text: kept raw, never read here  # only a picture proved outside the source, holding none of it, owes nothing
     return {'read': True, 'records': out, **({'background_images': images} if images else {}), 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why), 'text_proved': text_proved}
 
 
@@ -792,7 +811,7 @@ def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: sym = {'error': repr(e)[:200]}  # the symbols alone: the geometry measured stays (the step says why)
         if prefix is not None:  # the page's own layout of generated content (pseudo elements, list markers), read once in this same page
-            try: gen = _generated(page, prefix)
+            try: sc = _scope_of(source, page); gen = _generated(page, prefix, **({'scope': sc} if sc is not None else {}))  # the existing two-argument call where no context scope exists
             except (OSError, StorageError, ImportError, MemoryError): raise
             except Exception as e: gen = {'read': False, 'error': repr(e)[:200]}
             sym = dict(sym, generated=gen)
@@ -803,11 +822,11 @@ def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=
     return (by_table, got['boxes']) if prefix is None else (by_table, got['boxes'], sym)
 
 
-LINKS_JS = """p => { const twice = (() => { const n = new Map(), tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT); for (let c = tw.nextNode(); c; c = tw.nextNode()) if (c.data.startsWith(p)) n.set(c.data, (n.get(c.data) || 0) + 1); return new Set([...n].filter(([, k]) => k > 1).map(([d]) => d)); })();  // the shared run-binding rule: a mark of ours the page holds twice (a cloned or re-inserted block) binds nothing, for every reader
+LINKS_JS = """([p, scoped]) => { const twice = (() => { const n = new Map(), tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT); for (let c = tw.nextNode(); c; c = tw.nextNode()) if (c.data.startsWith(p)) n.set(c.data, (n.get(c.data) || 0) + 1); return new Set([...n].filter(([, k]) => k > 1).map(([d]) => d)); })();  // the shared run-binding rule: a mark of ours the page holds twice (a cloned or re-inserted block) binds nothing, for every reader
   const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), tags = new Map(), out = {links: {}, runs: {}, pictures: {}, reconstructed: 0}, mark = new RegExp('^' + p + '([sqa]):([0-9]+)$');
   const marks = []; for (let c = w.nextNode(); c; c = w.nextNode()) { const m = mark.exec(c.data); if (m && !twice.has(c.data)) marks.push([m[1], m[2], c]); }
   for (const [kind, k, c] of marks) if (kind === 'a') { const e = c.parentNode; if (e && e.nodeType === 1 && e.localName === 'a' && e.firstChild === c && !tags.has(e)) { tags.set(e, k); out.links[k] = {href: e.getAttribute('href')}; } else out.links[k] = null; }  // the mark stands first inside the element made for its own tag
-  for (const a of document.querySelectorAll('a[href]')) if (!tags.has(a) && !(window.__sourceScope && window.__sourceScope.outside(a))) out.reconstructed++;  // a context state names its proved parent/hidden-original nodes; none elsewhere  // an <a href> the parser made with no source tag of its own (a reconstruction)
+  for (const a of document.querySelectorAll('a[href]')) if (!tags.has(a) && !(scoped && window.__sourceScope && window.__sourceScope.outside(a) === true)) out.reconstructed++;  // a context state names its proved parent/hidden-original nodes; none elsewhere  // an <a href> the parser made with no source tag of its own (a reconstruction)
   const near = el => { const a = el && el.closest('a[href]'); return a ? (tags.has(a) ? tags.get(a) : 'reconstructed') : null; };
   for (const [kind, k, c] of marks) {
     if (kind === 'q') { const e = c.nextSibling; out.pictures[k] = e && e.nodeType === 1 && (e.localName === 'img' || e.localName === 'svg') ? near(e) : 'unbound'; }  // PICTURES_JS's own rule: the <img>/<svg> right after its mark, else nothing (a moved picture binds no link)
@@ -868,7 +887,7 @@ def page_visibility(raw, vis, browser, source=None):
     if source is not None: source.charset = charset  # read once: every later render of this document reads it so
     if asked: raise RuntimeError('style sheets the page names cannot be read offline: ' + ', '.join(asked)[:150])  # every sheet the page names is requested from a page with an address, and refused: what it shows or hides is not known, no verdict at all
     page = _offline_page(browser, None, (address, marked, charset), source)  # then the marked bytes in that charset: a comment cannot move a <meta> out of the browser's reach
-    try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True]); seen = page.evaluate(PICTURES_JS, prefix + 'q:'); near = page.evaluate(LINKS_JS, prefix)
+    try: page.goto(address, wait_until='load'); got = page.evaluate(SYMBOLS_JS, [prefix, True]); seen = page.evaluate(PICTURES_JS, prefix + 'q:'); sc = _scope_of(source, page); near = (sc.call('(' + LINKS_JS + ')(' + json.dumps([prefix, True]) + ')') if sc is not None else (None, None))[0] or page.evaluate(LINKS_JS, [prefix, False])  # a context state: in its isolated world (scoped); else, or unknown there, unscoped
     finally: page.close()
     out, unresolved = {'hidden': [], 'shown': [], 'unproven': 0, 'unbound': []}, []; unsure = set()  # the runs no verdict reached (unbound, unproven)
     replaced = {k: v for k, v in (source.context.observed_labels(raw).items() if source is not None and getattr(source, 'context', None) is not None else ()) if v['shown']}  # acted controls shown with their label replaced

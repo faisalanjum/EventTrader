@@ -52,23 +52,18 @@ INIT = """(() => { const origin = new WeakMap();
   document.addEventListener('DOMContentLoaded', () => { const s = new Set(), w = document.createTreeWalker(document, NodeFilter.SHOW_ALL); let n; while ((n = w.nextNode())) s.add(n); window.__preSelectAtParse = s; }, {once: true});
   window.__lineage = {origin, mutations: () => mutations}; })();"""  # native cloneNode/importNode results unchanged; timers untouched (not observed)
 ATTEMPTS = 3  # Root CONTEXT_CANONICAL_STATE_DECISION_20261021: at most 3 observation attempts per logical reading
-OBSERVATION = ('startup', 'selection', 'selection_settle', 'control_located', 'action', 'action_settle', 'effects', 'probe', 'proof', 'origin_in_selected_child', 'target', 'bridge',
+OBSERVATION = ('startup', 'parse_order', 'scope', 'pre_selection_nodes', 'scope_activated', 'scope_origin', 'selection', 'selection_settle', 'control_located', 'action', 'action_settle', 'effects', 'probe', 'proof', 'origin_in_selected_child', 'target', 'bridge',
                'after_bridge_settle', 'after_bridge', 'observe', 'inner', 'final_controls', 'refused')  # one attempt's own observation fields
-FINAL_CONTROLS = '() => (window.__acted || []).map(e => ({label: e.textContent, shown: e.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})}))'  # each acted control's own proved node, read once after all actions
+FINAL_CONTROL = 'function () { return {label: this.textContent, shown: this.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})}; }'  # each acted control's own retained node, read once after all actions
 class Refused(RuntimeError):
     """An observation refusal: a property of what this attempt observed (kept with the attempt), not a fault."""
 
-PRESEL = "() => { window.__preSelect = new Set(); const w = document.createTreeWalker(document, NodeFilter.SHOW_ALL); let n; while ((n = w.nextNode())) window.__preSelect.add(n); return window.__preSelect.size; }"
-SCOPE = "() => { window.__sourceScope = {outside: n => window.__preSelect.has(n) || (!!window.__hiddenOrigin && window.__hiddenOrigin.contains(n))}; return true; }"  # proved parent nodes + the bridged hidden original, nothing else
 CTL_FIND = """([p, runKeys, linkIndex, nLinks, hrefs]) => { const re = new RegExp('^' + p + 's:([0-9]+)$'), w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT), found = []; let c;
   while ((c = w.nextNode())) { const m = re.exec(c.data); if (m && runKeys.includes(+m[1])) found.push(c); }
   if (found.length) { const els = new Set(); for (const k of found) { let el = null; for (let n = k.nextSibling; n; n = n.nextSibling) { if (n.nodeType === 3) { el = n.parentElement; break; } if (n.nodeType !== 8) break; } els.add(el && el.closest('a[href]')); }
     if (found.length !== runKeys.length) return {how: 'own run marks', ok: false, why: found.length + ' run marks for ' + runKeys.length + ' control runs'};
-    if (els.size !== 1 || els.has(null)) return {how: 'own run marks', ok: false, why: 'run marks resolve to ' + els.size + ' anchors'}; window.__ctl = [...els][0]; return {how: 'own run marks', ok: true}; }
-  const anchors = Array.from(document.querySelectorAll('a[href]')).filter(a => !window.__preSelect.has(a));
-  if (anchors.length !== nLinks) return {how: 'inserted-child link order', ok: false, why: anchors.length + ' inserted anchors for ' + nLinks + ' source links'};
-  for (let i = 0; i < nLinks; i++) if (anchors[i].getAttribute('href') !== hrefs[i]) return {how: 'inserted-child link order', ok: false, why: 'href differs at link ' + i};
-  window.__ctl = anchors[linkIndex]; return {how: 'inserted-child link order', ok: true}; }"""
+    if (els.size !== 1 || els.has(null)) return {how: 'own run marks', ok: false, why: 'run marks resolve to ' + els.size + ' anchors'}; return [{how: 'own run marks', ok: true}, [...els][0]]; }
+  return {how: 'inserted-child link order', fallback: true}; }"""  # no own run mark: decided in the isolated world (Scope.pick), the node carried by native identity
 FX_START = """() => { window.__fx = []; window.__fxObs = new MutationObserver(ms => { for (const m of ms) window.__fx.push(m); });
   window.__fxObs.observe(document, {subtree: true, childList: true, characterData: true, attributes: true, characterDataOldValue: true, attributeOldValue: true}); return true; }"""
 FX_TAKE = """() => { const ms = window.__fx.concat(window.__fxObs.takeRecords()); window.__fxObs.disconnect();
@@ -85,28 +80,119 @@ IN_COPY_FIND = """([p, runKeys, k, hrefs]) => { const copy = window.__copy; if (
   const w = document.createTreeWalker(copy, NodeFilter.SHOW_COMMENT), found = []; let c; while ((c = w.nextNode())) { const m = re.exec(c.data); if (m && runKeys.includes(+m[1])) found.push(c); }
   if (found.length) { const els = new Set(); for (const x of found) { let el = null; for (let n = x.nextSibling; n; n = n.nextSibling) { if (n.nodeType === 3) { el = n.parentElement; break; } if (n.nodeType !== 8) break; } els.add(el && el.closest('a[href]')); }
     if (found.length !== runKeys.length || els.size !== 1 || els.has(null) || !copy.contains([...els][0])) return {how: 'own run marks in the copy', ok: false, why: found.length + ' marks resolve to ' + els.size + ' anchors'};
-    window.__ctl = [...els][0]; return {how: 'own run marks in the copy', ok: true}; }
+    return [{how: 'own run marks in the copy', ok: true}, [...els][0]]; }
   const as = Array.from(copy.querySelectorAll('a[href]')); if (as.length !== hrefs.length || as.some((a, i) => a.getAttribute('href') !== hrefs[i])) return {how: 'copy link order', ok: false, why: as.length + ' copy anchors for ' + hrefs.length + ' target source links'};
-  window.__ctl = as[k]; return {how: 'copy link order', ok: true}; }"""
+  return [{how: 'copy link order', ok: true}, as[k]]; }"""  # [reading, the node itself]: the caller retains the node (Scope.locate)
 REPLACED = "([p]) => { " + COMMON + """ const rs = roots(); const r = rs.length === 1 ? rs[0] : null;
   return {same_origin: !!r && window.__lineage.origin.get(r) === window.__hiddenOrigin, old_removed: !!window.__copy && !window.__copy.isConnected,
           parent_kept: !!window.__copyParent && window.__copyParent.isConnected, same_parent: !!r && r.parentNode === window.__copyParent}; }"""  # Root CONTEXT_EXACT_STATE_REPLACEMENT_DECISION_20261022
 ADOPT = "([p]) => { " + COMMON + """ const rs = roots(); window.__copy = rs[0]; return true; }"""  # the proved new instance is the copy from now on
-ORIGIN_SCOPE = "([p]) => { " + COMMON + """ const rs = roots(); if (rs.length !== 1) return null; const o = window.__lineage.origin.get(rs[0]); return o ? !window.__preSelect.has(o) : null; }"""  # the selected child's own node, never a parent one
-COPY_SIG = """([p]) => { const re = new RegExp('^' + p), acted = window.__acted || [], c = window.__copy.cloneNode(true);
+ISO_WORLD = 'context_source_scope'  # the isolated world's name (CDP worldName); page scripts cannot reach its realm
+ISO_INIT = """(() => { const has = Set.prototype.has, add = Set.prototype.add; let parse = null, snap = null, pre = null, origin = null;
+  const all = () => { const s = new Set(), w = document.createTreeWalker(document, NodeFilter.SHOW_ALL); let n; while ((n = w.nextNode())) add.call(s, n); return s; };
+  document.addEventListener('DOMContentLoaded', () => { parse = all(); }, {once: true});
+  const outside = n => pre === null ? null : (has.call(pre, n) || (!!origin && origin.contains(n)));
+  window.__sourceScope = {outside, useParse: () => { pre = parse; return parse !== null; }, takeNow: () => { snap = all(); return snap.size; }, useNow: () => { pre = snap; return snap !== null; },
+    setOrigin: n => { origin = n || null; return !!origin; }, isOrigin: n => !!origin && n === origin, notPre: n => pre === null ? null : !has.call(pre, n),
+    pick: (nLinks, hrefs, k) => { if (pre === null) return 'source scope unknown'; const anchors = Array.from(document.querySelectorAll('a[href]')).filter(a => !has.call(pre, a));
+      if (anchors.length !== nLinks) return anchors.length + ' inserted anchors for ' + nLinks + ' source links';
+      for (let i = 0; i < nLinks; i++) if (anchors[i].getAttribute('href') !== hrefs[i]) return 'href differs at link ' + i;
+      return anchors[k]; }}; })();"""  # pick: the inserted-child link order rule, whole, in this realm; returns the node itself  # parse/pre/origin: this realm only
+ORIGIN_NODE = "([p]) => { " + COMMON + """ const rs = roots(); return rs.length === 1 ? (window.__lineage.origin.get(rs[0]) || null) : null; }"""  # the one new root's native copy origin (main-world clone instrumentation, as PROVE reads it)
+
+
+class Scope:
+    """The Context-owned source scope of one owned Page: ONE CDP session, the isolated world named ISO_WORLD registered for every new document of the
+    page (so each navigation/attempt rebuilds it), that world's context id tracked from the session's own Runtime events. Every ownership question
+    is answered in that world: (value, None) or (None, why); no context, a destroyed one or a failed resolution is unknown (None), never outside."""
+    def __init__(self, page):
+        self.cdp = page.context.new_cdp_session(page); self.ids = {}; self.frame = self.cdp.send('Page.getFrameTree')['frameTree']['frame']['id']
+        def made(e):
+            c = e['context']; aux = c.get('auxData') or {}
+            if aux.get('frameId') != self.frame: return
+            if c.get('name') == ISO_WORLD: self.ids['iso'] = c['id']
+            elif aux.get('isDefault'): self.ids['main'] = c['id']
+        self.cdp.on('Runtime.executionContextCreated', made)
+        self.cdp.on('Runtime.executionContextDestroyed', lambda e: [self.ids.pop(k) for k, v in list(self.ids.items()) if v == e['executionContextId']])
+        self.cdp.on('Runtime.executionContextsCleared', lambda e: self.ids.clear())
+        self.cdp.send('Page.enable'); self.cdp.send('Page.addScriptToEvaluateOnNewDocument', {'source': ISO_INIT, 'worldName': ISO_WORLD}); self.cdp.send('Runtime.enable')
+    def _result(self, r):
+        if r.get('exceptionDetails'): return None, repr((r['exceptionDetails'].get('exception') or {}).get('description') or r['exceptionDetails'].get('text'))[:200]
+        return r['result'].get('value'), None
+    def call(self, expr):  # an expression in the isolated world, by value
+        if 'iso' not in self.ids: return None, 'no isolated scope context'
+        try: return self._result(self.cdp.send('Runtime.evaluate', {'expression': expr, 'contextId': self.ids['iso'], 'returnByValue': True}))
+        except (OSError, StorageError, ImportError, MemoryError): raise
+        except Exception as e: return None, repr(e)[:200]
+    def node(self, backend, fn):  # fn called on that node as the isolated world resolves it (DOM.resolveNode by backendNodeId)
+        if 'iso' not in self.ids: return None, 'no isolated scope context'
+        try:
+            obj = self.cdp.send('DOM.resolveNode', {'backendNodeId': backend, 'executionContextId': self.ids['iso']})['object']['objectId']
+            return self._result(self.cdp.send('Runtime.callFunctionOn', {'objectId': obj, 'returnByValue': True, 'functionDeclaration': fn}))
+        except (OSError, StorageError, ImportError, MemoryError): raise
+        except Exception as e: return None, repr(e)[:200]
+    def to_main(self, expr, fn):  # a node the isolated world's own query returns (or its reason, a string), carried into the main world by native identity
+        if 'iso' not in self.ids or 'main' not in self.ids: return None, 'no scope context'
+        try:
+            r = self.cdp.send('Runtime.evaluate', {'expression': expr, 'contextId': self.ids['iso'], 'returnByValue': False})
+            if r.get('exceptionDetails'): return self._result(r)
+            got = r['result']
+            if got.get('type') == 'string': return None, got.get('value')
+            if got.get('subtype') != 'node' or not got.get('objectId'): return None, 'no node'
+            backend = self.cdp.send('DOM.describeNode', {'objectId': got['objectId']})['node']['backendNodeId']
+            obj = self.cdp.send('DOM.resolveNode', {'backendNodeId': backend, 'executionContextId': self.ids['main']})['object']['objectId']
+            if fn is None: return obj, None  # the node itself, retained (its main-world remote object)
+            return self._result(self.cdp.send('Runtime.callFunctionOn', {'objectId': obj, 'returnByValue': True, 'functionDeclaration': fn}))
+        except (OSError, StorageError, ImportError, MemoryError): raise
+        except Exception as e: return None, repr(e)[:200]
+    ctl = outer = None; acted = ()  # the retained located control, the outer control, the acted controls (CDP remote object ids of this document)
+    def obj(self, expr):  # a main-world expression's result kept as a remote object (never by value): (objectId, None) or (None, why)
+        if 'main' not in self.ids: return None, 'no main context'
+        try:
+            r = self.cdp.send('Runtime.evaluate', {'expression': expr, 'contextId': self.ids['main'], 'returnByValue': False})
+            if r.get('exceptionDetails'): return None, self._result(r)[1]
+            return r['result'].get('objectId'), (None if r['result'].get('objectId') else 'no object')
+        except (OSError, StorageError, ImportError, MemoryError): raise
+        except Exception as e: return None, repr(e)[:200]
+    def on(self, obj, fn, *args, by_value=True):  # fn with `this` = a retained object; args: values, or ('obj', id) for retained objects: (result, None); a null node: (None, 'no object')
+        # the ONE native error boundary of every retained-control read: a native exception or an absent/invalid/destroyed retained object refuses (Refused, cause kept)
+        if obj is None: raise Refused('control handle: no retained object')
+        try:
+            r = self.cdp.send('Runtime.callFunctionOn', {'objectId': obj, 'functionDeclaration': fn, 'returnByValue': by_value,
+                                                          'arguments': [{'objectId': a[1]} if isinstance(a, tuple) else {'value': a} for a in args]})
+        except (OSError, StorageError, ImportError, MemoryError): raise
+        except Exception as e: raise Refused('control handle: ' + repr(e)[:200])
+        if r.get('exceptionDetails'): raise Refused('control handle: native exception: ' + str(self._result(r)[1]))
+        if by_value: return r['result'].get('value'), None
+        return r['result'].get('objectId'), (None if r['result'].get('objectId') else 'no object')
+    def locate(self, js, args):  # a main-world locator returning [reading, node] or a reading alone: (reading, the node retained as a remote object, or None)
+        arr, why = self.obj('(' + js + ')(' + json.dumps(args) + ')')
+        if arr is None: return {'ok': False, 'why': why}, None
+        loc, why = self.on(arr, 'function () { return Array.isArray(this) ? this[0] : this; }')
+        el, _ = self.on(arr, 'function () { return Array.isArray(this) ? this[1] : null; }', by_value=False)
+        return (loc if isinstance(loc, dict) else {'ok': False, 'why': why or 'no reading'}), el
+    def from_main(self, js, args, fn):  # a node the main world's proof code returns (a native object, never a page name), asked in the isolated world
+        if 'main' not in self.ids: return None, 'no main context'
+        try:
+            r = self.cdp.send('Runtime.evaluate', {'expression': '(' + js + ')(' + json.dumps(args) + ')', 'contextId': self.ids['main'], 'returnByValue': False})
+            if r.get('exceptionDetails') or not r['result'].get('objectId'): return None, 'no node from the proof code'
+            return self.node(self.cdp.send('DOM.describeNode', {'objectId': r['result']['objectId']})['node']['backendNodeId'], fn)
+        except (OSError, StorageError, ImportError, MemoryError): raise
+        except Exception as e: return None, repr(e)[:200]
+COPY_SIG = """function (p, ...acted) { const re = new RegExp('^' + p), c = window.__copy.cloneNode(true);
   const skip = new Set(); const pair = (a, b) => { if (acted.includes(a)) skip.add(b); for (let i = 0; i < a.childNodes.length && i < b.childNodes.length; i++) pair(a.childNodes[i], b.childNodes[i]); }; pair(window.__copy, c);  // paired while the clone is still identical
   const w = document.createTreeWalker(c, NodeFilter.SHOW_COMMENT), cs = []; let n; while ((n = w.nextNode())) if (re.test(n.nodeValue)) cs.push(n); cs.forEach(x => x.remove()); c.normalize();
   const shape = e => Array.from(e.children).map(c => '<' + c.localName + shape(c) + '>').join('');  // an acted control: its own text may change, its elements may not
   const out = []; const walk = e => { for (const x of e.childNodes) { if (skip.has(x)) { out.push('<acted ' + x.localName + shape(x) + '>'); continue; } if (x.nodeType === 1) { out.push('<' + x.localName); walk(x); out.push('>'); } else if (x.nodeType === 3) out.push(x.data); else if (x.nodeType === 8) out.push('!' + x.data); } }; walk(c); return out.join('\u0001'); }"""  # content and order, attributes left out
-FX_TAKE_INNER = """() => { const ms = window.__fx.concat(window.__fxObs.takeRecords()); window.__fxObs.disconnect(); const copy = window.__copy;
-  const ctl = window.__ctl, inCtl = t => !!ctl && (t === ctl || ctl.contains(t));
+FX_TAKE_INNER = """function () { const ms = window.__fx.concat(window.__fxObs.takeRecords()); window.__fxObs.disconnect(); const copy = window.__copy;
+  const ctl = this, inCtl = t => !!ctl && (t === ctl || ctl.contains(t));
   const roots = []; const w = document.createTreeWalker(document, NodeFilter.SHOW_ALL); let n; while ((n = w.nextNode())) if (!window.__pre.has(n) && (!n.parentNode || window.__pre.has(n.parentNode)) && !inCtl(n)) roots.push(n);  // a control's own new label nodes are its observed state
   const path = e => { const c = []; let q = e && e.nodeType === 1 ? e : e && e.parentElement; while (q) { c.push(q.tagName.toLowerCase() + (q.id ? '#' + q.id : '')); q = q.parentElement; } return c.join('<'); };
   return {roots: roots.length, records: ms.map(m => ({where: inCtl(m.target) && m.type !== 'attributes' ? 'control label' : copy && copy.contains(m.target) ? (m.type === 'attributes' ? 'attribute inside the copy' : m.type + ' inside the copy') : 'outside the copy', type: m.type, target: path(m.target), attribute: m.attributeName, old: m.oldValue,
     now: m.type === 'attributes' ? m.target.getAttribute(m.attributeName) : m.type === 'characterData' ? m.target.data : null, added: m.addedNodes.length, removed: m.removedNodes.length}))}; }"""
 EQUAL_UNMARKED = "([p]) => { " + COMMON + """ const rs = roots(); const r = rs[0], o = window.__lineage.origin.get(r); const u = unmarked(r), v = unmarked(o);
   return u.childNodes.length === v.childNodes.length && Array.from(v.childNodes).every((c, i) => c.isEqualNode(u.childNodes[i])); }"""  # both sides through Smart's own unmarked(): our comments dropped, text normalized
-OBSERVE = """([p]) => { const re = new RegExp('^' + p + 's:([0-9]+)$'), ctl = window.__ctl, runs = [];
+OBSERVE = """function (p) { const re = new RegExp('^' + p + 's:([0-9]+)$'), ctl = this, runs = [];
   const t = document.createTreeWalker(ctl, NodeFilter.SHOW_COMMENT); let c; while ((c = t.nextNode())) { const m = re.exec(c.nodeValue); if (m) runs.push(+m[1]); }
   const w = document.createTreeWalker(document, NodeFilter.SHOW_ALL), roots = []; let n; while ((n = w.nextNode())) if (!window.__pre.has(n) && (!n.parentNode || window.__pre.has(n.parentNode))) roots.push(n);
   const els = roots.filter(r => r.nodeType === 1); if (els.length !== 1) return {control_runs: runs, copy: null};
@@ -125,7 +211,8 @@ class Context:
     response: {'form', 'inserted'}[, before, after])}; `control` = the source byte start of the activated source link record, None for the initial view."""
     def __init__(self, evidence, control=None, label='initial', settle_s=3.0):  # control: a source link start, or (outer, inner, ...) - an outer reveal then controls inside its proved target
         self.controls = [] if control is None else [control] if isinstance(control, int) else list(control)
-        self.evidence, self.control, self.label, self.settle_s, self.records, self.reference, self.captures = evidence, (self.controls or [None])[0], label, settle_s, [], None, {}  # reference: the state's first completed unmarked observation
+        self.evidence, self.control, self.label, self.settle_s, self.records, self.reference, self.captures = evidence, (self.controls or [None])[0], label, settle_s, [], None, {}
+        self.scopes = {}  # id(owned page) -> its Scope (the isolated-world source scope)  # reference: the state's first completed unmarked observation
         self.parent_hrefs = [l['href'] for l in sg.Visible(evidence['observed'][evidence['parent_url']]['body']).links]
 
     def identity(self):
@@ -144,7 +231,7 @@ class Context:
         page = browser.new_page(viewport={'width': 1400, 'height': 1000}, service_workers='block', offline=True)  # native: an owned context; Page.close closes it
         if measured is not None and 'window' in rec['overlay']:  # an inserted run (SEC's server adds one to some pages): accepted only where it is node-level (OCR's native proof)
             cs = re.search(r'charset=([^;\s]+)', t.get('content_type') or '', re.I); rec['node_level'] = overlay.node_level(page, measured, rec['overlay'], cs.group(1) if cs else 'utf-8')
-        page.context.add_init_script(INIT); page.context.add_init_script(acquisition.INIT); rec['inflight'] = acquisition.count_requests(page); served = [False]; got_in, refused_in = set(), set()  # this render's received inputs (OCR facts: delivered identities, refused GETs)
+        scope = self.scopes[id(page)] = Scope(page); page.on('close', lambda _: self.scopes.pop(id(page), None)); page.context.add_init_script(INIT); page.context.add_init_script(acquisition.INIT); rec['inflight'] = acquisition.count_requests(page); served = [False]; got_in, refused_in = set(), set()  # this render's received inputs (OCR facts: delivered identities, refused GETs)
         def answer(route):
             q = route.request; r4 = [rec['phase'], q.method, q.url, q.resource_type]; rec['requests'].append(r4)  # the four raw fields, recorded first and always
             try: r4.append(bool(q.is_navigation_request() and q.frame.parent_frame is None))  # fifth field: a main-frame navigation by the browser's own facts (Request.is_navigation_request, Frame.parent_frame); a child-frame document load is not one
@@ -162,6 +249,7 @@ class Context:
             return route.abort('aborted')
         page.context.route('**/*', answer); page.context.on('page', lambda pg: rec.__setitem__('pages', rec['pages'] + 1))  # the context's route: popups and workers answer to the same rule
         page.on('pageerror', lambda e: rec['errors'].append([rec['phase'], str(e)[:200]]))
+        page.on('domcontentloaded', lambda _: rec.setdefault('dcl_at', len(rec['requests'])))  # native lifecycle order: requests recorded before the main frame's DOMContentLoaded event (the parse-time snapshot)
         goto = page.goto
         def refuse(why): rec['refused'] = why; raise Refused(f'context {self.label}: refused: {why}')
         def snapshot():  # at measurement start (before the step's own scripts): the one shared native-state read (document + native full-page capture) and this attempt's received inputs
@@ -174,12 +262,18 @@ class Context:
             if not rec['startup']['settled']: refuse('incomplete observation before selection')
             if ev['selection'].get('initial'):  # the target is the parent's own initial selection (OCR's native outcome): no click
                 if not any(r[2] == ev['target_url'] and r[1] == 'GET' for r in rec['requests']): refuse('initial selection: the parent did not request the target at startup')
-                if not page.evaluate('() => { if (!window.__preSelectAtParse) return false; window.__preSelect = window.__preSelectAtParse; return true; }'): refuse('initial selection: no parse-time snapshot of the parent')
-                rec['selection'] = 'initial (no action)'; page.evaluate(SCOPE)
+                t_at = next(i for i, r in enumerate(rec['requests']) if r[2] == ev['target_url'] and r[1] == 'GET'); d_at = rec.get('dcl_at')
+                rec['parse_order'] = {'target_request_index': t_at, 'domcontentloaded_index': d_at, 'target_after_parse_snapshot': d_at is not None and t_at >= d_at}  # observed order only
+                rec['selection'] = 'initial (no action)'
+                if rec['parse_order']['target_after_parse_snapshot']:  # the parse-time parent set holds no member node: a parent-only inference is sound
+                    rec['scope_activated'] = list(scope.call('window.__sourceScope.useParse()'))
+                    if rec['scope_activated'][0] is not True: refuse('initial selection: no parse-time snapshot of the parent in the source scope (%s)' % rec['scope_activated'][1])
+                else: rec['scope'] = 'unknown: the target was not proved requested after the parse-time snapshot; no source scope (consumers fail closed)'
                 if self.control is not None: self._activate(page, raw, p, rec, refuse)
                 for inner in self.controls[1:]: self._activate_inner(page, raw, p, rec, refuse, inner)
                 return res
-            page.evaluate(PRESEL); rec['phase'] = 'selection'; sel = ev['selection']
+            rec['pre_selection_nodes'] = list(scope.call('window.__sourceScope.takeNow()')); rec['phase'] = 'selection'; sel = ev['selection']
+            if not isinstance(rec['pre_selection_nodes'][0], int): refuse('source scope: no parent snapshot before the selection (%s)' % rec['pre_selection_nodes'][1])  # the parent's nodes right before the selection, in the isolated world
             if 'native_node' in sel: el = self._native_node(page, sel, got_in, refused_in, refuse); rec['selection'] = 'native observed control (OCR NativeSelection key), not a raw-source anchor'
             else:
                 el = page.evaluate_handle(acquisition.LOCATE, [self.parent_hrefs, sel['source_anchor']]).as_element()
@@ -193,7 +287,8 @@ class Context:
                 refuse('the selection did not request the target (' + type(e).__name__ + ')')
             rec['selection_settle'] = _settle(page, rec, self.settle_s)
             if not rec['selection_settle']['settled']: refuse('incomplete observation after selection')
-            page.evaluate(SCOPE)
+            rec['scope_activated'] = list(scope.call('window.__sourceScope.useNow()'))
+            if rec['scope_activated'][0] is not True: refuse('source scope: not activated after the selection (%s)' % rec['scope_activated'][1])
             if self.control is not None: self._activate(page, raw, p, rec, refuse)
             for inner in self.controls[1:]: self._activate_inner(page, raw, p, rec, refuse, inner)
             return res
@@ -204,9 +299,9 @@ class Context:
             rec['attempts'] = []
             for k in range(1, ATTEMPTS + 1):  # Root's canonical state: the same Page navigated afresh (no Page swapped under the caller); one attempt equal to the state reference is used
                 if k > 1: keep(rec['attempts'][-1])
-                served[0] = False; got_in.clear(); refused_in.clear(); rec.pop('refused', None); rec['phase'] = 'startup'; a = {'attempt': k}; rec['attempts'].append(a)
-                try: res = observe(); n = snapshot(); rec['final_controls'] = page.evaluate(FINAL_CONTROLS)  # the final state's control readings, beside the canonical snapshot
-                except Refused: a['outcome'] = 'not used: refused'; continue  # its reason is kept with the attempt
+                served[0] = False; got_in.clear(); refused_in.clear(); rec.pop('refused', None); rec.pop('dcl_at', None); scope.ctl = scope.outer = None; scope.acted = []; rec['phase'] = 'startup'; a = {'attempt': k}; rec['attempts'].append(a)
+                try: res = observe(); n = snapshot(); rec['final_controls'] = [scope.on(a, FINAL_CONTROL)[0] for a in scope.acted]  # the final state's control readings, beside the canonical snapshot
+                except Refused as e: rec.setdefault('refused', str(e)); a['outcome'] = 'not used: refused'; continue  # its reason is kept with the attempt (a boundary's own Refused: its message)
                 except sg.CaptureError as e: a['outcome'] = 'failed: ' + str(e); refuse(str(e))  # a failed or incomplete native capture: refused, never retried
                 a['native'] = n; ref = self.reference
                 if ref is None and rec['marked']: a['outcome'] = 'not used: no state reference (no unmarked observation completed first)'; break  # nothing to match: no retry
@@ -234,10 +329,17 @@ class Context:
         src = [l for l in vis.links if l['start'] == self.control]; idx = [i for i, l in enumerate(vis.links) if l['start'] == self.control]
         ctl_runs = [k for k, (_, chars, _, ok) in enumerate(runs) if ok and src and src[0]['tag_end'] <= chars[0][0] and chars[-1][1] <= src[0]['end']]
         if len(src) != 1 or not ctl_runs: refuse('no single source link record with text at the control position')
-        rec['phase'] = 'action'; loc = page.evaluate(CTL_FIND, [p, ctl_runs, idx[0], len(vis.links), [l['href'] for l in vis.links]]); rec['control_located'] = loc
-        if not loc['ok']: refuse('control identity: ' + loc['why'])
+        sc = self.scopes[id(page)]; hrefs = [l['href'] for l in vis.links]; rec['phase'] = 'action'; loc, el = sc.locate(CTL_FIND, [p, ctl_runs, idx[0], len(vis.links), hrefs])
+        if loc.get('fallback'):  # no own run mark in this render: the inserted-child link order rule, decided in the isolated world on its own scope
+            el, why = sc.to_main('window.__sourceScope.pick(%d, %s, %d)' % (len(vis.links), json.dumps(hrefs), idx[0]), None)
+            loc = {'how': 'inserted-child link order (isolated-world scope; node by native identity)', 'ok': el is not None, **({} if el is not None else {'why': why or 'not located'})}
+        rec['control_located'] = loc
+        if not loc['ok'] or el is None: refuse('control identity: ' + str(loc.get('why') or 'no located node'))
+        sc.ctl = el  # retained: every later step acts on this node, never on a page-writable name
         page.evaluate(SNAP); n0, e0 = len(rec['requests']), len(rec['errors']); page.evaluate(FX_START)
-        page.evaluate('() => window.__ctl.click()'); rec['action'] = 'programmatic HTMLElement.click() (untrusted)'; rec['action_settle'] = _settle(page, rec, self.settle_s)
+        why = sc.on(sc.ctl, 'function () { this.click(); }')[1]
+        if why: refuse('control handle: ' + why)
+        rec['action'] = 'programmatic HTMLElement.click() (untrusted)'; rec['action_settle'] = _settle(page, rec, self.settle_s)
         fx = page.evaluate(FX_TAKE); rec['effects'] = fx; reqs = rec['requests'][n0:]; errs = rec['errors'][e0:]
         rec['probe'] = {'new_roots': fx['roots'], 'mutations': len(fx['records']), 'requests': len(reqs), 'errors': len(errs)}
         proof = page.evaluate(PROVE, [p, raw.decode('utf-8')]); rec['proof'] = proof
@@ -250,17 +352,19 @@ class Context:
             why += [w for w, bad in (('origin not present before the action', not L['origin_was_present']), ('origin moved', not L['origin_still_connected']), ('copy not shown', not proof[0]['shown']),
                     ('origin id not declared exactly once', len(ids) != 1 or ids[0]['end'] is None or L['inert_id_hits'] != 1), ('origin differs from the inert parse of the source', not L['origin_equals_source_parse']),
                     ('copy root not mapped', not L['copy_root_mapped']), ('copy children not an ordered native copy', not L['copy_children_ordered_identity']), ('copy children not node-equal', not L['copy_children_equal'])) if bad]
-            rec['origin_in_selected_child'] = page.evaluate(ORIGIN_SCOPE, [p])
+            v, why_o = self.scopes[id(page)].from_main(ORIGIN_NODE, [p], 'function () { return window.__sourceScope.notPre(this); }'); rec['origin_in_selected_child'] = v if why_o is None else {'unknown': why_o}  # the selected child's own node, never a parent one; a scope failure: its cause, never True
             if rec['origin_in_selected_child'] is not True: why.append('the origin is not a node of the selected child (a parent-owned equal target does not qualify)')
             if len(ids) == 1 and ids[0]['end'] is not None: rec['target'] = {'declared_id': L['origin_id'], 'source_extent': {'byte_start': ids[0]['start'], 'byte_end_exclusive': ids[0]['end']}}
         if why: refuse('; '.join(why))
         br = page.evaluate(BRIDGE, [p]); rec['bridge'] = br
         if not br['performed']: refuse('bridge: ' + br['why'])
-        page.evaluate(SET_ORIGIN, [p]); rec['after_bridge_settle'] = _settle(page, rec, self.settle_s); after = page.evaluate(AFTER, [p]); rec['after_bridge'] = after
+        page.evaluate(SET_ORIGIN, [p]); rec['scope_origin'] = list(self.scopes[id(page)].from_main(ORIGIN_NODE, [p], 'function () { return window.__sourceScope.setOrigin(this); }'))
+        if rec['scope_origin'][0] is not True: refuse('source scope: the proved origin was not transferred (%s)' % rec['scope_origin'][1])
+        rec['after_bridge_settle'] = _settle(page, rec, self.settle_s); after = page.evaluate(AFTER, [p]); rec['after_bridge'] = after
         after['copy_equals_origin_both_unmarked'] = page.evaluate(EQUAL_UNMARKED, [p])  # AFTER's own field compares an unnormalized origin (our removed marks leave its text split)
         bad = [k for k in ('copy_still_shown', 'origin_still_connected', 'origin_still_not_displayed', 'copy_equals_origin_both_unmarked') if after.get(k) is not True]
         if not rec['after_bridge_settle']['settled'] or bad: refuse('after the bridge: ' + ', '.join(bad or ['not settled']))
-        rec['observe'] = page.evaluate(OBSERVE, [p]); page.evaluate('() => { window.__outerCtl = window.__ctl; window.__acted = []; }')
+        rec['observe'] = sc.on(sc.ctl, OBSERVE, p)[0]; sc.outer, sc.acted = sc.ctl, []
 
     def _activate_inner(self, page, raw, p, rec, refuse, start):
         """A source-owned control inside the proved target, after the outer reveal: accepted only as an in-place change - no new node, every mutation an
@@ -269,32 +373,38 @@ class Context:
         if not ext: refuse('inner control without a proved target')
         inner = [l for l in vis.links if ext['byte_start'] <= l['start'] < ext['byte_end_exclusive']]; k = [i for i, l in enumerate(inner) if l['start'] == start]
         one = {'control': start}; rec.setdefault('inner', []).append(one)
-        if start == self.control: one['located'] = {'how': 'the outer control element already proved', 'ok': page.evaluate('() => { window.__ctl = window.__outerCtl; return !!window.__ctl; }')}
+        sc = self.scopes[id(page)]
+        if start == self.control: sc.ctl = sc.outer; one['located'] = {'how': 'the outer control element already proved', 'ok': sc.outer is not None}
         elif len(k) != 1: refuse('a later control is neither a source link inside the proved target nor the outer control')
         else:
             l = inner[k[0]]; ctl_runs = [j for j, (_, chars, _, ok) in enumerate(runs) if ok and l['tag_end'] <= chars[0][0] and chars[-1][1] <= l['end']]
-            one['located'] = page.evaluate(IN_COPY_FIND, [p, ctl_runs, k[0], [x['href'] for x in inner]])
+            one['located'], sc.ctl = sc.locate(IN_COPY_FIND, [p, ctl_runs, k[0], [x['href'] for x in inner]])
         loc = one['located']
-        if not loc['ok']: refuse('later control identity: ' + str(loc.get('why')))
-        page.evaluate('() => { if (!window.__acted.includes(window.__ctl)) window.__acted.push(window.__ctl); }')  # its own label is observed action state, compared apart
-        one['label_before'] = page.evaluate('() => window.__ctl.textContent')
+        if not loc['ok'] or sc.ctl is None: refuse('later control identity: ' + str(loc.get('why') or 'no located node'))
+        if sc.on(sc.ctl, 'function (...acted) { return acted.includes(this); }', *[('obj', a) for a in sc.acted])[0] is not True: sc.acted.append(sc.ctl)  # its own label is observed action state, compared apart
+        one['label_before'], why = sc.on(sc.ctl, 'function () { return this.textContent; }')
+        if why: refuse('control handle: ' + why)
         page.evaluate('() => { window.__copyParent = window.__copy ? window.__copy.parentNode : null; }')  # where the proved copy stands before the action
-        before = page.evaluate(COPY_SIG, [p]); page.evaluate(SNAP); n0, e0 = len(rec['requests']), len(rec['errors']); page.evaluate(FX_START)
-        page.evaluate('() => window.__ctl.click()'); one['settle'] = _settle(page, rec, self.settle_s); fx = page.evaluate(FX_TAKE_INNER); one['effects'] = fx
+        sig = lambda: sc.on(sc.ctl, COPY_SIG, p, *[('obj', a) for a in sc.acted])[0]
+        before = sig(); page.evaluate(SNAP); n0, e0 = len(rec['requests']), len(rec['errors']); page.evaluate(FX_START)
+        why = sc.on(sc.ctl, 'function () { this.click(); }')[1]
+        if why: refuse('control handle: ' + why)
+        one['settle'] = _settle(page, rec, self.settle_s); fx, why = sc.on(sc.ctl, FX_TAKE_INNER); one['effects'] = fx
+        if fx is None: refuse('control handle: ' + str(why))
         reqs, errs = rec['requests'][n0:], rec['errors'][e0:]; rep = None
         if start == self.control and fx['roots'] == 1:  # the outer control again, one new root: a native replacement of the proved copy, every fact required
-            proof = page.evaluate(PROVE, [p, raw.decode('utf-8')]); f = page.evaluate(REPLACED, [p]); L = proof[0]['lineage'] if len(proof) == 1 else None; got = {q[2] for q in rec['requests'][:n0]}
+            proof = page.evaluate(PROVE, [p, raw.decode('utf-8')]); f = page.evaluate(REPLACED, [p]); so = self.scopes[id(page)].from_main(ORIGIN_NODE, [p], 'function () { return window.__sourceScope.isOrigin(this); }'); f['same_origin'] = so[0] is True; f['same_origin'] or one.__setitem__('replacement_origin_scope', list(so)); L = proof[0]['lineage'] if len(proof) == 1 else None; got = {q[2] for q in rec['requests'][:n0]}
             rep = one['replacement'] = {'same_origin': f['same_origin'], 'new_root_in_place': f['same_parent'], 'old_copy_removed_only': f['old_removed'] and f['parent_kept'] and sum(m['removed'] for m in fx['records']) == 1,
                 'only_that_change': all(m['type'] == 'childList' for m in fx['records']) and sum(m['added'] for m in fx['records']) == 1, 'origin_equals_source_parse': bool(L and L['origin_equals_source_parse']),
                 'children_ordered_identity': bool(L and L['copy_children_ordered_identity']), 'children_equal': bool(L and L['copy_children_equal']), 'inputs_already_received': all(q[1] == 'GET' and q[2] in got for q in reqs)}
         replaced = rep is not None and all(rep.values()) and one['settle']['settled'] and not errs
         if replaced: page.evaluate(ADOPT, [p])
-        one['copy_shown_after'] = page.evaluate('() => !!window.__copy && window.__copy.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})'); one['label_after'] = page.evaluate('() => window.__ctl.textContent')
-        one['control_shown_after'] = page.evaluate('() => window.__ctl.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})')  # native: the acted control itself is shown
+        one['copy_shown_after'] = page.evaluate('() => !!window.__copy && window.__copy.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})'); one['label_after'] = sc.on(sc.ctl, 'function () { return this.textContent; }')[0]
+        one['control_shown_after'] = sc.on(sc.ctl, 'function () { return this.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}); }')[0]  # native: the acted control itself is shown
         one['probe'] = {'new_roots': fx['roots'], 'mutations': len(fx['records']), 'requests': len(reqs), 'errors': len(errs)}
         why = [w for w, bad in (('incomplete observation after the inner action', not one['settle']['settled']), ('script error', errs), ('navigation by an ordinary link (no conditional state)', any(r[3] == 'document' for r in reqs)), ('request after the inner action', not replaced and [r for r in reqs if r[3] != 'document']),
                ('new nodes', not replaced and fx['roots']), ('a change other than an attribute inside the copy or the control\'s own label', not replaced and any(m['where'] not in ('attribute inside the copy', 'control label') for m in fx['records'])),
-               ("the copy's content or order changed", not replaced and page.evaluate(COPY_SIG, [p]) != before)) if bad]
+               ("the copy's content or order changed", not replaced and (before is None or sig() != before))) if bad]
         if rep is not None and not replaced: why.append('not a qualified replacement: ' + (', '.join(k for k, v in rep.items() if not v) or 'unsettled or script error'))
         if why: refuse('inner action: ' + '; '.join(why))
 

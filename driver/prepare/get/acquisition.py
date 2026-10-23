@@ -4,10 +4,16 @@
   quiet_settle / count_requests: the one settle rule (500 ms, nothing in flight, no new mutation, within the bound), shared with convert.context.
   Every observation also takes the ONE runtime native-state read (screen_grid.native_state: document + full-page capture digest + environment), part
     of the canonical equality; a capture failure fails that reading, never retried (OCR's v9 change, applied here).
-  Selection: automatic source-anchor selection on recorded responses (parent as observed, target as its verified measurement body via MeasuredSource):
+  Selection: the shared selection machinery on recorded responses (parent as observed, target as its verified measurement body via MeasuredSource; its own
+    source-anchor locate is no longer an automatic selector - select_parent below is):
     target GET after the action only, verified body, no non-GET, no navigation, no page error, settled, inclusion, clean no-action baseline, ambiguity;
     the canonical-state rule (one fixed unmarked reference, at most 3 observations per reading). NativeSelection: controls of the recorded native parent
-    state (NODES key: path, tag chain, outerHTML sha256, plus that state's received inputs), never raw-source anchors.
+    state (NODES key: path, tag chain, outerHTML sha256, plus that state's received inputs), never raw-source anchors. `select_parent` is the ONE
+    automatic selection of both callers (context_acquire._select, document.select): NativeSelection, controls tried in recorded order until the FIRST
+    fully qualified context, at most max_actions controls tried; the domain size and the tried/untried counts are saved. A selected context is not a
+    claim that untried or undecided controls are absent; no qualified context = incomplete unless the whole domain was tried and decided.
+    Undecided, never absent: a control that cannot be located (key ambiguous or elsewhere, other inputs) and an action that requested the target but
+    did not qualify. `selection_record` is the one serialization of a selected context.
   Prototypes cut from the runtime (no callers): the Recorder downloader, acquire_parent, QUIET, render_neutral and the test-only extra_init hook; they
     stay in ocr_handoff/ as first-attempt evidence."""
 import time, re
@@ -109,6 +115,7 @@ class Selection:
         if got['url'] != self.parent_url: why.append('top URL changed')
         return why
     def count(self): return len(self.hrefs)
+    def _order(self): return range(self.count())  # the recorded order
     def _locate(self, page, i, rec=None):  # source anchors: native source-order correspondence
         h = page.evaluate_handle(LOCATE, [self.hrefs, i]).as_element()
         return (h, None) if h is not None else (None, 'document anchors do not correspond to the source anchors')
@@ -119,7 +126,7 @@ class Selection:
         try:
             if not rec['initial_settled']: a['state'] = 'refused: initial state not settled'; a['pre_action_facts'] = facts(rec); return a  # no action ran: an initial reading
             h, why_loc = self._locate(page, i, rec)
-            if h is None: a['state'] = 'refused: ' + why_loc; a['pre_action_facts'] = facts(rec); return a  # no action ran: an initial reading
+            if h is None: a['state'] = 'incomplete: ' + why_loc; a['pre_action_facts'] = facts(rec); return a  # no action ran: undecided (never absence), an initial reading
             step = 'pre-action reading'; a['control_shown'] = h.evaluate('e => e.checkVisibility()'); m0 = page.evaluate('() => window.__m'); mark, e0 = len(rec['log']), len(rec['errors'])
             self.pre_refused = getattr(self, 'pre_refused', {}); pre = facts(rec); self.pre_refused[marked] = pre['refused_get']
             step = 'click'; h.evaluate('e => e.click()'); step = 'settle'; settled = self._settle(page); step = 'after-action reading'; after = rec['log'][mark:]; errs = rec['errors'][e0:]; why = []
@@ -137,7 +144,8 @@ class Selection:
             doc, m1 = page.evaluate(SER, self.prefix)
             try: native = sg.native_state(page, self.prefix, blobs=self.blobs)[0]
             except sg.CaptureError as e: native = None; why = ['native capture refused: %s' % e]; a['capture_failed'] = True
-            a.update(state='qualified' if not why else 'refused: ' + '; '.join(why), requests=after, doc=doc, facts=f, pre_action_facts=pre, native=native, mutations_before_action=m0, mutations_after_action=m1 - m0,
+            asked = any(r[1] == self.target and r[0] == 'GET' and not r[2] for r in after)  # the action requested the target: if it does not qualify, undecided (never absence)
+            a.update(state='qualified' if not why else ('incomplete: ' if asked else 'refused: ') + '; '.join(why), requests=after, doc=doc, facts=f, pre_action_facts=pre, native=native, mutations_before_action=m0, mutations_after_action=m1 - m0,
                      blocked_non_get_after_action=[r[:2] for r in after if r[0] != 'GET'], refused_by_source=sorted(k for k, v in rec['source'].records.items() if v.get('status') == 'refused'), extra_pages=len(rec['pages']) - 1)
             return a
         except PlaywrightError as e:  # ONE typed boundary for the whole action observation (Root CONTEXT_ACTION_OBSERVATION_REPAIR_20261022T0535): recorded, never qualified/missing/no-op
@@ -207,14 +215,16 @@ class Selection:
         self.initial_result = {'state': c['state'], 'neutral': c['state'] == 'qualified', 'attempts': c['attempts'], 'facts': {True: u.get('facts'), False: r.get('facts')},
                                'blocked_non_get': u.get('blocked_non_get'), 'mutations': u.get('mutations'), 'dom_anchors': u.get('dom_anchors'), 'source_anchors': len(self.hrefs), 'requests': len(u.get('requests') or [])}
         return self.initial_result
-    def run(self, browser):
+    def run(self, browser, max_actions=None):  # controls in recorded order until the first fully qualified context; at most max_actions tried
         rec = {'log': [], 'errors': []}; ctx, page = self._page(browser, True, rec); time.sleep(self.settle_s); self._settle(page); post = page.evaluate(READ, self.prefix); ctx.close()
         baseline = {'target_requested': any(r[1] == self.target for r in rec['log']), 'marks': len(post['marks']), 'errors': rec['errors'], 'blocked_non_get': [r[:2] for r in rec['log'] if r[0] != 'GET'], 'extra_pages': len(rec['pages']) - 1, 'facts': facts(rec)}  # the marked load before any action
         if baseline['target_requested'] and not baseline['errors']:  # the target is the parent's own initial selection: qualify that state, no action
             return {'source_anchors': len(self.hrefs), 'baseline': baseline, 'initial': self.initial(browser), 'attempts': [], 'actions': 'not attempted: the target is the initial selection',
-                    'verdict': None} | (lambda i: {'verdict': 'initial' if i['state'] == 'qualified' else ('incomplete: initial reading ' + i['state']) if i['state'].startswith(('failed', 'incomplete')) else 'missing'})(self.initial_result)
+                    'search': {'domain': self.count(), 'tried': 0, 'untried': self.count(), 'untried_reason': 'the target was requested by the initial (no-action) load'},
+                    'verdict': None} | (lambda i: {'verdict': 'initial' if i['state'] == 'qualified' else ('incomplete: initial reading ' + i['state']) if i['state'].startswith(('failed', 'incomplete')) else 'missing' if not self.count() else 'incomplete: initial reading %s; %d control(s) not tried' % (i['state'], self.count())})(self.initial_result)  # untried controls stay unknown
         attempts = []
-        for i in range(self.count()):
+        for i in self._order():  # the recorded order; NativeSelection may move ONE exact declared-title match first (order only)
+            if max_actions is not None and len(attempts) >= max_actions: break  # the limit caps controls tried, never the domain
             a = self.act(browser, i, True)
             if a['state'] == 'qualified':  # canonical rule for the used reading of this action (the first marked act counts as attempt 1)
                 def obs(m, i=i):
@@ -225,32 +235,42 @@ class Selection:
                 c = self._canonical(obs, marked_first=first); a['canonical'] = {'state': c['state'], 'attempts': c['attempts']}; a['neutral'] = c['state'] == 'qualified'
                 if not a['neutral']: a['state'] = c['state'] if c['state'].startswith(('incomplete', 'failed')) else 'refused: ' + c['state']
             attempts.append(a)
+            if a['state'] == 'qualified': break  # one fully qualified context: later controls are untried, never absent
         for a in attempts: a.pop('doc', None)
         ok = [a for a in attempts if a['state'] == 'qualified']; clean = not baseline['target_requested'] and not baseline['marks'] and not baseline['errors']
-        open_ = [a for a in attempts if a['state'].startswith(('failed', 'incomplete'))]  # undecided attempts: never 'missing' (one known qualified action still selects; two stay ambiguous)
-        return {'source_anchors': len(self.hrefs), 'baseline': baseline, 'attempts': attempts,
-                'verdict': ('selected' if len(ok) == 1 else 'ambiguous' if ok else 'incomplete: %d action observation(s) not decided' % len(open_) if open_ else 'missing') if clean else 'baseline_not_clean'}
+        open_ = [a for a in attempts if a['state'].startswith(('failed', 'incomplete'))]; untried = self.count() - len(attempts)  # undecided or untried: never 'missing'
+        search = {'domain': self.count(), 'tried': len(attempts), 'untried': untried, 'untried_reason': None if not untried else 'stopped at the first fully qualified context' if ok else 'action limit %d reached' % max_actions,
+                  **({'priority': self.priority} if getattr(self, 'priority', None) is not None else {})}
+        return {'source_anchors': len(self.hrefs), 'baseline': baseline, 'attempts': attempts, 'search': search,
+                'verdict': ('selected' if ok else ('incomplete: %d action observation(s) not decided' % len(open_) + (', %d control(s) not tried (%s)' % (untried, search['untried_reason']) if untried else '')) if open_ or untried else 'missing') if clean else 'baseline_not_clean'}
 
 
-NODES = """() => { const path = el => { const p = []; for (let n = el; n && n !== document.documentElement; n = n.parentElement) p.unshift(Array.prototype.indexOf.call(n.parentElement.children, n)); return p; };
+NODES = """(withText) => { const path = el => { const p = []; for (let n = el; n && n !== document.documentElement; n = n.parentElement) p.unshift(Array.prototype.indexOf.call(n.parentElement.children, n)); return p; };
   const tags = el => { const t = []; for (let n = el; n && n !== document.documentElement; n = n.parentElement) t.unshift(n.localName); return t.join('>'); };
-  return Array.from(document.getElementsByTagName('a')).filter(a => a.hasAttribute('href')).map(a => [path(a), tags(a), a.outerHTML]); }"""
+  return Array.from(document.getElementsByTagName('a')).filter(a => a.hasAttribute('href')).map(a => withText ? [path(a), tags(a), a.outerHTML, (a.textContent || '').replace(/\s+/g, ' ').trim()] : [path(a), tags(a), a.outerHTML]); }"""  # the key: path, tag chain, outerHTML; withText (explicit): the same node's normalized text, read in this same query
 RESOLVE = "(path) => { let n = document.documentElement; for (const i of path) { n = n ? n.children[i] : null; } return n || null; }"
 
 class NativeSelection(Selection):
-    """Controls of the recorded authoritative native parent state (scripts ran; menus may be script-built): each identified by that state's whole native
-    serialization sha256 (our prefix comments removed) and the node's tree path and outerHTML sha256. Correspondence is proved afresh at every replay:
-    the replayed state must serialize identically before the action and the node at the path must have the recorded outerHTML; otherwise refused.
-    Not a raw-source anchor claim. Call prepare(browser) once (an unmarked load), then run(browser) as Selection."""
+    """Controls of the recorded authoritative native parent state (scripts ran; menus may be script-built). prepare() records that state (its whole
+    native serialization sha256, our prefix comments removed, is SAVED in state_record, not compared later), its received inputs, and each anchor's
+    key: tree path, tag chain and outerHTML sha256. Every attempt and the Context replay prove afresh: the same received inputs before the action,
+    exactly one anchor in the whole document with the recorded tag chain and outerHTML sha256, at the recorded path; otherwise not located (undecided).
+    Full native-state equality is the canonical rule's (unmarked reference vs marked reading). Not a raw-source anchor claim. Call prepare(browser)
+    once (an unmarked load), then run(browser, max_actions) as Selection; select_parent does both."""
     def prepare(self, browser):
         rec = {'log': [], 'errors': []}; ctx, page = self._page(browser, False, rec)
         try:
             self._settle(page); doc, _ = page.evaluate(SER, self.prefix); self.state_sha = sha(doc.encode())
-            self.nodes = [(p, t, sha(h.encode())) for p, t, h in page.evaluate(NODES)]; self.state_facts = facts(rec)
+            got = page.evaluate(NODES, True); self.nodes = [(p, t, sha(h.encode())) for p, t, h, _ in got]; self.texts = [x for _, _, _, x in got]; self.state_facts = facts(rec)  # the text of each node, read with its key
             self.state_record = {'state_sha256': self.state_sha, 'native_anchors': len(self.nodes), 'requests': rec['log'], 'errors': rec['errors'], 'facts': self.state_facts}
         finally: ctx.close()
         return self.state_record
     def count(self): return len(self.nodes)
+    def _order(self):  # order only: ONE node whose normalized text equals the declared report title goes first; none or several: the recorded order
+        t = ' '.join(self.title.split()) if isinstance(getattr(self, 'title', None), str) else ''
+        hits = [i for i, x in enumerate(getattr(self, 'texts', None) or []) if t and x == t]
+        self.priority = {'title': self.title, 'matches': len(hits), 'first': hits[0] if len(hits) == 1 else None} if t else None
+        return [hits[0]] + [i for i in range(self.count()) if i != hits[0]] if len(hits) == 1 else range(self.count())
     def _locate(self, page, i, rec=None):
         if rec is not None and not _same_inputs(facts(rec), self.state_facts): return None, 'replayed state received different inputs than the recorded state'
         p, t, want = self.nodes[i]; now = [(q, u, sha(h.encode())) for q, u, h in page.evaluate(NODES)]
@@ -258,3 +278,19 @@ class NativeSelection(Selection):
         if len(hits) != 1: return None, ('recorded native node key matches %d nodes in the replayed state' % len(hits)) + (' (ambiguous)' if len(hits) > 1 else '')
         if hits[0] != p: return None, 'recorded native node found at another path'
         return page.evaluate_handle(RESOLVE, p).as_element(), None
+
+
+def select_parent(browser, parent_url, observed, target_url, member, body, prefix, max_actions=200, offline=False, title=None):
+    """The ONE automatic parent selection of both callers: the recorded native parent state's controls, the first fully qualified context within
+    max_actions controls tried (the prepared state's own load is saved with the result). `title` (optional: the declared report title of the member)
+    only orders the search (NativeSelection._order); it proves, removes or skips nothing."""
+    s = NativeSelection(parent_url, observed, target_url, member, body, prefix, offline=offline); s.title = title; state = s.prepare(browser)
+    return dict(s.run(browser, max_actions), prepared_state=state), s
+
+
+def selection_record(r, s):
+    """The one serialization of a selected context: the parent's own initial selection, or the qualified native control's key with the recorded
+    state's inputs (proved afresh at replay by convert.context's native-node check)."""
+    if r['verdict'] == 'initial': return {'initial': True}
+    p, t, o = s.nodes[next(a['source_anchor'] for a in r['attempts'] if a['state'] == 'qualified')]
+    return {'native_node': {'path': p, 'tags': t, 'outer_html_sha256': o}, 'state_inputs': {'delivered': s.state_facts['delivered'], 'refused_get': s.state_facts['refused_get']}}

@@ -64,6 +64,24 @@ def keep_captures(folder, captures):  # every distinct native capture once, cont
         assert archive.load_blob(folder / 'captures', digest) == png, 'capture restoration mismatch'
 
 
+def source_child(attempt, row, raw, displayed, declared, html_route, edgartools_html, archive, acquire):
+    """The attempt's ONE typed whole-source reading (html_route.source_reading, from the displayed initial route's own saved visibility evidence),
+    saved as a whole attempt of its own under source_reading/: its SOURCE and ROUTE/COMPLETE by the same finish, with no prepared inputs. An HTML
+    reading also keeps its own RAW_READING (the parent's receipt untouched) and names its pictures unprepared (PARTIAL); the strict XML reading has
+    no raw reading and qualifies each source picture tag against the displayed route's own occurrence, whose input the caller checks there. The
+    parent's completion pins it (finish) and the custody gate holds it to the same checks. The outcome - made, or why not - is written into the
+    displayed route's facts."""
+    child = attempt / 'source_reading'
+    def parse(raw_, vis):
+        child.mkdir(mode=0o700); save(child / 'SOURCE.json', dict(declared, reading='source (not a display state)'))
+        return raw_reading(child, row['file_id'], edgartools_html, archive, acquire)(raw_, vis)
+    route, why = html_route.source_reading(raw, row['file_id'], row['source_sha256'], displayed, parse=parse)
+    if route is not None:
+        if not child.exists(): child.mkdir(mode=0o700); save(child / 'SOURCE.json', dict(declared, reading='source (not a display state)'))  # a reading made with no HTML parse (the XML route)
+        finish(child, row, route, {}, archive, save)
+    displayed.setdefault('facts', {})['source_reading'] = {'made': True, 'status': route['status'], **({'error': route['error']} if route.get('error') else {})} if route is not None else {'made': False, 'why': why}
+
+
 def finish(folder, row, route, prepared, archive, save_):
     """The completion step every saved route takes (version 5's tail, unchanged): prepared inputs restore, the raw reading restores, ROUTE then COMPLETE."""
     for pin, data in prepared.items():
@@ -79,7 +97,8 @@ def finish(folder, row, route, prepared, archive, save_):
         'route_sha256': digest((folder / 'ROUTE.json').read_bytes()), 'native_status': route['status'],
         'prepared_input_sha256': sorted(prepared), 'reader_called': False,
         'raw_reading_sha256': kept and kept['raw_reading_sha256'], 'raw_reading_receipt_sha256': kept and digest(receipt.read_bytes()),
-        **({'context_renders_sha256': digest((folder / 'CONTEXT_RENDERS.json').read_bytes())} if (folder / 'CONTEXT_RENDERS.json').exists() else {})})  # a context route's saved render evidence, bound like ROUTE
+        **({'context_renders_sha256': digest((folder / 'CONTEXT_RENDERS.json').read_bytes())} if (folder / 'CONTEXT_RENDERS.json').exists() else {}),  # a context route's saved render evidence, bound like ROUTE
+        **({'source_reading_complete_sha256': digest((folder / 'source_reading' / 'COMPLETE.json').read_bytes())} if (folder / 'source_reading' / 'COMPLETE.json').exists() else {})})  # the attempt's typed source reading, bound like ROUTE
 
 
 def context_evidence(row):
@@ -115,26 +134,21 @@ def acquired_context(browser, row, raw, screen_grid, attempt, save_, require=Tru
 
 def select(browser, row, ev, raw, screen_grid, keep):
     """OCR's automatic parent-action selection from the runtime (driver.prepare.get.acquisition; no click list, no research-path import): the parent's
-    own initial selection, else exactly one qualified source anchor, else exactly one qualified native observed control (NativeSelection: a node of
-    the recorded native parent state, never a raw-source anchor); otherwise refused. Every native result is saved before any gate."""
+    own initial selection, else the first fully qualified native observed control (acquisition.select_parent, the same owner as context_acquire:
+    a node of the recorded native parent state, never a raw-source anchor); otherwise refused. Every native result is saved before any gate."""
     from driver.prepare.get import acquisition
     from driver.prepare.convert import overlay
     c = row['context']; p = screen_grid.marker_prefix(raw); marked = run_marked(raw, screen_grid, p)
     body, rec = overlay.measurement_body(ev['observed'][ev['target_url']]['body'], raw, marked, p, ev['proof'])
     assert body is not None, 'selection: no verified measurement body: ' + json.dumps(rec)[:200]
-    args = (ev['parent_url'], ev['observed'], ev['target_url'], raw, body, p); got = acquisition.Selection(*args).run(browser); ns = native = None
-    if got['verdict'] not in ('initial', 'selected'):  # source anchors gave no single qualified action: the recorded native parent state's own controls
-        ns = acquisition.NativeSelection(*args); state = ns.prepare(browser); native = dict(ns.run(browser), prepared_state=state)
-    keep({'selection_result': got, 'native_selection_result': native, 'measurement': rec, 'evidence': c['evidence'], 'evidence_sha256': c['evidence_sha256']})
-    use = native or got; chosen = [a['source_anchor'] for a in use['attempts'] if a['state'] == 'qualified']
-    summary = {'by': 'NativeSelection' if native else 'Selection', 'verdict': use['verdict'], 'qualified': chosen, 'baseline': use['baseline'],
-               'attempts': [{k: a.get(k) for k in ('source_anchor', 'state', 'neutral')} for a in use['attempts']]}
-    if use['verdict'] == 'initial': return {'initial': True, 'by': 'OCR acquisition: the parent\'s own initial load requests the target (no action)'}, summary
-    assert use['verdict'] == 'selected' and len(chosen) == 1, 'selection refused: ' + json.dumps(summary)[:300]
-    if not native: return {'source_anchor': chosen[0], 'by': 'OCR acquisition.Selection.run (automatic; programmatic untrusted click)'}, summary
-    path, tags, outer = ns.nodes[chosen[0]]
-    return {'native_node': {'path': path, 'tags': tags, 'outer_html_sha256': outer}, 'state_inputs': {'delivered': ns.state_facts['delivered'], 'refused_get': ns.state_facts['refused_get']},
-            'by': 'OCR acquisition.NativeSelection.run: a native observed control of the recorded parent state, not a raw-source anchor (programmatic untrusted click)'}, summary
+    got, ns = acquisition.select_parent(browser, ev['parent_url'], ev['observed'], ev['target_url'], raw, body, p)  # the one selector, its default limit (as acquire_context)
+    keep({'selection_result': None, 'native_selection_result': got, 'measurement': rec, 'evidence': c['evidence'], 'evidence_sha256': c['evidence_sha256']})  # no source-anchor pass any more
+    chosen = [a['source_anchor'] for a in got['attempts'] if a['state'] == 'qualified']
+    summary = {'by': 'NativeSelection', 'verdict': got['verdict'], 'qualified': chosen, 'baseline': got['baseline'], 'search': got.get('search'),
+               'attempts': [{k: a.get(k) for k in ('source_anchor', 'state', 'neutral')} for a in got['attempts']]}
+    if got['verdict'] == 'initial': return dict(acquisition.selection_record(got, ns), by='OCR acquisition: the parent\'s own initial load requests the target (no action)'), summary
+    assert got['verdict'] == 'selected' and len(chosen) == 1, 'selection refused: ' + json.dumps(summary)[:300]
+    return dict(acquisition.selection_record(got, ns), by='OCR acquisition.select_parent: the first fully qualified native observed control of the recorded parent state, not a raw-source anchor (programmatic untrusted click)'), summary
 
 
 def main():
@@ -207,6 +221,7 @@ def main():
                         if label != 'initial': folder(label).mkdir(mode=0o700); save(folder(label) / 'SOURCE.json', dict(declared, state=label))
                         return raw_reading(folder(label), row['file_id'], edgartools_html, archive, acquire)
                     def per_prepare(route_, src, label):
+                        if label == 'initial': source_child(attempt, row, raw, route_, declared, html_route, edgartools_html, archive, acquire)  # once, before the interaction graph
                         save(folder(label) / 'ROUTE_BEFORE_INPUTS.json', route_)
                         try: prepared_by[label] = inputs.prepare(raw, route_, members, browser, src)
                         finally:
@@ -226,6 +241,7 @@ def main():
                     route, facts = html_route.prepare(raw, row['file_id'], row['source_sha256'], browser, source,
                                                       parse=raw_reading(attempt, row['file_id'], edgartools_html, archive, acquire))
                     route['facts'] = facts
+                    source_child(attempt, row, raw, route, declared, html_route, edgartools_html, archive, acquire)
                     save(attempt / 'ROUTE_BEFORE_INPUTS.json', route)
                     try:
                         prepared = inputs.prepare(raw, route, members, browser, source)

@@ -1,7 +1,7 @@
 """The batch owner: one pinned plan, run from this checkout's own reviewed runtime (the plan's runtime_root, its manifest checked before any row). For each ordinal:
 generation child (document.py) -> reconstruct main child -> reconstruct verify child, each exit observed from the child itself.
 RESULT.json is one record, rewritten whole as rows change; every ordinal is listed 'unstarted' before any child runs.
-Outcomes: verified_saved_output (generation 0; then ONE shared check for the initial output and for every labelled state: own identity, decoding,
+Outcomes: verified_saved_output (generation 0; then ONE shared check for the initial output, for every labelled state and for the source reading: own identity, decoding,
 native OK, no picture input error, readback asset status ok, every named native capture kept and restorable, reconstruct and verify 0; every activation's state is a saved folder in states/ with
 the route hash it records, and every saved state is named; preservation only, never source fidelity), identity_mismatch, incomplete (with
 reasons), generation_failed (composition skipped). Exit 0 only if every row is verified_saved_output, else 1.
@@ -74,7 +74,7 @@ def kept_captures(folder, documents, what):  # every native capture digest a sav
 
 
 def check_output(folder, logs, expected, seconds, renv, row, result, record, what, live):  # live: where these fields stand in the saved record
-    """The one acceptance check for a saved output (the initial output and every labelled state): its own completion identity, its decoding, native
+    """The one acceptance check for a saved output (the initial output, every labelled state and the typed source reading): its own completion identity, its decoding, native
     status, picture preparation and the readback's own asset status, reconstruct and verify. Returns (fields, reasons, route)."""
     st, t0 = {}, len(row.get('technical_failures', []))
     complete = decoded(folder / 'COMPLETE.json', row, what + 'COMPLETE.json'); route = decoded(folder / 'ROUTE.json', row, what + 'ROUTE.json')
@@ -154,6 +154,11 @@ def main(plan_path, pin, out_dir, generator=str(HERE / 'document.py'), seconds=9
             sl = logs / ('state_' + name.replace('@', '_')); sl.mkdir()
             st, st_reasons, _ = check_output(states / name, sl, expected, seconds, renv, row, result, record, f'state {name} ', row['states'].setdefault(name, {}))
             row['states'][name] = dict(st, reasons=st_reasons); reasons += [f'state {name}: {r}' for r in st_reasons]; save(result, record)
+        sdir, said = attempt / 'source_reading', (route.get('facts') or {}).get('source_reading')  # the attempt's one typed source reading (document.source_child): a required owned reading
+        if sdir.exists() or (said or {}).get('made'):  # the same complete check as the initial output and every state; its own logs; its reasons keep the document incomplete
+            sl = logs / 'source_reading'; sl.mkdir()
+            st, st_reasons, _ = check_output(sdir, sl, expected, seconds, renv, row, result, record, 'source reading ', row.setdefault('source_reading', {}))
+            row['source_reading'] = dict(st, reasons=st_reasons); reasons += [f'source reading: {r}' for r in st_reasons]; save(result, record)
         row.update(status='done', outcome='incomplete' if reasons else 'verified_saved_output', reasons=reasons); save(result, record)
     return 0 if all(r.get('outcome') == 'verified_saved_output' for r in rows) else 1
 

@@ -188,14 +188,14 @@ class ContextAcquisitionFailures(unittest.TestCase):
                                 'initial': {'facts': {'true': bad if origin == 'source_initial' else facts}},
                                 'attempts': [{'state': 'refused: source anchors do not correspond',
                                               'facts': bad if origin == 'source_action' else facts}]}
-                class NativeSelection:
+                class NativeSelection:  # v3 (Root 1809): the one selector; the former source-pass origins are now this run's own baseline and action readings
                     def __init__(self, *args, **kwargs): pass
                     def prepare(self, browser):
                         self.state_facts = bad if origin == 'native_prepare' else facts
                         return {'native_anchors': 1, 'facts': self.state_facts}
-                    def run(self, browser):
-                        return {'verdict': 'selected', 'baseline': {}, 'attempts': [
-                            {'state': 'qualified', 'source_anchor': 0, 'facts': facts}]}
+                    def run(self, browser, max_actions=None):
+                        return {'verdict': 'selected', 'baseline': {'facts': bad if origin == 'source_initial' else facts}, 'attempts': [
+                            {'state': 'qualified', 'source_anchor': 0, 'facts': bad if origin == 'source_action' else facts}]}
                 with Campaign(directory, live=False, minimum_free_bytes=0) as campaign:
                     fetch = _Fetcher(campaign, 80)
                     if fault == 'retry_status':

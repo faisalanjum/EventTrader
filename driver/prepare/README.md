@@ -14,7 +14,7 @@ original package -> get -> exact member bytes
 |---|---|
 | `job.py`, `document.py` | The existing batch and per-document callers: one pinned checkout and interpreter, complete input accounting, bounded children and saved-output verification. See the batch command below. |
 | `get/` | Verified acquisition, member inventory and lossless storage. See [usage](get/README.md). |
-| `get/context_acquire.py` | Uses the existing `Campaign` and package identity to acquire one proved viewer context and its required responses. Unknown alternatives remain recorded; multiple qualified contexts are ambiguous. |
+| `get/context_acquire.py` | Uses the existing `Campaign` and package identity to acquire a proved viewer context and its required responses. Within each parent, native search stops at the first fully qualified view and records other controls as untried; multiple qualified parents remain ambiguous. |
 | `convert/html_route.py` | `prepare(raw, file_id, sha256, browser, source=None, parse=None)` returns `(route, facts)` using EdgarTools and the existing browser measurements. `parse` is the tool call `convert` makes (default `edgartools_html.parse`); a caller that must keep the raw reading wraps it and stores the returned plain dump and version itself, before the route is built. `prepare` stores nothing. EdgarTools 5.60.0's own exports (`Document.to_json`, `TableNode.to_dict`) drop cell spans, header flags and row groups, so the dump is the raw reading to keep. |
 | `convert/context.py` | `contextual_routes` reads the initial document and qualified states through the same HTML and picture helpers. Returns routes, raw trials and native captures; the caller stores them. |
 | `convert/xml_fields.py` | `convert(raw, file_id, sha256)` returns ordered fields and XML elements, with attributes, namespaces, parents and mixed content. |
@@ -38,8 +38,17 @@ the route status and the qualified caller use that one decision. Ordinary docume
 need no context campaign. The caller's job-level `context_campaign` enables automatic
 acquisition for packaged inputs; missing configuration or unqualified context keeps
 the ordinary output and an explicit incomplete result. Its optional `max_actions`
-passes the native fallback-selection limit unchanged; omitting it keeps the native
+passes the native selection attempt limit unchanged; omitting it keeps the native
 default. This operational setting changes no source or state acceptance rule.
+The package's native FilingSummary report title can prioritize that search; it
+does not establish source identity or qualify a view.
+
+When the initial HTML reading identifies hidden source content, the caller also
+keeps one typed whole-source reading in `source_reading/`. It reuses the HTML
+parser, or the existing strict XML route for structured Inline XBRL content.
+This is source content, not another displayed state. The parent completion binds
+the child; the normal job reconstructs and verifies both, and propagates the
+child's failures. Unknown placement and unread pictures remain incomplete.
 
 Each contextual state retains its own source, raw reading, route, picture inputs
 and native observations. Changed control labels keep the original text, each action
@@ -93,7 +102,9 @@ keep their `read`, `error`, `fallback` and unresolved states with the values.
 | Member | Evidence retained |
 |---|---|
 | `schema`, `file_id`, `sha256`, `route` | Payload schema, source identity, tool version and conversion settings. The schema alone is not a code-version identity. |
-| `source_links` | Written links, source occurrences, destinations and proved owners; unknown ownership stays explicit. |
+| `source_links` | Written links, source occurrences, destinations, event declarations and proved owners; a declaration's value and source bytes do not prove executed behavior. Unknown ownership stays explicit. |
+| `source_ids` | Raw source `id` and anchor `name` occurrences, including hidden, duplicate and empty values. Starts locate their written tags; scanner ends are not proved DOM ownership. Reconstruction carries this inventory as uncomposed evidence. |
+| `source_hidden` | In an HTML source reading, hidden text runs and their proved extracted owners; unresolved placements stay explicit. |
 | `source_relations` | Explicit Inline XBRL references and continuation chains. An unread source is not evidence that it has no relationships. |
 | `source_symbols` | Raw symbol-font readings, decoder results, source places and unknown codes. |
 | `source_inline` | Native raised/lowered text evidence and its source-bound owners: sup/sub, a plain inline box with any non-baseline vertical-align (other inline boxes: super, sub or a number), and positioned inline boxes with their raw computed position, top, bottom, left and right. |

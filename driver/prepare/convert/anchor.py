@@ -314,7 +314,8 @@ class Visible:
     it proved shown); a text token one of those runs holds whole takes that verdict instead of the scanner's — every other token, every tag and the
     layout keep the scanner's reading, and the file is never certain."""
 
-    def __init__(self, raw, xml=False, page=None):
+    def __init__(self, raw, xml=False, page=None, source=False):  # source=True: the typed whole-source reading (html_route.source_reading): hidden text kept in the stream, still listed in `hidden`
+        self.source = source
         try:
             s, blen = raw.decode('utf-8'), (lambda t: len(t.encode('utf-8')))
         except UnicodeDecodeError:
@@ -498,13 +499,14 @@ class Visible:
                     recs = []  # its link and target records
                     if 'id' in attrs: recs.append({'start': start, 'end': pos if name in VOID else None}); self.ids.setdefault(attribute_value(attrs['id']), []).append(recs[-1])
                     on = sorted(x for x in attrs if x.startswith('on'))
-                    if on and not (name == 'a' and 'href' in attrs): self.declared.append({'start': start, 'tag_end': pos, 'tag': name, 'on_attributes': on, 'hidden': off})  # a declaration outside the supported link path (Root CONTEXT_DECLARED_ACTION_BOUNDARY_20261022)
+                    said = [{'name': x, 'value': attribute_value(attrs[x]), 'value_at': (lambda sp: sp and [start + blen(t[:sp[0]]), start + blen(t[:sp[1]])])(attribute_span(t, name, x))} for x in attrs if x.startswith('on')]  # each on* declaration as written, in source order: its value as the parser decodes it and where that value stands (None: no value written); data, never run
+                    if on and not (name == 'a' and 'href' in attrs): self.declared.append({'start': start, 'tag_end': pos, 'tag': name, 'on_attributes': on, 'hidden': off, 'declarations': said})  # a declaration outside the supported link path (Root CONTEXT_DECLARED_ACTION_BOUNDARY_20261022)
                     if name == 'a':
                         for r in (r for rs in marks.values() for r in rs if 'href' in r): r['whole'] = False  # an <a> inside an open one: the parser ends that one here
                         if 'name' in attrs: recs.append({'start': start, 'end': None}); self.names.setdefault(attribute_value(attrs['name']), []).append(recs[-1])
                         if 'href' in attrs:
                             recs.append({'start': start, 'tag_end': pos, 'href': attribute_value(attrs['href']), 'hidden': off, 'end': None, 'whole': not (top and top.inside in _TABLE)}); self.links.append(recs[-1])  # standing in a table outside any cell, the parser moves it out
-                            if on: recs[-1]['on_attributes'] = on  # raw declaration at the link's own start tag; the pinned browser decides it and the href's protocol (html_route.declarations)
+                            if on: recs[-1]['on_attributes'], recs[-1]['declarations'] = on, said  # raw declaration at the link's own start tag; the pinned browser decides it and the href's protocol (html_route.declarations)
                     if name == 'base' and 'href' in attrs and self.base is None: self.base = {'start': start, 'end': pos, 'href': attribute_value(attrs['href'])}
                     if name not in VOID:  # a void one ends where it starts; a slash on a non-void HTML tag closes nothing
                         inside = name if name in _PARTS or name == 'table' else top.inside if top else None  # the innermost table, row group, row or cell this element stands in
@@ -539,8 +541,8 @@ class Visible:
                 elif not _WS.match(text): self.hidden_chars += 1
                 self.hidden.append((start, pos))
                 if said: self.browser_hidden.append((start, pos))
-                if top is not None and not top.gone: veil = len(chars) if text[-1] in ('\r\n' if keeps else _SPACE) or (veil == len(chars) and not word) else None  # invisible text that ends with collapsible white space, or with a kept line feed (the line it starts drops the white space that follows) — and kept white space after either leaves it so; removed text is not there at all and changes nothing
-                continue
+                if not self.source and top is not None and not top.gone: veil = len(chars) if text[-1] in ('\r\n' if keeps else _SPACE) or (veil == len(chars) and not word) else None  # invisible text that ends with collapsible white space, or with a kept line feed (the line it starts drops the white space that follows) — and kept white space after either leaves it so; removed text is not there at all and changes nothing
+                if not self.source: continue  # the source reading keeps the hidden token (it stays listed in `hidden`)
             if (after and word) or (touch == len(chars) and not _WS.match(text)) or (not keeps and text[0] in _SPACE and len(chars) in (lead, veil)) or (fresh and bool(top) and top.disp in _SHED and not text.strip(_SPACE) and bool(chars) and not _WS.fullmatch(chars[-1])): computed = True  # a word on the line of a box that must have it to itself; white space the browser drops — at the edge of an inline box between two words, after invisible text that ended with white space, or alone between a word and a tag in a flex, grid or table box, which shows none of its white space that stands alone between its children (CSS Flexbox 4, CSS 2 17.2.1; what follows is not looked at)
             fresh = False
             if st and top.loose: struck_computed = True  # struck letters that may have no room (a spacing or a containment declared on their element or above it): the line may have no length — not certified
