@@ -53,7 +53,7 @@ INIT = """(() => { const origin = new WeakMap();
   window.__lineage = {origin, mutations: () => mutations}; })();"""  # native cloneNode/importNode results unchanged; timers untouched (not observed)
 ATTEMPTS = 3  # Root CONTEXT_CANONICAL_STATE_DECISION_20261021: at most 3 observation attempts per logical reading
 OBSERVATION = ('startup', 'parse_order', 'scope', 'pre_selection_nodes', 'scope_activated', 'scope_origin', 'selection', 'selection_settle', 'control_located', 'action', 'action_settle', 'effects', 'probe', 'proof', 'origin_in_selected_child', 'target', 'bridge',
-               'after_bridge_settle', 'after_bridge', 'observe', 'inner', 'final_controls', 'refused')  # one attempt's own observation fields
+               'after_bridge_settle', 'after_bridge', 'observe', 'inner', 'final_controls', 'refused', 'selection_inputs')  # one attempt's own observation fields
 FINAL_CONTROL = 'function () { return {label: this.textContent, shown: this.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})}; }'  # each acted control's own retained node, read once after all actions
 class Refused(RuntimeError):
     """An observation refusal: a property of what this attempt observed (kept with the attempt), not a fault."""
@@ -274,7 +274,9 @@ class Context:
                 return res
             rec['pre_selection_nodes'] = list(scope.call('window.__sourceScope.takeNow()')); rec['phase'] = 'selection'; sel = ev['selection']
             if not isinstance(rec['pre_selection_nodes'][0], int): refuse('source scope: no parent snapshot before the selection (%s)' % rec['pre_selection_nodes'][1])  # the parent's nodes right before the selection, in the isolated world
-            if 'native_node' in sel: el = self._native_node(page, sel, got_in, refused_in, refuse); rec['selection'] = 'native observed control (OCR NativeSelection key), not a raw-source anchor'
+            if 'native_node' in sel:
+                rec['selection_inputs'] = {'received': sorted(map(list, got_in), key=str), 'refused_get': sorted(map(list, refused_in), key=str)}  # the exact sets _native_node compares next (no browser call between), kept even when it refuses
+                el = self._native_node(page, sel, got_in, refused_in, refuse); rec['selection'] = 'native observed control (OCR NativeSelection key), not a raw-source anchor'
             else:
                 el = page.evaluate_handle(acquisition.LOCATE, [self.parent_hrefs, sel['source_anchor']]).as_element()
                 if el is None: refuse('parent anchors do not correspond to the parent source anchors (a script-built menu needs the native-node selection)')

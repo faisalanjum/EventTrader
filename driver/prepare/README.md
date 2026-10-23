@@ -31,6 +31,12 @@ keep separate source context. The caller's source/version identity must remain w
 these outputs when they are serialized or moved.
 For packaged HTML, pass the same `screen_grid.Source` through HTML conversion and
 picture preparation; it binds the document address, package and dependency evidence.
+Inside a qualified context, that Source answers a URL the parent recording observed
+with the recorded response (the acquisition's own rule), never with a package member
+at the same address; elsewhere a package member answers first. `route['resources']`
+records which source each dependency came from (`member`, or `url` with `observed_at`).
+The picture input fields `member_sha256` and `how: 'member'` are legacy names for the
+direct image bytes the Source answered, which may be such a recorded response.
 
 HTML with declared script actions stays incomplete until those actions are qualified.
 `html_route.declarations` uses the pinned browser's URL and event properties; both

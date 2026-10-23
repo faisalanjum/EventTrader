@@ -282,5 +282,56 @@ class Boundary(unittest.TestCase):
             if status == 'PARTIAL': self.assertIn('geometry is unproved', route['error'])
 
 
+
+class ObservationBodyIdentity(unittest.TestCase):  # Root FABLE_FINAL_BODY_GUARD_20261023T1715: a SUPPLIED body must match its recorded digest whatever the status
+    URL = 'https://evidence.invalid/f/dep.css'
+    BODY = b'p { color: navy }'
+
+    def observe(self, status, body, digest):  # one recorded observation answered through the Source's own rule: (returned or None, its record)
+        o = {'status': status, 'observed_at': 'invented test evidence', 'content_type': 'text/css', 'sha256': digest}
+        if body is not None: o['body'] = body
+        s = Source('d.html', {'d.html': b'<p>d</p>'}, base='https://evidence.invalid/f/', observed={self.URL: o})
+        return s.observation(self.URL, 'stylesheet'), s.records[self.URL]
+
+    def assertServed(self, got, rec, status, body):
+        self.assertEqual(got, (status, 'text/css', body)); self.assertEqual((rec['status'], rec['sha256']), (status, hashlib.sha256(body).hexdigest()))  # the record names the bytes returned
+    def assertRefused(self, got, rec):
+        self.assertIsNone(got); self.assertEqual((rec['status'], rec['why']), ('refused', 'observed bytes are not the recorded sha256'))
+
+    def test_a_200_needs_its_body_and_the_matching_digest(self):
+        h, e = hashlib.sha256(self.BODY).hexdigest(), hashlib.sha256(b'').hexdigest()
+        self.assertServed(*self.observe(200, self.BODY, h), 200, self.BODY)
+        self.assertServed(*self.observe(200, b'', e), 200, b'')  # an explicitly supplied empty body with its own digest
+        self.assertRefused(*self.observe(200, None, h)); self.assertRefused(*self.observe(200, None, None))  # no body
+        self.assertRefused(*self.observe(200, self.BODY, e)); self.assertRefused(*self.observe(200, self.BODY, None))  # wrong or missing digest
+
+    def test_a_supplied_non_200_body_must_match_its_digest(self):  # failed before: any non-200 body was returned and recorded unchecked
+        h, e = hashlib.sha256(self.BODY).hexdigest(), hashlib.sha256(b'').hexdigest()
+        self.assertServed(*self.observe(404, self.BODY, h), 404, self.BODY)  # valid supplied 404
+        self.assertRefused(*self.observe(404, self.BODY, hashlib.sha256(b'other').hexdigest()))  # corrupted supplied 404
+        self.assertRefused(*self.observe(404, self.BODY, None))  # a supplied body with a missing digest
+        self.assertRefused(*self.observe(404, b'', None))  # an explicitly supplied empty body with a missing digest
+        self.assertServed(*self.observe(404, b'', e), 404, b'')  # an explicitly supplied empty body with its own digest
+        self.assertRefused(*self.observe(500, self.BODY, e))  # any non-200 status, same rule
+
+    def test_a_digest_without_a_supplied_body_is_refused_whatever_the_status(self):  # Root FABLE_BODY_PAIR_COMPLETION_20261023T1725: failed before (non-200 accepted)
+        for status in (404, 500):
+            self.assertRefused(*self.observe(status, None, hashlib.sha256(self.BODY).hexdigest()))
+            self.assertRefused(*self.observe(status, None, hashlib.sha256(b'').hexdigest()))
+
+    def test_the_full_status_body_digest_matrix(self):  # accepted ONLY: a supplied body equal to its digest, or a non-200 with BOTH body and digest absent
+        for status in (200, 404):
+            for body in (None, b'', self.BODY):
+                for digest in (None, hashlib.sha256(b'').hexdigest(), hashlib.sha256(self.BODY).hexdigest()):
+                    ok = (body is not None and digest == hashlib.sha256(body).hexdigest()) or (status != 200 and body is None and digest is None)  # the invariant, by hashlib
+                    got, rec = self.observe(status, body, digest)
+                    with self.subTest(status=status, body=body, digest=digest):
+                        if ok: self.assertEqual(got, (status, 'text/css', body if body is not None else b''))
+                        else: self.assertRefused(got, rec)
+
+    def test_a_native_failure_without_body_or_digest_stays_an_explicit_failure(self):  # the real controls' only non-200 form (null hash, no body)
+        got, rec = self.observe(404, None, None); self.assertEqual(got, (404, 'text/css', b'')); self.assertEqual((rec['status'], rec['sha256']), (404, None))
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -568,6 +568,7 @@ class Source:
         name = urllib.parse.unquote(urllib.parse.urlsplit(url).path)[len(urllib.parse.urlsplit(self.root).path):] if self.root and url.startswith(self.root) else None  # the pictures' member rule: the decoded path under the address
         key = name if self.base is None and name is not None else url
         if navigation: return self._refuse(url, key, name, 'navigation')  # a member path never answers a navigation
+        if self.context is not None and url in self.observed: return self.observation(url, kind, key, name)  # a context state replays its recorded parent: an observed URL is its recorded response (acquisition's rule), never a member
         if name in self.members:
             body = self.members[name]; self.records.setdefault(key, {'member': name, 'sha256': hashlib.sha256(body).hexdigest(), 'status': 200, 'kind': kind})
             return 200, mimetypes.guess_type(name)[0] or 'application/octet-stream', body
@@ -577,7 +578,7 @@ class Source:
         key = url if key is None else key; seen = self.observed.get(url)
         if seen is None: return self._refuse(url, key, name, kind)
         body = seen.get('body')
-        if seen['status'] == 200 and (body is None or hashlib.sha256(body).hexdigest() != seen.get('sha256')): return self._refuse(url, key, name, kind, 'observed bytes are not the recorded sha256')
+        if not (hashlib.sha256(body).hexdigest() == seen.get('sha256') if body is not None else seen['status'] != 200 and seen.get('sha256') is None): return self._refuse(url, key, name, kind, 'observed bytes are not the recorded sha256')  # a supplied body is its recorded digest; no body only for a non-200 native failure with no digest
         self.records.setdefault(key, {'url': url, 'status': seen['status'], 'observed_at': seen['observed_at'], 'sha256': seen.get('sha256'), 'kind': kind})
         return seen['status'], seen.get('content_type') or 'application/octet-stream', body or b''
 
