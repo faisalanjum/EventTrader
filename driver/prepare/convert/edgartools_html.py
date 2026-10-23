@@ -416,7 +416,8 @@ def source_links(units, vis):
         rec = {'href': l['href'], 'tag': {'byte_start': l['start'], 'byte_end_exclusive': l['tag_end']}, **({'hidden': True} if l['hidden'] else {}), **({} if vis.certain else {'certain': False}),
                **({'declarations': l['declarations']} if l.get('declarations') else {})}  # its tag's on* declarations as written (anchor.Visible): data, never run; what they name stays unresolved
         proved = not vis.certain and l['start'] in ((vis.page or {}).get('links') or {}).get('proved', ())  # an uncertain reading: the page's own render proved this link's runs and pictures (screen_grid._link_owners)
-        whole = (vis.certain or proved) and not l['hidden'] and l['whole'] and l['end'] is not None
+        whole = (vis.certain or proved) and (getattr(vis, 'source', False) or not l['hidden']) and l['whole'] and l['end'] is not None  # the shown/hidden filter is the displayed reading's; the typed source reading
+        # (anchor.Visible source=True, html_route.source_reading) holds hidden text in its units, so a hidden link it proves whole (scan certainty or the page's native proof of this link, same as a shown one) owns what its extent contains
         held_by = owners(l['tag_end'], l['end']) if whole else None
         if proved and held_by and (not held_by[0] or held_by[2]): whole, held_by = False, None  # the page's proof names extracted text and pictures held - never that nothing else shows (no []), never with text no unit holds: left as unproved
         rec['extent'] = {'byte_start': l['start'], 'byte_end_exclusive': l['end']} if whole else None

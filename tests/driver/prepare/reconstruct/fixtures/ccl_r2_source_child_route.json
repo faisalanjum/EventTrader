@@ -1,0 +1,4922 @@
+{
+  "error": null,
+  "file_id": "public/CCL_R2.htm (unused validation)",
+  "page_visibility": {
+    "hidden": [
+      [
+        464,
+        471
+      ],
+      [
+        2145,
+        2146
+      ],
+      [
+        2275,
+        2287
+      ],
+      [
+        2299,
+        2318
+      ],
+      [
+        2394,
+        2406
+      ],
+      [
+        2441,
+        2465
+      ],
+      [
+        2541,
+        2550
+      ],
+      [
+        2650,
+        2656
+      ],
+      [
+        2703,
+        2733
+      ],
+      [
+        2809,
+        2827
+      ],
+      [
+        2846,
+        2850
+      ],
+      [
+        2879,
+        2890
+      ],
+      [
+        2909,
+        2929
+      ],
+      [
+        2958,
+        2972
+      ],
+      [
+        2991,
+        2993
+      ],
+      [
+        3022,
+        3035
+      ],
+      [
+        3054,
+        3062
+      ],
+      [
+        3337,
+        3338
+      ],
+      [
+        3467,
+        3479
+      ],
+      [
+        3491,
+        3525
+      ],
+      [
+        3601,
+        3613
+      ],
+      [
+        3648,
+        3706
+      ],
+      [
+        3710,
+        3725
+      ],
+      [
+        3729,
+        3745
+      ],
+      [
+        3749,
+        3761
+      ],
+      [
+        3765,
+        3778
+      ],
+      [
+        3786,
+        3844
+      ],
+      [
+        3848,
+        3863
+      ],
+      [
+        3867,
+        3883
+      ],
+      [
+        3887,
+        3899
+      ],
+      [
+        3903,
+        3916
+      ],
+      [
+        3920,
+        3934
+      ],
+      [
+        3942,
+        4000
+      ],
+      [
+        4004,
+        4019
+      ],
+      [
+        4023,
+        4039
+      ],
+      [
+        4043,
+        4055
+      ],
+      [
+        4059,
+        4072
+      ],
+      [
+        4076,
+        4090
+      ],
+      [
+        4170,
+        4179
+      ],
+      [
+        4279,
+        4285
+      ],
+      [
+        4332,
+        4349
+      ],
+      [
+        4425,
+        4443
+      ],
+      [
+        4462,
+        4466
+      ],
+      [
+        4495,
+        4506
+      ],
+      [
+        4525,
+        4559
+      ],
+      [
+        4588,
+        4602
+      ],
+      [
+        4621,
+        4623
+      ],
+      [
+        4652,
+        4665
+      ],
+      [
+        4684,
+        4692
+      ],
+      [
+        4969,
+        4970
+      ],
+      [
+        5099,
+        5111
+      ],
+      [
+        5123,
+        5181
+      ],
+      [
+        5185,
+        5200
+      ],
+      [
+        5204,
+        5220
+      ],
+      [
+        5224,
+        5236
+      ],
+      [
+        5240,
+        5253
+      ],
+      [
+        5261,
+        5319
+      ],
+      [
+        5323,
+        5338
+      ],
+      [
+        5342,
+        5358
+      ],
+      [
+        5362,
+        5374
+      ],
+      [
+        5378,
+        5391
+      ],
+      [
+        5395,
+        5409
+      ],
+      [
+        5417,
+        5475
+      ],
+      [
+        5479,
+        5494
+      ],
+      [
+        5498,
+        5514
+      ],
+      [
+        5518,
+        5530
+      ],
+      [
+        5534,
+        5547
+      ],
+      [
+        5551,
+        5565
+      ],
+      [
+        5645,
+        5654
+      ],
+      [
+        5754,
+        5760
+      ],
+      [
+        5807,
+        5826
+      ],
+      [
+        5902,
+        5920
+      ],
+      [
+        5939,
+        5943
+      ],
+      [
+        5972,
+        5983
+      ],
+      [
+        6002,
+        6031
+      ],
+      [
+        6060,
+        6074
+      ],
+      [
+        6093,
+        6095
+      ],
+      [
+        6124,
+        6137
+      ],
+      [
+        6156,
+        6164
+      ],
+      [
+        6437,
+        6438
+      ],
+      [
+        6567,
+        6579
+      ],
+      [
+        6591,
+        6649
+      ],
+      [
+        6653,
+        6668
+      ],
+      [
+        6672,
+        6688
+      ],
+      [
+        6692,
+        6704
+      ],
+      [
+        6708,
+        6721
+      ],
+      [
+        6729,
+        6787
+      ],
+      [
+        6791,
+        6806
+      ],
+      [
+        6810,
+        6826
+      ],
+      [
+        6830,
+        6842
+      ],
+      [
+        6846,
+        6859
+      ],
+      [
+        6863,
+        6877
+      ],
+      [
+        6885,
+        6943
+      ],
+      [
+        6947,
+        6962
+      ],
+      [
+        6966,
+        6982
+      ],
+      [
+        6986,
+        6998
+      ],
+      [
+        7002,
+        7015
+      ],
+      [
+        7019,
+        7033
+      ],
+      [
+        7113,
+        7122
+      ],
+      [
+        7222,
+        7228
+      ],
+      [
+        7275,
+        7290
+      ],
+      [
+        7366,
+        7384
+      ],
+      [
+        7403,
+        7407
+      ],
+      [
+        7436,
+        7447
+      ],
+      [
+        7466,
+        7495
+      ],
+      [
+        7524,
+        7538
+      ],
+      [
+        7557,
+        7559
+      ],
+      [
+        7588,
+        7601
+      ],
+      [
+        7620,
+        7628
+      ]
+    ],
+    "links": {
+      "proved": [
+        853,
+        1151,
+        1419,
+        1694,
+        2068,
+        2210,
+        2329,
+        2476,
+        3260,
+        3402,
+        3536,
+        4105,
+        4892,
+        5034,
+        5580,
+        6360,
+        6502,
+        7048
+      ],
+      "unproved": {}
+    },
+    "shown": [],
+    "unbound": [],
+    "unproven": 0
+  },
+  "route": {
+    "adapter": "driver/prepare/convert/edgartools_html.py",
+    "linker": "driver/prepare/convert/anchor.py",
+    "name": "edgartools-html+source-reading",
+    "settings": {
+      "heading_boundaries": "source matched",
+      "headings": "detected blocks read whole",
+      "hidden_basis": "browser verdict of the displayed route",
+      "hidden_text": "kept in place (typed source reading), hidden as the browser proved it 55eb6759a2630550",
+      "inline_fact_spaces": "kept",
+      "inline_facts": "read whole",
+      "ix_exclude": "read as shown",
+      "lists": "the parser's own list items: list, ordered, item",
+      "nested_tables": "each a table unit naming its holder cell",
+      "page_number_candidates": "kept",
+      "paragraph_membership": "kept where one of the tool's paragraphs becomes several units",
+      "parse_html": "defaults",
+      "picture_names": "codes",
+      "pictures": "every shown tag",
+      "punctuation": "as the source writes it: no white space removed before . , ; ! ? and none added after . ! ?",
+      "reading": "source (not a display state)",
+      "retain_native_heading_evidence": true,
+      "retain_pictures": true,
+      "source_inline": "per source run under a sup or sub, a plain inline box with any non-baseline vertical-align, another inline box with vertical-align super, sub or a number, or a positioned inline box (computed position not static): nearest-first ancestors; a positioned one adds its raw computed position, top, bottom, left and right",
+      "source_lines": "certified <br> breaks",
+      "source_style": "per source run: colour, weight, font style, decorations in effect, text transform (the computed property, never a printed string), raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)",
+      "style_values": "independent",
+      "table_captions": "each table's own caption a caption unit, bound to its source caption",
+      "table_cells": "every own cell, bound to its source cell, in its row's source order",
+      "table_header": "header is the tool's own verdict (EdgarTools 5.60.0 TableProcessor), read unchanged; a cell's tag, its attrs (id, scope, headers as the parser reads them: character references decoded) and its row_group (the cell's own source group, carried through re-gridding; its tag in the table's row_group_tags) are the source's statements; an absent tag, attrs entry or group is unknown",
+      "table_identity": "own start tag, shown or hidden",
+      "table_rows": "every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group"
+    },
+    "tool": "edgartools",
+    "version": "edgartools 5.60.0"
+  },
+  "schema": "prepare-route-output/1",
+  "seconds": 0.01,
+  "sha256": "0483e3891b60a7844614bf3134bd489331d593d94f4573691016706c5a314a02",
+  "source_hidden": {
+    "basis": "browser verdict of the displayed route",
+    "read": true,
+    "records": [
+      {
+        "byte_end_exclusive": 471,
+        "byte_start": 464,
+        "owners": [
+          {
+            "text_at": [
+              [
+                0,
+                7
+              ]
+            ],
+            "unit": "u0"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2146,
+        "byte_start": 2145,
+        "owners": [
+          {
+            "cell": 2145,
+            "text_at": [
+              [
+                0,
+                1
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2287,
+        "byte_start": 2275,
+        "owners": [
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                12
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2318,
+        "byte_start": 2299,
+        "owners": [
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                13,
+                20
+              ],
+              [
+                21,
+                32
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2406,
+        "byte_start": 2394,
+        "owners": [
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                33,
+                34
+              ],
+              [
+                35,
+                45
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2465,
+        "byte_start": 2441,
+        "owners": [
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                46,
+                48
+              ],
+              [
+                49,
+                59
+              ],
+              [
+                60,
+                70
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2550,
+        "byte_start": 2541,
+        "owners": [
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                71,
+                72
+              ],
+              [
+                73,
+                80
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2656,
+        "byte_start": 2650,
+        "owners": [
+          {
+            "cell": 2651,
+            "text_at": [
+              [
+                0,
+                5
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                81,
+                86
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2733,
+        "byte_start": 2703,
+        "owners": [
+          {
+            "cell": 2703,
+            "text_at": [
+              [
+                0,
+                30
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                87,
+                117
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2827,
+        "byte_start": 2809,
+        "owners": [
+          {
+            "cell": 2810,
+            "text_at": [
+              [
+                0,
+                9
+              ],
+              [
+                10,
+                17
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                118,
+                127
+              ],
+              [
+                128,
+                135
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2850,
+        "byte_start": 2846,
+        "owners": [
+          {
+            "cell": 2846,
+            "text_at": [
+              [
+                0,
+                4
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                136,
+                140
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2890,
+        "byte_start": 2879,
+        "owners": [
+          {
+            "cell": 2880,
+            "text_at": [
+              [
+                0,
+                4
+              ],
+              [
+                5,
+                10
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                141,
+                145
+              ],
+              [
+                146,
+                151
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2929,
+        "byte_start": 2909,
+        "owners": [
+          {
+            "cell": 2909,
+            "text_at": [
+              [
+                0,
+                20
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                152,
+                172
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2972,
+        "byte_start": 2958,
+        "owners": [
+          {
+            "cell": 2959,
+            "text_at": [
+              [
+                0,
+                7
+              ],
+              [
+                8,
+                13
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                173,
+                180
+              ],
+              [
+                181,
+                186
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 2993,
+        "byte_start": 2991,
+        "owners": [
+          {
+            "cell": 2991,
+            "text_at": [
+              [
+                0,
+                2
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                187,
+                189
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3035,
+        "byte_start": 3022,
+        "owners": [
+          {
+            "cell": 3023,
+            "text_at": [
+              [
+                0,
+                6
+              ],
+              [
+                7,
+                12
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                190,
+                196
+              ],
+              [
+                197,
+                202
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3062,
+        "byte_start": 3054,
+        "owners": [
+          {
+            "cell": 3054,
+            "text_at": [
+              [
+                0,
+                8
+              ]
+            ],
+            "unit": "t3"
+          },
+          {
+            "cell": 2275,
+            "text_at": [
+              [
+                203,
+                211
+              ]
+            ],
+            "unit": "t2"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3338,
+        "byte_start": 3337,
+        "owners": [
+          {
+            "cell": 3337,
+            "text_at": [
+              [
+                0,
+                1
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3479,
+        "byte_start": 3467,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                12
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3525,
+        "byte_start": 3491,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                13,
+                18
+              ],
+              [
+                19,
+                25
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                32,
+                36
+              ],
+              [
+                37,
+                47
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3613,
+        "byte_start": 3601,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                48,
+                49
+              ],
+              [
+                50,
+                60
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3706,
+        "byte_start": 3648,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                61,
+                70
+              ],
+              [
+                71,
+                73
+              ],
+              [
+                74,
+                119
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3725,
+        "byte_start": 3710,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                120,
+                130
+              ],
+              [
+                131,
+                134
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3745,
+        "byte_start": 3729,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                135,
+                140
+              ],
+              [
+                141,
+                145
+              ],
+              [
+                146,
+                150
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3761,
+        "byte_start": 3749,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                151,
+                158
+              ],
+              [
+                159,
+                162
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3778,
+        "byte_start": 3765,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                163,
+                171
+              ],
+              [
+                172,
+                175
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3844,
+        "byte_start": 3786,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                176,
+                185
+              ],
+              [
+                186,
+                188
+              ],
+              [
+                189,
+                234
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3863,
+        "byte_start": 3848,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                235,
+                245
+              ],
+              [
+                246,
+                249
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3883,
+        "byte_start": 3867,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                250,
+                255
+              ],
+              [
+                256,
+                260
+              ],
+              [
+                261,
+                265
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3899,
+        "byte_start": 3887,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                266,
+                273
+              ],
+              [
+                274,
+                277
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3916,
+        "byte_start": 3903,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                278,
+                286
+              ],
+              [
+                287,
+                290
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 3934,
+        "byte_start": 3920,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                291,
+                302
+              ],
+              [
+                303,
+                304
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4000,
+        "byte_start": 3942,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                305,
+                314
+              ],
+              [
+                315,
+                317
+              ],
+              [
+                318,
+                363
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4019,
+        "byte_start": 4004,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                364,
+                374
+              ],
+              [
+                375,
+                378
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4039,
+        "byte_start": 4023,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                379,
+                384
+              ],
+              [
+                385,
+                389
+              ],
+              [
+                390,
+                394
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4055,
+        "byte_start": 4043,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                395,
+                402
+              ],
+              [
+                403,
+                406
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4072,
+        "byte_start": 4059,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                407,
+                415
+              ],
+              [
+                416,
+                419
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4090,
+        "byte_start": 4076,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                420,
+                431
+              ],
+              [
+                432,
+                433
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4179,
+        "byte_start": 4170,
+        "owners": [
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                434,
+                435
+              ],
+              [
+                436,
+                443
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4285,
+        "byte_start": 4279,
+        "owners": [
+          {
+            "cell": 4280,
+            "text_at": [
+              [
+                0,
+                5
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                444,
+                449
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4349,
+        "byte_start": 4332,
+        "owners": [
+          {
+            "cell": 4332,
+            "text_at": [
+              [
+                0,
+                17
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                450,
+                467
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4443,
+        "byte_start": 4425,
+        "owners": [
+          {
+            "cell": 4426,
+            "text_at": [
+              [
+                0,
+                9
+              ],
+              [
+                10,
+                17
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                468,
+                477
+              ],
+              [
+                478,
+                485
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4466,
+        "byte_start": 4462,
+        "owners": [
+          {
+            "cell": 4462,
+            "text_at": [
+              [
+                0,
+                4
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                486,
+                490
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4506,
+        "byte_start": 4495,
+        "owners": [
+          {
+            "cell": 4496,
+            "text_at": [
+              [
+                0,
+                4
+              ],
+              [
+                5,
+                10
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                491,
+                495
+              ],
+              [
+                496,
+                501
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4559,
+        "byte_start": 4525,
+        "owners": [
+          {
+            "cell": 4525,
+            "text_at": [
+              [
+                0,
+                34
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                502,
+                536
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4602,
+        "byte_start": 4588,
+        "owners": [
+          {
+            "cell": 4589,
+            "text_at": [
+              [
+                0,
+                7
+              ],
+              [
+                8,
+                13
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                537,
+                544
+              ],
+              [
+                545,
+                550
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4623,
+        "byte_start": 4621,
+        "owners": [
+          {
+            "cell": 4621,
+            "text_at": [
+              [
+                0,
+                2
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                551,
+                553
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4665,
+        "byte_start": 4652,
+        "owners": [
+          {
+            "cell": 4653,
+            "text_at": [
+              [
+                0,
+                6
+              ],
+              [
+                7,
+                12
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                554,
+                560
+              ],
+              [
+                561,
+                566
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4692,
+        "byte_start": 4684,
+        "owners": [
+          {
+            "cell": 4684,
+            "text_at": [
+              [
+                0,
+                8
+              ]
+            ],
+            "unit": "t5"
+          },
+          {
+            "cell": 3467,
+            "text_at": [
+              [
+                567,
+                575
+              ]
+            ],
+            "unit": "t4"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 4970,
+        "byte_start": 4969,
+        "owners": [
+          {
+            "cell": 4969,
+            "text_at": [
+              [
+                0,
+                1
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5111,
+        "byte_start": 5099,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                12
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5181,
+        "byte_start": 5123,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                13,
+                22
+              ],
+              [
+                23,
+                25
+              ],
+              [
+                26,
+                71
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5200,
+        "byte_start": 5185,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                72,
+                82
+              ],
+              [
+                83,
+                86
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5220,
+        "byte_start": 5204,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                87,
+                92
+              ],
+              [
+                93,
+                97
+              ],
+              [
+                98,
+                102
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5236,
+        "byte_start": 5224,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                103,
+                110
+              ],
+              [
+                111,
+                114
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5253,
+        "byte_start": 5240,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                115,
+                123
+              ],
+              [
+                124,
+                127
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5319,
+        "byte_start": 5261,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                128,
+                137
+              ],
+              [
+                138,
+                140
+              ],
+              [
+                141,
+                186
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5338,
+        "byte_start": 5323,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                187,
+                197
+              ],
+              [
+                198,
+                201
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5358,
+        "byte_start": 5342,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                202,
+                207
+              ],
+              [
+                208,
+                212
+              ],
+              [
+                213,
+                217
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5374,
+        "byte_start": 5362,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                218,
+                225
+              ],
+              [
+                226,
+                229
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5391,
+        "byte_start": 5378,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                230,
+                238
+              ],
+              [
+                239,
+                242
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5409,
+        "byte_start": 5395,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                243,
+                254
+              ],
+              [
+                255,
+                256
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5475,
+        "byte_start": 5417,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                257,
+                266
+              ],
+              [
+                267,
+                269
+              ],
+              [
+                270,
+                315
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5494,
+        "byte_start": 5479,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                316,
+                326
+              ],
+              [
+                327,
+                330
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5514,
+        "byte_start": 5498,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                331,
+                336
+              ],
+              [
+                337,
+                341
+              ],
+              [
+                342,
+                346
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5530,
+        "byte_start": 5518,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                347,
+                354
+              ],
+              [
+                355,
+                358
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5547,
+        "byte_start": 5534,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                359,
+                367
+              ],
+              [
+                368,
+                371
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5565,
+        "byte_start": 5551,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                372,
+                383
+              ],
+              [
+                384,
+                385
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5654,
+        "byte_start": 5645,
+        "owners": [
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                386,
+                387
+              ],
+              [
+                388,
+                395
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5760,
+        "byte_start": 5754,
+        "owners": [
+          {
+            "cell": 5755,
+            "text_at": [
+              [
+                0,
+                5
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                396,
+                401
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5826,
+        "byte_start": 5807,
+        "owners": [
+          {
+            "cell": 5807,
+            "text_at": [
+              [
+                0,
+                19
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                402,
+                421
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5920,
+        "byte_start": 5902,
+        "owners": [
+          {
+            "cell": 5903,
+            "text_at": [
+              [
+                0,
+                9
+              ],
+              [
+                10,
+                17
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                422,
+                431
+              ],
+              [
+                432,
+                439
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5943,
+        "byte_start": 5939,
+        "owners": [
+          {
+            "cell": 5939,
+            "text_at": [
+              [
+                0,
+                4
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                440,
+                444
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 5983,
+        "byte_start": 5972,
+        "owners": [
+          {
+            "cell": 5973,
+            "text_at": [
+              [
+                0,
+                4
+              ],
+              [
+                5,
+                10
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                445,
+                449
+              ],
+              [
+                450,
+                455
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6031,
+        "byte_start": 6002,
+        "owners": [
+          {
+            "cell": 6002,
+            "text_at": [
+              [
+                0,
+                29
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                456,
+                485
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6074,
+        "byte_start": 6060,
+        "owners": [
+          {
+            "cell": 6061,
+            "text_at": [
+              [
+                0,
+                7
+              ],
+              [
+                8,
+                13
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                486,
+                493
+              ],
+              [
+                494,
+                499
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6095,
+        "byte_start": 6093,
+        "owners": [
+          {
+            "cell": 6093,
+            "text_at": [
+              [
+                0,
+                2
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                500,
+                502
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6137,
+        "byte_start": 6124,
+        "owners": [
+          {
+            "cell": 6125,
+            "text_at": [
+              [
+                0,
+                6
+              ],
+              [
+                7,
+                12
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                503,
+                509
+              ],
+              [
+                510,
+                515
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6164,
+        "byte_start": 6156,
+        "owners": [
+          {
+            "cell": 6156,
+            "text_at": [
+              [
+                0,
+                8
+              ]
+            ],
+            "unit": "t7"
+          },
+          {
+            "cell": 5099,
+            "text_at": [
+              [
+                516,
+                524
+              ]
+            ],
+            "unit": "t6"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6438,
+        "byte_start": 6437,
+        "owners": [
+          {
+            "cell": 6437,
+            "text_at": [
+              [
+                0,
+                1
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6579,
+        "byte_start": 6567,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                12
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6649,
+        "byte_start": 6591,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                13,
+                22
+              ],
+              [
+                23,
+                25
+              ],
+              [
+                26,
+                71
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6668,
+        "byte_start": 6653,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                72,
+                82
+              ],
+              [
+                83,
+                86
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6688,
+        "byte_start": 6672,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                87,
+                92
+              ],
+              [
+                93,
+                97
+              ],
+              [
+                98,
+                102
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6704,
+        "byte_start": 6692,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                103,
+                110
+              ],
+              [
+                111,
+                114
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6721,
+        "byte_start": 6708,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                115,
+                123
+              ],
+              [
+                124,
+                127
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6787,
+        "byte_start": 6729,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                128,
+                137
+              ],
+              [
+                138,
+                140
+              ],
+              [
+                141,
+                186
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6806,
+        "byte_start": 6791,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                187,
+                197
+              ],
+              [
+                198,
+                201
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6826,
+        "byte_start": 6810,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                202,
+                207
+              ],
+              [
+                208,
+                212
+              ],
+              [
+                213,
+                217
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6842,
+        "byte_start": 6830,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                218,
+                225
+              ],
+              [
+                226,
+                229
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6859,
+        "byte_start": 6846,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                230,
+                238
+              ],
+              [
+                239,
+                242
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6877,
+        "byte_start": 6863,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                243,
+                254
+              ],
+              [
+                255,
+                256
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6943,
+        "byte_start": 6885,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                257,
+                266
+              ],
+              [
+                267,
+                269
+              ],
+              [
+                270,
+                315
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6962,
+        "byte_start": 6947,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                316,
+                326
+              ],
+              [
+                327,
+                330
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6982,
+        "byte_start": 6966,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                331,
+                336
+              ],
+              [
+                337,
+                341
+              ],
+              [
+                342,
+                346
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 6998,
+        "byte_start": 6986,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                347,
+                354
+              ],
+              [
+                355,
+                358
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7015,
+        "byte_start": 7002,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                359,
+                367
+              ],
+              [
+                368,
+                371
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7033,
+        "byte_start": 7019,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                372,
+                383
+              ],
+              [
+                384,
+                385
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7122,
+        "byte_start": 7113,
+        "owners": [
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                386,
+                387
+              ],
+              [
+                388,
+                395
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7228,
+        "byte_start": 7222,
+        "owners": [
+          {
+            "cell": 7223,
+            "text_at": [
+              [
+                0,
+                5
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                396,
+                401
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7290,
+        "byte_start": 7275,
+        "owners": [
+          {
+            "cell": 7275,
+            "text_at": [
+              [
+                0,
+                15
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                402,
+                417
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7384,
+        "byte_start": 7366,
+        "owners": [
+          {
+            "cell": 7367,
+            "text_at": [
+              [
+                0,
+                9
+              ],
+              [
+                10,
+                17
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                418,
+                427
+              ],
+              [
+                428,
+                435
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7407,
+        "byte_start": 7403,
+        "owners": [
+          {
+            "cell": 7403,
+            "text_at": [
+              [
+                0,
+                4
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                436,
+                440
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7447,
+        "byte_start": 7436,
+        "owners": [
+          {
+            "cell": 7437,
+            "text_at": [
+              [
+                0,
+                4
+              ],
+              [
+                5,
+                10
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                441,
+                445
+              ],
+              [
+                446,
+                451
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7495,
+        "byte_start": 7466,
+        "owners": [
+          {
+            "cell": 7466,
+            "text_at": [
+              [
+                0,
+                29
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                452,
+                481
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7538,
+        "byte_start": 7524,
+        "owners": [
+          {
+            "cell": 7525,
+            "text_at": [
+              [
+                0,
+                7
+              ],
+              [
+                8,
+                13
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                482,
+                489
+              ],
+              [
+                490,
+                495
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7559,
+        "byte_start": 7557,
+        "owners": [
+          {
+            "cell": 7557,
+            "text_at": [
+              [
+                0,
+                2
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                496,
+                498
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7601,
+        "byte_start": 7588,
+        "owners": [
+          {
+            "cell": 7589,
+            "text_at": [
+              [
+                0,
+                6
+              ],
+              [
+                7,
+                12
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                499,
+                505
+              ],
+              [
+                506,
+                511
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      },
+      {
+        "byte_end_exclusive": 7628,
+        "byte_start": 7620,
+        "owners": [
+          {
+            "cell": 7620,
+            "text_at": [
+              [
+                0,
+                8
+              ]
+            ],
+            "unit": "t9"
+          },
+          {
+            "cell": 6567,
+            "text_at": [
+              [
+                512,
+                520
+              ]
+            ],
+            "unit": "t8"
+          }
+        ]
+      }
+    ]
+  },
+  "source_ids": {
+    "read": true,
+    "records": [
+      {
+        "by": "id",
+        "end": 1872,
+        "start": 478,
+        "value": "idm140371821239040"
+      },
+      {
+        "by": "id",
+        "end": 3106,
+        "start": 1910,
+        "value": "defref_ccl_AuditorInformationAbstract"
+      },
+      {
+        "by": "id",
+        "end": 4736,
+        "start": 3115,
+        "value": "defref_dei_AuditorFirmId"
+      },
+      {
+        "by": "id",
+        "end": 6208,
+        "start": 4745,
+        "value": "defref_dei_AuditorLocation"
+      },
+      {
+        "by": "id",
+        "end": 7672,
+        "start": 6217,
+        "value": "defref_dei_AuditorName"
+      }
+    ]
+  },
+  "source_links": [
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.showAR( this, 'defref_ccl_AuditorInformationAbstract', window );",
+          "value_at": [
+            902,
+            971
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": {
+        "byte_end_exclusive": 1020,
+        "byte_start": 853
+      },
+      "href": "javascript:void(0);",
+      "owners": [
+        {
+          "cell": 981,
+          "unit": "t1"
+        }
+      ],
+      "owners_by": "page",
+      "tag": {
+        "byte_end_exclusive": 973,
+        "byte_start": 853
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.showAR( this, 'defref_dei_AuditorName', window );",
+          "value_at": [
+            1200,
+            1254
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": {
+        "byte_end_exclusive": 1268,
+        "byte_start": 1151
+      },
+      "href": "javascript:void(0);",
+      "owners": [
+        {
+          "cell": 1256,
+          "unit": "t1"
+        }
+      ],
+      "owners_by": "page",
+      "tag": {
+        "byte_end_exclusive": 1256,
+        "byte_start": 1151
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.showAR( this, 'defref_dei_AuditorLocation', window );",
+          "value_at": [
+            1468,
+            1526
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": {
+        "byte_end_exclusive": 1544,
+        "byte_start": 1419
+      },
+      "href": "javascript:void(0);",
+      "owners": [
+        {
+          "cell": 1528,
+          "unit": "t1"
+        }
+      ],
+      "owners_by": "page",
+      "tag": {
+        "byte_end_exclusive": 1528,
+        "byte_start": 1419
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.showAR( this, 'defref_dei_AuditorFirmId', window );",
+          "value_at": [
+            1743,
+            1799
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": {
+        "byte_end_exclusive": 1816,
+        "byte_start": 1694
+      },
+      "href": "javascript:void(0);",
+      "owners": [
+        {
+          "cell": 1801,
+          "unit": "t1"
+        }
+      ],
+      "owners_by": "page",
+      "tag": {
+        "byte_end_exclusive": 1801,
+        "byte_start": 1694
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.hideAR();",
+          "value_at": [
+            2129,
+            2143
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 2145,
+        "byte_start": 2068
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            2249,
+            2273
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 2275,
+        "byte_start": 2210
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            2368,
+            2392
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 2394,
+        "byte_start": 2329
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            2515,
+            2539
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 2541,
+        "byte_start": 2476
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.hideAR();",
+          "value_at": [
+            3321,
+            3335
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 3337,
+        "byte_start": 3260
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            3441,
+            3465
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 3467,
+        "byte_start": 3402
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            3575,
+            3599
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 3601,
+        "byte_start": 3536
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            4144,
+            4168
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 4170,
+        "byte_start": 4105
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.hideAR();",
+          "value_at": [
+            4953,
+            4967
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 4969,
+        "byte_start": 4892
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            5073,
+            5097
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 5099,
+        "byte_start": 5034
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            5619,
+            5643
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 5645,
+        "byte_start": 5580
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.hideAR();",
+          "value_at": [
+            6421,
+            6435
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 6437,
+        "byte_start": 6360
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            6541,
+            6565
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 6567,
+        "byte_start": 6502
+      }
+    },
+    {
+      "certain": false,
+      "declarations": [
+        {
+          "name": "onclick",
+          "value": "Show.toggleNext( this );",
+          "value_at": [
+            7087,
+            7111
+          ]
+        }
+      ],
+      "destination": {
+        "kind": "as_written"
+      },
+      "extent": null,
+      "hidden": true,
+      "href": "javascript:void(0);",
+      "owners": null,
+      "tag": {
+        "byte_end_exclusive": 7113,
+        "byte_start": 7048
+      }
+    }
+  ],
+  "source_relations": {
+    "error": "mismatched tag: line 11, column 2",
+    "read": false
+  },
+  "status": "OK",
+  "uncovered": [],
+  "units": [
+    {
+      "anchor": {
+        "byte_end_exclusive": 471,
+        "byte_start": 464
+      },
+      "id": "u0",
+      "kind": "text",
+      "text": "v3.22.4"
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 1846,
+        "byte_start": 631
+      },
+      "caption": [],
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 648,
+            "byte_start": 631
+          },
+          "c": 0,
+          "cs": 1,
+          "header": true,
+          "r": 0,
+          "row_group": 0,
+          "rs": 2,
+          "source": {
+            "byte_end_exclusive": 667,
+            "byte_start": 557
+          },
+          "tag": "th",
+          "text": "Audit Information"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 715,
+            "byte_start": 700
+          },
+          "c": 1,
+          "cs": 1,
+          "header": true,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 715,
+            "byte_start": 673
+          },
+          "tag": "th",
+          "text": "12 Months Ended"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 764,
+            "byte_start": 751
+          },
+          "c": 1,
+          "cs": 1,
+          "header": true,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 770,
+            "byte_start": 731
+          },
+          "tag": "th",
+          "text": "Nov. 30, 2022"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 1011,
+            "byte_start": 981
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1024,
+            "byte_start": 797
+          },
+          "tag": "td",
+          "text": "Auditor Information [Abstract]"
+        },
+        {
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1067,
+            "byte_start": 1030
+          },
+          "tag": "td",
+          "text": ""
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 1268,
+            "byte_start": 1256
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1272,
+            "byte_start": 1095
+          },
+          "tag": "td",
+          "text": "Auditor Name"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 1321,
+            "byte_start": 1295
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1335,
+            "byte_start": 1278
+          },
+          "tag": "td",
+          "text": "PricewaterhouseCoopers LLP"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 1544,
+            "byte_start": 1528
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1548,
+            "byte_start": 1363
+          },
+          "tag": "td",
+          "text": "Auditor Location"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 1596,
+            "byte_start": 1571
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1610,
+            "byte_start": 1554
+          },
+          "tag": "td",
+          "text": "Hallandale Beach, Florida"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 1816,
+            "byte_start": 1801
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 5,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1820,
+            "byte_start": 1638
+          },
+          "tag": "td",
+          "text": "Auditor Firm ID"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 1846,
+            "byte_start": 1843
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 5,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 1860,
+            "byte_start": 1826
+          },
+          "tag": "td",
+          "text": "238"
+        }
+      ],
+      "id": "t1",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 478
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 3062,
+        "byte_start": 2145
+      },
+      "caption": [],
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 2146,
+            "byte_start": 2145
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2150,
+            "byte_start": 2051
+          },
+          "tag": "td",
+          "text": "X"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 3062,
+            "byte_start": 2275
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 3095,
+            "byte_start": 2165
+          },
+          "tables": [
+            "t3"
+          ],
+          "tag": "td",
+          "text": "- Definition\nAuditor Information\n+ References\nNo definition available.\n+ Details\nName:\nccl_AuditorInformationAbstract\nNamespace Prefix:\nccl_\nData Type:\nxbrli:stringItemType\nBalance Type:\nna\nPeriod Type:\nduration"
+        }
+      ],
+      "id": "t2",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 1910
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 3062,
+        "byte_start": 2651
+      },
+      "caption": [],
+      "cell": {
+        "byte_end_exclusive": 3095,
+        "byte_start": 2165,
+        "c": 0,
+        "cs": 1,
+        "r": 1,
+        "rs": 1,
+        "table": "t2"
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 2656,
+            "byte_start": 2651
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "link_flag": "out_of_order",
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2665,
+            "byte_start": 2638
+          },
+          "tag": "td",
+          "text": "Name:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 2733,
+            "byte_start": 2703
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2733,
+            "byte_start": 2671
+          },
+          "tag": "td",
+          "text": "ccl_AuditorInformationAbstract"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 2827,
+            "byte_start": 2810
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2836,
+            "byte_start": 2750
+          },
+          "tag": "td",
+          "text": "Namespace Prefix:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 2850,
+            "byte_start": 2846
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2850,
+            "byte_start": 2842
+          },
+          "tag": "td",
+          "text": "ccl_"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 2890,
+            "byte_start": 2880
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2899,
+            "byte_start": 2867
+          },
+          "tag": "td",
+          "text": "Data Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 2929,
+            "byte_start": 2909
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2929,
+            "byte_start": 2905
+          },
+          "tag": "td",
+          "text": "xbrli:stringItemType"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 2972,
+            "byte_start": 2959
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2981,
+            "byte_start": 2946
+          },
+          "tag": "td",
+          "text": "Balance Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 2993,
+            "byte_start": 2991
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 2993,
+            "byte_start": 2987
+          },
+          "tag": "td",
+          "text": "na"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 3035,
+            "byte_start": 3023
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 3044,
+            "byte_start": 3010
+          },
+          "tag": "td",
+          "text": "Period Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 3062,
+            "byte_start": 3054
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 3062,
+            "byte_start": 3050
+          },
+          "tag": "td",
+          "text": "duration"
+        }
+      ],
+      "id": "t3",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 2582
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 4692,
+        "byte_start": 3337
+      },
+      "caption": [],
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 3338,
+            "byte_start": 3337
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 3342,
+            "byte_start": 3243
+          },
+          "tag": "td",
+          "text": "X"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4692,
+            "byte_start": 3467
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4725,
+            "byte_start": 3357
+          },
+          "tables": [
+            "t5"
+          ],
+          "tag": "td",
+          "text": "- Definition\nPCAOB issued Audit Firm Identifier\n+ References\nReference 1: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 10-K\n-Number 249\n-Section 310\nReference 2: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 20-F\n-Number 249\n-Section 220\n-Subsection f\nReference 3: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 40-F\n-Number 249\n-Section 240\n-Subsection f\n+ Details\nName:\ndei_AuditorFirmId\nNamespace Prefix:\ndei_\nData Type:\ndei:nonemptySequenceNumberItemType\nBalance Type:\nna\nPeriod Type:\nduration"
+        }
+      ],
+      "id": "t4",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 3115
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 4692,
+        "byte_start": 4280
+      },
+      "caption": [],
+      "cell": {
+        "byte_end_exclusive": 4725,
+        "byte_start": 3357,
+        "c": 0,
+        "cs": 1,
+        "r": 1,
+        "rs": 1,
+        "table": "t4"
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 4285,
+            "byte_start": 4280
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "link_flag": "out_of_order",
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4294,
+            "byte_start": 4267
+          },
+          "tag": "td",
+          "text": "Name:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4349,
+            "byte_start": 4332
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4349,
+            "byte_start": 4300
+          },
+          "tag": "td",
+          "text": "dei_AuditorFirmId"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4443,
+            "byte_start": 4426
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4452,
+            "byte_start": 4366
+          },
+          "tag": "td",
+          "text": "Namespace Prefix:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4466,
+            "byte_start": 4462
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4466,
+            "byte_start": 4458
+          },
+          "tag": "td",
+          "text": "dei_"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4506,
+            "byte_start": 4496
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4515,
+            "byte_start": 4483
+          },
+          "tag": "td",
+          "text": "Data Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4559,
+            "byte_start": 4525
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4559,
+            "byte_start": 4521
+          },
+          "tag": "td",
+          "text": "dei:nonemptySequenceNumberItemType"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4602,
+            "byte_start": 4589
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4611,
+            "byte_start": 4576
+          },
+          "tag": "td",
+          "text": "Balance Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4623,
+            "byte_start": 4621
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4623,
+            "byte_start": 4617
+          },
+          "tag": "td",
+          "text": "na"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4665,
+            "byte_start": 4653
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4674,
+            "byte_start": 4640
+          },
+          "tag": "td",
+          "text": "Period Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 4692,
+            "byte_start": 4684
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4692,
+            "byte_start": 4680
+          },
+          "tag": "td",
+          "text": "duration"
+        }
+      ],
+      "id": "t5",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 4211
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 6164,
+        "byte_start": 4969
+      },
+      "caption": [],
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 4970,
+            "byte_start": 4969
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 4974,
+            "byte_start": 4875
+          },
+          "tag": "td",
+          "text": "X"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 6164,
+            "byte_start": 5099
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 6197,
+            "byte_start": 4989
+          },
+          "tables": [
+            "t7"
+          ],
+          "tag": "td",
+          "text": "- References\nReference 1: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 10-K\n-Number 249\n-Section 310\nReference 2: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 20-F\n-Number 249\n-Section 220\n-Subsection f\nReference 3: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 40-F\n-Number 249\n-Section 240\n-Subsection f\n+ Details\nName:\ndei_AuditorLocation\nNamespace Prefix:\ndei_\nData Type:\ndei:internationalNameItemType\nBalance Type:\nna\nPeriod Type:\nduration"
+        }
+      ],
+      "id": "t6",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 4745
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 6164,
+        "byte_start": 5755
+      },
+      "caption": [],
+      "cell": {
+        "byte_end_exclusive": 6197,
+        "byte_start": 4989,
+        "c": 0,
+        "cs": 1,
+        "r": 1,
+        "rs": 1,
+        "table": "t6"
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 5760,
+            "byte_start": 5755
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "link_flag": "out_of_order",
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 5769,
+            "byte_start": 5742
+          },
+          "tag": "td",
+          "text": "Name:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 5826,
+            "byte_start": 5807
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 5826,
+            "byte_start": 5775
+          },
+          "tag": "td",
+          "text": "dei_AuditorLocation"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 5920,
+            "byte_start": 5903
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 5929,
+            "byte_start": 5843
+          },
+          "tag": "td",
+          "text": "Namespace Prefix:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 5943,
+            "byte_start": 5939
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 5943,
+            "byte_start": 5935
+          },
+          "tag": "td",
+          "text": "dei_"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 5983,
+            "byte_start": 5973
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 5992,
+            "byte_start": 5960
+          },
+          "tag": "td",
+          "text": "Data Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 6031,
+            "byte_start": 6002
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "link_flag": "out_of_order",
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 6031,
+            "byte_start": 5998
+          },
+          "tag": "td",
+          "text": "dei:internationalNameItemType"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 6074,
+            "byte_start": 6061
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 6083,
+            "byte_start": 6048
+          },
+          "tag": "td",
+          "text": "Balance Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 6095,
+            "byte_start": 6093
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 6095,
+            "byte_start": 6089
+          },
+          "tag": "td",
+          "text": "na"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 6137,
+            "byte_start": 6125
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 6146,
+            "byte_start": 6112
+          },
+          "tag": "td",
+          "text": "Period Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 6164,
+            "byte_start": 6156
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 6164,
+            "byte_start": 6152
+          },
+          "tag": "td",
+          "text": "duration"
+        }
+      ],
+      "id": "t7",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 5686
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 7628,
+        "byte_start": 6437
+      },
+      "caption": [],
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 6438,
+            "byte_start": 6437
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 6442,
+            "byte_start": 6343
+          },
+          "tag": "td",
+          "text": "X"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7628,
+            "byte_start": 6567
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7661,
+            "byte_start": 6457
+          },
+          "tables": [
+            "t9"
+          ],
+          "tag": "td",
+          "text": "- References\nReference 1: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 10-K\n-Number 249\n-Section 310\nReference 2: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 20-F\n-Number 249\n-Section 220\n-Subsection f\nReference 3: http://www.xbrl.org/2003/role/presentationRef\n-Publisher SEC\n-Name Form 40-F\n-Number 249\n-Section 240\n-Subsection f\n+ Details\nName:\ndei_AuditorName\nNamespace Prefix:\ndei_\nData Type:\ndei:internationalNameItemType\nBalance Type:\nna\nPeriod Type:\nduration"
+        }
+      ],
+      "id": "t8",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 6217
+      }
+    },
+    {
+      "anchor": {
+        "byte_end_exclusive": 7628,
+        "byte_start": 7223
+      },
+      "caption": [],
+      "cell": {
+        "byte_end_exclusive": 7661,
+        "byte_start": 6457,
+        "c": 0,
+        "cs": 1,
+        "r": 1,
+        "rs": 1,
+        "table": "t8"
+      },
+      "cells": [
+        {
+          "anchor": {
+            "byte_end_exclusive": 7228,
+            "byte_start": 7223
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "link_flag": "out_of_order",
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7237,
+            "byte_start": 7210
+          },
+          "tag": "td",
+          "text": "Name:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7290,
+            "byte_start": 7275
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 0,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7290,
+            "byte_start": 7243
+          },
+          "tag": "td",
+          "text": "dei_AuditorName"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7384,
+            "byte_start": 7367
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7393,
+            "byte_start": 7307
+          },
+          "tag": "td",
+          "text": "Namespace Prefix:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7407,
+            "byte_start": 7403
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 1,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7407,
+            "byte_start": 7399
+          },
+          "tag": "td",
+          "text": "dei_"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7447,
+            "byte_start": 7437
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7456,
+            "byte_start": 7424
+          },
+          "tag": "td",
+          "text": "Data Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7495,
+            "byte_start": 7466
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "link_flag": "out_of_order",
+          "r": 2,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7495,
+            "byte_start": 7462
+          },
+          "tag": "td",
+          "text": "dei:internationalNameItemType"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7538,
+            "byte_start": 7525
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7547,
+            "byte_start": 7512
+          },
+          "tag": "td",
+          "text": "Balance Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7559,
+            "byte_start": 7557
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 3,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7559,
+            "byte_start": 7553
+          },
+          "tag": "td",
+          "text": "na"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7601,
+            "byte_start": 7589
+          },
+          "c": 0,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7610,
+            "byte_start": 7576
+          },
+          "tag": "td",
+          "text": "Period Type:"
+        },
+        {
+          "anchor": {
+            "byte_end_exclusive": 7628,
+            "byte_start": 7620
+          },
+          "c": 1,
+          "cs": 1,
+          "header": false,
+          "r": 4,
+          "row_group": 0,
+          "rs": 1,
+          "source": {
+            "byte_end_exclusive": 7628,
+            "byte_start": 7616
+          },
+          "tag": "td",
+          "text": "duration"
+        }
+      ],
+      "id": "t9",
+      "kind": "table",
+      "row_group_tags": [
+        "table"
+      ],
+      "source_table": {
+        "claims": 1,
+        "tag_start": 7154
+      }
+    }
+  ]
+}

@@ -102,7 +102,7 @@ keep their `read`, `error`, `fallback` and unresolved states with the values.
 | Member | Evidence retained |
 |---|---|
 | `schema`, `file_id`, `sha256`, `route` | Payload schema, source identity, tool version and conversion settings. The schema alone is not a code-version identity. |
-| `source_links` | Written links, source occurrences, destinations, event declarations and proved owners; a declaration's value and source bytes do not prove executed behavior. Unknown ownership stays explicit. |
+| `source_links` | Written links, source occurrences, destinations, event declarations and proved owners. A whole-source reading includes hidden links only with the same certainty/native containment proof; declarations do not prove executed behavior. Unknown ownership stays explicit. |
 | `source_ids` | Raw source `id` and anchor `name` occurrences, including hidden, duplicate and empty values. Starts locate their written tags; scanner ends are not proved DOM ownership. Reconstruction carries this inventory as uncomposed evidence. |
 | `source_hidden` | In an HTML source reading, hidden text runs and their proved extracted owners; unresolved placements stay explicit. |
 | `source_relations` | Explicit Inline XBRL references and continuation chains. An unread source is not evidence that it has no relationships. |
@@ -121,9 +121,13 @@ content or nested table keeps its source span, including blanks. A cell marked
 `grid: screen` uses measured display coordinates; without that marker its numbers
 remain native parser coordinates. Those two frames must not be mixed. A nested
 table names its holder cell, whose `tables` list names its children. The holder's
-native aggregate text can overlap the child text; the source spans and containment
-identify that shared content. Wholly blank top-level spacer tables keep the
-existing omission policy.
+native aggregate text can overlap the child text. Where saved run mappings prove
+the whole child, readback `aggregate.nested` gives each table's exact range in the
+holder text: read own text before the range, the child table instead of the range,
+then own text after it. Raw text stays unchanged. Missing/conflicting evidence,
+captions, deeper child content or other units in the holder keep `aggregate`
+explicitly `unresolved`. Wholly blank top-level spacer tables keep the existing
+omission policy.
 
 `source_table` retains a table's original opening-tag byte and the number of
 route tables claiming it. Repeated claims remain explicit; this point proves

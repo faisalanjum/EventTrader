@@ -2,7 +2,9 @@
 Every saved record is carried verbatim exactly once inside the composed body; relations exist only as the body's structure (order, list groups,
 holder placement, caption placement, owner attachments, the XML tree). `preserved` is the saved content/structure boundary: the body's inverse must equal E
 under type-preserving JSON equality, every body edge must be the one its own records state, and every emitted key is consumed, an annotation, or
-an explicit unrepresented family. `annotations` is the uncertainty boundary (a dropped, added or changed unknown fails there); `verify` needs custody, preserved and annotations together. Inputs: the saved route and its bound prepared/ archive
+an explicit unrepresented family. A cell holding nested tables keeps its saved (aggregate) text and states `aggregate`: 'unresolved', or - only where
+the saved run records prove a whole nested table's text in one range of the holder's text - {'nested': [{'unit', 'text_at'}]}, read as: own text before
+the range, the composed table instead of that range, own text after (`_aggregate`); never a flat rendering. `annotations` is the uncertainty boundary (a dropped, added or changed unknown fails there); `verify` needs custody, preserved and annotations together. Inputs: the saved route and its bound prepared/ archive
 (archive.load_blob); never the original, a reparse, or the raw parser reading. Preservation does not certify fidelity to the original document.
 Observed controls (a contextual state route's `observed_controls`, OBSERVED_CONTROLS_CONTRACT v2): one record per acted source-owned control whose own
 label the action replaced, carried verbatim as a body family and attached, like every other owner record, to the units/cells its owners name, each
@@ -281,6 +283,46 @@ def _units_in_order(seq, container=None, path=()):
         yield from ((x, ('caption', id(n)), ()) for x in caps if x.get('position') != 'before')
 
 
+def _aggregate(route, units, by_id, placed, p, k, tables):
+    """A holder cell's aggregate (EdgarTools gives a cell only its aggregate text, its nested tables' text included): {'nested': [{'unit', 'text_at':
+    [start, end)}]} - for each nested table this cell holds, in saved order, the range of the holder's saved text that is that table's - or 'unresolved'.
+    Only a WHOLE composed child is claimed: the holder holds nothing but these tables, and no table has a caption or anything placed in its cells
+    (`_resolve`'s containment); any other composed content stays 'unresolved' (unsupported, not proved). Then stated ONLY where the saved run records
+    (source text runs: RUNS but an observed control's replaced-label slices) prove it: every non-white-space character of each of the table's cells is
+    mapped, one to one and equal, to a holder position by a record naming both that cell and the holder (each owner placed and ranged by `_placed`); in
+    the table's cell order those positions increase; every non-white-space holder character inside the range is one of them; ranges follow the saved
+    order without overlap. Anything missing, conflicting, out of order, interleaved or empty stays 'unresolved'. Positions only, never a text search.
+    Reading order it states: the holder's own text before the first range, the composed table in place of that range, own text between, ..., own text
+    after the last range; the raw text is unchanged and no flat rendering is claimed."""
+    claimed = {by_id.get(t) for t in tables}
+    if not tables or None in claimed or any(w == ('cell', p, k) and j not in claimed or w[0] == 'caption' and w[1] in claimed or w[0] == 'cell' and w[1] in claimed for j, w in placed.items()):
+        return 'unresolved'  # no table, another child in the holder, a caption on a table, or content inside a table's cells: not a whole proved child
+    ht, pairs = units[p]['cells'][k].get('text') or '', {}  # (unit, cell, nested position) -> holder position
+    for f in (x for x in RUNS if x != 'observed_controls'):
+        fam = route.get(f)
+        if not (isinstance(fam, dict) and fam.get('read') is True and isinstance(fam.get('records'), list)): continue
+        for rec in fam['records']:
+            sites = [(o, _placed(f, o, units, by_id)[0]) for o in (rec.get('owners') if isinstance(rec, dict) else None) or []]
+            mine = [o for o, s in sites if s == ('cell', p, k)]
+            if len(mine) != 1: continue
+            hpos = [x for a, b in mine[0]['text_at'] for x in range(a, b)]
+            for o, s in sites:
+                if s is None or s[0] != 'cell' or units[s[1]].get('id') not in tables: continue
+                npos, nt = [x for a, b in o['text_at'] for x in range(a, b)], units[s[1]]['cells'][s[2]].get('text') or ''
+                if len(npos) != len(hpos): return 'unresolved'
+                for a, b in zip(npos, hpos):
+                    if nt[a] != ht[b] or pairs.setdefault((s[1], s[2], a), b) != b: return 'unresolved'
+    if len(set(pairs.values())) != len(pairs): return 'unresolved'  # one holder position for one nested character
+    out, last = [], -1
+    for t in tables:
+        j = by_id[t]; seq = [pairs.get((j, kk, a)) for kk, c in enumerate(units[j].get('cells') or []) for a, ch in enumerate(c.get('text') or '') if not ch.isspace()]
+        if not seq or None in seq or any(x >= y for x, y in zip(seq, seq[1:])) or seq[0] <= last: return 'unresolved'
+        own = set(seq)
+        if any(not ht[x].isspace() and x not in own for x in range(seq[0], seq[-1] + 1)): return 'unresolved'
+        out.append({'unit': t, 'text_at': [seq[0], seq[-1] + 1]}); last = seq[-1]
+    return {'nested': out}
+
+
 def _html(route, prepared, R, families):
     units = route.get('units') or []
     nodes = []
@@ -297,10 +339,11 @@ def _html(route, prepared, R, families):
         if w[0] == 'caption': nodes[i]['position'] = 'before' if i < w[1] else 'after'; nodes[w[1]].setdefault('captions', []).append(nodes[i])
         else: nodes[w[1]]['cells'][w[2]].setdefault('children', []).append(nodes[i])
     for n in nodes:
-        for c in n.get('cells', []):
+        for k, c in enumerate(n.get('cells', [])):
             if c.get('children'):
                 c['children'] = _group(c['children'])
-                if any(x['record'].get('kind') == 'table' for x, _, _ in _units_in_order(c['children'])): c['aggregate'] = 'unresolved'
+                if any(x['record'].get('kind') == 'table' for x, _, _ in _units_in_order(c['children'])):
+                    c['aggregate'] = _aggregate(route, units, by_id, placed, n['ordinal'], k, [units[j]['id'] for j in sorted(placed) if placed[j] == ('cell', n['ordinal'], k) and units[j].get('kind') == 'table'])
     R['sequence'] = _group([n for i, n in enumerate(nodes) if i not in placed])
     for f in families:  # each saved owner, resolved once by _owner_site, holds its record's index; the family itself is kept verbatim
         R[f] = route[f]
