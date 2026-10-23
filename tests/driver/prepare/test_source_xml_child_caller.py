@@ -37,6 +37,7 @@ PAGES = {'ix_q': page('q', IX, SHOWN), 'ix_ix': page('ix', IX, SHOWN), 'wrong_ns
          'parent_pic_fail': page('ix', IX, '<p><img src="missing.png" alt="m"/></p>'),
          # Root OCR_XML_PICTURE_RULE_REVIEW_20261022T2242, exact bytes: the inline-XBRL namespace, an ordinary img with NO XML namespace
          'root_positive': ROOT_POSITIVE, 'root_hidden_present': ROOT_HIDDEN, 'root_hidden_missing': ROOT_HIDDEN,
+         'ix_comment': page('ix', IX, '<!--producer: x-->' + SHOWN),  # a declaration and a comment the XML child must carry as saved metadata
          'svg_shown': page('ix', IX, '<p><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10"/></svg></p>')}
 ASSETS = {'root_hidden_present': ('missing.png',), 'root_hidden_missing': (), 'root_positive': ()}  # which named pictures each row's package holds (default: a.png, b.png where named)
 
@@ -170,6 +171,17 @@ class XmlSourceChildThroughTheCaller(unittest.TestCase):
         dup = copy.deepcopy(shown); u = next(x for x in dup['units'] if x.get('kind') == 'image'); dup['units'].append(dict(copy.deepcopy(u), id=u['id'] + '-again'))
         bad, _ = html_route.source_reading(raw, 'ix_ix/page.htm', sha(raw), dup)
         self.assertEqual(bad['status'], 'PARTIAL'); self.assertIn('%d-%d' % (u['anchor']['byte_start'], u['anchor']['byte_end_exclusive']), bad['error'])
+
+    def test_xml_child_carries_declaration_and_comment_metadata(self):
+        r, a, raw = self.rows['ix_comment'], self.attempt('ix_comment'), PAGES['ix_comment']; s = r.get('source_reading') or {}
+        self.assertEqual((r['outcome'], s.get('native_status'), s.get('reconstruct_exit'), s.get('verify_exit')), ('verified_saved_output', 'OK', 0, 0), r.get('reasons'))
+        child = self.load(a / 'source_reading' / 'ROUTE.json'); self.assertEqual(child['route']['name'], 'xml-fields+source-reading')
+        want = {'declaration': {'version': '1.0', 'encoding': 'utf-8', 'standalone': -1, 'parser_byte_index': 0},
+                'comments': [{'text': 'producer: x', 'parser_byte_index': raw.index(b'<!--producer'), 'parent': raw.index(b'<body')}]}
+        self.assertEqual(child['xml_metadata'], want)
+        R = self.load(self.logs('ix_comment') / 'source_reading' / 'R.json')
+        self.assertEqual((R['not_composed']['xml_metadata'], R['xml']['not_represented']), (want, ['processing_instructions', 'doctype', 'source_spelling']))
+        self.assertNotIn('producer', json.dumps(self.load(a / 'ROUTE.json')))  # the displayed HTML parent never shows the comment
 
     def test_job_exit_is_not_success_with_incomplete_rows(self):
         self.assertEqual(self.exit, 1)

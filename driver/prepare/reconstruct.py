@@ -387,7 +387,8 @@ def readback(route, prepared=None):
     R = {'readback_schema': SCHEMA, 'kind': fmt, 'identity': {k: v for k, v in route.items() if roles[k] == 'identity'}, 'unknowns': [], 'not_composed': {}}
     if route.get('status') != 'OK': R['unknowns'].append({'family': 'status', 'why': f"route status {route.get('status')!r}"})
     if fmt == 'xml':
-        R['xml'] = {'elements': _xml_tree(route['xml_elements']) if roles.get('xml_elements') == 'body' else None, 'not_represented': list(NOT_REPRESENTED_XML)}
+        meta = route.get('xml_metadata'); saved = ('comments', 'xml_declaration') if isinstance(meta, dict) and set(meta) == {'declaration', 'comments'} and isinstance(meta['comments'], list) else ()
+        R['xml'] = {'elements': _xml_tree(route['xml_elements']) if roles.get('xml_elements') == 'body' else None, 'not_represented': [k for k in NOT_REPRESENTED_XML if k not in saved]}  # xml_metadata itself is carried verbatim (not_composed)
         why = _xml_identity(route.get('xml_elements'))
         if why: R['unknowns'].append({'family': 'xml_elements', 'why': why})
     elif roles.get('units') == 'body':

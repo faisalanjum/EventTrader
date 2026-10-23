@@ -11,7 +11,12 @@ replaced, white space normalized, a default the document's own DTD declares incl
 kept); the namespace bindings the parser reports for its start tag (`namespaces`: declared there, or by a default of the DTD; prefix '' the
 default namespace, uri '' undeclared; the bindings in force are found through the parents); and its direct `content` in source order, where a string is a run of its own character data (adjacent parser
 callbacks joined, CDATA as text; comments and processing instructions are not kept) and {"child": start byte} the child element standing
-there. A key that would hold nothing is left out. The tree is given only for a complete parse. No field list, nothing inferred, nothing
+there. A key that would hold nothing is left out. Beside it, saved metadata that is never body (`xml_metadata`): the XML `declaration` as the
+parser reports it (`version`, `encoding` - null if not stated, `standalone` - 1 yes, 0 no, -1 not stated; null when the document has none)
+and every `comments` entry in the parser's callback order (prolog, document type subset, content, epilog): its `text` as the parser reports
+it (XML-normalized: CR and CRLF read as LF; not the source bytes, whose spelling stays unrepresented) and its `parent`, the start byte of the
+element it stands in (null outside the root). Each carries `parser_byte_index`, the parser's own event location: for a comment expanded from
+an entity it is the entity reference's byte, so it is never a claimed comment start or span. The tree is given only for a complete parse. No field list, nothing inferred, nothing
 repaired: a document that does not parse is reported FAILED with the parser's own message. The parser is the grader's own (`anchor.xml_parser`):
 what stands outside the document is refused, so a reading that would need it fails instead of going on without it; an element the parser
 makes from an entity's text has no bytes of its own, and the document is refused rather than given a position that is none."""
@@ -28,10 +33,11 @@ def clark(name):
     return '{' + name if '}' in name else name
 
 
-def units_of(raw, facts=None, *, elements=None):
+def units_of(raw, facts=None, *, elements=None, metadata=None):
     """Field units of one XML document; raises ExpatError, ValueError or LookupError for invalid XML or an unsupported encoding. `facts`, when
     given, receives what the route does not read (`attribute_values`: none once `elements` keeps them). `elements`, a list, receives the element
-    tree of the module's description, only when the whole document parses."""
+    tree of the module's description, only when the whole document parses; `metadata`, a dict, receives the document's declaration and comments
+    the same way."""
     p = xml_parser(namespace_separator='}'); stack, leaves, root_counts, attrs, tree, declared = [], [], {}, 0, [], {}
     p.StartNamespaceDeclHandler = lambda prefix, uri: declared.update({prefix or '': uri or ''})
     def start(name, a):
@@ -59,8 +65,13 @@ def units_of(raw, facts=None, *, elements=None):
         for child in leaves[fr['mark']:]: child.setdefault('within', leaf)  # the nearest prose ancestor reads the child's text in place
         leaves.append(leaf)
     p.StartElementHandler, p.EndElementHandler, p.CharacterDataHandler = start, end, data
+    decl, comments = [], []
+    if metadata is not None:
+        p.XmlDeclHandler = lambda version, encoding, standalone: decl.append({'version': version, 'encoding': encoding, 'standalone': standalone, 'parser_byte_index': p.CurrentByteIndex})
+        p.CommentHandler = lambda text: comments.append({'text': text, 'parser_byte_index': p.CurrentByteIndex, 'parent': stack[-1]['start_tag'] if stack else None})
     p.Parse(raw, True)
     if elements is not None: elements.extend(tree)
+    if metadata is not None: metadata.update(declaration=decl[0] if decl else None, comments=comments)
     if facts is not None: facts['attribute_values'] = attrs if elements is None else 0
     order = sorted(leaves, key=lambda leaf: leaf['anchor']['byte_start']); ids = {id(leaf): f'f{i}' for i, leaf in enumerate(order)}  # source order: prose before the fields inside it
     out = []
@@ -83,7 +94,7 @@ def convert(raw, file_id, sha256):
     check_source(raw, sha256)
     t0 = time.time(); doc = {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'route': deepcopy(ROUTE), 'units': []}
     try:
-        tree = []; doc['units'] = units_of(raw, elements=tree); doc['xml_elements'] = tree  # every attribute kept in the tree: nothing left unread to state
+        tree, meta = [], {}; doc['units'] = units_of(raw, elements=tree, metadata=meta); doc['xml_elements'], doc['xml_metadata'] = tree, meta  # every attribute kept in the tree: nothing left unread to state
     except (expat.ExpatError, ValueError, LookupError) as e: doc['status'], doc['error'] = 'FAILED', f'XML parse failed: {e}'
     doc['seconds'] = round(time.time() - t0, 3)
     return doc
