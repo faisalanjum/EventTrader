@@ -194,5 +194,16 @@ class FramingTests(unittest.TestCase):
                     self.assertEqual(http_request(URL, HEADERS, 10, 60, 120)[::2], (200, expected))
 
 
+
+class CompletionRuleTests(unittest.TestCase):
+    def test_closes_is_the_one_rule_for_a_completed_response(self):  # 200, or a final non-200 answer; RETRY statuses and unsupported 3xx stay open; context acquisition uses the same function
+        from driver.prepare.get import context_acquire, transport
+        table = {200: True, 404: True, 410: True, 400: True, 503: False, 429: False, 408: False, 500: False, 502: False, 504: False, 301: False, 302: False, 304: False}
+        self.assertEqual({s: transport.closes({'status': s}) for s in table}, table)
+        self.assertEqual([transport.closes(x) for x in (None, {}, {'status': '200'}, {'status': None})], [False] * 4)
+        self.assertIs(context_acquire._closes, transport.closes)
+
+
 if __name__ == '__main__':
     unittest.main()
+

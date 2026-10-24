@@ -15,6 +15,11 @@ LIMITS = dict(connect_timeout=10, read_timeout=60, attempt_wall_seconds=120,
 RETRY = {408, 429, 500, 502, 503, 504}
 
 
+def closes(response):  # a completed dependency: a 200, or a final non-200 answer (this module's own policy: not RETRY, not its unsupported 3xx). A retained 3xx or
+    s = (response or {}).get('status')  # retry-exhausted response is a KNOWN response kept raw, but leaves the dependency open (incomplete)
+    return isinstance(s, int) and (s == 200 or (s not in RETRY and not 300 <= s < 400))
+
+
 class DownloadError(OSError):
     def __init__(self, message, receipt):
         super().__init__(message)

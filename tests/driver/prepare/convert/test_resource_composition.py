@@ -78,6 +78,30 @@ class Boundary(unittest.TestCase):
         self.assertIn({'url': 'https://ext.example/a.css', 'status': 404, 'observed_at': '2026-10-11T15:14:28Z', 'sha256': None, 'kind': 'stylesheet'}, route['resources']['dependencies'])
         self.assertEqual(self.prepare(raw, Source('sub/doc.htm', SHEETS))['status'], 'PARTIAL')
 
+    def test_a_recorded_response_that_leaves_the_dependency_open_is_no_answer(self):  # transport's RETRY statuses and its unsupported 3xx keep a dependency open (the one rule, transport.closes); a default Source must not let such a response prove what the page shows (public R2: a recorded 503 for its sheet)
+        raw = DOC.replace(b'</head>', b'<link rel="stylesheet" href="https://ext.example/a.css"></head>')
+        body = b'<html>temporarily unavailable</html>'
+        for seen in ({'status': 503, 'observed_at': '2026-10-24T12:47:24Z'}, {'status': 429, 'observed_at': '2026-10-24T12:47:24Z'},
+                     {'status': 301, 'observed_at': '2026-10-24T12:47:24Z'}, {'status': 503, 'observed_at': '2026-10-24T12:47:24Z', 'body': body, 'sha256': sha(body)}):
+            with self.subTest(status=seen['status'], body='body' in seen):
+                route = self.prepare(raw, Source('sub/doc.htm', SHEETS, observed={'https://ext.example/a.css': seen}))
+                self.assertEqual(route['status'], 'PARTIAL'); self.assertIn('cannot be read offline', route['error'])
+                rec = [r for r in route['resources']['dependencies'] if r.get('url') == 'https://ext.example/a.css']
+                self.assertEqual([(r['status'], r['kind']) for r in rec], [('refused', 'stylesheet')])
+                self.assertIn('observed %d at 2026-10-24T12:47:24Z' % seen['status'], rec[0]['why'])
+
+    def test_a_context_replay_refuses_an_open_subresource_and_serves_a_closed_one(self):  # the same one rule for a context's recorded subresources (injected or acquired evidence alike); parent and target keep their own observation path
+        class Ctx: pass  # only `context is not None` matters to answer()
+        url, body = 'https://ext.example/a.css', b'td{color:#000}'
+        for seen, want in (({'status': 503, 'observed_at': 'T'}, None), ({'status': 302, 'observed_at': 'T'}, None), ({'status': 429, 'observed_at': 'T'}, None),
+                           ({'status': 200, 'observed_at': 'T', 'body': body, 'sha256': sha(body)}, 200), ({'status': 404, 'observed_at': 'T'}, 404)):
+            with self.subTest(status=seen['status']):
+                src = Source('sub/doc.htm', {}, observed={url: seen}, context=Ctx())
+                got = src.answer(url, 'stylesheet')
+                self.assertEqual(got[0] if got else None, want)
+                self.assertEqual(src.records[url]['status'], 'refused' if want is None else want)
+                self.assertEqual(dict(src.observed[url]), seen)  # the raw observation itself is never changed
+
     def test_a_member_path_never_answers_a_navigation(self):
         raw = DOC.replace(b'</body>', b'<iframe src="frame.htm"></iframe></body>')
         route = self.prepare(raw, Source('sub/doc.htm', {**SHEETS, 'sub/frame.htm': b'<p>framed</p>'}))

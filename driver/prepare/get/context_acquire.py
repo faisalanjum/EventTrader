@@ -25,7 +25,7 @@ from urllib.parse import quote, urlsplit
 from playwright.sync_api import TimeoutError as PlaywrightTimeout
 from driver.prepare.get.acquire import _identity, _url, read_package, document_parts, _readings, _prove, AcquisitionError, StorageError
 from driver.prepare.get.campaign import OfflineCacheMiss
-from driver.prepare.get.transport import DownloadError, RETRY
+from driver.prepare.get.transport import DownloadError, closes as _closes
 from driver.prepare.convert import screen_grid as sg, overlay
 import hashlib
 sha = lambda b: hashlib.sha256(b).hexdigest()
@@ -45,10 +45,6 @@ def _get(campaign, url, declared_by, log, observed=None):
     if observed is not None:
         last = rec['attempts'][-1]; observed[url] = {'status': last['status'], 'content_type': (last.get('headers') or {}).get('content-type'), 'observed_at': rec['retrieved_at'], 'sha256': rec['sha256'], 'body': data}
     return data
-
-def _closes(o):  # a completed dependency: a 200, or a final non-200 answer (transport's own policy: not RETRY, not its unsupported 3xx). A retained 3xx or
-    s = (o or {}).get('status')  # retry-exhausted response is a KNOWN response kept raw, but leaves the dependency open (incomplete)
-    return isinstance(s, int) and (s == 200 or (s not in RETRY and not 300 <= s < 400))
 
 def _failed(observed, url, receipt):  # a failed attempt's own last status, kept raw with no body (404 = original absence); no status = no observation
     last = ((receipt or {}).get('attempts') or [{}])[-1]; status = last.get('status')

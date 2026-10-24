@@ -22,6 +22,7 @@ from pathlib import Path
 
 from driver.prepare.convert import anchor, edgartools_html
 from driver.prepare.get.acquire import StorageError
+from driver.prepare.get.transport import closes
 from driver.prepare.convert.anchor import Visible
 
 _CELL_END = re.compile(rb'(?i)</t[dh]\s*>')
@@ -579,6 +580,7 @@ class Source:
         if seen is None: return self._refuse(url, key, name, kind)
         body = seen.get('body')
         if not (hashlib.sha256(body).hexdigest() == seen.get('sha256') if body is not None else seen['status'] != 200 and seen.get('sha256') is None): return self._refuse(url, key, name, kind, 'observed bytes are not the recorded sha256')  # a supplied body is its recorded digest; no body only for a non-200 native failure with no digest
+        if not closes(seen): return self._refuse(url, key, name, kind, 'observed %d at %s leaves the dependency open' % (seen['status'], seen['observed_at']))  # every role (subresource, context parent/target, measured target): a retry-exhausted or redirect answer stays observed raw, never an answer; each caller's existing refusal applies
         self.records.setdefault(key, {'url': url, 'status': seen['status'], 'observed_at': seen['observed_at'], 'sha256': seen.get('sha256'), 'kind': kind})
         return seen['status'], seen.get('content_type') or 'application/octet-stream', body or b''
 
