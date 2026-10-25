@@ -434,7 +434,7 @@ def preserved(route, R):
     try:
         S, problems = _shape(route), []
         if R.get('readback_schema') != SCHEMA or R.get('kind') != S['kind']: problems.append('readback_schema or kind is not the required value')
-        if set(R) - {'custody'} != S['top']: problems.append(f'top-level keys differ from the owners E implies: {sorted(set(R) ^ S["top"] - {"custody"})}')
+        if set(R) - {'custody', 'source_reading'} != S['top']: problems.append(f'top-level keys differ from the owners E implies: {sorted(set(R) ^ S["top"] - {"custody", "source_reading"})}')  # source_reading: the bound typed reading's own readback, checked by verify against its own attempt
         if 'custody' in R:
             c, hexpin = R['custody'], HEXPIN
             if not (isinstance(c, dict) and set(c) - {RENDERS_KEY, SOURCE_READING_KEY} == CUSTODY_KEYS and type(c['prepared']) is bool and hexpin(c['route_sha256']) and hexpin(c['complete_sha256'])
@@ -598,7 +598,30 @@ def main(argv):
     """main([attempt_dir, out_json]): one frozen attempt (ROUTE.json bound by COMPLETE.json, optional prepared/) to one new readback file."""
     route, prepared, custody = _custody(argv[0])
     R = readback(route, prepared); R['custody'] = custody
+    if SOURCE_READING_KEY in custody:  # the attempt's bound typed source reading (its definition and hidden content) travels in the product, as its own readback with its own custody
+        croute, cprepared, ccustody = _custody(Path(argv[0]) / 'source_reading')
+        R['source_reading'] = readback(croute, cprepared); R['source_reading']['custody'] = ccustody
     with open(argv[1], 'x', encoding='utf-8') as f: json.dump(R, f, ensure_ascii=False, indent=1)
+
+
+def _unrepresented(R):  # the families a readback leaves unrepresented: not composed, XML families the tree does not represent, and unknowns (parent and carried child alike)
+    return set(R.get('not_composed') or {}) | set((R.get('xml') or {}).get('not_represented') or []) | {u.get('family') for u in R.get('unknowns') or [] if isinstance(u, dict)}
+
+
+def _carried(attempt, R, custody, out, prefix):
+    """A carried typed reading (R['source_reading']) exactly when the completion binds one, held to the same custody/preserved/annotations
+    checks against its own attempt, and recursively so: a reading carried inside it must be bound by its own completion too."""
+    C = R.get('source_reading') if isinstance(R, dict) else None
+    if SOURCE_READING_KEY not in custody:
+        if isinstance(R, dict) and 'source_reading' in R: out['custody'].append(prefix + 'R carries a source_reading readback the completion does not bind')
+        return
+    if not isinstance(C, dict): out['custody'].append(prefix + 'R does not carry the source_reading readback the completion binds'); return
+    croute, cprepared, ccustody = _custody(attempt / 'source_reading')
+    p = prefix + 'source reading: '
+    if canon(C.get('custody')) != canon(ccustody): out['custody'].append(prefix + 'R.source_reading.custody differs from the custody the typed reading proves')
+    out['preserved'] += [p + x for x in preserved(croute, C)]; out['annotations'] += [p + x for x in annotations(croute, C, cprepared)]
+    out['unrepresented'] = sorted(set(out['unrepresented']) | {p + x for x in _unrepresented(C)})
+    _carried(attempt / 'source_reading', C, ccustody, out, p)
 
 
 def verify(attempt_dir, r_json):
@@ -608,8 +631,9 @@ def verify(attempt_dir, r_json):
     except (ValueError, json.JSONDecodeError) as error:
         return {'custody': [f'custody not proved: {error}'], 'preserved': ['not checked: custody failed'], 'unrepresented': [], 'annotations': ['not checked: custody failed']}
     if not isinstance(R, dict) or canon(R.get('custody')) != canon(custody): return {'custody': ['R.custody differs from the custody this attempt proves'], 'preserved': preserved(route, R) if isinstance(R, dict) else ['R is not an object'], 'unrepresented': [], 'annotations': ['not checked: custody failed']}
-    unrepresented = sorted(set(R.get('not_composed') or {}) | set((R.get('xml') or {}).get('not_represented') or []) | {u.get('family') for u in R.get('unknowns') or [] if isinstance(u, dict)})
+    unrepresented = sorted(_unrepresented(R))
     out = {'custody': [], 'preserved': preserved(route, R), 'unrepresented': unrepresented, 'annotations': annotations(route, R, prepared)}
+    _carried(Path(attempt_dir), R, custody, out, '')
     if 'observed_controls' in route: out['observed'] = observed(attempt_dir, route, custody)  # a contextual state route: its composed labels bound to the pinned native render record
     return out
 

@@ -61,6 +61,12 @@ parser, or the existing strict XML route for structured Inline XBRL content.
 This is source content, not another displayed state. The parent completion binds
 the child; the normal job reconstructs and verifies both, and propagates the
 child's failures. Unknown placement and unread pictures remain incomplete.
+The final readback includes that bound child as `source_reading`, with its own
+content, source identity and uncertainty. It can repeat content in the parent;
+keep the two readings separate rather than treating repeated text as extra facts.
+`verify` checks the carried child against its saved attempt and includes its
+unrepresented material in the report. This delivery does not qualify click effects
+or turn an incomplete extraction into a complete one.
 
 Each contextual state retains its own source, raw reading, route, picture inputs
 and native observations. Changed control labels keep the original text, each action
