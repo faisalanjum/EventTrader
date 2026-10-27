@@ -33,8 +33,12 @@ these outputs when they are serialized or moved.
 Inline XBRL is retained as `source_facts`: each fact names its exact original
 start-tag byte range and carries the native parsed attributes, element text and
 EdgarTools fact fields, including raw scale, decimals, sign, unit/context references,
-lexical value and metadata. The native value may already be transformed and scaled;
-never multiply it again. It is kept separately from the displayed unit/cell text.
+lexical value and metadata. `native_element` keeps the library's per-element fields,
+including the fact type and written fraction numerator/denominator. A fraction's
+concatenated text or native lexical value is not its numeric meaning. Missing native
+fraction components remain unread; no replacement fraction parser is added.
+The native value may already be transformed and scaled; never multiply it again.
+It is kept separately from the displayed unit/cell text.
 Native format issues and hidden/header metadata stay explicit. These are native
 claims, not proof that an unbound context or unsupported transformation is resolved.
 Missing scale stays missing. Unread fact metadata is a partial result, never an

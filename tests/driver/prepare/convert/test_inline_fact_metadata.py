@@ -91,7 +91,7 @@ class InlineFactMetadata(unittest.TestCase):
         self.assertEqual(inverse['source_facts'], r['source_facts'])
         self.assertIn('source_facts', inverse)
         self.assertEqual(reconstruct.preserved(r, saved), [])
-        for key in ('source_tag', 'attributes', 'native'):
+        for key in ('source_tag', 'attributes', 'native_element', 'native'):
             damaged = copy.deepcopy(saved)
             del damaged['not_composed']['source_facts']['records'][0][key]
             self.assertTrue(reconstruct.preserved(r, damaged), key)
@@ -226,6 +226,49 @@ class InlineFactMetadata(unittest.TestCase):
         self.assertEqual((b['element_text'], b['native']['format']), ('-', 'ixt:zerodash'))
         table, = [u for u in r['units'] if u['kind'] == 'table']
         self.assertEqual([c['text'] for c in table['cells']], ['1.25', '-'])
+
+    def test_native_element_kind_and_fraction_components_are_not_flattened(self):
+        _, r = route('<p><ix:fraction name="x:Ratio"><ix:numerator>2</ix:numerator>'
+                     '<ix:denominator>3</ix:denominator></ix:fraction></p>')
+        f, = r['source_facts']['records']
+        self.assertEqual(f['native_element'], {'type': 'fraction', 'name': 'x:Ratio', 'numerator': '2', 'denominator': '3'})
+        self.assertEqual(f['element_text'], '23')  # concatenated text is not the fraction's numeric meaning
+        saved = json.loads(json.dumps(reconstruct.readback(r)))
+        self.assertEqual(reconstruct.inverse(saved)['source_facts'], r['source_facts'])
+        for key in ('type', 'numerator', 'denominator'):
+            bad = copy.deepcopy(saved)
+            del bad['not_composed']['source_facts']['records'][0]['native_element'][key]
+            self.assertTrue(reconstruct.preserved(r, bad), key)
+
+    def test_native_element_kind_keeps_numeric_and_non_numeric_distinct(self):
+        _, r = route('<p><ix:nonFraction name="x:A">7</ix:nonFraction>'
+                     '<ix:nonNumeric name="x:B">7</ix:nonNumeric></p>')
+        self.assertEqual([f['native_element']['type'] for f in r['source_facts']['records']], ['nonFraction', 'nonNumeric'])
+
+    def test_fraction_components_the_native_reader_cannot_qualify_stay_unread(self):
+        # The native fraction lookup requires its own ix: child spelling; it
+        # does not resolve an aliased child here, unlike the nonFraction path.
+        # No new child parser or a concatenated-text numeric fallback.
+        for body in ('<q:fraction name="x:R"><q:numerator>2</q:numerator><q:denominator>3</q:denominator></q:fraction>',
+                     '<ix:fraction name="x:R"><ix:numerator>2</ix:numerator></ix:fraction>'):
+            with self.subTest(body=body):
+                _, r = route('<p xmlns:q="http://www.xbrl.org/2013/inlineXBRL">' + body + '</p>')
+                self.assertFalse(r['source_facts']['read'])
+                self.assertIn('fraction components not read', r['source_facts']['error'])
+
+    def test_later_native_failure_keeps_earlier_complete_fact_records(self):
+        from edgar.documents.strategies.xbrl_extraction import XBRLExtractor
+        body = '<p><ix:nonFraction name="x:A">7</ix:nonFraction><ix:nonFraction name="x:B">8</ix:nonFraction></p>'
+        _, positive = route(body)
+        self.assertTrue(positive['source_facts']['read'])
+        original = XBRLExtractor.extract_fact
+        def failed(reader, element):
+            if element.get('name') == 'x:B': raise ValueError('second fact unread')
+            return original(reader, element)
+        with patch.object(XBRLExtractor, 'extract_fact', failed):
+            _, negative = route(body)
+        self.assertFalse(negative['source_facts']['read'])
+        self.assertEqual(negative['source_facts']['records'], positive['source_facts']['records'][:1])
 
 
 if __name__ == '__main__': unittest.main()

@@ -626,7 +626,7 @@ def whole_headings():
 SETTINGS = {'parse_html': 'defaults', 'source_inline': 'per source run under a sup or sub, a plain inline box with any non-baseline vertical-align, another inline box with vertical-align super, sub or a number, or a positioned inline box (computed position not static): nearest-first ancestors; a positioned one adds its raw computed position, top, bottom, left and right', 'source_style': 'per source run: colour, weight, font style, decorations in effect, text transform (the computed property, never a printed string), raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)', 'lists': "the parser's own list items: list, ordered, item", 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell, in its row\'s source order', 'table_captions': "each table's own caption a caption unit, bound to its source caption", 'punctuation': 'as the source writes it: no white space removed before . , ; ! ? and none added after . ! ?', 'table_header': "header is the tool's own verdict (EdgarTools 5.60.0 TableProcessor), read unchanged; a cell's tag, its attrs (id, scope, headers as the parser reads them: character references decoded) and its row_group (the cell's own source group, carried through re-gridding; its tag in the table's row_group_tags) are the source's statements; an absent tag, attrs entry or group is unknown"}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
-SETTINGS['inline_xbrl'] = 'native lexical facts and metadata, exact original start-tag identities, before visibility filtering; unread is explicit'
+SETTINGS['inline_xbrl'] = 'native lexical facts, per-element fields and metadata, exact original start-tag identities, before visibility filtering; unread is explicit'
 
 
 def settings(vis):
@@ -651,7 +651,8 @@ def inline_facts(raw, parser):
     returns [] on failure. Reuse its HTML parser and XBRLExtractor directly on
     the unfiltered source. A temporary per-element attribute carries the source
     address through that parse; no attribute defaults or scale arithmetic here.
-    Native lexical value is already transformed/scaled. It is not display text.
+    Native lexical value may already be transformed/scaled. It is not display text
+    or, for a fraction, a certified numeric value; keep its native component fields.
     """
     from edgar.documents.strategies.xbrl_extraction import XBRLExtractor
     if b'\x00' in raw: return {'read': False, 'records': [], 'error': 'byte-token fact inventory cannot qualify null-containing input'}
@@ -691,15 +692,19 @@ def inline_facts(raw, parser):
             # The native reader's literal ix: input form, only after the source's
             # actual namespace declaration qualifies it. Original namespace kept.
             element.tag = 'ix:' + tag.split(':')[-1]
-            try: fact = extractor.extract_fact(element)
+            try:
+                element_fields = extractor.extract_context(element)  # native type and written fraction components are not fields of XBRLFact
+                fact = extractor.extract_fact(element)
             finally: element.tag = tag
             if fact is None: raise ValueError('native reader did not support fact at byte ' + code)
+            if element_fields.get('type') == 'fraction' and not {'numerator', 'denominator'} <= element_fields.keys():
+                raise ValueError('native fraction components not read at byte ' + code)
             # Same written hidden/header applicability as the native pre-pass;
             # this is not a computed CSS or displayed-state assertion.
             if any(isinstance(p.tag, str) and p.tag.lower().split(':')[-1] in ('hidden', 'header') and namespace(p) == ns for p in element.iterancestors()):
                 fact.metadata = dict(fact.metadata or {}, hidden=True)
             records[code] = {'source_tag': known[code], 'namespace': ns, 'attributes': {k: v for k, v in element.attrib.items() if k != key},
-                             'element_text': element.text_content(), 'native': asdict(fact)}  # no numeric_value float property
+                             'element_text': element.text_content(), 'native_element': element_fields, 'native': asdict(fact)}  # no numeric_value float property
         if accounted != set(known): raise ValueError('native parse did not retain every fact source identity')
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as exc:
