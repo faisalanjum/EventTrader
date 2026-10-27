@@ -108,6 +108,64 @@ Preserve these contracts:
   survive serialization; reused images keep separate contexts; stale/wrong sources,
   keys, modes and missing/incomplete readings have the required explicit outcome.
 
+### Downstream table-context readiness (27 October 2026)
+
+These are required checks for an AI consumer of the saved extraction, not claims
+that a production consumer is wired or qualified. Keep the complete ordered
+document and source links; assemble reader input without rewriting extraction.
+
+The owner's extraction scale test is preservation: every original number and
+unit/scale statement, its meaningful position and its source connections must
+survive. Extraction need not assign an unproved multiplier. Test source content
+and associations independently of downstream scale interpretation; an unknown
+assigned scale alone is not an extraction defect or a reason to invent a value.
+
+The choice between a small target and larger context is deliberately deferred.
+Retain the complete saved source/version and ordered pieces once, with their
+actual addresses and known references. Quotes, facts and driver updates made
+later must retain the original source addresses as well as their own identities.
+Keep the existing saved-output/version pin too: piece numbering may change on
+re-extraction. Reuse the source/output hashes already carried by the pipeline;
+no new identity system is needed. Unknown positions or relationships remain explicit. No new context flag or
+semantic splitting step is required now, and the existing 18 August full-event
+reader contract stays in force until the owner changes it.
+
+- Check the actual serialized model input, including any retrieval or splitting:
+  table cells, row/column headers, captions, linked notes, relevant surrounding
+  prose and applicable section/document declarations must reach the reader.
+  Include notes below tables and explicit references outside the local section.
+- Apply the same check to tables delivered through the picture path, whether
+  the reader receives an image, its extracted text/grid or both. Carry each
+  occurrence's surrounding document context through to the actual AI input;
+  an image-only packet or OCR result is not sufficient evidence of that handoff.
+  Reusing identical image bytes or one OCR result must preserve the distinct
+  headings, notes and source locations of every occurrence.
+- Nearby or earlier scale statements with unproved scope remain attributed
+  candidate context. Preserve their exact text, exceptions, location and order;
+  proximity, agreement among phrases and an assumed table continuation do not
+  prove that a statement governs a value. Different units may correctly govern
+  different tables, columns or kinds of value.
+- If a table's required context cannot be bounded reliably, widen to the
+  containing section or document with its referenced context. Do not silently
+  truncate required evidence to fit a model budget. An unresolved association
+  or unread required context must remain explicit, including when the full
+  document does not fit. Whole-document delivery is not proof of interpretation.
+- Verify each resolved value's unit/scale and exceptions against independent
+  source evidence. Preserve raw values and native normalized values separately;
+  unknown scale is not zero, one or the document's most frequent scale, and an
+  already scaled native value must not be scaled again.
+- Use independent real examples and positive/negative controls for above/below
+  notes, genuine and false continuations, distant declarations, mixed units,
+  per-share exceptions, conflicting/missing scope and model-budget boundaries.
+  Report content preservation, correct context association and downstream meaning
+  accuracy separately, with abstentions, actual prompt tokens and runtime costs.
+  Phrase-search coverage alone qualifies none of these measures.
+
+No new parser, semantic rule engine, model call or release credit is authorized
+by this checklist. Reuse native structures and existing reconstruction; first
+prove any proposed integration on the actual consumer's inputs. Existing reader
+contracts that require a complete event still apply.
+
 Retain regression cases for supported PDF behavior already in the runtime; this
 does not restart PDF development. Tests of retired routes and grader-only scoring,
 rankings, key management or experiment measurements remain with their archived
