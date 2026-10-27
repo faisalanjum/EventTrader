@@ -285,10 +285,11 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
         k = u.pop('_paragraph', None)
         if size[k] > 1: u['paragraph'] = number.setdefault(k, len(number))
     base = {'source_base': {'tag': {'byte_start': vis.base['start'], 'byte_end_exclusive': vis.base['end']}, 'href': vis.base['href']}} if vis.base else {}
+    facts = tree.get('source_facts')  # absent in older saved parses, never an invented empty inventory
     return {'schema': 'prepare-route-output/1', 'file_id': file_id, 'sha256': sha256, 'status': 'OK', 'error': None, 'seconds': seconds,
             'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': dict(settings or {'parse_html': 'defaults'}, pictures='every shown tag', source_lines='certified <br> breaks'), 'adapter': 'driver/prepare/convert/edgartools_html.py',
                       'linker': 'driver/prepare/convert/anchor.py'}, 'units': units, 'uncovered': linked['uncovered'], 'source_links': source_links(units, vis), 'source_relations': source_relations(raw, units, vis),
-            'source_ids': source_ids(vis), **base}
+            'source_ids': source_ids(vis), **({'source_facts': facts} if facts is not None else {}), **base}
 
 
 def source_ids(vis):
@@ -625,6 +626,9 @@ def whole_headings():
 SETTINGS = {'parse_html': 'defaults', 'source_inline': 'per source run under a sup or sub, a plain inline box with any non-baseline vertical-align, another inline box with vertical-align super, sub or a number, or a positioned inline box (computed position not static): nearest-first ancestors; a positioned one adds its raw computed position, top, bottom, left and right', 'source_style': 'per source run: colour, weight, font style, decorations in effect, text transform (the computed property, never a printed string), raw background stack with opacity; the raw native client rectangles of the whole run (boxes), the source extent they measure where it differs (boxes_at), and their one frame (viewport, scroll, device pixel ratio)', 'lists': "the parser's own list items: list, ordered, item", 'retain_pictures': True, 'retain_native_heading_evidence': True, 'picture_names': 'codes', 'hidden_text': 'left out', 'headings': 'detected blocks read whole', 'inline_facts': 'read whole', 'page_number_candidates': 'kept', 'ix_exclude': 'read as shown', 'inline_fact_spaces': 'kept', 'table_identity': 'own start tag, shown or hidden', 'style_values': 'independent', 'heading_boundaries': 'source matched', 'paragraph_membership': 'kept where one of the tool\'s paragraphs becomes several units', 'table_rows': 'every own row, empty ones too, in the table model order (its header group, bodies as written, its footer group); a span ends with its row group', 'nested_tables': 'each a table unit naming its holder cell', 'table_cells': 'every own cell, bound to its source cell, in its row\'s source order', 'table_captions': "each table's own caption a caption unit, bound to its source caption", 'punctuation': 'as the source writes it: no white space removed before . , ; ! ? and none added after . ! ?', 'table_header': "header is the tool's own verdict (EdgarTools 5.60.0 TableProcessor), read unchanged; a cell's tag, its attrs (id, scope, headers as the parser reads them: character references decoded) and its row_group (the cell's own source group, carried through re-gridding; its tag in the table's row_group_tags) are the source's statements; an absent tag, attrs entry or group is unknown"}  # what this route does, recorded in every route and with every saved parse: a parse saved under other settings is not reused
 
 
+SETTINGS['inline_xbrl'] = 'native lexical facts and metadata, exact original start-tag identities, before visibility filtering; unread is explicit'
+
+
 def settings(vis):
     """SETTINGS for one document; where the browser proved which of its text hides (Visible's `page`), that reading with a digest of the spans the tool
     is given without, so that a parse saved for other input (a raw one, or another verdict) is never reused for this one. A typed source reading
@@ -638,6 +642,70 @@ def settings(vis):
 def version():
     import importlib.metadata as md
     return f"edgartools {md.version('edgartools')}"
+
+
+def inline_facts(raw, parser):
+    """Native facts bound to their own original start tag, not matched by value.
+
+    EdgarTools' pre-process reader loses element identity, and its catch-all
+    returns [] on failure. Reuse its HTML parser and XBRLExtractor directly on
+    the unfiltered source. A temporary per-element attribute carries the source
+    address through that parse; no attribute defaults or scale arithmetic here.
+    Native lexical value is already transformed/scaled. It is not display text.
+    """
+    from edgar.documents.strategies.xbrl_extraction import XBRLExtractor
+    if b'\x00' in raw: return {'read': False, 'records': [], 'error': 'byte-token fact inventory cannot qualify null-containing input'}
+    key = 'data-prepare-fact-' + anchor.sha256(raw)
+    while key.encode() in raw.lower(): key += 'x'
+    known, edits, pos = {}, [], 0
+    for token, kind, literal in anchor.html_tokens(raw.decode('latin-1')):
+        start, pos = pos, pos + len(token)
+        if kind or literal or token.startswith('</'): continue
+        name = anchor._NAME.match(token)
+        if not name or name[1].split(':')[-1].lower() not in XBRLExtractor.FACT_TAGS: continue
+        if not anchor._TAG.fullmatch(token): return {'read': False, 'records': [], 'error': 'unqualified fact start tag at byte ' + str(start)}
+        code = str(start); known[code] = {'byte_start': start, 'byte_end_exclusive': pos}
+        edits.append((start + name.end(), (' ' + key + '="' + code + '"').encode()))
+    if not known: return {'read': True, 'records': []}
+    parts, last, records, accounted = [], 0, {}, set()
+    for at, text in edits: parts += [raw[last:at], text]; last = at
+    marked = b''.join(parts) + raw[last:]
+    try:
+        try: text = marked.decode('utf-8')
+        except UnicodeDecodeError: text = marked.decode('cp1252', 'replace')
+        tree, extractor = parser._parse_html(text), XBRLExtractor()
+        def namespace(element):
+            prefix = element.tag.split(':', 1)[0] if ':' in element.tag else ''
+            attr = 'xmlns:' + prefix if prefix else 'xmlns'
+            return next((p.get(attr) for p in (element, *element.iterancestors()) if p.get(attr) is not None), None)
+        for element in tree.iter():
+            code = element.get(key)
+            if code is None: continue
+            if code not in known or code in accounted: raise ValueError('fact source identity missing or repeated')
+            accounted.add(code)
+            ns = namespace(element)
+            if ns is None and ':' not in element.tag: continue  # ordinary unqualified HTML, not an inline namespace
+            if ns is None: raise ValueError('fact namespace is unbound at byte ' + code)
+            if ns not in (IX, 'http://www.xbrl.org/2008/inlineXBRL'): continue  # a declared other vocabulary is not Inline XBRL
+            tag = element.tag
+            # The native reader's literal ix: input form, only after the source's
+            # actual namespace declaration qualifies it. Original namespace kept.
+            element.tag = 'ix:' + tag.split(':')[-1]
+            try: fact = extractor.extract_fact(element)
+            finally: element.tag = tag
+            if fact is None: raise ValueError('native reader did not support fact at byte ' + code)
+            # Same written hidden/header applicability as the native pre-pass;
+            # this is not a computed CSS or displayed-state assertion.
+            if any(isinstance(p.tag, str) and p.tag.lower().split(':')[-1] in ('hidden', 'header') and namespace(p) == ns for p in element.iterancestors()):
+                fact.metadata = dict(fact.metadata or {}, hidden=True)
+            records[code] = {'source_tag': known[code], 'namespace': ns, 'attributes': {k: v for k, v in element.attrib.items() if k != key},
+                             'element_text': element.text_content(), 'native': asdict(fact)}  # no numeric_value float property
+        if accounted != set(known): raise ValueError('native parse did not retain every fact source identity')
+    except (OSError, StorageError, ImportError, MemoryError): raise
+    except Exception as exc:
+        if isinstance(exc.__cause__, (OSError, StorageError, ImportError, MemoryError)): raise exc.__cause__  # native _parse_html wraps these
+        return {'read': False, 'records': [records[k] for k in known if k in records], 'error': type(exc).__name__ + ': ' + str(exc)[:200]}
+    return {'read': True, 'records': [records[k] for k in known if k in records]}
 
 
 def parse(raw, vis):
@@ -702,9 +770,11 @@ def parse(raw, vis):
             self._read.append((tr, cells))  # the row and its cells, as read (its group and drawn place: `_model`)
             return cells
 
-    whole_headings(); t0 = time.time(); parser = HTMLParser(ParserConfig())  # what parse_html builds
+    whole_headings(); t0 = time.time(); parser = HTMLParser(ParserConfig(extract_xbrl=False))  # the one native fact pass below replaces the unbound best-effort pass
     parser.strategies['table_processing'] = EveryRowGroup(parser.config)
+    facts = inline_facts(raw, parser)  # before visibility filtering removes hidden fact text
     tree = dump(parser.parse(named(raw, vis, codes(raw, vis))).root)
+    tree['source_facts'] = facts
     return tree, round(time.time() - t0, 2), version()
 
 

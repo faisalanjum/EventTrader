@@ -29,6 +29,19 @@ name. A packet is only a presentation of the readings: it can omit evidence reta
 in the raw records. Repeated image bytes share worker results while their occurrences
 keep separate source context. The caller's source/version identity must remain with
 these outputs when they are serialized or moved.
+
+Inline XBRL is retained as `source_facts`: each fact names its exact original
+start-tag byte range and carries the native parsed attributes, element text and
+EdgarTools fact fields, including raw scale, decimals, sign, unit/context references,
+lexical value and metadata. The native value may already be transformed and scaled;
+never multiply it again. It is kept separately from the displayed unit/cell text.
+Native format issues and hidden/header metadata stay explicit. These are native
+claims, not proof that an unbound context or unsupported transformation is resolved.
+Missing scale stays missing. Unread fact metadata is a partial result, never an
+empty successful inventory. An older saved parse without this field proves no
+absence. The saved readback carries this source evidence without assigning its
+scale to a whole table or changing any displayed number.
+
 For packaged HTML, pass the same `screen_grid.Source` through HTML conversion and
 picture preparation; it binds the document address, package and dependency evidence.
 Inside a qualified context, that Source answers a URL the parent recording observed

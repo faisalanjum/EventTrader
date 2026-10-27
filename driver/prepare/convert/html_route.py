@@ -83,6 +83,8 @@ def prepare(raw, file_id, sha256, browser, source=None, parse=None):
     seen = (['page visibility: ' + failed] if failed else []) + unresolved(vis, source.context.label_spans(raw) if getattr(source, 'context', None) is not None else ())  # the visibility list
     screen = ['screen step: ' + facts['screen']['error']] if 'error' in facts['screen'] else []
     rest = ['context: ' + w for w in source.context.gate()] if getattr(source, 'context', None) is not None else []  # every render reached the state and agrees
+    if (route.get('source_facts') or {}).get('read') is False:
+        rest.append('inline XBRL: ' + route['source_facts']['error'])  # preserve the independent body/render work before reporting this unread family
     declared, outside = declarations(vis, browser)  # the one shared decision, carried on each source link record (route.source_links follows vis.links)
     for rec in route.get('source_links') or []:
         if rec['tag']['byte_start'] in declared: rec['script_action'] = declared[rec['tag']['byte_start']]
@@ -130,6 +132,8 @@ def source_reading(raw, file_id, sha256, displayed, parse=None):
         (records.append({'byte_start': a, 'byte_end_exclusive': b, 'owners': own}) if own else failed.append({'byte_start': a, 'byte_end_exclusive': b, 'why': why}))
     route['source_hidden'] = {'read': True, 'basis': basis, 'records': records, **({'unresolved': failed} if failed else {})}
     errors = (['source reading: %d proved-hidden run%s not placed' % (len(failed), '' if len(failed) == 1 else 's')] if failed else []) + unresolved(whole)
+    if (route.get('source_facts') or {}).get('read') is False:
+        errors.append('inline XBRL: ' + route['source_facts']['error'])
     pictures = sum(1 for u in route['units'] if u.get('kind') == 'image')
     if pictures: errors.append('source reading: %d picture%s not prepared (named, not reconstructed)' % (pictures, '' if pictures == 1 else 's'))
     if errors: route['status'], route['error'] = 'PARTIAL', '; '.join(errors)

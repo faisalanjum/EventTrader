@@ -1,4 +1,6 @@
-"""The tool's own heading evidence travels beside the text as a claim (the worktree's cases; its two iXBRL cases are not taken: that payload is not copied into a route)."""
+"""The tool's own heading evidence travels beside the text as a claim.
+Inline XBRL preservation is covered separately by test_inline_fact_metadata.
+"""
 from dataclasses import dataclass
 import unittest
 
