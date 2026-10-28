@@ -27,7 +27,27 @@ from driver.prepare.get.acquire import _identity, _url, read_package, document_p
 from driver.prepare.get.campaign import OfflineCacheMiss
 from driver.prepare.get.transport import DownloadError, closes as _closes
 from driver.prepare.convert import screen_grid as sg, overlay
-import hashlib
+import hashlib, base64
+BIND = """([b64, base]) => { let t; try { t = new TextDecoder('utf-8', {fatal: true}).decode(Uint8Array.from(atob(b64), c => c.charCodeAt(0))); } catch (e) { return {why: 'run not strict utf-8'}; }
+  const d = new DOMParser().parseFromString('<body>' + t, 'text/html'), n = Array.from(d.body.childNodes).filter(x => !(x.nodeType === 3 && !x.nodeValue.trim()));
+  if (d.head.childNodes.length || n.length !== 1 || n[0].nodeName !== 'SCRIPT') return {why: 'run is not exactly one script element'};
+  const e = n[0], names = e.getAttributeNames(), src = e.getAttribute('src'), type = e.getAttribute('type');
+  if (names.some(k => k !== 'src' && k !== 'type') || (type !== null && type !== 'text/javascript') || src === null || e.textContent.trim()) return {why: 'script element shape'};
+  if (!src.startsWith('/') || src.startsWith('//')) return {why: 'src is not root-relative'};
+  return {src, href: new URL(src, base).href}; }"""  # the pinned browser's parser and URL resolution (binder reviewed in W3 and the R2 WITHOUT pilots)
+
+def bind_inserted(pg, copy, fit, mrec, nl, target):
+    """The ONE script SEC's server inserted into the published copy (owner single-version policy): the single node-level placement node_level
+    accepted must be exactly one <script> with type/src only, no inline text, a root-relative src on the target's origin that the filed bytes do
+    not name. Bind only: nothing is withheld or changed. -> {'src', 'href', 'run_start'} or {'why'}"""
+    acc = [x['q'] for x in nl.get('placements') or [] if x['node_level']]
+    if len(acc) != 1: return {'why': f'{len(acc)} accepted node-level placements'}
+    a = fit[1]['inserted'][0] - (mrec['window'][1] - acc[0]); w = pg.evaluate(BIND, [base64.b64encode(copy[a:a + fit[1]['inserted'][1] - fit[1]['inserted'][0]]).decode(), target])
+    if w.get('why'): return w
+    if w['src'].encode() in fit[0]: return {'why': 'authored-file dependency collision: the filed bytes name the same src (held, no alias guess)'}
+    if urlsplit(w['href']).netloc != urlsplit(target).netloc: return {'why': 'address origin differs from the target'}
+    return dict(w, run_start=a)
+
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
 def _get(campaign, url, declared_by, log, observed=None):
@@ -142,7 +162,8 @@ def _report_title(files, filename):
     return (title, None) if isinstance(title, str) and title.strip() else (None, 'no report title for the member')
 
 
-def acquire_context(campaign, browser, version_dir, filename, marked, prefix, requested_cik=None, budget=80, max_actions=200):
+def acquire_context(campaign, browser, version_dir, filename, marked, prefix, requested_cik=None, budget=80, max_actions=200, withhold=False):
+    sg.WITHHELD.clear()  # COMPARISON-ONLY (plan.qualification_withhold): strict unless this document's own bound exception is set below
     from driver.prepare.get.acquisition import index_parent_candidates
     manifest, files = read_package(version_dir); ident = manifest['identity']; fetch = _Fetcher(campaign, budget)
     rec = {'identity': {'accession': ident['accession'], 'ciks': ident['ciks'], 'form': ident['form'], 'filename': filename, 'package_sha256': manifest['package']['sha256']}, 'requests': fetch.log}
@@ -166,10 +187,16 @@ def acquire_context(campaign, browser, version_dir, filename, marked, prefix, re
     if body is None: return {'outcome': 'refused: measurement body', 'evidence': None, 'record': rec}
     if 'window' in mrec:
         pg = browser.new_page(java_script_enabled=False)
-        try: nl = overlay.node_level(pg, body, mrec, 'utf-8')
+        try: nl = overlay.node_level(pg, body, mrec, 'utf-8'); ins = bind_inserted(pg, copy, fit, mrec, nl, target) if nl['node_level'] else {'why': 'inserted run not node-level'}
         finally: pg.close()
-        rec['target']['node_level'] = nl
+        rec['target']['node_level'] = nl; rec['target']['inserted_script'] = ins
+        if withhold and ins.get('href'):  # COMPARISON-ONLY (plan.qualification_withhold): the proved script's own recorded response, bound before any render, then withheld
+            fetch.get(ins['href'], {'kind': 'comparison_exception', 'declarer': target, 'declarer_sha256': sha(copy)}); seen = fetch.observed.get(ins['href']) or {}
+            if seen.get('status') == 200 and seen.get('sha256') and _closes(seen): sg.WITHHELD[ins['href']] = {'kinds': frozenset({'script', 'xhr'}), 'sha256': seen['sha256']}
         if not nl['node_level']: return {'outcome': 'refused: inserted run not node-level', 'evidence': None, 'record': rec}
+    if withhold and (rec.get('target') or {}).get('inserted_script', {}).get('href') in sg.WITHHELD:
+        ins_w = rec['target']['inserted_script']; rec['target']['comparison_exception'] = {'bound': True, 'address_sha256': sha(ins_w['href'].encode()), 'run_start': ins_w['run_start'], 'response_sha256': sg.WITHHELD[ins_w['href']]['sha256'], 'kinds': ['script', 'xhr']}
+    elif withhold and rec.get('target') is not None: rec['target']['comparison_exception'] = {'bound': False, 'why': ((rec['target'].get('inserted_script') or {}).get('why')) or 'no bound inserted script with a closed recorded 200 response'}
     rec['parents'], chosen = {}, []
     for parent in cands:
         if fetch.get(parent, {'kind': 'index_link', 'declarer': index_url, 'declarer_sha256': sha(index)}) is None: rec['parents'][parent] = {'verdict': 'parent unavailable', 'request': fetch.log[-1]['outcome']}; continue
@@ -189,7 +216,10 @@ def acquire_context(campaign, browser, version_dir, filename, marked, prefix, re
         a = next(x for x in r['attempts'] if x['state'] == 'qualified'); delivered = {d[0] for d in (a.get('facts') or {}).get('delivered', [])}
         from driver.prepare.get.acquisition import selection_record
         selection = selection_record(r, s)
-    obs = fetch.observed; keep = (delivered | {parent, target}) & set(obs)
-    evidence = {'parent_url': parent, 'target_url': target, 'observed': {u: obs[u] for u in sorted(keep)}, 'selection': selection, 'proof': fit[1], 'before': before, 'after': after}
+    obs = fetch.observed; keep = (delivered | {parent, target} | set(sg.WITHHELD)) & set(obs)  # the withheld response travels as evidence (version guard), never as an input
+    ins = (rec.get('target') or {}).get('inserted_script') or {}  # this file's own proof: the bound address and the recorded response it delivered
+    if ins.get('href'): seen = obs.get(ins['href']) or {}; ins['response_sha256'] = seen.get('sha256') if ins['href'] in keep and seen.get('status') == 200 and _closes(seen) else None
+    evidence = {'parent_url': parent, 'target_url': target, 'observed': {u: obs[u] for u in sorted(keep)}, 'selection': selection, 'proof': fit[1], 'before': before, 'after': after,
+                **({'inserted_script': {'href': ins['href'], 'response_sha256': ins['response_sha256']}} if ins.get('response_sha256') else {})}
     rec['evidence_identity'] = {'parent_url': parent, 'target_url': target, 'selection': selection, 'observed': {u: obs[u]['sha256'] for u in sorted(keep)}, 'proof': fit[1]}
     return {'outcome': 'associated', 'evidence': evidence, 'record': rec}

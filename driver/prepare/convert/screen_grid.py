@@ -530,6 +530,9 @@ def styles(raw, vis, runs, got, units):
     return {'records': records, 'unresolved': unresolved, **({'frame': got['frame']} if got.get('frame') else {})}  # the one frame of every box: viewport, scroll origin, device pixel ratio
 
 
+WITHHELD = {}  # COMPARISON-ONLY (plan.qualification_withhold): {address: {'kinds', 'sha256'}} of the ONE proved inserted script of this document; empty (strict) otherwise; cleared per document
+
+
 class Source:
     """The exact evidence one document's renders may use, nothing else: the document's own `path` among its bundle's verified `members`
     ({path: bytes}, from the package reader; `bundle` names that bundle, e.g. its package sha256), read at `base` + path - `base` the bundle's
@@ -566,6 +569,11 @@ class Source:
         self.refusals.append((url, kind)); self.records.setdefault(key, {('path' if key == name else 'url'): key, 'status': 'refused', 'kind': kind, **({'why': why} if why else {})})
 
     def answer(self, url, kind, navigation=False):
+        if url in WITHHELD:  # the deliberate comparison exception: only the bound kinds of the bound recorded response; booked apart, never served, never an input
+            b, seen = WITHHELD[url], self.observed.get(url)
+            if navigation or kind not in b['kinds']: return self._refuse(url, url, None, kind, 'withheld address outside the declared exception kinds')
+            if seen is None or not b.get('sha256') or seen.get('sha256') != b['sha256']: return self._refuse(url, url, None, kind, 'withheld address: its recorded response is not the bound one')
+            self.records.setdefault(url + '\x00withheld\x00' + kind, {'url': url, 'status': 'withheld', 'kind': kind, 'sha256': b['sha256'], 'why': 'comparison-only exception: the script SEC inserted into the published copy'}); return None
         name = urllib.parse.unquote(urllib.parse.urlsplit(url).path)[len(urllib.parse.urlsplit(self.root).path):] if self.root and url.startswith(self.root) else None  # the pictures' member rule: the decoded path under the address
         key = name if self.base is None and name is not None else url
         if navigation: return self._refuse(url, key, name, 'navigation')  # a member path never answers a navigation

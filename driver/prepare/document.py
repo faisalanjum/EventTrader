@@ -118,14 +118,14 @@ def run_marked(raw, screen_grid, p):  # the run-mark body every selection measur
     return screen_grid.tag_cells(raw, vis, (), [(a, b'<!--%ss:%d-->' % (p.encode(), k)) for k, (a, _, _, ok) in enumerate(runs) if ok], p)[0]
 
 
-def acquired_context(browser, row, raw, screen_grid, attempt, save_, require=True, max_actions=None):
+def acquired_context(browser, row, raw, screen_grid, attempt, save_, require=True, max_actions=None, withhold=False):
     """The production path (Root CONTEXT_ACQUISITION_FAILURE_CLASS_20261021): authoritative context from the sealed package identity and member through
     the existing Campaign and the generic seam (driver.prepare.get.context_acquire); the selection's native captures kept once under captures/. Any error
     the seam raises (storage, OS, memory, an untyped acquisition error, a stopped campaign) fails the run - never an unavailable page."""
     from driver.prepare.get import acquisition, campaign, context_acquire, transport
     a = row['context']['acquire']; p = screen_grid.marker_prefix(raw); acquisition.Selection.blobs = attempt / 'captures'
     with campaign.Campaign(a['campaign'], live=bool(a.get('live')), sender=transport.http_request) as camp:
-        got = context_acquire.acquire_context(camp, browser, row['immutable_package_directory'], row['filename'], run_marked(raw, screen_grid, p), p, requested_cik=row.get('requested_cik'),
+        got = context_acquire.acquire_context(camp, browser, row['immutable_package_directory'], row['filename'], run_marked(raw, screen_grid, p), p, requested_cik=row.get('requested_cik'), withhold=withhold,
                                                    **({} if max_actions is None else {'max_actions': max_actions}))  # the job-level native action limit when set; otherwise the native function's own default
     save_(attempt / 'CONTEXT_ACQUISITION.json', {'outcome': got['outcome'], 'record': got['record']})  # kept before any gate
     if got['outcome'] != 'associated' and not require: return None, {'by': 'driver.prepare.get.context_acquire', 'outcome': got['outcome']}  # automatic entry: the default output stays, incomplete
@@ -207,15 +207,17 @@ def main():
                 from driver.prepare.convert import html_route as _route
                 if 'context' not in row and _route.declarations(screen_grid.Visible(raw), browser)[0]:  # the same shared decision the route status uses; only the supported link path enters context
                     cfg = plan.get('context_campaign')  # the one job-level campaign configuration; no per-document switch
-                    if cfg and 'immutable_package_directory' in row: auto = acquired_context(browser, dict(row, context={'acquire': cfg}), raw, screen_grid, attempt, save, require=False, max_actions=cfg.get('max_actions'))  # optional job-level limit only (Root CONTEXT_NATIVE_ACTION_BUDGET_20261022T0438)
+                    if cfg and 'immutable_package_directory' in row: auto = acquired_context(browser, dict(row, context={'acquire': cfg}), raw, screen_grid, attempt, save, require=False, max_actions=cfg.get('max_actions'), withhold=plan.get('qualification_withhold') is True)  # optional job-level limit only (Root CONTEXT_NATIVE_ACTION_BUDGET_20261022T0438)
                     else: save(attempt / 'CONTEXT_ACQUISITION.json', {'outcome': 'not attempted: ' + ('no job campaign configuration' if not cfg else 'a loose input has no filing package'), 'record': None})
                 if 'context' in row or auto[0] is not None:  # version 6: every state through the one context boundary, each with its own custody
                     from driver.prepare.convert import context
                     if auto[0] is not None: ev, chosen = auto  # associated automatically: the same path as a pinned acquire row
-                    elif 'acquire' in row['context']: ev, chosen = acquired_context(browser, row, raw, screen_grid, attempt, save)  # production: package identity + member
+                    elif 'acquire' in row['context']: ev, chosen = acquired_context(browser, row, raw, screen_grid, attempt, save, withhold=plan.get('qualification_withhold') is True)  # production: package identity + member
                     else:  # the injected public-fixture test path: a pinned evidence file, the runtime's own selection
                         ev = context_evidence(row); ev['selection'], chosen = select(browser, row, ev, raw, screen_grid, lambda x: save(attempt / 'CONTEXT_SELECTION_RESULT.json', x))
                     save(attempt / 'CONTEXT_SELECTION.json', {'selection': ev['selection'], 'summary': chosen, 'evidence': row.get('context', {}).get('evidence'), 'evidence_sha256': row.get('context', {}).get('evidence_sha256')})
+                    if auto[0] is not None or 'acquire' in (row.get('context') or {}): ev['qualifications'] = {'folder': plan.get('script_qualifications'), 'runtime_manifest_sha256': plan['runtime_manifest']['sha256']}  # owner single-version policy: the producer's records for acquired evidence only, re-verified by optional_controls on every use
+                    if (auto[0] is not None or 'acquire' in (row.get('context') or {})) and plan.get('qualification_diagnostic') is True and ev.get('inserted_script'): ev['diagnostic_continuation'] = {'bound_href': ev['inserted_script']['href']}  # QUALIFICATION-ONLY explored NORMAL run (Context.continuation); never a production setting
                     states, prepared_by = attempt / 'states', {}; states.mkdir(mode=0o700)
                     folder = lambda label: attempt if label == 'initial' else states / label
                     def per_parse(label):

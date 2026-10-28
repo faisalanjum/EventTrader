@@ -1,0 +1,81 @@
+  #menu{
+            font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-size:11px;
+          }
+         
+          ul#menu {
+          list-style-type:none;
+          margin:0;
+          padding:0;
+          width:15em;
+          border:1px solid #333;
+          background-color:#FFFFFF;
+          }
+         
+          ul#menu ul{
+            list-style-type:none;
+            margin:0;
+            padding:0;
+            width:15em;
+            background-color:#FFFFFF;
+          }
+         
+          ul#menu a{
+            display:block;
+            text-decoration:none;
+          }
+         
+          ul#menu li{
+            margin-top:1px;
+          }
+         
+          ul#menu li a{
+            background:#F7F7F7;
+            color:black;
+            padding:0.5em;
+          }
+         
+          ul#menu li a:hover{
+            background:#aaa;
+          }
+         
+          ul#menu li ul li a{
+            background:#FFFFFF;
+            color: #0071EB;
+            padding-left:20px;
+          }
+         
+          ul#menu li ul li a:hover{
+            background:#aaa;
+            border-left:5px #000 solid;
+            padding-left:15px;
+            text-decoration: underline;
+          }
+          ul#menu li a.all_reports, ul#menu li a.rendering_logs {
+		  	background-color: #0C213A;
+            color: #FFFFFF;
+		  }
+		   ul#menu li a.all_reports:hover, ul#menu li a.rendering_logs:hover  {
+		  	background-color: #12659C;
+            color: #0C213A;
+		  }
+          ul#menu li.ix > a {
+            background-color: #0C213A; 
+            color: #FFFFFF
+          }            
+          li.octave {
+              border-top: 1px solid black;
+          }          
+          button {
+		   	color: #212529;
+		    border-radius: 1rem;
+		    background-color: #FFC107;
+		    border-color: #FFC107;
+		    white-space: nowrap;
+		  }
+		  button:hover {
+		   	background-color: #EEA800;
+		    border-color: #EEA800;
+		  }
+
+

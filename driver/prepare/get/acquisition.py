@@ -73,11 +73,12 @@ def facts(rec):
     """The state's received facts (Smart CONTEXT_REAL_SELECTION_DECISION sec. 1): delivered inputs {(url/member, status, observation sha256)} and refused
     GET dependencies {(url/member, kind)} from the Source's own records; outbound refused non-GET attempts as (method, url, count), recorded, not compared."""
     recs = rec['source'].records.values(); from collections import Counter
-    delivered = sorted({(r.get('url') or r.get('member') or r.get('path'), r['status'], r.get('sha256')) for r in recs if r.get('status') != 'refused'}, key=str)
+    delivered = sorted({(r.get('url') or r.get('member') or r.get('path'), r['status'], r.get('sha256')) for r in recs if r.get('status') not in ('refused', 'withheld')}, key=str)  # withheld: the comparison exception, never an input
     refused = sorted({(r.get('url') or r.get('path'), r.get('kind')) for r in recs if r.get('status') == 'refused' and r.get('kind') != 'navigation'}, key=str)
     out = sorted(Counter((x[0], x[1]) for x in rec['log'] if x[0] != 'GET').items())
     navigations = sorted({u for u, k in rec['source'].refusals if k == 'navigation'})  # every navigation the Source refused, each time (a refused reload of an answered URL too): unknown, never absence
-    return {'delivered': delivered, 'refused_get': refused, 'outbound_attempts_refused': [(m, u, c) for (m, u), c in out], 'refused_navigation': navigations}
+    withheld = sorted({(r['url'], r['kind'], r['sha256']) for r in recs if r.get('status') == 'withheld'}, key=str)  # recorded apart with the bound response identity, never compared as an input
+    return {'delivered': delivered, 'refused_get': refused, 'outbound_attempts_refused': [(m, u, c) for (m, u), c in out], 'refused_navigation': navigations, **({'withheld': withheld} if withheld else {})}
 
 def _same_inputs(a, b):  # marked vs unmarked: equal delivered inputs (observation identities) and equal refused GET sets; outbound counts excluded
     return a is not None and b is not None and a['delivered'] == b['delivered'] and a['refused_get'] == b['refused_get']

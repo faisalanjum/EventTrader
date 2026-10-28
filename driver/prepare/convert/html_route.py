@@ -95,6 +95,8 @@ def prepare(raw, file_id, sha256, browser, source=None, parse=None):
         facts['declared_outside_link_path'] = outside; rest.append(f'context: {len(outside)} declared event handler(s) outside the supported link path (not activated)')
     errors = seen + screen + rest
     if errors: route['status'], route['error'] = 'PARTIAL', '; '.join(errors)
+    diag = ['context: ' + w for w in source.context.diagnostics()] if getattr(source, 'context', None) is not None and hasattr(source.context, 'diagnostics') else []  # QUALIFICATION-ONLY (Context.continuation)
+    if diag and facts['screen'].get('text_proved') is True and not seen and all(e in diag for e in rest): route['diagnostic'] = {'text_proved_before_gate': True, 'gate': diag}  # the native proof kept apart; text_proved and status stay failed
     route['text_proved'] = facts['screen'].get('text_proved') is True and not seen and not rest  # the route-text proof: the screen step's, and no visibility, context, script or handler failure (an unread picture alone may stand); absent (a failed conversion) is false
     if given is not None: route['resources'] = source.identity()  # the document, its bundle and every dependency the renders asked for, once
     return route, facts

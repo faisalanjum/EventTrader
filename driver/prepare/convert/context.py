@@ -12,11 +12,13 @@ and the bridge removes only our comments from the wholly not-displayed original.
 select the same target occurrence and placement, and (OCR's strict rule, every marker kind, initial and activated views) equal the state's unmarked
 reference render at measurement start: the whole native serialization without our comments and the received inputs; anything else leaves the
 state incomplete with its reasons."""
-import hashlib, json, re, time
+import hashlib, json, os, re, time
+from pathlib import Path
 from playwright.sync_api import Error as PlaywrightError  # the pinned library's public typed error; Request.frame raises it for a navigation request whose frame does not exist yet
 from . import anchor, edgartools_html, overlay, screen_grid as sg
 from ..get.acquire import StorageError
 from ..get import acquisition  # OCR's frozen selection module (one settle rule, one serializer, the native node key)
+from .. import compare  # the shared comparison form (compare._WS), the scanner's own search form
 
 # Smart's reviewed proof scripts, verbatim (bridge_helper_v3.py sha256 53a685d46bd577cf...; its timer-wrapping INIT and capped EFFECTS are not used)
 SNAP = "() => { const w = document.createTreeWalker(document, NodeFilter.SHOW_ALL); window.__pre = new Set(); let n; while ((n = w.nextNode())) window.__pre.add(n); return window.__pre.size; }"
@@ -104,13 +106,46 @@ ORIGIN_NODE = "([p]) => { " + COMMON + """ const rs = roots(); return rs.length 
 # holds: every main-world script the browser parsed is exact reviewed bytes, the viewer template with only its three data slots, a control's own
 # declared attribute or the viewer menu's; no other listener sits on a source node, a control or any ancestor (owner policy: the exact identified
 # sec.gov-injected bot-detection artifacts are website infrastructure); each Show.showAR resolves, in the DOM, to one source-scope id (a following
-# TABLE branch is unsupported). Anything else keeps the deficit. Reviewed public bytes: P/FABLE_P5_REPORT_CONTROL_EVIDENCE_20261028T002140Z.
+# TABLE branch is unsupported); each Show.toggleNext that changes anything (its own DOM walk) has its control and DIV inside a DOM-unique source element the reading
+# holds whole (Show.hideAR only hides Show.LastAR, which only Show.showAR sets).
+# Anything else keeps the deficit. Reviewed public bytes: P/FABLE_P5_REPORT_CONTROL_EVIDENCE_20261028T002140Z.
 KNOWN_CODE = {'2e4e3855abccb781a7086a1720be0114500d5e252ab21bf2094ea557b6d94901': 'renderer Show.js',
               '55e5cd7e99fb2aecfd86f64e3daf9c88c4878111d6a79dbeb2eaba58a34aafa8': 'renderer report helper (toggleNextSibling definition)',
               'fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a': 'viewer jQuery v3.7.1',
               '2fb11b7660e3be6710a60743c252c4bde9286c70064d8e032c0a20927ea378e9': 'viewer accordionMenu.js'}
 INFRASTRUCTURE = {'0f23ad013f05888115512f5dc6493ac6d6af23358424253090bf565fe81a36ee': 'sec.gov-injected bot detection (AMG campaign, initiator-identified 10-22)',
                   '39f3dc5b34f614a78075f1824407dc3de33cffcb5e5e3c5fd59a1356d3385d97': 'sec.gov-injected bot detection (CCL campaign, initiator-identified 10-22)'}
+
+
+def qualified_version(evidence, h, url=None):
+    """Owner single-version policy: exact inserted-script bytes count as website infrastructure (reviewed versions included, no grandfathering) only
+    when (1) THIS file's own acquisition proved them its one server-inserted script (evidence['inserted_script']: bound address and recorded response
+    sha256; the address too where the script has one) and (2) the producer's record for those bytes (qualify_version) passed, was made by this runtime
+    (manifest pin) and still holds its chain: the producer's schema and fields, every named evidence file re-hashing to its pin, every required role
+    present, the WITHOUT result holding exactly one verified row for the qualifying file. A record or flag alone never admits. -> (True, None) or (False, why)"""
+    ins, q = evidence.get('inserted_script') or {}, evidence.get('qualifications') or {}
+    if not ins.get('href') or ins.get('response_sha256') != h or (url and url != ins['href']): return False, "not this file's proved inserted script"
+    if not q.get('folder') or not q.get('runtime_manifest_sha256'): return False, 'no qualification store'
+    try: rec = json.loads((Path(q['folder']) / (h + '.json')).read_bytes())
+    except (OSError, ValueError): return False, 'no qualification record'
+    if rec.get('schema') != QUALIFY_SCHEMA or rec.get('script_sha256') != h or rec.get('outcome') != 'passed' or rec.get('reasons') != [] or (rec.get('comparison') or {}).get('all_equal') is not True or not rec.get('file_id') or not rec.get('states'):
+        return False, 'record not passed for these bytes'
+    if rec.get('runtime_manifest_sha256') != q['runtime_manifest_sha256']: return False, 'record made by another runtime'
+    roles = {}
+    for e in rec.get('evidence') or []:
+        try: b = Path(e['path']).read_bytes()
+        except (OSError, KeyError, TypeError): return False, 'record evidence missing'
+        if hashlib.sha256(b).hexdigest() != e.get('sha256'): return False, 'record evidence changed after recording'
+        roles[e.get('role')] = b
+    if not QUALIFY_ROLES <= set(roles): return False, 'record lacks the producer evidence chain'
+    try: rows = [r for r in json.loads(roles['without_result'])['rows'] if r.get('file_id') == rec['file_id']]
+    except (ValueError, TypeError, AttributeError, KeyError): rows = []
+    return (True, None) if len(rows) == 1 and rows[0].get('outcome') == 'verified_saved_output' else (False, 'record evidence has no verified WITHOUT row for its file')
+
+from ..job import QUALIFY_ROUTE, QUALIFY_SCHEMA, QUALIFY_ROLES, QUALIFY_PLAN_KEYS, compare_views, claim_version, qualify_version  # noqa: E402,F401 the producer lives with
+# the batch owner (job.py runs -I -S, without Playwright); qualified_version below is its consumer
+
+
 TOOLING = {'764405f9d392d5881909d5d98e159ed8c1fc1a8320a3fc47736a6688e0fcf767': 'pinned Playwright 1.59.0 injected script',  # the run's own instrumentation, exact
            '6853be72f0e1a5eb5512aebe8549f7efd3342fb57e51395edf5140f427241065': 'pinned Playwright 1.59.0 handle preview',
            '9e22374178d30310bf36b9ad25aeb7e094195c70fae675a5d8e48cad46b77308': 'pinned Playwright 1.59.0 service-worker block (init script)',
@@ -128,10 +163,13 @@ ACTION = re.compile(r"(?:top\.)?Show\.(?:showAR\( this, '(?P<id>[^'\\\r\n  ]
 LIFECYCLE = frozenset(('load', 'DOMContentLoaded'))  # fire once at load, already past at the initial state
 CODE_NODE = """function () { const s = window.__sourceScope; if (!s) return null; const src = Array.from(document.querySelectorAll('a[href]')).filter(a => s.outside(a) === false);
   return {outside: s.outside(this), ancestor: src.some(a => a !== this && this.contains(a)), attributes: this.getAttributeNames ? this.getAttributeNames().filter(n => n.toLowerCase().startsWith('on')).map(n => this.getAttribute(n)) : []}; }"""
-CODE_ACTIONS = """(() => { const s = window.__sourceScope; if (!s) return null; const actions = [], ids = {};
-  for (const a of document.querySelectorAll('[onclick]')) { if (s.outside(a) !== false) continue; let e = a; while (e && e.nodeName !== 'TABLE') e = e.nextSibling; actions.push([a.getAttribute('onclick'), !!e]); }
+CODE_ACTIONS = """(() => { const s = window.__sourceScope; if (!s) return null; const actions = [], ids = {}, texts = {}, TOGGLE = /^(?:top\\.)?Show\\.toggleNext\\( this \\);$/;
+  for (const a of document.querySelectorAll('[onclick]')) { if (s.outside(a) !== false) continue; let e = a; while (e && e.nodeName !== 'TABLE') e = e.nextSibling; const v = a.getAttribute('onclick');
+    let d = a; while (d && d.nodeName !== 'DIV') d = d.nextSibling; const t = TOGGLE.test(v || ''), shown = t && d && d.style.display, h = [];
+    for (let p = a.parentElement; p; p = p.parentElement) if (p.hasAttribute('id') && (!d || p.contains(d))) { const k = p.getAttribute('id'); h.push(k); if (shown) texts[k] = p.textContent; }
+    actions.push([v, !!e, t ? {div: !!d, display: d ? d.style.display : null, holders: h} : null]); }
   for (const n of document.querySelectorAll('[id]')) { const k = n.getAttribute('id'), v = ids[k] || (ids[k] = [0, 0]); v[0]++; if (s.outside(n) === false) v[1]++; }
-  return {actions, ids}; })()"""  # Show.showAR's own walk: a following sibling TABLE is shown instead of the named target
+  return {actions, ids, texts}; })()"""  # Show.showAR's own walk: a following sibling TABLE is shown instead of the named target
 
 
 def viewer_template(text):
@@ -328,6 +366,7 @@ class Context:
                 got_in.add((q.url, tv[0], t.get('sha256'))); return route.fulfill(status=tv[0], content_type=t.get('content_type') or 'text/html', body=measured)  # received: the original response's identity
             got = source.answer(q.url, q.resource_type, q.is_navigation_request())
             if got: got_in.add((q.url, got[0], source.observed[q.url].get('sha256') if q.url in source.observed else hashlib.sha256(got[2]).hexdigest())); return route.fulfill(status=got[0], content_type=got[1], body=got[2])
+            if q.url in sg.WITHHELD and (q.url + '\x00withheld\x00' + q.resource_type) in source.records: rec.setdefault('withheld', []).append([q.url, q.resource_type]); return route.abort('aborted')  # COMPARISON-ONLY (plan.qualification_withhold): exactly where the Source booked it; never a received or refused input
             if not q.is_navigation_request(): refused_in.add((q.url, q.resource_type))
             if asked is not None and q.resource_type == 'stylesheet': asked.append(q.url)
             return route.abort('aborted')
@@ -432,9 +471,11 @@ class Context:
         rec['probe'] = {'new_roots': fx['roots'], 'mutations': len(fx['records']), 'requests': len(reqs), 'errors': len(errs)}
         proof = page.evaluate(PROVE, [p, raw.decode('utf-8')]); rec['proof'] = proof
         other = [m for m in fx['records'] if not (m['where'] == 'copy inserted' or (m['where'] == 'inside the copy' and m['type'] == 'attributes'))]  # a reveal may set the copy's own properties; any content change or outside effect is held
+        mut = f"{len(other)} mutation(s) other than the one copy insertion and attribute changes inside the copy (held)"
         why = [w for w, bad in (('incomplete observation after the action', not rec['action_settle']['settled']), ('script error', errs), ('non-GET request', any(r[1] != 'GET' for r in reqs)),
                ('navigation', any(r[3] == 'document' for r in reqs)), ('not exactly one new element root with native copy lineage', len(proof) != 1 or proof[0]['lineage'] is None),
-               (f"{len(other)} mutation(s) other than the one copy insertion and attribute changes inside the copy (held)", other)) if bad]
+               (mut, other)) if bad]
+        cont = self.continuation(rec, list(why), reqs, other, {'non-GET request', mut}, inner=False)  # QUALIFICATION-ONLY diagnostic continuation (root-single-version-qualification): decided on the action-phase reasons only
         if len(proof) == 1 and proof[0]['lineage']:
             L = proof[0]['lineage']; ids = vis.ids.get(L['origin_id'], []) if L['origin_id'] is not None else []
             why += [w for w, bad in (('origin not present before the action', not L['origin_was_present']), ('origin moved', not L['origin_still_connected']), ('copy not shown', not proof[0]['shown']),
@@ -443,7 +484,7 @@ class Context:
             v, why_o = self.scopes[id(page)].from_main(ORIGIN_NODE, [p], 'function () { return window.__sourceScope.notPre(this); }'); rec['origin_in_selected_child'] = v if why_o is None else {'unknown': why_o}  # the selected child's own node, never a parent one; a scope failure: its cause, never True
             if rec['origin_in_selected_child'] is not True: why.append('the origin is not a node of the selected child (a parent-owned equal target does not qualify)')
             if len(ids) == 1 and ids[0]['end'] is not None: rec['target'] = {'declared_id': L['origin_id'], 'source_extent': {'byte_start': ids[0]['start'], 'byte_end_exclusive': ids[0]['end']}}
-        if why: refuse('; '.join(why))
+        if why and not (cont and why == rec['diagnostic_continuation']['rejected']): refuse('; '.join(why))  # the lineage/origin reasons added above are never continued
         br = page.evaluate(BRIDGE, [p]); rec['bridge'] = br
         if not br['performed']: refuse('bridge: ' + br['why'])
         page.evaluate(SET_ORIGIN, [p]); rec['scope_origin'] = list(self.scopes[id(page)].from_main(ORIGIN_NODE, [p], 'function () { return window.__sourceScope.setOrigin(this); }'))
@@ -494,7 +535,8 @@ class Context:
                ('new nodes', not replaced and fx['roots']), ('a change other than an attribute inside the copy or the control\'s own label', not replaced and any(m['where'] not in ('attribute inside the copy', 'control label') for m in fx['records'])),
                ("the copy's content or order changed", not replaced and (before is None or sig() != before))) if bad]
         if rep is not None and not replaced: why.append('not a qualified replacement: ' + (', '.join(k for k, v in rep.items() if not v) or 'unsettled or script error'))
-        if why: refuse('inner action: ' + '; '.join(why))
+        if why and not self.continuation(one, list(why), reqs, [m for m in fx['records'] if m['where'] not in ('attribute inside the copy', 'control label')],
+                                         {'request after the inner action', "a change other than an attribute inside the copy or the control's own label"}, inner=True): refuse('inner action: ' + '; '.join(why))
 
     def observed_labels(self, raw):
         """The acted controls whose own label an action replaced, as the render now being read observed them (its record): {(tag_end, end): {control,
@@ -518,9 +560,23 @@ class Context:
         starts = {i['control'] for r in self.records for i in r.get('inner') or [] if any(m['where'] == 'control label' for m in (i.get('effects') or {}).get('records', []))}
         return [(l['tag_end'], l['end']) for l in sg.Visible(raw).links if l['start'] in starts and l['end'] is not None]
 
+    def continuation(self, rec, why, reqs, records, allowed, inner):
+        """QUALIFICATION-ONLY diagnostic continuation (root-single-version-qualification). Only where the caller's evidence names it ({'diagnostic_continuation': {'bound_href': the proved inserted
+        script's address}} - never set by production settings): an action whose rejected reasons are ALL in `allowed` (its own two bound-script effect
+        classes) and whose every non-GET request (inner action: every request) is a non-GET to that address is observed on instead of refused. Its full rejected reasons, requests and
+        records stay in rec['diagnostic_continuation']; Context.gate keeps the state incomplete. Evidence for the pair comparison only, never a pass."""
+        href = ((self.evidence or {}).get('diagnostic_continuation') or {}).get('bound_href')
+        if not href or not why or not set(why) <= allowed or not all(r[1] != 'GET' and r[2] == href for r in reqs if r[3] != 'document' and (inner or r[1] != 'GET')): return False
+        rec['diagnostic_continuation'] = {'rejected': why, 'requests': [list(r) for r in reqs], 'records': records, 'bound_href': href}; return True
+
+    def diagnostics(self):  # the gate reasons that come only from the qualification-only diagnostic continuation
+        return [f"render {i}: diagnostic continuation (qualification only, never a native success): {c['rejected']}" for i, r in enumerate(self.records)
+                for c in [r.get('diagnostic_continuation')] + [x.get('diagnostic_continuation') for x in r.get('inner') or []] if c]
+
     def gate(self):
         """Why this state is not complete ([] when every render reached it and all agree on the target occurrence and its placement)."""
-        why = [f"render {i} ({'marked' if r.get('marked') else 'unmarked'}): {r['refused']}" for i, r in enumerate(self.records) if r.get('refused')]
+        cont = self.diagnostics()
+        why = cont + [f"render {i} ({'marked' if r.get('marked') else 'unmarked'}): {r['refused']}" for i, r in enumerate(self.records) if r.get('refused')]
         why += [f"render {i} ({'marked' if r.get('marked') else 'unmarked'}): attempted, but no completed native record" for i, r in enumerate(self.records) if not r.get('refused') and not r.get('native')]
         ref = next((r['native'] for r in self.records if not r.get('marked') and r.get('native')), None)  # OCR's strict rule, every attempted render and marker kind
         if ref is None: why.append('neutrality: no unmarked reference render of this state')
@@ -545,7 +601,8 @@ def observed_controls(raw, route, ctx):
     labels = ctx.observed_labels(raw) if ctx.records else {}
     if not labels: return
     pv = route.get('page_visibility'); vis = anchor.Visible(raw, page=pv) if pv else anchor.Visible(raw)
-    owned = sg._owners(vis, route['units'], spaced=True); rendered = [k for k, r in enumerate(ctx.records) if r.get('native')]; state = text_proof(route, ctx)
+    owned = sg._owners(vis, route['units'], spaced=True); rendered = [k for k, r in enumerate(ctx.records) if r.get('native')]; diag = ctx.diagnostics()
+    state = [w for w in ctx.gate() if w not in diag] + ([] if route.get('text_proved') is True or (diag and (route.get('diagnostic') or {}).get('text_proved_before_gate') is True) else ['state route text not proved'])  # text_proof, the QUALIFICATION-ONLY diagnostic gate kept apart (the route stays PARTIAL)
     for (x0, x1), o in sorted(labels.items()):
         owners, why = owned(x0, x1)  # each owner (unit, or a table cell by its anchor's first byte) with the label's own code-point ranges in its saved text
         reasons = [w for w, bad in (('control not shown in the final state', not o['shown']), ('no final native reading of the control', o['after'] is None), ('the label is not owned whole: ' + str(why), owners is None)) if bad] + state
@@ -569,6 +626,13 @@ def state_source(source, evidence, ctx):
     return sg.Source(source.path, dict(source.members), base=source.base, observed=obs, bundle=source.bundle, context=ctx)
 
 
+def same_text(vis, a, b, dom):
+    """True iff `dom` (an element's DOM textContent: CODE_ACTIONS) in the shared comparison form (compare._WS removed) is exactly the scanner's search
+    characters (`vis.idx`, the characters the held/owners rule counts) in that element's bytes [a, b): no held character the parser moved in, out or
+    out of order. White space is not held material in that contract (the scanner's own layout gaps are white space); its roles stay with the reading's gates."""
+    return dom is not None and compare._WS.sub('', dom) == ''.join(vis.text[i] for i in vis.idx if a <= vis.starts[i] < b)
+
+
 def optional_controls(raw, route, records, evidence, child):
     """(why the initial-only view's declared controls stay a deficit - [] means a truthful warning instead, facts). EVERY initial render actually
     made must carry its own code inventory (Scope.code) and pass every condition on its own - no render certifies another, a missing or unknown
@@ -579,46 +643,64 @@ def optional_controls(raw, route, records, evidence, child):
     mine = [v for m in (acquisition, sg) for v in vars(m).values() if isinstance(v, str)] + [v for v in list(globals().values()) + list(OWN_SNIPPETS) if isinstance(v, str)]
     own = {hashlib.sha256(x.encode()).hexdigest() for v in mine for x in (v, INIT_WRAP[0] + v + INIT_WRAP[1])} | set(TOOLING)  # this runtime's own evaluated code, exact (as written or as its init script)
     parent = ((evidence.get('observed') or {}).get(evidence.get('parent_url')) or {}).get('body') or b''  # the recorded viewer page: its own javascript: links
-    declared, targets, inner = {}, {}, []
+    checked, mine_ins = {}, [0]  # mine_ins: objections whose subject is exactly this file's proved inserted script (a typed count, for the producer's eligibility)
+    ins_h, ins_u = (evidence.get('inserted_script') or {}).get('response_sha256'), (evidence.get('inserted_script') or {}).get('href')
+    proved = lambda h, url: bool(ins_u) and h == ins_h and (not url or url == ins_u)  # this file's own proof that these bytes are its one server-inserted script
+    def held_ins(r, h, url, why):  # an objection made about the proved inserted bytes is counted as such; every other objection is not
+        r.append(why); mine_ins[0] += 1 if h and h == ins_h and (not url or url == ins_u) else 0
+    def ok(h, url=None):  # a version outside the reviewed lists admitted by its own record and this file's insertion proof (qualified_version), decided once per call
+        if (h, url) not in checked: checked[(h, url)] = bool(h) and qualified_version(evidence, h, url)[0]  # reviewed bytes too: their own record and this file's proof (no grandfathering)
+        return checked[(h, url)]
+    declared, targets, toggles = {}, {}, []
     for l in route.get('source_links') or []:
         if not l.get('script_action'): continue
         d = l.get('declarations') or []; m = ACTION.fullmatch(d[0].get('value') or '') if len(d) == 1 and d[0].get('name') == 'onclick' else None
         if l.get('href') != 'javascript:void(0);' or m is None: why.append(f"control at {l['tag']['byte_start']}: not one renderer action on javascript:void(0);"); continue
         declared[d[0]['value']] = declared.get(d[0]['value'], 0) + 1
         if m.group('id'): targets[l['tag']['byte_start']] = m.group('id')
-        else: inner.append(l['tag'])
+        # Show.hideAR only hides Show.LastAR, which only Show.showAR sets (pinned Show.js): it reveals nothing. Show.toggleNext: its own DOM walk (CODE_ACTIONS), below
     def one(g):  # one render's own inventory: every condition, nothing borrowed from another render
         r = []
         if g.get('frames') != 0 or g.get('contexts') != []: r.append(f"unsupported active context: {g.get('frames')} child frame(s), other targets {g.get('contexts')}")
-        infra = {u for u, h in observed.items() if h in INFRASTRUCTURE}  # the exact identified bot artifacts' own recorded addresses (owner policy)
+        infra = {u for u, h in observed.items() if ok(h, u)}  # the exact identified (or qualified) bot artifacts' own recorded addresses (owner policy)
         foreign = [x for x in g.get('executed_contexts') if not (not x.get('own_frame') and x.get('creator') and all(u in infra for u in x['creator']))] if isinstance(g.get('executed_contexts'), list) else None
-        if foreign != []: r.append(f"unqualified executed context(s) in this page's lifetime (a child frame not attached by the identified infrastructure, or a foreign world, gone or not): {foreign}")
+        if foreign != []:
+            w = f"unqualified executed context(s) in this page's lifetime (a child frame not attached by the identified infrastructure, or a foreign world, gone or not): {foreign}"
+            only = ins_u and isinstance(foreign, list) and all(not x.get('own_frame') and x.get('creator') and set(x['creator']) == {ins_u} and observed.get(ins_u) == ins_h for x in foreign)
+            held_ins(r, ins_h if only else None, None, w)
         acts = g.get('actions')
         if not isinstance(acts, dict) or 'unknown' in acts: r.append('the DOM control facts are unknown')
         else:
             seen = {}
-            for v, table in acts['actions']:
+            for v, table, *walk in acts['actions']:
                 seen[v] = seen.get(v, 0) + 1; m = ACTION.fullmatch(v or '')
                 if table and m and m.group('id'): r.append(f'Show.showAR {m.group("id")!r}: a following TABLE is shown instead (branch unsupported)')
+                if m and 'toggleNext' in m.group(0):  # pinned Show.toggleNext: the first DIV from the control along its following siblings; no DIV throws, no inline display is a no-op
+                    t = walk[0] if walk else None
+                    if not isinstance(t, dict): r.append('Show.toggleNext: its DOM walk facts are unknown')
+                    elif t['div'] and t['display']:  # it shows or hides that DIV and rewrites the control's own first character: both must lie in an element the reading holds whole
+                        u = [k for k in t.get('holders') or [] if acts['ids'].get(k) == [1, 1]]  # DOM ancestors enclosing control and DIV, one element per id, in the source scope
+                        if u: toggles.append(tuple((k, (acts.get('texts') or {}).get(k)) for k in sorted(u)))  # with the DOM's own text of each
+                        else: r.append('Show.toggleNext: no DOM-unique source-scope element encloses the control and its DIV')
             if seen != declared: r.append('the source-scope onclick controls in the DOM differ from the native declarations')
             for t in sorted(set(targets.values())):
                 if acts['ids'].get(t) != [1, 1]: r.append(f'Show.showAR target {t!r}: {acts["ids"].get(t)} [document, source-scope] elements, not one source-scope id')
         for s in g.get('scripts') or []:
             url, h = s['url'], s['sha256']
-            if h in INFRASTRUCTURE or h in KNOWN_CODE:  # exact reviewed bytes; a fetched one must also be the recorded response at its own address
+            if h in KNOWN_CODE or ok(h, url or None):  # exact reviewed (or qualified) bytes; a fetched one must also be the recorded response at its own address
                 if url and observed.get(url) != h: r.append(f'known code at {url} is not the recorded response')
                 continue
             if url == evidence.get('parent_url') and s.get('template') == VIEWER_TEMPLATE: continue
             if s.get('text') is not None and (s['text'] in declared or s['text'] in VIEWER_ATTRIBUTES): continue  # an attribute handler; its node is checked below
             if not url and h in own: continue  # this runtime's own instrumentation (its module code, inline evaluations, the pinned Playwright's)
             if not url and VIEWER_NAVIGATION.fullmatch(s.get('text') or '') and b'href="javascript:' + s['text'].encode() + b'"' in parent: continue  # the selection's click on a recorded viewer menu link: the template's loadReport(n) only, never arbitrary link code
-            r.append(f"unknown executable code: {url or '(no url)'} {h[:12]} ({s['bytes']} bytes)")
+            held_ins(r, h, url, f"unknown executable code: {url or '(no url)'} {h[:12]} ({s['bytes']} bytes)")
         for l in g.get('listeners') or []:
             s, rel = l.get('script') or {}, l.get('relation')
             if not isinstance(rel, dict) or rel.get('outside') is None: r.append(f"listener {l['type']}: node scope unknown"); continue
             if l.get('window') or rel.get('ancestor'):  # the window, the document or a container of source content (checked first: the document is in no snapshot)
-                if not (s.get('sha256') in INFRASTRUCTURE or (not s.get('url') and s.get('sha256') in TOOLING) or (l['type'] in LIFECYCLE and (s.get('template') == VIEWER_TEMPLATE or s.get('sha256') in KNOWN_CODE))):
-                    r.append(f"listener {l['type']} on an ancestor of source content from {s.get('url') or '(no url)'} {(s.get('sha256') or '')[:12]}")
+                if not (ok(s.get('sha256'), s.get('url') or None) or (not s.get('url') and s.get('sha256') in TOOLING) or (l['type'] in LIFECYCLE and (s.get('template') == VIEWER_TEMPLATE or s.get('sha256') in KNOWN_CODE))):
+                    held_ins(r, s.get('sha256'), s.get('url') or None, f"listener {l['type']} on an ancestor of source content from {s.get('url') or '(no url)'} {(s.get('sha256') or '')[:12]}")
             elif rel['outside'] is False:  # a source node: only its own declared renderer action
                 if not (s.get('text') in declared and s.get('text') in (rel.get('attributes') or [])): r.append(f"listener {l['type']} on a source node is not its own declared action")
             elif not (s.get('sha256') in KNOWN_CODE or s.get('text') in VIEWER_ATTRIBUTES):  # the viewer's own controls (its menu): known code only
@@ -642,17 +724,19 @@ def optional_controls(raw, route, records, evidence, child):
             if r.get('by') == 'id': ids.setdefault(r['value'], []).append((r['start'], r['end']))
         vis = anchor.Visible(raw, page=route.get('page_visibility'), source=True)  # the source reading's own stream (html_route.source_reading)
         held, owners = edgartools_html._holders(child.get('units') or [], vis)[0], sg._owners(vis, child.get('units') or [])  # the one run-to-owner rule
-        spans = []
         for t in sorted(set(targets.values())):
             if len(ids.get(t) or []) != 1: why.append(f'target {t!r}: {len(ids.get(t) or [])} native id records'); continue
-            (a, b), = ids[t]; spans.append((a, b)); _, n, _ = held(a, b); _, bad = owners(a, b)
+            (a, b), = ids[t]; _, n, _ = held(a, b); _, bad = owners(a, b)
             if n == 0 or bad: why.append(f'target {t!r}: {bad or "no character"} (source reading, one run-to-owner rule)')  # every character held, each owner's text the source's own at its places, every character read
-        for tag in inner:
-            if not any(a <= tag['byte_start'] and tag['byte_end_exclusive'] <= b for a, b in spans): why.append(f"control at {tag['byte_start']}: hide/toggle outside every held target")
+        whole = lambda a, b: b is not None and held(a, b)[1] > 0 and owners(a, b)[1] is None  # the targets' rule, on that element's one native id record
+        for u in sorted(set(toggles), key=str):
+            if not any(len(ids.get(k) or []) == 1 and whole(*ids[k][0]) and same_text(vis, *ids[k][0], dom) for k, dom in u):
+                why.append(f'Show.toggleNext: none of its {len(u)} enclosing DOM-unique element(s) is held whole by the source reading with exactly its own source text in the DOM')
     facts = {'controls': sum(declared.values()), 'targets': len(set(targets.values())), 'renders': len(records), 'renders_inventoried': len(done),
              'scripts': [len(g.get('scripts') or []) for g in done], 'listeners': [len(g.get('listeners') or []) for g in done],
              'infrastructure': sorted({INFRASTRUCTURE[s['sha256']] for g in done for s in g.get('scripts') or [] if s['sha256'] in INFRASTRUCTURE}),
-             'inventory_seconds': [g.get('seconds') for g in done]}
+             'inventory_seconds': [g.get('seconds') for g in done], 'qualified_versions': sorted({h for (h, _), v in checked.items() if v}),
+             'inserted_version_objections': mine_ins[0], 'other_objections': len(why) - mine_ins[0]}  # typed: held only by the proved inserted bytes iff other_objections == 0 < inserted_version_objections
     return why, facts
 
 
@@ -672,7 +756,10 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         src = state_source(source, evidence, ctx)
         route, facts = html_route.prepare(raw, file_id, sha256, browser, src, **({} if parse is None else {'parse': parse(ctx.label)})); route['facts'] = facts
         if prepare: prepare(route, src, ctx.label)  # the caller's per-state step; its renders are gated by the same state gate there
-        if route.get('text_proved') is True and ctx.gate(): route['text_proved'] = False  # a later render failed the state gate: the prepare-time proof no longer holds
+        g = ctx.gate()
+        if route.get('text_proved') is True and g:  # a later render failed the state gate: the prepare-time proof no longer holds
+            if len(ctx.diagnostics()) == len(g): route['diagnostic'] = {'text_proved_before_gate': True, 'gate': g}  # QUALIFICATION-ONLY: the native proof kept apart; status stays diagnostic
+            route['text_proved'] = False
         observed_controls(raw, route, ctx)
         return route, src
     def trial(controls, label):  # one unmarked render: the whole native record, or why it was refused

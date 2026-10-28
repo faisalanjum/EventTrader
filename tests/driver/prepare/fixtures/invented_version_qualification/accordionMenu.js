@@ -1,0 +1,3 @@
+function accMenu(){$('#menu ul').hide();$('#menu li a').click(function(){$(this).next().slideToggle('normal')});$('#menu li ul li a.xbrlviewer').first().css('background-color','#C1CDCD');$('#menu_cat0').trigger('click')}
+$(document).ready(function(){accMenu()});function unHighlightAllMenuItems(){$('#menu li ul li a.xbrlviewer').css('background-color','#FFFFFF')}
+function highlightAllMenuItems(){$('#menu li ul li a.xbrlviewer').css('background-color','#C1CDCD')}

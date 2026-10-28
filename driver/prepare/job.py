@@ -111,6 +111,154 @@ def check_output(folder, logs, expected, seconds, renv, row, result, record, wha
     return st, reasons, route
 
 
+QUALIFY_ROUTE = ('units', 'page_visibility', 'source_ids', 'source_relations', 'source_style', 'source_inline', 'source_symbols', 'source_facts', 'generated_content', 'uncovered')
+QUALIFY_SCHEMA, QUALIFY_ROLES = 'script-version-qualification/2', {'normal_result', 'explored_result', 'without_result', 'normal_route', 'without_route', 'normal_acquisition', 'explored_acquisition', 'without_acquisition', 'explored_trials'}
+QUALIFY_PLAN_KEYS = ('context_explore', 'qualification_diagnostic', 'qualification_withhold', 'source_commands')  # the only settings a qualification arm may differ in (same runtime, same store)
+
+
+def compare_views(a, b):
+    """One saved view against another, field by field (the producer's comparison; a may be an explored NORMAL state in its diagnostic representation).
+    Content / visibility / layout fields must be equal; the text proof must be TRUE in both - for a diagnostic route its native proof before the
+    diagnostic gate (route.diagnostic.text_proved_before_gate), never a missing or false value turned true."""
+    tp = lambda r: (r.get('diagnostic') or {}).get('text_proved_before_gate') if r.get('diagnostic') else r.get('text_proved')
+    links = lambda r: [{k: v for k, v in l.items() if k != 'activations'} for l in r.get('source_links') or []]
+    screen = lambda r: {k: v for k, v in ((r.get('facts') or {}).get('screen') or {}).items() if k != 'seconds'}
+    f = {k: a.get(k) == b.get(k) for k in QUALIFY_ROUTE}
+    f.update(text_proved=tp(a) is True and tp(b) is True, source_links=links(a) == links(b), screen=screen(a) == screen(b),
+             **{k: (a.get('facts') or {}).get(k) == (b.get('facts') or {}).get(k) for k in ('visibility', 'formatting')})
+    return f
+
+
+def claim_version(folder, h):
+    """The one exclusive claim per exact bytes, taken BEFORE any expensive qualification run: True for the caller that created it, False when any
+    caller (this job or another) already holds it. Never released or retried: one qualification attempt per version (its record or its absence)."""
+    try: os.close(os.open(Path(folder) / (h + '.claim'), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o444)); return True
+    except FileExistsError: return False
+
+
+def qualify_version(normal, explored, without, folder, runtime_manifest_sha256, file_id):
+    """The producer for qualified_version. Three saved job outputs (job.py out dirs) of ONE file: NORMAL (production settings, the saved result),
+    explored (the same row, context_explore True + qualification_diagnostic: every action observed via the diagnostic continuation, states diagnostic)
+    and WITHOUT (context_explore True + qualification_withhold: the proved inserted script withheld). Each arm: exactly one RESULT row for `file_id`, its
+    plan unchanged since its pin, the same selected source command and common settings (QUALIFY_PLAN_KEYS aside) and the same COMPLETE source and raw
+    reading. passed only if: WITHOUT verified; NORMAL held by its proved inserted bytes only (typed counts, its one deficit exactly); every arm bound the
+    same address and response; no explored action refused; the same state labels; the initial views and EVERY state equal (compare_views), and the
+    source readings' units. The record keeps every compared field per state and the evidence chain; written O_EXCL, never overwritten. -> the record"""
+    read = {}  # every file this decision reads, with its sha256 at the moment it was read: all of them are the record's evidence
+    def rd(x): b = Path(x).read_bytes(); read[str(x)] = hashlib.sha256(b).hexdigest(); return json.loads(b)
+    def sha(x): b = Path(x).read_bytes(); read[str(x)] = hashlib.sha256(b).hexdigest(); return read[str(x)]
+    why, arms = [], {}
+    for name, out in (('normal', normal), ('explored', explored), ('without', without)):
+        res = rd(Path(out) / 'RESULT.json'); rows = [r for r in res.get('rows') or [] if r.get('file_id') == file_id]
+        if len(rows) != 1: why.append(f'{name}: not exactly one row for the file'); continue
+        plan = None
+        try:
+            if sha(res['plan']) != res.get('plan_sha256'): why.append(f'{name}: plan differs from its pin')
+            else: plan = rd(res['plan'])
+        except (OSError, KeyError, TypeError, ValueError): why.append(f'{name}: plan unreadable')
+        arms[name] = (Path(out), rows[0], Path(rows[0]['attempt']), plan)
+    if len(arms) != 3: raise ValueError('; '.join(why))
+    (_, rn, an, pn), (_, rx, ax, px), (_, rw, aw, pw) = arms['normal'], arms['explored'], arms['without']
+    common = lambda p: None if p is None else (json.dumps({k: v for k, v in p.items() if k not in QUALIFY_PLAN_KEYS}, sort_keys=True), json.dumps([c for c in p.get('source_commands') or [] if c.get('file_id') == file_id], sort_keys=True))
+    if None not in (pn, px, pw) and not (common(pn) == common(px) == common(pw)): why.append('the arms ran different plans')
+    src = lambda a: tuple((rd(a / 'COMPLETE.json').get(k)) for k in ('source_sha256', 'raw_reading_sha256'))
+    if not (src(an) == src(ax) == src(aw)): why.append('the arms read different sources')
+    ins = (rd(an / 'CONTEXT_ACQUISITION.json')['record'].get('target') or {}).get('inserted_script') or {}
+    exc = (rd(aw / 'CONTEXT_ACQUISITION.json')['record'].get('target') or {}).get('comparison_exception') or {}
+    h = ins.get('response_sha256')
+    if not h or not ins.get('href'): raise ValueError('NORMAL has no proved inserted script: nothing to qualify')
+    if not (exc.get('bound') is True and exc.get('response_sha256') == h and exc.get('address_sha256') == hashlib.sha256(ins['href'].encode()).hexdigest()): why.append('the arms did not bind the same inserted address and response')
+    if rw.get('outcome') != 'verified_saved_output': why.append('WITHOUT not verified')
+    n_route, w_route = rd(an / 'ROUTE.json'), rd(aw / 'ROUTE.json'); oc = (n_route.get('facts') or {}).get('optional_controls') or {}
+    scripted = sum(1 for l in n_route.get('source_links') or [] if l.get('script_action'))
+    if not (oc.get('other_objections') == 0 and (oc.get('inserted_version_objections') or 0) > 0 and rn.get('reasons') == ['native status PARTIAL']
+            and n_route.get('error') == f'context: {scripted} declared script action(s) not attempted (report-control exploration disabled)'
+            and (rn.get('source_reading') or {}).get('native_status') == 'OK'): why.append('NORMAL is held by more than its proved inserted bytes')
+    fields = dict(compare_views(n_route, w_route), source_reading_units=rd(an / 'source_reading/ROUTE.json').get('units') == rd(aw / 'source_reading/ROUTE.json').get('units'))
+    why += [f'initial views differ: {k}' for k, v in fields.items() if not v]
+    ins_x = (rd(ax / 'CONTEXT_ACQUISITION.json')['record'].get('target') or {}).get('inserted_script') or {}
+    if (ins_x.get('href'), ins_x.get('response_sha256')) != (ins['href'], h): why.append('the explored NORMAL run bound another inserted script')
+    refused = [x.get('label') for x in rd(ax / 'CONTEXT_TRIALS.json') if x.get('refused')]
+    if refused: why.append(f'explored NORMAL left {len(refused)} action(s) unobserved (refused): their states are unqualified')
+    labels = lambda a: sorted(q.name for q in (a / 'states').iterdir()) if (a / 'states').is_dir() else []
+    if labels(ax) != labels(aw): why.append(f'state sets differ: NORMAL {len(labels(ax))}, WITHOUT {len(labels(aw))}')
+    states = {'initial': compare_views(rd(ax / 'ROUTE.json'), w_route)}
+    states.update({lb: compare_views(rd(ax / 'states' / lb / 'ROUTE.json'), rd(aw / 'states' / lb / 'ROUTE.json')) for lb in labels(aw) if lb in labels(ax)})
+    why += [f'state {lb} differs: {k}' for lb, f in states.items() for k, v in f.items() if not v]
+    ev = [{'role': role, 'path': str(x), 'sha256': read.get(str(x)) or sha(x)} for role, x in (('normal_result', Path(normal) / 'RESULT.json'), ('explored_result', Path(explored) / 'RESULT.json'), ('without_result', Path(without) / 'RESULT.json'),
+          ('normal_route', an / 'ROUTE.json'), ('without_route', aw / 'ROUTE.json'), ('normal_acquisition', an / 'CONTEXT_ACQUISITION.json'), ('explored_acquisition', ax / 'CONTEXT_ACQUISITION.json'),
+          ('without_acquisition', aw / 'CONTEXT_ACQUISITION.json'), ('explored_trials', ax / 'CONTEXT_TRIALS.json'))]
+    named = {e['path'] for e in ev}; ev += [{'role': 'operand', 'path': x, 'sha256': h_} for x, h_ in sorted(read.items()) if x not in named]  # plans, COMPLETEs, source readings, every state and initial route
+    rec = {'schema': QUALIFY_SCHEMA, 'script_sha256': h, 'address_sha256': hashlib.sha256(ins['href'].encode()).hexdigest(), 'file_id': file_id, 'runtime_manifest_sha256': runtime_manifest_sha256,
+           'arm_runtime_manifests': {k: (v[3] or {}).get('runtime_manifest') for k, v in arms.items()}, 'outcome': 'held' if why else 'passed', 'reasons': why,
+           'comparison': {'all_equal': all(fields.values()) and all(all(f.values()) for f in states.values()) and not refused and labels(ax) == labels(aw), 'initial_view': fields},
+           'states': states, 'evidence': ev, 'limits': ['one filing: residual page-dependent risk, unmeasured', 'the explored NORMAL states are diagnostic evidence, never a native success']}
+    out = Path(folder) / (h + '.json'); fd = os.open(out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o444)  # never overwritten: one record per exact version
+    with os.fdopen(fd, 'w') as f: json.dump(rec, f, indent=1, sort_keys=True)
+    return rec
+
+
+QUALIFY_ARMS = (('explored', {'context_explore': True, 'qualification_diagnostic': True}), ('without', {'context_explore': True, 'qualification_withhold': True}), ('release', {}))
+
+
+def clean_row(r):  # job.main's own outcome contract: generated, no recorded technical failure, every reconstruct/verify (initial, each state, source reading) exited 0
+    parts = [r] + [s for s in (r.get('states') or {}).values() if isinstance(s, dict)] + ([r['source_reading']] if isinstance(r.get('source_reading'), dict) else [])
+    return r.get('generate_exit') == 0 and not r.get('technical_failures') and all(x.get('reconstruct_exit') == 0 and x.get('verify_exit') == 0 for x in parts)
+
+
+def arm_row(out_dir, file_id, code, name):  # one child job's actual return: exit 0 or 1 only, exactly one finished own row agreeing with it, clean; else why it stops
+    if code not in (0, 1): return None, f'held: {name} child job returned {code}'
+    try: rows = [r for r in json.loads((out_dir / 'RESULT.json').read_bytes())['rows'] if r.get('file_id') == file_id]
+    except (OSError, ValueError, KeyError, TypeError, AttributeError): return None, f'held: {name} child job wrote no readable RESULT'
+    if len(rows) != 1: return None, f'held: {name} child job has {len(rows)} own rows'
+    r = rows[0]
+    if r.get('status') != 'done' or r.get('outcome') not in ('verified_saved_output', 'incomplete') or (code == 0) != (r.get('outcome') == 'verified_saved_output') or not clean_row(r):
+        return None, f"held: {name} child row is not a clean finished attempt ({r.get('status')}, {r.get('outcome')}, exit {code})"
+    return r, None
+
+
+def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, seconds, home):
+    """Owner single-version policy (root-native-automatic-trigger-closeout-20261028t211651877057z): the FIRST file held ONLY by its own proved inserted
+    script version (typed counts, no record for those bytes) qualifies that exact version once, inside this job. One exclusive claim
+    (context.claim_version) before any arm; then one-row child jobs of THIS runtime through the native job CLI (-I -S -B, child accounting, the same
+    per-child seconds, the enclosing process/STOP boundary): the explored NORMAL (diagnostic continuation) and the comparison-only WITHOUT, then
+    context.qualify_version over a frozen copy of this row's held result; only if it passed, exactly one ordinary attempt of the same file, whose
+    actual row becomes this row's outcome (the held attempt kept). Never from a diagnostic or withhold plan, never twice for the same bytes, no retry."""
+    store = plan.get('script_qualifications')
+    if not store or plan.get('qualification_diagnostic') or plan.get('qualification_withhold'): return
+    if row.get('outcome') != 'incomplete' or row.get('reasons') != ['native status PARTIAL'] or not clean_row(row): return  # an independent failure is never spent on arms
+    a = Path(row['attempt'])
+    try:
+        oc = (json.loads((a / 'ROUTE.json').read_bytes()).get('facts') or {}).get('optional_controls') or {}
+        ins = ((json.loads((a / 'CONTEXT_ACQUISITION.json').read_bytes()).get('record') or {}).get('target') or {}).get('inserted_script') or {}
+    except (OSError, ValueError): return
+    h = ins.get('response_sha256')
+    if not (h and oc.get('other_objections') == 0 and (oc.get('inserted_version_objections') or 0) > 0) or (Path(store) / (h + '.json')).exists(): return
+    done = row['qualification'] = {'script_sha256': h}
+    if not claim_version(store, h): done['outcome'] = 'held: this version is claimed by another qualification'; save(result, record); return
+    q = out / f'qualification_{k}'; (q / 'normal').mkdir(parents=True)
+    save(q / 'normal' / 'RESULT.json', {'plan': str(plan_path), 'plan_sha256': pin, 'rows': [dict(row)]})  # the held NORMAL result, frozen as the record's evidence
+    one, env, arms = dict(plan, source_commands=[plan['source_commands'][k]]), {'PATH': '/usr/bin:/bin', 'HOME': home}, {}
+    for name, extra in QUALIFY_ARMS:
+        if name == 'release' and done.get('outcome') != 'passed': break
+        body = json.dumps(dict(one, **extra)).encode(); pp = q / f'{name}_PLAN.json'; pp.write_bytes(body); logs = q / f'{name}_logs'; logs.mkdir()
+        done[name] = {'exit': child([sys.executable, '-I', '-S', '-B', str(HERE / 'job.py'), str(pp), hashlib.sha256(body).hexdigest(), str(q / name), generator, str(seconds)], logs, 'job', ROOT, env),
+                      'observed': observed(logs, 'job'), 'result': str(q / name / 'RESULT.json')}
+        save(result, record)
+        arms[name], why = arm_row(q / name, row['file_id'], done[name]['exit'], name)
+        if why: done['release_outcome' if name == 'release' else 'outcome'] = why; break  # its dependent path stops, truthfully
+        if name == 'without':
+            try:
+                rec = qualify_version(q / 'normal', q / 'explored', q / 'without', store, plan['runtime_manifest']['sha256'], row['file_id'])
+                done.update(outcome=rec['outcome'], reasons=rec['reasons'], record=str(Path(store) / (h + '.json')), record_sha256=hashlib.sha256((Path(store) / (h + '.json')).read_bytes()).hexdigest())
+            except (OSError, ValueError, KeyError) as e: done.update(outcome='held: qualification not comparable', why=repr(e)[:300])
+    if arms.get('release') is not None:  # the parent row becomes the released row whole (its own status, error, evidence, measurements, size, states, source); the held row kept whole
+        held = {key: v for key, v in row.items() if key not in ('ordinal', 'file_id', 'qualification')}
+        for key in held: del row[key]
+        row.update({key: v for key, v in arms['release'].items() if key not in ('ordinal', 'file_id')}, held=held, released_by=str(q / 'release' / 'RESULT.json'))
+    save(result, record)
+
+
 def main(plan_path, pin, out_dir, generator=str(HERE / 'document.py'), seconds=900):  # common per-child time and file-size bounds
     body = Path(plan_path).read_bytes(); assert hashlib.sha256(body).hexdigest() == pin, 'plan pin mismatch'
     plan = json.loads(body)
@@ -161,6 +309,7 @@ def main(plan_path, pin, out_dir, generator=str(HERE / 'document.py'), seconds=9
             st, st_reasons, _ = check_output(sdir, sl, expected, seconds, renv, row, result, record, 'source reading ', row.setdefault('source_reading', {}))
             row['source_reading'] = dict(st, reasons=st_reasons); reasons += [f'source reading: {r}' for r in st_reasons]; save(result, record)
         row.update(status='done', outcome='incomplete' if reasons else 'verified_saved_output', reasons=reasons); save(result, record)
+        if row['outcome'] == 'incomplete': qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, seconds, home)  # the one automatic version qualification
     return 0 if all(r.get('outcome') == 'verified_saved_output' for r in rows) else 1
 
 
