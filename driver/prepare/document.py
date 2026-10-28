@@ -80,6 +80,7 @@ def source_child(attempt, row, raw, displayed, declared, html_route, edgartools_
         if not child.exists(): child.mkdir(mode=0o700); save(child / 'SOURCE.json', dict(declared, reading='source (not a display state)'))  # a reading made with no HTML parse (the XML route)
         finish(child, row, route, {}, archive, save)
     displayed.setdefault('facts', {})['source_reading'] = {'made': True, 'status': route['status'], **({'error': route['error']} if route.get('error') else {})} if route is not None else {'made': False, 'why': why}
+    return route  # the saved reading itself, for a caller that qualifies the displayed route against it (context.optional_controls)
 
 
 def finish(folder, row, route, prepared, archive, save_):
@@ -221,7 +222,7 @@ def main():
                         if label != 'initial': folder(label).mkdir(mode=0o700); save(folder(label) / 'SOURCE.json', dict(declared, state=label))
                         return raw_reading(folder(label), row['file_id'], edgartools_html, archive, acquire)
                     def per_prepare(route_, src, label):
-                        if label == 'initial': source_child(attempt, row, raw, route_, declared, html_route, edgartools_html, archive, acquire)  # once, before the interaction graph
+                        if label == 'initial': src.source_reading_route = source_child(attempt, row, raw, route_, declared, html_route, edgartools_html, archive, acquire)  # once, before the interaction graph; contextual_routes qualifies optional controls against it
                         save(folder(label) / 'ROUTE_BEFORE_INPUTS.json', route_)
                         try: prepared_by[label] = inputs.prepare(raw, route_, members, browser, src)
                         finally:

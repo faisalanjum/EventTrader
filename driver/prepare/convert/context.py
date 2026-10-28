@@ -99,6 +99,42 @@ ISO_INIT = """(() => { const has = Set.prototype.has, add = Set.prototype.add; l
       for (let i = 0; i < nLinks; i++) if (anchors[i].getAttribute('href') !== hrefs[i]) return 'href differs at link ' + i;
       return anchors[k]; }}; })();"""  # pick: the inserted-child link order rule, whole, in this realm; returns the node itself  # parse/pre/origin: this realm only
 ORIGIN_NODE = "([p]) => { " + COMMON + """ const rs = roots(); return rs.length === 1 ? (window.__lineage.origin.get(rs[0]) || null) : null; }"""  # the one new root's native copy origin (main-world clone instrumentation, as PROVE reads it)
+# Optional report controls of an initial-only view (Root order root-fable-p5-native-control-20261028T005238Z). Their "not attempted" deficit becomes a
+# warning only where the page's executable code is completely known and each control can only reveal content the attempt's own typed source reading
+# holds: every main-world script the browser parsed is exact reviewed bytes, the viewer template with only its three data slots, a control's own
+# declared attribute or the viewer menu's; no other listener sits on a source node, a control or any ancestor (owner policy: the exact identified
+# sec.gov-injected bot-detection artifacts are website infrastructure); each Show.showAR resolves, in the DOM, to one source-scope id (a following
+# TABLE branch is unsupported). Anything else keeps the deficit. Reviewed public bytes: P/FABLE_P5_REPORT_CONTROL_EVIDENCE_20261028T002140Z.
+KNOWN_CODE = {'2e4e3855abccb781a7086a1720be0114500d5e252ab21bf2094ea557b6d94901': 'renderer Show.js',
+              '55e5cd7e99fb2aecfd86f64e3daf9c88c4878111d6a79dbeb2eaba58a34aafa8': 'renderer report helper (toggleNextSibling definition)',
+              'fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a': 'viewer jQuery v3.7.1',
+              '2fb11b7660e3be6710a60743c252c4bde9286c70064d8e032c0a20927ea378e9': 'viewer accordionMenu.js'}
+INFRASTRUCTURE = {'0f23ad013f05888115512f5dc6493ac6d6af23358424253090bf565fe81a36ee': 'sec.gov-injected bot detection (AMG campaign, initiator-identified 10-22)',
+                  '39f3dc5b34f614a78075f1824407dc3de33cffcb5e5e3c5fd59a1356d3385d97': 'sec.gov-injected bot detection (CCL campaign, initiator-identified 10-22)'}
+TOOLING = {'764405f9d392d5881909d5d98e159ed8c1fc1a8320a3fc47736a6688e0fcf767': 'pinned Playwright 1.59.0 injected script',  # the run's own instrumentation, exact
+           '6853be72f0e1a5eb5512aebe8549f7efd3342fb57e51395edf5140f427241065': 'pinned Playwright 1.59.0 handle preview',
+           '9e22374178d30310bf36b9ad25aeb7e094195c70fae675a5d8e48cad46b77308': 'pinned Playwright 1.59.0 service-worker block (init script)'}
+UTILITY_WORLD = '__playwright_utility_world_'  # pinned Playwright 1.59.0: its own isolated world in this page's main frame (name + page guid)
+INIT_WRAP = ('(() => {\n      ', '\n    })();')  # pinned Playwright 1.59.0: how add_init_script wraps this runtime's own init scripts (exact)
+OWN_SNIPPETS = ('() => window.__m', 'e => e.click()', 'e => e.checkVisibility()')  # inline evaluations of acquisition.py (l.50/130/132/194) and context.py (Context.page selection click)
+VIEWER_TEMPLATE = '0f8f0dc5ee025f233eec8c14df146e5e4333bc1f0c6fed39c3781a0412780a9f'  # the viewer's inline script, its data slots blanked, byte-exact elsewhere
+VIEWER_SLOTS = ((re.compile(r'^[ \t]*reports\[\d+\] = ("[^"\n]*"|\'[^\'\n]*\');\r?\n', re.M), ''), (re.compile(r'var reports = new Array\(\d+\);'), 'var reports = new Array(<N>);'),
+                (re.compile(r'var url_path = "/Archives/edgar/data/\d+/\d+/";'), 'var url_path = "<FOLDER>";'))
+VIEWER_ATTRIBUTES = frozenset(('javascript:highlight(this);',))  # the viewer menu's own handler
+VIEWER_NAVIGATION = re.compile(r'loadReport\(\d+\);')  # the only viewer menu javascript: code admitted: the pinned template's own loadReport(n) (the selection's click)
+ACTION = re.compile(r"(?:top\.)?Show\.(?:showAR\( this, '(?P<id>[^'\\\r\n  ]+)', window \);|hideAR\(\);|toggleNext\( this \);)")  # the renderer's three control forms, exact; the id literal has no escape or line terminator, so it IS the runtime argument
+LIFECYCLE = frozenset(('load', 'DOMContentLoaded'))  # fire once at load, already past at the initial state
+CODE_NODE = """function () { const s = window.__sourceScope; if (!s) return null; const src = Array.from(document.querySelectorAll('a[href]')).filter(a => s.outside(a) === false);
+  return {outside: s.outside(this), ancestor: src.some(a => a !== this && this.contains(a)), attributes: this.getAttributeNames ? this.getAttributeNames().filter(n => n.toLowerCase().startsWith('on')).map(n => this.getAttribute(n)) : []}; }"""
+CODE_ACTIONS = """(() => { const s = window.__sourceScope; if (!s) return null; const actions = [], ids = {};
+  for (const a of document.querySelectorAll('[onclick]')) { if (s.outside(a) !== false) continue; let e = a; while (e && e.nodeName !== 'TABLE') e = e.nextSibling; actions.push([a.getAttribute('onclick'), !!e]); }
+  for (const n of document.querySelectorAll('[id]')) { const k = n.getAttribute('id'), v = ids[k] || (ids[k] = [0, 0]); v[0]++; if (s.outside(n) === false) v[1]++; }
+  return {actions, ids}; })()"""  # Show.showAR's own walk: a following sibling TABLE is shown instead of the named target
+
+
+def viewer_template(text):
+    for rx, to in VIEWER_SLOTS: text = rx.sub(to, text)
+    return hashlib.sha256(text.encode()).hexdigest()
 
 
 class Scope:
@@ -106,13 +142,15 @@ class Scope:
     page (so each navigation/attempt rebuilds it), that world's context id tracked from the session's own Runtime events. Every ownership question
     is answered in that world: (value, None) or (None, why); no context, a destroyed one or a failed resolution is unknown (None), never outside."""
     def __init__(self, page):
-        self.cdp = page.context.new_cdp_session(page); self.ids = {}; self.frame = self.cdp.send('Page.getFrameTree')['frameTree']['frame']['id']
+        self.cdp = page.context.new_cdp_session(page); self.ids = {}; self.seen = []; self.attached = {}; self.frame = self.cdp.send('Page.getFrameTree')['frameTree']['frame']['id']
         def made(e):
             c = e['context']; aux = c.get('auxData') or {}
+            self.seen.append({'own_frame': aux.get('frameId') == self.frame, 'frame': aux.get('frameId'), 'default': aux.get('isDefault') is True, 'name': c.get('name') or '', 'type': aux.get('type')})  # every context this page ever ran (Scope.code)
             if aux.get('frameId') != self.frame: return
             if c.get('name') == ISO_WORLD: self.ids['iso'] = c['id']
             elif aux.get('isDefault'): self.ids['main'] = c['id']
         self.cdp.on('Runtime.executionContextCreated', made)
+        self.cdp.on('Page.frameAttached', lambda e: self.attached.setdefault(e['frameId'], [f.get('url') or '' for f in ((e.get('stack') or {}).get('callFrames') or [])]))  # the script stack that attached a frame (none: not script-initiated)
         self.cdp.on('Runtime.executionContextDestroyed', lambda e: [self.ids.pop(k) for k, v in list(self.ids.items()) if v == e['executionContextId']])
         self.cdp.on('Runtime.executionContextsCleared', lambda e: self.ids.clear())
         self.cdp.send('Page.enable'); self.cdp.send('Page.addScriptToEvaluateOnNewDocument', {'source': ISO_INIT, 'worldName': ISO_WORLD}); self.cdp.send('Runtime.enable')
@@ -131,6 +169,50 @@ class Scope:
             return self._result(self.cdp.send('Runtime.callFunctionOn', {'objectId': obj, 'returnByValue': True, 'functionDeclaration': fn}))
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: return None, repr(e)[:200]
+    def code(self):
+        """This state's executable code and listeners exactly as the pinned browser reports them (no click, no page function called): every main-world
+        script it had parsed (Debugger.scriptParsed on enable; the exact source's sha256), every listener of the document subtree and the window
+        (DOMDebugger.getEventListeners) with its script and its node's source-scope relation, and each source onclick's Show.showAR facts. A failure
+        is recorded, never a guess (the decision fails closed)."""
+        if 'main' not in self.ids or 'iso' not in self.ids: return {'unknown': 'no scope context'}
+        t0, cdp, parsed = time.monotonic(), self.cdp, {}
+        def keep(e): parsed.setdefault(e['scriptId'], e)
+        cdp.on('Debugger.scriptParsed', keep)
+        try:
+            cdp.send('Debugger.enable'); existing = set(parsed)  # every script parsed so far is reported on enable, before this call returns
+            root = cdp.send('DOM.getDocument', {'depth': 0})['root']
+            doc = cdp.send('DOM.resolveNode', {'backendNodeId': root['backendNodeId'], 'executionContextId': self.ids['main']})['object']['objectId']
+            win = cdp.send('Runtime.evaluate', {'expression': 'window', 'contextId': self.ids['main']})['result']['objectId']  # our own: parsed after `existing`
+            listeners = []
+            for obj in (doc, win):
+                for l in cdp.send('DOMDebugger.getEventListeners', {'objectId': obj, 'depth': -1, 'pierce': True})['listeners']:
+                    node = l.get('backendNodeId'); rel, why = ({'outside': True, 'ancestor': True, 'attributes': []}, None) if node is None else self.node(node, CODE_NODE)
+                    listeners.append({'type': l['type'], 'script_id': l.get('scriptId'), 'window': node is None, 'relation': rel, **({'why': why} if why else {})})
+            actions, why_a = self.call(CODE_ACTIONS)
+            def nested(t): return sum(1 + nested(c) for c in t.get('childFrames') or [])
+            frames = nested(cdp.send('Page.getFrameTree')['frameTree'])  # child frames run code this inventory does not read: the decision fails closed on any
+            me = cdp.send('Target.getTargetInfo')['targetInfo']  # other active contexts of this page (workers, out-of-process frames, opened windows)
+            contexts = sorted(t['type'] for t in cdp.send('Target.getTargets')['targetInfos'] if t.get('browserContextId') == me.get('browserContextId')
+                              and t['targetId'] != me['targetId'] and (t['type'] != 'page' or t.get('openerId') == me['targetId']))
+            wanted = existing | {l['script_id'] for l in listeners}  # attribute handlers are compiled on demand: their scripts are the listeners' own
+            scripts = {}
+            for sid in sorted(wanted, key=str):
+                e = parsed.get(sid)
+                if e is None or e.get('executionContextId') != self.ids['main']: continue
+                text = cdp.send('Debugger.getScriptSource', {'scriptId': sid})['scriptSource']
+                scripts[sid] = {'url': e.get('url') or '', 'sha256': hashlib.sha256(text.encode()).hexdigest(), 'bytes': len(text.encode()),
+                                **({'text': text} if len(text) <= 300 else {}), **({'template': viewer_template(text)} if e.get('url') else {})}
+            for l in listeners: l['script'] = scripts.get(l.pop('script_id'))
+            return {'scripts': sorted(scripts.values(), key=lambda s: (s['url'], s['sha256'])), 'listeners': listeners,
+                    'actions': actions if why_a is None else {'unknown': why_a}, 'frames': frames, 'contexts': contexts,
+                    'executed_contexts': [dict(x, creator=self.attached.get(x['frame'])) for x in self.seen if not (x['own_frame'] and (x['default'] or x['name'] == ISO_WORLD or x['name'].startswith(UTILITY_WORLD)))],
+                    'seconds': round(time.monotonic() - t0, 3)}
+        except (OSError, StorageError, ImportError, MemoryError): raise
+        except Exception as e: return {'unknown': repr(e)[:200]}
+        finally:
+            try: cdp.send('Debugger.disable')
+            except Exception: pass
+            cdp.remove_listener('Debugger.scriptParsed', keep)
     def to_main(self, expr, fn):  # a node the isolated world's own query returns (or its reason, a string), carried into the main world by native identity
         if 'iso' not in self.ids or 'main' not in self.ids: return None, 'no scope context'
         try:
@@ -209,6 +291,7 @@ class Context:
     """One state of one document shown by its observed parent: `evidence` = {parent_url, target_url, observed (Source.observed shape: every recorded
     response, the parent and the target included), selection ({source_anchor}: OCR's recorded parent action), proof (overlay proof of the target
     response: {'form', 'inserted'}[, before, after])}; `control` = the source byte start of the activated source link record, None for the initial view."""
+    inventory = False  # contextual_routes sets it for an initial-only view: each render then records Scope.code (optional_controls)
     def __init__(self, evidence, control=None, label='initial', settle_s=3.0):  # control: a source link start, or (outer, inner, ...) - an outer reveal then controls inside its proved target
         self.controls = [] if control is None else [control] if isinstance(control, int) else list(control)
         self.evidence, self.control, self.label, self.settle_s, self.records, self.reference, self.captures = evidence, (self.controls or [None])[0], label, settle_s, [], None, {}
@@ -309,7 +392,9 @@ class Context:
                 if ref is None and rec['marked']: a['outcome'] = 'not used: no state reference (no unmarked observation completed first)'; break  # nothing to match: no retry
                 if ref is not None and n != ref: a['outcome'] = 'not used: differs from the state reference (' + ', '.join(x for x in ref if n.get(x) != ref[x]) + ')'; continue
                 if ref is None: self.reference = n  # the first completed unmarked observation: fixed for this state, never changed afterwards
-                a['outcome'] = 'used' if ref is not None else 'used: the state reference'; rec['native'] = n; rec['phase'] = 'measurement'; return res
+                a['outcome'] = 'used' if ref is not None else 'used: the state reference'; rec['native'] = n; rec['phase'] = 'measurement'
+                if self.inventory and not self.controls: rec['code'] = scope.code()  # an initial-only view's executable code and listeners (optional_controls reads them)
+                return res
             refuse('neutrality: no observation attempt equalled the state reference (' + '; '.join(f"attempt {x['attempt']} {x['outcome']}" + (f": {x['refused']}" if x.get('refused') else '') for x in rec['attempts'][:-1])
                    + ('; ' if len(rec['attempts']) > 1 else '') + f"attempt {a['attempt']} {a['outcome']}" + (f": {rec['refused']}" if rec.get('refused') else '') + '; its observation is this record\'s own)')
         page.goto = stated
@@ -483,6 +568,92 @@ def state_source(source, evidence, ctx):
     return sg.Source(source.path, dict(source.members), base=source.base, observed=obs, bundle=source.bundle, context=ctx)
 
 
+def optional_controls(raw, route, records, evidence, child):
+    """(why the initial-only view's declared controls stay a deficit - [] means a truthful warning instead, facts). EVERY initial render actually
+    made must carry its own code inventory (Scope.code) and pass every condition on its own - no render certifies another, a missing or unknown
+    inventory fails; then the route's native declarations and ids and the attempt's own typed source reading `child` (one run-to-owner rule).
+    No click is claimed; unknown code, listeners or active contexts, a following-TABLE branch, an escaped or unresolved or ambiguous id, or a
+    target the reading does not hold keeps the deficit."""
+    why, observed = [], {u: o.get('sha256') for u, o in (evidence.get('observed') or {}).items() if o.get('status') == 200}
+    mine = [v for m in (acquisition, sg) for v in vars(m).values() if isinstance(v, str)] + [v for v in list(globals().values()) + list(OWN_SNIPPETS) if isinstance(v, str)]
+    own = {hashlib.sha256(x.encode()).hexdigest() for v in mine for x in (v, INIT_WRAP[0] + v + INIT_WRAP[1])} | set(TOOLING)  # this runtime's own evaluated code, exact (as written or as its init script)
+    parent = ((evidence.get('observed') or {}).get(evidence.get('parent_url')) or {}).get('body') or b''  # the recorded viewer page: its own javascript: links
+    declared, targets, inner = {}, {}, []
+    for l in route.get('source_links') or []:
+        if not l.get('script_action'): continue
+        d = l.get('declarations') or []; m = ACTION.fullmatch(d[0].get('value') or '') if len(d) == 1 and d[0].get('name') == 'onclick' else None
+        if l.get('href') != 'javascript:void(0);' or m is None: why.append(f"control at {l['tag']['byte_start']}: not one renderer action on javascript:void(0);"); continue
+        declared[d[0]['value']] = declared.get(d[0]['value'], 0) + 1
+        if m.group('id'): targets[l['tag']['byte_start']] = m.group('id')
+        else: inner.append(l['tag'])
+    def one(g):  # one render's own inventory: every condition, nothing borrowed from another render
+        r = []
+        if g.get('frames') != 0 or g.get('contexts') != []: r.append(f"unsupported active context: {g.get('frames')} child frame(s), other targets {g.get('contexts')}")
+        infra = {u for u, h in observed.items() if h in INFRASTRUCTURE}  # the exact identified bot artifacts' own recorded addresses (owner policy)
+        foreign = [x for x in g.get('executed_contexts') if not (not x.get('own_frame') and x.get('creator') and all(u in infra for u in x['creator']))] if isinstance(g.get('executed_contexts'), list) else None
+        if foreign != []: r.append(f"unqualified executed context(s) in this page's lifetime (a child frame not attached by the identified infrastructure, or a foreign world, gone or not): {foreign}")
+        acts = g.get('actions')
+        if not isinstance(acts, dict) or 'unknown' in acts: r.append('the DOM control facts are unknown')
+        else:
+            seen = {}
+            for v, table in acts['actions']:
+                seen[v] = seen.get(v, 0) + 1; m = ACTION.fullmatch(v or '')
+                if table and m and m.group('id'): r.append(f'Show.showAR {m.group("id")!r}: a following TABLE is shown instead (branch unsupported)')
+            if seen != declared: r.append('the source-scope onclick controls in the DOM differ from the native declarations')
+            for t in sorted(set(targets.values())):
+                if acts['ids'].get(t) != [1, 1]: r.append(f'Show.showAR target {t!r}: {acts["ids"].get(t)} [document, source-scope] elements, not one source-scope id')
+        for s in g.get('scripts') or []:
+            url, h = s['url'], s['sha256']
+            if h in INFRASTRUCTURE or h in KNOWN_CODE:  # exact reviewed bytes; a fetched one must also be the recorded response at its own address
+                if url and observed.get(url) != h: r.append(f'known code at {url} is not the recorded response')
+                continue
+            if url == evidence.get('parent_url') and s.get('template') == VIEWER_TEMPLATE: continue
+            if s.get('text') is not None and (s['text'] in declared or s['text'] in VIEWER_ATTRIBUTES): continue  # an attribute handler; its node is checked below
+            if not url and h in own: continue  # this runtime's own instrumentation (its module code, inline evaluations, the pinned Playwright's)
+            if not url and VIEWER_NAVIGATION.fullmatch(s.get('text') or '') and b'href="javascript:' + s['text'].encode() + b'"' in parent: continue  # the selection's click on a recorded viewer menu link: the template's loadReport(n) only, never arbitrary link code
+            r.append(f"unknown executable code: {url or '(no url)'} {h[:12]} ({s['bytes']} bytes)")
+        for l in g.get('listeners') or []:
+            s, rel = l.get('script') or {}, l.get('relation')
+            if not isinstance(rel, dict) or rel.get('outside') is None: r.append(f"listener {l['type']}: node scope unknown"); continue
+            if l.get('window') or rel.get('ancestor'):  # the window, the document or a container of source content (checked first: the document is in no snapshot)
+                if not (s.get('sha256') in INFRASTRUCTURE or (not s.get('url') and s.get('sha256') in TOOLING) or (l['type'] in LIFECYCLE and (s.get('template') == VIEWER_TEMPLATE or s.get('sha256') in KNOWN_CODE))):
+                    r.append(f"listener {l['type']} on an ancestor of source content from {s.get('url') or '(no url)'} {(s.get('sha256') or '')[:12]}")
+            elif rel['outside'] is False:  # a source node: only its own declared renderer action
+                if not (s.get('text') in declared and s.get('text') in (rel.get('attributes') or [])): r.append(f"listener {l['type']} on a source node is not its own declared action")
+            elif not (s.get('sha256') in KNOWN_CODE or s.get('text') in VIEWER_ATTRIBUTES):  # the viewer's own controls (its menu): known code only
+                r.append(f"listener {l['type']} on a viewer node from unknown code")
+        return r
+    if not records: why.append('no initial render was recorded')
+    done = []
+    for i, rec in enumerate(records):
+        g = rec.get('code')
+        if not isinstance(g, dict): why.append(f'render {i}: no code inventory'); continue
+        if 'unknown' in g: why.append(f"render {i}: code inventory unknown: {g['unknown']}"); continue
+        why += [f'render {i}: {w}' for w in one(g)]; done.append(g)
+    if len({json.dumps(sorted((s['url'], s['sha256']) for s in g.get('scripts') or [])) for g in done}) > 1: why.append('the initial renders disagree on the executable code')  # in addition to each render's own pass
+    sr = (route.get('facts') or {}).get('source_reading') or {}
+    if not (sr.get('made') is True and sr.get('status') == 'OK' and child is not None and child.get('status') == 'OK'):
+        why.append('the attempt has no OK typed source reading')
+    else:
+        ids = {}
+        for r in (route.get('source_ids') or {}).get('records') or []:
+            if r.get('by') == 'id': ids.setdefault(r['value'], []).append((r['start'], r['end']))
+        vis = anchor.Visible(raw, page=route.get('page_visibility'), source=True)  # the source reading's own stream (html_route.source_reading)
+        held, owners = edgartools_html._holders(child.get('units') or [], vis)[0], sg._owners(vis, child.get('units') or [])  # the one run-to-owner rule
+        spans = []
+        for t in sorted(set(targets.values())):
+            if len(ids.get(t) or []) != 1: why.append(f'target {t!r}: {len(ids.get(t) or [])} native id records'); continue
+            (a, b), = ids[t]; spans.append((a, b)); _, n, _ = held(a, b); _, bad = owners(a, b)
+            if n == 0 or bad: why.append(f'target {t!r}: {bad or "no character"} (source reading, one run-to-owner rule)')  # every character held, each owner's text the source's own at its places, every character read
+        for tag in inner:
+            if not any(a <= tag['byte_start'] and tag['byte_end_exclusive'] <= b for a, b in spans): why.append(f"control at {tag['byte_start']}: hide/toggle outside every held target")
+    facts = {'controls': sum(declared.values()), 'targets': len(set(targets.values())), 'renders': len(records), 'renders_inventoried': len(done),
+             'scripts': [len(g.get('scripts') or []) for g in done], 'listeners': [len(g.get('listeners') or []) for g in done],
+             'infrastructure': sorted({INFRASTRUCTURE[s['sha256']] for g in done for s in g.get('scripts') or [] if s['sha256'] in INFRASTRUCTURE}),
+             'inventory_seconds': [g.get('seconds') for g in done]}
+    return why, facts
+
+
 def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=None, prepare=None, max_states=32, max_transitions=128, explore=True):
     """The initial route, then each source-owned action once (finite): a trial render first; only an action that proves a useful state (an outer reveal
     of one proved target, or an in-place change inside it, or the same control reopening it) gets full per-state extraction. Every trial keeps its
@@ -556,7 +727,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         return act
     def attach(start, act): next(r for r in initial['source_links'] if r['tag']['byte_start'] == start).setdefault('activations', []).append(act)
     def refused(start, label, r, why): attach(start, {'state': None, 'trial': label, 'status': 'refused', 'reasons': [why], 'target': r.get('target'), 'action': 'programmatic HTMLElement.click() (untrusted)'})
-    start = Context(evidence); initial, _ = one(start)  # the initial view: its reference is the 'back to the start' identity
+    start = Context(evidence); start.inventory = not explore; initial, src0 = one(start)  # the initial view: its reference is the 'back to the start' identity; its code inventory only where optional_controls needs it
     out = {'initial': initial, 'states': [], 'trials': [], 'trial_captures': {}}  # trial captures: the caller keeps them once by digest
     unknown, deficits = [], []  # refused source-owned actions (ordinary navigation excepted); the document's required deficits
     for l in vis0.links:  # every source link record shown in the initial reading, once; one hidden there is reachable only inside a revealed target
@@ -614,7 +785,11 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         if graph['frontier']: deficits.append(f"{label}: {len(graph['frontier'])} transition(s) left unexplored at the state ceiling")
     if not explore:  # a context route's declared actions count as qualified only by their activations (html_route): none was attempted, each stays unresolved
         scripted = sum(1 for r in initial.get('source_links') or [] if r.get('script_action'))
-        if scripted: deficits.append(f'{scripted} declared script action(s) not attempted (report-control exploration disabled)')
+        if scripted:  # optional report controls: a warning only where optional_controls proves every one reveals content the source reading holds
+            why, facts = optional_controls(raw, initial, start.records, evidence, getattr(src0, 'source_reading_route', None))
+            initial['facts']['optional_controls'] = dict(facts, reasons=why, outcome='deficit kept' if why else
+                                                         f'warning: {scripted} declared report control(s) not opened (initial view only); each in-page target is held by the source reading')
+            if why: deficits.append(f'{scripted} declared script action(s) not attempted (report-control exploration disabled)')
         elif skipped := sum(1 for l in vis0.links if not l['hidden']):  # no inline declaration is no proof of no action (a parent/delegated listener): each skipped visible link stays unresolved
             deficits.append(f'{skipped} visible source link(s) not attempted, action unresolved (report-control exploration disabled)')
     reached = {c for t in out['trials'] for c in t.get('controls', [])[1:]}
