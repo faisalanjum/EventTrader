@@ -2,7 +2,23 @@
 
 **New owner-authorized campaign, starting 22 October 2026 at 13:03 UTC.** Continue after the completed 18-document review through the 1,000-document final test and necessary repairs. The previous review supports controlled use; it does not establish database-wide recall. This plan supersedes earlier instructions prohibiting new 1,000-run qualification, without reopening the retired score or changing earlier results.
 
-## Current priorities — all 1,000 on one final candidate, 28 October 2026
+## Current launch gate — resolve known failures before the full run
+
+**Owner clarification, 28 October:** the three stylesheet/page-selection failures MUST be resolved too before the 1,000-file run. Fixing the script check does not clear them. Reuse the saved diagnoses, source reviews and prepared inputs; test affected cases first. Do not restart completed investigations or knowingly launch a candidate with required failures still open.
+
+**Current work:** the owner-visible Fable session `46c7d0af-79f9-4ff7-9160-9d9f1b95fa8e` (`driver-helper [6b4197]`) actually received order `root-visible-minimal-script-proof-20261028t173419435185z` at **1:34:56.247 PM EDT**. Scope/first/work/final are 1:39:56.247 / 1:49:56.247 / 2:34:56.247 / 2:49:56.247 PM EDT. Every order/reply must carry both IDs. Background preparation is actually closed with zero sample evaluations; no same-name fallback. The previous V5 button stage is also closed. V5 reports 49 focused and 69 affected passing tests, with overlap; it remains unmerged pending Root review and final applicability.
+
+**Smallest script approach under test:** scripts already run normally. Keep that normal output and use existing native source-fidelity and required-control coverage. The proposed comparison copy withholds exactly one positively bound SEC-inserted script; filing content, visibility, layout and required states must agree, and each copy must independently preserve its original source. No brand, `bmak`, POST behavior or future-version whitelist proves harmlessness. Initial-only comparison, generic substring deletion, arbitrary list sorting and dropping whole code inventories are rejected. No new parser, script auditor, mutation logger, traversal engine or offline verifier. Root reviews the prospective caller inside this same order before sample execution.
+
+**Before bulk work:** reconcile the existing full failure-family accounts to actual fixes and supported settings: scripts/context/listeners, hide/toggle controls, stylesheet and reference selection, action limits, requested-company identity, missing recorded resources and failure/cleanup behavior. Use existing tests and evidence, not another census. A known missing required offline response must be resolved or explicitly block the all-success expectation; no fabricated response or silent live fallback.
+
+**Sequence:** clear known blockers with valid and damage controls; review the minimal diff and applicable regressions; freeze code/environment/settings; verify affected cases and the original 25; then finish the remaining fixed files on that same snapshot. Reuse actually qualifying same-version work. If a repair becomes necessary, preserve completed work and revalidate only evidence it can affect; do not default to restarting everything. After the final freeze, complete the independent 200-filing/32-source test and the operating, context/picture delivery and live-integration gates. An absent consumer remains an explicit gate, not a reason to design a speculative AI subsystem now.
+
+**Limits:** accepted preservation 1,000/source32 and current automatic 11 verified/14 incomplete/975 unstarted are unchanged. Aim for all 1,000; the historical 990 floor is not an all-1,000 claim. No finite preparation can promise zero surprises or perfect future recall/precision. No full run with a known required defect, and no unproved content labelled complete. Runtime `a6d325831` remains pushed and unchanged; no 975/200, main runtime merge, live fetch, database or deployment release.
+
+Order: `/home/faisal/prepare_work/extraction_closeout_20261010/production_qualification_20261022/FABLE_VISIBLE_MINIMAL_SCRIPT_PROOF_20261028T173419435185Z/PUBLIC_ROOT_VISIBLE_FABLE_ORDER.json` (`350ce460`). Actual ACK `a57be0d9`; scope `18e98158`; Root draft review `30ad5555`. Test stays closed until there is a qualified candidate. No Root timer is active.
+
+## Earlier 12:25 PM priorities — retained history, superseded above
 
 **Owner goal:** check every fixed file on the final code and preserve all required content and source connections. A 25-file check catches shared problems early; it does not prove the other 975. Aim for all 1,000 working and report every incomplete or failed file. The historical 990 minimum does not mean all 1,000 worked or guarantee every future filing.
 
