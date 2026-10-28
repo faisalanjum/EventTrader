@@ -36,6 +36,7 @@ class OptionalControls(unittest.TestCase):
         why, facts = call(); self.assertEqual(why, [])
         self.assertEqual((facts['controls'], facts['targets'], facts['renders']), (18, 4, 3))  # fixture facts: 18 declared controls, 4 distinct targets, 3 initial renders
         self.assertEqual(len(facts['infrastructure']), 1)
+        self.assertEqual(sorted(len(c['scripts']) for c in IN['codes']), [179, 181, 181])  # fixture fact: the renders' own-code counts differ (lifetime record)
 
     def test_unknown_action_form(self):
         r = copy.deepcopy(IN['route']); show_links(r)[0]['declarations'][0]['value'] = 'Show.load( this );'
@@ -87,8 +88,14 @@ class OptionalControls(unittest.TestCase):
     def test_unknown_node_scope(self):
         self.assertKept(call(codes=codes(lambda c: c['listeners'][0].__setitem__('relation', None))), 'node scope unknown')
 
-    def test_renders_disagree(self):
-        cs = copy.deepcopy(IN['codes']); cs[1]['scripts'] = cs[1]['scripts'][1:]
+    def test_renders_disagree(self):  # one render lacks a page script
+        cs = copy.deepcopy(IN['codes']); cs[1]['scripts'].remove(next(s for s in cs[1]['scripts'] if s['url'] == SHOW_JS))
+        self.assertKept(call(codes=cs), 'disagree')
+
+    def test_own_code_count_may_differ_page_code_may_not(self):  # this runtime's code runs once per its own call; the page's must agree
+        wrapper = next(s for s in IN['codes'][0]['scripts'] if s['sha256'] in context.TOOLING and s['bytes'] == 61)
+        cs = copy.deepcopy(IN['codes']); cs[1]['scripts'].append(dict(wrapper)); self.assertEqual(call(codes=cs)[0], [])
+        cs = copy.deepcopy(IN['codes']); cs[1]['scripts'].append(dict(next(s for s in cs[1]['scripts'] if s['url'] == SHOW_JS)))
         self.assertKept(call(codes=cs), 'disagree')
 
     def test_no_or_unknown_inventory(self):

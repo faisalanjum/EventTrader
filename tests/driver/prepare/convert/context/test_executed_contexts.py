@@ -24,7 +24,7 @@ class ExecutedContexts(unittest.TestCase):
         ctx = self.browser.new_context(); page = ctx.new_page()
         try:
             page.route('https://fixture.invalid/**', lambda r: r.fulfill(status=200, content_type='text/html', body=body))
-            scope = context.Scope(page); page.goto('https://fixture.invalid/page.html', wait_until='load')
+            scope = context.Scope(page, lifetime=True); page.goto('https://fixture.invalid/page.html', wait_until='load')
             return page.evaluate("() => Show.showAR(null, 't', window)"), scope.code()
         finally:
             ctx.close()

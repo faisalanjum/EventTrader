@@ -113,7 +113,9 @@ INFRASTRUCTURE = {'0f23ad013f05888115512f5dc6493ac6d6af23358424253090bf565fe81a3
                   '39f3dc5b34f614a78075f1824407dc3de33cffcb5e5e3c5fd59a1356d3385d97': 'sec.gov-injected bot detection (CCL campaign, initiator-identified 10-22)'}
 TOOLING = {'764405f9d392d5881909d5d98e159ed8c1fc1a8320a3fc47736a6688e0fcf767': 'pinned Playwright 1.59.0 injected script',  # the run's own instrumentation, exact
            '6853be72f0e1a5eb5512aebe8549f7efd3342fb57e51395edf5140f427241065': 'pinned Playwright 1.59.0 handle preview',
-           '9e22374178d30310bf36b9ad25aeb7e094195c70fae675a5d8e48cad46b77308': 'pinned Playwright 1.59.0 service-worker block (init script)'}
+           '9e22374178d30310bf36b9ad25aeb7e094195c70fae675a5d8e48cad46b77308': 'pinned Playwright 1.59.0 service-worker block (init script)',
+           '12e3bee590e0ccbe3a221b7a19dc098cbe5e66ce06cbe24ecff98e76eef4b4fc': 'pinned Playwright 1.59.0 main-world utility script (server/javascript.js utilityScript(), not under test)',
+           'a3c74b2aecbdd0b615e6a2eed4788a374366e25d5fdcd45dca45d55fbb119046': 'pinned Playwright 1.59.0 evaluate wrapper (server/javascript.js evaluateExpression, as Runtime.callFunctionOn compiles it)'}
 UTILITY_WORLD = '__playwright_utility_world_'  # pinned Playwright 1.59.0: its own isolated world in this page's main frame (name + page guid)
 INIT_WRAP = ('(() => {\n      ', '\n    })();')  # pinned Playwright 1.59.0: how add_init_script wraps this runtime's own init scripts (exact)
 OWN_SNIPPETS = ('() => window.__m', 'e => e.click()', 'e => e.checkVisibility()')  # inline evaluations of acquisition.py (l.50/130/132/194) and context.py (Context.page selection click)
@@ -141,7 +143,7 @@ class Scope:
     """The Context-owned source scope of one owned Page: ONE CDP session, the isolated world named ISO_WORLD registered for every new document of the
     page (so each navigation/attempt rebuilds it), that world's context id tracked from the session's own Runtime events. Every ownership question
     is answered in that world: (value, None) or (None, why); no context, a destroyed one or a failed resolution is unknown (None), never outside."""
-    def __init__(self, page):
+    def __init__(self, page, lifetime=False):  # lifetime: record every script the page parses from before its first navigation (Scope.code)
         self.cdp = page.context.new_cdp_session(page); self.ids = {}; self.seen = []; self.attached = {}; self.frame = self.cdp.send('Page.getFrameTree')['frameTree']['frame']['id']
         def made(e):
             c = e['context']; aux = c.get('auxData') or {}
@@ -154,6 +156,10 @@ class Scope:
         self.cdp.on('Runtime.executionContextDestroyed', lambda e: [self.ids.pop(k) for k, v in list(self.ids.items()) if v == e['executionContextId']])
         self.cdp.on('Runtime.executionContextsCleared', lambda e: self.ids.clear())
         self.cdp.send('Page.enable'); self.cdp.send('Page.addScriptToEvaluateOnNewDocument', {'source': ISO_INIT, 'worldName': ISO_WORLD}); self.cdp.send('Runtime.enable')
+        self.parsed = None
+        if lifetime:  # a late Debugger.enable reports only "known and uncollected" scripts (pinned protocol): enable before any page script runs, keep every one
+            self.parsed = {}; self.cdp.on('Debugger.scriptParsed', lambda e: self.parsed.setdefault(e['scriptId'], e))
+            self.cdp.send('Debugger.enable'); self.cdp.send('Debugger.setSkipAllPauses', {'skip': True})  # never pause the page (a page `debugger;` statement)
     def _result(self, r):
         if r.get('exceptionDetails'): return None, repr((r['exceptionDetails'].get('exception') or {}).get('description') or r['exceptionDetails'].get('text'))[:200]
         return r['result'].get('value'), None
@@ -175,12 +181,11 @@ class Scope:
         (DOMDebugger.getEventListeners) with its script and its node's source-scope relation, and each source onclick's Show.showAR facts. A failure
         is recorded, never a guess (the decision fails closed)."""
         if 'main' not in self.ids or 'iso' not in self.ids: return {'unknown': 'no scope context'}
-        t0, cdp, parsed = time.monotonic(), self.cdp, {}
-        def keep(e): parsed.setdefault(e['scriptId'], e)
-        cdp.on('Debugger.scriptParsed', keep)
+        if self.parsed is None: return {'unknown': 'no lifetime script record (the debugger was not enabled before page execution)'}
+        t0, cdp, parsed = time.monotonic(), self.cdp, self.parsed
         try:
-            cdp.send('Debugger.enable'); existing = set(parsed)  # every script parsed so far is reported on enable, before this call returns
-            root = cdp.send('DOM.getDocument', {'depth': 0})['root']
+            root = cdp.send('DOM.getDocument', {'depth': 0})['root']  # a round trip on this session first: every scriptParsed sent before it is delivered
+            existing = set(parsed)  # every script this page parsed in its lifetime so far, collected or not
             doc = cdp.send('DOM.resolveNode', {'backendNodeId': root['backendNodeId'], 'executionContextId': self.ids['main']})['object']['objectId']
             win = cdp.send('Runtime.evaluate', {'expression': 'window', 'contextId': self.ids['main']})['result']['objectId']  # our own: parsed after `existing`
             listeners = []
@@ -209,10 +214,6 @@ class Scope:
                     'seconds': round(time.monotonic() - t0, 3)}
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: return {'unknown': repr(e)[:200]}
-        finally:
-            try: cdp.send('Debugger.disable')
-            except Exception: pass
-            cdp.remove_listener('Debugger.scriptParsed', keep)
     def to_main(self, expr, fn):  # a node the isolated world's own query returns (or its reason, a string), carried into the main world by native identity
         if 'iso' not in self.ids or 'main' not in self.ids: return None, 'no scope context'
         try:
@@ -314,7 +315,7 @@ class Context:
         page = browser.new_page(viewport={'width': 1400, 'height': 1000}, service_workers='block', offline=True)  # native: an owned context; Page.close closes it
         if measured is not None and 'window' in rec['overlay']:  # an inserted run (SEC's server adds one to some pages): accepted only where it is node-level (OCR's native proof)
             cs = re.search(r'charset=([^;\s]+)', t.get('content_type') or '', re.I); rec['node_level'] = overlay.node_level(page, measured, rec['overlay'], cs.group(1) if cs else 'utf-8')
-        scope = self.scopes[id(page)] = Scope(page); page.on('close', lambda _: self.scopes.pop(id(page), None)); page.context.add_init_script(INIT); page.context.add_init_script(acquisition.INIT); rec['inflight'] = acquisition.count_requests(page); served = [False]; got_in, refused_in = set(), set()  # this render's received inputs (OCR facts: delivered identities, refused GETs)
+        scope = self.scopes[id(page)] = Scope(page, lifetime=self.inventory); page.on('close', lambda _: self.scopes.pop(id(page), None)); page.context.add_init_script(INIT); page.context.add_init_script(acquisition.INIT); rec['inflight'] = acquisition.count_requests(page); served = [False]; got_in, refused_in = set(), set()  # this render's received inputs (OCR facts: delivered identities, refused GETs)
         def answer(route):
             q = route.request; r4 = [rec['phase'], q.method, q.url, q.resource_type]; rec['requests'].append(r4)  # the four raw fields, recorded first and always
             try: r4.append(bool(q.is_navigation_request() and q.frame.parent_frame is None))  # fifth field: a main-frame navigation by the browser's own facts (Request.is_navigation_request, Frame.parent_frame); a child-frame document load is not one
@@ -630,7 +631,8 @@ def optional_controls(raw, route, records, evidence, child):
         if not isinstance(g, dict): why.append(f'render {i}: no code inventory'); continue
         if 'unknown' in g: why.append(f"render {i}: code inventory unknown: {g['unknown']}"); continue
         why += [f'render {i}: {w}' for w in one(g)]; done.append(g)
-    if len({json.dumps(sorted((s['url'], s['sha256']) for s in g.get('scripts') or [])) for g in done}) > 1: why.append('the initial renders disagree on the executable code')  # in addition to each render's own pass
+    page_code = lambda g: sorted((s['url'], s['sha256']) for s in g.get('scripts') or [] if s['url'] or s['sha256'] not in own)  # this runtime's own code runs once per its own call
+    if len({json.dumps(page_code(g)) for g in done}) > 1: why.append('the initial renders disagree on the executable code')  # in addition to each render's own pass
     sr = (route.get('facts') or {}).get('source_reading') or {}
     if not (sr.get('made') is True and sr.get('status') == 'OK' and child is not None and child.get('status') == 'OK'):
         why.append('the attempt has no OK typed source reading')
