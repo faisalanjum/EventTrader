@@ -35,7 +35,8 @@ def declared_source(row, manifest, members, screen_grid, acquire):
     if wanted is not None and acquire._identity(identity['accession'], wanted, identity['form'])['cik'] not in identity['ciks']: raise ValueError('requested CIK is not one of the package')
     cik = acquire._identity(identity['accession'], wanted, identity['form'])['cik'] if wanted is not None else identity['ciks'][0] if len(identity['ciks']) == 1 else None
     base = None if cik is None else acquire._url(acquire._identity(identity['accession'], cik, identity['form'])).rsplit('/', 1)[0] + '/'
-    observed = {o['url']: dict(o, body=bytes.fromhex(o['body'])) if 'body' in o else dict(o) for o in row.get('observed_responses', [])}
+    observed = {o['url']: {**{k: o.get(k) for k in ('status', 'content_type', 'observed_at', 'sha256')}, 'body': bytes.fromhex(o['body']) if 'body' in o else None}
+                for o in row.get('observed_responses', [])}  # Source's own form, as the context records responses (_get, _failed): the url is the key, an omitted body none
     declared = {'path': row['filename'], 'bundle': manifest['package']['sha256'], 'requested_cik': cik, 'base': base,
                 'base_from': None if base is None else 'requested filing directory of the package address (declared derivation, not an observed response)',
                 **({} if base else {'no_base': 'several CIKs and no requested_cik' if len(identity['ciks']) > 1 else 'no CIK'}), 'observed_urls': sorted(observed)}
