@@ -4,7 +4,7 @@
 
 ## Current priorities — finish known failures before bulk
 
-**28 October 2026, 11:42 PM EDT:** the corrected code and two small test inputs are ready. Root reviewed the completed preparation and released exactly one run: the original page whose script qualification previously timed out (case6617). The existing Test agent was queued once at11:42:32.812207PM EDT and actually received the order at11:42:41.682485PM EDT. Latest launch11:52:41.682485PM/first11:57:41.682485PM; work6:12:41.682485AM/final6:27:41.682485AM EDT on29October. Launch is not yet observed. The stylesheet case4488 is prepared but unreleased. The fixed1,000 has not been released.
+**28 October 2026, 11:42 PM EDT:** the corrected code and two small test inputs are ready. Root reviewed the completed preparation and released exactly one run: the original page whose script qualification previously timed out (case6617). The existing Test agent was queued once at11:42:32.812207PM EDT and actually received the order at11:42:41.682485PM EDT. Latest launch11:52:41.682485PM/first11:57:41.682485PM; work6:12:41.682485AM/final6:27:41.682485AM EDT on29October. The one unchanged service actually launched11:47:10.681778PM EDT, before the original latest-launch limit. InvocationIDb0fc667fe00f4df3ac722aaef2f1ddbe; native outcome pending. MainPID1313550 is flock, with native Python child1313551. The administrative process-role report failed an assertion and stays stopped; independent recorded lifecycle custody is positive, with no native retry. The stylesheet case4488 is prepared but unreleased. The fixed1,000 has not been released.
 
 | Priority | Work | Required result |
 |---|---|---|
