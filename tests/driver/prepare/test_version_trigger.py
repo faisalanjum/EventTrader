@@ -96,6 +96,29 @@ class ChildBoundaryAndRelease(unittest.TestCase):  # job.qualify_first with cont
                 self.tearDown(); self.setUp(); self.row.update(bad); self.go(); self.assertEqual(self.ran, []); self.assertNotIn('qualification', self.row)
                 self.assertFalse((self.store / (H + '.claim')).exists())
 
+    # root-qualification-failure-propagation-and-retained-timeout-20261029t004424909762z: a technical child failure must reach the PARENT row's own
+    # structured outcome contract (clean_row: the fields every row reader checks), never read as ordinary incompleteness; verdicts and holds stay clean
+    TECHNICAL = ((2, None), (124, None), (-9, None), (1, 'missing'), (1, 'malformed'), (1, []), (1, [dict(ROW_PARTIAL, ordinal=0, file_id='f/R1.htm')] * 2),
+                 (1, dict(ROW_PARTIAL, status='composing')), (1, dict(ROW_PARTIAL, outcome='generation_failed', generate_exit=124)), (1, dict(ROW_PARTIAL, outcome='identity_mismatch')),
+                 (0, ROW_PARTIAL), (1, ROW_OK), (1, dict(ROW_PARTIAL, technical_failures=['R.json: ValueError'])), (1, dict(ROW_PARTIAL, reconstruct_exit=1)),
+                 (1, dict(ROW_PARTIAL, states={'activated@1': {'reconstruct_exit': 0, 'verify_exit': 2}})), (1, dict(ROW_PARTIAL, source_reading={'reconstruct_exit': 0, 'verify_exit': 1})))
+    def test_a_technical_child_failure_of_any_arm_reaches_the_parent_row(self):
+        for arm in ('explored', 'without', 'release'):
+            for case in self.TECHNICAL:
+                with self.subTest(arm=arm, case=str(case)[:80]):
+                    self.tearDown(); self.setUp(); self.spec[arm] = case; r = self.go()
+                    self.assertEqual(self.ran[-1], arm); self.assertEqual((r['outcome'], r['native_error'], r['attempt_bytes']), ('incomplete', 'held initial error', 100))  # never bound
+                    self.assertFalse(job.clean_row(r)); self.assertEqual(len(r['technical_failures']), 1); self.assertEqual(len(r['reasons']), 2)
+    def test_a_qualification_that_cannot_be_compared_is_technical(self):
+        def broken(*a): raise ValueError('evidence unreadable')
+        job.qualify_version = broken; r = self.go(); self.assertEqual(self.ran, ['explored', 'without']); self.assertFalse(job.clean_row(r)); self.assertEqual(len(r['technical_failures']), 1)
+    def test_verdicts_and_holds_stay_clean(self):  # the expected diagnostic exit 1, a comparison mismatch, a lost claim and a reused record are no technical failure
+        self.spec['explored'] = (1, None); r = self.go(); self.assertEqual(r['outcome'], 'verified_saved_output'); self.assertTrue(job.clean_row(r)); self.assertNotIn('technical_failures', r)
+        self.tearDown(); self.setUp(); self.spec['explored'] = (1, None); job.qualify_version = lambda normal, explored, without, store, *a: (Path(store) / (H + '.json')).write_text('{}') and {'outcome': 'held', 'reasons': ['state sets differ']}; r = self.go()  # the producer saves held records too
+        self.assertEqual((r['outcome'], r['qualification']['outcome'], self.ran), ('incomplete', 'held', ['explored', 'without'])); self.assertTrue(job.clean_row(r)); self.assertNotIn('technical_failures', r)
+        self.tearDown(); self.setUp(); (self.store / (H + '.claim')).write_text(''); r = self.go(); self.assertEqual(self.ran, []); self.assertTrue(job.clean_row(r)); self.assertNotIn('technical_failures', r)
+        self.tearDown(); self.setUp(); (self.store / (H + '.json')).write_text('{}'); r = self.go(); self.assertEqual(self.ran, []); self.assertNotIn('qualification', r); self.assertTrue(job.clean_row(r))
+
 
 if __name__ == '__main__':
     unittest.main()

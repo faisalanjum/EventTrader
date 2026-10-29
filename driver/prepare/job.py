@@ -217,6 +217,10 @@ def arm_row(out_dir, file_id, code, name):  # one child job's actual return: exi
     return r, None
 
 
+def technical(row, what):  # a failed qualification child or unreadable comparison is THIS row's technical failure, in the same fields check_output uses
+    row.setdefault('technical_failures', []).append(what); row['reasons'] = row.get('reasons', []) + [f'technical failure: {what}']  # so clean_row and every row reader see it
+
+
 def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, seconds, home):
     """Owner single-version policy (root-native-automatic-trigger-closeout-20261028t211651877057z): the FIRST file held ONLY by its own proved inserted
     script version (typed counts, no record for those bytes) qualifies that exact version once, inside this job. One exclusive claim
@@ -246,12 +250,12 @@ def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, 
                       'observed': observed(logs, 'job'), 'result': str(q / name / 'RESULT.json')}
         save(result, record)
         arms[name], why = arm_row(q / name, row['file_id'], done[name]['exit'], name)
-        if why: done['release_outcome' if name == 'release' else 'outcome'] = why; break  # its dependent path stops, truthfully
+        if why: done['release_outcome' if name == 'release' else 'outcome'] = why; technical(row, f'qualification {name}: {why}'); break  # its dependent path stops, truthfully
         if name == 'without':
             try:
                 rec = qualify_version(q / 'normal', q / 'explored', q / 'without', store, plan['runtime_manifest']['sha256'], row['file_id'])
                 done.update(outcome=rec['outcome'], reasons=rec['reasons'], record=str(Path(store) / (h + '.json')), record_sha256=hashlib.sha256((Path(store) / (h + '.json')).read_bytes()).hexdigest())
-            except (OSError, ValueError, KeyError) as e: done.update(outcome='held: qualification not comparable', why=repr(e)[:300])
+            except (OSError, ValueError, KeyError) as e: done.update(outcome='held: qualification not comparable', why=repr(e)[:300]); technical(row, 'qualification not comparable: ' + repr(e)[:300])
     if arms.get('release') is not None:  # the parent row becomes the released row whole (its own status, error, evidence, measurements, size, states, source); the held row kept whole
         held = {key: v for key, v in row.items() if key not in ('ordinal', 'file_id', 'qualification')}
         for key in held: del row[key]
