@@ -335,6 +335,7 @@ class Context:
         self.controls = [] if control is None else [control] if isinstance(control, int) else list(control)
         self.evidence, self.control, self.label, self.settle_s, self.records, self.reference, self.captures = evidence, (self.controls or [None])[0], label, settle_s, [], None, {}
         self.scopes = {}  # id(owned page) -> its Scope (the isolated-world source scope)  # reference: the state's first completed unmarked observation
+        self.named_by = None  # a trial-named state (contextual_routes): the trial's own native record that named it; this extraction must be that observation
         self.parent_hrefs = [l['href'] for l in sg.Visible(evidence['observed'][evidence['parent_url']]['body']).links]
 
     def identity(self):
@@ -431,6 +432,7 @@ class Context:
                 a['native'] = n; ref = self.reference
                 if ref is None and rec['marked']: a['outcome'] = 'not used: no state reference (no unmarked observation completed first)'; break  # nothing to match: no retry
                 if ref is not None and n != ref: a['outcome'] = 'not used: differs from the state reference (' + ', '.join(x for x in ref if n.get(x) != ref[x]) + ')'; continue
+                if ref is None and self.named_by is not None and n != self.named_by: a['outcome'] = 'not used: differs from the trial observation that named the state (' + ', '.join(x for x in self.named_by if n.get(x) != self.named_by.get(x)) + ')'; continue  # a trial-named state's reference is only its own observation of that state
                 if ref is None: self.reference = n  # the first completed unmarked observation: fixed for this state, never changed afterwards
                 a['outcome'] = 'used' if ref is not None else 'used: the state reference'; rec['native'] = n; rec['phase'] = 'measurement'
                 if self.inventory and not self.controls: rec['code'] = scope.code()  # an initial-only view's executable code and listeners (optional_controls reads them)
@@ -582,6 +584,7 @@ class Context:
         if ref is None: why.append('neutrality: no unmarked reference render of this state')
         else: why += [f"neutrality: render {i} ({'marked' if r.get('marked') else 'unmarked'}) differs from the unmarked reference ({', '.join(k for k in ref if r['native'].get(k) != ref[k])})"
                       for i, r in enumerate(self.records) if r.get('native') and r['native'] != ref]
+        if self.named_by is not None and ref is not None and ref != self.named_by: why.append("state identity: this extraction's reference differs from the trial observation that named the state")
         if self.control is not None and not why:
             seen = {json.dumps([r.get('target'), (r.get('observe') or {}).get('copy'), [(i['control'], [(m['target'], m['attribute'], m['now']) for m in i['effects']['records']]) for i in r.get('inner') or []]], sort_keys=True) for r in self.records}
             if len(seen) != 1: why.append(f'neutrality: renders disagree on the target occurrence or its placement ({len(seen)} distinct readings across {len(self.records)} renders)')
@@ -825,7 +828,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         r, probe, why = trial(l['start'], f"trial@{l['start']}")
         if probe and not any(probe.values()): continue  # located, clicked, nothing happened: a no-op, no state
         if why: refused(l['start'], f"trial@{l['start']}", r, why); continue  # an attempted action that proved no target state: its record kept, no extraction
-        label = f"activated@{l['start']}"; ctx = Context(evidence, control=l['start'], label=label); route, _ = one(ctx)
+        label = f"activated@{l['start']}"; ctx = Context(evidence, control=l['start'], label=label); ctx.named_by = r.get('native') or {}; route, _ = one(ctx)  # named by its trial (none: unproved)
         act = activation(ctx, route, label); out['states'].append({'label': label, 'control': l['start'], 'route': route, 'records': ctx.records}); attach(l['start'], act)
         if not act['target']: continue
         x0, x1 = act['target']['source_extent']['byte_start'], act['target']['source_extent']['byte_end_exclusive']; family = [(label, route, ctx)]
@@ -838,9 +841,10 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
             inner = rec.get('inner') or []; copy = (rec.get('observe') or {}).get('copy')  # same instance only by this observation, never by a matching hash
             return {'copy': copy, 'actions': [{'located': i.get('located'), 'new_roots': (i.get('probe') or {}).get('new_roots'), 'copy_shown_after': i.get('copy_shown_after')} for i in inner],
                     'same_instance': copy is not None and all((i.get('probe') or {}).get('new_roots') == 0 for i in inner), 'replacements': [i['replacement'] for i in inner if i.get('replacement')]}
-        seen = {k: v for k, v in ((ident(start.reference), 'initial'), (ident(r.get('native')), label)) if k}
-        graph = {'states': [label], 'edges': [], 'noops': 0, 'refused': 0, 'transitions': 0, 'frontier': [], 'ceilings': {'states': max_states, 'transitions': max_transitions}}
-        queue = [((l['start'],), label)]
+        proved = r.get('native') == ctx.reference  # its own trial and extraction agree: only then enrolled and expanded (else held by its own gate)
+        seen = {k: v for k, v in ((ident(start.reference), 'initial'), (ident(r.get('native')) if proved else None, label)) if k}
+        graph = {'states': [label], 'edges': [], 'noops': 0, 'refused': 0, 'transitions': 0, 'frontier': [], 'unexpanded': [] if proved else [label], 'ceilings': {'states': max_states, 'transitions': max_transitions}}
+        queue = [((l['start'],), label)] if proved else []  # never a traversal from an unproved state
         while queue:
             base, at = queue.pop(0)
             for c in moves:
@@ -854,10 +858,13 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
                 if ((r2.get('inner') or [{}])[-1]).get('replacement'):  # a qualified replacement only ever reaches an already-qualified exact state; unmatched: unknown, never a new state
                     why = 'a replacement whose native state equals no already-qualified state'; graph['refused'] += 1; unknown.append(tl); refused(c, tl, r2, why)
                     graph['edges'].append({'from': at, 'control': c, 'to': None, 'kind': 'refused', 'trial': tl, 'lineage': lineage(r2)}); continue
-                ilabel = 'activated@' + '+'.join(map(str, seq)); ictx = Context(evidence, control=seq, label=ilabel); iroute, _ = one(ictx)
+                ilabel = 'activated@' + '+'.join(map(str, seq)); ictx = Context(evidence, control=seq, label=ilabel); ictx.named_by = r2.get('native') or {}; iroute, _ = one(ictx)
                 out['states'].append({'label': ilabel, 'control': list(seq), 'route': iroute, 'records': ictx.records}); attach(c, activation(ictx, iroute, ilabel, act['target'])); family.append((ilabel, iroute, ictx))
-                if key: seen[key] = ilabel
-                graph['states'].append(ilabel); graph['edges'].append({'from': at, 'control': c, 'to': ilabel, 'kind': 'new state', 'trial': tl, 'lineage': lineage(r2)}); queue.append((seq, ilabel))
+                ok = r2.get('native') == ictx.reference  # enrolled and expanded only when its own trial and extraction agree (else held by its gate, never an edge target)
+                if key and ok: seen[key] = ilabel
+                graph['states'].append(ilabel); graph['edges'].append({'from': at, 'control': c, 'to': ilabel, 'kind': 'new state', 'trial': tl, 'lineage': lineage(r2)})
+                if ok: queue.append((seq, ilabel))
+                else: graph['unexpanded'].append(ilabel)
         act['state_graph'] = graph
         if graph['frontier']: act['status'] = 'incomplete'; act['reasons'] = act['reasons'] + [f"state graph: {len(graph['frontier'])} transition(s) left unexplored at the ceiling"]
         target_runs = [(chars[0][0], chars[-1][1]) for _, chars, _, ok in runs0 if ok and x0 <= chars[0][0] and chars[-1][1] <= x1 and sg._glyphs(raw, chars)[1]]  # white space only: nothing to show
