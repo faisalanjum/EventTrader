@@ -6,7 +6,8 @@ record after the parent RESULT changed. Damage: the same bot also rewriting fili
 Run with the qualified interpreter from this checkout. Environment: BROWSER_EXECUTABLE (default: the pinned headless shell path in version_fixture)."""
 import json, tempfile, unittest
 from pathlib import Path
-from tests.driver.prepare import version_fixture as vf
+from tests.driver.prepare import version_fixture as vf, test_version_trigger as vt  # vt: the early-hold outcome text (a module, so its tests are not collected twice)
+from driver.prepare import job
 
 rd = lambda p: json.loads(Path(p).read_bytes())
 
@@ -45,10 +46,12 @@ class AScriptThatChangesFilingTextIsHeld(unittest.TestCase):
     def setUpClass(cls):
         cls.t = Path(tempfile.mkdtemp(prefix='vq_native_evil_')); cls.pp, cls.pin, cls.f = vf.build(cls.t, bot=vf.EVIL)
         cls.exit, cls.out = vf.run_job(cls.t, cls.pp, cls.pin); cls.row = rd(cls.out / 'RESULT.json')['rows'][0]
-    def test_no_qualification_and_no_release(self):
-        q = self.row['qualification']; self.assertEqual((self.exit, self.row['outcome'], q['outcome']), (1, 'incomplete', 'held')); self.assertTrue(q['reasons'])
-        self.assertNotIn('release', q); self.assertNotIn('held', self.row); self.assertFalse((self.out / 'qualification_0' / 'release').exists())
-        self.assertEqual(rd(q['record'])['outcome'], 'held')
+    def test_no_qualification_and_no_release(self):  # root-bound-native-early-stop-and-damage-checks-20261029t095934395308z: the explored products already fail the producer's
+        # own NORMAL/explored checks, so the version is held before WITHOUT: no WITHOUT or release child, no record (fail closed), the claim kept, no technical failure
+        q = self.row['qualification']; self.assertEqual((self.exit, self.row['outcome'], q['outcome']), (1, 'incomplete', vt.HELD)); self.assertTrue(q['reasons'])
+        self.assertNotIn('without', q); self.assertNotIn('release', q); self.assertNotIn('record', q); self.assertNotIn('held', self.row)
+        self.assertFalse((self.out / 'qualification_0' / 'without').exists()); self.assertFalse((self.out / 'qualification_0' / 'release').exists())
+        self.assertEqual(sorted(p.name for p in self.f['store'].iterdir()), [self.f['bot_sha256'] + '.claim']); self.assertTrue(job.clean_row(self.row))
 
 
 if __name__ == '__main__':
