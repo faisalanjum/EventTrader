@@ -1,0 +1,22 @@
+# REVIEWABLE - NOT APPLIED. image8 = image6 + header split only (converter 49cc35ed, README e0046591, runtime manifest d4aaffde); native EdgarTools unchanged. Pushed (private) 08:54 AM EDT Oct 31, tag prepared-candidate-20261031-8, digest e8ca7a58...
+# Image: image8 = local sha256:6101d010 = FROM image6 (sha256:8f2c2f9e) + runtime convert/edgartools_html.py 49cc35ed, README.md e0046591, RUNTIME_MANIFEST_ROLE.json d4aaffde; pushed PRIVATE 08:54 AM EDT Oct 31 as tag prepared-candidate-20261031-8 (registry digest in the image line). Pair with configmap-prepared-adapter.image8.yaml (manifest d4aaffde).
+spec:
+  strategy: {type: Recreate, rollingUpdate: null}   # the processing list has ONE owner: the old pod stops before the new one starts
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum2          # the hostPath below is node-local
+      containers:
+      - name: enricher
+        image: faisalanjum/report-enricher@sha256:e8ca7a5887dcce986f18b377917fa1e4a07c0684c2e6edfc15e2010978a27adc   # prepared-candidate-20261031-8
+        env:
+        - name: PREPARED_EXTRACTION_CONFIG             # unset = today's worker path exactly (seam tests 5/5)
+          value: /etc/prepared/adapter_config.json
+        volumeMounts:
+        - {name: prepared-output, mountPath: /data/sec_prepared}
+        - {name: prepared-config, mountPath: /etc/prepared, readOnly: true}
+      volumes:
+      - name: prepared-output
+        hostPath: {path: /home/faisal/data/sec_prepared, type: Directory}   # must exist BEFORE the pod starts
+      - name: prepared-config
+        configMap: {name: prepared-adapter-config}

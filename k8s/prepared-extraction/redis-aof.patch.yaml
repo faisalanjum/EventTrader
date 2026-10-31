@@ -1,0 +1,10 @@
+# PREPARED - NOT APPLIED. Strategic-merge patch for deployment/redis (namespace infrastructure). Apply ONLY after the online AOF enable has finished (REDIS_AOF_PREPARED.txt step R3).
+# Recreate: the RWO local-path /data must never have two Redis processes. Image pinned to the CURRENT running 7.4.4 digest (not mutable redis:7).
+spec:
+  strategy: {type: Recreate, rollingUpdate: null}
+  template:
+    spec:
+      containers:
+      - name: redis
+        image: redis@sha256:7b5ee51c14cf5febd4adde3a4b6cced72efdf154df7e9a0383163b13e16e9091
+        args: ["--appendonly", "yes", "--appendfsync", "always"]   # official entrypoint: leading '-' args go to redis-server

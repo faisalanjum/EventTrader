@@ -1,0 +1,199 @@
+{
+ "created_utc": "2026-10-30T17:53:25Z",
+ "package": "/home/faisal/prepare_work/extraction_closeout_20261010/production_qualification_20261022/fable_public_context_control/store/0000815097-23-000012/e5da0a7e0ccbdd6ac2f2ae8ab4229d5e13edfeb9cec1d155371b98b396444781",
+ "package_sha256": "e5da0a7e0ccbdd6ac2f2ae8ab4229d5e13edfeb9cec1d155371b98b396444781",
+ "source": "R3.htm",
+ "source_sha256": "a1ab6b7b3079fb9e3a76d7419d6cabb6142d6b950d2e819d8147607113c62df3",
+ "negative_sha256": "b614948248f61c5f9e41a147f4d0512a5d8744ad535fa058bf96ad606303c195",
+ "row_extent": [
+  4721,
+  5111
+ ],
+ "class_extent": [
+  4732,
+  4735
+ ],
+ "class_P": "reu",
+ "class_N": "re ",
+ "source_row": "<tr class=\"reu\">\n<td class=\"pl\" style=\"border-bottom: 0px;\" valign=\"top\"><a class=\"a\" href=\"javascript:void(0);\" onclick=\"Show.showAR( this, 'defref_us-gaap_OperatingCostsAndExpenses', window );\">Operating costs and expenses</a></td>\n<td class=\"nump\">11,757,000,000<span></span>\n</td>\n<td class=\"nump\">4,655,000,000<span></span>\n</td>\n<td class=\"nump\">8,245,000,000<span></span>\n</td>\n</tr>",
+ "cells": [
+  "Operating costs and expenses",
+  "11,757,000,000",
+  "4,655,000,000",
+  "8,245,000,000"
+ ],
+ "css_sha256": "c564d6d00dc81a734bd958995c968a220c4e3de896cd48ac52b82a641a40e26f",
+ "css_text": "/* Updated 2009-11-04 */\n/* v2.2.0.24 */\n\n/* DefRef Styles */\n.report table.authRefData{\n\tbackground-color: #def;\n\tborder: 2px solid #2F4497;\n\tfont-size: 1em;\n\tposition: absolute;\n}\n\n.report table.authRefData a {\n\tdisplay: block;\n\tfont-weight: bold;\n}\n\n.report table.authRefData p {\n\tmargin-top: 0px;\n}\n\n.report table.authRefData .hide {\n\tbackground-color: #2F4497;\n\tpadding: 1px 3px 0px 0px;\n\ttext-align: right;\n}\n\n.report table.authRefData .hide a:hover {\n\tbackground-color: #2F4497;\n}\n\n.report table.authRefData .body {\n\theight: 150px;\n\toverflow: auto;\n\twidth: 400px;\n}\n\n.report table.authRefData table{\n\tfont-size: 1em;\n}\n\n/* Report Styles */\n.pl a, .pl a:visited {\n\tcolor: black;\n\ttext-decoration: none;\n}\n\n/* table */\n.report {\n\tbackground-color: white;\n\tborder: 2px solid #acf;\n\tclear: both;\n\tcolor: black;\n\tfont: normal 8pt Helvetica, Arial, san-serif;\n\tmargin-bottom: 2em;\n}\n\n.report hr {\n\tborder: 1px solid #acf;\n}\n\n/* Top labels */\n.report th {\n\tbackground-color: #acf;\n\tcolor: black;\n\tfont-weight: bold;\n\ttext-align: center;\n}\n\n.report th.void\t{\n\tbackground-color: transparent;\n\tcolor: #000000;\n\tfont: bold 10pt Helvetica, Arial, san-serif;\n\ttext-align: left;\n}\n\n.report .pl {\n\ttext-align: left;\n\tvertical-align: top;\n\twhite-space: normal;\n\twidth: 200px;\n\twhite-space: normal; /* word-wrap: break-word; */\n}\n\n.report td.pl a.a {\n\tcursor: pointer;\n\tdisplay: block;\n\twidth: 200px;\n\toverflow: hidden;\n}\n\n.report td.pl div.a {\n\twidth: 200px;\n}\n\n.report td.pl a:hover {\n\tbackground-color: #ffc;\n}\n\n/* Header rows... */\n.report tr.rh {\n\tbackground-color: #acf;\n\tcolor: black;\n\tfont-weight: bold;\n}\n\n/* Calendars... */\n.report .rc {\n\tbackground-color: #f0f0f0;\n}\n\n/* Even rows... */\n.report .re, .report .reu {\n\tbackground-color: #def;\n}\n\n.report .reu td {\n\tborder-bottom: 1px solid black;\n}\n\n/* Odd rows... */\n.report .ro, .report .rou {\n\tbackground-color: white;\n}\n\n.report .rou td {\n\tborder-bottom: 1px solid black;\n}\n\n.report .rou table td, .report .reu table td {\n\tborder-bottom: 0px solid black;\n}\n\n/* styles for footnote marker */\n.report .fn {\n\twhite-space: nowrap;\n}\n\n/* styles for numeric types */\n.report .num, .report .nump {\n\ttext-align: right;\n\twhite-space: nowrap;\n}\n\n.report .nump {\n\tpadding-left: 2em;\n}\n\n.report .nump {\n\tpadding: 0px 0.4em 0px 2em;\n}\n\n/* styles for text types */\n.report .text {\n\ttext-align: left;\n\twhite-space: normal;\n}\n\n.report .text .big {\n\tmargin-bottom: 1em;\n\twidth: 17em;\n}\n\n.report .text .more {\n\tdisplay: none;\n}\n\n.report .text .note {\n\tfont-style: italic;\n\tfont-weight: bold;\n}\n\n.report .text .small {\n\twidth: 10em;\n}\n\n.report sup {\n\tfont-style: italic;\n}\n\n.report .outerFootnotes {\n\tfont-size: 1em;\n}\n",
+ "transformation": "SIMULATION: exact same-package report.css copied to loose include/report.css, not an observed SEC response",
+ "native_total_rows": {
+  "P": [
+   {
+    "concept_id": "us-gaap_OperatingCostsAndExpenses",
+    "label": "Operating costs and expenses",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "11,757,000,000",
+     "12 Months Ended Nov. 30, 2021": "4,655,000,000",
+     "12 Months Ended Nov. 30, 2020": "8,245,000,000"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "reu",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_CostsAndExpenses",
+    "label": "Costs and expenses",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "16,547,000,000",
+     "12 Months Ended Nov. 30, 2021": "8,997,000,000",
+     "12 Months Ended Nov. 30, 2020": "14,460,000,000"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "reu",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_OperatingIncomeLoss",
+    "label": "Operating Income (Loss)",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "(4,379,000,000)",
+     "12 Months Ended Nov. 30, 2021": "(7,089,000,000)",
+     "12 Months Ended Nov. 30, 2020": "(8,865,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "rou",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_NonoperatingIncomeExpense",
+    "label": "Nonoperating Income (Expense)",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "(1,701,000,000)",
+     "12 Months Ended Nov. 30, 2021": "(2,433,000,000)",
+     "12 Months Ended Nov. 30, 2020": "(1,388,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "rou",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments",
+    "label": "Income (Loss) Before Income Taxes",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "(6,080,000,000)",
+     "12 Months Ended Nov. 30, 2021": "(9,522,000,000)",
+     "12 Months Ended Nov. 30, 2020": "(10,253,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "reu",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_NetIncomeLoss",
+    "label": "Net Income (Loss)",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "$ (6,093,000,000)",
+     "12 Months Ended Nov. 30, 2021": "$ (9,501,000,000)",
+     "12 Months Ended Nov. 30, 2020": "$ (10,236,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "reu",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   }
+  ],
+  "N": [
+   {
+    "concept_id": "us-gaap_CostsAndExpenses",
+    "label": "Costs and expenses",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "16,547,000,000",
+     "12 Months Ended Nov. 30, 2021": "8,997,000,000",
+     "12 Months Ended Nov. 30, 2020": "14,460,000,000"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "reu",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_OperatingIncomeLoss",
+    "label": "Operating Income (Loss)",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "(4,379,000,000)",
+     "12 Months Ended Nov. 30, 2021": "(7,089,000,000)",
+     "12 Months Ended Nov. 30, 2020": "(8,865,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "rou",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_NonoperatingIncomeExpense",
+    "label": "Nonoperating Income (Expense)",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "(1,701,000,000)",
+     "12 Months Ended Nov. 30, 2021": "(2,433,000,000)",
+     "12 Months Ended Nov. 30, 2020": "(1,388,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "rou",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments",
+    "label": "Income (Loss) Before Income Taxes",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "(6,080,000,000)",
+     "12 Months Ended Nov. 30, 2021": "(9,522,000,000)",
+     "12 Months Ended Nov. 30, 2020": "(10,253,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "reu",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   },
+   {
+    "concept_id": "us-gaap_NetIncomeLoss",
+    "label": "Net Income (Loss)",
+    "values": {
+     "12 Months Ended Nov. 30, 2022": "$ (6,093,000,000)",
+     "12 Months Ended Nov. 30, 2021": "$ (9,501,000,000)",
+     "12 Months Ended Nov. 30, 2020": "$ (10,236,000,000)"
+    },
+    "is_abstract": false,
+    "is_total": true,
+    "is_header": false,
+    "level": 0,
+    "css_class": "reu",
+    "primary_period": "12 Months Ended Nov. 30, 2022"
+   }
+  ]
+ }
+}

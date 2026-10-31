@@ -113,7 +113,7 @@ def check_output(folder, logs, expected, seconds, renv, row, result, record, wha
 
 QUALIFY_ROUTE = ('units', 'page_visibility', 'source_ids', 'source_relations', 'source_style', 'source_inline', 'source_symbols', 'source_facts', 'generated_content', 'uncovered')
 QUALIFY_SCHEMA, QUALIFY_ROLES = 'script-version-qualification/2', {'normal_result', 'explored_result', 'without_result', 'normal_route', 'without_route', 'normal_acquisition', 'explored_acquisition', 'without_acquisition', 'explored_trials'}
-QUALIFY_PLAN_KEYS = ('context_explore', 'qualification_diagnostic', 'qualification_withhold', 'source_commands')  # the only settings a qualification arm may differ in (same runtime, same store)
+QUALIFY_PLAN_KEYS = ('context_explore', 'qualification_diagnostic', 'qualification_withhold', 'source_commands', 'context_viewer_start')  # viewer start is separately bound to NORMAL's own observation below
 
 
 def compare_views(a, b):
@@ -145,6 +145,27 @@ def reader(read):  # the producer's file reads: each records the file's sha256 a
     return rd, sha
 
 
+def viewer_start(ref, expected, read):
+    """Read the original unmarked parent plan from its own completed NORMAL render. Shared by the child and both producer gates; no alternate
+    reference, later-attached plan, stale render or other file can supply it. Unsupported parents have no plan and retain the existing path."""
+    rd, sha = reader(read); path = Path(ref['path'])
+    if sha(path) != ref['sha256']: raise ValueError('viewer start: completion pin differs')
+    complete = rd(path)
+    if 'context_renders_sha256' not in complete: return None
+    renders = path.parent / 'CONTEXT_RENDERS.json'
+    if sha(renders) != complete['context_renders_sha256']: raise ValueError('viewer start: render pin differs')
+    originals = [r for r in rd(renders) if 'viewer_start' in r]
+    if not originals: return None
+    if any(complete.get(k) != expected.get(k) for k in ('file_id', 'source_sha256')): raise ValueError('viewer start: source or file differs')
+    if len(originals) != 1: raise ValueError('viewer start: not one original observation')
+    r = originals[0]; attempts = r.get('attempts') or []; start = r['viewer_start']
+    if not (r.get('marked') is False and r.get('state') == 'initial' and not r.get('refused') and not r.get('action') and not r.get('inner')
+            and not r.get('viewer_actions') and start == r.get('viewer_before') and attempts and attempts[-1].get('outcome') == 'used: the state reference'
+            and r.get('native') and r['native'] == attempts[-1].get('native')): raise ValueError('viewer start: plan is not its original accepted observation')
+    if start.get('source_sha256') != expected['source_sha256']: raise ValueError('viewer start: original source differs')
+    return start
+
+
 def qualify_arms(outs, file_id, read):
     """The producer's reading and binding of the saved arms that needs no WITHOUT comparison, shared by qualify_version and by qualify_first's decision
     before WITHOUT (root-bound-native-early-stop-and-damage-checks-20261029t095934395308z). outs: (name, job.py out dir) for normal, explored and, from
@@ -168,6 +189,10 @@ def qualify_arms(outs, file_id, read):
     sources = [src(v[2]) for v in arms.values()]
     if any(s != sources[0] for s in sources): why.append('the arms read different sources')
     (_, rn, an, _), (_, _, ax, _) = arms['normal'], arms['explored']
+    normal_ref = {'path': str(an / 'COMPLETE.json'), 'sha256': sha(an / 'COMPLETE.json')}
+    start = viewer_start(normal_ref, {'file_id': file_id, 'source_sha256': sources[0][0]}, read)
+    for name, (_, _, _, plan) in arms.items():
+        if name != 'normal' and plan is not None and plan.get('context_viewer_start') != (normal_ref if start is not None else None): why.append(f'{name}: viewer start is not the normal observation')
     ins = (rd(an / 'CONTEXT_ACQUISITION.json')['record'].get('target') or {}).get('inserted_script') or {}
     if not ins.get('response_sha256') or not ins.get('href'): raise ValueError('NORMAL has no proved inserted script: nothing to qualify')
     n_route = rd(an / 'ROUTE.json'); oc = (n_route.get('facts') or {}).get('optional_controls') or {}
@@ -269,6 +294,10 @@ def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, 
     save(q / 'normal' / 'RESULT.json', {'plan': str(plan_path), 'plan_sha256': pin, 'rows': [dict(row)]})  # the held NORMAL result, frozen as the record's evidence
     one, env, arms = dict(plan, source_commands=[plan['source_commands'][k]]), {'PATH': '/usr/bin:/bin', 'HOME': home}, {}
     def uncomparable(e): done.update(outcome='held: qualification not comparable', why=repr(e)[:300]); technical(row, 'qualification not comparable: ' + repr(e)[:300])
+    try:
+        ref = {'path': str(a / 'COMPLETE.json'), 'sha256': hashlib.sha256((a / 'COMPLETE.json').read_bytes()).hexdigest()}
+        if viewer_start(ref, plan['source_commands'][k], {}) is not None: one['context_viewer_start'] = ref
+    except QUALIFY_FAILURES as e: uncomparable(e); save(result, record); return
     for name, extra in QUALIFY_ARMS:
         if name == 'release' and done.get('outcome') != 'passed': break
         body = json.dumps(dict(one, **extra)).encode(); pp = q / f'{name}_PLAN.json'; pp.write_bytes(body); logs = q / f'{name}_logs'; logs.mkdir()

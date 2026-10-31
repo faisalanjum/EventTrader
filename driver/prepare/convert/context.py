@@ -12,7 +12,7 @@ and the bridge removes only our comments from the wholly not-displayed original.
 select the same target occurrence and placement, and (OCR's strict rule, every marker kind, initial and activated views) equal the state's unmarked
 reference render at measurement start: the whole native serialization without our comments and the received inputs; anything else leaves the
 state incomplete with its reasons."""
-import hashlib, json, os, re, time
+import hashlib, json, os, posixpath, re, time, urllib.parse
 from pathlib import Path
 from playwright.sync_api import Error as PlaywrightError  # the pinned library's public typed error; Request.frame raises it for a navigation request whose frame does not exist yet
 from . import anchor, edgartools_html, overlay, screen_grid as sg
@@ -55,7 +55,7 @@ INIT = """(() => { const origin = new WeakMap();
   window.__lineage = {origin, mutations: () => mutations}; })();"""  # native cloneNode/importNode results unchanged; timers untouched (not observed)
 ATTEMPTS = 3  # Root CONTEXT_CANONICAL_STATE_DECISION_20261021: at most 3 observation attempts per logical reading
 OBSERVATION = ('startup', 'parse_order', 'scope', 'pre_selection_nodes', 'scope_activated', 'scope_origin', 'selection', 'selection_settle', 'control_located', 'action', 'action_settle', 'effects', 'probe', 'proof', 'origin_in_selected_child', 'target', 'bridge',
-               'after_bridge_settle', 'after_bridge', 'observe', 'inner', 'final_controls', 'refused', 'selection_inputs')  # one attempt's own observation fields
+               'after_bridge_settle', 'after_bridge', 'observe', 'inner', 'final_controls', 'refused', 'selection_inputs', 'viewer_before', 'viewer_actions', 'viewer_unsupported', 'viewer_start_sha256')  # one attempt's own observation fields
 FINAL_CONTROL = 'function () { return {label: this.textContent, shown: this.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})}; }'  # each acted control's own retained node, read once after all actions
 class Refused(RuntimeError):
     """An observation refusal: a property of what this attempt observed (kept with the attempt), not a fault."""
@@ -169,7 +169,23 @@ CODE_ACTIONS = """(() => { const s = window.__sourceScope; if (!s) return null; 
     for (let p = a.parentElement; p; p = p.parentElement) if (p.hasAttribute('id') && (!d || p.contains(d))) { const k = p.getAttribute('id'); h.push(k); if (shown) texts[k] = p.textContent; }
     actions.push([v, !!e, t ? {div: !!d, display: d ? d.style.display : null, holders: h} : null]); }
   for (const n of document.querySelectorAll('[id]')) { const k = n.getAttribute('id'), v = ids[k] || (ids[k] = [0, 0]); v[0]++; if (s.outside(n) === false) v[1]++; }
-  return {actions, ids, texts}; })()"""  # Show.showAR's own walk: a following sibling TABLE is shown instead of the named target
+  const prof = el => { const tg = new Set(), dc = []; for (const e of [el, ...el.querySelectorAll('*')]) { tg.add(e.localName); const st = e.style;  // SHARED GUARD: what a reveal would show - its elements, and each declaration as the browser's own CSSStyleDeclaration lists it (name, value, priority)
+      if (st) for (let i = 0; i < st.length; i++) { const n = st.item(i); dc.push([n, st.getPropertyValue(n), st.getPropertyPriority(n)]); } } return {tags: Array.from(tg).sort(), decls: dc}; };
+  const reveal = {targets: {}, toggles: [], source_styles: Array.from(document.querySelectorAll('style')).filter(e => s.outside(e) === false).length}, AR = /^(?:top\\.)?Show\\.showAR\\( this, '([^']+)', window \\);$/;  // source <style>: it can style what a reveal shows (Codex T2)
+  for (const a of document.querySelectorAll('[onclick]')) { if (s.outside(a) !== false) continue; const v = a.getAttribute('onclick') || '', m = AR.exec(v);
+    if (m && !reveal.targets[m[1]]) { const tt = document.getElementById(m[1]); if (tt) reveal.targets[m[1]] = prof(tt); }
+    if (TOGGLE.test(v)) { let d = a; while (d && d.nodeName !== 'DIV') d = d.nextSibling; if (d) reveal.toggles.push(prof(d)); } }  // toggleNext's own DIV, wherever it is
+  const cls = new Set(), all = new Map(), ctx = new Set(); for (const e of document.querySelectorAll('*')) { if (s.outside(e) !== false) continue; for (const c of e.classList) cls.add(c); }  // SOURCE-WIDE: every source class (a sheet may style any of them)
+  const up = e => { for (let p = e; p; p = p.parentElement) ctx.add(p); };  // REVEAL CONTEXT: what a reveal can inherit - the ancestors (inclusive) of every source-scope control (showAR's clone goes there), showAR target and toggleNext DIV
+  for (const a of document.querySelectorAll('[onclick]')) { if (s.outside(a) !== false) continue; const v = a.getAttribute('onclick') || '', m = AR.exec(v), tt = m && document.getElementById(m[1]); up(a); if (tt) up(tt);
+    if (TOGGLE.test(v)) { let d = a; while (d && d.nodeName !== 'DIV') d = d.nextSibling; if (d) up(d); } }  // visible content elsewhere (e.g. an XBRL text block's own formatting) is read by the ordinary carriers, as on any HTML page
+  for (const e of ctx) { if (s.outside(e) !== false) continue; const st = e.style;  // each reveal-context inline declaration, as the browser's own CSSStyleDeclaration lists it
+    if (st) for (let i = 0; i < st.length; i++) { const n = st.item(i), v = st.getPropertyValue(n), q = st.getPropertyPriority(n); all.set(n + '|' + v + '|' + q, [n, v, q]); } }
+  reveal.classes = Array.from(cls).sort(); reveal.decls = Array.from(all.values());
+  reveal.sheets = Array.from(document.styleSheets).map(x => { let rules = null, imports = 0; try { imports = Array.from(x.cssRules).filter(r => r.type === 3).length; rules = Array.from(x.cssRules).map(r => r.cssText).join('\\n'); } catch (e) {}  // EFFECTIVE STYLES: every sheet as the page applies it NOW: the browser's own cssText, no normalization
+    return [x.href, x.disabled, x.media.mediaText, x.ownerNode ? x.ownerNode.localName : null, x.href ? null : (x.ownerNode ? x.ownerNode.textContent : null), rules, imports]; });  // [href, disabled, media, owner, inline text, the browser's own serialization of its current rules (after any script insertRule/deleteRule), @import count]
+  reveal.adopted = (document.adoptedStyleSheets || []).length;  // constructed sheets a script adopted: never reviewed
+  return {actions, ids, texts, reveal}; })()"""  # Show.showAR's own walk: a following sibling TABLE is shown instead of the named target
 
 
 def viewer_template(text):
@@ -201,6 +217,22 @@ class Scope:
     def _result(self, r):
         if r.get('exceptionDetails'): return None, repr((r['exceptionDetails'].get('exception') or {}).get('description') or r['exceptionDetails'].get('text'))[:200]
         return r['result'].get('value'), None
+    def function_sources(self, expression):
+        """The browser's actual script sources for retained functions, not a page's toString claim. Uses the same native source API as code()."""
+        obj, why = self.obj(expression)
+        if why: return None
+        self.cdp.send('Debugger.enable'); self.cdp.send('Debugger.setSkipAllPauses', {'skip': True})
+        functions = [p.get('value') or {} for p in self.cdp.send('Runtime.getProperties', {'objectId': obj, 'ownProperties': True})['result'] if p['name'].isdigit()]
+        sources, out = {}, []
+        for f in functions:
+            if f.get('type') != 'function': return None
+            props = self.cdp.send('Runtime.getProperties', {'objectId': f['objectId'], 'ownProperties': True})
+            location = next((p['value'].get('value') for p in props.get('internalProperties') or [] if p['name'] == '[[FunctionLocation]]'), None)
+            if not location: return None
+            sid = location['scriptId']
+            if sid not in sources: sources[sid] = hashlib.sha256(self.cdp.send('Debugger.getScriptSource', {'scriptId': sid})['scriptSource'].encode()).hexdigest()
+            out.append(sources[sid])
+        return out
     def call(self, expr):  # an expression in the isolated world, by value
         if 'iso' not in self.ids: return None, 'no isolated scope context'
         try: return self._result(self.cdp.send('Runtime.evaluate', {'expression': expr, 'contextId': self.ids['iso'], 'returnByValue': True}))
@@ -326,17 +358,85 @@ def _settle(page, rec, seconds):  # the one settle rule: OCR's acquisition.quiet
     return {'settled': False, 'inflight': rec['inflight'][0]}
 
 
+VIEWER_MENU = """() => { const jq = window.jQuery; if (!jq || typeof jq._data !== 'function') return null;
+  return Array.from(document.querySelectorAll('a[href]')).flatMap((a, index) => {
+    if (!a.matches('#menu > li > a[href="#"]')) return [];
+    const ul = a.nextElementSibling, handlers = (jq._data(a, 'events') || {}).click || [];
+    return [{index, closed: ul && getComputedStyle(ul).display === 'none',
+      supported: !!ul && ul.tagName === 'UL' && a.onclick === null && !a.hasAttribute('onclick') && handlers.length === 1 &&
+        Function.prototype.toString.call(handlers[0].handler) === "function(){$(this).next().slideToggle('normal')}"}];
+  }); }"""  # the pinned accordion's own direct handler, through pinned jQuery's existing event-data helper
+VIEWER_CLOSED = "e => !!e.nextElementSibling && getComputedStyle(e.nextElementSibling).display === 'none'"
+VIEWER_HELPERS = 'window.$ === window.jQuery ? [window.jQuery, window.jQuery && window.jQuery._data, window.jQuery && window.jQuery.fn.next, window.jQuery && window.jQuery.fn.slideToggle] : []'
+VIEWER_HANDLERS = "Array.from(document.querySelectorAll('#menu > li > a[href=\"#\"]')).map(a => jQuery._data(a, 'events').click[0].handler)"
+VIEWER_ACT = "e => jQuery._data(e, 'events').click[0].handler.call(e)"  # the bound category callback only: no bubbling, default navigation or DOM0 handler
+
+
 class Context:
     """One state of one document shown by its observed parent: `evidence` = {parent_url, target_url, observed (Source.observed shape: every recorded
     response, the parent and the target included), selection ({source_anchor}: OCR's recorded parent action), proof (overlay proof of the target
     response: {'form', 'inserted'}[, before, after])}; `control` = the source byte start of the activated source link record, None for the initial view."""
     inventory = False  # contextual_routes sets it for an initial-only view: each render then records Scope.code (optional_controls)
-    def __init__(self, evidence, control=None, label='initial', settle_s=3.0):  # control: a source link start, or (outer, inner, ...) - an outer reveal then controls inside its proved target
+    def __init__(self, evidence, control=None, label='initial', settle_s=3.0, viewer_start=None):  # control: a source link start, or (outer, inner, ...) - an outer reveal then controls inside its proved target
         self.controls = [] if control is None else [control] if isinstance(control, int) else list(control)
         self.evidence, self.control, self.label, self.settle_s, self.records, self.reference, self.captures = evidence, (self.controls or [None])[0], label, settle_s, [], None, {}
         self.scopes = {}  # id(owned page) -> its Scope (the isolated-world source scope)  # reference: the state's first completed unmarked observation
         self.named_by = None  # a trial-named state (contextual_routes): the trial's own native record that named it; this extraction must be that observation
+        self.viewer_start = json.dumps(viewer_start, sort_keys=True) if viewer_start is not None else None  # immutable value; committed only with the original completed unmarked observation
         self.parent_hrefs = [l['href'] for l in sg.Visible(evidence['observed'][evidence['parent_url']]['body']).links]
+
+    def _viewer(self, page, raw, rec, got_in, refused_in, refuse):
+        """Replay one originally observed parent start BEFORE target bytes and the entire source-action sequence. Unsupported parents keep the strict
+        existing path. A supplied plan must match the parent, source, selection, received inputs and every native control; it is never replaced."""
+        ev = self.evidence; plan = json.loads(self.viewer_start) if self.viewer_start is not None else None
+        before_target = not any(r[1] == 'GET' and r[2] == ev['target_url'] for r in rec['requests'])
+        if not before_target or 'native_node' not in ev['selection']:
+            if plan is not None: refuse('viewer start: target already requested or no recorded native selection')
+            return
+        known = {h for _, status, h in got_in if status == 200}
+        needed = {h for h, name in KNOWN_CODE.items() if name in ('viewer jQuery v3.7.1', 'viewer accordionMenu.js')}
+        sc = self.scopes[id(page)]
+        helpers = sc.function_sources(VIEWER_HELPERS) if needed <= known else None
+        jq = next(h for h, name in KNOWN_CODE.items() if name == 'viewer jQuery v3.7.1')
+        rows = page.evaluate(VIEWER_MENU) if helpers == [jq] * 4 else None
+        if not rows or not all(r['supported'] for r in rows):
+            if plan is not None: refuse('viewer start: recorded native category controls unavailable')
+            return
+        accordion = next(h for h, name in KNOWN_CODE.items() if name == 'viewer accordionMenu.js')
+        if sc.function_sources(VIEWER_HANDLERS) != [accordion] * len(rows):
+            if plan is not None: refuse('viewer start: category handler is not the recorded viewer code')
+            return
+        nodes = page.evaluate(acquisition.NODES)
+        keys = [dict(zip(('path', 'tags', 'outer_html_sha256'), (nodes[r['index']][0], nodes[r['index']][1], acquisition.sha(nodes[r['index']][2].encode())))) for r in rows]
+        before = {'parent_url': ev['parent_url'], 'target_url': ev['target_url'], 'parent_sha256': ev['observed'][ev['parent_url']]['sha256'],
+                  'source_sha256': hashlib.sha256(raw).hexdigest(), 'selection': ev['selection']['native_node'],
+                  'received': sorted(map(list, got_in), key=str), 'refused_get': sorted(map(list, refused_in), key=str),
+                  'controls': [{'native_node': key, 'closed': r['closed']} for key, r in zip(keys, rows)]}
+        try: handles = [self._native_node(page, {'native_node': key, 'state_inputs': ev['selection']['state_inputs']}, got_in, refused_in, refuse) for key in keys]
+        except Refused:
+            if plan is not None: raise
+            rec['viewer_unsupported'] = rec.pop('refused'); return  # an ambiguous category does not impose a new prerequisite on the old path
+        if any(r[1] == 'GET' and r[2] == ev['target_url'] for r in rec['requests']):
+            if plan is not None: refuse('viewer start: target arrived before preparation')
+            return
+        rec['viewer_before'] = before
+        if plan is None: return  # observation only; no changed reference or action in the original attempt
+        # The comparison-only Source has already proved each withheld response. It is the existing input exception, never a general missing-input allowance.
+        withheld = {u for u, _ in rec.get('withheld') or []}
+        expected = dict(plan, received=[r for r in plan['received'] if r[0] not in withheld], controls=[dict(c, closed=r['closed']) for c, r in zip(plan['controls'], rows)])
+        if expected != before or len(plan['controls']) != len(rows) or any(type(c['closed']) is not bool for c in plan['controls']): refuse('viewer start: original parent, input or control binding differs')
+        rec['viewer_actions'] = []; rec['phase'] = 'viewer start'; rec['viewer_start_sha256'] = hashlib.sha256(self.viewer_start.encode()).hexdigest()
+        for control, current, wanted in zip(handles, rows, plan['controls']):
+            if current['closed'] == wanted['closed']: continue
+            if any(r[1] == 'GET' and r[2] == ev['target_url'] for r in rec['requests']): refuse('viewer start: target arrived before preparation')
+            action = {'native_node': wanted['native_node'], 'before_closed': current['closed'], 'after_closed': None}; rec['viewer_actions'].append(action)
+            n0 = len(rec['requests']); control.evaluate(VIEWER_ACT); action['settle'] = _settle(page, rec, self.settle_s)
+            if not action['settle']['settled']: refuse('viewer start: native category action did not settle')
+            if any(r[1] == 'GET' and r[2] == ev['target_url'] for r in rec['requests']): refuse('viewer start: category action requested the target')
+            if rec['pages'] or any(r[0] == 'viewer start' and r[3] == 'document' for r in rec['requests']) or any(e[0] == 'viewer start' for e in rec['errors']): refuse('viewer start: navigation, new page or script error')
+            if rec['requests'][n0:]: refuse('viewer start: request during the category action')
+            action['after_closed'] = control.evaluate(VIEWER_CLOSED)
+            if action['after_closed'] != wanted['closed']: refuse('viewer start: native category action did not restore the observed state')
 
     def identity(self):
         o = self.evidence['observed']
@@ -363,6 +463,7 @@ class Context:
             if q.url == ev['parent_url'] and q.is_navigation_request() and not served[0]:
                 served[0] = True; got_in.add((q.url, pv[0], o[q.url].get('sha256'))); return route.fulfill(status=pv[0], content_type=o[q.url].get('content_type') or 'text/html', body=pv[2])
             if q.url == ev['target_url'] and not q.is_navigation_request():
+                if rec['phase'] == 'viewer start': return route.abort('blockedbyclient')  # no target measurement bytes may arrive during preparation; its recorded request refuses the attempt
                 if measured is None: source._refuse(q.url, q.url, None, q.resource_type, 'target without a verified measurement body'); refused_in.add((q.url, q.resource_type)); return route.abort('failed')
                 got_in.add((q.url, tv[0], t.get('sha256'))); return route.fulfill(status=tv[0], content_type=t.get('content_type') or 'text/html', body=measured)  # received: the original response's identity
             got = source.answer(q.url, q.resource_type, q.is_navigation_request())
@@ -384,6 +485,7 @@ class Context:
         def observe():  # one observation attempt in this Page: the parent loaded, the selection, the source-owned actions
             res = goto(ev['parent_url'], wait_until='load'); rec['startup'] = _settle(page, rec, self.settle_s)
             if not rec['startup']['settled']: refuse('incomplete observation before selection')
+            self._viewer(page, raw, rec, got_in, refused_in, refuse)
             if ev['selection'].get('initial'):  # the target is the parent's own initial selection (OCR's native outcome): no click
                 if not any(r[2] == ev['target_url'] and r[1] == 'GET' for r in rec['requests']): refuse('initial selection: the parent did not request the target at startup')
                 t_at = next(i for i, r in enumerate(rec['requests']) if r[2] == ev['target_url'] and r[1] == 'GET'); d_at = rec.get('dcl_at')
@@ -434,6 +536,8 @@ class Context:
                 if ref is not None and n != ref: a['outcome'] = 'not used: differs from the state reference (' + ', '.join(x for x in ref if n.get(x) != ref[x]) + ')'; continue
                 if ref is None and self.named_by is not None and n != self.named_by: a['outcome'] = 'not used: differs from the trial observation that named the state (' + ', '.join(x for x in self.named_by if n.get(x) != self.named_by.get(x)) + ')'; continue  # a trial-named state's reference is only its own observation of that state
                 if ref is None: self.reference = n  # the first completed unmarked observation: fixed for this state, never changed afterwards
+                if ref is None and not rec['marked'] and self.viewer_start is None and not self.controls and rec.get('viewer_before'):
+                    rec['viewer_start'] = rec['viewer_before']; self.viewer_start = json.dumps(rec['viewer_start'], sort_keys=True)
                 a['outcome'] = 'used' if ref is not None else 'used: the state reference'; rec['native'] = n; rec['phase'] = 'measurement'
                 if self.inventory and not self.controls: rec['code'] = scope.code()  # an initial-only view's executable code and listeners (optional_controls reads them)
                 return res
@@ -636,6 +740,177 @@ def same_text(vis, a, b, dom):
     return dom is not None and compare._WS.sub('', dom) == ''.join(vis.text[i] for i in vis.idx if a <= vis.starts[i] < b)
 
 
+def _declared_controls(items):
+    """(reasons, {action value: count}, {link start: showAR id}) for scripted source links given as (start, href, declarations): each must be exactly one
+    renderer ACTION form on javascript:void(0); (optional_controls' own rule, shared with the SCRIPTLESS path)."""
+    why, declared, targets = [], {}, {}
+    for start, href, d in items:
+        m = ACTION.fullmatch(d[0].get('value') or '') if len(d) == 1 and d[0].get('name') == 'onclick' else None
+        if href != 'javascript:void(0);' or m is None: why.append(f"control at {start}: not one renderer action on javascript:void(0);"); continue
+        declared[d[0]['value']] = declared.get(d[0]['value'], 0) + 1
+        if m.group('id'): targets[start] = m.group('id')
+        # Show.hideAR only hides Show.LastAR, which only Show.showAR sets (pinned Show.js): it reveals nothing. Show.toggleNext: its own DOM walk (CODE_ACTIONS), below
+    return why, declared, targets
+
+
+REVIEWED_SHEETS = {'cb242530100cd884d71f96f5fb2f780c23b21027e81be3b8a778b7bbd9282ca8': 'viewer /include/report.css', '53ad2e099685b3b0f9f313352e126db79eaeb28a2168ee5fda02a2aaf845ba33': 'viewer /include/interactive2.css',
+                   'd85327d99c7a3ee1f9b5d0500d1370acea3ad2db39c163c2f51f232baedbdede': 'viewer bootstrap.min.css', '711700a13fac17a9e5a6a23b654c3449285396a7e003aab5679183dcae91d88e': 'viewer /include/xbrlViewerStyle.css',
+                   '5b47d0695976e1c83253163f36e080b11531d3c136c794a9338eaae963420074': 'viewer /include/print.css', 'c564d6d00dc81a734bd958995c968a220c4e3de896cd48ac52b82a641a40e26f': 'package report.css',
+                   '9e1daf3fc7e3573457b340ee45f8f5e9dd6b47ccd913c9cfee43a63a0ede7722': 'viewer inline <style> (li.accordion menu)'}  # reviewed 10-30 (VIEWER_SHEETS_REVIEW.txt): no text-adding rule reaches Renderer classes/reveal tags
+
+
+REVIEWED_CSSOM = {'cb242530100cd884d71f96f5fb2f780c23b21027e81be3b8a778b7bbd9282ca8': ('d8054541f7687020e49468a068416a9debfebe28bae7797f08e79eea7129a237',),
+                  '53ad2e099685b3b0f9f313352e126db79eaeb28a2168ee5fda02a2aaf845ba33': ('9319d1e321c0f0bbd2dfac32bcaac6ee40dd3f499db7fa534b21d83b1a3a4228',),
+                  'd85327d99c7a3ee1f9b5d0500d1370acea3ad2db39c163c2f51f232baedbdede': ('9a2c34104ad5859d7e39c23f1b473d6f231b1342699c1a3f7ecdbc2eda2d1f28', '12bc2d0664a9f99be2ec87373e57618244dafc11235eff4f1c73a2bce4e2572c'),
+                  '711700a13fac17a9e5a6a23b654c3449285396a7e003aab5679183dcae91d88e': ('0b5ef6ad519292cf1f0cb2cead1d7ec6e004e6cec9d8f4d15a39a6cfaac7d506',),
+                  '5b47d0695976e1c83253163f36e080b11531d3c136c794a9338eaae963420074': ('3d2270c0d30f8a4ff748afde8da05ab68bf2f1e092592c678f44a80bd2e5c5cf',),
+                  'c564d6d00dc81a734bd958995c968a220c4e3de896cd48ac52b82a641a40e26f': ('d8054541f7687020e49468a068416a9debfebe28bae7797f08e79eea7129a237',),
+                  '9e1daf3fc7e3573457b340ee45f8f5e9dd6b47ccd913c9cfee43a63a0ede7722': ('5cff2d47979a1171507a2f4f6779903d531ebf917b081935dd094dad210602b4',)}  # each reviewed sheet's DEMONSTRATED raw native cssRules[].cssText digests (joined by newline), pinned Chromium 147: the clean <link> parse (REVIEWED_CSSOM_DERIVATION_LINK.txt); for bootstrap ALSO the same-DOM JS-disabled parse that equals the live viewer exactly (Codex S0b: six navbar-collapse rules serialize display/flex-basis in the other order). Any other current text: unknown, deficit kept
+
+
+RENDERER_REVEAL_TAGS = frozenset(('table', 'tbody', 'tr', 'td', 'div', 'a', 'p', 'strong', 'br'))  # SHARED GUARD positive profile: inside every definition on the 4 reviewed public Renderer pages (tbody: the parser's own)
+RENDERER_REVEAL_ANY = frozenset(('color', 'width', 'text-wrap-mode'))  # with any padding-* longhand
+RENDERER_REVEAL_BORDERS = frozenset(f'border-{side}-{part}' for side in ('top', 'right', 'bottom', 'left') for part in ('width', 'style', 'color'))  # exactly what the per-cell carrier records; border-image-* is NOT admitted (no demonstrated need; it can add image content)  # by EFFECT: paint, spacing, line breaking - none adds, removes or reorders text
+RENDERER_CLASSES = frozenset(('a', 'authRefData', 'big', 'body', 'fn', 'hide', 'more', 'note', 'num', 'nump', 'outerFootnotes', 'pl', 'rc', 're', 'report', 'reu', 'rh', 'ro', 'rou', 'small', 'text', 'void',  # every class selector of the reviewed report.css c564d6d0
+                              'th', 'tl', 'custom', 'outerFootnote'))  # + Renderer markup classes NO reviewed or recorded viewer sheet styles (inert on both routes); bootstrap styles only 'small' (font size). Any other class: unproved
+# outerFootnote (the Renderer's footnote ROW class; .outerFootnotes is its table): 0 class-token and 0 [class] attribute selectors in package report.css c564d6d0 and the
+# recorded viewer sheets cb242530, 53ad2e09, d85327d9, 711700a1, 5b47d069 (KNOWN_00D_R4_ASSESSMENT, static read 6:31 PM)
+RENDERER_REVEAL_VALUES = {'display': ('none', 'block'), 'white-space-collapse': ('collapse',)}  # hide/show only (what the reveal toggles); default white-space collapsing only. Any priority (!important) or other declaration: unproved
+
+
+def _dom_action_reasons(acts, declared, targets, toggles, unknown_classes_inert=False):
+    """optional_controls' DOM-action conditions on one CODE_ACTIONS reading (appends each qualifying toggleNext's holders to `toggles`)."""
+    r = []
+    if not isinstance(acts, dict) or 'unknown' in acts: return ['the DOM control facts are unknown']
+    seen = {}
+    for v, table, *walk in acts['actions']:
+        seen[v] = seen.get(v, 0) + 1; m = ACTION.fullmatch(v or '')
+        if table and m and m.group('id'): r.append(f'Show.showAR {m.group("id")!r}: a following TABLE is shown instead (branch unsupported)')
+        if m and 'toggleNext' in m.group(0):  # pinned Show.toggleNext: the first DIV from the control along its following siblings; no DIV throws, no inline display is a no-op
+            t = walk[0] if walk else None
+            if not isinstance(t, dict): r.append('Show.toggleNext: its DOM walk facts are unknown')
+            elif t['div'] and t['display']:  # it shows or hides that DIV and rewrites the control's own first character: both must lie in an element the reading holds whole
+                u = [k for k in t.get('holders') or [] if acts['ids'].get(k) == [1, 1]]  # DOM ancestors enclosing control and DIV, one element per id, in the source scope
+                if u: toggles.append(tuple((k, (acts.get('texts') or {}).get(k)) for k in sorted(u)))  # with the DOM's own text of each
+                else: r.append('Show.toggleNext: no DOM-unique source-scope element encloses the control and its DIV')
+    if seen != declared: r.append('the source-scope onclick controls in the DOM differ from the native declarations')
+    for t in sorted(set(targets.values())):
+        if acts['ids'].get(t) != [1, 1]: r.append(f'Show.showAR target {t!r}: {acts["ids"].get(t)} [document, source-scope] elements, not one source-scope id')
+    rv = acts.get('reveal')  # SHARED GUARD (Codex T2/T3): what any reveal shows must lie within the reviewed Renderer profile; unknown or outside keeps the deficit
+    if not (isinstance(rv, dict) and {'targets', 'toggles', 'source_styles', 'classes', 'decls', 'sheets', 'adopted'} <= set(rv)): r.append('reveal profile facts unknown (shared guard)'); return r
+    if set(rv['classes']) - RENDERER_CLASSES and not unknown_classes_inert: r.append(f"source classes outside the reviewed Renderer profile: {sorted(set(rv['classes']) - RENDERER_CLASSES)} (another sheet may style them)")  # e.g. a viewer-only utility class
+    if rv['source_styles'] != 0: r.append(f"source <style> elements: {rv['source_styles']} (only the reviewed Renderer stylesheet may style a reveal)")
+    def odd(decls): return [f"{n}: {v}" + (f" !{q}" if q else '') for n, v, q in decls or [] if q or not (n in RENDERER_REVEAL_ANY or n.startswith('padding-') or n in RENDERER_REVEAL_BORDERS or v in RENDERER_REVEAL_VALUES.get(n, ()))]
+    def outside(f): return sorted(set(f.get('tags') or []) - RENDERER_REVEAL_TAGS) + odd(f.get('decls'))
+    if odd(rv['decls']): r.append(f"source inline declarations outside the effect profile: {odd(rv['decls'])[:6]}")  # the ancestor/insertion context of every reveal (CODE_ACTIONS REVEAL CONTEXT)
+    for t in sorted(set(targets.values())):
+        f = rv['targets'].get(t)
+        if f is None: r.append(f'Show.showAR target {t!r}: reveal profile facts unknown (shared guard)'); continue
+        if outside(f): r.append(f'Show.showAR target {t!r}: content outside the supported reveal profile {outside(f)} (its CSS/source program is not proved reveal-only)')
+    for k, f in enumerate(rv['toggles']):
+        if outside(f): r.append(f'Show.toggleNext DIV {k}: content outside the supported reveal profile {outside(f)}')
+    return r
+
+
+def _reading_reasons(raw, route, child, targets, toggles):
+    """optional_controls' source-reading conditions: every showAR target and every toggleNext holder held by the OK typed source reading (one run-to-owner rule)."""
+    why, ids = [], {}
+    for r in (route.get('source_ids') or {}).get('records') or []:
+        if r.get('by') == 'id': ids.setdefault(r['value'], []).append((r['start'], r['end']))
+    vis = anchor.Visible(raw, page=route.get('page_visibility'), source=True)  # the source reading's own stream (html_route.source_reading)
+    held, owners = edgartools_html._holders(child.get('units') or [], vis)[0], sg._owners(vis, child.get('units') or [])  # the one run-to-owner rule
+    for t in sorted(set(targets.values())):
+        if len(ids.get(t) or []) != 1: why.append(f'target {t!r}: {len(ids.get(t) or [])} native id records'); continue
+        (a, b), = ids[t]; _, n, _ = held(a, b); _, bad = owners(a, b)
+        if n == 0 or bad: why.append(f'target {t!r}: {bad or "no character"} (source reading, one run-to-owner rule)')  # every character held, each owner's text the source's own at its places, every character read
+    whole = lambda a, b: b is not None and held(a, b)[1] > 0 and owners(a, b)[1] is None  # the targets' rule, on that element's one native id record
+    for u in sorted(set(toggles), key=str):
+        if not any(len(ids.get(k) or []) == 1 and whole(*ids[k][0]) and same_text(vis, *ids[k][0], dom) for k, dom in u):
+            why.append(f'Show.toggleNext: none of its {len(u)} enclosing DOM-unique element(s) is held whole by the source reading with exactly its own source text in the DOM')
+    return why
+
+
+RENDERER_SCRIPTS = {'37b4bcd336d85afa83ee0d5af7fd0c4ca43b0f4388eda9f2ed7e7c9be40999c8': 'package Show.js (the viewer 2e4e3855 with CRLF -> LF)',
+                    '2e4e3855abccb781a7086a1720be0114500d5e252ab21bf2094ea557b6d94901': 'renderer Show.js'}  # SCRIPTLESS: reviewed Show.js bytes
+RENDERER_HELPER = '55e5cd7e99fb2aecfd86f64e3daf9c88c4878111d6a79dbeb2eaba58a34aafa8'  # KNOWN_CODE's inline toggleNextSibling definition (never called by a control)
+RENDERER_UNVALIDATED = ()  # Root 10:24 PM: every c564 role effect has an existing carrier (rc background stack, note font_style+weight, more hidden run, fn sup lift) - ROLE_GUARD proof. Was: SCRIPTLESS scope: report.css roles not yet shown preserved on this path (hidden more, notes, calendars). fn (footnote reference cell) admitted Root 10:07 PM: FN_PROOF 3 pages, 170 cells/52 sup markers kept vs independent original. Totals (reu/rou) admitted: their underline is now kept by source_style 'borders' (Codex T1 P/N, B1)
+RENDERER_DOM = """(() => { const sheets = Array.from(document.querySelectorAll('link')).filter(l => /stylesheet/i.test(l.rel || '')).map(l => l.href);
+  const scripts = Array.from(document.scripts).map(s => s.hasAttribute('src') ? [s.src, null] : [null, s.text]);
+  const classes = new Set(); for (const e of document.querySelectorAll('[class]')) for (const c of e.classList) classes.add(c);
+  const applied = Array.from(document.styleSheets).map(x => { let n = null; try { n = x.cssRules.length; } catch (e) {} return [x.href, x.disabled, x.media.mediaText, n, x.ownerNode ? x.ownerNode.localName : null]; });  // what the page actually applies: every sheet, enabled or not, its media and rule count
+  const links = Array.from(document.querySelectorAll('link')).filter(l => /stylesheet/i.test(l.rel || '')).map(l => [l.href, (l.getAttribute('rel') || '').toLowerCase().split(/\\s+/).filter(Boolean), l.getAttribute('media'), l.hasAttribute('title'), l.hasAttribute('disabled')]);  // each sheet link as written: an alternate or titled sheet can report enabled yet not apply
+  return {top: window.top === window, sheets, applied, links, scripts, classes: Array.from(classes).sort(), sup: document.querySelectorAll('sup').length, styles: document.querySelectorAll('style').length, frames: document.querySelectorAll('iframe,frame,object,embed').length}; })()"""
+
+
+def renderer_eligible(raw, vis, links, outside, browser, source):
+    """SCRIPTLESS: may this Renderer report page skip the viewer? (reasons, facts). From the native declarations first (no render), then ONE read of the
+    owner's JS-disabled page (screen_grid._document; no page script runs): exact plain Show.* forms, no other handler, the page's scripts bound to their
+    own references (the browser resolves each src against the document's address; Source's path rule names the member) and only reviewed bytes, its
+    one stylesheet the include/report.css the bundle binds, no frame, no role outside the validated set, and optional_controls' DOM-action conditions.
+    Any reason: the caller keeps today's route (viewer where configured)."""
+    why, facts = [], {}
+    items = [(l['start'], l.get('href'), l.get('declarations') or []) for l in vis.links if l['start'] in links]
+    w0, declared, targets = _declared_controls(items); why += w0
+    if outside: why.append(f'{len(outside)} declared event handler(s) outside the supported link path')
+    if getattr(source, 'renderer_css', None) is None: why.append('no Renderer bundle binding')
+    if why: return why, dict(facts, stage='declarations')
+    page, address, _ = sg._document(browser, raw, raw, source)
+    try:
+        dom = page.evaluate(RENDERER_DOM); page.evaluate("window.__sourceScope = {outside: () => false}; true"); acts = page.evaluate(CODE_ACTIONS)  # a standalone page holds only the document's own nodes
+    finally: page.close()
+    member = lambda url: (urllib.parse.unquote(urllib.parse.urlsplit(url).path)[len(urllib.parse.urlsplit(source.root).path):] if source.root and url.startswith(source.root) else None)
+    want_js = posixpath.join(posixpath.dirname(source.path), 'Show.js'); want_css = posixpath.join(posixpath.dirname(source.path), sg.RENDERER_CSS_REF)
+    srcs, inline = [u for u, _ in dom['scripts'] if u is not None], [t for u, t in dom['scripts'] if u is None]
+    if [member(u) for u in srcs] != [want_js]: why.append(f'scripts by reference: {[member(u) or u for u in srcs]}, not exactly the bundle member {want_js}')
+    elif hashlib.sha256(source.members.get(want_js, b'')).hexdigest() not in RENDERER_SCRIPTS: why.append(f'{want_js}: bytes not a reviewed Show.js')
+    if [hashlib.sha256(t.encode()).hexdigest() for t in inline] != [RENDERER_HELPER]: why.append(f'inline scripts: {len(inline)}, not exactly the reviewed helper')
+    if [member(u) for u in dom['sheets']] != [want_css]: why.append(f'stylesheets by reference: {[member(u) or u for u in dom["sheets"]]}, not exactly {want_css}')
+    else:  # both, each on its own: the sheet the page APPLIES on screen, and the bytes this render actually USED for it (Source's own record: an exact member or recorded answer wins over the remap), never the URL alone
+        plain = len(dom['links']) == 1 and dom['links'][0][1] == ['stylesheet'] and dom['links'][0][2] in (None, '', 'all', 'screen') and not dom['links'][0][3] and not dom['links'][0][4]  # exactly rel=stylesheet, screen media, no title, not disabled
+        if not (plain and len(dom['applied']) == 1 and dom['applied'][0][0] == dom['sheets'][0] and dom['applied'][0][1] is False and dom['applied'][0][2] in ('', 'all', 'screen') and (dom['applied'][0][3] or 0) > 0):
+            why.append(f"stylesheet {want_css} is not the one sheet applied on screen: links {dom['links']}, applied {dom['applied']}")  # fetched is not applied: disabled/alternate, print-only media, no rules
+        from .html_route import RENDERER_CSS
+        rec = source.records.get(dom['sheets'][0]) or source.records.get(want_css) or {}
+        used = rec.get('status') in ('renderer-remap', 200) and rec.get('sha256') in RENDERER_CSS
+        if not used: why.append(f"effective stylesheet for {want_css} is not the reviewed Renderer CSS: status {rec.get('status')}, sha256 {rec.get('sha256')}")
+    if dom['frames']: why.append(f"{dom['frames']} frame/object element(s)")
+    if dom.get('top') is not True: why.append('the page is not its own top window (top.Show would not be its own Show)')  # the top.Show forms are Show here only when top === window
+    exact = not why  # Root 9:57 PM: every check above passed - exact bound reviewed report.css (RENDERER_CSS c564d6d0: all 22 class selectors in RENDERER_CLASSES, 0 attribute selectors) applied alone, reviewed Show.js + helper only, no other handler/frame: a class that sheet does not name styles nothing here
+    roles = sorted(set(dom['classes']) & set(RENDERER_UNVALIDATED))  # <sup> admitted: screen_grid's lift records every sup BY TAG (text, raise, owner) on either route; one inside a reveal stays refused (RENDERER_REVEAL_TAGS)
+    if roles: why.append(f'roles not yet validated on the script-free path: {roles}')
+    toggles = []; why += _dom_action_reasons(acts, declared, targets, toggles, unknown_classes_inert=exact)  # the shared default (viewer path, late fallback) stays conservative
+    return why, {'stage': 'dom', 'controls': sum(declared.values()), 'targets': len(set(targets.values())), 'toggles': len(set(toggles)), 'scripts': [member(u) or u for u in srcs] + ['inline'] * len(inline),
+                 'sheets': [member(u) or u for u in dom['sheets']], 'classes': dom['classes'], '_targets': targets, '_toggles': toggles}
+
+
+def renderer_controls(raw, route, child, browser, source, pre=None):
+    """SCRIPTLESS: the declared Renderer controls of a script-free route decided by the existing content rule: renderer_eligible (or its earlier result
+    `pre`) and optional_controls' source-reading conditions on the attempt's own typed source reading. (reasons, facts); [] -> a recorded warning."""
+    if pre is None:
+        from . import html_route  # no cycle: html_route never imports context
+        vis = sg.Visible(raw); links, outside = html_route.declarations(vis, browser); pre = renderer_eligible(raw, vis, links, outside, browser, source)
+    why, facts = list(pre[0]), {k: v for k, v in pre[1].items() if not k.startswith('_')}
+    if not why:
+        if child is None or child.get('status') != 'OK': why.append('the attempt has no OK typed source reading')
+        else: why += _reading_reasons(raw, route, child, pre[1]['_targets'], pre[1]['_toggles'])
+    return why, dict(facts, by='context.renderer_controls (script-free path)')
+
+
+def _effective_sheet_reasons(rv, observed, answered):
+    """EFFECTIVE STYLES (old route): every sheet the page applies on screen is reviewed bytes (an external one by its recorded response, an inline one by its
+    text) AND its CURRENT rules - the browser's own cssText after any script - equal those bytes' own native parse; no @import, no adopted sheet. Missing facts are
+    reported by _dom_action_reasons ('reveal profile facts unknown'). A recorded non-200 answer that applies no rules is no style."""
+    r = []
+    for href, _, media, _, text, rules, imports in (rv or {}).get('sheets') or []:
+        if media == 'print': continue
+        if href and isinstance(answered.get(href), int) and answered[href] != 200 and rules == '': continue  # e.g. the R page's own include/report.css 404 inside the viewer
+        h = observed.get(href) if href else hashlib.sha256((text or '').encode()).hexdigest()
+        cur = hashlib.sha256(rules.encode()).hexdigest() if isinstance(rules, str) else None
+        if h not in REVIEWED_SHEETS or imports or cur not in REVIEWED_CSSOM.get(h, ()): r.append(f"stylesheet {href or '(inline)'} {(h or 'unrecorded')[:12]}: not reviewed bytes with their own unchanged rules (current rules {(cur or 'unreadable')[:12]}, imports {imports})")
+    if (rv or {}).get('adopted'): r.append(f"{rv['adopted']} adopted (script-constructed) stylesheet(s): never reviewed")
+    return r
+
+
 def optional_controls(raw, route, records, evidence, child):
     """(why the initial-only view's declared controls stay a deficit - [] means a truthful warning instead, facts). EVERY initial render actually
     made must carry its own code inventory (Scope.code) and pass every condition on its own - no render certifies another, a missing or unknown
@@ -643,6 +918,7 @@ def optional_controls(raw, route, records, evidence, child):
     No click is claimed; unknown code, listeners or active contexts, a following-TABLE branch, an escaped or unresolved or ambiguous id, or a
     target the reading does not hold keeps the deficit."""
     why, observed = [], {u: o.get('sha256') for u, o in (evidence.get('observed') or {}).items() if o.get('status') == 200}
+    answered = {u: o.get('status') for u, o in (evidence.get('observed') or {}).items()}  # every recorded status (EFFECTIVE STYLES)
     mine = [v for m in (acquisition, sg) for v in vars(m).values() if isinstance(v, str)] + [v for v in list(globals().values()) + list(OWN_SNIPPETS) if isinstance(v, str)]
     own = {hashlib.sha256(x.encode()).hexdigest() for v in mine for x in (v, INIT_WRAP[0] + v + INIT_WRAP[1])} | set(TOOLING)  # this runtime's own evaluated code, exact (as written or as its init script)
     parent = ((evidence.get('observed') or {}).get(evidence.get('parent_url')) or {}).get('body') or b''  # the recorded viewer page: its own javascript: links
@@ -654,13 +930,7 @@ def optional_controls(raw, route, records, evidence, child):
     def ok(h, url=None):  # a version outside the reviewed lists admitted by its own record and this file's insertion proof (qualified_version), decided once per call
         if (h, url) not in checked: checked[(h, url)] = bool(h) and qualified_version(evidence, h, url)[0]  # reviewed bytes too: their own record and this file's proof (no grandfathering)
         return checked[(h, url)]
-    declared, targets, toggles = {}, {}, []
-    for l in route.get('source_links') or []:
-        if not l.get('script_action'): continue
-        d = l.get('declarations') or []; m = ACTION.fullmatch(d[0].get('value') or '') if len(d) == 1 and d[0].get('name') == 'onclick' else None
-        if l.get('href') != 'javascript:void(0);' or m is None: why.append(f"control at {l['tag']['byte_start']}: not one renderer action on javascript:void(0);"); continue
-        declared[d[0]['value']] = declared.get(d[0]['value'], 0) + 1
-        if m.group('id'): targets[l['tag']['byte_start']] = m.group('id')
+    toggles = []; w0, declared, targets = _declared_controls((l['tag']['byte_start'], l.get('href'), l.get('declarations') or []) for l in route.get('source_links') or [] if l.get('script_action')); why += w0
         # Show.hideAR only hides Show.LastAR, which only Show.showAR sets (pinned Show.js): it reveals nothing. Show.toggleNext: its own DOM walk (CODE_ACTIONS), below
     def one(g):  # one render's own inventory: every condition, nothing borrowed from another render
         r = []
@@ -671,23 +941,9 @@ def optional_controls(raw, route, records, evidence, child):
             w = f"unqualified executed context(s) in this page's lifetime (a child frame not attached by the identified infrastructure, or a foreign world, gone or not): {foreign}"
             only = ins_u and isinstance(foreign, list) and all(not x.get('own_frame') and x.get('creator') and set(x['creator']) == {ins_u} and observed.get(ins_u) == ins_h for x in foreign)
             held_ins(r, ins_h if only else None, None, w)
-        acts = g.get('actions')
-        if not isinstance(acts, dict) or 'unknown' in acts: r.append('the DOM control facts are unknown')
-        else:
-            seen = {}
-            for v, table, *walk in acts['actions']:
-                seen[v] = seen.get(v, 0) + 1; m = ACTION.fullmatch(v or '')
-                if table and m and m.group('id'): r.append(f'Show.showAR {m.group("id")!r}: a following TABLE is shown instead (branch unsupported)')
-                if m and 'toggleNext' in m.group(0):  # pinned Show.toggleNext: the first DIV from the control along its following siblings; no DIV throws, no inline display is a no-op
-                    t = walk[0] if walk else None
-                    if not isinstance(t, dict): r.append('Show.toggleNext: its DOM walk facts are unknown')
-                    elif t['div'] and t['display']:  # it shows or hides that DIV and rewrites the control's own first character: both must lie in an element the reading holds whole
-                        u = [k for k in t.get('holders') or [] if acts['ids'].get(k) == [1, 1]]  # DOM ancestors enclosing control and DIV, one element per id, in the source scope
-                        if u: toggles.append(tuple((k, (acts.get('texts') or {}).get(k)) for k in sorted(u)))  # with the DOM's own text of each
-                        else: r.append('Show.toggleNext: no DOM-unique source-scope element encloses the control and its DIV')
-            if seen != declared: r.append('the source-scope onclick controls in the DOM differ from the native declarations')
-            for t in sorted(set(targets.values())):
-                if acts['ids'].get(t) != [1, 1]: r.append(f'Show.showAR target {t!r}: {acts["ids"].get(t)} [document, source-scope] elements, not one source-scope id')
+        r += _dom_action_reasons(g.get('actions'), declared, targets, toggles)
+        rv = g['actions'].get('reveal') if isinstance(g.get('actions'), dict) else None
+        r += _effective_sheet_reasons(rv, observed, answered)
         for s in g.get('scripts') or []:
             url, h = s['url'], s['sha256']
             if h in KNOWN_CODE or ok(h, url or None):  # exact reviewed (or qualified) bytes; a fetched one must also be the recorded response at its own address
@@ -721,20 +977,7 @@ def optional_controls(raw, route, records, evidence, child):
     sr = (route.get('facts') or {}).get('source_reading') or {}
     if not (sr.get('made') is True and sr.get('status') == 'OK' and child is not None and child.get('status') == 'OK'):
         why.append('the attempt has no OK typed source reading')
-    else:
-        ids = {}
-        for r in (route.get('source_ids') or {}).get('records') or []:
-            if r.get('by') == 'id': ids.setdefault(r['value'], []).append((r['start'], r['end']))
-        vis = anchor.Visible(raw, page=route.get('page_visibility'), source=True)  # the source reading's own stream (html_route.source_reading)
-        held, owners = edgartools_html._holders(child.get('units') or [], vis)[0], sg._owners(vis, child.get('units') or [])  # the one run-to-owner rule
-        for t in sorted(set(targets.values())):
-            if len(ids.get(t) or []) != 1: why.append(f'target {t!r}: {len(ids.get(t) or [])} native id records'); continue
-            (a, b), = ids[t]; _, n, _ = held(a, b); _, bad = owners(a, b)
-            if n == 0 or bad: why.append(f'target {t!r}: {bad or "no character"} (source reading, one run-to-owner rule)')  # every character held, each owner's text the source's own at its places, every character read
-        whole = lambda a, b: b is not None and held(a, b)[1] > 0 and owners(a, b)[1] is None  # the targets' rule, on that element's one native id record
-        for u in sorted(set(toggles), key=str):
-            if not any(len(ids.get(k) or []) == 1 and whole(*ids[k][0]) and same_text(vis, *ids[k][0], dom) for k, dom in u):
-                why.append(f'Show.toggleNext: none of its {len(u)} enclosing DOM-unique element(s) is held whole by the source reading with exactly its own source text in the DOM')
+    else: why += _reading_reasons(raw, route, child, targets, toggles)
     facts = {'controls': sum(declared.values()), 'targets': len(set(targets.values())), 'renders': len(records), 'renders_inventoried': len(done),
              'scripts': [len(g.get('scripts') or []) for g in done], 'listeners': [len(g.get('listeners') or []) for g in done],
              'infrastructure': sorted({INFRASTRUCTURE[s['sha256']] for g in done for s in g.get('scripts') or [] if s['sha256'] in INFRASTRUCTURE}),
@@ -743,7 +986,7 @@ def optional_controls(raw, route, records, evidence, child):
     return why, facts
 
 
-def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=None, prepare=None, max_states=32, max_transitions=128, explore=True):
+def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=None, prepare=None, max_states=32, max_transitions=128, explore=True, viewer_start=None):
     """The initial route, then each source-owned action once (finite): a trial render first; only an action that proves a useful state (an outer reveal
     of one proved target, or an in-place change inside it, or the same control reopening it) gets full per-state extraction. Every trial keeps its
     whole native record. Each acting link record of the initial route carries labelled activations: complete or not with reasons, or `refused` (no state
@@ -766,7 +1009,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         observed_controls(raw, route, ctx)
         return route, src
     def trial(controls, label):  # one unmarked render: the whole native record, or why it was refused
-        t = Context(evidence, control=controls, label=label); why = None
+        t = Context(evidence, control=controls, label=label, viewer_start=viewer_start); why = None
         try:
             pg = t.page(browser, None, ('http://trial.invalid/', raw), state_source(source, evidence, t))
             try: pg.goto('trial')
@@ -819,7 +1062,8 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         return act
     def attach(start, act): next(r for r in initial['source_links'] if r['tag']['byte_start'] == start).setdefault('activations', []).append(act)
     def refused(start, label, r, why): attach(start, {'state': None, 'trial': label, 'status': 'refused', 'reasons': [why], 'target': r.get('target'), 'action': 'programmatic HTMLElement.click() (untrusted)'})
-    start = Context(evidence); start.inventory = not explore; initial, src0 = one(start)  # the initial view: its reference is the 'back to the start' identity; its code inventory only where optional_controls needs it
+    start = Context(evidence, viewer_start=viewer_start); start.inventory = not explore; initial, src0 = one(start)  # the initial view: its reference is the 'back to the start' identity; its code inventory only where optional_controls needs it
+    viewer_start = json.loads(start.viewer_start) if start.viewer_start is not None else None
     out = {'initial': initial, 'states': [], 'trials': [], 'trial_captures': {}}  # trial captures: the caller keeps them once by digest
     unknown, deficits = [], []  # refused source-owned actions (ordinary navigation excepted); the document's required deficits
     for l in vis0.links:  # every source link record shown in the initial reading, once; one hidden there is reachable only inside a revealed target
@@ -828,7 +1072,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
         r, probe, why = trial(l['start'], f"trial@{l['start']}")
         if probe and not any(probe.values()): continue  # located, clicked, nothing happened: a no-op, no state
         if why: refused(l['start'], f"trial@{l['start']}", r, why); continue  # an attempted action that proved no target state: its record kept, no extraction
-        label = f"activated@{l['start']}"; ctx = Context(evidence, control=l['start'], label=label); ctx.named_by = r.get('native') or {}; route, _ = one(ctx)  # named by its trial (none: unproved)
+        label = f"activated@{l['start']}"; ctx = Context(evidence, control=l['start'], label=label, viewer_start=viewer_start); ctx.named_by = r.get('native') or {}; route, _ = one(ctx)  # named by its trial (none: unproved)
         act = activation(ctx, route, label); out['states'].append({'label': label, 'control': l['start'], 'route': route, 'records': ctx.records}); attach(l['start'], act)
         if not act['target']: continue
         x0, x1 = act['target']['source_extent']['byte_start'], act['target']['source_extent']['byte_end_exclusive']; family = [(label, route, ctx)]
@@ -858,7 +1102,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
                 if ((r2.get('inner') or [{}])[-1]).get('replacement'):  # a qualified replacement only ever reaches an already-qualified exact state; unmatched: unknown, never a new state
                     why = 'a replacement whose native state equals no already-qualified state'; graph['refused'] += 1; unknown.append(tl); refused(c, tl, r2, why)
                     graph['edges'].append({'from': at, 'control': c, 'to': None, 'kind': 'refused', 'trial': tl, 'lineage': lineage(r2)}); continue
-                ilabel = 'activated@' + '+'.join(map(str, seq)); ictx = Context(evidence, control=seq, label=ilabel); ictx.named_by = r2.get('native') or {}; iroute, _ = one(ictx)
+                ilabel = 'activated@' + '+'.join(map(str, seq)); ictx = Context(evidence, control=seq, label=ilabel, viewer_start=viewer_start); ictx.named_by = r2.get('native') or {}; iroute, _ = one(ictx)
                 out['states'].append({'label': ilabel, 'control': list(seq), 'route': iroute, 'records': ictx.records}); attach(c, activation(ictx, iroute, ilabel, act['target'])); family.append((ilabel, iroute, ictx))
                 ok = r2.get('native') == ictx.reference  # enrolled and expanded only when its own trial and extraction agree (else held by its gate, never an edge target)
                 if key and ok: seen[key] = ilabel

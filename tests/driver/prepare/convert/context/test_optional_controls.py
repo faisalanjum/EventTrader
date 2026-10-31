@@ -59,6 +59,10 @@ def setUpModule():  # AUGMENTED, not historical: the walk facts and texts are co
         c['actions']['texts'] = dict(got['texts'])
 
 
+def only_unknown_reveal(why):  # TIGHTENED (SHARED GUARD, Codex T2/T3): these recorded 10-22 inventories carry no reveal-profile facts, so the old acceptance cannot show
+    return [w for w in why if 'reveal profile facts unknown (shared guard)' not in w]  # its revealed CSS is reveal-only; a former pass now holds ONLY those reasons, nothing else
+
+
 def codes(fn):  # every render's inventory changed the same way (renders must agree)
     cs = copy.deepcopy(IN['codes'])
     for c in cs: fn(c)
@@ -73,8 +77,10 @@ class OptionalControls(unittest.TestCase):
     def assertKept(self, got, part):
         why, _ = got; self.assertTrue(why, 'the deficit must stay'); self.assertTrue(any(part in w for w in why), why)
 
-    def test_recorded_positive_qualifies(self):
-        why, facts = call(); self.assertEqual(why, [])
+    def test_recorded_positive_qualifies(self):  # TIGHTENED (SHARED GUARD, Codex T2/T3): the recorded 10-22 inventory has no reveal-profile facts, so the old
+        why, facts = call()                        # acceptance cannot show its revealed CSS is reveal-only; exactly those reasons, and nothing else, now keep the deficit
+        self.assertTrue(why); self.assertTrue(all('reveal profile facts unknown (shared guard)' in w for w in why), why)
+        self.assertEqual(len(why), 3)  # one per initial render (3)
         self.assertEqual((facts['controls'], facts['targets'], facts['renders']), (18, 4, 3))  # fixture facts: 18 declared controls, 4 distinct targets, 3 initial renders
         self.assertEqual(len(facts['infrastructure']), 1)
         self.assertEqual(sorted(len(c['scripts']) for c in IN['codes']), [179, 181, 181])  # fixture fact: the renders' own-code counts differ (lifetime record)
@@ -135,7 +141,7 @@ class OptionalControls(unittest.TestCase):
 
     def test_own_code_count_may_differ_page_code_may_not(self):  # this runtime's code runs once per its own call; the page's must agree
         wrapper = next(s for s in IN['codes'][0]['scripts'] if s['sha256'] in context.TOOLING and s['bytes'] == 61)
-        cs = copy.deepcopy(IN['codes']); cs[1]['scripts'].append(dict(wrapper)); self.assertEqual(call(codes=cs)[0], [])
+        cs = copy.deepcopy(IN['codes']); cs[1]['scripts'].append(dict(wrapper)); self.assertTrue(all('reveal profile facts unknown' in w for w in call(codes=cs)[0]))  # TIGHTENED (shared guard): only the missing reveal facts remain
         cs = copy.deepcopy(IN['codes']); cs[1]['scripts'].append(dict(next(s for s in cs[1]['scripts'] if s['url'] == SHOW_JS)))
         self.assertKept(call(codes=cs), 'disagree')
 
@@ -249,7 +255,7 @@ class OptionalControls(unittest.TestCase):
     def test_a_white_space_only_dom_difference_passes(self):  # demonstrated limit (search form): a blank more in the DOM text is not a held character
         def f(c):
             k = next(x for x in c['actions']['actions'] if x[2] and x[2]['display'] == 'none')[2]['holders'][0]; c['actions']['texts'][k] += ' \n'
-        self.assertEqual(call(codes=codes(f))[0], [])
+        self.assertEqual(only_unknown_reveal(call(codes=codes(f))[0]), [])
 
     def test_historical_fields_predate_the_walk(self):  # provenance: the recorded caller renders carry no walk; the facts the other tests use are augmented
         self.assertTrue(all(len(x) == 2 for c in HISTORICAL_CODES for x in c['actions']['actions']))
@@ -259,17 +265,17 @@ class OptionalControls(unittest.TestCase):
         def f(c):
             for x in c['actions']['actions']:
                 if x[2]: x[2] = dict(x[2], holders=[], display='' if x[2]['display'] == 'none' else x[2]['display'])
-        self.assertEqual(call(codes=codes(f))[0], [])
+        self.assertEqual(only_unknown_reveal(call(codes=codes(f))[0]), [])
         def g(c):
             for x in c['actions']['actions']:
                 if x[2]: x[2] = {'div': False, 'display': None, 'holders': []}
-        self.assertEqual(call(codes=codes(g))[0], [])
+        self.assertEqual(only_unknown_reveal(call(codes=codes(g))[0]), [])
 
     def test_hide_needs_no_enclosing_element(self):  # pinned Show.js: hideAR only hides Show.LastAR, which only showAR sets - it reveals nothing
         r = copy.deepcopy(IN['route']); hide = [l for l in r['source_links'] if l.get('script_action') and l['declarations'][0]['value'] == 'Show.hideAR();']
         self.assertTrue(hide)  # fixture fact: Show.hideAR controls
         hide[0]['tag'] = {'byte_start': 0, 'byte_end_exclusive': 1}
-        self.assertEqual(call(route=r)[0], [])
+        self.assertEqual(only_unknown_reveal(call(route=r)[0]), [])
 
 
 
@@ -354,7 +360,7 @@ class UntargetedPopup(unittest.TestCase):  # a popup no showAR control of the pa
 
     def test_its_controls_qualify_inside_its_dom_unique_held_element(self):  # the private 6+6 shape: close + toggles of a popup no showAR names
         r, cs = untargeted(self.T); why, facts = call(route=r, codes=cs)
-        self.assertEqual(why, []); self.assertEqual((facts['controls'], facts['targets']), (17, 3))
+        self.assertEqual(only_unknown_reveal(why), []); self.assertEqual((facts['controls'], facts['targets']), (17, 3))
 
     def test_two_native_records_for_its_id(self):
         r, cs = untargeted(self.T); r['source_ids']['records'].append(dict(record(r, self.T), start=0, end=1))
@@ -428,7 +434,7 @@ class SingleVersionQualification(unittest.TestCase):  # owner single-version pol
     def test_a_new_version_without_a_record_stays_held(self):  # the real current behaviour for the 11 files
         self.assertKept(call(evidence=self.ev()), 'unknown executable code')
     def test_a_passed_record_and_this_files_insertion_proof_admit_it(self):
-        self.record(); why, facts = call(evidence=self.ev()); self.assertEqual(why, []); self.assertEqual(facts['qualified_versions'], [BOT])
+        self.record(); why, facts = call(evidence=self.ev()); self.assertEqual(only_unknown_reveal(why), []); self.assertEqual(facts['qualified_versions'], [BOT])
     def test_a_record_for_other_bytes_does_not_admit(self):
         self.record(script_sha256='b' * 64); self.assertKept(call(evidence=self.ev()), 'unknown executable code')
     def test_without_this_files_insertion_proof_a_record_does_not_admit(self):
@@ -466,7 +472,7 @@ class SingleVersionQualification(unittest.TestCase):  # owner single-version pol
     def test_a_reviewed_version_with_proof_but_no_record_is_held(self):  # no grandfathered approval: the same qualification as a new version
         context.INFRASTRUCTURE[BOT] = self.saved[BOT]; e = copy.deepcopy(AUGMENTED_EVIDENCE); e.pop('qualifications'); self.assertKept(call(evidence=e), 'unknown executable code')
     def test_the_reviewed_versions_pass_with_their_record_and_proof(self):  # the augmented default: this file's proof + the producer's record
-        context.INFRASTRUCTURE[BOT] = self.saved[BOT]; why, _ = call(); self.assertEqual(why, [])
+        context.INFRASTRUCTURE[BOT] = self.saved[BOT]; why, _ = call(); self.assertEqual(only_unknown_reveal(why), [])
 
 
 if __name__ == '__main__':

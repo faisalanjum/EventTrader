@@ -24960,6 +24960,127 @@
     "what": "Oct-6 original receipt on the pre-fix routes: AMG not delivered (the regression proof)",
     "source": "real575_20261005/handoff_20261006/HANDOFF_fixed_sonnet_on.json"
    }
+  },
+  "adapter_r1_verified_20261030/attempt_1/COMPLETE.json": {
+   "sha256": "c4ec2fdf4fb334c70cf765701ecc9739f0a10abe32f98375f2c65ad9d71f74be",
+   "bytes": 584,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/COMPLETE.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/ROUTE.json": {
+   "sha256": "191517b137c8129cf9ea4ed1ecfb9c5d9b77f2468db57485385a89ebc05784a1",
+   "bytes": 540543,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/ROUTE.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/RAW_READING.json": {
+   "sha256": "a0fd2a2ec977c0c78e0be662390da71c1542c8bd7aa18548ee1c5a23878237c1",
+   "bytes": 2790,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/RAW_READING.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/RENDERER_ELIGIBILITY.json": {
+   "sha256": "ddbbefc2867d205b0ffd6c0bd5ce29be1602d2b810376bbc325d49285cf87e0d",
+   "bytes": 783,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/RENDERER_ELIGIBILITY.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/raw_reading/b9ddedab8965fe1e85d037fefce061722b5f8871582bdb7a944f70f5be1a2079.gz": {
+   "sha256": "61584625c581bd3e65a1b19bcb6bde6189333275b114930202088cf6f0e1f73e",
+   "bytes": 3386,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/raw_reading/b9ddedab8965fe1e85d037fefce061722b5f8871582bdb7a944f70f5be1a2079.gz",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/source_reading/COMPLETE.json": {
+   "sha256": "6bcef45838dfd0164ccd8c173265f26a4d156bde01fe90d059ee0b44eae4f1e7",
+   "bytes": 480,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/source_reading/COMPLETE.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/source_reading/ROUTE.json": {
+   "sha256": "b783eee6ae90248c03fb961a0ef21bcec7abaa5146a2e87f9778b41ee619346f",
+   "bytes": 570587,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/source_reading/ROUTE.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/source_reading/RAW_READING.json": {
+   "sha256": "933e8ffd80d726fcc6b5981dba02bfb49e0cc73e46ca2c932243dc9886e13d6f",
+   "bytes": 2826,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/source_reading/RAW_READING.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/attempt_1/source_reading/raw_reading/5861734e9c20b2618179ea5c966332e5aa4b9c29c330a79a430615f939451c5b.gz": {
+   "sha256": "dbf320a98914f5f38c43dfbcaf039ab450efc91183b493a8d852680e9c302d4f",
+   "bytes": 5908,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1/source_reading/raw_reading/5861734e9c20b2618179ea5c966332e5aa4b9c29c330a79a430615f939451c5b.gz",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/logs_1/R.json": {
+   "sha256": "89385ee947e4bede7a7b705bba6cee41cd782011146d28fa56d487ce4d167ab1",
+   "bytes": 1073753,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/logs_1/R.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
+  },
+  "adapter_r1_verified_20261030/logs_1/source_reading/R.json": {
+   "sha256": "c23caa64f32427300ef5761871d275fe5ae5bbf578555967e72b84ab8013878e",
+   "bytes": 513935,
+   "role": "input",
+   "provenance": {
+    "kind": "saved_verified_product",
+    "what": "real job.py verified_saved_output row for public AMG R1.htm (script-free Renderer page); only the files prepared_filing.settle and reconstruct verify read",
+    "source": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/logs_1/source_reading/R.json",
+    "derivation": "saved 2026-10-30 by the candidate runtime; still verifies under the image8 release runtime (reconstruct verify exit 0, 2026-10-31)"
+   }
   }
  },
  "groups": {
@@ -29850,6 +29971,19 @@
    "real575_20261005/handoff_20261006/routes/0001558370-24-013452/adc-20240930xex10d2.htm.json",
    "real575_20261005/handoff_20261006/HANDOFF_fixed.json",
    "real575_20261005/handoff_20261006/HANDOFF_fixed_sonnet_on.json"
+  ],
+  "adapter.r1_verified": [
+   "adapter_r1_verified_20261030/attempt_1/COMPLETE.json",
+   "adapter_r1_verified_20261030/attempt_1/ROUTE.json",
+   "adapter_r1_verified_20261030/attempt_1/RAW_READING.json",
+   "adapter_r1_verified_20261030/attempt_1/RENDERER_ELIGIBILITY.json",
+   "adapter_r1_verified_20261030/attempt_1/raw_reading/b9ddedab8965fe1e85d037fefce061722b5f8871582bdb7a944f70f5be1a2079.gz",
+   "adapter_r1_verified_20261030/attempt_1/source_reading/COMPLETE.json",
+   "adapter_r1_verified_20261030/attempt_1/source_reading/ROUTE.json",
+   "adapter_r1_verified_20261030/attempt_1/source_reading/RAW_READING.json",
+   "adapter_r1_verified_20261030/attempt_1/source_reading/raw_reading/5861734e9c20b2618179ea5c966332e5aa4b9c29c330a79a430615f939451c5b.gz",
+   "adapter_r1_verified_20261030/logs_1/R.json",
+   "adapter_r1_verified_20261030/logs_1/source_reading/R.json"
   ]
  },
  "metadata": {

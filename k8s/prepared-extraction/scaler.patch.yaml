@@ -1,0 +1,4 @@
+# REVIEWABLE - NOT APPLIED. KEDA ScaledObject report-enricher-scaler (namespace processing): exactly one pod for the canary (today: min 1 / max 5).
+spec:
+  minReplicaCount: 1
+  maxReplicaCount: 1

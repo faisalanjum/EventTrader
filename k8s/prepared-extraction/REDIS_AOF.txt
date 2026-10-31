@@ -1,0 +1,41 @@
+MANUAL INSTRUCTIONS — activation requires the owner decision; nothing is applied by committing these files.
+CWD: k8s/prepared-extraction/ beneath the repository root. Keep BEFORE_WORKER_REVISION.txt here when R0 creates it.
+REDIS AOF v3 - PREPARED, NOT APPLIED - Claude 578e6535, written after the clock read 01:00:22 EDT Oct 31. Supersedes v1 (REDIS_AOF_PREPARED_v1_cee16699.txt): bounded/aborting waits, no RDB-only revert.
+Part of the OWNER's final go-live decision (it restarts the SHARED Redis). Native Redis only; no new persistence layer.
+FACTS (read-only, 00:54 EDT): infrastructure/deploy redis, 1 replica, strategy RollingUpdate, image redis:7 = running digest 7b5ee51c (7.4.4), no command/args, no config file, no readiness probe.
+ PVC redis-pvc is RWO local-path 40Gi at /data on minisforum2 (434G free). appendonly no, appendfsync everysec, save "3600 1 300 100 60 10000", dir /data, dump.rdb 12 MB (Oct 23), DBSIZE 57,775, 25.7 MB.
+ So today a Redis crash can lose writes made since the last snapshot (queued, in-progress and dead payloads included).
+EVIDENCE (isolated, same digest): Claude redis_aof/AOF_PROOF2.log. At 57,776 keys the online enable took 0.3 s; after SIGKILL and a restart with the args, 57,777/57,777 keys came back.
+ TRAP: starting with --appendonly yes BEFORE any AOF exists ignored dump.rdb and started with 0 keys, so NEVER apply R4 before R3 is done.
+ Codex (PASS, Root 01:00): codex/WORKER_RECOVERY_REVIEW_20261031T043134Z/NATIVE_AOF_REVIEW.txt, AOF_HARD_RESTART_RESULT.json, AOF_NATIVE_MIGRATION_RESULT.json (hard kill + migration + timing).
+Run the commands in a Bash subshell with set -euo pipefail; stop on a non-zero step. Paste wait_one_owner from ROLLOUT.txt before these helpers. Polling has a 180-second budget; each API request is capped at 10 seconds. Failed reads never satisfy a condition; persistent read failures abort. Historical Failed/Succeeded pods are ignored:
+  rc() { kubectl --request-timeout=10s -n infrastructure exec deploy/redis -- redis-cli -e "$@"; }
+  until_ok() { end=$((SECONDS+180)); while :; do "$@" && return 0; [ $SECONDS -ge $end ] && { echo "ABORT: timeout: $*"; return 1; }; sleep 1; done; }
+  pers() { rc INFO persistence | tr -d '\r'; }   # a failed read returns non-zero, so every check below fails closed
+  active_pods() { kubectl --request-timeout=10s -n processing get pods -l app=report-enricher --field-selector='status.phase!=Failed,status.phase!=Succeeded' -o name; }
+  no_active() { out=$(active_pods) || { echo "ABORT: API error"; exit 1; }; [ -z "$out" ]; }   # run R1-R6 in a subshell: exit = abort
+GO-LIVE ORDER (one owner approval covers it; stop at the first ABORT):
+ R0 capture the CURRENT pre-switch worker revision (keep this file for rollback; do not overwrite it after switching):
+    kubectl --request-timeout=10s -n processing get deployment report-enricher -o jsonpath='{.metadata.annotations.deployment\.kubernetes\.io/revision}' > BEFORE_WORKER_REVISION.txt
+    test -s BEFORE_WORKER_REVISION.txt
+    Read-only: pers; rc DBSIZE   # expect loading:0, aof_enabled:0, rdb_bgsave_in_progress:0
+ R0a Before stopping the old BLPOP worker, confirm its current filing has finished and intake is quiet. If it is busy, wait for completion; do not kill an in-flight filing. Recheck this immediately before the approved switch.
+ R0b Limit the owner count before pausing: kubectl --request-timeout=10s -n processing patch scaledobject report-enricher-scaler --type merge -p "$(cat scaler.patch.yaml)" && wait_one_owner
+ R1 stop the extraction owner: kubectl --request-timeout=10s -n processing annotate scaledobject report-enricher-scaler autoscaling.keda.sh/paused-replicas="0" --overwrite && until_ok no_active
+ R2 fresh snapshot: rc BGSAVE && until_ok sh -c 'p=$(kubectl --request-timeout=10s -n infrastructure exec deploy/redis -- redis-cli -e INFO persistence) && echo "$p" | grep -q "rdb_bgsave_in_progress:0" && echo "$p" | grep -q "rdb_last_bgsave_status:ok"'
+ R3 online conversion: rc CONFIG SET appendfsync always && rc CONFIG SET appendonly yes
+    Continue the same step only on success: until_ok sh -c 'p=$(kubectl --request-timeout=10s -n infrastructure exec deploy/redis -- redis-cli -e INFO persistence) && for k in aof_enabled:1 aof_rewrite_in_progress:0 aof_rewrite_scheduled:0 aof_last_bgrewrite_status:ok aof_last_write_status:ok; do echo "$p" | grep -q "$k" || exit 1; done'
+    Continue the same step only on success: kubectl --request-timeout=10s -n infrastructure exec deploy/redis -- ls /data/appendonlydir && rc DBSIZE   # base + incr + manifest; note the count
+ R4 persist across restarts, no dual writers: kubectl --request-timeout=10s -n infrastructure patch deployment redis --type strategic -p "$(cat redis-aof.patch.yaml)"   # Recreate + pinned digest + args; server dry-run OK
+    then: kubectl --request-timeout=190s -n infrastructure rollout status deployment/redis --timeout=180s
+    Only after that command succeeds, run R5; a PING from the old pod is not a successful rollout. This causes a brief shared-Redis outage; the extraction worker stays stopped.
+ R5 ready: until_ok sh -c 'p=$(kubectl --request-timeout=10s -n infrastructure exec deploy/redis -- redis-cli -e PING) && [ "$p" = PONG ]' && until_ok sh -c 'p=$(kubectl --request-timeout=10s -n infrastructure exec deploy/redis -- redis-cli -e INFO persistence) && echo "$p" | grep -q "^loading:0"'
+    Continue the same step only on success: pers | grep -E 'aof_enabled:1' && rc CONFIG GET appendfsync && rc DBSIZE   # always; compare with R3 while allowing concurrent writes and key expiry; investigate an unexplained drop
+ R6 the worker, still paused at 0 (no worker pod exists, so no overlap is possible):
+    kubectl --request-timeout=10s apply -f adapter-config.yaml
+    kubectl --request-timeout=10s -n processing patch deployment report-enricher --type strategic -p "$(cat worker.patch.yaml)"   # image8 + Recreate; replicas stay 0 while paused
+    kubectl --request-timeout=10s -n processing patch scaledobject report-enricher-scaler --type merge -p "$(cat scaler.patch.yaml)"   # min=max=1
+    kubectl --request-timeout=10s -n processing annotate scaledobject report-enricher-scaler autoscaling.keda.sh/paused-replicas-   # unpause: KEDA starts ONE image8 worker
+    then: kubectl --request-timeout=190s -n processing rollout status deployment/report-enricher --timeout=180s
+    then wait_one_owner from ROLLOUT.txt (HPA max 1 + exactly one active pod) and its exact image check; then steps 7-8 (watch; rate/replicas later).
+ROLLBACK: a worker rollback (ROLLBACK.txt) leaves Redis on AOF. Do NOT revert Redis to the old RDB-only args: the old worker runs unchanged on AOF Redis.

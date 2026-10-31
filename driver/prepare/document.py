@@ -206,7 +206,36 @@ def main():
                 save(attempt / 'SOURCE.json', declared)
                 auto = (None, None)  # automatic entry (Root CONTEXT_AUTOMATIC_ENTRY_IMPLEMENT_20261022): a declared script action, no pinned context row
                 from driver.prepare.convert import html_route as _route
-                if 'context' not in row and _route.declarations(screen_grid.Visible(raw), browser)[0]:  # the same shared decision the route status uses; only the supported link path enters context
+                source0 = source  # today's Source, restored if the script-free route falls back
+                scriptless, pre = None, None  # SCRIPTLESS: a Renderer report page the script-free path can decide; otherwise every line below is today's
+                binding = _route.renderer_bundle(row['filename'], manifest, members) if 'directory' not in row and 'context' not in row else None
+                if binding is not None:
+                    vis0 = screen_grid.Visible(raw); links0, outside0 = _route.declarations(vis0, browser)
+                    if links0:
+                        from driver.prepare.convert import context as _ctx
+                        probe = screen_grid.Source(row['filename'], members, base=source.base, observed={u: dict(o) for u, o in source.observed.items()}, bundle=source.bundle, renderer_css=binding)  # its own Source: never the context route's
+                        pre = _ctx.renderer_eligible(raw, vis0, links0, outside0, browser, probe)
+                        save(attempt / 'RENDERER_ELIGIBILITY.json', {'binding': binding, 'eligible': not pre[0], 'reasons': pre[0], 'facts': {k: v for k, v in pre[1].items() if not k.startswith('_')}})
+                        if not pre[0]: scriptless, source = binding, probe  # eligible: this route, its Source and records; ineligible: today's route below, unchanged
+                early = None  # SCRIPTLESS first: kept, or - only on a late CONTENT failure with a configured viewer - set aside whole and today's route below runs unchanged
+                if scriptless:
+                    made = {}
+                    def qualify(route_):  # the attempt's one typed source reading, then the existing content rule on it (context.renderer_controls)
+                        made['child'] = source_child(attempt, row, raw, route_, declared, html_route, edgartools_html, archive, acquire)
+                        return _ctx.renderer_controls(raw, route_, made['child'], browser, source, pre=pre)
+                    r0, f0 = html_route.prepare(raw, row['file_id'], row['source_sha256'], browser, source, parse=raw_reading(attempt, row['file_id'], edgartools_html, archive, acquire), qualify=qualify)
+                    r0['facts'] = dict(f0, **(r0.get('facts') or {}))  # source_child's own fact, written during qualify, joins the step facts
+                    if 'child' not in made: source_child(attempt, row, raw, r0, declared, html_route, edgartools_html, archive, acquire)
+                    late = (f0.get('renderer_controls') or {}).get('reasons')  # content reasons only: resource and other errors raised above, as today
+                    if late and plan.get('context_campaign') and 'immutable_package_directory' in row:
+                        aside, moved = attempt / 'scriptless_attempt', []; aside.mkdir(mode=0o700)
+                        for n in ('RAW_READING.json', 'raw_reading', 'source_reading'):
+                            if (attempt / n).exists(): (attempt / n).rename(aside / n); moved.append(n)  # kept whole, never overwritten
+                        save(aside / 'ROUTE_SCRIPTLESS.json', r0)
+                        save(attempt / 'RENDERER_FALLBACK.json', {'reasons': late, 'moved_to': 'scriptless_attempt', 'moved': moved, 'route_sha256': digest((aside / 'ROUTE_SCRIPTLESS.json').read_bytes())})
+                        scriptless, source = None, source0
+                    else: early = r0
+                if 'context' not in row and scriptless is None and _route.declarations(screen_grid.Visible(raw), browser)[0]:  # the same shared decision the route status uses; only the supported link path enters context
                     cfg = plan.get('context_campaign')  # the one job-level campaign configuration; no per-document switch
                     if cfg and 'immutable_package_directory' in row: auto = acquired_context(browser, dict(row, context={'acquire': cfg}), raw, screen_grid, attempt, save, require=False, max_actions=cfg.get('max_actions'), withhold=plan.get('qualification_withhold') is True)  # optional job-level limit only (Root CONTEXT_NATIVE_ACTION_BUDGET_20261022T0438)
                     else: save(attempt / 'CONTEXT_ACQUISITION.json', {'outcome': 'not attempted: ' + ('no job campaign configuration' if not cfg else 'a loose input has no filing package'), 'record': None})
@@ -234,8 +263,10 @@ def main():
                             save(folder(label) / 'ROUTE_AFTER_INPUTS.json', route_)
                             save(folder(label) / 'CONTEXT_RENDERS.json', src.context.records)  # every render of this state: its native snapshot (strict gate), requests, proofs
                             keep_captures(folder(label), src.context.captures)
+                    from driver.prepare.job import viewer_start
+                    start = viewer_start(plan['context_viewer_start'], row, {}) if plan.get('context_viewer_start') is not None else None
                     res = context.contextual_routes(raw, row['file_id'], row['source_sha256'], browser, source, ev, parse=per_parse, prepare=per_prepare,  # the row's own Source evidence
-                                                    explore=plan.get('context_explore', True))  # the one job-level choice: False = the initial view only (report controls not attempted)
+                                                    explore=plan.get('context_explore', True), viewer_start=start)  # False = the initial view only (report controls not attempted)
                     for st in res['states']: finish(folder(st['label']), row, st['route'], prepared_by[st['label']], archive, save)  # each state finished once, after its route is whole (observed controls included)
                     route, prepared = res['initial'], prepared_by.get('initial', {})
                     for l in route['source_links']:
@@ -243,10 +274,12 @@ def main():
                             if act.get('state'): act['route_sha256'] = digest((states / act['state'] / 'ROUTE.json').read_bytes())  # a refused attempt has no state route
                     save(attempt / 'CONTEXT_TRIALS.json', res['trials']); keep_captures(attempt, res['trial_captures'])
                 else:
-                    route, facts = html_route.prepare(raw, row['file_id'], row['source_sha256'], browser, source,
-                                                      parse=raw_reading(attempt, row['file_id'], edgartools_html, archive, acquire))
-                    route['facts'] = facts
-                    source_child(attempt, row, raw, route, declared, html_route, edgartools_html, archive, acquire)
+                    if early is not None: route = early  # the kept script-free route (its raw reading and source child already saved)
+                    else:  # today's ordinary route, as frozen 00e04fb0 wrote it
+                        route, facts = html_route.prepare(raw, row['file_id'], row['source_sha256'], browser, source,
+                                                          parse=raw_reading(attempt, row['file_id'], edgartools_html, archive, acquire))
+                        route['facts'] = facts
+                        source_child(attempt, row, raw, route, declared, html_route, edgartools_html, archive, acquire)
                     save(attempt / 'ROUTE_BEFORE_INPUTS.json', route)
                     try:
                         prepared = inputs.prepare(raw, route, members, browser, source)

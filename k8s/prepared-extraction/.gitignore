@@ -1,0 +1,2 @@
+# Captured from the live deployment only when the owner approves activation.
+BEFORE_WORKER_REVISION.txt

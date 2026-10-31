@@ -1,0 +1,23 @@
+MANUAL INSTRUCTIONS — activation requires the owner decision; nothing is applied by committing these files.
+CWD: k8s/prepared-extraction/ beneath the repository root. Keep BEFORE_WORKER_REVISION.txt here when R0 creates it.
+Execution prelude: use a Bash subshell with set -euo pipefail. Each API request is capped at 10 seconds; polling budget is 180 seconds. Stop on any non-zero step.
+ROLLBACK WITH PENDING JOBS (image8 worker -> old worker). Same owner approval as the switch. Order: stop the new worker, return its claims, then start the old one.
+Redis stays on AOF: a worker rollback never reverts Redis (no stale RDB-only args). The old worker runs unchanged on AOF Redis.
+Helpers (paste once). Every wait is bounded at 180 s. An API/Redis error ABORTS; it never counts as "zero pods". Historical Failed/Succeeded pods (e.g. ...-5kjv4) are ignored.
+  active_pods() { kubectl --request-timeout=10s -n processing get pods -l app=report-enricher --field-selector='status.phase!=Failed,status.phase!=Succeeded' -o name; }
+  wait_no_active() { end=$((SECONDS+180)); while :; do out=$(active_pods) || { echo "ABORT: API error"; return 1; }; [ -z "$out" ] && return 0; [ $SECONDS -ge $end ] && { echo "ABORT: timeout, still: $out"; return 1; }; sleep 2; done; }
+1. Stop the new worker (KEDA 2.17.2 pause at 0):
+   kubectl --request-timeout=10s -n processing annotate scaledobject report-enricher-scaler autoscaling.keda.sh/paused-replicas="0" --overwrite && wait_no_active
+2. Return claimed payloads to the HEAD of the queue, oldest first. The loop is counted from a checked LLEN (an empty payload is a valid item), so it is finite and every Redis call is checked:
+   kubectl --request-timeout=10s -n infrastructure exec deploy/redis -- sh -c 'P=reports:queues:enrich:processing Q=reports:queues:enrich; n=$(redis-cli -e LLEN $P) || exit 1; i=0; while [ $i -lt $n ]; do redis-cli -e LMOVE $P $Q RIGHT LEFT >/dev/null || exit 1; i=$((i+1)); done; m=$(redis-cli -e LLEN $P) || exit 1; echo "returned $n, left $m"; [ "$m" = 0 ]'
+   (must print "left 0" and exit 0; on non-zero exit STOP and inspect - nothing is deleted)
+3. Restore the captured pre-switch POD TEMPLATE while still paused at zero; applying an old YAML alone can leave patched fields behind:
+   kubectl --request-timeout=10s -n processing rollout undo deployment/report-enricher --to-revision="$(cat BEFORE_WORKER_REVISION.txt)"
+   Verify the restored template has no PREPARED_EXTRACTION_CONFIG or prepared-output/prepared-config mounts/volumes before deleting the ConfigMap. The native undo restores the old complete template, including removals.
+   kubectl --request-timeout=10s -n processing delete configmap prepared-adapter-config
+   Restore the pre-switch scaler limits (observed min=1/max=5; recheck and record before activation):
+   kubectl --request-timeout=10s -n processing patch scaledobject report-enricher-scaler --type merge -p '{"spec":{"minReplicaCount":1,"maxReplicaCount":5}}'
+   kubectl --request-timeout=10s -n processing annotate scaledobject report-enricher-scaler autoscaling.keda.sh/paused-replicas-
+   kubectl --request-timeout=190s -n processing rollout status deployment/report-enricher --timeout=180s
+Kept for review, untouched: reports:queues:enrich:dead (full original payloads + reason), reports:queues:enrich:deliveries, the prepared outputs on disk.
+Tested locally: test_rollback_returns_a_pending_payload_to_the_old_worker (return + the old b36aa7d2 worker processes it).

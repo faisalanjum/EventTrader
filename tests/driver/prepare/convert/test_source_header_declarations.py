@@ -1,5 +1,6 @@
 """Source table declarations beside the tool's own header verdict (MANUAL_M2_HEADER_IMPLEMENTATION_20261021.md; Smart's corrected design; Root's
-binding review MANUAL_M2_HEADER_BINDING_REVIEW_20261021.md). `header` stays the tool's verdict (EdgarTools 5.60.0 TableProcessor), unchanged. Beside
+binding review MANUAL_M2_HEADER_BINDING_REVIEW_20261021.md). The tool's verdict (EdgarTools 5.60.0 TableProcessor) stays unchanged, now as `header_guess`
+(2026-10-31: `header` states the source markup only, test_header_markup_facts). Beside
 it ride the source's own statements: each cell's `tag` (td/th as parsed), its `id`/`scope`/`headers` values as the parser reads them (`attrs`), and
 its own source row group (`row_group`, an index into the table's `row_group_tags`: thead, tbody, tfoot, or 'table' for rows straight in the table),
 carried on the cell itself so that it stays with that cell when the screen step re-grids rows. Expected declarations come from the fixture markup;
@@ -53,7 +54,7 @@ def old_dump(*drop):  # a raw reading saved before these declarations (and, with
 class SourceHeaderDeclarations(unittest.TestCase):
     def test_structural_declarations_ride_beside_the_unchanged_verdict(self):  # failed before: no tag, attrs or group (first version: no tag)
         r = route(STRUCT)
-        got = [[(c['r'], c['c'], c.get('tag'), c.get('attrs'), c['header']) for c in t['cells']] for t in tables(r)]
+        got = [[(c['r'], c['c'], c.get('tag'), c.get('attrs'), c['header_guess']) for c in t['cells']] for t in tables(r)]
         self.assertEqual(got, [[(0, 0, 'th', {'scope': 'col'}, True), (0, 1, 'td', None, True), (1, 0, 'th', {'scope': 'row', 'headers': 'h1'}, True),
                                 (1, 1, 'td', {'headers': 'c1 r1'}, True), (2, 0, 'td', None, False), (2, 1, 'td', None, False), (3, 0, 'td', None, False), (3, 1, 'td', None, False)],
                                [(0, 0, 'td', None, False), (0, 1, 'td', None, False), (1, 0, 'td', None, False), (1, 1, 'td', None, False)],
@@ -83,7 +84,7 @@ class SourceHeaderDeclarations(unittest.TestCase):
         t = tables(route(raw)); self.assertEqual(len(t), 1); cells = t[0]['cells']
         self.assertEqual({c.get('tag') for c in cells}, {'td'})
         self.assertFalse(any('attrs' in c for c in cells))
-        self.assertEqual([c['header'] for c in cells], [False] * 27 + [True] * 20)  # the unchanged tool's verdict (title row and the data row alike)
+        self.assertEqual([c['header_guess'] for c in cells], [False] * 27 + [True] * 20)  # the unchanged tool's verdict (title row and the data row alike)
         self.assertEqual((t[0].get('row_group_tags'), {c['row_group'] for c in cells}, 'row_groups' in t[0]), (['table'], {0}, False))
         self.assertEqual([c['text'] for c in cells if c['r'] == 2 and c['text']], ['Make-whole provisions', 'Liability', 'June/August 2018', 'December 2038', '$', '69'])
 
@@ -91,13 +92,16 @@ class SourceHeaderDeclarations(unittest.TestCase):
         r = route(STRUCT, parse=old_dump())
         self.assertTrue(all(c['tag'] is None and 'attrs' not in c for t in tables(r) for c in t['cells']))
         self.assertTrue(all('row_group_tags' not in t for t in tables(r)))
-        self.assertEqual([c['header'] for t in tables(r) for c in t['cells']], STRUCT_VERDICTS)
+        self.assertEqual([c['header_guess'] for t in tables(r) for c in t['cells']], STRUCT_VERDICTS)
         r = route(STRUCT, parse=old_dump('row_groups'))
         self.assertTrue(all(c['row_group'] is None for t in tables(r) for c in t['cells']))
 
     def test_the_verdict_is_unchanged_and_named_as_the_tools(self):
-        self.assertEqual([c['header'] for t in tables(route(STRUCT)) for c in t['cells']], STRUCT_VERDICTS)
-        self.assertEqual(eh.SETTINGS['table_header'], "header is the tool's own verdict (EdgarTools 5.60.0 TableProcessor), read unchanged; a cell's tag, its attrs "
+        self.assertEqual([c['header_guess'] for t in tables(route(STRUCT)) for c in t['cells']], STRUCT_VERDICTS)
+        self.assertEqual(eh.SETTINGS['table_header'], "header states the source's own markup only: true for a th or a cell in its own table's thead; false when the "
+                                                      "cell's tag and row group are both recorded and neither marks a header (no such markup, not a judgment that the "
+                                                      "cell is no heading); null (unknown) when that evidence is missing and no th or thead proves it; header_guess is "
+                                                      "the tool's own verdict (EdgarTools 5.60.0 TableProcessor), read unchanged; a cell's tag, its attrs "
                                                       "(id, scope, headers as the parser reads them: character references decoded) and its row_group (the cell's own "
                                                       "source group, carried through re-gridding; its tag in the table's row_group_tags) are the source's statements; "
                                                       "an absent tag, attrs entry or group is unknown")

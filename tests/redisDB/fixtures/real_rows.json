@@ -1,0 +1,238 @@
+{
+ "clean_partial": {
+  "R_bytes": 1158005,
+  "attempt": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_2",
+  "attempt_bytes": 4095579,
+  "attempt_exists": true,
+  "captures_named": 2,
+  "complete_exists": true,
+  "file_id": "AMG_modified_showjs_LABELLED",
+  "generate_exit": 0,
+  "generate_observed": {
+   "max_rss_kb": 220892,
+   "system_seconds": 1.13363,
+   "user_seconds": 6.608874,
+   "wall_seconds": 21.959
+  },
+  "native_error": "context: 140 declared script action(s) not attempted (report-control exploration disabled)",
+  "native_status": "PARTIAL",
+  "ordinal": 2,
+  "outcome": "incomplete",
+  "picture_asset_status": {},
+  "picture_input_errors": [],
+  "reasons": [
+   "native status PARTIAL"
+  ],
+  "reconstruct_exit": 0,
+  "reconstruct_observed": {
+   "max_rss_kb": 31224,
+   "system_seconds": 0.008091,
+   "user_seconds": 0.24359699999999998,
+   "wall_seconds": 0.252
+  },
+  "reconstruction_unknown_families": {
+   "facts": 1,
+   "generated_content": 1,
+   "page_visibility": 1,
+   "resources": 1,
+   "source_facts": 1,
+   "source_ids": 1,
+   "source_links": 100,
+   "source_relations": 1,
+   "source_style": 463,
+   "status": 1,
+   "text_proved": 1
+  },
+  "source_reading": {
+   "R_bytes": 513950,
+   "captures_named": 0,
+   "native_error": null,
+   "native_status": "OK",
+   "picture_asset_status": {},
+   "picture_input_errors": [],
+   "reasons": [],
+   "reconstruct_exit": 0,
+   "reconstruct_observed": {
+    "max_rss_kb": 31236,
+    "system_seconds": 0.012176,
+    "user_seconds": 0.138828,
+    "wall_seconds": 0.151
+   },
+   "reconstruction_unknown_families": {
+    "page_visibility": 1,
+    "source_facts": 1,
+    "source_ids": 1,
+    "source_relations": 1
+   },
+   "verify": {
+    "annotations": [],
+    "custody": [],
+    "preserved": [],
+    "unrepresented": [
+     "page_visibility",
+     "source_facts",
+     "source_ids",
+     "source_relations",
+     "uncovered"
+    ]
+   },
+   "verify_exit": 0
+  },
+  "states": {},
+  "status": "done",
+  "verify": {
+   "annotations": [],
+   "custody": [],
+   "preserved": [],
+   "unrepresented": [
+    "facts",
+    "generated_content",
+    "page_visibility",
+    "resources",
+    "source reading: page_visibility",
+    "source reading: source_facts",
+    "source reading: source_ids",
+    "source reading: source_relations",
+    "source reading: uncovered",
+    "source_facts",
+    "source_ids",
+    "source_links",
+    "source_relations",
+    "source_style",
+    "status",
+    "text_proved",
+    "uncovered"
+   ]
+  },
+  "verify_exit": 0
+ },
+ "source": {
+  "clean_partial": "cand/OUT_GREEN/RESULT.json ordinal 2",
+  "startup_crash": "/tmp/source_xml_child_caller_yww7g1ir/out/RESULT.json ordinal 3",
+  "verified": "cand/OUT_GREEN/RESULT.json ordinal 1"
+ },
+ "startup_crash": {
+  "attempt": "/tmp/source_xml_child_caller_yww7g1ir/out/attempt_3",
+  "attempt_bytes": 139,
+  "attempt_exists": true,
+  "complete_exists": false,
+  "file_id": "malformed/page.htm",
+  "generate_exit": 1,
+  "generate_observed": {
+   "max_rss_kb": 220212,
+   "system_seconds": 0.159863,
+   "user_seconds": 0.601734,
+   "wall_seconds": 0.794
+  },
+  "ordinal": 3,
+  "outcome": "generation_failed",
+  "reasons": [
+   "generation exit 1",
+   "no COMPLETE.json"
+  ],
+  "status": "done"
+ },
+ "verified": {
+  "R_bytes": 1073753,
+  "attempt": "/tmp/sec-root-production-20261030T193349Z/claude/cand/OUT_GREEN/attempt_1",
+  "attempt_bytes": 2209864,
+  "attempt_exists": true,
+  "captures_named": 0,
+  "complete_exists": true,
+  "file_id": "AMG_R1_sealed",
+  "generate_exit": 0,
+  "generate_observed": {
+   "max_rss_kb": 220752,
+   "system_seconds": 0.385484,
+   "user_seconds": 2.282565,
+   "wall_seconds": 2.858
+  },
+  "native_error": null,
+  "native_status": "OK",
+  "ordinal": 1,
+  "outcome": "verified_saved_output",
+  "picture_asset_status": {},
+  "picture_input_errors": [],
+  "reasons": [],
+  "reconstruct_exit": 0,
+  "reconstruct_observed": {
+   "max_rss_kb": 30280,
+   "system_seconds": 0.00805,
+   "user_seconds": 0.242421,
+   "wall_seconds": 0.251
+  },
+  "reconstruction_unknown_families": {
+   "facts": 1,
+   "generated_content": 1,
+   "page_visibility": 1,
+   "resources": 1,
+   "source_facts": 1,
+   "source_ids": 1,
+   "source_links": 100,
+   "source_relations": 1,
+   "source_style": 463,
+   "text_proved": 1
+  },
+  "source_reading": {
+   "R_bytes": 513935,
+   "captures_named": 0,
+   "native_error": null,
+   "native_status": "OK",
+   "picture_asset_status": {},
+   "picture_input_errors": [],
+   "reasons": [],
+   "reconstruct_exit": 0,
+   "reconstruct_observed": {
+    "max_rss_kb": 26780,
+    "system_seconds": 0.016959,
+    "user_seconds": 0.132609,
+    "wall_seconds": 0.15
+   },
+   "reconstruction_unknown_families": {
+    "page_visibility": 1,
+    "source_facts": 1,
+    "source_ids": 1,
+    "source_relations": 1
+   },
+   "verify": {
+    "annotations": [],
+    "custody": [],
+    "preserved": [],
+    "unrepresented": [
+     "page_visibility",
+     "source_facts",
+     "source_ids",
+     "source_relations",
+     "uncovered"
+    ]
+   },
+   "verify_exit": 0
+  },
+  "states": {},
+  "status": "done",
+  "verify": {
+   "annotations": [],
+   "custody": [],
+   "preserved": [],
+   "unrepresented": [
+    "facts",
+    "generated_content",
+    "page_visibility",
+    "resources",
+    "source reading: page_visibility",
+    "source reading: source_facts",
+    "source reading: source_ids",
+    "source reading: source_relations",
+    "source reading: uncovered",
+    "source_facts",
+    "source_ids",
+    "source_links",
+    "source_relations",
+    "source_style",
+    "text_proved",
+    "uncovered"
+   ]
+  },
+  "verify_exit": 0
+ }
+}

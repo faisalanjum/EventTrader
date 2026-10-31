@@ -2,6 +2,7 @@
 (`source_formatting.step`), the page's geometry is measured in the caller's browser (`screen_grid.step`); where the scanner cannot certify which text
 the page hides, the browser first says it (`visibility`), and the conversion and the screen step read by that. A thin composition of those calls: no
 browser launcher, scheduler, cache or parser of its own."""
+import hashlib
 from bisect import bisect_left
 
 from driver.prepare.convert import anchor, edgartools_html, screen_grid, source_formatting, xml_fields
@@ -58,7 +59,26 @@ def declarations(vis, browser):
     return links, [d for d in outside if d['event_attributes']]
 
 
-def prepare(raw, file_id, sha256, browser, source=None, parse=None):
+RENDERER_CSS = {'c564d6d00dc81a734bd958995c968a220c4e3de896cd48ac52b82a641a40e26f': 'package report.css; its rules equal the viewer /include/report.css cb242530 but for one trailing space'}  # SCRIPTLESS reviewed bytes
+
+
+def renderer_bundle(filename, manifest, members):
+    """SCRIPTLESS: the binding a Renderer report page's include/report.css may use on the script-free path, or None. Holds only when the package's own
+    Renderer manifest (FilingSummary.xml, read by EdgarTools' FilingSummary.parse) lists `filename` as a report and the same package holds report.css as an
+    SEC-added IDEA document with reviewed bytes. Names, hashes or a manifest alone never bind; nothing is fetched."""
+    from edgar.sgml.filing_summary import FilingSummary
+    css, fs = members.get('report.css'), members.get('FilingSummary.xml')
+    entry = next((m for m in manifest.get('members') or [] if m.get('filename') == 'report.css'), None)
+    if css is None or fs is None or entry is None or entry.get('description') != 'IDEA: XBRL DOCUMENT' or hashlib.sha256(css).hexdigest() not in RENDERER_CSS: return None
+    try: listed = FilingSummary.parse(fs.decode('utf-8')).reports.get_by_filename(filename) is not None
+    except MemoryError: raise  # a resource failure, never 'no binding'
+    except Exception: return None  # an unreadable manifest binds nothing
+    if not listed: return None
+    return {'member': 'report.css', 'sha256': hashlib.sha256(css).hexdigest(), 'report': filename, 'sequence': entry.get('sequence'),
+            'why': 'Renderer normalization: FilingSummary.xml lists this page; the package IDEA member report.css (reviewed bytes) styles it, as the SEC viewer styles it with equal rules'}
+
+
+def prepare(raw, file_id, sha256, browser, source=None, parse=None, qualify=None):
     """(route, facts) for one HTML document: the caller's bytes, their SHA-256 and a browser the caller owns and may reuse. `facts` holds each step's own
     result - `formatting` its count (None where nothing can be certified), `screen` its facts, `visibility` (a file the scanner cannot certify) the
     browser's counts or why it could not read them. A failed conversion stops there (no step runs, `facts` empty). A page that cannot be measured keeps
@@ -89,6 +109,10 @@ def prepare(raw, file_id, sha256, browser, source=None, parse=None):
     for rec in route.get('source_links') or []:
         if rec['tag']['byte_start'] in declared: rec['script_action'] = declared[rec['tag']['byte_start']]
     scripted = len(declared) if getattr(source, 'context', None) is None else 0  # a context route's actions are qualified by its activations
+    if scripted and qualify is not None:  # SCRIPTLESS: the caller's Renderer controls check on this script-free path; any reason keeps today's deficit
+        why_q, info = qualify(route)
+        facts['renderer_controls'] = dict(info, reasons=why_q, outcome='deficit kept' if why_q else f'warning: {scripted} declared Renderer control(s) not opened (script-free path); each in-page target is held by the source reading')
+        if not why_q: scripted = 0
     if scripted: rest.append(f'context: {scripted} declared script action(s) not qualified (no context entered)')  # unknown, never standalone success
     document = getattr(source, 'context', None) is None or source.context.control is None  # the document-level route: the default one, or a context's initial view
     if outside and document:  # declared outside the supported link path: never activated here, so the document stays explicitly incomplete, context or not

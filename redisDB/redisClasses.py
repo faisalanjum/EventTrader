@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 class EventTraderRedis:
 
-    def __init__(self, source=RedisKeys.SOURCE_NEWS, clear_config=False, preserve_processed=True):
+    def __init__(self, source=RedisKeys.SOURCE_NEWS, clear_config=False, preserve_processed=True, clear_on_init=True):
         self.source = source
         prefixes = RedisKeys.get_prefixes(self.source) # {'live': 'news:live:', 'hist': 'news:hist:'}
         self.logger = logging.getLogger(f"{self.__class__.__name__}.{source}")
@@ -40,7 +40,8 @@ class EventTraderRedis:
         
         self.config = RedisClient(prefix='admin:')
         
-        self.clear(preserve_processed)
+        if clear_on_init:  # False for a worker that must not delete raw items still owned by the producer
+            self.clear(preserve_processed)
         self.initialize_stock_universe(clear_config=clear_config)
 
 
@@ -231,9 +232,12 @@ class RedisClient:
             try:
                 filed_at = filing.filedAt.replace(':', '.') # 2025-02-13T08:07:15-05:00 -> 2025-02-13T08.07.15-05.00
 
-                # Check if already successfully written to Neo4j (accessionNo-based, no timestamp ambiguity)
-                if self.client.sismember("reports:confirmed_in_neo4j", filing.accessionNo):
-                    self.logger.info(f"Skipping filing already confirmed in Neo4j: {filing.accessionNo}")
+                # Check processed queue for duplicates
+                processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
+                processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
+            
+                if processed_key in processed_items:
+                    self.logger.info(f"Skipping duplicate filing: {processed_key}")
                     return False  # ✅ Clearly indicates "not processed"
                 
                 storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"

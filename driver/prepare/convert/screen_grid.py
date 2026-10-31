@@ -12,6 +12,7 @@ BALLOT BOX WITH BOLD CHECK, LIGHT WHITE SQUARE), with its exact source bytes and
 import hashlib
 import json
 import mimetypes
+import posixpath
 import re
 import urllib.parse
 import time
@@ -160,7 +161,8 @@ def apply(units, spans, measured_by_table):
         parents.append(stack[-1] if stack else -1); stack.append(g)
     for t, table_cells in measured_by_table.items():
         for g, (r, c, cs) in screen_grid(table_cells).items(): by_g[g] = (r, c, cs); table_of[g] = t
-    rows = {c['g']: c.get('rs', 1) for table_cells in measured_by_table.values() for c in table_cells}  # each cell's rows as the browser's table model ends them (rowspan="0" to its row group's end, a larger span stopped there)
+    rows = {c['g']: c.get('rs', 1) for table_cells in measured_by_table.values() for c in table_cells}
+    edges = {c['g']: c['b'] for table_cells in measured_by_table.values() for c in table_cells if c.get('b')}  # SCRIPTLESS: each measured cell's own border sides  # each cell's rows as the browser's table model ends them (rowspan="0" to its row group's end, a larger span stopped there)
     key = lambda u: u.get('id', id(u))  # a unit's id (a caller's bare unit: its identity)
     tabs = {key(u): u for u in units if u.get('kind') == 'table'}
 
@@ -183,6 +185,7 @@ def apply(units, spans, measured_by_table):
             r, c, cs = by_g[g]; rs = rows[g]  # a text cell states its rows as a picture in the same cell does
             if (cell['r'], cell['c'], cell.get('rs', 1), cell.get('cs', 1)) != (r, c, rs, cs): cell.update(r=r, c=c, rs=rs, cs=cs); n += 1
             cell['grid'] = 'screen'; tables.add(table_of[g])
+            if g in edges: cell['borders'] = edges[g]  # the cell's own borders, owned by this route cell (its source span), empty or not
         grid[key(u)] = next(iter(tables)) if len(tables) == 1 and None not in tables else None
         if grid[key(u)] is not None: u['cells'].sort(key=lambda x: (x['r'], x['c']))  # stable: cells that share a place keep their order; a table with a cell not measured, or measured in two tables (one inside the other), keeps the tool's order
     holder = {k: (u, c) for u in tabs.values() for c in u.get('cells') or [] for k in c.get('tables') or []}
@@ -211,7 +214,9 @@ JS = """(arg) => { const [p0, want] = Array.isArray(arg) ? arg : [arg, []]; cons
   for (let c = cw.nextNode(); c; c = cw.nextNode()) { const m = cell.exec(c.data), el = c.parentElement; if (!m || twice.has(c.data) || !(el instanceof HTMLTableCellElement) || named.has(el)) continue; named.add(el);
     const r = el.getBoundingClientRect(); const t = el.closest('table'); const tr = el.parentElement;
     const rest = tr && tr.parentElement && tr.parentElement.rows ? tr.parentElement.rows.length - tr.sectionRowIndex : 1;  // the rows left in its row group, where the table model ends a cell: rowspan="0" runs to there, a larger one stops there
-    out.push({g: +m[1], table: tables.indexOf(t), row: tr && shown.has(tr) ? shown.get(tr) : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest)}); }
+    const cb = getComputedStyle(el), b = [];  // SCRIPTLESS: the cell's OWN drawn border sides (style not none/hidden, width not 0px) as the browser computes them - an empty cell too
+    for (const side of ['top', 'right', 'bottom', 'left']) { const st = cb.getPropertyValue('border-' + side + '-style'), bw = cb.getPropertyValue('border-' + side + '-width'); if (st !== 'none' && st !== 'hidden' && bw !== '0px') b.push([side, bw, st, cb.getPropertyValue('border-' + side + '-color')]); }
+    out.push({g: +m[1], table: tables.indexOf(t), row: tr && shown.has(tr) ? shown.get(tr) : -1, x: r.left, w: r.width, rs: el.rowSpan === 0 ? rest : Math.min(el.rowSpan, rest), ...(b.length ? {b} : {})}); }
   const boxes = {}, runs = new Map(), run = new RegExp('^' + p + 's:([0-9]+)$'), SP = ' \\t\\n\\r\\f';  // each gap side: [key, run, first non-white-space code point, code points]
   for (const [key, k, j, n] of want || []) { if (!runs.has(k)) runs.set(k, []); runs.get(k).push([key, j, n]); }
   const w = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT);
@@ -533,6 +538,9 @@ def styles(raw, vis, runs, got, units):
 WITHHELD = {}  # COMPARISON-ONLY (plan.qualification_withhold): {address: {'kinds', 'sha256'}} of the ONE proved inserted script of this document; empty (strict) otherwise; cleared per document
 
 
+RENDERER_CSS_REF = 'include/report.css'  # SCRIPTLESS: the stylesheet reference every Edgar Renderer report page writes (relative to the page)
+
+
 class Source:
     """The exact evidence one document's renders may use, nothing else: the document's own `path` among its bundle's verified `members`
     ({path: bytes}, from the package reader; `bundle` names that bundle, e.g. its package sha256), read at `base` + path - `base` the bundle's
@@ -541,7 +549,7 @@ class Source:
     @import); a URL is answered only by the member at exactly that path under `base` or by its own observation - a 200 only with the bytes its
     sha256 names. One document's: bound to its bytes at first use (the declared member, where it is one, must be those bytes). `records`: one per
     URL asked (member path and sha256, observation status and time, or 'refused' and why); `charset`: the browser's for the document, read once."""
-    def __init__(self, path, members, base=None, observed=None, bundle=None, context=None):  # `context`: a context.Context - every render is made in that observed parent state
+    def __init__(self, path, members, base=None, observed=None, bundle=None, context=None, renderer_css=None):  # `context`: a context.Context - every render is made in that observed parent state; `renderer_css`: html_route.renderer_bundle's binding (SCRIPTLESS), or None
         split = urllib.parse.urlsplit(base) if base is not None else None
         if split is not None and not (split.scheme and split.netloc and base.endswith('/')): raise ValueError('base: an absolute address ending in "/", or None')
         if path.startswith('/') or urllib.parse.urlsplit(path).scheme: raise ValueError("path: the document's member path, relative to base")
@@ -551,6 +559,8 @@ class Source:
         self.members, self.observed = types.MappingProxyType(dict(members)), types.MappingProxyType({u: types.MappingProxyType(dict(o)) for u, o in (observed or {}).items()})
         self.records, self.refusals, self.root, self.document, self.charset = {}, [], None, None, None
         self.context = context
+        self.renderer_css = renderer_css  # never with a context: the Renderer normalization belongs to the script-free path only
+        if renderer_css is not None and context is not None: raise ValueError('renderer_css: the script-free path only, never a context render')
 
     def bind(self, raw):  # ValueError unless `raw` is this source's document: its declared member (where it is one), the bytes it was first used for
         digest = hashlib.sha256(raw).hexdigest()
@@ -581,6 +591,12 @@ class Source:
         if name in self.members:
             body = self.members[name]; self.records.setdefault(key, {'member': name, 'sha256': hashlib.sha256(body).hexdigest(), 'status': 200, 'kind': kind})
             return 200, mimetypes.guess_type(name)[0] or 'application/octet-stream', body
+        if (self.renderer_css is not None and kind == 'stylesheet' and url not in self.observed  # an exact member (above) or a recorded answer for this URL always wins
+                and name == posixpath.join(posixpath.dirname(self.path), RENDERER_CSS_REF)):
+            body = self.members.get(self.renderer_css['member'])  # SCRIPTLESS: the explicit Renderer normalization - the page's own include/report.css, which no member or
+            if body is not None and hashlib.sha256(body).hexdigest() == self.renderer_css['sha256']:  # record answers, styled by its package's IDEA report.css; recorded as that transformation
+                self.records.setdefault(key, {'url': url, 'reference': name, 'status': 'renderer-remap', 'member': self.renderer_css['member'], 'sha256': self.renderer_css['sha256'], 'kind': kind, 'why': self.renderer_css['why']})
+                return 200, 'text/css', body
         return self.observation(url, kind, key, name)
 
     def observation(self, url, kind, key=None, name=None):  # an exact recorded response by its recorded identity (never a package member): answer()'s own rule

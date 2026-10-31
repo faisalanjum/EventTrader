@@ -122,8 +122,12 @@ browser reading order. Unknown or unrepresented material remains explicit, and a
 faithfully reconstructed partial result is still partial. Originals are needed
 for independent fidelity review, never to fill reconstruction gaps.
 
-Table cells keep two kinds of evidence apart. `header` is EdgarTools' own header-row
-guess (`TableProcessor`), read unchanged; it is not a source statement. A cell's `tag`
+Table cells keep two kinds of evidence apart. `header` states the source's own markup
+only: true for a `th` or a cell in its own table's `thead`; false when the cell's `tag` and
+row group are both recorded and neither marks a header (no such markup, not a judgment that
+the cell is no heading); null (unknown) when that evidence is missing and no `th` or `thead`
+proves it. `header_guess` is EdgarTools' own header-row guess (`TableProcessor`), read
+unchanged; it is not a source statement. A cell's `tag`
 (`td`/`th`), its `id`/`scope`/`headers` values as the parser reads them (`attrs`;
 character references decoded, so not always the exact source spelling) and its own
 `row_group` are what the source declares. `row_group` indexes the table's `row_group_tags`
