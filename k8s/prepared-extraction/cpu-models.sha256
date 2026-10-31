@@ -1,0 +1,4 @@
+00b40714e00039c8c04891e5fd98ad5cb46c34fa7133ba09e2a55d4b28d42a68  /opt/prepared/ocr-cache/models/parseq-00b40714.onnx
+1b89ebf9b6a5e01eb21b1775efc54aab6dbf8c726dcce938e40ddcb91404b43a  /opt/prepared/ocr-cache/models/rep_fast_base-1b89ebf9.onnx
+92078b7355007ccfffcd4c8cd441a3afd4538904d06881b29a155e1e679907c2  /opt/prepared/venv/lib/python3.11/site-packages/rapidocr/models/PP-OCRv6_det_medium.onnx
+eef444829dbbe18d7fea59a3f6eb75647518d2b3a9568d27c92e42940204894b  /opt/prepared/venv/lib/python3.11/site-packages/rapidocr/models/PP-OCRv6_rec_medium.onnx

@@ -36,6 +36,26 @@ Keep `unittest`, already used by the downloader and grader. No new test framewor
 scoring engine or orchestration service. The full command includes browser tests,
 saved-reading replays and failure/restart tests; it makes no SEC or model calls.
 
+The optional saved OCR stage additionally needs the pinned client packages in
+`k8s/prepared-extraction/requirements-ocr.txt`. Its `test_vllm` tests execute the
+actual Chandra helper and SDK with substituted transport; they never call a model.
+Use the candidate OCR environment for both suites when these tests are present.
+`test_saved` checks immutable extraction, all accepted views/source children, PDF
+pages, input/reader identities, publication and saved-result damage. Adapter tests
+keep operational completion distinct from unverified model accuracy. Actual RunPod
+qualification remains a separate bounded check; it is not part of discovery.
+The adapter retries an OCR technical failure at most three times against the same
+saved extraction and reader cache; complete or incomplete outcomes stop retries.
+Each child gets the configured `seconds` base plus `timeout` for every distinct
+prepared HTML image and native PDF page. Counting pages does not render them.
+Tests cover transient recovery, persistent failure, reused good readings and
+failed plan/configuration/receipt flushes before any success is credited.
+
+The public CCL/AMG source-reading inputs use FixtureStore group `source_reading_v2`:
+three exact input files, 129,268 bytes. No old `ocr_no_click` directory is required
+by `test_source_reading_v2`. Provision and restore those pinned blobs with the
+existing archive helper before retiring the historical copies.
+
 ## Approved offline test environment (7 October 2026)
 
 Use a dedicated **Linux x86_64 / CPython 3.11.10** environment, currently

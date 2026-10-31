@@ -5,6 +5,8 @@
 !k8s/prepared-extraction/Dockerfile
 !k8s/prepared-extraction/Dockerfile.dockerignore
 !k8s/prepared-extraction/RUNTIME_MANIFEST.json
+!k8s/prepared-extraction/requirements-ocr.txt
+!k8s/prepared-extraction/cpu-models.sha256
 !driver/
 !driver/__init__.py
 !driver/README.md

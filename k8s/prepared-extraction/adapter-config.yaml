@@ -1,4 +1,5 @@
-# REVIEWABLE - NOT APPLIED. Pair with worker.patch.yaml: image9 retains runtime manifest d4aaffde.
+# REVIEWABLE - NOT APPLIED. Pair with worker.patch.yaml and README.md.
+# Before activation, replace the OCR endpoint and provide the prepared-ocr Secret.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -13,7 +14,7 @@ data:
      "runtime_root": "/opt/prepared/runtime",
      "runtime_manifest": {
       "path": "/opt/prepared/runtime/RUNTIME_MANIFEST_ROLE.json",
-      "sha256": "d4aaffdee5d99748cb370d172c024f966aae5fb32c773f12f1b36671ee09804a"
+      "sha256": "2f0928f5435465b522b51b06f4145d02c6cf810df064b1eb445a8e78bc40a9ca"
      },
      "browser": {
       "executable": "/opt/prepared/browser/chrome-headless-shell-linux64/chrome-headless-shell",
@@ -29,5 +30,22 @@ data:
       "max_actions": 4
      },
      "script_qualifications": "/data/sec_prepared/script_qualifications",
-     "_comment": "PRODUCTION CONFIG (named, reviewable; NOT applied). Same keys as the tested runs. Viewer fallback ON with the native existing settings: context_campaign {campaign, live, max_actions 4} as in Root first8/known19 (there live=false offline); the adapter fixes context_explore=false. script_qualifications = the native qualification store: must PRE-EXIST (job.claim_version never creates it; the adapter refuses a campaign without it). live=true viewer fetching for new arrivals is UNPROVED until the scoped one-pod canary. context_campaign:null was the AMG smoke policy only. image9: runtime manifest d4aaffde (header split) in image candidate-20261031-9."
+     "ocr": {
+      "endpoint": "https://REPLACE_WITH_POD_ID-8000.proxy.runpod.net/v1",
+      "identity": {
+       "model": "datalab-to/chandra-ocr-2",
+       "revision": "af93b47dba1b47b6640c86ccf487ed2260ab9a09",
+       "image_digest": "sha256:14ea8b431aaaf75eb873c46c8ebfbad2b4b0790d30c66126d789d8cb9bd0aab9",
+       "dtype": "bfloat16",
+       "gpu": "NVIDIA GeForce RTX 4090",
+       "max_num_seqs": 16,
+       "max_num_batched_tokens": 2048,
+       "max_model_len": 18000,
+       "gpu_memory_utilization": 0.85
+      },
+      "timeout": 660,
+      "seconds": 1800,
+      "python": "/opt/prepared/venv/bin/python"
+     },
+     "_comment": "REVIEW ONLY. Replace the OCR endpoint; keep its key only in VLLM_API_KEY. Omit ocr to retain HTML/XML-only operation. script_qualifications must pre-exist; job.claim_version does not create it. Live viewer fetching for new arrivals still needs the approved one-worker canary; the recorded AMG test uses context_campaign:null. OCR status describes execution, never accuracy: every OCR result has fidelity:unverified."
     }

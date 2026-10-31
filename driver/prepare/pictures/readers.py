@@ -4,12 +4,13 @@
 # keeps the readings. PP-OCR and OnnxTR are separate readers, so one tool's good reading is never redone or lost with the other's failure.
 # Undecodable bytes or unprepared transparency are a PictureError; source-rendered inputs must be opaque. A storage failure is never caught here. The optional Sonnet caller
 # stays outside the runtime until it is production-safe (Codex r12 C3).
-import ast, functools, hashlib, importlib.metadata as md, inspect, io, json, math, os, re, tempfile, textwrap, time, types, zipfile
+import ast, functools, hashlib, importlib.metadata as md, inspect, io, json, math, os, re, tempfile, textwrap, threading, time, types, zipfile
 from pathlib import PurePath
 from ..get.acquire import StorageError
 
 OX = dict(det_arch='fast_base', reco_arch='parseq', load_in_8_bit=False)
 MAX_TOKENS = 12384                                                       # Chandra's output limit (routing's 'cut off' reads it)
+_VLLM_CLIENT = threading.Lock()  # Chandra 0.2 constructs its SDK client internally; scope its constructor binding to one native call
 
 
 class PictureError(ValueError):
@@ -119,7 +120,13 @@ def _chandra_status(r):  # a Chandra reading: [raw HTML, run record]; 'cut off' 
     if not (isinstance(r, list) and len(r) == 2 and isinstance(r[0], str) and isinstance(r[1], dict)): raise ValueError('not a Chandra reading')
     tokens = r[1].get('generation_tokens')
     if tokens is not None and (type(tokens) is not int or tokens < 0): raise ValueError('invalid generated-token count')
-    return 'cut off' if (tokens or 0) >= MAX_TOKENS else 'complete'
+    if r[1].get('finish_reason') not in (None, 'stop', 'length'): raise ValueError('invalid generation finish reason')
+    if 'repeated' in r[1] and type(r[1]['repeated']) is not bool: raise ValueError('invalid repetition observation')
+    return 'cut off' if chandra_cutoff(r[1], MAX_TOKENS) else 'complete'
+
+
+def chandra_cutoff(run, limit):
+    return run.get('finish_reason') == 'length' or (run.get('generation_tokens') or 0) >= limit
 
 
 def chandra(model, wheel):
@@ -145,6 +152,77 @@ def chandra(model, wheel):
             r = generate(m, processor, apply_chat_template(processor, config, ns['PROMPT_MAPPING']['ocr_layout'], num_images=1), [png],
                          max_tokens=MAX_TOKENS, temperature=0.0, verbose=False)
         return [getattr(r, 'text', r), dict(secs=round(time.time() - t, 1), **{k: getattr(r, k, None) for k in ('prompt_tokens', 'generation_tokens', 'generation_tps', 'peak_memory')})]
+    return types.SimpleNamespace(read=read, settings=settings, status=_chandra_status)
+
+
+def chandra_vllm(endpoint, identity, timeout=660):
+    """Native Chandra 0.2 client of a separately qualified self-hosted server; no semantic or transport retries.
+
+    The pinned helper has no client/timeout argument and discards finish metadata. Bind its SDK constructor only for the native
+    call, retaining the SDK response fields without rebuilding its request. Use from the isolated OCR child; model identity is
+    the operator's pinned server/model qualification record, not an inference from an endpoint's name.
+    """
+    import chandra.model.vllm as native
+    from chandra.input import load_image
+    from chandra.model.schema import BatchInputItem
+    if md.version('chandra-ocr') != '0.2.0': raise ValueError('Chandra client version must be 0.2.0')
+    if not isinstance(endpoint, str) or not endpoint.startswith(('http://', 'https://')): raise ValueError('explicit self-hosted endpoint required')
+    if not isinstance(identity, dict) or not identity: raise ValueError('pinned server/model identity required')
+    if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0: raise ValueError('finite positive request timeout required')
+    settings = dict(reader='chandra-vllm', server=json.loads(json.dumps(identity)), max_tokens=MAX_TOKENS,
+                    temperature=0.0, top_p=0.1, application_retries=0, transport_retries=0, timeout=timeout,
+                    stream=True, stream_options=dict(include_usage=True),
+                    prompt_sha256=hashlib.sha256(native.PROMPT_MAPPING['ocr_layout'].encode()).hexdigest(),
+                    code=[_code_id(chandra_vllm), _code_id(_image), _code_id(native.generate_vllm), _code_id(load_image)],
+                    versions={n: md.version(n) for n in ('chandra-ocr', 'openai', 'pillow')})
+    def read(data):
+        checked = _image(data); checked.close()  # existing opaque-source rule before the native loader converts RGB
+        observed, clients, resource_errors = {}, [], []
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, 'input.png')
+            with open(path, 'wb') as f: f.write(data)
+            image = load_image(path)
+            with _VLLM_CLIENT:
+                original = native.OpenAI
+                def client(*args, **kwargs):
+                    sdk = original(*args, **dict(kwargs, timeout=timeout, max_retries=0)); clients.append(sdk)
+                    def capture(**request):
+                        started = time.monotonic()
+                        try:
+                            # Native SDK accumulation keeps raw text, finish and the final usage-only chunk. Its final parsing helper
+                            # raises for length finishes; the public snapshot preserves that incomplete reading without parsing it.
+                            with sdk.chat.completions.stream(**request, stream_options=dict(include_usage=True)) as stream:
+                                stream.until_done()
+                                response = stream.current_completion_snapshot
+                            if len(response.choices) != 1 or response.choices[0].finish_reason not in ('stop', 'length') or response.usage is None:
+                                raise RuntimeError('Chandra stream lacks a supported finish or final usage')
+                            observed.update(finish_reason=response.choices[0].finish_reason,
+                                            usage=response.usage.model_dump(), server_model=response.model)
+                            return response
+                        except Exception as e:
+                            if isinstance(e, (OSError, StorageError, MemoryError)): resource_errors.append(e)
+                            observed['error'] = f'{type(e).__name__}: {e}'; raise
+                        finally: observed['seconds'] = time.monotonic() - started
+                    # Keep the real SDK's create method intact: its public stream helper calls that method internally.
+                    return types.SimpleNamespace(models=getattr(sdk, 'models', None),
+                        chat=types.SimpleNamespace(completions=types.SimpleNamespace(create=capture)))
+                native.OpenAI = client
+                try:
+                    result = native.generate_vllm([BatchInputItem(image=image, prompt_type='ocr_layout')],
+                        max_output_tokens=MAX_TOKENS, max_retries=0, max_failure_retries=0, max_workers=1,
+                        vllm_api_base=endpoint, temperature=0.0, top_p=0.1)[0]
+                finally:
+                    native.OpenAI = original
+                    for sdk in clients: sdk.close()
+                    image.close()
+        if resource_errors: raise resource_errors[0]  # the helper catches Exception; restore worker.py's resource-failure boundary
+        if result.error: raise RuntimeError(observed.get('error') or 'native Chandra request failed')
+        if not isinstance(result.raw, str) or not result.raw.strip(): raise RuntimeError('Chandra returned an empty reading')
+        if observed.get('finish_reason') not in ('stop', 'length'): raise RuntimeError('Chandra returned an unsupported finish reason')
+        observed.update(generation_tokens=result.token_count,
+                        repeated=bool(native.detect_repeat_token(result.raw) or
+                                      len(result.raw) > 50 and native.detect_repeat_token(result.raw, cut_from_end=50)))
+        return [result.raw, observed]
     return types.SimpleNamespace(read=read, settings=settings, status=_chandra_status)
 
 

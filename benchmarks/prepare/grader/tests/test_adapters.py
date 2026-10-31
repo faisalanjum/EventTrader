@@ -243,7 +243,8 @@ class EdgartoolsHtmlAdapterTests(unittest.TestCase):
 
     def test_cells_get_grid_positions_from_colspan_and_rowspan(self):
         cells = eh.to_units(TREE)[2]['cells']
-        self.assertEqual([(c['r'], c['c'], c['rs'], c['cs'], c['text'], c['header']) for c in cells],
+        self.assertEqual([c['header'] for c in cells], [None] * 6)  # this saved tree has tool guesses but no source markup
+        self.assertEqual([(c['r'], c['c'], c['rs'], c['cs'], c['text'], c['header_guess']) for c in cells],
                          [(0, 0, 1, 2, 'Title', False), (1, 1, 1, 3, 'Three Months Ended', True),
                           (2, 1, 1, 1, 'Free cash flow(1)', False), (2, 2, 1, 1, '$', False), (2, 3, 1, 1, '(506', False), (2, 4, 1, 1, ')', False)])
 

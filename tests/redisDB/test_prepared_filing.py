@@ -5,6 +5,8 @@ or ADAPTER_RUNTIME_MANIFEST). Needs PREPARE_TEST_DATA (tests/driver/prepare/READ
 The end-to-end event runs only with ADAPTER_E2E=1, ADAPTER_OUT=<new folder on a filesystem with >=16% free> and ADAPTER_RECORDED=<recorded SEC
 responses: responses.sqlite3 + blobs> (pinned job.py: 3 browser rows)."""
 import atexit, functools, gzip, hashlib, json, os, shutil, sqlite3, subprocess, sys, tempfile, unittest
+from unittest.mock import patch
+from types import SimpleNamespace
 from pathlib import Path
 
 sys.dont_write_bytecode = True  # never write caches into the runtime tree
@@ -46,7 +48,7 @@ def recorded_body(url):
     if not RECORDED: return None
     db = sqlite3.connect(f'file:{RECORDED}/responses.sqlite3?mode=ro', uri=True)
     row = db.execute('SELECT receipt FROM responses WHERE url=?', (url,)).fetchone(); db.close()
-    return gzip.decompress((RECORDED / 'blobs' / (json.loads(row[0])['sha256'] + '.gz')).read_bytes()) if row else None
+    return gzip.decompress((Path(RECORDED) / 'blobs' / (json.loads(row[0])['sha256'] + '.gz')).read_bytes()) if row else None
 
 
 def sec_copy(url):
@@ -82,6 +84,22 @@ def by(members, *cats):
     return {d['filename'] for d in members if d['category'] in cats}
 
 
+class RecordedTransport(unittest.TestCase):
+    def test_recorded_response_folder_accepts_the_environment_string_and_a_path(self):
+        body = b'independent recorded SEC transport control'
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d); (root / 'blobs').mkdir(); pin = hashlib.sha256(body).hexdigest()
+            (root / 'blobs' / (pin + '.gz')).write_bytes(gzip.compress(body))
+            with sqlite3.connect(root / 'responses.sqlite3') as db:
+                db.execute('CREATE TABLE responses (url TEXT, receipt TEXT)')
+                db.execute('INSERT INTO responses VALUES (?, ?)', ('https://recorded.invalid/found', json.dumps(dict(sha256=pin))))
+            for folder in (str(root), root):
+                with self.subTest(folder=type(folder).__name__), patch(__name__ + '.RECORDED', folder):
+                    self.assertEqual(recorded_body('https://recorded.invalid/found'), body)
+                    self.assertIsNone(recorded_body('https://recorded.invalid/absent'))
+            with patch(__name__ + '.RECORDED', None): self.assertIsNone(recorded_body('https://recorded.invalid/found'))
+
+
 class Categories(unittest.TestCase):
     def test_amg_every_member_one_category_native_document_type(self):
         m = amg_members()
@@ -97,6 +115,169 @@ class Categories(unittest.TestCase):
                            {'filename': 'c.htm', 'format_hint': 'unknown'}, {'filename': 'd.txt', 'format_hint': 'unknown'}]}
         self.assertEqual([d['category'] for d in pf.categories(man)], ['conflict', 'conflict', 'html', 'pending'])
 
+
+class ReceiptDurability(unittest.TestCase):
+    def test_file_flush_failure_does_not_publish_or_replace_a_receipt(self):
+        with tempfile.TemporaryDirectory() as d:
+            target = Path(d) / 'RECEIPT.json'
+            pf._save(target, dict(status='original'))
+            with patch.object(pf.os, 'fsync', side_effect=OSError('controlled file flush failure')):
+                with self.assertRaises(OSError): pf._save(target, dict(status='changed'))
+            self.assertEqual(json.loads(target.read_bytes()), dict(status='original'))
+            pf._save(target, dict(status='changed'))
+            self.assertEqual(json.loads(target.read_bytes()), dict(status='changed'))
+
+    def test_directory_flush_failure_is_never_success(self):
+        from driver.prepare.get.acquire import StorageError
+        import stat
+        sync = os.fsync
+        def fail_directory(fd):
+            if stat.S_ISDIR(os.fstat(fd).st_mode): raise OSError('controlled directory flush failure')
+            sync(fd)
+        with tempfile.TemporaryDirectory() as d:
+            target = Path(d) / 'RECEIPT.json'
+            with patch.object(pf.os, 'fsync', side_effect=fail_directory):
+                with self.assertRaises(StorageError): pf._save(target, dict(status='complete'))
+            pf._save(target, dict(status='complete'))
+            self.assertEqual(json.loads(target.read_bytes()), dict(status='complete'))
+
+    def test_new_receipt_directories_are_synced_before_publication(self):
+        from driver.prepare.get.acquire import StorageError
+        with tempfile.TemporaryDirectory() as d:
+            target = Path(d) / 'ocr' / 'receipts' / 'RECEIPT.json'
+            with patch.object(pf.os, 'fsync', side_effect=OSError('controlled parent flush failure')):
+                with self.assertRaises(StorageError): pf._save(target, dict(status='complete'))
+            self.assertFalse(target.exists())
+            pf._save(target, dict(status='complete'))
+            self.assertEqual(json.loads(target.read_bytes()), dict(status='complete'))
+
+
+class OcrExtension(unittest.TestCase):
+    def setUp(self):
+        from tests.driver.prepare.pictures.test_saved import SavedPictures
+        from tests.driver.prepare.pictures.test_join import fakes
+        self.fixture = SavedPictures(); self.fixture.setUp(); self.addCleanup(self.fixture.doCleanups)
+        self.receipt = self.fixture.filing()
+        self.receipt['members'] = pf.categories(read_package(self.receipt['version'])[0])
+        pf.settle(self.receipt['members'], json.loads(Path(self.receipt['result']['path']).read_bytes()))
+        self.makers = fakes(self.fixture.calls, html='<div data-bbox="0 0 1000 1000" data-label="Text"><p>FAKE</p></div>')
+        self.config = dict(runtime_root=str(RUNTIME), python=sys.executable,
+                           ocr=dict(endpoint='http://unused.invalid/v1', identity=dict(model='control'), seconds=60))
+
+    def child(self, argv, **kwargs):
+        from driver.prepare.pictures import saved
+        self.assertIn('driver.prepare.pictures.saved', argv)
+        receipt = json.loads(kwargs['input'])
+        reference = saved.run(receipt, json.loads(Path(argv[-2]).read_text()), argv[-1], self.makers)
+        return SimpleNamespace(returncode=0, stdout=json.dumps(reference)+'\n', stderr='')
+
+    def test_enabled_ocr_is_source_bound_unverified_and_reuses_reader_results(self):
+        original = json.dumps(self.receipt, sort_keys=True)
+        with patch.object(pf.subprocess, 'run', side_effect=self.child):
+            result = pf.with_ocr(self.receipt, self.config)
+            again = pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(result['status'], 'complete')
+        self.assertEqual((result['fidelity'], result['ocr']['fidelity']), ('unverified', 'unverified'))
+        self.assertEqual(len(self.fixture.calls), 3)
+        self.assertEqual(result, again)
+        self.assertEqual(json.dumps(self.receipt, sort_keys=True), original)
+        self.assertTrue(Path(result['saved_receipt']['path']).is_file())
+
+    def test_unconsumed_picture_is_explicitly_unread_with_ocr_enabled(self):
+        self.receipt['members'].append(dict(filename='unbound.png', sha256='1'*64, format_hint='png', category='owner_excluded'))
+        with patch.object(pf.subprocess, 'run', side_effect=self.child): result = pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(result['status'], 'incomplete')
+        self.assertEqual(result['members'][-1]['category'], 'unread')
+        self.assertTrue(any('unbound.png' in reason for reason in result['reasons']))
+
+    def test_transient_ocr_failure_retries_only_failed_reader_without_html_rerun(self):
+        reader = self.makers['chandra'](); normal = reader.read; attempts = []
+        def read(data):
+            attempts.append(1)
+            if len(attempts) == 1: raise RuntimeError('controlled transient OCR outage')
+            return normal(data)
+        reader.read = read; self.makers['chandra'] = lambda: reader
+        with patch.object(pf.subprocess, 'run', side_effect=self.child) as child, patch.object(pf, '_job', side_effect=AssertionError('HTML rerun')):
+            result = pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(result['status'], 'complete')
+        self.assertEqual((child.call_count, len(attempts)), (2, 2))
+        self.assertEqual([role for role, _ in self.fixture.calls], ['pp', 'ox', 'chandra'])
+        old = [json.loads(p.read_bytes()) for p in (self.fixture.root / 'ocr/receipts').glob('*.json')]
+        self.assertEqual(sorted(r['status'] for r in old), ['complete', 'failed'])
+
+    def test_persistent_ocr_failure_stops_after_exactly_three_attempts(self):
+        reader = self.makers['chandra'](); attempts = []
+        def read(_): attempts.append(1); raise RuntimeError('controlled persistent OCR outage')
+        reader.read = read; self.makers['chandra'] = lambda: reader
+        with patch.object(pf.subprocess, 'run', side_effect=self.child) as child, patch.object(pf, '_job', side_effect=AssertionError('HTML rerun')):
+            result = pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(result['status'], 'failed')
+        self.assertEqual((child.call_count, len(attempts)), (3, 3))
+        self.assertEqual([role for role, _ in self.fixture.calls], ['pp', 'ox'])
+
+    def test_budget_counts_unique_html_inputs_and_native_pdf_pages_without_rendering(self):
+        from tests.driver.prepare.pictures.test_saved import SavedPictures
+        from tests.driver.prepare.pictures.test_pdf import made
+        from tests.driver.prepare.get.test_acquire import uu
+        from driver.prepare.pictures import pdf
+        self.assertEqual(pf._ocr_seconds(self.receipt, dict(seconds=60, timeout=10)), 70)  # two occurrences, one input
+        fixture = SavedPictures(); fixture.setUp(); self.addCleanup(fixture.doCleanups)
+        raw = made((100, 100), (200, 100), (300, 100))
+        receipt = fixture.filing([('three-pages.pdf', uu(raw, 'three-pages.pdf'), 'EX-99', '3', None)])
+        with patch.object(pdf, 'pages', side_effect=AssertionError('budget rerendered PDF')):
+            self.assertEqual(pf._ocr_seconds(receipt, dict(seconds=60, timeout=10)), 100)  # one input + three native pages
+        for bad in (dict(seconds=0), dict(seconds='60'), dict(timeout=0), dict(timeout=float('inf'))):
+            with self.subTest(bad=bad), self.assertRaises(ValueError): pf._ocr_seconds(receipt, bad)
+
+    def test_missing_child_result_is_failed_and_no_ocr_config_keeps_original_path(self):
+        self.assertIs(pf.with_ocr(self.receipt, {}), self.receipt)
+        with patch.object(pf.subprocess, 'run', return_value=SimpleNamespace(returncode=124, stdout='', stderr='bounded stop')):
+            result = pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(result['status'], 'failed')
+        self.assertEqual(result['fidelity'], 'unverified')
+
+    def test_config_flush_failure_never_starts_child_or_credits_an_ocr_result(self):
+        sync = os.fsync
+        def fail_config(fd):
+            if Path(os.readlink(f'/proc/self/fd/{fd}')).name.startswith('OCR_CONFIG_'):
+                raise OSError('controlled OCR configuration flush failure')
+            sync(fd)
+        with patch.object(pf.subprocess, 'run') as child, patch.object(pf.os, 'fsync', side_effect=fail_config):
+            with self.assertRaises(OSError): pf.with_ocr(self.receipt, self.config)
+            child.assert_not_called()
+        self.assertFalse(list(self.fixture.root.glob('ocr/receipts/*.json')))
+        with patch.object(pf.subprocess, 'run', side_effect=self.child): result = pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(result['status'], 'complete')
+
+    def test_real_saved_wrong_ratio_suffix_is_preserved_and_never_certified(self):
+        from tests.driver.prepare.pictures.test_saved import SavedPictures
+        from tests.driver.prepare.pictures.saved import Saved
+        from driver.prepare.pictures import readers, saved
+        fixture = SavedPictures(); fixture.setUp(); self.addCleanup(fixture.doCleanups)
+        source = Saved(fixture.root)
+        row = next(r for r in source.records if r['name'] == '157_0001558370-25-005434_dlr-20250424xex99d2g026.jpg')
+        _, picture, raw, tokens, free, _ = source.inputs(row)
+        fixture.image = Path(picture).read_bytes()
+        self.fixture = fixture
+        self.receipt = fixture.filing()
+        self.receipt['members'] = pf.categories(read_package(self.receipt['version'])[0])
+        pf.settle(self.receipt['members'], json.loads(Path(self.receipt['result']['path']).read_bytes()))
+        self.makers = dict(chandra=lambda: SimpleNamespace(
+            settings=dict(reader='saved-original-157', max_tokens=readers.MAX_TOKENS),
+            status=readers._chandra_status, read=lambda _: [raw, dict(generation_tokens=tokens)]))
+        for role in ('pp', 'ox'):
+            self.makers[role] = lambda role=role: SimpleNamespace(
+                settings=dict(reader='saved-original-157-' + role), status=readers._free_status,
+                read=lambda _: dict(w=free['w'], h=free['h'], boxes=free[role]))
+        # Independently reviewed original image says 5.1x; the frozen OCR wrote 5.1%. Preserve the error, never silently repair it.
+        self.assertIn('5.1%', raw)
+        with patch.object(pf.subprocess, 'run', side_effect=self.child): result = pf.with_ocr(self.receipt, self.config)
+        report = saved.verify(result['ocr'], self.receipt)
+        self.assertEqual((result['fidelity'], report['fidelity']), ('unverified', 'unverified'))
+        for picture in report['documents'][0]['pictures']:
+            self.assertEqual(saved._restore(picture['records']['chandra'])['result'][0], raw)
+            self.assertIn('5.1%', picture['packet'])
+            self.assertIn('unverified', picture['packet'])
 
 class Settle(unittest.TestCase):
     def test_reader_records_make_support_rest_stay_accounted(self):
@@ -346,6 +527,19 @@ class Recovery(unittest.TestCase):  # Root 8:28 PM: bounded automatic recovery i
         finally: pf.subprocess.run = REAL_RUN
 
     def run_dir(self): return next((self.dir / 'runs').glob('*/*/*'))
+
+    def test_plan_flush_failure_never_launches_a_job_or_saves_a_success(self):
+        sync = os.fsync
+        def fail_plan(fd):
+            if Path(os.readlink(f'/proc/self/fd/{fd}')).name == 'PLAN.json.pending':
+                raise OSError('controlled extraction plan flush failure')
+            sync(fd)
+        with patch.object(pf.os, 'fsync', side_effect=fail_plan):
+            with self.assertRaises(OSError): self.event(['verified'])
+        self.assertFalse(list(self.dir.glob('runs/*/*/*/job_*')))
+        self.assertFalse(list(self.dir.glob('runs/*/*/*/RECEIPT.json')))
+        receipt, launched = self.event(['verified'])
+        self.assertEqual((receipt['status'], launched), ('complete', ['job_0']))
 
     def test_startup_crash_is_recovered_automatically_and_the_failed_job_is_kept(self):
         r, launched = self.event(['startup_crash', 'verified'])

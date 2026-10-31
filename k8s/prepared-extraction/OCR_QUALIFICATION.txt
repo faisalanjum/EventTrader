@@ -1,0 +1,74 @@
+SEC extraction with self-hosted OCR — 31 October 2026 (EDT)
+Reviewed and tested preparation; NOT activated. Model accuracy is NOT certified.
+
+Immutable worker image:
+ faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70
+ tag prepared-ocr-20261031-1
+ runtime manifest 2f0928f5435465b522b51b06f4145d02c6cf810df064b1eb445a8e78bc40a9ca
+ adapter 3ae3ceb8b061d4d553280e1a50d8500dfd9d93680c41ea8ef2464430e21d2b06
+Registry config digest equals the tested local image. All 48 runtime files, adapter,
+worker, Redis wrapper, browser and four CPU weight hashes were checked. No extra
+runtime files, obsolete application copies, local GPU framework or Chandra weights.
+Native Chandra client 0.2.0; SDK 3.24.0. Server identity/settings are in README.md.
+
+Actual image integration:
+ - Public AMG filing 0001004434-23-000015: all 17 package members accounted for,
+   nine HTML/XML targets, two unique embedded images and all eight PDF pages.
+   Twelve image/page occurrences share 30 reader records across the three readers.
+ - First run 273.68 seconds on the tested warm RTX 4090 endpoint. HTML/XML complete;
+   OCR incomplete due to retained independent-reader disagreements and unsupported
+   blocks. All PDF Chandra calls finished normally. Every OCR value is unverified.
+ - Repeating with networking disabled took 7.17 seconds: identical aggregate,
+   all 30 reader files unchanged in bytes and modification time, no SEC calls.
+ - Separate six-image live check: four normal finishes; two output-limit finishes
+   retained as cut off/incomplete with repetition. Streaming removed the observed
+   proxy HTTP 524 failures. No transport failures in this six-case rerun.
+ - Independent source comparisons: 49/49 selected table cells on image 041 and
+   18/18 financial cells plus seven headline facts on AMG PDF page 1 matched.
+   Image 157 still misread four x-ratios as percentages; existing flags did not
+   identify those four errors. The two difficult chart/drawing cases still invent
+   content. These finite checks establish no universal precision or recall.
+
+Regression closure:
+ Current inventory: 1,598 permanent test IDs reconciled. 202 fresh complete-unit
+ passes, 28 completed methods before the explicit serial stop, 1,196 compatible
+ prior passes, and 172 inherited from the accepted 3e/b7 baseline. Those 172 retain
+ a specific limit: the older individual test log is not an exact current-context
+ byte match. Context code is unchanged by this OCR addition; its earlier accepted
+ qualification is inherited, not represented as a new test execution.
+ All 199 picture tests passed in 148.63 seconds; the three relocated source-fixture
+ tests passed with restored inputs. All 543 retained grader tests passed. The
+ adapter's 34 offline tests passed; its three gated cases separately passed in
+ the actual image with networking disabled (43.55 seconds): source/repeat/damage,
+ interrupted-run recovery and missing-package refusal. The stopped serial suite
+ returned 130 and is explicitly NOT a full fresh pass.
+The preceding HTML/XML qualification remains separate: 999/1,000 initial successes,
+a later successful browser-failure recheck, fresh 200 successes, 1,116 affected
+header tests and source-bound replay of 954 documents/1,813 views/602,977 cells.
+It must not be restated as a fresh perfect 1,000-file run of this OCR integration.
+
+Why this integration is small:
+ Native Chandra supplies loading, resizing, prompt, generation and repetition
+ detection. Its client constructs the SDK internally and drops finish metadata;
+ the small adapter uses the SDK's own streaming accumulator, with no second parser.
+ Existing image/PDF preparation, per-reader cache, packets and archive storage are
+ reused. The filing adapter adds three bounded technical attempts and durable
+ metadata writes. No model-content repair, additional queue or GPU allocator.
+
+Activation limits:
+ Keep a qualified, authenticated GPU endpoint running before enabling OCR; cold
+ starts can exhaust three quick attempts. Persistent failures retain the original
+ filing and reason for replay. One worker remains the qualified operating mode;
+ OCR delays combined publication and a large PDF can hold the worker for a long
+ time. Live-arrival latency is not established by this recorded-source test.
+ Mac automation, Neo4j integration changes and production activation were not done.
+
+Detailed evidence (outside Git):
+ /home/faisal/prepare_cleanup_review_20261031/
+ root/IMAGE_QUALIFICATION.json; root/REGISTRY_VERIFIED.json;
+ root/AMG_IMAGE_E2E.log; live_filing/OFFLINE_REPEAT_CHECKS.json;
+ root/LIVE_SOURCE_COMPARISONS.json; live_cases_streaming/SUMMARY.json;
+ claude/OCR_FINAL_REVIEW.txt; codex/OCR_IMPLEMENTATION_HANDOFF.txt;
+ codex/OCR_PERMANENT_COVERAGE_LEDGER.json; root/ADAPTER_NATIVE_IMAGE.log.
+RunPod test resources were deleted; root/RUNPOD_FINAL.json records zero Pods,
+volumes, serverless endpoints and hourly spend. Test cost approximately $0.57.

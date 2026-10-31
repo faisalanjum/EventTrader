@@ -10,8 +10,8 @@ from pathlib import Path
 from driver.prepare.convert import anchor, edgartools_html as eh, html_route, screen_grid as sg
 from driver.prepare import document, reconstruct
 from driver.prepare.get import acquire, archive
+from tests.driver.prepare.support import FixtureStore
 
-PUBLIC = Path('/home/faisal/prepare_work/extraction_closeout_20261010/production_qualification_20261022/ocr_no_click')
 def doc(body): raw = ('<html><body>%s</body></html>' % body).encode(); return raw, hashlib.sha256(raw).hexdigest()
 def items(r): return [x for u in r['units'] for x in ((u.get('cells') or []) if u.get('kind') == 'table' else [u])]
 def site(r, o):  # the unit or cell a saved owner names (reconstruct's own owner rule)
@@ -100,10 +100,11 @@ class RealReports(unittest.TestCase):  # the displayed route through the product
     @classmethod
     def setUpClass(cls):
         from playwright.sync_api import sync_playwright
+        store = FixtureStore()
         cls.pw = sync_playwright().start(); cls.browser = cls.pw.chromium.launch(); cls.got = {}
         for name in ('CCL_R1.htm', 'AMG_R1.htm'):
-            raw = (PUBLIC / name).read_bytes(); sha = hashlib.sha256(raw).hexdigest()
-            css = (PUBLIC / 'AMG_report.css').read_bytes()  # the public SEC stylesheet both R pages name (include/report.css), saved earlier: the displayed route gets its browser verdict
+            raw = store.read('source_reading_v2/' + name); sha = hashlib.sha256(raw).hexdigest()
+            css = store.read('source_reading_v2/AMG_report.css')  # the public SEC stylesheet both R pages name (include/report.css)
             src = sg.Source(name, {name: raw, 'include/report.css': css})
             shown, _ = html_route.prepare(raw, name, sha, cls.browser, src); r, why = html_route.source_reading(raw, name, sha, shown)
             cls.got[name] = (raw, sha, shown, r, why)

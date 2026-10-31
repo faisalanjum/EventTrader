@@ -1,5 +1,5 @@
-# REVIEWABLE - NOT APPLIED. image9 removes the two obsolete application checkouts and redirects package metadata to /app.
-# Runtime manifest d4aaffde, reader, worker, adapter, Redis wrapper and browser are unchanged. Pair with adapter-config.yaml.
+# REVIEWABLE - NOT APPLIED. Pair with adapter-config.yaml and the exact image in README.md.
+# Prepare the OCR endpoint and Secret before the owner-approved activation.
 spec:
   strategy: {type: Recreate, rollingUpdate: null}   # the processing list has ONE owner: the old pod stops before the new one starts
   template:
@@ -8,10 +8,13 @@ spec:
         kubernetes.io/hostname: minisforum2          # the hostPath below is node-local
       containers:
       - name: enricher
-        image: faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b   # prepared-candidate-20261031-9
+        image: faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70   # prepared-ocr-20261031-1
         env:
         - name: PREPARED_EXTRACTION_CONFIG             # unset = today's worker path exactly (seam tests 5/5)
           value: /etc/prepared/adapter_config.json
+        - name: VLLM_API_KEY
+          valueFrom:
+            secretKeyRef: {name: prepared-ocr, key: api-key}
         volumeMounts:
         - {name: prepared-output, mountPath: /data/sec_prepared}
         - {name: prepared-config, mountPath: /etc/prepared, readOnly: true}

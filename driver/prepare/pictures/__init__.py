@@ -16,6 +16,7 @@ def status(flags, enable_sonnet, asked, second_text, generated_tokens, limit):
                     else 'INCOMPLETE OR UNCERTAIN: Chandra marked text unreadable or uncertain')
     if 'missed' in flags: says.append("possible skipped text: both free OCR tools read text outside Chandra's blocks")
     if 'no support' in flags: says.append('unconfirmed text: a Chandra block that no free OCR tool reads at its place')
+    if 'repetition' in flags: says.append('INCOMPLETE OR UNCERTAIN: native reader repetition warning')
     says.append('single reader (Sonnet; Chandra missing), unverified' if second_text and 'no reading' in flags
                 else 'two readers (Chandra + Sonnet), compared per block' if second_text
                 else ('no reader text (Sonnet ' if 'no reading' in flags else 'single reader (Chandra; Sonnet ')
@@ -23,7 +24,7 @@ def status(flags, enable_sonnet, asked, second_text, generated_tokens, limit):
     return '[EXTRACTION STATUS: ' + '; '.join(says) + ']'
 
 
-def read_picture(name, picture, chandra_html, generated_tokens, free, limit, enable_sonnet=False, second=None, picture_ref=None):
+def read_picture(name, picture, chandra_html, generated_tokens, free, limit, enable_sonnet=False, second=None, picture_ref=None, reader_flags=()):
     """One picture: (read by Sonnet?, flags, packet text, packet record). chandra_html None = no reading; free = the free OCR's record;
     limit = Chandra's output limit. Flags are the existing checks on Chandra's reading and the free OCR alone: 'no reading' and
     'cut off' mark a failed or partial reading; 'table', 'chart text', 'missed' and 'no support' mark risk. Off (default): second is
@@ -32,6 +33,8 @@ def read_picture(name, picture, chandra_html, generated_tokens, free, limit, ena
     packet names as its picture (packet()); the picture file is still what is measured and what the second reader reads."""
     if enable_sonnet and second is None: raise ValueError('enable_sonnet needs a second reader')
     flagged, flags = route(chandra_html, generated_tokens, free, limit)
+    flags += [f for f in reader_flags if f not in flags]
+    flagged = bool(flags)
     asked = enable_sonnet and flagged
     text, src = second(picture) if asked else (None, None)
     t, rec = packet(name, picture, chandra_html or '', text, src, free=free, picture_ref=picture_ref)

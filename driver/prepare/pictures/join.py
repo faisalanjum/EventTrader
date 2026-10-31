@@ -60,10 +60,13 @@ def _packet(s, data, c, pp, ox, enable_sonnet, second):  # ({packet fields} or {
     limit, free = c['settings'].get('max_tokens'), readers.free_record(pp, ox)   # Chandra's own limit, never the caller's
     if type(limit) is not int: raise ValueError("Chandra's reader settings name no max_tokens")
     html, tokens = (None, None) if c['status'] == 'error' else (c['result'][0], c['result'][1].get('generation_tokens'))
-    if c['status'] != 'error' and (c['status'] == 'cut off') != ((tokens or 0) >= limit): raise ValueError("Chandra's status and its own limit disagree")
+    if c['status'] != 'error' and (c['status'] == 'cut off') != readers.chandra_cutoff(c['result'][1], limit): raise ValueError("Chandra's status and its own limit disagree")
     with tempfile.NamedTemporaryFile(suffix='.input') as f:                # packet() measures a file; the second reader reads it
         f.write(data); f.flush()
         with Image.open(f.name) as im: size = im.size
         if free and (free['w'], free['h']) != size: raise ValueError('the free OCR frame is not the picture read')
-        asked, flags, text, rec = read_picture(f'sha256:{s}', f.name, html, tokens, free, limit, enable_sonnet, second, picture_ref=f'sha256:{s}')
+        native_flags = ([] if c['status'] == 'error' else
+                        (['cut off'] if c['status'] == 'cut off' else []) + (['repetition'] if c['result'][1].get('repeated') else []))
+        asked, flags, text, rec = read_picture(f'sha256:{s}', f.name, html, tokens, free, limit, enable_sonnet, second,
+                                             picture_ref=f'sha256:{s}', reader_flags=native_flags)
     return dict(packet=text, packet_record=rec, flags=flags, sonnet_asked=asked), size

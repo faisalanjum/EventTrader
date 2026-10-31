@@ -6,7 +6,7 @@ Status comes only from job.py's RESULT.json rows and the readers' own saved reco
 Every package member gets one category; nothing is dropped from the account.
 The worker runs this file as an isolated child (pointer below), so the worker never imports driver/edgar itself.
 """
-import hashlib, json, os, subprocess, sys
+import copy, hashlib, json, os, subprocess, sys
 from pathlib import Path
 
 PICTURES = {'jpeg', 'png', 'gif'}
@@ -122,11 +122,23 @@ def reverify(receipt, config):
                                       cwd=config['runtime_root'], env={'PATH': '/usr/bin:/bin', 'PYTHONDONTWRITEBYTECODE': '1'},
                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode
                 if code: why.append(f'{r["file_id"]}: {folder.relative_to(a.parent)} no longer verifies (exit {code})')
+    if not why and receipt.get('ocr'):
+        try:
+            from driver.prepare.pictures import saved
+            report = saved.verify(receipt['ocr'])
+            expected = _ocr_receipt(report['source'], receipt['ocr'], report)
+            if any(receipt.get(k) != value for k, value in expected.items()): why.append('OCR aggregate differs from its source and saved evidence')
+        except (ValueError, OSError, KeyError, TypeError) as error: why.append(f'OCR: {type(error).__name__}: {error}')
     return dict(receipt, status='failed', reasons=['saved output no longer verifies'] + why) if why else receipt
 
 
 def _save(path, value):
-    pending = path.with_name(path.name + '.pending'); pending.write_text(json.dumps(value, indent=1, sort_keys=True) + '\n'); os.replace(pending, path)
+    from driver.prepare.get.acquire import _make_dirs, _sync_dir
+    _make_dirs(path.parent)
+    pending = path.with_name(path.name + '.pending')
+    with pending.open('w') as f:
+        f.write(json.dumps(value, indent=1, sort_keys=True) + '\n'); f.flush(); os.fsync(f.fileno())
+    os.replace(pending, path); _sync_dir(path.parent)
 
 
 def prepare_filing(filing, config, sender=None):
@@ -137,12 +149,12 @@ def prepare_filing(filing, config, sender=None):
     if str(root) not in sys.path: sys.path.insert(0, str(root))
     from driver.prepare.get.campaign import Campaign
     from driver.prepare.get import full_run
-    from driver.prepare.get.acquire import read_package, _identity
+    from driver.prepare.get.acquire import read_package, _identity, _make_dirs
     foreign = sorted({m.__file__ for k, m in list(sys.modules.items()) if k.split('.')[0] == 'driver' and getattr(m, '__file__', None)
                       and not Path(m.__file__).resolve().is_relative_to(root)})
     if foreign: raise ImportError(f'driver modules not from the pinned runtime: {foreign[:3]}')  # e.g. a worker that imported its own tree
     acc, cik, form = filing['accessionNo'], str(filing['cik']), filing['formType']
-    out = Path(config['output_root']).absolute(); out.mkdir(parents=True, exist_ok=True)
+    out = Path(config['output_root']).absolute(); _make_dirs(out)
     pct = inspect.signature(full_run.run).parameters['min_free_percent'].default  # the native acquisition reserve policy
     reserve = int(shutil.disk_usage(out).total * pct / 100)  # full_run.run's own formula
     base = dict(schema='prepared-filing-receipt/2', accession=acc, cik=cik, form=form)
@@ -184,14 +196,93 @@ def prepare_filing(filing, config, sender=None):
             if saved['status'] == 'failed': return saved  # damaged/changed saved output: an explicit failure, never credited, never run over
             st, reasons = status(saved['result']['path'], pin, members)
             receipt = dict(saved, status=st, reasons=reasons, members=members)
-    run.mkdir(parents=True, exist_ok=True)
-    if not (run / 'PLAN.json').exists(): (run / 'PLAN.json').write_bytes(body)
+    if not (run / 'PLAN.json').exists(): _save(run / 'PLAN.json', plan)
     while receipt is None or receipt['status'] == 'failed':  # no product yet, or a technical failure: a new job, every earlier job folder and receipt kept
         n = len(list(run.glob('job_*.stdout')))  # every launched job, an interrupted one included
         if n >= config['max_jobs']:
             return receipt or dict(base, status='failed', reasons=[f'{n} jobs launched, none finished (max_jobs {config["max_jobs"]})'], members=members)
         receipt = _job(config, root, run, pin, run / f'job_{n}', base, members)
-    return receipt
+    return with_ocr(receipt, config)
+
+
+def _ocr_receipt(receipt, reference, report):
+    """OCR completion is operational only; every model reading remains unverified."""
+    members = copy.deepcopy(receipt.get('members') or [])
+    pdfs = {d['source']['file_id']: d for d in report['documents'] if not d['source'].get('attempt')}
+    read_images = {p['input'].get('member_sha256') for d in report['documents'] for p in d['pictures'] if p.get('records')}
+    reasons = list(receipt.get('reasons') or []) + list(report['reasons'])
+    for member in members:
+        if member.get('category') == 'owner_excluded' and member.get('format_hint') == 'pdf':
+            doc = pdfs.get(member['filename'])
+            if doc is None:
+                member['category'] = 'unread'; reasons.append(f"{member['filename']}: PDF OCR result missing")
+            else: member.update(category='ocr', ocr_status=doc['status'], fidelity='unverified')
+        elif member.get('category') == 'support' and member.get('sha256') in read_images:
+            member.update(category='ocr', fidelity='unverified')
+        elif member.get('category') == 'owner_excluded' and member.get('format_hint') in PICTURES:
+            member['category'] = 'unread'
+            reasons.append(f"{member['filename']}: picture has no bound HTML OCR occurrence")
+    status = ('failed' if receipt['status'] == 'failed' or report['status'] == 'failed' else
+              'incomplete' if receipt['status'] == 'incomplete' or reasons else 'complete')
+    return dict(receipt, schema='prepared-filing-with-ocr/1', extraction_status=receipt['status'],
+                ocr=reference, status=status, fidelity='unverified', reasons=reasons, members=members)
+
+
+def _ocr_seconds(receipt, config):
+    """One child budget: base allowance plus one request allowance per source input/page."""
+    import math
+    import pypdfium2 as pdfium
+    from driver.prepare.pictures import saved
+    base, per_input = config.get('seconds', 1800), config.get('timeout', 660)
+    if type(base) is not int or base <= 0: raise ValueError('OCR seconds must be a positive integer')
+    if type(per_input) not in (int, float) or not math.isfinite(per_input) or per_input <= 0: raise ValueError('OCR timeout must be finite and positive')
+    commands, rows, manifest, members = saved._source(receipt)
+    inventory, _ = saved._inventory(commands, rows, manifest)
+    inputs, pages = set(), 0
+    for source, route in inventory:
+        if route is not None:
+            inputs.update(u['input']['input_sha256'] for u in route['units'] if 'input_sha256' in (u.get('input') or {}))
+        else:
+            try: document = pdfium.PdfDocument(members[source['file_id']])
+            except pdfium.PdfiumError: continue  # unreadable PDFs have no model calls and remain explicit in the supplement
+            try: pages += len(document)
+            finally: document.close()
+    return base + math.ceil((len(inputs) + pages) * per_input)
+
+
+def with_ocr(receipt, config):
+    """The existing adapter invokes one bounded OCR supplement child after saved extraction."""
+    if not config.get('ocr') or receipt.get('status') == 'failed' or not receipt.get('plan'): return receipt
+    from driver.prepare.job import bound
+    from driver.prepare.pictures import saved
+    cfg = config['ocr']; run = Path(receipt['plan']['path']).parent; folder = run / 'ocr'
+    body = (json.dumps(cfg, indent=1, sort_keys=True) + '\n').encode()
+    cp = run / ('OCR_CONFIG_' + hashlib.sha256(body).hexdigest() + '.json')
+    if cp.exists() and cp.read_bytes() != body: raise ValueError('OCR configuration file differs')
+    if not cp.exists(): _save(cp, cfg)
+    env = {k: os.environ[k] for k in ('HOME', 'VLLM_API_KEY', 'ONNXTR_CACHE_DIR') if k in os.environ}
+    env['PATH'] = '/usr/bin:/bin'; env['PYTHONDONTWRITEBYTECODE'] = '1'
+    seconds = None
+    for _ in range(3):  # bounded technical retries, same saved extraction and native per-reader cache; no new queue
+        try:
+            if seconds is None: seconds = _ocr_seconds(receipt, cfg)
+            got = subprocess.run(bound(seconds) + [cfg.get('python', config['python']), '-B', '-m', 'driver.prepare.pictures.saved', '-', str(cp), str(folder)],
+                                 input=json.dumps(receipt), capture_output=True, text=True, cwd=config['runtime_root'], env=env)
+            if got.returncode != 0: raise RuntimeError(f'OCR child exit {got.returncode}: {got.stderr.strip()[-300:]}')
+            reference = json.loads(got.stdout.strip().splitlines()[-1])
+            report = saved.verify(reference, receipt)
+            result = _ocr_receipt(receipt, reference, report)
+            name = reference['sha256']
+        except (ValueError, OSError, KeyError, TypeError, RuntimeError, IndexError) as error:
+            result = dict(receipt, schema='prepared-filing-with-ocr/1', extraction_status=receipt['status'], fidelity='unverified',
+                          status='failed', reasons=list(receipt.get('reasons') or []) + [f'OCR: {type(error).__name__}: {error}'])
+            name = hashlib.sha256(json.dumps(result, sort_keys=True).encode()).hexdigest()
+        target = folder / 'receipts' / (name + '.json')
+        if target.exists():
+            if json.loads(target.read_bytes()) != result: raise ValueError('saved OCR aggregate differs')
+        else: _save(target, result)
+        if result['status'] != 'failed': break
+    return dict(result, saved_receipt=dict(path=str(target), sha256=_sha(target)))
 
 
 def _job(config, root, run, pin, jobdir, base, members):  # one pinned job.py child in a new folder (job.py refuses an existing one)
@@ -220,16 +311,18 @@ def pointer(filing, config_path):
     The adapter runs as an isolated child of the configured pinned interpreter. Any error becomes an honest 'failed' pointer."""
     try:
         config = json.loads(Path(config_path).read_text())
+        env = {k: os.environ[k] for k in ('HOME', 'VLLM_API_KEY', 'ONNXTR_CACHE_DIR') if k in os.environ}; env['PATH'] = '/usr/bin:/bin'
         p = subprocess.run([config['python'], '-I', '-B', str(Path(__file__).resolve()), str(config_path)], input=json.dumps(filing),
-                           capture_output=True, text=True, env={'PATH': '/usr/bin:/bin', 'HOME': os.environ['HOME']})
+                           capture_output=True, text=True, env=env)
         r = json.loads(p.stdout.strip().splitlines()[-1]) if p.returncode == 0 else None
         if r is None: return dict(status='failed', reasons=[f'adapter exit {p.returncode}: {p.stderr.strip()[-300:]}'])
     except Exception as e:
         return dict(status='failed', reasons=[f'adapter: {type(e).__name__}: {e}'])
-    saved = Path(r['plan']['path']).with_name('RECEIPT.json') if r.get('plan') else None
+    saved = Path(r['saved_receipt']['path']) if r.get('saved_receipt') else Path(r['plan']['path']).with_name('RECEIPT.json') if r.get('plan') else None
+    extra = dict(fidelity='unverified', ocr=r.get('ocr')) if r.get('extraction_status') is not None else {}
     return dict(status=r['status'], reasons=r.get('reasons', [])[:20], package_sha256=r.get('package_sha256'),
                 runtime_manifest_sha256=r.get('runtime_manifest_sha256'),
-                receipt=dict(path=str(saved), sha256=_sha(saved)) if saved and saved.exists() else None)
+                receipt=dict(path=str(saved), sha256=_sha(saved)) if saved and saved.exists() else None, **extra)
 
 
 if __name__ == '__main__':  # the isolated child: filing JSON on stdin, config path as argv[1], the receipt as the last stdout line

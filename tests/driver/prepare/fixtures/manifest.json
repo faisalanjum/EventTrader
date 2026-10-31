@@ -2,6 +2,24 @@
  "schema": "prepare-test-fixtures/1",
  "status": "corrected draft for Codex (accuracy-ocr-2), 2026-10-07; not provisioned",
  "assets": {
+  "source_reading_v2/CCL_R1.htm": {
+   "sha256": "dccc1adabcff43a90ea46355963d7d612c92b43d7a86c12176774ab32d7263f0",
+   "bytes": 79153,
+   "role": "input",
+   "provenance": {"kind": "public SEC original", "source": "extraction_closeout_20261010/production_qualification_20261022/ocr_no_click/CCL_R1.htm"}
+  },
+  "source_reading_v2/AMG_R1.htm": {
+   "sha256": "40cbafcfff5d0cced54eec8f75c5a57b8c27c791c6b01ba6cee279a8bbd4c065",
+   "bytes": 47463,
+   "role": "input",
+   "provenance": {"kind": "public SEC original", "source": "extraction_closeout_20261010/production_qualification_20261022/ocr_no_click/AMG_R1.htm"}
+  },
+  "source_reading_v2/AMG_report.css": {
+   "sha256": "cb242530100cd884d71f96f5fb2f780c23b21027e81be3b8a778b7bbd9282ca8",
+   "bytes": 2652,
+   "role": "input",
+   "provenance": {"kind": "public SEC stylesheet", "source": "extraction_closeout_20261010/production_qualification_20261022/ocr_no_click/AMG_report.css"}
+  },
   "real575_20261005/runtime_extract_20261006/DEFAULT_BASELINE.jsonl": {
    "sha256": "9776f1e8e75a5860d37cb06b81647277c973b9e1370128e1e95dff57c183b355",
    "bytes": 11427873,
@@ -25084,6 +25102,7 @@
   }
  },
  "groups": {
+  "source_reading_v2": ["source_reading_v2/CCL_R1.htm", "source_reading_v2/AMG_R1.htm", "source_reading_v2/AMG_report.css"],
   "ocr.inputs.506": [
    "real575_20261005/fixture_manifest_20261007/v2/OCR_INPUTS_506.json",
    "real575_20261005/validation_20261006/pictures/1_00_0000726958-25-000032_logo.jpg",

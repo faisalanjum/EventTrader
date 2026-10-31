@@ -241,8 +241,57 @@ read the hidden text layer or dispatch an entire filing inventory.
 
 Default picture reading uses Chandra, PP-OCR/RapidOCR and OnnxTR. Sonnet is off by
 default. Raw readings, disagreement, cutoffs and failures remain visible. Reader
-agreement does not establish correctness against the original. The current Chandra
-factory uses MLX; a production NVIDIA worker is not yet qualified.
+agreement does not establish correctness against the original. `readers.chandra`
+uses Mac MLX; `readers.chandra_vllm` reuses the native Chandra 0.2 client for a
+separately qualified self-hosted server. Mac automation remains separate.
+
+### Saved OCR supplements
+
+An optional `ocr` object in the filing adapter configuration runs OCR after saved
+HTML/XML extraction. It reads prepared images from accepted views/source readings
+and uses the existing PDFium page renderer for PDF components. Original extraction
+routes, completions and receipts remain unchanged. Unsupported PDFs, unread
+attachments/pages and package pictures without a bound HTML reading stay explicit.
+
+```json
+"ocr": {
+  "endpoint": "http://SELF_HOSTED_SERVER:8000/v1",
+  "identity": {"model": "datalab-to/chandra-ocr-2", "revision": "PINNED_REVISION", "image_digest": "PINNED_IMAGE"},
+  "timeout": 660,
+  "seconds": 1800,
+  "python": "/path/to/qualified-ocr-environment/bin/python"
+}
+```
+
+Use the pinned [OCR client dependencies](../../k8s/prepared-extraction/requirements-ocr.txt)
+and provisioned native CPU weights. The remote client needs no local Torch,
+Transformers, MLX or GPU. Preserve `ONNXTR_CACHE_DIR` and supply server authentication
+through `VLLM_API_KEY`; credentials never enter settings or receipts. The endpoint
+must serve the separately pinned public-weight model; there is no hosted fallback.
+The native SDK streams and accumulates the original response, preserving its finish
+reason and final token usage. Missing finish/usage, interrupted streams and server
+errors fail the reading; a length finish remains incomplete. Streaming avoids
+waiting for an entire long reading before the HTTP proxy receives any response.
+
+For an existing extraction receipt, from the frozen runtime:
+
+```sh
+python -B -m driver.prepare.pictures.saved RECEIPT.json OCR_CONFIG.json OCR_OUTPUT_DIR
+```
+
+`OCR_OUTPUT_DIR/RESULT.json` locates an immutable supplement in the existing archive
+format. It binds source versions, views, picture occurrences, native PDF page order,
+inputs and raw reader snapshots. `saved.verify` checks the complete inventory and
+recomposes packets without model calls or rendering again. Successful input/settings
+readings are reused by the existing worker. Failed, blank, capped or repeated results
+retain their evidence and cannot become a fully completed OCR obligation.
+
+`complete` is operational completion, not certified source accuracy. Every OCR
+supplement and downstream pointer says `fidelity: unverified`. Existing checks can
+miss a wrong ratio suffix or invented number despite normal generation; no numeric
+repair is applied. Originals, raw readings and detected conflicts remain available.
+The earlier non-OCR image remains a separate release. Source changes or image builds
+do not activate OCR or authorize a production switch.
 
 `OK` means that conversion completed, not that every source fact or picture was
 independently checked. Inspect `uncovered`, unresolved source evidence, picture input
