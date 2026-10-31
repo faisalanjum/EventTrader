@@ -8,7 +8,7 @@ intact.
 
 ## Exact release
 
-- Qualified image: `faisalanjum/report-enricher@sha256:e8ca7a5887dcce986f18b377917fa1e4a07c0684c2e6edfc15e2010978a27adc`.
+- Qualified image: `faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b`.
 - Runtime manifest SHA-256: `d4aaffdee5d99748cb370d172c024f966aae5fb32c773f12f1b36671ee09804a`.
 - Environment base: `faisalanjum/report-enricher@sha256:23ca15adc2b1f265ec862a1af2bfa471cc525a6b18b25524049b044803c6236b`.
 
@@ -59,15 +59,20 @@ and reason in `reports:queues:enrich:dead`. Saved successes can be found under
 `runs/<accession>/*/*/RECEIPT.json` beneath the configured output directory. Preserve
 the saved original files, source/version identities and receipts together.
 
-The inherited base still has older copies of the wider application under
-`/app/src/eventtrader` and `/app/venv/src/eventtrader`. Their cleanup is open and
-separate from this source import. Two old `redisDB/ReportProcessor.py` copies are
-shadowed by the active `/app/redisDB/ReportProcessor.py`; the active processor still
-supplies fields used by the existing consumer. Do not delete entire old checkouts
-without checking their unique files. There is one current `driver.prepare` tree,
-under `/opt/prepared/runtime`, and no older Prepare/test/grader tree in the image.
+The image uses the active application under `/app`; both older checkouts under
+`/app/src/eventtrader` and `/app/venv/src/eventtrader` are removed from its filesystem.
+Package metadata points to `/app`, with the same package version and requirements.
+The active `/app/redisDB/ReportProcessor.py` still supplies fields used by the
+existing consumer. There is one current `driver.prepare` tree, under
+`/opt/prepared/runtime`, and no older Prepare/test/grader tree in the image.
 
 ## Qualification record
+
+The cleanup image passed all 23 worker checks with an isolated Redis and imported
+its real worker without test substitutes. All 47 runtime files and the adapter,
+worker, Redis wrapper, active legacy processor, native library and browser retain
+their qualified hashes. Package resolution and effective dependencies were checked
+independently. Earlier extraction qualification therefore remains applicable.
 
 The final extraction snapshot passed 1,116 affected tests without skips. A complete
 saved-output comparison covered 954 HTML documents, 1,813 native views and 602,977

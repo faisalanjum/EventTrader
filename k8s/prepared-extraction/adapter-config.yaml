@@ -1,4 +1,4 @@
-# REVIEWABLE - NOT APPLIED. ConfigMap for image8: claude/image/adapter_config.production.v4.json with runtime_manifest.sha256 = d4aaffde (header split); apply together with report-enricher-worker.image8.patch.yaml (an image8 pod with the previous runtime pin fails closed).
+# REVIEWABLE - NOT APPLIED. Pair with worker.patch.yaml: image9 retains runtime manifest d4aaffde.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -29,5 +29,5 @@ data:
       "max_actions": 4
      },
      "script_qualifications": "/data/sec_prepared/script_qualifications",
-     "_comment": "PRODUCTION CONFIG (named, reviewable; NOT applied). Same keys as the tested runs. Viewer fallback ON with the native existing settings: context_campaign {campaign, live, max_actions 4} as in Root first8/known19 (there live=false offline); the adapter fixes context_explore=false. script_qualifications = the native qualification store: must PRE-EXIST (job.claim_version never creates it; the adapter refuses a campaign without it). live=true viewer fetching for new arrivals is UNPROVED until the scoped one-pod canary. context_campaign:null was the AMG smoke policy only. image8: runtime manifest d4aaffde (header split) in image candidate-20261031-8."
+     "_comment": "PRODUCTION CONFIG (named, reviewable; NOT applied). Same keys as the tested runs. Viewer fallback ON with the native existing settings: context_campaign {campaign, live, max_actions 4} as in Root first8/known19 (there live=false offline); the adapter fixes context_explore=false. script_qualifications = the native qualification store: must PRE-EXIST (job.claim_version never creates it; the adapter refuses a campaign without it). live=true viewer fetching for new arrivals is UNPROVED until the scoped one-pod canary. context_campaign:null was the AMG smoke policy only. image9: runtime manifest d4aaffde (header split) in image candidate-20261031-9."
     }

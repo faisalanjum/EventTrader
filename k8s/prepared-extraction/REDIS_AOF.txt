@@ -33,9 +33,9 @@ GO-LIVE ORDER (one owner approval covers it; stop at the first ABORT):
     Continue the same step only on success: pers | grep -E 'aof_enabled:1' && rc CONFIG GET appendfsync && rc DBSIZE   # always; compare with R3 while allowing concurrent writes and key expiry; investigate an unexplained drop
  R6 the worker, still paused at 0 (no worker pod exists, so no overlap is possible):
     kubectl --request-timeout=10s apply -f adapter-config.yaml
-    kubectl --request-timeout=10s -n processing patch deployment report-enricher --type strategic -p "$(cat worker.patch.yaml)"   # image8 + Recreate; replicas stay 0 while paused
+    kubectl --request-timeout=10s -n processing patch deployment report-enricher --type strategic -p "$(cat worker.patch.yaml)"   # image9 + Recreate; replicas stay 0 while paused
     kubectl --request-timeout=10s -n processing patch scaledobject report-enricher-scaler --type merge -p "$(cat scaler.patch.yaml)"   # min=max=1
-    kubectl --request-timeout=10s -n processing annotate scaledobject report-enricher-scaler autoscaling.keda.sh/paused-replicas-   # unpause: KEDA starts ONE image8 worker
+    kubectl --request-timeout=10s -n processing annotate scaledobject report-enricher-scaler autoscaling.keda.sh/paused-replicas-   # unpause: KEDA starts ONE image9 worker
     then: kubectl --request-timeout=190s -n processing rollout status deployment/report-enricher --timeout=180s
     then wait_one_owner from ROLLOUT.txt (HPA max 1 + exactly one active pod) and its exact image check; then steps 7-8 (watch; rate/replicas later).
 ROLLBACK: a worker rollback (ROLLBACK.txt) leaves Redis on AOF. Do NOT revert Redis to the old RDB-only args: the old worker runs unchanged on AOF Redis.

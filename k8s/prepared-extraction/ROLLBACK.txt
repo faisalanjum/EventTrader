@@ -1,7 +1,7 @@
 MANUAL INSTRUCTIONS — activation requires the owner decision; nothing is applied by committing these files.
 CWD: k8s/prepared-extraction/ beneath the repository root. Keep BEFORE_WORKER_REVISION.txt here when R0 creates it.
 Execution prelude: use a Bash subshell with set -euo pipefail. Each API request is capped at 10 seconds; polling budget is 180 seconds. Stop on any non-zero step.
-ROLLBACK WITH PENDING JOBS (image8 worker -> old worker). Same owner approval as the switch. Order: stop the new worker, return its claims, then start the old one.
+ROLLBACK WITH PENDING JOBS (image9 worker -> old worker). Same owner approval as the switch. Order: stop the new worker, return its claims, then start the old one.
 Redis stays on AOF: a worker rollback never reverts Redis (no stale RDB-only args). The old worker runs unchanged on AOF Redis.
 Helpers (paste once). Every wait is bounded at 180 s. An API/Redis error ABORTS; it never counts as "zero pods". Historical Failed/Succeeded pods (e.g. ...-5kjv4) are ignored.
   active_pods() { kubectl --request-timeout=10s -n processing get pods -l app=report-enricher --field-selector='status.phase!=Failed,status.phase!=Succeeded' -o name; }

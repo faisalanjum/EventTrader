@@ -1,12 +1,13 @@
 MANUAL INSTRUCTIONS — activation requires the owner decision; nothing is applied by committing these files.
 CWD: k8s/prepared-extraction/ beneath the repository root. Keep BEFORE_WORKER_REVISION.txt here when R0 creates it.
 Execution prelude: use a Bash subshell with set -euo pipefail. Each API request is capped at 10 seconds; polling budget is 180 seconds. Stop on any non-zero step.
-ROLLOUT STEPS v6 - Claude 578e6535, written after the clock read 01:00:22 EDT Oct 31. Supersedes v4 (ROLLOUT_STEPS_v4_cb6b6f84.txt): bounded waits that abort on API errors. Namespace processing. NOTHING BELOW IS APPLIED.
-IMAGE (pushed 08:54 AM EDT Oct 31, private repo; processing/default SA pulls via secret dockerhub-pull):
- faisalanjum/report-enricher@sha256:e8ca7a5887dcce986f18b377917fa1e4a07c0684c2e6edfc15e2010978a27adc (tag prepared-candidate-20261031-8)
- = local image8 sha256:6101d010, built FROM image6 sha256:8f2c2f9e (= clean image5 f742cc07 + redisDB/report_enricher.py 33db8990 + redisDB/redisClasses.py 0e7ac21d) + runtime
-   convert/edgartools_html.py 49cc35ed + README.md e0046591 + RUNTIME_MANIFEST_ROLE.json d4aaffde (b7 + header split). EdgarTools unchanged (nodes.py 9850d60d + original pyc).
-DONE (owner-approved): storage, image5 push, AMG canary (complete, 9/9, receipt a4de5cf2). The image8 push is preparation only.
+Namespace processing. NOTHING BELOW IS APPLIED.
+IMAGE (prepared 31 October 2026, private repo; processing/default SA pulls via secret dockerhub-pull):
+ faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b (tag prepared-candidate-20261031-9)
+ = local image9 sha256:2da9c277, built from the checked-in Dockerfile. Both obsolete application
+   checkouts are removed; runtime manifest d4aaffde, worker 33db8990, Redis wrapper 0e7ac21d,
+   adapter e6d054d5, native EdgarTools nodes 9850d60d and browser 22d72b58 retain their qualified bytes.
+Prior storage and the 9/9-document AMG canary are unchanged. This image push is preparation only.
 GO-LIVE is reserved by the OWNER (separate OK). With the Redis AOF change in the same window, use REDIS_AOF.txt R0-R6, which covers these steps in a paused-at-0 order.
 Helpers (paste once; 180 s bound; an API error ABORTS and never counts as zero pods; historical Failed/Succeeded pods are ignored):
   active_pods() { kubectl --request-timeout=10s -n processing get pods -l app=report-enricher --field-selector='status.phase!=Failed,status.phase!=Succeeded' -o name; }
@@ -14,9 +15,9 @@ Helpers (paste once; 180 s bound; an API error ABORTS and never counts as zero p
 Before any switch, capture the pre-switch revision using REDIS_AOF.txt R0 (from this directory). Keep it for the native rollback; do not overwrite it after switching.
 4. kubectl --request-timeout=10s apply -f adapter-config.yaml
 5. One owner BEFORE the switch: kubectl --request-timeout=10s -n processing patch scaledobject report-enricher-scaler --type merge -p "$(cat scaler.patch.yaml)" && wait_one_owner   # HPA max 1 and exactly one active pod
-6. kubectl --request-timeout=10s -n processing patch deployment report-enricher --type strategic -p "$(cat worker.patch.yaml)" && wait_one_owner   # image8 + Recreate: the old pod stops before the new one starts
+6. kubectl --request-timeout=10s -n processing patch deployment report-enricher --type strategic -p "$(cat worker.patch.yaml)" && wait_one_owner   # image9 + Recreate: the old pod stops before the new one starts
    Wait for the new revision: kubectl --request-timeout=190s -n processing rollout status deployment/report-enricher --timeout=180s
-   Check: kubectl --request-timeout=10s -n processing get pods -l app=report-enricher --field-selector=status.phase=Running -o jsonpath='{.items[*].spec.containers[0].image}'   # exactly the image8 digest above
+   Check: kubectl --request-timeout=10s -n processing get pods -l app=report-enricher --field-selector=status.phase=Running -o jsonpath='{.items[*].spec.containers[0].image}'   # exactly the image9 digest above
    Effects: the live worker consumes the real enrich queue with claim/ack (reports:queues:enrich:processing) and writes the usual Redis processed records (+ prepared_extraction pointer). Downstream Neo4j publication continues as today.
 7. Watch the first live arrivals (when the first live arrival comes is not predicted here): processed status + receipt; LLEN reports:queues:enrich:processing (0 or 1); LLEN reports:queues:enrich:dead; pod restarts; memory (8Gi); extraction seconds; legacy publication delay; SEC request rate.
 8. Then decide rate/replicas. Until then KEDA min=max=1: the processing list has ONE owner, and more replicas need a design change.

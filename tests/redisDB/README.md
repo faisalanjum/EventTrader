@@ -42,7 +42,7 @@ docker run -d --rm --name $RED --network $NET --memory 512m \
 docker run --rm --network $NET --memory 8g \
   -e REDIS_TEST_HOST=$RED -e REDIS_TEST_PORT=6379 -e ENRICHER_OLD=/old/report_enricher.py -e PYTHONDONTWRITEBYTECODE=1 \
   -v "$PWD":/t:ro -v "$OLD":/old/report_enricher.py:ro -w /t --entrypoint python \
-  faisalanjum/report-enricher@sha256:e8ca7a5887dcce986f18b377917fa1e4a07c0684c2e6edfc15e2010978a27adc \
+  faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b \
   -B -m unittest discover -s tests/redisDB -t . -p 'test_[wr]*.py' -v
 docker stop $RED; docker network rm $NET
 ```

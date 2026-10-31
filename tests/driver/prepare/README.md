@@ -180,9 +180,10 @@ retain the original when layout, byte offsets or image geometry require it.
 
 Use **`PREPARE_TEST_DATA`**, provisioned once, for large immutable fixture bytes.
 The local location is `/home/faisal/prepare_test_data/`, outside git and
-`prepare_work`; 2,319 asset references / 2,253 unique blobs (168,878,153 original
-bytes) are provisioned. The checked-in manifest pins this exact snapshot; its
-draft-status text records the inventory's creation, not current provisioning. Reuse get's content-addressed
+`prepare_work`. The main manifest has 2,330 asset references; the observed-controls
+manifest has another 100. Together they require 2,340 unique blobs (173,586,617
+original bytes). Both checked-in manifests pin the provisioned bytes; draft-status
+text records the inventory's creation, not current provisioning. Reuse get's content-addressed
 gzip format and `archive.load_blob`: `blobs/<original-sha256>.gz`. No Git LFS,
 new cache service or dependency on the live corpus.
 
@@ -202,16 +203,18 @@ Missing, corrupted or inaccessible required data **fails**, never skips or fetch
 from SEC. Tests print the missing asset ID and expected hash.
 
 Before retiring old evidence, copy the pinned fixture store to backed-up persistent
-storage and prove restoration into an empty directory. Record the actual backup
-location here during migration. This snapshot was backed up on **minisforum2**, under
-`/home/faisal/prepare_test_data_backup/7b8cdc07f7237b68b73b1466d4348fd17c8b71cd060580fa479145134f621e3a/`,
-and restored into an empty directory with every asset's original SHA-256 and
-length checked using both stdlib gzip/hashlib and the loader. The backup uses a
-different machine from the primary store on minisforum. Its helper pod is
-transient; the host directory is durable. Evidence: `prepare_work/prepare_accuracy_20261007/fixture_support/`
-(`PROVISION.json`, `BACKUP.json`, `RESTORE.json`). A directory name or symlink alone
-is not a backup. Retain old evidence until all required ports and clean-checkout
-checks pass. Unreleased held-out answers do not enter this store.
+storage and prove restoration into an empty directory. The current snapshot was
+backed up on **minisforum2** on 31 October 2026, under
+`/home/faisal/prepare_test_data_backup/ad2a1b04300792a1e6fc20f1704e8f9c849fa0786d4ad66ea0db1489af527b24/`.
+All 2,340 blobs were restored from that machine into an empty directory and checked
+against both manifests using stdlib gzip/hashlib and the native loader. The primary
+store was not used during restoration. The earlier October 7 backup remains intact.
+Evidence: `prepare_work/extraction_closeout_20261010/production_qualification_20261022/CLAUDE_SEC_GIT_PUBLICATION_20261031/FIXTURE_BACKUP_20261031/`
+(`BACKUP.json`, `RESTORE.json`). The backup is on a different machine from the primary
+store on minisforum; its host directory persists after the helper pod is removed.
+A directory name or symlink alone is not a backup. Retain old evidence until all
+required ports and clean-checkout checks pass. Unreleased held-out answers do not
+enter this store.
 
 ## Stable execution and expectations
 
