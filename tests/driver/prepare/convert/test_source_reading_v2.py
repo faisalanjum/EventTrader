@@ -5,7 +5,7 @@ route's own saved visibility evidence (no new render), typed as a source reading
 (route PARTIAL). The caller saves it as its own attempt under source_reading/, pinned by the parent's COMPLETE and held to the same custody gate.
 Expected values come from each fixture's own bytes; real-content expectations from the ORIGINAL DOM (lxml), never from our reader. Real inputs: public CCL R1 (two definitions no control reaches) and AMG R1. The damage check (a fresh reading of the same bytes) is a consistency check, not source truth.
 Run: python -I -B -m unittest discover -s tests/driver/prepare/convert -p test_source_reading_v2.py -t ."""
-import copy, hashlib, json, re, tempfile, unittest
+import copy, gzip, hashlib, json, re, tempfile, unittest
 from pathlib import Path
 from driver.prepare.convert import anchor, edgartools_html as eh, html_route, screen_grid as sg
 from driver.prepare import document, reconstruct
@@ -87,11 +87,11 @@ class Synthetic(unittest.TestCase):  # certain scans: the displayed route is the
             self.assertEqual(shown['facts']['source_reading'], {'made': True, 'status': 'OK'})
             document.finish(a, row, shown, {}, archive, document.save)
             route, _, custody = reconstruct._custody(a); self.assertIn('source_reading_complete_sha256', custody)
-            child = json.loads((a / 'source_reading' / 'ROUTE.json').read_bytes()); self.assertEqual(hidden(child), [('Revenue grew quietly strongly.', ['quietly'])])
+            child = json.loads(archive.read_record(a / 'source_reading' / 'ROUTE.json')); self.assertEqual(hidden(child), [('Revenue grew quietly strongly.', ['quietly'])])
             self.assertTrue((a / 'RAW_READING.json').exists() is False and (a / 'source_reading' / 'RAW_READING.json').exists())  # the child's own receipt; the parent's untouched
-            p = a / 'source_reading' / 'ROUTE.json'; body = p.read_bytes(); p.chmod(0o600); p.write_bytes(body.replace(b'quietly', b'QUIETLY'))
+            p = a / 'source_reading' / 'ROUTE.json'; body = archive.read_record(p); stored = archive.record_path(p); stored.chmod(0o600); stored.write_bytes(gzip.compress(body.replace(b'quietly', b'QUIETLY')))
             with self.assertRaises(ValueError): reconstruct._custody(a)  # a changed child route fails the parent
-            p.write_bytes(body); reconstruct._custody(a)
+            stored.write_bytes(gzip.compress(body)); reconstruct._custody(a)
             (a / 'source_reading' / 'COMPLETE.json').rename(a / 'source_reading' / 'COMPLETE.moved')
             with self.assertRaises(ValueError): reconstruct._custody(a)  # a missing child completion fails the parent
 

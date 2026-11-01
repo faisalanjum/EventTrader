@@ -6,11 +6,12 @@ The deterministic varied-start graph test is separate; no timing claim here.
 """
 import hashlib, json, os, tempfile, unittest
 from pathlib import Path
+from driver.prepare.get import archive
 from unittest.mock import patch
 from . import version_fixture as vf
 from driver.prepare import job
 
-read = lambda p: json.loads(Path(p).read_bytes())
+read = lambda p: json.loads(archive.read_record(p))
 BASE_VIEWER = vf.viewer
 # A separate invented bot: POST on every full native click, with no frame creation
 # during report selection (that independent lifetime-context deficit is not eligible).

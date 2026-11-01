@@ -6,11 +6,13 @@ and a malformed page (today's HTML source reading, still incomplete); a hidden-o
 cannot be prepared (the parent's own check keeps the document incomplete).
 Run with the qualified interpreter from this checkout: python -I -B -m unittest tests.driver.prepare.test_source_xml_child_caller
 Environment: BROWSER_EXECUTABLE (default: the pinned headless shell path below)."""
-import copy, hashlib, io, json, os, shutil, subprocess, sys, tempfile, unittest
+import copy, gzip, hashlib, io, json, os, shutil, subprocess, sys, tempfile, unittest
 import xml.parsers.expat as expat
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent; ROOT = HERE.parents[2]
+sys.path.insert(0, str(ROOT))
+from driver.prepare.get import archive
 EXE = os.environ.get('BROWSER_EXECUTABLE', '/home/faisal/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell')
 IX = 'http://www.xbrl.org/2013/inlineXBRL'; XI = 'http://www.xbrl.org/2003/instance'; XHTML = 'http://www.w3.org/1999/xhtml'
 sha = lambda b: hashlib.sha256(b).hexdigest()
@@ -91,7 +93,7 @@ class XmlSourceChildThroughTheCaller(unittest.TestCase):
 
     def logs(self, name): return self.out / ('logs_%d' % self.rows[name]['ordinal'])
     def attempt(self, name): return self.out / ('attempt_%d' % self.rows[name]['ordinal'])
-    def load(self, p): return json.loads(Path(p).read_bytes())
+    def load(self, p): return json.loads(archive.read_record(p))
 
     def test_complete_xml_child_under_the_html_parent(self):
         for name in ('ix_q', 'ix_ix'):
@@ -144,7 +146,7 @@ class XmlSourceChildThroughTheCaller(unittest.TestCase):
                 d = Path(tempfile.mkdtemp(prefix='xml_child_damage_')) / 'a'; shutil.copytree(src, d)
                 c = d / 'source_reading'
                 if how == 'missing': shutil.rmtree(c)
-                elif how == 'route': (c / 'ROUTE.json').write_bytes((c / 'ROUTE.json').read_bytes().replace(b'0000000002', b'0000000003'))
+                elif how == 'route': archive.record_path(c / 'ROUTE.json').write_bytes(gzip.compress(archive.read_record(c / 'ROUTE.json').replace(b'0000000002', b'0000000003')))
                 else: (c / 'COMPLETE.json').unlink()
                 with self.assertRaises(ValueError): reconstruct._custody(d)
 

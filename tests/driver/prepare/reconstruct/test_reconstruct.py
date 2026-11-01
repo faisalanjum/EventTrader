@@ -279,13 +279,13 @@ class E_Custody(unittest.TestCase):
         self.assertEqual((v['custody'], v['preserved'], v['annotations']), ([], [], [])); self.assertIn('source_relations', v['unrepresented'])
 
     def test_custody_payload_or_types_fail_preserved(self):
-        E, a = self.attempt('c_shape'); rb.main([str(a), str(a / 'R.json')]); R = json.loads((a / 'R.json').read_text())
+        E, a = self.attempt('c_shape'); rb.main([str(a), str(a / 'R.json')]); R = json.loads(archive.read_record(a / 'R.json'))
         for name, c in (('fabricated key', dict(R['custody'], zz='x')), ('E.units copied into custody', dict(R['custody'], units=E['units'])), ('a string', 'free text'),
                         ('wrong JSON types', dict(R['custody'], prepared=1, route_sha256=None))):
             with self.subTest(name): self.assertNotEqual(rb.preserved(E, dict(R, custody=c)), [])
 
     def test_forged_or_mismatched_custody_fails_verify(self):
-        E, a = self.attempt('c_base'); rb.main([str(a), str(a / 'R.json')]); R0 = json.loads((a / 'R.json').read_text())
+        E, a = self.attempt('c_base'); rb.main([str(a), str(a / 'R.json')]); R0 = json.loads(archive.read_record(a / 'R.json'))
         forged = {'route_sha256 forged': lambda R: R['custody'].update(route_sha256='0' * 64), 'complete_sha256 forged': lambda R: R['custody'].update(complete_sha256='0' * 64),
                   'prepared flipped': lambda R: R['custody'].update(prepared=False), 'raw_reading claimed': lambda R: R['custody'].update(raw_reading_sha256='a' * 64),
                   'custody removed': lambda R: R.pop('custody')}
@@ -302,7 +302,7 @@ class E_Custody(unittest.TestCase):
 class F_InputContract(unittest.TestCase):
     """v4: the complete producer COMPLETE contract at the one custody gate, on native-shaped copies of a real public attempt."""
     def attempt(self, name, complete=None, route=None, prepared='copy', receipt='copy'):
-        a = RUN / name; a.mkdir(); body = (PUBLIC_ATTEMPT / 'ROUTE.json').read_bytes() if route is None else json.dumps(route).encode()
+        a = RUN / name; a.mkdir(); body = archive.read_record(PUBLIC_ATTEMPT / 'ROUTE.json') if route is None else json.dumps(route).encode()
         (a / 'ROUTE.json').write_bytes(body)
         c = json.loads((PUBLIC_ATTEMPT / 'COMPLETE.json').read_bytes()); c['route_sha256'] = hashlib.sha256(body).hexdigest()
         (a / 'COMPLETE.json').write_text(json.dumps(c if complete is None else complete(c)))
@@ -325,10 +325,10 @@ class F_InputContract(unittest.TestCase):
         v = rb.verify(a, a / 'R.json'); self.assertEqual((v['preserved'], v['annotations']), ([], []))
 
     def test_a_consistent_partial_route_is_not_rejected_for_its_status(self):
-        route = json.loads((PUBLIC_ATTEMPT / 'ROUTE.json').read_bytes()); route['status'] = 'PARTIAL'
+        route = json.loads(archive.read_record(PUBLIC_ATTEMPT / 'ROUTE.json')); route['status'] = 'PARTIAL'
         a = self.attempt('ic_partial', complete=lambda c: dict(c, native_status='PARTIAL'), route=route); main_ok, custody = self.check(a)
         self.assertTrue(main_ok); self.assertEqual(custody, [])
-        self.assertTrue(any(u['family'] == 'status' for u in json.loads((a / 'R.json').read_text())['unknowns']))
+        self.assertTrue(any(u['family'] == 'status' for u in json.loads(archive.read_record(a / 'R.json'))['unknowns']))
 
     def test_every_contradicting_attempt_is_refused_at_the_gate(self):
         pin = json.loads((PUBLIC_ATTEMPT / 'COMPLETE.json').read_bytes())['prepared_input_sha256'][0]

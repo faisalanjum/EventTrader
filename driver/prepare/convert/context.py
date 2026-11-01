@@ -132,15 +132,19 @@ def qualified_version(evidence, h, url=None):
         return False, 'record not passed for these bytes'
     if rec.get('runtime_manifest_sha256') != q['runtime_manifest_sha256']: return False, 'record made by another runtime'
     roles = {}
+    from driver.prepare.get import archive
     for e in rec.get('evidence') or []:
-        try: b = Path(e['path']).read_bytes()
-        except (OSError, KeyError, TypeError): return False, 'record evidence missing'
+        try: b = archive.read_record(e['path'])
+        except (OSError, ValueError, KeyError, TypeError): return False, 'record evidence missing'
         if hashlib.sha256(b).hexdigest() != e.get('sha256'): return False, 'record evidence changed after recording'
         roles[e.get('role')] = b
     if not QUALIFY_ROLES <= set(roles): return False, 'record lacks the producer evidence chain'
     try: rows = [r for r in json.loads(roles['without_result'])['rows'] if r.get('file_id') == rec['file_id']]
     except (ValueError, TypeError, AttributeError, KeyError): rows = []
-    return (True, None) if len(rows) == 1 and rows[0].get('outcome') == 'verified_saved_output' else (False, 'record evidence has no verified WITHOUT row for its file')
+    if len(rows) == 1 and rows[0].get('outcome') == 'verified_saved_output':
+        archive._sync_dir(Path(q['folder']))  # a concurrent producer may have linked this durable file before flushing its name
+        return True, None
+    return False, 'record evidence has no verified WITHOUT row for its file'
 
 from ..job import QUALIFY_ROUTE, QUALIFY_SCHEMA, QUALIFY_ROLES, QUALIFY_PLAN_KEYS, compare_views, claim_version, qualify_version  # noqa: E402,F401 the producer lives with
 # the batch owner (job.py runs -I -S, without Playwright); qualified_version below is its consumer

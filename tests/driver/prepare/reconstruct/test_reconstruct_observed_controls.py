@@ -185,12 +185,12 @@ class FinalObservation(unittest.TestCase):
 
 class Custody(unittest.TestCase):
     def test_render_evidence_is_bound_by_the_completion_pin(self):
-        E = route([ONE()]); d = attempt(E, renders()); rb.main([str(d), str(d / 'R.json')]); v = rb.verify(str(d), str(d / 'R.json')); self.assertEqual(v['custody'], []); self.assertIn('context_renders_sha256', json.loads((d / 'R.json').read_bytes())['custody'])
+        E = route([ONE()]); d = attempt(E, renders()); rb.main([str(d), str(d / 'R.json')]); v = rb.verify(str(d), str(d / 'R.json')); self.assertEqual(v['custody'], []); self.assertIn('context_renders_sha256', json.loads(archive.read_record(d / 'R.json'))['custody'])
         (d / 'CONTEXT_RENDERS.json').write_text(json.dumps(renders(after='Closed notes')))  # changed after the pin: custody fails and nothing else is claimed
         v = rb.verify(str(d), str(d / 'R.json')); self.assertEqual(v['custody'], ['custody not proved: CONTEXT_RENDERS.json missing or not the completion pin']); self.assertEqual(v['annotations'], ['not checked: custody failed'])
     def test_a_context_route_without_the_pin_fails_custody_and_an_ordinary_route_is_unchanged(self):
         E = route([ONE()]); d = attempt(E, renders(), pin=False); self.assertRaisesRegex(ValueError, 'context_renders_sha256 missing', rb.main, [str(d), str(d / 'R.json')])
-        E0 = route(); d0 = attempt(E0, None); rb.main([str(d0), str(d0 / 'R.json')]); self.assertEqual(set(json.loads((d0 / 'R.json').read_bytes())['custody']), rb.CUSTODY_KEYS); self.assertNotIn('observed', rb.verify(str(d0), str(d0 / 'R.json')))
+        E0 = route(); d0 = attempt(E0, None); rb.main([str(d0), str(d0 / 'R.json')]); self.assertEqual(set(json.loads(archive.read_record(d0 / 'R.json'))['custody']), rb.CUSTODY_KEYS); self.assertNotIn('observed', rb.verify(str(d0), str(d0 / 'R.json')))
 
 class RootProbe(unittest.TestCase):
     """Root's retained damage probe (reconstruction_owner_contract_red/CASES.json): the positive composes; every other case is listed with one reason and composes nowhere."""
@@ -266,13 +266,19 @@ class NewSavedFixture(unittest.TestCase):
     def test_every_state_composes_its_visible_labels_and_lists_its_hidden_ones(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.RUN = saved_run(Path(tmp)); self._states()
+    def test_compressed_saved_states_preserve_the_same_native_label_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.RUN = saved_run(Path(tmp))
+            for path in self.RUN.rglob('ROUTE.json'):
+                body = path.read_bytes(); path.unlink(); archive.write_record(path, body)
+            self._states()
     def _states(self):
-        states = sorted(p for p in (self.RUN / 'states').iterdir() if (p / 'ROUTE.json').is_file()); self.assertTrue(states)
+        states = sorted(p for p in (self.RUN / 'states').iterdir() if archive.record_path(p / 'ROUTE.json').is_file()); self.assertTrue(states)
         visible = hidden = 0
         for st in states:
-            E = json.loads((st / 'ROUTE.json').read_bytes()); recs = E.get('observed_controls') or []
+            E = json.loads(archive.read_record(st / 'ROUTE.json')); recs = E.get('observed_controls') or []
             with self.subTest(state=st.name):
-                out = Path(tempfile.mkdtemp()) / 'R.json'; rb.main([str(st), str(out)]); v = rb.verify(str(st), str(out)); R = json.loads(out.read_bytes())
+                out = Path(tempfile.mkdtemp()) / 'R.json'; rb.main([str(st), str(out)]); v = rb.verify(str(st), str(out)); R = json.loads(archive.read_record(out))
                 self.assertEqual((v['custody'], v['preserved'], v['annotations']), ([], [], []))
                 if not recs: continue
                 renders = json.loads((st / 'CONTEXT_RENDERS.json').read_bytes()); want, listed = {}, []

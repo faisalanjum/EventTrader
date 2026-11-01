@@ -12,6 +12,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent; ROOT = HERE.parents[3]
 if str(ROOT) not in sys.path: sys.path.insert(0, str(ROOT))
+from driver.prepare.get import archive
 EXE = os.environ.get('BROWSER_EXECUTABLE', '/home/faisal/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell')
 sha = lambda b: hashlib.sha256(b).hexdigest()
 PAGE = ('<html><body><p id="top">Intro <a href="#t1" onclick="show(&quot;d&#233;f&quot;, \'T1\')" onmouseover="hi()">Label</a> \u00e9t\u00e9</p>'
@@ -107,10 +108,10 @@ class OutsideDeclarationThroughTheCaller(unittest.TestCase):
         (t / 'job.stderr').write_bytes(p.stderr); cls.row = json.loads((cls.out / 'RESULT.json').read_bytes())['rows'][0]
 
     def test_outside_declaration_keeps_its_value_and_the_saved_output_verifies(self):
-        route = json.loads((self.out / 'attempt_0' / 'ROUTE.json').read_bytes()); out = route['facts']['declared_outside_link_path']
+        route = json.loads(archive.read_record(self.out / 'attempt_0' / 'ROUTE.json')); out = route['facts']['declared_outside_link_path']
         self.assertEqual([(d['tag'], [(x['name'], x['value']) for x in d['declarations']]) for d in out], [('span', [('onclick', "go('t1')")])])
         self.assertEqual((self.row.get('reconstruct_exit'), self.row.get('verify_exit')), (0, 0), self.row.get('reasons'))
-        R = json.loads((self.out / 'logs_0' / 'R.json').read_bytes())
+        R = json.loads(archive.read_record(self.out / 'logs_0' / 'R.json'))
         self.assertEqual(R['not_composed']['source_ids'], route['source_ids']); self.assertEqual(R['not_composed']['facts'], route['facts'])
         self.assertEqual([l.get('declarations') for l in R['source_links']], [l.get('declarations') for l in route['source_links']])
 

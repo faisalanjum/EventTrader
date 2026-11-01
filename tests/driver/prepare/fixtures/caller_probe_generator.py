@@ -12,6 +12,12 @@ a = Path(attempt); a.mkdir(mode=0o700)
 (a / 'START.json').write_text(json.dumps({'ordinal': int(k)}))
 (a / 'PROBE.json').write_text(json.dumps({'executable': sys.executable, 'home': os.environ.get('HOME'),
                                           'affinity': sorted(os.sched_getaffinity(0)), 'cwd': os.getcwd()}))
+if row['probe'].get('snapshots'):
+    for folder in (a, a / 'scriptless_attempt', a / 'unverified'):
+        folder.mkdir(exist_ok=True)
+        for name in ('ROUTE_BEFORE_INPUTS.json', 'ROUTE_AFTER_INPUTS.json'):
+            (folder / name).write_text('{"diagnostic": true}')
+    (a / 'OTHER.json').write_text('{"keep": true}')
 if not row['probe']['complete']: sys.exit(1)
 route = json.dumps({'status': 'OK', 'units': []}).encode()
 (a / 'ROUTE.json').write_bytes(route)

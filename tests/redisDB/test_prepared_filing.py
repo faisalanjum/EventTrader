@@ -15,7 +15,8 @@ RUNTIME = HERE.parents[1]  # this checkout
 RUNTIME_MANIFEST = Path(os.environ.get('ADAPTER_RUNTIME_MANIFEST', RUNTIME / 'k8s/prepared-extraction/RUNTIME_MANIFEST.json'))
 sys.path.insert(0, str(RUNTIME))
 from redisDB import prepared_filing as pf
-from driver.prepare.get.acquire import acquire, read_package
+from driver.prepare.get.acquire import acquire, read_package, StorageError
+from driver.prepare.get import archive
 from tests.driver.prepare.support import FixtureStore
 
 AMG = dict(accessionNo='0001004434-23-000015', cik='1004434', formType='8-K')
@@ -154,6 +155,8 @@ class ReceiptDurability(unittest.TestCase):
 
 class OcrExtension(unittest.TestCase):
     def setUp(self):
+        space = patch.object(shutil, 'disk_usage', return_value=SimpleNamespace(total=10_000_000_000, used=4_000_000_000, free=6_000_000_000))
+        space.start(); self.addCleanup(space.stop)  # independent ample-space control for these small temporary reader fixtures
         from tests.driver.prepare.pictures.test_saved import SavedPictures
         from tests.driver.prepare.pictures.test_join import fakes
         self.fixture = SavedPictures(); self.fixture.setUp(); self.addCleanup(self.fixture.doCleanups)
@@ -163,6 +166,40 @@ class OcrExtension(unittest.TestCase):
         self.makers = fakes(self.fixture.calls, html='<div data-bbox="0 0 1000 1000" data-label="Text"><p>FAKE</p></div>')
         self.config = dict(runtime_root=str(RUNTIME), python=sys.executable,
                            ocr=dict(endpoint='http://unused.invalid/v1', identity=dict(model='control'), seconds=60))
+
+    def test_low_space_stops_before_ocr_config_or_writing_child(self):
+        low = SimpleNamespace(total=10_000_000_000, used=9_999_000_000, free=1_000_000)
+        with patch.object(shutil, 'disk_usage', return_value=low), patch.object(pf.subprocess, 'run', side_effect=self.child) as child:
+            with self.assertRaises(StorageError): pf.with_ocr(self.receipt, self.config)
+            child.assert_not_called()
+        self.assertEqual(self.fixture.calls, [])
+        self.assertFalse(list(self.fixture.root.glob('OCR_CONFIG_*.json')))
+        self.assertFalse((self.fixture.root / 'ocr').exists())
+
+    def test_space_failure_between_ocr_attempts_is_not_a_model_error_or_retry(self):
+        calls = []
+        def child(*args, **kwargs): calls.append(1); raise RuntimeError('controlled first child failure')
+        def space(_):
+            free = 1_000_000 if calls else 5_000_000_000
+            return SimpleNamespace(total=10_000_000_000, used=10_000_000_000-free, free=free)
+        with patch.object(shutil, 'disk_usage', side_effect=space), patch.object(pf.subprocess, 'run', side_effect=child):
+            with self.assertRaises(StorageError): pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(self.fixture.calls, [])
+
+    def test_identical_ocr_aggregate_reuse_requires_parent_flush(self):
+        sync = os.fsync
+        def fail_receipts(fd):
+            path = Path(os.readlink(f'/proc/self/fd/{fd}'))
+            if path.is_dir() and path.name == 'receipts': raise OSError('controlled aggregate parent flush failure')
+            sync(fd)
+        with patch.object(pf.subprocess, 'run', side_effect=self.child):
+            for _ in range(2):
+                with patch.object(os, 'fsync', side_effect=fail_receipts):
+                    with self.assertRaises(StorageError): pf.with_ocr(self.receipt, self.config)
+            result = pf.with_ocr(self.receipt, self.config)
+        self.assertEqual(result['status'], 'complete')
+        self.assertTrue(Path(result['saved_receipt']['path']).is_file())
 
     def child(self, argv, **kwargs):
         from driver.prepare.pictures import saved
@@ -481,7 +518,9 @@ class AmgEvent(unittest.TestCase):
 
         c, d = clone('control_undamaged'); self.assertEqual(pf.reverify(c, cfg)['status'], receipt['status'])  # control: a clone verifies like the original
         first = next(r for r in result['rows'] if r['outcome'] == V)
-        c, d = clone('readback_damaged'); (d / ('logs_' + Path(first['attempt']).name.split('_', 1)[1]) / 'R.json').write_text('{}')
+        c, d = clone('readback_damaged')
+        logical = d / ('logs_' + Path(first['attempt']).name.split('_', 1)[1]) / 'R.json'; stored = archive.record_path(logical)
+        self.assertEqual(stored.name, 'R.json.gz'); stored.write_bytes(gzip.compress(b'{}', mtime=0))
         damaged = pf.reverify(c, cfg)
         self.assertEqual(damaged['status'], 'failed'); self.assertTrue(any('no longer verifies' in x for x in damaged['reasons']), damaged['reasons'])
         c, d = clone('result_missing'); (d / 'RESULT.json').unlink()
@@ -541,6 +580,34 @@ class Recovery(unittest.TestCase):  # Root 8:28 PM: bounded automatic recovery i
         receipt, launched = self.event(['verified'])
         self.assertEqual((receipt['status'], launched), ('complete', ['job_0']))
 
+    def test_retry_sentinel_flush_failure_never_launches_or_acknowledges_a_job(self):
+        sync = os.fsync
+        def fail_sentinel(fd):
+            if Path(os.readlink(f'/proc/self/fd/{fd}')).name == 'job_0.stdout':
+                raise OSError('controlled retry sentinel flush failure')
+            sync(fd)
+        with patch.object(os, 'fsync', side_effect=fail_sentinel):
+            with self.assertRaises(OSError): self.event(['verified'])
+        run = self.run_dir()
+        self.assertFalse((run / 'job_0').exists())
+        self.assertFalse((run / 'RECEIPT.json').exists())
+        receipt, launched = self.event(['verified'])
+        self.assertEqual((receipt['status'], launched), ('complete', ['job_1']))
+
+    def test_published_receipt_reuse_requires_successful_parent_flush(self):
+        sync = os.fsync
+        def fail_receipt_parent(fd):
+            path = Path(os.readlink(f'/proc/self/fd/{fd}'))
+            if path.is_dir() and (path / 'RECEIPT.json').is_file(): raise OSError('controlled receipt parent flush failure')
+            sync(fd)
+        with patch.object(os, 'fsync', side_effect=fail_receipt_parent):
+            with self.assertRaises(StorageError): self.event(['verified'])
+        self.assertEqual(json.loads((self.run_dir() / 'RECEIPT.json').read_bytes())['status'], 'complete')
+        with patch.object(os, 'fsync', side_effect=fail_receipt_parent):
+            with self.assertRaises(StorageError): self.event([])
+        receipt, launched = self.event([])
+        self.assertEqual((receipt['status'], launched), ('complete', []))
+
     def test_startup_crash_is_recovered_automatically_and_the_failed_job_is_kept(self):
         r, launched = self.event(['startup_crash', 'verified'])
         self.assertEqual((r['status'], launched), ('complete', ['job_0', 'job_1']), r['reasons'])
@@ -568,6 +635,61 @@ class Recovery(unittest.TestCase):  # Root 8:28 PM: bounded automatic recovery i
         self.assertFalse((self.run_dir() / 'RECEIPT.json').exists())
         r, launched = self.event(['verified']); self.assertEqual((r['status'], launched), ('complete', ['job_1']))
         self.assertTrue((self.run_dir() / 'job_0/RESULT.json').exists())
+
+
+class CachedReserve(unittest.TestCase):
+    """Real cached SEC package/responses must not bypass the native work reserve."""
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp(prefix='cached_reserve_', dir='/dev/shm'))
+        self.addCleanup(lambda: (REAL_RUN(['chmod', '-R', 'u+w', str(self.root)]), shutil.rmtree(self.root)))
+        self.send = sender(gzip.decompress(AMG_PACKAGE.read_bytes()))
+        self.calls = []
+
+    def invoke(self, root, free):
+        class ReachedJob(Exception): pass
+        def send(*args, **kwargs): self.calls.append(args[0]); return self.send(*args, **kwargs)
+        with patch.object(shutil, 'disk_usage', return_value=SimpleNamespace(total=10_000_000_000, used=10_000_000_000-free, free=free)), patch.object(pf, '_job', side_effect=ReachedJob) as child:
+            try: result = pf.prepare_filing(dict(AMG), e2e_config(root), sender=send)
+            except ReachedJob: result = 'job reached'
+            finally: self.job_called = child.called
+        return result
+
+    def test_cached_package_requires_reserve_before_new_job(self):
+        root = self.root / 'warm'
+        self.assertEqual(self.invoke(root, 5_000_000_000), 'job reached')
+        self.assertTrue(self.calls)
+        self.calls.clear()
+        self.assertEqual(self.invoke(root, 1_600_000_000), 'job reached')  # the native check accepts the exact reserve boundary
+        with self.assertRaises(StorageError): self.invoke(root, 1_000_000)
+        self.assertFalse(self.job_called)
+        self.assertEqual(self.calls, [])
+        self.assertFalse(list(root.glob('runs/*/*/*/job_*.stdout')))
+
+    def test_cold_low_space_stops_and_ample_space_is_the_positive_control(self):
+        root = self.root / 'cold'
+        self.assertEqual(self.invoke(root, 1_000_000)['status'], 'failed')
+        self.assertFalse(self.job_called)
+        self.assertEqual(self.calls, [])
+        self.assertEqual(self.invoke(root, 5_000_000_000), 'job reached')
+
+    def test_low_space_keeps_read_only_verified_receipt_reuse_available(self):
+        root = self.root / 'saved'; config = e2e_config(root)
+        for free, script in ((5_000_000_000, ['verified']), (1_000_000, [])):
+            child = FakeJob(script)
+            with patch.object(shutil, 'disk_usage', return_value=SimpleNamespace(total=10_000_000_000, used=10_000_000_000-free, free=free)), patch.object(pf.subprocess, 'run', child):
+                receipt = pf.prepare_filing(dict(AMG), config, sender=self.send)
+            self.assertEqual(receipt['status'], 'complete', receipt.get('reasons'))
+            self.assertEqual(child.launched, ['job_0'] if script else [])
+
+    def test_space_is_checked_again_before_a_new_job_retry(self):
+        child = FakeJob(['startup_crash', 'verified'])
+        def space(_):
+            free = 1_000_000 if child.launched else 5_000_000_000
+            return SimpleNamespace(total=10_000_000_000, used=10_000_000_000-free, free=free)
+        with patch.object(shutil, 'disk_usage', side_effect=space), patch.object(pf.subprocess, 'run', child):
+            with self.assertRaises(StorageError): pf.prepare_filing(dict(AMG), e2e_config(self.root / 'retry'), sender=self.send)
+        self.assertEqual(child.launched, ['job_0'])
+        self.assertFalse(list(self.root.glob('retry/runs/*/*/*/job_1.stdout')))
 
 
 if __name__ == '__main__':

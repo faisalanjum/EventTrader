@@ -2,9 +2,11 @@
 names and fields (owner single-version policy; root-automatic-version-path-completion-20261028t202337210252z). Pure: no browser, no job. The explored
 NORMAL states carry the diagnostic representation the runtime gives them (Context.gate makes text_proved False; the native proof before the gate is
 kept apart in route.diagnostic). The native positive on real contextual_routes output is in test_diagnostic_continuation."""
-import copy, hashlib, json, shutil, tempfile, unittest
+import copy, gzip, hashlib, json, shutil, tempfile, unittest
+from unittest.mock import patch
 from pathlib import Path
 from driver.prepare.convert import context
+from driver.prepare.get import acquire, archive
 
 H, HREF, M, FID, SRC = 'f' * 64, 'https://www.sec.gov/Qp9qZ/x', 'a' * 64, '0000815097-23-000012/R2.htm', '5' * 64
 ROUTE = {'units': [{'id': 'u0', 'kind': 'table', 'cells': [['Revenue', '500'], ['Net income', '200']]}], 'page_visibility': {'hidden': [], 'shown': [[0, 9]]},
@@ -66,6 +68,42 @@ class VersionQualification(unittest.TestCase):
     def test_equal_views_and_states_pass_and_the_consumer_accepts_the_record(self):
         rec = self.produce(); self.assertEqual((rec['outcome'], rec['reasons']), ('passed', [])); self.assertEqual(self.consumer(), (True, None))
         self.assertEqual(sorted(rec['states']), ['activated@5', 'initial']); self.assertTrue(all(all(f.values()) for f in rec['states'].values()))
+
+    def test_compressed_main_state_and_source_operands_keep_logical_exact_hashes(self):
+        originals = {}
+        for path in self.root.rglob('ROUTE.json'):
+            data = path.read_bytes(); originals[str(path)] = data; path.unlink(); archive.write_record(path, data)
+        rec = self.produce(); self.assertEqual(rec['outcome'], 'passed'); self.assertEqual(self.consumer(), (True, None))
+        for item in rec['evidence']:
+            self.assertFalse(item['path'].endswith('.gz'))
+            if item['path'] in originals: self.assertEqual(item['sha256'], hashlib.sha256(originals[item['path']]).hexdigest())
+        path = self.w / 'attempt_0/ROUTE.json'; stored = archive.record_path(path); good = stored.read_bytes()
+        for damage in ('missing', 'corrupt', 'truncated', 'dual', 'decoded whitespace'):
+            with self.subTest(damage=damage):
+                if damage == 'missing': stored.unlink()
+                elif damage == 'corrupt': stored.write_bytes(b'not gzip')
+                elif damage == 'truncated': stored.write_bytes(good[:-4])
+                elif damage == 'dual': path.write_bytes(originals[str(path)])
+                else: stored.write_bytes(gzip.compress(originals[str(path)] + b' '))
+                self.assertFalse(self.consumer()[0])
+                path.unlink(missing_ok=True); stored.write_bytes(good)
+                self.assertEqual(self.consumer(), (True, None))
+
+    def test_accepting_a_published_record_requires_its_directory_flush(self):
+        self.produce(); self.assertEqual(self.consumer(), (True, None))
+        with patch.object(archive, '_sync_dir', side_effect=acquire.StorageError('controlled store flush failure')):
+            with self.assertRaises(acquire.StorageError): self.consumer()
+        self.assertEqual(self.consumer(), (True, None))
+
+    def test_qualification_claim_and_record_file_flush_failures_never_return_success(self):
+        with patch.object(archive.os, 'fsync', side_effect=OSError('controlled file flush failure')):
+            with self.assertRaises(OSError): context.claim_version(self.store, H)
+        self.assertFalse((self.store / (H + '.claim')).exists())
+        self.assertTrue(context.claim_version(self.store, H))
+        with patch.object(archive.os, 'fsync', side_effect=OSError('controlled file flush failure')):
+            with self.assertRaises(OSError): self.produce()
+        self.assertFalse((self.store / (H + '.json')).exists())
+        self.assertEqual(self.produce()['outcome'], 'passed'); self.assertEqual(self.consumer(), (True, None))
     def test_a_diagnostic_state_whose_native_proof_failed_is_held(self):
         self.edit(self.x, 'states/activated@5/ROUTE.json', lambda d: d['diagnostic'].__setitem__('text_proved_before_gate', False)); self.assertIn('state activated@5 differs: text_proved', self.produce()['reasons'])
     def test_a_diagnostic_state_without_its_kept_native_proof_is_held(self):

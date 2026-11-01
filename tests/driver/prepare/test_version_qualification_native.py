@@ -8,8 +8,9 @@ import json, tempfile, unittest
 from pathlib import Path
 from tests.driver.prepare import version_fixture as vf, test_version_trigger as vt  # vt: the early-hold outcome text (a module, so its tests are not collected twice)
 from driver.prepare import job
+from driver.prepare.get import archive
 
-rd = lambda p: json.loads(Path(p).read_bytes())
+rd = lambda p: json.loads(archive.read_record(p))
 
 
 class FirstFileQualifiesAndASecondReuses(unittest.TestCase):

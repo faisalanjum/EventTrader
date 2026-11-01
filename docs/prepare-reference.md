@@ -88,8 +88,9 @@ fact and a fresh native state check. An unread background picture alone does not
 withhold proved text; other proof failures still block it. Missing proof is false,
 and a failed later render revokes it. This diagnostic is not a source-accuracy
 certificate and does not override aggregate status or picture uncertainty.
-The final `ROUTE.json` carries that later check; intermediate snapshots keep their
-own earlier stage's facts.
+The final `ROUTE.json` carries that later check. New jobs remove the temporary
+before/after-input snapshots only after the main reading, every saved state and
+the source reading pass verification. Failed, incomplete and fallback evidence stays.
 The initial document **and every saved state** must pass the caller's checks.
 Non-GET actions, handlers outside links, unproved copies, unexplored states beyond
 the recorded limits and unstable observations remain incomplete. Hidden controls
@@ -110,6 +111,12 @@ For a saved attempt containing `ROUTE.json`, `COMPLETE.json` and its named archi
 python -m driver.prepare.reconstruct ATTEMPT OUTPUT.json
 python -m driver.prepare.reconstruct verify ATTEMPT OUTPUT.json
 ```
+
+`ROUTE.json` and the caller's `R.json` are logical names: new files use lossless
+gzip at those names plus `.gz`. Commands still take the logical names; the reader
+also accepts older plain files. Both forms together, corruption or a missing file
+fail explicitly. Source hashes and `R_bytes` refer to the exact decoded bytes.
+Other metadata and custom output names such as `OUTPUT.json` remain plain.
 
 The second command must pass before accepting preservation. Node `ordinal` keeps
 the original extracted stream's order alongside containment; it does not certify

@@ -8,7 +8,7 @@ spec:
         kubernetes.io/hostname: minisforum2          # the hostPath below is node-local
       containers:
       - name: enricher
-        image: faisalanjum/report-enricher@sha256:cb980c0daba30dbe61e3d62009daed994a403c50973866af5ccd2af9182d5e6d   # prepared-table-lookup-20261101
+        image: faisalanjum/report-enricher@sha256:3e0ac53919cb24a0034c18244398e6666374ba83431259557c7236f3b599a242   # prepared-storage-20261101
         env:
         - name: PREPARED_EXTRACTION_CONFIG             # unset = today's worker path exactly (seam tests 5/5)
           value: /etc/prepared/adapter_config.json

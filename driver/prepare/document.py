@@ -18,12 +18,17 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def save(path, value):
+def _start(path, value):  # before runtime pins: standard library only
     with path.open('x', encoding='utf-8') as handle:
         json.dump(value, handle, ensure_ascii=False, sort_keys=True, indent=2)
         handle.write('\n')
         handle.flush()
         os.fsync(handle.fileno())
+
+
+def save(path, value):
+    from driver.prepare.get import archive
+    archive.write_record(path, (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + '\n').encode('utf-8'))
 
 
 def declared_source(row, manifest, members, screen_grid, acquire):
@@ -74,11 +79,11 @@ def source_child(attempt, row, raw, displayed, declared, html_route, edgartools_
     displayed route's facts."""
     child = attempt / 'source_reading'
     def parse(raw_, vis):
-        child.mkdir(mode=0o700); save(child / 'SOURCE.json', dict(declared, reading='source (not a display state)'))
+        archive.make_dir(child); save(child / 'SOURCE.json', dict(declared, reading='source (not a display state)'))
         return raw_reading(child, row['file_id'], edgartools_html, archive, acquire)(raw_, vis)
     route, why = html_route.source_reading(raw, row['file_id'], row['source_sha256'], displayed, parse=parse)
     if route is not None:
-        if not child.exists(): child.mkdir(mode=0o700); save(child / 'SOURCE.json', dict(declared, reading='source (not a display state)'))  # a reading made with no HTML parse (the XML route)
+        if not child.exists(): archive.make_dir(child); save(child / 'SOURCE.json', dict(declared, reading='source (not a display state)'))  # a reading made with no HTML parse (the XML route)
         finish(child, row, route, {}, archive, save)
     displayed.setdefault('facts', {})['source_reading'] = {'made': True, 'status': route['status'], **({'error': route['error']} if route.get('error') else {})} if route is not None else {'made': False, 'why': why}
     return route  # the saved reading itself, for a caller that qualifies the displayed route against it (context.optional_controls)
@@ -96,7 +101,7 @@ def finish(folder, row, route, prepared, archive, save_):
         archive.load_blob(folder / 'raw_reading', kept['raw_reading_sha256'])
     save_(folder / 'ROUTE.json', route)
     save_(folder / 'COMPLETE.json', {'file_id': row['file_id'], 'source_sha256': row['source_sha256'],
-        'route_sha256': digest((folder / 'ROUTE.json').read_bytes()), 'native_status': route['status'],
+        'route_sha256': digest(archive.read_record(folder / 'ROUTE.json')), 'native_status': route['status'],
         'prepared_input_sha256': sorted(prepared), 'reader_called': False,
         'raw_reading_sha256': kept and kept['raw_reading_sha256'], 'raw_reading_receipt_sha256': kept and digest(receipt.read_bytes()),
         **({'context_renders_sha256': digest((folder / 'CONTEXT_RENDERS.json').read_bytes())} if (folder / 'CONTEXT_RENDERS.json').exists() else {}),  # a context route's saved render evidence, bound like ROUTE
@@ -162,7 +167,7 @@ def main():
     row = plan['source_commands'][int(ordinal)]
     attempt = Path(attempt_path)
     attempt.mkdir(mode=0o700)  # an existing attempt is never overwritten
-    save(attempt / 'START.json', {'ordinal': int(ordinal), 'file_id': row['file_id'], 'plan_sha256': plan_hash})
+    _start(attempt / 'START.json', {'ordinal': int(ordinal), 'file_id': row['file_id'], 'plan_sha256': plan_hash})
     runtime = Path(plan['runtime_root'])
     runtime_manifest = Path(plan['runtime_manifest']['path']).read_bytes()
     assert digest(runtime_manifest) == plan['runtime_manifest']['sha256'], 'runtime manifest mismatch'
@@ -170,6 +175,7 @@ def main():
         assert digest((runtime / name).read_bytes()) == pin, 'runtime file mismatch'
     sys.path.insert(0, str(runtime))
     from driver.prepare.get import acquire, archive
+    archive._sync_dir(attempt); archive._sync_dir(attempt.parent)  # START and the pre-pin attempt name are now part of the verified runtime's output
     from driver.prepare.convert import edgartools_html, html_route, screen_grid, xml_fields
     if 'directory' in row:  # v5: loose local members, each named and pinned by the plan row; never a package
         assert 'immutable_package_directory' not in row and row.get('base') is None and row.get('bundle') is None, 'a loose row declares no package, base or bundle'
@@ -228,9 +234,10 @@ def main():
                     if 'child' not in made: source_child(attempt, row, raw, r0, declared, html_route, edgartools_html, archive, acquire)
                     late = (f0.get('renderer_controls') or {}).get('reasons')  # content reasons only: resource and other errors raised above, as today
                     if late and plan.get('context_campaign') and 'immutable_package_directory' in row:
-                        aside, moved = attempt / 'scriptless_attempt', []; aside.mkdir(mode=0o700)
+                        aside, moved = attempt / 'scriptless_attempt', []; archive.make_dir(aside)
                         for n in ('RAW_READING.json', 'raw_reading', 'source_reading'):
                             if (attempt / n).exists(): (attempt / n).rename(aside / n); moved.append(n)  # kept whole, never overwritten
+                        archive._sync_dir(attempt); archive._sync_dir(aside)
                         save(aside / 'ROUTE_SCRIPTLESS.json', r0)
                         save(attempt / 'RENDERER_FALLBACK.json', {'reasons': late, 'moved_to': 'scriptless_attempt', 'moved': moved, 'route_sha256': digest((aside / 'ROUTE_SCRIPTLESS.json').read_bytes())})
                         scriptless, source = None, source0
@@ -248,10 +255,10 @@ def main():
                     save(attempt / 'CONTEXT_SELECTION.json', {'selection': ev['selection'], 'summary': chosen, 'evidence': row.get('context', {}).get('evidence'), 'evidence_sha256': row.get('context', {}).get('evidence_sha256')})
                     if auto[0] is not None or 'acquire' in (row.get('context') or {}): ev['qualifications'] = {'folder': plan.get('script_qualifications'), 'runtime_manifest_sha256': plan['runtime_manifest']['sha256']}  # owner single-version policy: the producer's records for acquired evidence only, re-verified by optional_controls on every use
                     if (auto[0] is not None or 'acquire' in (row.get('context') or {})) and plan.get('qualification_diagnostic') is True and ev.get('inserted_script'): ev['diagnostic_continuation'] = {'bound_href': ev['inserted_script']['href']}  # QUALIFICATION-ONLY explored NORMAL run (Context.continuation); never a production setting
-                    states, prepared_by = attempt / 'states', {}; states.mkdir(mode=0o700)
+                    states, prepared_by = attempt / 'states', {}; archive.make_dir(states)
                     folder = lambda label: attempt if label == 'initial' else states / label
                     def per_parse(label):
-                        if label != 'initial': folder(label).mkdir(mode=0o700); save(folder(label) / 'SOURCE.json', dict(declared, state=label))
+                        if label != 'initial': archive.make_dir(folder(label)); save(folder(label) / 'SOURCE.json', dict(declared, state=label))
                         return raw_reading(folder(label), row['file_id'], edgartools_html, archive, acquire)
                     def per_prepare(route_, src, label):
                         if label == 'initial': src.source_reading_route = source_child(attempt, row, raw, route_, declared, html_route, edgartools_html, archive, acquire)  # once, before the interaction graph; contextual_routes qualifies optional controls against it
@@ -271,7 +278,7 @@ def main():
                     route, prepared = res['initial'], prepared_by.get('initial', {})
                     for l in route['source_links']:
                         for act in l.get('activations') or []:
-                            if act.get('state'): act['route_sha256'] = digest((states / act['state'] / 'ROUTE.json').read_bytes())  # a refused attempt has no state route
+                            if act.get('state'): act['route_sha256'] = digest(archive.read_record(states / act['state'] / 'ROUTE.json'))  # a refused attempt has no state route
                     save(attempt / 'CONTEXT_TRIALS.json', res['trials']); keep_captures(attempt, res['trial_captures'])
                 else:
                     if early is not None: route = early  # the kept script-free route (its raw reading and source child already saved)

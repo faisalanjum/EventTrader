@@ -20,7 +20,13 @@ def bound(seconds):  # each child's limits: time, file size, no core (CPU affini
 
 
 def save(path, record):  # the one result record, replaced whole
-    tmp = path.with_name(path.name + '.tmp'); tmp.write_text(json.dumps(record, indent=1)); os.replace(tmp, path)
+    from driver.prepare.get import archive
+    archive.write_record(path, json.dumps(record, indent=1).encode(), replace=True)
+
+
+def record_bytes(path):  # deferred: the isolated CLI verifies its runtime before importing helpers
+    from driver.prepare.get import archive
+    return archive.read_record(path)
 
 
 CURRENT = []  # the one running child, so a stop signal to the job reaches it (its `timeout` passes it on) instead of leaving it running
@@ -40,17 +46,19 @@ def size(d):
 
 
 def child(argv, logs, name, cwd, env):
+    from driver.prepare.get import archive
     with open(logs / f'{name}.stdout', 'xb') as out, open(logs / f'{name}.stderr', 'xb') as err:
         t0 = time.monotonic(); p = subprocess.Popen(argv, stdout=out, stderr=err, stdin=subprocess.DEVNULL, cwd=cwd, env=env); CURRENT.append(p)
         try: _, status, use = os.wait4(p.pid, 0)
         finally: CURRENT.remove(p)
         p.returncode = code = os.waitstatus_to_exitcode(status)
-        (logs / f'{name}.usage.json').write_text(json.dumps({'wall_seconds': round(time.monotonic() - t0, 3), 'max_rss_kb': use.ru_maxrss, 'user_seconds': use.ru_utime, 'system_seconds': use.ru_stime}))
+        for handle in (out, err): handle.flush(); os.fsync(handle.fileno())
+        archive.write_record(logs / f'{name}.usage.json', json.dumps({'wall_seconds': round(time.monotonic() - t0, 3), 'max_rss_kb': use.ru_maxrss, 'user_seconds': use.ru_utime, 'system_seconds': use.ru_stime}).encode())
         return code
 
 
 def decoded(path, row, what):  # a child's JSON output: an explicit recorded technical failure when absent or not JSON, never a crash or a guess
-    try: return json.loads(Path(path).read_bytes())
+    try: return json.loads(record_bytes(path))
     except (OSError, ValueError) as error: row.setdefault('technical_failures', []).append(f'{what}: {type(error).__name__}: {error}'); return None
 
 
@@ -91,7 +99,7 @@ def check_output(folder, logs, expected, seconds, renv, row, result, record, wha
     st['reconstruct_observed'] = observed(logs, 'reconstruct'); live.update(st); save(result, record)  # each child's exit is saved before its output is decoded
     R = decoded(logs / 'R.json', row, what + 'R.json') if st['reconstruct_exit'] == 0 else None
     if R is not None:
-        st['R_bytes'] = (logs / 'R.json').stat().st_size; fams, assets = {}, []
+        st['R_bytes'] = len(record_bytes(logs / 'R.json')); fams, assets = {}, []
         for u in R['unknowns']: fams[u.get('family')] = fams.get(u.get('family'), 0) + 1
         st['reconstruction_unknown_families'] = fams  # every unknown stays in R.json; counted here, never judged
         def walk(x):
@@ -132,7 +140,8 @@ def compare_views(a, b):
 def claim_version(folder, h):
     """The one exclusive claim per exact bytes, taken BEFORE any expensive qualification run: True for the caller that created it, False when any
     caller (this job or another) already holds it. Never released or retried: one qualification attempt per version (its record or its absence)."""
-    try: os.close(os.open(Path(folder) / (h + '.claim'), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o444)); return True
+    from driver.prepare.get import archive
+    try: archive.write_record(Path(folder) / (h + '.claim'), b'', mode=0o444); return True
     except FileExistsError: return False
 
 
@@ -140,8 +149,8 @@ QUALIFY_FAILURES = (OSError, ValueError, KeyError, TypeError, AttributeError)  #
 
 
 def reader(read):  # the producer's file reads: each records the file's sha256 at the moment it was read in `read` (the record's evidence)
-    def rd(x): b = Path(x).read_bytes(); read[str(x)] = hashlib.sha256(b).hexdigest(); return json.loads(b)
-    def sha(x): b = Path(x).read_bytes(); read[str(x)] = hashlib.sha256(b).hexdigest(); return read[str(x)]
+    def rd(x): b = record_bytes(x); read[str(x)] = hashlib.sha256(b).hexdigest(); return json.loads(b)
+    def sha(x): b = record_bytes(x); read[str(x)] = hashlib.sha256(b).hexdigest(); return read[str(x)]
     return rd, sha
 
 
@@ -241,8 +250,8 @@ def qualify_version(normal, explored, without, folder, runtime_manifest_sha256, 
            'arm_runtime_manifests': {k: (v[3] or {}).get('runtime_manifest') for k, v in arms.items()}, 'outcome': 'held' if why else 'passed', 'reasons': why,
            'comparison': {'all_equal': all(fields.values()) and all(all(f.values()) for f in states.values()) and not b['refused'] and sorted(xs) == ws, 'initial_view': fields},
            'states': states, 'evidence': ev, 'limits': ['one filing: residual page-dependent risk, unmeasured', 'the explored NORMAL states are diagnostic evidence, never a native success']}
-    out = Path(folder) / (h + '.json'); fd = os.open(out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o444)  # never overwritten: one record per exact version
-    with os.fdopen(fd, 'w') as f: json.dump(rec, f, indent=1, sort_keys=True)
+    from driver.prepare.get import archive
+    archive.write_record(Path(folder) / (h + '.json'), json.dumps(rec, indent=1, sort_keys=True).encode(), mode=0o444)
     return rec
 
 
@@ -278,19 +287,20 @@ def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, 
     version, and either stops here; else the comparison-only WITHOUT, then
     context.qualify_version over a frozen copy of this row's held result; only if it passed, exactly one ordinary attempt of the same file, whose
     actual row becomes this row's outcome (the held attempt kept). Never from a diagnostic or withhold plan, never twice for the same bytes, no retry."""
+    from driver.prepare.get import archive
     store = plan.get('script_qualifications')
     if not store or plan.get('qualification_diagnostic') or plan.get('qualification_withhold'): return
     if row.get('outcome') != 'incomplete' or row.get('reasons') != ['native status PARTIAL'] or not clean_row(row): return  # an independent failure is never spent on arms
     a = Path(row['attempt'])
     try:
-        oc = (json.loads((a / 'ROUTE.json').read_bytes()).get('facts') or {}).get('optional_controls') or {}
+        oc = (json.loads(record_bytes(a / 'ROUTE.json')).get('facts') or {}).get('optional_controls') or {}
         ins = ((json.loads((a / 'CONTEXT_ACQUISITION.json').read_bytes()).get('record') or {}).get('target') or {}).get('inserted_script') or {}
     except (OSError, ValueError): return
     h = ins.get('response_sha256')
     if not (h and oc.get('other_objections') == 0 and (oc.get('inserted_version_objections') or 0) > 0) or (Path(store) / (h + '.json')).exists(): return
     done = row['qualification'] = {'script_sha256': h}
     if not claim_version(store, h): done['outcome'] = 'held: this version is claimed by another qualification'; save(result, record); return
-    q = out / f'qualification_{k}'; (q / 'normal').mkdir(parents=True)
+    q = out / f'qualification_{k}'; archive.make_dir(q / 'normal', parents=True)
     save(q / 'normal' / 'RESULT.json', {'plan': str(plan_path), 'plan_sha256': pin, 'rows': [dict(row)]})  # the held NORMAL result, frozen as the record's evidence
     one, env, arms = dict(plan, source_commands=[plan['source_commands'][k]]), {'PATH': '/usr/bin:/bin', 'HOME': home}, {}
     def uncomparable(e): done.update(outcome='held: qualification not comparable', why=repr(e)[:300]); technical(row, 'qualification not comparable: ' + repr(e)[:300])
@@ -300,7 +310,7 @@ def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, 
     except QUALIFY_FAILURES as e: uncomparable(e); save(result, record); return
     for name, extra in QUALIFY_ARMS:
         if name == 'release' and done.get('outcome') != 'passed': break
-        body = json.dumps(dict(one, **extra)).encode(); pp = q / f'{name}_PLAN.json'; pp.write_bytes(body); logs = q / f'{name}_logs'; logs.mkdir()
+        body = json.dumps(dict(one, **extra)).encode(); pp = q / f'{name}_PLAN.json'; archive.write_record(pp, body); logs = q / f'{name}_logs'; archive.make_dir(logs)
         done[name] = {'exit': child([sys.executable, '-I', '-S', '-B', str(HERE / 'job.py'), str(pp), hashlib.sha256(body).hexdigest(), str(q / name), generator, str(seconds)], logs, 'job', ROOT, env),
                       'observed': observed(logs, 'job'), 'result': str(q / name / 'RESULT.json')}
         save(result, record)
@@ -333,14 +343,16 @@ def main(plan_path, pin, out_dir, generator=str(HERE / 'document.py'), seconds=9
     pins = json.loads(manifest)['files']; tree = {str(p.relative_to(ROOT)) for p in (ROOT / 'driver').rglob('*') if p.is_file() and '__pycache__' not in p.relative_to(ROOT).parts}
     assert set(pins) == tree, 'the manifest is not the exact runtime inventory: ' + ', '.join(sorted(set(pins) ^ tree))[:500]  # every runtime file listed, nothing else (Python caches aside)
     for name, file_pin in pins.items(): assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == file_pin, 'runtime file mismatch: ' + name
+    sys.path.insert(0, str(ROOT))
+    from driver.prepare.get import archive
     home = os.environ['HOME']  # the caller's own environment; no default
-    out = Path(out_dir); out.mkdir(mode=0o700)  # a fresh job folder; an existing one is refused
+    out = Path(out_dir); archive.make_dir(out)  # a fresh job folder; an existing one is refused
     rows = [{'ordinal': k, 'file_id': r.get('file_id'), 'status': 'unstarted'} for k, r in enumerate(plan['source_commands'])]
     record = {'plan': str(plan_path), 'plan_sha256': pin, 'generator': generator, 'reconstruct': str(ROOT / 'driver/prepare/reconstruct.py'), 'rows': rows}
     result = out / 'RESULT.json'; save(result, record)
     for row in rows:
         k = row['ordinal']; attempt, logs = out / f'attempt_{k}', out / f'logs_{k}'
-        logs.mkdir(); (logs / 'tmp').mkdir(); (logs / 'cache').mkdir()
+        archive.make_dir(logs); archive.make_dir(logs / 'tmp'); archive.make_dir(logs / 'cache')
         row.update(status='generating', attempt=str(attempt)); save(result, record)
         env = {'PATH': '/usr/bin:/bin', 'HOME': home, 'TMPDIR': str(logs / 'tmp'), 'XDG_CACHE_HOME': str(logs / 'cache')}
         row['generate_exit'] = child(bound(seconds) + [sys.executable, '-I', '-B', generator, str(plan_path), pin, str(k), str(attempt)], logs, 'generate', logs / 'tmp', env)
@@ -361,23 +373,35 @@ def main(plan_path, pin, out_dir, generator=str(HERE / 'document.py'), seconds=9
         named = [(l['tag']['byte_start'], a) for l in route.get('source_links') or [] if isinstance(l, dict) for a in l.get('activations') or [] if isinstance(a, dict) and a.get('state')]
         for start_, a in named:  # every activation's state is a saved folder directly inside states/ (so it gets the per-state check), with the ROUTE.json its activation records
             sf = states / a['state'] if a['state'] in saved else None
-            if sf is None or not (sf / 'ROUTE.json').is_file(): reasons.append(f"activation at {start_} names a state with no saved route: {a['state']}")
-            elif hashlib.sha256((sf / 'ROUTE.json').read_bytes()).hexdigest() != a.get('route_sha256'): reasons.append(f"activation at {start_}: state {a['state']} route differs from its recorded sha256")
+            if sf is None or not archive.record_path(sf / 'ROUTE.json').is_file(): reasons.append(f"activation at {start_} names a state with no saved route: {a['state']}")
+            elif hashlib.sha256(record_bytes(sf / 'ROUTE.json')).hexdigest() != a.get('route_sha256'): reasons.append(f"activation at {start_}: state {a['state']} route differs from its recorded sha256")
         reasons += [f'saved state not referenced by any activation: {name}' for name in saved if name not in {a['state'] for _, a in named}]
         for name in saved:  # each labelled state: the same complete check as the initial output
-            sl = logs / ('state_' + name.replace('@', '_')); sl.mkdir()
+            sl = logs / ('state_' + name.replace('@', '_')); archive.make_dir(sl)
             st, st_reasons, _ = check_output(states / name, sl, expected, seconds, renv, row, result, record, f'state {name} ', row['states'].setdefault(name, {}))
             row['states'][name] = dict(st, reasons=st_reasons); reasons += [f'state {name}: {r}' for r in st_reasons]; save(result, record)
         sdir, said = attempt / 'source_reading', (route.get('facts') or {}).get('source_reading')  # the attempt's one typed source reading (document.source_child): a required owned reading
         if sdir.exists() or (said or {}).get('made'):  # the same complete check as the initial output and every state; its own logs; its reasons keep the document incomplete
-            sl = logs / 'source_reading'; sl.mkdir()
+            sl = logs / 'source_reading'; archive.make_dir(sl)
             st, st_reasons, _ = check_output(sdir, sl, expected, seconds, renv, row, result, record, 'source reading ', row.setdefault('source_reading', {}))
             row['source_reading'] = dict(st, reasons=st_reasons); reasons += [f'source reading: {r}' for r in st_reasons]; save(result, record)
         row.update(status='done', outcome='incomplete' if reasons else 'verified_saved_output', reasons=reasons); save(result, record)
+        if row['outcome'] == 'verified_saved_output':
+            folders = [attempt] + [states / name for name in saved] + ([sdir] if 'source_reading' in row else [])
+            for folder in folders:  # only these explicitly checked outputs; fallback/diagnostic descendants stay whole
+                removed = False
+                for name in ('ROUTE_BEFORE_INPUTS.json', 'ROUTE_AFTER_INPUTS.json'):
+                    snapshot = folder / name
+                    if snapshot.exists(): snapshot.unlink(); removed = True
+                if removed: archive._sync_dir(folder)
         if row['outcome'] == 'incomplete': qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, seconds, home)  # the one automatic version qualification
     return 0 if all(r.get('outcome') == 'verified_saved_output' for r in rows) else 1
 
 
 if __name__ == '__main__':
     signal.signal(signal.SIGTERM, _stop); signal.signal(signal.SIGINT, _stop)
-    a = sys.argv[1:]; sys.exit(main(*a[:4], *([int(a[4])] if len(a) > 4 else [])))
+    a = sys.argv[1:]
+    try: code = main(*a[:4], *([int(a[4])] if len(a) > 4 else []))
+    except Exception:
+        sys.excepthook(*sys.exc_info()); sys.exit(2)  # an unhandled storage/runtime failure is never the checked incomplete outcome (1)
+    sys.exit(code)

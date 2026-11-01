@@ -9,6 +9,8 @@ import hashlib, json, os, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent; ROOT = HERE.parents[2]
+sys.path.insert(0, str(ROOT))
+from driver.prepare.get import archive
 EXE = os.environ.get('BROWSER_EXECUTABLE', '/home/faisal/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell')
 sha = lambda b: hashlib.sha256(b).hexdigest()
 PAGES = {'ordinary': b'<html><body><p>Plain shown text.</p></body></html>',
@@ -49,22 +51,28 @@ class SourceChildThroughTheCaller(unittest.TestCase):
     def test_mixed_child_is_composed_verified_and_carries_the_hidden_word(self):
         r = self.rows['mixed']; s = r.get('source_reading') or {}
         self.assertEqual((r['outcome'], s.get('native_status'), s.get('reconstruct_exit'), s.get('verify_exit'), s.get('reasons')), ('verified_saved_output', 'OK', 0, 0, []), r.get('reasons'))
-        R = json.loads((self.logs('mixed') / 'source_reading' / 'R.json').read_bytes())  # the child's OWN reconstruction (a parent-only R cannot satisfy this)
-        recs = R['source_hidden']['records']; units = {u['id']: u for u in json.loads((self.attempt('mixed') / 'source_reading' / 'ROUTE.json').read_bytes())['units']}
+        R = json.loads(archive.read_record(self.logs('mixed') / 'source_reading' / 'R.json'))  # the child's OWN reconstruction (a parent-only R cannot satisfy this)
+        recs = R['source_hidden']['records']; units = {u['id']: u for u in json.loads(archive.read_record(self.attempt('mixed') / 'source_reading' / 'ROUTE.json'))['units']}
         words = [units[o['unit']]['text'][a:b] for rec in recs for o in rec['owners'] for a, b in o['text_at']]
         self.assertEqual(words, ['quietly'])
         texts = [n['record'].get('text') for n in R['sequence'] if isinstance(n, dict) and 'record' in n]
         self.assertIn('Revenue grew quietly strongly.', texts)  # the composed child body holds the hidden word in place
-        parent = json.loads((self.logs('mixed') / 'R.json').read_bytes()); self.assertNotIn('source_hidden', parent)
+        parent = json.loads(archive.read_record(self.logs('mixed') / 'R.json')); self.assertNotIn('source_hidden', parent)
 
     def test_unplaceable_hidden_fact_child_blocks_whole_document_success(self):
         r = self.rows['hidden_fact']; s = r.get('source_reading') or {}
         self.assertEqual(s.get('native_status'), 'PARTIAL'); self.assertEqual(r['outcome'], 'incomplete')
         self.assertTrue(any(x.startswith('source reading: native status PARTIAL') for x in r['reasons']), r['reasons'])
-        self.assertTrue((self.logs('hidden_fact') / 'source_reading' / 'R.json').is_file())
+        self.assertTrue(archive.record_path(self.logs('hidden_fact') / 'source_reading' / 'R.json').is_file())
 
     def test_job_exit_is_not_success_with_an_incomplete_row(self):
         self.assertEqual(self.exit, 1)
+
+    def test_temporary_input_snapshots_retire_only_after_whole_output_verifies(self):
+        for name, row in self.rows.items():
+            for snapshot in ('ROUTE_BEFORE_INPUTS.json', 'ROUTE_AFTER_INPUTS.json'):
+                with self.subTest(name=name, snapshot=snapshot):
+                    self.assertEqual((self.attempt(name) / snapshot).exists(), row['outcome'] != 'verified_saved_output')
 
 
 if __name__ == '__main__':

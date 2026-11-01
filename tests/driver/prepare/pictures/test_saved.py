@@ -74,6 +74,22 @@ class SavedPictures(unittest.TestCase):
         self.assertEqual(self.calls, [('chandra', sha(self.image)), ('pp', sha(self.image)), ('ox', sha(self.image))])
         self.assertEqual({p.name: p.read_bytes() for p in source.glob('*.json')}, before)
 
+    def test_compressed_saved_route_is_exact_and_corruption_stops_before_readers(self):
+        source = self.attempt(); path = source / 'ROUTE.json'; original = path.read_bytes(); path.unlink()
+        archive.write_record(path, original)
+        result = saved.read_attempt(source, self.root / 'ocr', fakes(self.calls))
+        self.assertEqual(len(result['pictures']), 2)
+        self.assertEqual(archive.read_record(path), original)
+        self.assertEqual(self.calls, [('chandra', sha(self.image)), ('pp', sha(self.image)), ('ox', sha(self.image))])
+        self.calls.clear(); stored = archive.record_path(path); good = stored.read_bytes()
+        for damage in ('corrupt', 'dual'):
+            with self.subTest(damage=damage):
+                if damage == 'corrupt': stored.write_bytes(b'not gzip')
+                else: path.write_bytes(original)
+                with self.assertRaises(ValueError): saved.read_attempt(source, self.root / 'ocr', fakes(self.calls))
+                self.assertEqual(self.calls, [])
+                path.unlink(missing_ok=True); stored.write_bytes(good)
+
     def test_a_changed_prepared_image_fails_before_any_reader(self):
         source = self.attempt()
         next((source / 'prepared').glob('*.gz')).write_bytes(b'corrupt')

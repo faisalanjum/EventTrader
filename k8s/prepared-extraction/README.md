@@ -12,11 +12,12 @@ consumers must check `fidelity`, not use `status: complete` as an accuracy guara
 
 ## Exact release
 
-- Table-lookup image: `faisalanjum/report-enricher@sha256:cb980c0daba30dbe61e3d62009daed994a403c50973866af5ccd2af9182d5e6d`.
+- Storage image: `faisalanjum/report-enricher@sha256:3e0ac53919cb24a0034c18244398e6666374ba83431259557c7236f3b599a242`.
+- Previous table-lookup image: `faisalanjum/report-enricher@sha256:cb980c0daba30dbe61e3d62009daed994a403c50973866af5ccd2af9182d5e6d`.
 - Previous OCR image (1 November documentation rebuild): `faisalanjum/report-enricher@sha256:7d057ab66ac7e6ab3b97a31cd2c828b4123df2704a5d395a0e6c17164a089010`.
 - Previous OCR image (31 October qualification): `faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70`.
 - Earlier HTML/XML-only image: `faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b`.
-- Runtime manifest SHA-256: `fac7fd45575de7765bcab541bad3f9ac5b45a96235fabb264e3ceda8dadadc79`.
+- Runtime manifest SHA-256: `f0ac7059e617646cd4a51fe87a8915f4e5c6026a9d5800d7af433401c727074e`.
 - Environment base: `faisalanjum/report-enricher@sha256:23ca15adc2b1f265ec862a1af2bfa471cc525a6b18b25524049b044803c6236b`.
 
 The table-lookup change reuses a local source-anchor index and preserves
@@ -26,13 +27,19 @@ on all three attempts. All 1,780 saved outputs from 19 other filings remain byte
 identical. A larger 32,768-cell, 256-holder case passed its independent checks.
 All 102 affected reconstruction tests, 543 grader tests and three native adapter
 cases passed; the exact image's 48 runtime files match the reviewed source.
-The broader Prepare run passed 1,603 of 1,604 tests. One unchanged browser test,
+The preceding full Prepare run passed 1,603 of 1,604 tests. One unchanged browser test,
 `ControlIdentity.test_a_swapped_inner_pointer_never_credits_another_label_change`,
 exceeded its 20-minute test budget; it remains unfinished, not a fresh pass.
 Evidence and the complete test ledger are retained in
 `/home/faisal/prepare_cleanup_review_20261031/storage_review_20261101/`.
 The timeout, extraction content and OCR behavior are unchanged; the bounded model
 findings in [OCR_QUALIFICATION.txt](OCR_QUALIFICATION.txt) still apply.
+
+Storage verification compared all 1,780 saved outputs through both legacy and
+compressed reads: 3,560 exact-byte and native-verification matches. The final image
+passed three whole-filing adapter cases and 23 disk-reserve, recovery and OCR
+controls, without network or model calls. The storage test ledger separates fresh affected checks
+from retained checks of unchanged behavior; it does not claim a fresh full-suite pass.
 
 The later 1 November `set_filing` fix affects the `event-trader` intake service.
 Rebuild that service's image before restarting intake. This enricher image contains
@@ -107,10 +114,23 @@ Omitting `ocr` retains the existing HTML/XML-only behavior; also omit the unused
 
 ## Operating boundary
 
-Before backfill or activation, finish the pending storage work: compress the large
-result files, retire verified temporary snapshots, and flush every required saved
-result and directory entry before acknowledging completion. These storage changes
-are not included in this image.
+New `ROUTE.json` and `R.json` records use the existing gzip compression. Their
+decoded bytes and hashes stay unchanged; older plain files remain readable.
+Each receipt still requires its own pinned runtime. The caller removes temporary
+before/after-input snapshots only after all required readings verify. Failed,
+incomplete and fallback evidence stays. Required outputs and new directory entries
+are flushed before completion; a failed flush cannot count as a finished job.
+
+New extraction and OCR attempts check the native 16% free-disk reserve, including
+cached filings and retries. Existing saved-result verification remains available.
+Measured historical HTML/XML storage scenarios are 305–332 GB allocated, excluding
+additional OCR, graph growth and failed attempts; these are estimates, not upper bounds.
+
+Historical replay should reuse the existing Mini 2 archive through read-only
+version/blob mounts and a private copy of its HTTP metadata, with live fetching off.
+That layout passed a native cached-filing control without requests or new blobs.
+Check one cached filing on the exact Mini 2 mounts before starting backfill.
+The normal new-arrival configuration below retains writable acquisition.
 
 Run the operating instructions from `k8s/prepared-extraction/`:
 

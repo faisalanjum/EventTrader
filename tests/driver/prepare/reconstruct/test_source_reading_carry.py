@@ -8,6 +8,7 @@ fixture facts (x1_structure saves none and carries field `units`, an explicit un
 Run from the repository root: python -I -B -m unittest tests.driver.prepare.reconstruct.test_source_reading_carry"""
 import copy, hashlib, json, shutil, tempfile, unittest
 from pathlib import Path
+from driver.prepare.get import archive
 
 from driver.prepare import reconstruct as rb
 from tests.driver.prepare.reconstruct.test_reconstruct import load
@@ -41,7 +42,7 @@ class SourceReadingCarry(unittest.TestCase):
         x['file_id'], x['sha256'] = self.parent['file_id'], self.parent['sha256']; return x
 
     def run_main(self, a):
-        rb.main([str(a), str(a / 'R.json')]); return json.loads((a / 'R.json').read_bytes())
+        rb.main([str(a), str(a / 'R.json')]); return json.loads(archive.read_record(a / 'R.json'))
 
     def verify(self, a, R):
         p = a / 'R_checked.json'; p.unlink(missing_ok=True); p.write_text(json.dumps(R)); return rb.verify(a, p)

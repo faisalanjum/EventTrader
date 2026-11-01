@@ -573,7 +573,8 @@ def observed(attempt_dir, route, custody):
 def _custody(attempt_dir):
     """The one custody gate (main and verify): ROUTE.json bound by COMPLETE.json, known identity, reader proved unused. Returns (route, prepared, custody)."""
     a = Path(attempt_dir)
-    try: body, cbody = (a / 'ROUTE.json').read_bytes(), (a / 'COMPLETE.json').read_bytes()
+    from driver.prepare.get import archive
+    try: body, cbody = archive.read_record(a / 'ROUTE.json'), (a / 'COMPLETE.json').read_bytes()
     except FileNotFoundError as error: raise ValueError(f'attempt file missing: {Path(error.filename).name}')
     complete, route = json.loads(cbody), json.loads(body)
     if not isinstance(complete, dict) or not isinstance(route, dict): raise ValueError('attempt files are not JSON objects')
@@ -625,7 +626,8 @@ def main(argv):
     if SOURCE_READING_KEY in custody:  # the attempt's bound typed source reading (its definition and hidden content) travels in the product, as its own readback with its own custody
         croute, cprepared, ccustody = _custody(Path(argv[0]) / 'source_reading')
         R['source_reading'] = readback(croute, cprepared); R['source_reading']['custody'] = ccustody
-    with open(argv[1], 'x', encoding='utf-8') as f: json.dump(R, f, ensure_ascii=False, indent=1)
+    from driver.prepare.get import archive
+    archive.write_record(argv[1], json.dumps(R, ensure_ascii=False, indent=1).encode('utf-8'))
 
 
 def _unrepresented(R):  # the families a readback leaves unrepresented: not composed, XML families the tree does not represent, and unknowns (parent and carried child alike)
@@ -650,7 +652,8 @@ def _carried(attempt, R, custody, out, prefix):
 
 def verify(attempt_dir, r_json):
     """Preservation and annotation results for one written readback against its frozen ROUTE.json (and prepared/), kept separate."""
-    R = json.loads(Path(r_json).read_bytes())
+    from driver.prepare.get import archive
+    R = json.loads(archive.read_record(r_json))
     try: route, prepared, custody = _custody(attempt_dir)
     except (ValueError, json.JSONDecodeError) as error:
         return {'custody': [f'custody not proved: {error}'], 'preserved': ['not checked: custody failed'], 'unrepresented': [], 'annotations': ['not checked: custody failed']}

@@ -42,11 +42,12 @@ def categories(manifest):
 def consumed(result):
     """{(member, sha256 or None)} the VERIFIED rows' readers recorded as consumed: ROUTE dependencies with a member, and the scripts
     an eligible Renderer page's own check hashed (RENDERER_ELIGIBILITY facts.scripts, relative to the page)."""
+    from driver.prepare.get import archive
     got = set()
     for r in result['rows']:
         if r.get('outcome') != VERIFIED: continue
         a = Path(r['attempt'])
-        for d in (json.loads((a / 'ROUTE.json').read_text()).get('resources') or {}).get('dependencies', []):
+        for d in (json.loads(archive.read_record(a / 'ROUTE.json')).get('resources') or {}).get('dependencies', []):
             if d.get('member'): got.add((d['member'], d.get('sha256')))
         e = a / 'RENDERER_ELIGIBILITY.json'
         if e.exists() and (el := json.loads(e.read_text())).get('eligible') is True:
@@ -141,22 +142,26 @@ def _save(path, value):
     os.replace(pending, path); _sync_dir(path.parent)
 
 
+def _reserve(path):  # the acquisition owner's native percentage, on the filesystem receiving this work
+    import inspect, shutil
+    from driver.prepare.get import full_run
+    return int(shutil.disk_usage(path).total * inspect.signature(full_run.run).parameters['min_free_percent'].default / 100)
+
+
 def prepare_filing(filing, config, sender=None):
     """filing: the worker's metadata (accessionNo, cik, formType). config: explicit, no defaults (ADAPTER_DESIGN.txt)."""
-    import inspect, shutil
     sys.dont_write_bytecode = True  # the pinned runtime is read-only
     root = Path(config['runtime_root']).resolve()
     if str(root) not in sys.path: sys.path.insert(0, str(root))
     from driver.prepare.get.campaign import Campaign
     from driver.prepare.get import full_run
-    from driver.prepare.get.acquire import read_package, _identity, _make_dirs
+    from driver.prepare.get.acquire import read_package, _identity, _make_dirs, check_space, _sync_dir
     foreign = sorted({m.__file__ for k, m in list(sys.modules.items()) if k.split('.')[0] == 'driver' and getattr(m, '__file__', None)
                       and not Path(m.__file__).resolve().is_relative_to(root)})
     if foreign: raise ImportError(f'driver modules not from the pinned runtime: {foreign[:3]}')  # e.g. a worker that imported its own tree
     acc, cik, form = filing['accessionNo'], str(filing['cik']), filing['formType']
     out = Path(config['output_root']).absolute(); _make_dirs(out)
-    pct = inspect.signature(full_run.run).parameters['min_free_percent'].default  # the native acquisition reserve policy
-    reserve = int(shutil.disk_usage(out).total * pct / 100)  # full_run.run's own formula
+    reserve = _reserve(out)
     base = dict(schema='prepared-filing-receipt/2', accession=acc, cik=cik, form=form)
     if config.get('context_campaign') and not config.get('script_qualifications'):  # job.qualify_first and document.py read plan['script_qualifications']
         return dict(base, status='failed', reasons=['config: context_campaign without script_qualifications would silently disable job.py automatic script qualification'])
@@ -196,11 +201,13 @@ def prepare_filing(filing, config, sender=None):
             if saved['status'] == 'failed': return saved  # damaged/changed saved output: an explicit failure, never credited, never run over
             st, reasons = status(saved['result']['path'], pin, members)
             receipt = dict(saved, status=st, reasons=reasons, members=members)
+            _sync_dir(run)  # a prior replacement may have published this receipt before its directory flush failed
     if not (run / 'PLAN.json').exists(): _save(run / 'PLAN.json', plan)
     while receipt is None or receipt['status'] == 'failed':  # no product yet, or a technical failure: a new job, every earlier job folder and receipt kept
         n = len(list(run.glob('job_*.stdout')))  # every launched job, an interrupted one included
         if n >= config['max_jobs']:
             return receipt or dict(base, status='failed', reasons=[f'{n} jobs launched, none finished (max_jobs {config["max_jobs"]})'], members=members)
+        check_space(out, reserve)
         receipt = _job(config, root, run, pin, run / f'job_{n}', base, members)
     return with_ocr(receipt, config)
 
@@ -255,7 +262,9 @@ def with_ocr(receipt, config):
     if not config.get('ocr') or receipt.get('status') == 'failed' or not receipt.get('plan'): return receipt
     from driver.prepare.job import bound
     from driver.prepare.pictures import saved
+    from driver.prepare.get.acquire import check_space, _sync_dir
     cfg = config['ocr']; run = Path(receipt['plan']['path']).parent; folder = run / 'ocr'
+    reserve = _reserve(run); check_space(run, reserve)
     body = (json.dumps(cfg, indent=1, sort_keys=True) + '\n').encode()
     cp = run / ('OCR_CONFIG_' + hashlib.sha256(body).hexdigest() + '.json')
     if cp.exists() and cp.read_bytes() != body: raise ValueError('OCR configuration file differs')
@@ -264,6 +273,7 @@ def with_ocr(receipt, config):
     env['PATH'] = '/usr/bin:/bin'; env['PYTHONDONTWRITEBYTECODE'] = '1'
     seconds = None
     for _ in range(3):  # bounded technical retries, same saved extraction and native per-reader cache; no new queue
+        check_space(run, reserve)  # outside the model-error handler: low space never starts/retries a writing child
         try:
             if seconds is None: seconds = _ocr_seconds(receipt, cfg)
             got = subprocess.run(bound(seconds) + [cfg.get('python', config['python']), '-B', '-m', 'driver.prepare.pictures.saved', '-', str(cp), str(folder)],
@@ -280,17 +290,22 @@ def with_ocr(receipt, config):
         target = folder / 'receipts' / (name + '.json')
         if target.exists():
             if json.loads(target.read_bytes()) != result: raise ValueError('saved OCR aggregate differs')
+            _sync_dir(target.parent)  # verified identical reuse still has to persist the already-published name
         else: _save(target, result)
         if result['status'] != 'failed': break
     return dict(result, saved_receipt=dict(path=str(target), sha256=_sha(target)))
 
 
 def _job(config, root, run, pin, jobdir, base, members):  # one pinned job.py child in a new folder (job.py refuses an existing one)
+    from driver.prepare.get.acquire import _sync_dir
     prep = root / 'driver/prepare'
     with open(run / f'{jobdir.name}.stdout', 'xb') as so, open(run / f'{jobdir.name}.stderr', 'xb') as se:
+        for handle in (so, se): handle.flush(); os.fsync(handle.fileno())
+        _sync_dir(run)  # retry-count sentinels must survive before a child is launched
         code = subprocess.run([config['python'], '-I', '-S', '-B', str(prep / 'job.py'), str(run / 'PLAN.json'), pin, str(jobdir),
                                str(prep / 'document.py'), str(config['seconds'])], env={'PATH': '/usr/bin:/bin', 'HOME': os.environ['HOME']},
                               cwd=str(run), stdout=so, stderr=se).returncode
+        for handle in (so, se): handle.flush(); os.fsync(handle.fileno())
     result = jobdir / 'RESULT.json'
     st, reasons = status(result, pin, members)
     if code not in (0, 1) and st != 'failed': st, reasons = 'failed', [f'job.py exit {code}'] + reasons

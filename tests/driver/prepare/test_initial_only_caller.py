@@ -11,6 +11,7 @@ HERE = Path(__file__).resolve().parent; ROOT = HERE.parents[2]
 EXE = os.environ.get('BROWSER_EXECUTABLE', '/home/faisal/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell')
 sha = lambda b: hashlib.sha256(b).hexdigest()
 sys.path.insert(0, str(ROOT))
+from driver.prepare.get import archive
 from tests.driver.prepare.convert.context import cases  # noqa: E402  (the fixtures' own facts)
 
 
@@ -62,13 +63,13 @@ class InitialOnlyThroughTheCaller(unittest.TestCase):
         comp = json.loads((self.out / 'attempt_0/COMPLETE.json').read_bytes())
         self.assertEqual(comp.get('source_reading_complete_sha256'), sha((self.out / 'attempt_0/source_reading/COMPLETE.json').read_bytes()))
         for f in ('attempt_0/RAW_READING.json', 'attempt_0/CONTEXT_RENDERS.json', 'attempt_0/CONTEXT_SELECTION.json', 'logs_0/R.json', 'logs_0/source_reading/R.json'):
-            self.assertTrue((self.out / f).is_file(), f)
+            self.assertTrue(archive.record_path(self.out / f).is_file(), f)
         self.assertEqual((self.row['reconstruct_exit'], self.row['verify_exit']), (0, 0))
 
     def test_same_initial_route_and_source_child_as_the_default_job(self):
-        a, b = (json.loads((o / 'attempt_0/ROUTE.json').read_bytes()) for o in (self.out, self.dout))
+        a, b = (json.loads(archive.read_record(o / 'attempt_0/ROUTE.json')) for o in (self.out, self.dout))
         self.assertEqual(a['units'], b['units']); self.assertEqual(a['page_visibility'], b['page_visibility']); self.assertEqual(a['text_proved'], b['text_proved'])
-        ca, cb = (json.loads((o / 'logs_0/source_reading/R.json').read_bytes()) for o in (self.out, self.dout))
+        ca, cb = (json.loads(archive.read_record(o / 'logs_0/source_reading/R.json')) for o in (self.out, self.dout))
         self.assertEqual(ca['sequence'], cb['sequence']); self.assertTrue(self.drow.get('states'))  # the default job still explores (its states exist)
 
     def test_a_non_boolean_choice_is_refused_before_any_row(self):

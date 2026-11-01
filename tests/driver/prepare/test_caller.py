@@ -33,6 +33,9 @@ def runtime(root, job_bytes, omit=()):
     for rel, data in {'driver/__init__.py': b'', 'driver/prepare/__init__.py': b'', 'driver/prepare/job.py': job_bytes, 'driver/prepare/document.py': PROBE.read_bytes(),
                       'driver/prepare/reconstruct.py': STANDIN}.items():
         p = root / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(data)
+    source = HERE.parents[2]
+    for rel in ('driver/prepare/get/__init__.py', 'driver/prepare/get/archive.py', 'driver/prepare/get/acquire.py', 'driver/prepare/get/transport.py'):
+        p = root / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes((source / rel).read_bytes())
     files = {str(p.relative_to(root)): sha(p.read_bytes()) for p in sorted(root.rglob('*')) if p.is_file() and '__pycache__' not in p.parts}
     for rel in omit: files.pop(rel)
     man = root.parent / (root.name + '_MANIFEST.json'); man.write_text(json.dumps({'runtime_root': str(root), 'files': files}))
@@ -138,6 +141,45 @@ class Caller(unittest.TestCase):
 
     def test_missing_home_is_refused_before_any_row(self):
         self.refused(env='no HOME')
+
+    def test_durable_result_failure_is_technical_not_legitimate_incomplete(self):
+        generator = self.t / 'partial.py'
+        generator.write_bytes(PROBE.read_bytes().replace(b"'status': 'OK'", b"'status': 'PARTIAL'").replace(b"'native_status': 'OK'", b"'native_status': 'PARTIAL'"))
+        body = json.dumps({'runtime_root': str(self.rt), 'runtime_manifest': {'path': str(self.man), 'sha256': sha(self.man.read_bytes())}, 'source_commands': [row(0)]}).encode()
+        plan = self.t / 'PARTIAL_PLAN.json'; plan.write_bytes(body)
+        injection = '''import json, os, pathlib, runpy, stat, sys
+sync = os.fsync
+def fsync(fd):
+    if stat.S_ISDIR(os.fstat(fd).st_mode):
+        result = pathlib.Path(os.readlink('/proc/self/fd/' + str(fd))) / 'RESULT.json'
+        if result.is_file() and any(r.get('outcome') == 'incomplete' for r in json.loads(result.read_bytes())['rows']):
+            raise OSError('controlled final incomplete RESULT directory flush failure')
+    sync(fd)
+os.fsync = fsync
+sys.argv = sys.argv[1:]
+runpy.run_path(sys.argv[0], run_name='__main__')
+'''
+        for fail, expected in ((False, 1), (True, 2)):
+            with self.subTest(fail=fail):
+                out = self.t / ('durability_' + str(fail))
+                argv = [sys.executable, '-I', '-S', '-B'] + (['-c', injection] if fail else [])
+                argv += [str(self.rt / 'driver/prepare/job.py'), str(plan), sha(body), str(out), str(generator), '60']
+                done = subprocess.run(argv, env={'PATH': '/usr/bin:/bin', 'HOME': str(self.t)}, capture_output=True, timeout=60)
+                (self.t / ('durability_' + str(fail) + '.stderr')).write_bytes(done.stderr)
+                self.assertEqual(done.returncode, expected, done.stderr.decode())
+                self.assertEqual(json.loads((out / 'RESULT.json').read_bytes())['rows'][0]['outcome'], 'incomplete')
+
+    def test_input_snapshot_retirement_is_only_for_verified_direct_outputs(self):
+        for complete in (True, False):
+            with self.subTest(complete=complete):
+                command = row(0, complete); command['probe']['snapshots'] = True
+                code, out, _, _, _ = self.go(rows=(command,))
+                self.assertEqual(code, 0 if complete else 1)
+                for name in ('ROUTE_BEFORE_INPUTS.json', 'ROUTE_AFTER_INPUTS.json'):
+                    self.assertEqual((out / 'attempt_0' / name).exists(), not complete)
+                    for child in ('scriptless_attempt', 'unverified'):
+                        self.assertTrue((out / 'attempt_0' / child / name).exists())
+                self.assertTrue((out / 'attempt_0/OTHER.json').exists())
 
 
 INVENTORY = json.loads((HERE / 'fixtures/runtime_inventory.json').read_bytes())['files']  # the frozen directory inventory: the expected set, never the job's own rule
