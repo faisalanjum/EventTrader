@@ -16,7 +16,7 @@ SEC API live feed / historical search
   -> Redis raw -> report filtering and metadata -> enrichment worker
   -> Redis processed -> price-return calculation -> Redis withoutreturns / withreturns
   -> Neo4j Report and content nodes
-       -> separate financial-fact jobs -> XBRL nodes and relationships
+       -> separate jobs for tagged financial facts
 ```
 
 | Step | Actual behavior and source |
@@ -41,11 +41,11 @@ All **42,633** Reports use `id = accessionNo`, without Redis's timestamp suffix.
 | `HAS_FILING_TEXT` -> `FilingTextContent` | `<accession>_text` / `content` text | 2,689 / 2,689 / 0 |
 | `HAS_FINANCIAL_STATEMENT` -> `FinancialStatementContent` | `<accession>_<statement_type>` / whole statement JSON in `value` | 38,950 / 38,942 / 8 |
 
-Children retain filing/form/company/time identity. ID and child full-text indexes are online. Existing [8-K readers](../scripts/earnings/builders/eight_k_packet.py) and [financial readers](../scripts/earnings/builders/prior_financials.py) follow these links.
+Children retain filing/form IDs and available company/time fields. ID and child full-text indexes are online. Existing [8-K readers](../scripts/earnings/builders/eight_k_packet.py) and [financial readers](../scripts/earnings/builders/prior_financials.py) follow these links.
 
 Report links outward to Company via `PRIMARY_FILER`/`REFERENCED_IN`, carrying price returns; to Sector/Industry/MarketIndex via `INFLUENCES`; to AdminReport via `IN_CATEGORY`. Targets come from the [initializer](../neograph/Neo4jInitializer.py); invalid company/sector/industry data can prevent links. Shared infrastructure also serves [news](../neograph/mixins/news.py) and [transcripts](../neograph/mixins/transcript.py).
 
-Detailed facts are **separate from statement JSON and OCR**. [Queue routing](../neograph/mixins/xbrl.py): eligible 10-K/10-K/A -> `reports:queues:xbrl:heavy`; 10-Q/10-Q/A -> `reports:queues:xbrl:medium`; other forms skipped. [Workers](../neograph/xbrl_worker_loop.py) use [Arelle](../XBRL/xbrl_processor.py):
+Tagged financial data (XBRL) is **separate from statement JSON and OCR**. [Queue routing](../neograph/mixins/xbrl.py): eligible 10-K/10-K/A -> `reports:queues:xbrl:heavy`; 10-Q/10-Q/A -> `reports:queues:xbrl:medium`; other forms skipped. [Workers](../neograph/xbrl_worker_loop.py) use [Arelle, the financial-file reader](../XBRL/xbrl_processor.py):
 
 ```text
 Report -HAS_XBRL-> XBRLNode <-REPORTS- Fact
@@ -59,7 +59,7 @@ XBRLNode ID is the source URL. Some links use `edge_writer:queue` and the [edge 
 - Graph writes and Redis completion stamps are separate transactions. Success stamps `inserted_into_neo4j_at`; checkout code adds `reports:confirmed_in_neo4j`; successful final return records are deleted. Batch/reconciliation can skip stamped records. Full comparison: confirmation set = graph IDs, **42,633 each, zero differences**, not proof of complete content.
 - Both checkout and running enrichment's bundled `set_filing` still deduplicate against the processed list, contrary to the older [gap plan](../.claude/plans/Infra_Bugs/report-ingestion-gaps.md).
 - [Content](../neograph/mixins/report.py) and [database helpers](../neograph/Neo4jManager.py) can swallow failures. Success is not proof of all children/links; measured missing links are in the table, causes unestablished.
-- All Reports lack `updated`; the writer's date-versus-null comparisons keep existing Report JSON. Child upserts are separate.
+- All Reports lack `updated`; the writer's date-versus-null comparisons keep existing Report JSON. Child nodes are updated separately.
 - [XBRL completion](../neograph/xbrl_status_helper.py) checks in-memory facts, not edge persistence. XBRL/edge workers pop jobs before processing.
 - Read with native clients: [EventTraderRedis construction](../redisDB/redisClasses.py) clears raw keys by default; application startup can write Neo4j.
 
