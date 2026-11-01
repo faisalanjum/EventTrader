@@ -1,5 +1,5 @@
 {
- "source": "names of RUNTIME_MANIFEST_controls_24_after2.json (Root-verified equal to every non-cache file under checkout/driver, 2026-10-22)",
+ "source": "Original 2026-10-22 inventory plus pictures/saved.py from the accepted OCR integration; all 48 names independently checked against checkout/driver and the release manifest, 2026-11-01.",
  "files": [
   "driver/README.md",
   "driver/__init__.py",
@@ -41,6 +41,7 @@
   "driver/prepare/pictures/readers.py",
   "driver/prepare/pictures/routing.py",
   "driver/prepare/pictures/rowcheck.py",
+  "driver/prepare/pictures/saved.py",
   "driver/prepare/pictures/table_choice.py",
   "driver/prepare/pictures/worker.py",
   "driver/prepare/reconstruct.py",

@@ -157,10 +157,32 @@ def _resolve(units):
     return by_id, placed, unknowns
 
 
-def _owner_site(o, units, by_id):  # the one unit, or one cell by its first anchor byte, that a saved owner names; None if not exactly one
+def _cell_index(units):
+    """One route's first-anchor lookup; unusual keys retain the original equality scan."""
+    out = {}
+    for i, u in enumerate(units):
+        cells = {}
+        for k, c in enumerate(u.get('cells') or []):
+            if not isinstance(c, dict): continue
+            first = _first_byte(c)
+            try:
+                if first != first: cells = None; break  # NaN: dict identity would differ from the scan's equality
+                cells[first] = None if first in cells else k
+            except TypeError: cells = None; break       # a malformed unhashable anchor may still compare equal
+        out[i] = cells
+    return out
+
+
+def _owner_site(o, units, by_id, cell_index=None):  # the one unit, or one cell by its first anchor byte, that a saved owner names; None if not exactly one
     i = by_id.get(o.get('unit')) if isinstance(o, dict) else None
     if i is None: return None
     if 'cell' not in o: return ('unit', i)
+    indexed = cell_index.get(i) if cell_index is not None else None
+    if indexed is not None:
+        if o['cell'] is None: return None
+        try: k = indexed.get(o['cell'])
+        except TypeError: pass  # the original scan accepts unhashable owner values
+        else: return ('cell', i, k) if k is not None else None
     hits = [k for k, c in enumerate(units[i].get('cells') or []) if isinstance(c, dict) and o['cell'] is not None and _first_byte(c) == o['cell']]
     return ('cell', i, hits[0]) if len(hits) == 1 else None
 
@@ -171,8 +193,8 @@ def _ranges_ok(ranges, text):  # a saved run owner's text_at as the producer wri
             and all(p[1] <= q[0] for p, q in zip(ranges, ranges[1:])))
 
 
-def _placed(f, o, units, by_id):  # (site, None) or (None, why): the one placement rule of builder and checker; run records also need a qualified saved range
-    site = _owner_site(o, units, by_id)
+def _placed(f, o, units, by_id, cell_index=None):  # (site, None) or (None, why): the one placement rule of builder and checker; run records also need a qualified saved range
+    site = _owner_site(o, units, by_id, cell_index)
     if site is None: return None, 'an owner is absent or unresolved'
     if f in RUNS and not _ranges_ok(o.get('text_at'), (units[site[1]] if site[0] == 'unit' else units[site[1]]['cells'][site[2]]).get('text')):
         return None, 'an owner range is not a code-point range of its saved final text'
@@ -209,7 +231,7 @@ def _control_shape(r):  # None, or why this observed control record is not the c
     return None
 
 
-def _control_fit(r, links, context, units, by_id):  # None, or why a well-shaped complete record does not fit the route's own records
+def _control_fit(r, links, context, units, by_id, cell_index=None):  # None, or why a well-shaped complete record does not fit the route's own records
     ls = links.get(r['control']) or []
     if len(ls) != 1: return 'control names no single source link record'
     l = ls[0]
@@ -217,7 +239,7 @@ def _control_fit(r, links, context, units, by_id):  # None, or why a well-shaped
     if not isinstance(l.get('owners'), list) or not l['owners']: return 'the link record has no proved owners'
     if canon(r['owners']) != canon(l['owners']): return "owners differ from the link record's own owned intervals"  # omitted, reordered, extra or other slices: one class
     for o in r['owners']:
-        site, why = _placed('observed_controls', o, units, by_id)
+        site, why = _placed('observed_controls', o, units, by_id, cell_index)
         if site is None: return why
     lin = r['lineage']
     if not isinstance(context.get('controls'), list): return 'route context has no control sequence'
@@ -227,7 +249,7 @@ def _control_fit(r, links, context, units, by_id):  # None, or why a well-shaped
     return None
 
 
-def _controls(E, by_id):
+def _controls(E, by_id, cell_index=None):
     """The one rule for observed control records, for builder and checker alike: {record index: None where the record composes, else why}. Reads only E."""
     recs, units = E.get('observed_controls'), E.get('units') or []
     if not isinstance(recs, list): return {}
@@ -235,12 +257,12 @@ def _controls(E, by_id):
     for l in E.get('source_links') or []:
         if isinstance(l, dict) and isinstance(l.get('tag'), dict): links.setdefault(l['tag'].get('byte_start'), []).append(l)
     res = E.get('resources'); context = (res.get('context') or {}) if isinstance(res, dict) and isinstance(res.get('context'), dict) else {}
-    out = {j: _control_shape(r) or _control_fit(r, links, context, units, by_id) for j, r in enumerate(recs)}
+    out = {j: _control_shape(r) or _control_fit(r, links, context, units, by_id, cell_index) for j, r in enumerate(recs)}
     taken = {}  # owner site -> [(record, start, end)]: two composing records never own one character
     for j, r in enumerate(recs):
         if out[j]: continue
         for o in r['owners']:
-            site = _owner_site(o, units, by_id)
+            site = _owner_site(o, units, by_id, cell_index)
             for s, e in o['text_at']:
                 for j2, s2, e2 in taken.get(site, []):
                     if s < e2 and s2 < e: out[j] = out[j] or f'owned slice overlaps record {j2}'; out[j2] = out[j2] or f'owned slice overlaps record {j}'
@@ -283,7 +305,7 @@ def _units_in_order(seq, container=None, path=()):
         yield from ((x, ('caption', id(n)), ()) for x in caps if x.get('position') != 'before')
 
 
-def _aggregate(route, units, by_id, placed, p, k, tables):
+def _aggregate(route, units, by_id, placed, p, k, tables, cell_index=None):
     """A holder cell's aggregate (EdgarTools gives a cell only its aggregate text, its nested tables' text included): {'nested': [{'unit', 'text_at':
     [start, end)}]} - for each nested table this cell holds, in saved order, the range of the holder's saved text that is that table's - or 'unresolved'.
     Only a WHOLE composed child is claimed: the holder holds nothing but these tables, and no table has a caption or anything placed in its cells
@@ -302,7 +324,7 @@ def _aggregate(route, units, by_id, placed, p, k, tables):
         fam = route.get(f)
         if not (isinstance(fam, dict) and fam.get('read') is True and isinstance(fam.get('records'), list)): continue
         for rec in fam['records']:
-            sites = [(o, _placed(f, o, units, by_id)[0]) for o in (rec.get('owners') if isinstance(rec, dict) else None) or []]
+            sites = [(o, _placed(f, o, units, by_id, cell_index)[0]) for o in (rec.get('owners') if isinstance(rec, dict) else None) or []]
             mine = [o for o, s in sites if s == ('cell', p, k)]
             if len(mine) != 1: continue
             hpos = [x for a, b in mine[0]['text_at'] for x in range(a, b)]
@@ -332,6 +354,7 @@ def _html(route, prepared, R, families):
         if u.get('kind') == 'image': n['asset'] = _asset(u, prepared)
         nodes.append(n)
     by_id, placed, unknowns = _resolve(units); R['unknowns'] += unknowns
+    cell_index = _cell_index(units)
     for i, u in enumerate(units):
         if isinstance(u.get('cell'), dict) and u.get('kind') in ('table', 'image') and i not in placed: nodes[i]['holder'] = 'unresolved'
     for i in sorted(placed):  # saved order within every holder
@@ -343,18 +366,18 @@ def _html(route, prepared, R, families):
             if c.get('children'):
                 c['children'] = _group(c['children'])
                 if any(x['record'].get('kind') == 'table' for x, _, _ in _units_in_order(c['children'])):
-                    c['aggregate'] = _aggregate(route, units, by_id, placed, n['ordinal'], k, [units[j]['id'] for j in sorted(placed) if placed[j] == ('cell', n['ordinal'], k) and units[j].get('kind') == 'table'])
+                    c['aggregate'] = _aggregate(route, units, by_id, placed, n['ordinal'], k, [units[j]['id'] for j in sorted(placed) if placed[j] == ('cell', n['ordinal'], k) and units[j].get('kind') == 'table'], cell_index)
     R['sequence'] = _group([n for i, n in enumerate(nodes) if i not in placed])
     for f in families:  # each saved owner, resolved once by _owner_site, holds its record's index; the family itself is kept verbatim
         R[f] = route[f]
         for key in ('unresolved', 'unread') if f in RECORDS else ():  # the producer's two failure lists (screen_grid.py :861, :865), kept raw in the family
             if route[f].get(key): R['unknowns'].append({'family': f, 'why': f'saved {key} entries'})
-        skip = _controls(route, by_id) if f == 'observed_controls' else {}  # an observed control record composes only where the one rule finds nothing wrong
+        skip = _controls(route, by_id, cell_index) if f == 'observed_controls' else {}  # an observed control record composes only where the one rule finds nothing wrong
         for j, rec in enumerate(_records(f, route[f])):
             if skip.get(j): R['unknowns'].append({'family': f, 'record': j, 'why': skip[j]}); continue
             owners = rec.get('owners') if isinstance(rec, dict) else None
             for o in owners or []:
-                site, why = _placed(f, o, units, by_id)
+                site, why = _placed(f, o, units, by_id, cell_index)
                 if site is None: R['unknowns'].append({'family': f, 'record': j, 'why': why}); continue
                 target = nodes[site[1]] if site[0] == 'unit' else nodes[site[1]]['cells'][site[2]]
                 target.setdefault('attached', {}).setdefault(f, []).append(j)
@@ -456,6 +479,7 @@ def preserved(route, R):
         flat = list(_units_in_order(R.get('sequence', [])))
         recs = [_rebuild(n) for n, _, _ in flat]; at = {id(n): i for i, (n, _, _) in enumerate(flat)}
         by_id, placed, _ = _resolve(recs)
+        cell_index = _cell_index(recs)
         last = {}  # container -> previous ordinal: saved order must strictly increase inside every container (top level and list members, cell children, captions)
         for i, (n, container, chain) in enumerate(flat):  # every body edge is the one its own records state
             if container in last and not last[container] < n['ordinal']: problems.append(f'unit {i}: original ordinal does not increase within its container')
@@ -473,8 +497,8 @@ def preserved(route, R):
         problems += _lists_ok(R.get('sequence', []))
         for f in ATTACHED:  # one stated-vs-body check for every attached family, from the records R itself carries (their equality to E is checked above)
             recs_f = _records(f, R[f]) if f in R else []
-            skip = _controls(dict(got, units=recs), by_id) if f == 'observed_controls' else {}  # the same one rule, on the records R carries
-            stated = Counter((j, _placed(f, o, recs, by_id)[0]) for j, rec in enumerate(recs_f) if not skip.get(j) for o in (rec.get('owners') if isinstance(rec, dict) else None) or [])
+            skip = _controls(dict(got, units=recs), by_id, cell_index) if f == 'observed_controls' else {}  # the same one rule, on the records R carries
+            stated = Counter((j, _placed(f, o, recs, by_id, cell_index)[0]) for j, rec in enumerate(recs_f) if not skip.get(j) for o in (rec.get('owners') if isinstance(rec, dict) else None) or [])
             stated = Counter({k: v for k, v in stated.items() if k[1] is not None})
             idx = [j for n, _, _ in flat for a in [n.get('attached', {})] + [c.get('attached', {}) for c in n.get('cells', [])] for j in a.get(f, [])]
             if any(type(j) is not int or not 0 <= j < len(recs_f) for j in idx): problems.append('an attachment index is not a valid int')
@@ -523,7 +547,7 @@ def observed(attempt_dir, route, custody):
     try: renders = json.loads(p.read_bytes())
     except (OSError, json.JSONDecodeError, UnicodeDecodeError): return ['CONTEXT_RENDERS.json is not readable JSON']
     if not isinstance(renders, list): return ['CONTEXT_RENDERS.json is not a list of render records']
-    by_id, _, _ = _resolve(route.get('units') or []); why_by = _controls(route, by_id); out = []
+    by_id, _, _ = _resolve(route.get('units') or []); why_by = _controls(route, by_id, _cell_index(route.get('units') or [])); out = []
     for j, r in enumerate(recs):
         if why_by.get(j): continue  # listed, not composed: nothing bound
         lin, k = r['lineage'], r['lineage']['render']

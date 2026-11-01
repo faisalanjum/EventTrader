@@ -2,11 +2,13 @@ MANUAL INSTRUCTIONS — activation requires the owner decision; nothing is appli
 CWD: k8s/prepared-extraction/ beneath the repository root. Keep BEFORE_WORKER_REVISION.txt here when R0 creates it.
 Execution prelude: use a Bash subshell with set -euo pipefail. Each API request is capped at 10 seconds; polling budget is 180 seconds. Stop on any non-zero step.
 Namespace processing. NOTHING BELOW IS APPLIED.
-IMAGE (qualified 1 November 2026, private repo; processing/default SA pulls via secret dockerhub-pull):
- faisalanjum/report-enricher@sha256:7d057ab66ac7e6ab3b97a31cd2c828b4123df2704a5d395a0e6c17164a089010 (tag prepared-ocr-docs-20261101)
- Exact 48-file runtime manifest 4a74c64e and adapter 3ae3ceb8; pair with adapter-config.yaml.
- Worker 33db8990, Redis wrapper 0e7ac21d and browser 22d72b58 are unchanged.
- The 1 November image passed recorded adapter checks; its unchanged OCR runtime inherits the 31 October qualification.
+IMAGE (table-lookup fix checked 1 November 2026; private repo; processing/default SA pulls via secret dockerhub-pull):
+ faisalanjum/report-enricher@sha256:cb980c0daba30dbe61e3d62009daed994a403c50973866af5ccd2af9182d5e6d (tag prepared-table-lookup-20261101)
+ Exact 48-file runtime manifest fac7fd45 and adapter 3ae3ceb8; pair with adapter-config.yaml.
+ Worker 33db8990 and browser 22d72b58 are unchanged; Redis wrapper a9ef649f includes the approved duplicate-check fix.
+ The table lookup and exact-image adapter checks passed; its unchanged OCR runtime inherits the 31 October qualification.
+ Broader Prepare regression: 1,603/1,604 passed; one unchanged browser fixture exhausted its test budget. See README.md and the recorded ledger.
+ Create the configured script_qualifications/fac7fd45575d directory before activation; keep the older runtime's records separately.
  OCR remains unverified model output; see OCR_QUALIFICATION.txt for errors and test limits.
 BEFORE ENABLING OCR: prepare the warm, authenticated server, replace the endpoint in adapter-config.yaml,
  and create the processing/prepared-ocr Secret (api-key) described in README.md. Verify its pinned

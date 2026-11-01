@@ -12,25 +12,31 @@ consumers must check `fidelity`, not use `status: complete` as an accuracy guara
 
 ## Exact release
 
-- OCR integration image: `faisalanjum/report-enricher@sha256:7d057ab66ac7e6ab3b97a31cd2c828b4123df2704a5d395a0e6c17164a089010`.
+- Table-lookup image: `faisalanjum/report-enricher@sha256:cb980c0daba30dbe61e3d62009daed994a403c50973866af5ccd2af9182d5e6d`.
+- Previous OCR image (1 November documentation rebuild): `faisalanjum/report-enricher@sha256:7d057ab66ac7e6ab3b97a31cd2c828b4123df2704a5d395a0e6c17164a089010`.
 - Previous OCR image (31 October qualification): `faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70`.
 - Earlier HTML/XML-only image: `faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b`.
-- Runtime manifest SHA-256: `4a74c64ec8ddceb4f3a9f4a1be2af3423b9091a6825249daf7d5679ab54eb4be`.
+- Runtime manifest SHA-256: `fac7fd45575de7765bcab541bad3f9ac5b45a96235fabb264e3ceda8dadadc79`.
 - Environment base: `faisalanjum/report-enricher@sha256:23ca15adc2b1f265ec862a1af2bfa471cc525a6b18b25524049b044803c6236b`.
 
-The 1 November image updates only `driver/prepare/README.md` and its manifest.
-All executable runtime, adapter and worker bytes are unchanged. They passed
-37 adapter tests, including three recorded native cases with networking disabled.
-After shortening the entry README, the final image's exact 48-file inventory and
-the native extraction/reuse/damage case passed again. Detailed code contracts now
-live in [the code reference](../../docs/prepare-reference.md). This image inherits
-the bounded OCR findings in
-[OCR_QUALIFICATION.txt](OCR_QUALIFICATION.txt); no new model accuracy claim or
-production activation follows from this documentation rebuild.
+The table-lookup change reuses a local source-anchor index and preserves
+the existing exactly-one-match rule. The failing R70.htm step now reconstructs in
+4.006 seconds and verifies in 3.906 seconds; it previously hit the 240-second limit
+on all three attempts. All 1,780 saved outputs from 19 other filings remain byte
+identical. A larger 32,768-cell, 256-holder case passed its independent checks.
+All 102 affected reconstruction tests, 543 grader tests and three native adapter
+cases passed; the exact image's 48 runtime files match the reviewed source.
+The broader Prepare run passed 1,603 of 1,604 tests. One unchanged browser test,
+`ControlIdentity.test_a_swapped_inner_pointer_never_credits_another_label_change`,
+exceeded its 20-minute test budget; it remains unfinished, not a fresh pass.
+Evidence and the complete test ledger are retained in
+`/home/faisal/prepare_cleanup_review_20261031/storage_review_20261101/`.
+The timeout, extraction content and OCR behavior are unchanged; the bounded model
+findings in [OCR_QUALIFICATION.txt](OCR_QUALIFICATION.txt) still apply.
 
 The later 1 November `set_filing` fix affects the `event-trader` intake service.
-Rebuild that service's image before restarting intake. The qualified enricher image
-predates this source fix; its worker does not call `set_filing`.
+Rebuild that service's image before restarting intake. This enricher image contains
+the corrected Redis wrapper, but its worker does not call `set_filing`.
 
 Keep these immutable images available. The base retains the tested native packages,
 Chromium and fonts; the Dockerfile copies the reviewed repository source into their
@@ -49,6 +55,9 @@ Verify its runtime against `RUNTIME_MANIFEST.json`, plus the worker, Redis wrapp
 adapter and browser, before changing deployment pins. A source change requires a
 new reviewed manifest/image pair; never combine this image with an older manifest
 configuration. The checked-in deployment patches pair the new image with its exact manifest.
+Before activation, create the configured `script_qualifications` directory for
+this manifest. Keep older directories: their records and claims belong to the
+runtime that created them and must not block qualification of this new runtime.
 `requirements-ocr.txt` pins the native CPU client dependencies; `cpu-models.sha256`
 pins four existing CPU reader weights, loaded into native caches during the build.
 The worker image contains no GPU framework or model weights for Chandra.
@@ -97,6 +106,11 @@ Omitting `ocr` retains the existing HTML/XML-only behavior; also omit the unused
 `VLLM_API_KEY` Secret reference in that case.
 
 ## Operating boundary
+
+Before backfill or activation, finish the pending storage work: compress the large
+result files, retire verified temporary snapshots, and flush every required saved
+result and directory entry before acknowledging completion. These storage changes
+are not included in this image.
 
 Run the operating instructions from `k8s/prepared-extraction/`:
 

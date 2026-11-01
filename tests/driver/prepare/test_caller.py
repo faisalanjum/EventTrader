@@ -140,7 +140,7 @@ class Caller(unittest.TestCase):
         self.refused(env='no HOME')
 
 
-INVENTORY = json.loads((HERE / 'fixtures/runtime_inventory_47.json').read_bytes())['files']  # the frozen directory inventory: the expected set, never the job's own rule
+INVENTORY = json.loads((HERE / 'fixtures/runtime_inventory.json').read_bytes())['files']  # the frozen directory inventory: the expected set, never the job's own rule
 MARK = b"import os\nopen(os.path.join(os.environ['TMPDIR'], 'UNLISTED_INIT_EXECUTED'), 'a').write('imported\\n')\n"
 
 
@@ -167,14 +167,14 @@ class RuntimeInventory(unittest.TestCase):
         """A copy of this checkout's runtime driver tree. Both the checkout and the copy must list exactly the frozen inventory."""
         src = JOB.parents[2]
         self.assertEqual(sorted(str(p.relative_to(src)) for p in (src / 'driver').rglob('*') if p.is_file() and '__pycache__' not in p.parts), sorted(INVENTORY))
-        rt = self.t / 'rt47'
+        rt = self.t / 'rt'
         for n in INVENTORY: d = rt / n; d.parent.mkdir(parents=True, exist_ok=True); d.write_bytes((src / n).read_bytes())
         self.assertEqual(sorted(str(p.relative_to(rt)) for p in (rt / 'driver').rglob('*') if p.is_file()), sorted(INVENTORY))
         return rt, {n: sha((rt / n).read_bytes()) for n in INVENTORY}
 
-    def test_every_single_omission_from_the_frozen_inventory_is_refused(self):  # all 47 members, the 3 entry points included
+    def test_every_single_omission_from_the_frozen_inventory_is_refused(self):  # all 48 members, the 3 entry points included
         rt, full = self.real()
-        self.assertEqual(len(full), 47)
+        self.assertEqual(len(full), 48)
         for n in INVENTORY:
             with self.subTest(omitted=n): self.refused(rt, {k: v for k, v in full.items() if k != n})
 
