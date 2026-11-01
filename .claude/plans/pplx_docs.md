@@ -3,6 +3,13 @@
 Updated: 2026-02-16
 Purpose: Ground Perplexity implementation in official docs, then map it to our DataSubAgents PIT/Open architecture with minimal, centralized code.
 
+> **Alternative to remember (owner, 2026-10-15):** You.com Finance Research API — https://you.com/docs/guides/finance-research — could be compared with Perplexity for financial research, such as what moved a stock.
+> - Endpoint: `POST https://api.you.com/v1/finance_research`, with an MCP option at `https://api.you.com/mcp/finance`.
+> - Output: cited Markdown answers.
+> - Cost: paid, $110 per 1,000 `deep` requests or $500 per 1,000 `exhaustive`; the free MCP profile offers only general search.
+> - The owner has an API key. Not adopted; this is a reminder, not a decision.
+> - Not for Prepare extraction proof: it searches its own index, has no exact filing positions, and is "not a substitute for primary source verification".
+
 ---
 
 ## 0) Scope and sources

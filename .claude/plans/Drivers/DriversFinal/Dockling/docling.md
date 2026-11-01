@@ -133,3 +133,30 @@ A general 27B model is **not much faster per page** than Granite-Docling on CPU 
 
 - **"A blanket HTML→PDF switch is not yet justified"** — I agree for text and tables. But for the **section map**, the PDF route was the only one that found SEC headings: 0 via HTML in Codex's 8 sources and my 3; 271/273 Items via PDF.
 - **Suggested split:** HTML for text/tables; PDF for sections, OCR and slides. Validate on held-out filings before adopting.
+
+## Structure check against the documentation and the installed source (Fable, 2026-10-06; the structure part of the open deep-dive task)
+
+Question (owner): Docling markets its document structure — do its headings, footnotes and references give us what our routes lack (`heading_recognised` 35/178,
+`note_linked` 8/36, `reference_linked` 0/13 on the best EdgarTools route)?
+
+**Read:** the installed HTML backend (`docling 2.66.0`, `docling-core 2.57.0`: `docling/backend/html_backend.py`, 1,502 lines), the document model
+(`docling_core/types/doc/document.py`), and the project CHANGELOG up to **v2.134.0 (2026-10-06)**; and our own grader numbers for all 13 routes (run `r3/build_r4`).
+
+| Docling feature | How it works for **HTML** | Our need | Verdict |
+|---|---|---|---|
+| headings (`SectionHeaderItem`, levels, section groups) | **only `<h1>`–`<h6>` tags** (`find_all(["h1",…,"h6"])`, `_handle_heading`); no font-size / bold / centering inference for HTML — that inference exists for **PDF only** (v2.106, v2.109 bookmarks, v2.120 "font weight, slant and case") | SEC HTML writes headings as styled `<div>`/`<p>`/`<font>` | **none for HTML**: measured 0/164 headings on our 60 files (docling_html), 0/178 (docling_render); our own pre-step that wraps guide-style lines in `<h2>` lifts it to 104–112 of 158–167 but costs blocks (FAIL 7 → 13); the PDF route finds 20/31 (65 %) on the 9 PDFs |
+| footnotes (`FloatingItem.footnotes`) | the model can hold them; the HTML backend never fills them (no footnote code in `html_backend.py`); DOCX/ODF/JATS backends do | notes linked to marks | **none for HTML**: `note_linked` 8/36 on every route, Docling or not — those 8 are the grader's own adjacency matches |
+| references (`FloatingItem.references`, hyperlinks) | hyperlinks kept on text (`AnnotatedText.hyperlink`); no reference resolution | "see Note 3" → Note 3 | **none**: 0/13 everywhere; Group 4 (Prepare step 5) |
+| captions | `<figure>/<figcaption>`, `img alt`; table `<caption>` linked to the `TableItem` since **v2.130** (we run 2.66: not yet) | table titles | partial; an upgrade would carry table captions |
+| provenance (`ProvenanceItem.charspan`, page, bbox) | **no source positions for HTML** (0 `ProvenanceItem` in the HTML backend; charspans are written only by PDF/image pipelines) | exact source links | **none**: this is why the grader's own linker exists |
+| `orig` text kept (v2.122/2.132), rowspan/colspan fixes (v2.129, 2.131), lists, task lists, figure tables | tag-level conversion improvements | tables, lists | useful but incremental; none touches headings or notes |
+| PDF layout pipeline (layout model + heading-level inference) | genuine structure from the page image | sections on scanned/PDF filings | **strong but PDF-only**; 10× slower on CPU; HTML → PDF rendering was judged above ("a blanket switch is not yet justified") — the section map is the one thing it found that HTML did not |
+
+**Answer:** Docling's structure strength is its **PDF** pipeline (layout models, heading-level inference). Its **HTML** backend — at 2.66 and still at today's
+2.134 — is a tag-to-model converter: headings from `h1–h6` only, no footnote or reference linking, no source positions. For SEC HTML that yields exactly the
+zeros we measure. The gaps the owner names are not covered by Docling's HTML documentation or code; they need either (1) our own heading step on the page's
+signals (what both tools lack for SEC HTML; our `prestep_headings` is a first, costly attempt), (2) the PDF layout route for the section map only (the split
+proposed above), or (3) a later linking step for notes/references (Prepare step 5). An upgrade 2.66 → 2.134 is worth taking for tables (captions linked,
+rowspan fixes, `orig` kept) but changes nothing for headings or notes on HTML.
+
+Still open from the deep-dive task: the non-structure features, docling-graph, and the releases' effects on our table routes (a re-run on the 60 files after an upgrade).

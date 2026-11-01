@@ -1,0 +1,9 @@
+{
+  "id": "ra_0009",
+  "raised_in": "K-fields GO #1 step-2 harness build (pre-launch de-risk probe)",
+  "doc": "FableExperimentWorkOrder v1.9 §4 EXP-5 slice-menu Cypher",
+  "date": "2026-07-24",
+  "finding": "The pinned menu query joins (f)-[:FACT_MEMBER]->(m) with (f)-[:FACT_DIMENSION]->(d) as an unpaired cross-product and returns near-empty results on the live graph (probe: DRI across ALL prior 10-K/Qs -> 1 row; graph-wide FACT_MEMBER=12,779,496 vs FACT_DIMENSION=43,195). It predates and conflicts with the O13-RATIFIED binding (owner 2026-07-09): explicit-dims POSITIONAL pairing via Context.dimension_u_ids[i] <-> member_u_ids[i], typed dims dropped, CIK-normalized indexed-id lookup (the proven production-adapter pairing, S4-exercised).",
+  "ruling_fable_2026_07_24": "The EXP-5/K-fields slice-menu probe implements the ADAPTER-LAW retrieval: context-array positional pairing (CIK-normalized), PIT-cut at <= event_time, prior public 10-K/Q(/A) filings, numeric facts only, entity-scoped via FOR_COMPANY — anchored on (Company {ticker}) + event_time because the 36 events include transcripts/news that are not Report nodes (the adapter's source-anchored form covers filings only). Classification + normalization + FS-20/provisional handling = driver.core.slice_menu.build_menu imported READ-ONLY and UNCHANGED (the harness-imports table sanctions read-only core imports). The work-order Cypher line stands as recorded INTENT ('a query-level approximation of FACT-26's PIT menu'); its literal recipe is SUPERSEDED by this ruling. No bars changed; no law file edited.",
+  "status": "closed"
+}

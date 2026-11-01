@@ -1,0 +1,42 @@
+# Four-example review checkpoint — 2026-09-25
+
+Independent extraction review is complete. Fuel passed three fresh complete chains; tax, Darden and Best Buy each passed one fresh pair. These are four source targets and six assembled records, produced by 15 model calls (six naming, six fields, three fuel record readers). All calls were valid; no database or calendar-cache writes occurred. Core2427's complete report and frozen snapshot have been independently verified. Core2428 completed the tracker cleanup; Root independently verified the exact two-row change, unchanged earlier history, and minimal manifest update. The checkpoint is finished and both roles are STOP/WAIT before T036.
+
+| Target | Fresh test | Independent result | What was checked |
+|---|---|---|---|
+| Fuel T003 | 3 × Sonnet NAME → Luna FIELDS → real-code dry run → fresh Sonnet record reader | PASS 3/3 | Price association retained in name; forecast expense increase strictly greater than $4B; FY2026; no total-bill, price-only share, 2025 expense baseline or guidance-revision invention. All three readers understood the actual records. |
+| Tax T008 | 1 fresh NAME + FIELDS + real-code dry run | PASS | Signed income-tax expense −94 vs −175 million, increased; derivable change omitted; shortest `millions`; FY2026Q1. Every assembled field and all five planned operations equal the prior reviewed result. |
+| Darden T049 | 1 fresh NAME + FIELDS + real-code dry run | PASS under the existing meaning ruling | Restaurant-closure impairment, $24.7M gross charge, occurred, FY2026Q3 ending February22. Shorter lawful name; empty measurement lawful for the direct impairment. Record identity differs from the previous redundant-heading output. |
+| Best Buy T113 | 1 fresh NAME + FIELDS + real-code dry run | PASS | Revenue, International segment, $1.2B, stated +0.5% year-over-year retained, no invented prior amount, FY2026Q4. Actual fields reply, assembled record and all five operations equal the prior reviewed control. |
+
+The exact tested change is eight generic lines in Rule3 item1, applied to both naming and field instructions. They distinguish an amount whose own description includes a factor from an overall metric merely explained by a contributor. They retain the first factor in the name, without direction words or an exclusive-cause claim, and forbid invented totals, baselines or causes. There are no example-specific words or preferred answers in the addition.
+
+The experiment adds seven lines to an isolated copy of the existing input builder to load that one pinned rule definition. The runner and checking routine are reused; the wrapper only points at this experiment's folder. Removing those eight instruction lines restores every byte of all four cases' earlier NAME and FIELDS templates, including all financial source text. Tax's prior base is CHANGE_ELIGIBILITY_FIELDS_2400; the other three use GENERIC_FIELDS_CONTROLS_2402. Current product and original harness code have no tracked difference from the recovery HEAD.
+
+What the investigation established: under the failed four-line candidate, the public scope diagnostic classified the fuel amount as an overall total and emitted the broad name. Under the revised eight-line definition, that diagnostic retained the source attribution, then all three normal complete chains passed. Earlier reading-only work already recovered the financial facts. This supports a problem applying the quantity-identity rule at naming. It does not prove a unique historical cause for every A7 failure or universal model reliability. The failed NAME call and failed public diagnostic remain preserved; the successful scope diagnostic is separate. These three investigation calls are not counted among the 15 confirmation calls.
+
+Darden review reconciliation: Core2426 called the missing before-tax token a failure. Root re-read FINAL5.3/NAME-08/served Rule8 and the earlier independent financial-definition review. The already-established N267 and Codex2337/2339 judgment applies: the unqualified impairment amount is the write-down itself; $18.5M is its separate net-earnings effect. Empty measurement is lawful for this direct charge. The previous heading was a permitted redundant output, not a mandatory answer key. Core's original report and all actual outputs remain preserved. Different tokens still create different identities; this is no permission to merge, omit all tax qualifiers, infer GAAP or claim canonical stability.
+
+Root inspected the complete actual tasks and client context, native originals, public replies, all populated and defaulted fields, quotes/source links, and every planned operation. Delivery checks alone were not treated as semantic proof. Independent actual-code replays for fuel, Darden and Best Buy match the complete Core plans; the tax result matches the previously reviewed exact scenario. The route uses `enable_writes=False`; its replay store refuses transactions. Fiscal helpers follow the existing read-only lookup path. The checker’s declared zero-write counter alone is not the safety proof.
+
+Observed impact is limited: fuel and tax are the first two of the selected ten failed examples. Eight selected examples remain untouched: T036,T045,T050,T062,T067,T107,T142,T145. Darden and Best Buy are controls. The original population is 191 targets / 382 saved replies; it was not rerun. Applying this generic rule later would expose all191 targets; the33 lexical candidates are not33 confirmed defects or fixes. A prior manual audit of15 real naming boundaries is supporting scope review, not15 extra full extraction passes.
+
+This is a local experiment, with no production adoption or readiness claim. Catalog admission/deduplication and the terminal-suffix admission checks are not exercised by the temporary catalog. The frozen NAME input still places the target before the full event; applicability of the roadmap's item-last reader requirement must be resolved before formal adoption. Darden's new name and optional measurement variation also leave canonical identity stability unproved. Broader company-calendar accuracy and the existing scratch-only materializer/pre-A2 lock work remain separate. No schema, grader, key, production rule, commit or push was changed in this checkpoint.
+
+Evidence (in this folder unless stated otherwise):
+- ROOT_COHORT_INVENTORY_2430.json: all15 actual completed-call artifacts.
+- ROOT_FOUR_CASE_INPUT_DIFF_2430.json: all8 exact input comparisons against their true prior bases.
+- ROOT_T003_FIELDS_RESULT_2422.json and ROOT_T003_FIELDS_REVIEW_2425.json; ROOT_T003_READER_REVIEW_2423.json and ROOT_T003_READERS_REVIEW_2426.json.
+- ROOT_T008_PAIR_REVIEW_2427.json and ROOT_T008_LUNA_PRELIM_2427_1.json.
+- ROOT_T049_NAME_REVIEW_2428.json, ROOT_T049_PAIR_REVIEW_2429.json and ROOT_T049_LUNA_PRELIM_2429_1.json.
+- ROOT_T113_NAME_REVIEW_2430.json, ROOT_T113_PAIR_REVIEW_2430.json and ROOT_T113_LUNA_PRELIM_2430_1.json.
+- ROOT_REPLAY_2422, ROOT_REPLAY_2429, ROOT_REPLAY_2430: independent no-write code outputs.
+- ROOT_REAL_SCOPE_BOUNDARY_REVIEW_2419.md: the real boundary review and its limits.
+- Recovery experiment: a7_recovery/manual_failure_pilot_20260917/t003_attribution_scope_2420.
+- Append-only history: sibling next10_staged_20260923/TRACKER.md and ATTEMPT_LEDGER.jsonl.
+
+Owner stopping point: STOP before T036. No further model call or example is authorized by this report. Broader orchestration goal remains unfinished.
+
+Closure evidence: Core2427 SHA5b932d484f46740440058459a708bbc6f2663c03eec2ab23fe590ec5cabfa3ca; final snapshot SHA4ba8badad605a17e8e82d52b6e492b1e5838f0cf39bef198b553d85f0c3085ef. Root verified all11 experiment manifests covering234unique files in ROOT_FINAL_SNAPSHOT_REVIEW_2430.json. Snapshot wording correction: four original source targets were retested through the staged candidate; the whole191-target/382-saved-reply suite was not rerun. BBY's plan objects match; the timestamped audit files have different hashes.
+
+Final closure: Core2428 SHA1154f88b2231fd08297d4e8939179b8c77f127f87b4b1bcd6b83ff971e04b096 answers Codex2431. Current next10 TRACKER.md SHA3ed7f28317f87229fcefa89546654b1809de3629a1be670b3b55e53096319e42; its previous version is preserved. ROOT_TRACKER_CLOSURE_REVIEW_2431.json SHA3ff37f6d23d6406d705e15242f651cee54afdd66b62f4299aaac9a1d5df48277 verifies that only rows3/8 changed, the correction was appended, and reversing the two manifest-entry changes restores the prior manifest exactly. The final WAIT receipt requires no ACK-of-ACK and no new task.

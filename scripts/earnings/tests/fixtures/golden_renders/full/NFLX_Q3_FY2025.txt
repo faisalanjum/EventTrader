@@ -1,0 +1,541 @@
+# NFLX Q3_FY2025
+Filed: 2025-10-21T16:02:25-04:00 | Session: post_market | Period ending: 2025-09-30
+Accession: 0001065280-25-000404 | Prior 8-K: 2025-07-17T16:04:28-04:00 (96 days ago)
+Mode: historical | PIT cutoff: 2025-10-21T16:02:25-04:00 | Assembled: 2026-05-03T09:33:43Z
+
+## Evidence Source IDs (copy verbatim into evidence_ledger[].source_id)
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#header
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#quarter_info
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S1.consensus
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S2.8k_packet
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S3.guidance
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.prior_financials
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.inter_quarter
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S7.peers
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S10.lessons
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S2.exhibit.EX-99.1
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S2.section.FinancialStatementsandExhibits
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S2.section.ResultsofOperationsandFinancialCondition
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2025-06-30
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2025-03-31
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2024-12-31
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2024-09-30
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2024-06-30
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2024-03-31
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2023-12-31
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S5.financials.2023-09-30
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N1
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46480211
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N2
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46480329
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N3
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46480463
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N4
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46487427
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N5
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46487639
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N6
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46489241
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N7
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46490044
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N8
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46490069
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N9
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46490598
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N10
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46490599
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N11
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46491183
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N12
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46495625
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N13
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46498606
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N14
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46498628
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N15
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46501310
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N16
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46502199
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N17
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46502255
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.filing.F1
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.report:0001065280-25-000323
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N18
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46515300
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N19
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46532454
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N20
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46575394
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N21
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46626407
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N22
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46657918
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N23
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46729590
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N24
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46814654
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N25
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46844396
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N26
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_46974916
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N27
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47008367
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N28
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47078667
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N29
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47133221
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N30
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47214094
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N31
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47347829
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N32
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47366679
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N33
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47403453
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N34
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47419732
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N35
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47451746
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N36
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47462530
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N37
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47590468
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N38
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47600065
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N39
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47606508
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N40
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47607653
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N41
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47646614
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N42
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47650031
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N43
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47710960
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N44
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47747728
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N45
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47812018
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N46
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47847963
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N47
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47919866
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N48
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47967651
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N49
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47972540
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N50
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47977985
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N51
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47994250
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N52
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_47998497
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N53
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48018820
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N54
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48030257
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N55
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48066718
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N56
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48071386
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N57
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48075510
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N58
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48103630
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N59
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48123519
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N60
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48131507
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N61
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48232158
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N62
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48289167
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N63
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48301019
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N64
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48306110
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N65
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48306153
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N66
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48316180
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.news.N67
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S6.event.news:bzNews_48330983
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S7.peer.PLAY
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48325112
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48321270
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48326166
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48333162
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48334022
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48297045
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48300775
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48308042
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48308164
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S8.macro.bz:48301726
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S10.lesson.L1
+- SRC:NFLX:Q3_FY2025:0001065280-25-000404#S10.lesson.L2
+
+## 2. Results & Expectations
+
+### Consensus Bar
+[Consensus unavailable — AV upstream failed: AV EARNINGS failed for NFLX; AV EARNINGS_ESTIMATES failed for NFLX; AV INCOME_STATEMENT failed for NFLX]
+
+### Reported Results (EX-99.1)
+
+Exhibit 99.1 October 21, 2025 Fellow shareholders, •Revenue in Q3 grew 17%, in-line with our forecast. Operating margin of 28% was below our guidance of 31.5% due to an expense related to an ongoing dispute with Brazilian tax authorities that was not in our forecast. Absent this expense, we would have exceeded our Q3'25 operating margin forecast. We don’t expect this matter to have a material impact on future results. •Engagement remains healthy. We hit our highest quarterly view share ever in the US and UK, which has grown 15% and 22%, respectively since Q4’22, according to Nielsen and Barb. •In Q3, we made further progress against our 2025 priorities: ◦We delivered a great slate including Wednesday S2, Bon Appétit, Your Majesty from South Korea, and Happy Gilmore 2, while KPop Demon Hunters became our most popular film ever. ◦We recorded our best ad sales quarter ever and doubled our commitments in the US upfront. ◦The Canelo vs. Crawford boxing match became the most-viewed men’s championship fight this century. •We’re finishing the year with good momentum and have an exciting Q4 slate, including the final season of Stranger Things, new seasons of The Diplomat and Nobody Wants This, Guillermo del Toro’s Frankenstein, Kathryn Bigelow’s A HOUSE OF DYNAMITE, Rian Johnson’s Wake Up Dead Man: A Knives Out Mystery as well as more live events including NFL Christmas Day games and the Jake Paul vs. Tank Davis boxing match. Our summary results, and forecast for Q4, are below. (in millions except per share data) Q3'24 Q4'24 Q1'25 Q2'25 Q3'25 Q4'25 Forecast Revenue $ 9,825 $ 10,247 $ 10,543 $ 11,079 $ 11,510 $ 11,960 Y/Y % Growth 15.0 % 16.0 % 12.5 % 15.9 % 17.2 % 16.7 % Operating Income $ 2,909 $ 2,273 $ 3,347 $ 3,775 $ 3,248 $ 2,860 Operating Margin 29.6 % 22.2 % 31.7 % 34.1 % 28.2 % 23.9 % Net Income $ 2,364 $ 1,869 $ 2,890 $ 3,125 $ 2,547 $ 2,355 Diluted EPS $ 5.40 $ 4.27 $ 6.61 $ 7.19 $ 5.87 $ 5.45 Net cash provided by operating activities $ 2,321 $ 1,537 $ 2,789 $ 2,423 $ 2,825 Free Cash Flow $ 2,194 $ 1,378 $ 2,661 $ 2,267 $ 2,660 Shares (FD) 437.9 437.8 437.0 434.9 434.0 1 Q3 Results and Forecast Revenue in Q3 grew 17% year over year on both a reported and foreign exchange (F/X) neutral basis1, driven primarily by membership growth, pricing adjustments, and increased ad revenue. Revenue was in-line with our guidance with the slight variance due to unfavorable movements in foreign currencies since we set our forecast. Q3’25 operating income totaled $3.2B, up 12% year over year. Operating margin was 28% vs 30% in Q3’24. This was below our guidance forecast because we incurred an expense in Q3’25 of approximately $619 million related to an ongoing dispute with Brazilian tax authorities regarding certain non-income tax assessments. This expense was not included in our prior guidance forecast but was identified as a potential exposure in our prior 10-Q and 10-K filings. The expense, which covers periods from 2022 through Q3’25, was booked as a cost of revenue. The cumulative impact of this expense (approximately 20% of which is for the year 2025 with the remainder related to 2022-2024) reduced our Q3’25 operating margin by more than five percentage points. Absent this expense, we would have exceeded our Q3'25 operating margin forecast, and we don’t expect this matter to have a material impact on our results in the future. Diluted EPS was $5.87 vs. $5.40 last year (+9% year over year), $1.00 below forecast due to lower than forecasted operating income. As a reminder, the guidance we provide is our actual internal forecast at the time we report and we strive for accuracy. Our primary financial metrics are revenue for growth and operating margin for profitability. Our goal is to sustain healthy revenue growth, expand operating margin, and deliver growing free cash flow. In Q4’25, we expect revenue growth of 17% (16% on a F/X neutral basis) driven by growth in members, pricing, and ad revenue. We project an operating margin of 23.9%, a two percentage point year over year improvement. This means that for the full year 2025, we expect $45.1B in revenue (16% growth, 17% on an F/X neutral basis), in-line with our prior expectations for 15%-16% revenue growth (16%-17% on a F/X neutral basis). We’re now forecasting a 2025 operating margin of 29% (both reported and based on F/X rates as of 1/1/25), vs. our prior expectations for a 30% reported operating margin (29.5% based on F/X rates as of 1/1/25) due to the impact of the Brazilian tax matter. Content and Engagement At Netflix, our goal is both simple and ambitious: to entertain the world. We achieve this by offering a diverse selection of series, films, and games that our members love. This in turn fuels engagement, and when people love what they watch and play, they stick around longer (retention), recommend Netflix to others (acquisition), and place a higher value on our service. Delivering on this promise—especially across the more than 190 countries in which we operate—is a complex challenge that requires sharp focus, bold creative choices, and a commitment to continuous improvement. By working and partnering with the best talent from around the world, we achieve creative excellence across our broad slate. __________________________________ 1 Excluding the year over year effect of foreign exchange rate movements and the impact of hedging gains/losses realized as revenues. Assumes foreign exchange rates remained constant with foreign exchange rates from each of the corresponding months of the prior-year period. 2 Hit series in Q3 included returning seasons of Wednesday* (114M views2), My Life with the Walter Boys* (36M views), and Alice in Borderland* (20M views) from Japan, the documentary series Amy Bradley Is Missing (35M views), and new series like UNTAMED (87M views) and The Hunting Wives (25M views4), both of which have been renewed for second seasons. Successful series from around the world included Hostage* (35M views) from the UK, Billionaires’ Bunker* (22M views) from Spain, Bon Appétit, Your Majesty* (32M views) from South Korea, In the Mud* (15M views) from Argentina, and The Ba***ds of Bollywood* (9M views) from India. We made very good progress in Q3 with our film slate, which delivered hits across a range of genres including comedy, mystery, thriller, drama, and animation. Happy Gilmore 2*, starring Adam Sandler (126M views), set a new Nielsen streaming record with 2.9 billion viewing minutes in its opening weekend. The Thursday Murder Club*, featuring Helen Mirren and Pierce Brosnan (61M views), is the first feature-length film this century to top the UK TV rankings according to Barb. Other big films included rom-com My Oxford Year* (81M views), the latest breakout true-crime documentary Unknown Number: The High School Catfish* (55M views), Love Untangled* (23M views) from South Korea, and French Lover* (26M views) from France. Our successful slate helped us drive record TV view share in Q3 in the United States and the United Kingdom5, two of our largest markets. Based on Nielsen and Barb data, from Q4’22-Q3’25, our quarterly TV view share has grown 15% and 22% in the US and UK, respectively, as you see in the charts below. Given the still substantial amount of linear viewing globally, we believe there’s plenty of opportunity to expand our share of TV engagement, if we continue to improve. We grow engagement by expanding the variety and quality of our programming and we strive to deliver big breakthrough moments that bring people together. In a world of fleeting consumer attention and audience fragmentation, we believe big events that attract mass audiences are differentially valuable to our members and our business. For example our live super middleweight championship bout between Terence Crawford and Canelo Álvarez attracted more than 41M viewers6, making it the most-viewed men’s championship boxing match this century. The event was #1 on Netflix in 30 countries and made the top 10 in 91 countries. Across Netflix’s social channels, the fight generated over 950 million owned impressions, and Canelo/Crawford was a top trending topic on X worldwide, trending #1 in the US and __________________________________ 2 A view is defined as hours viewed divided by runtime for each title. Views for a title are based on the first 91 days since the release of each episode (less than 91 days denoted with an asterisk and data is from launch date through October 19, 2025). We publish our top titles based on views each week at Netflix Top 103. 3 https://www.netflix.com/tudum/top10 4 US only view count. 5 According to Nielsen (US) and Barb (UK). 6 Total viewership AMA estimates are derived from VideoAmp data in the US (Live+1), Joe Hand (US, Canada, Puerto Rico), and first-party data in global markets (Live+1). 3 appeared in the trending list in 21 other countries. We’re only in our second decade of original programming. We started without any of our own IP so we’ve had to learn how to build major franchises, like Stranger Things and Squid Game, from scratch. KPop Demon Hunters, which is now our most popular film ever (325M views), is another example of our ability to create large breakout hits and for our films to be part of the cultural conversation7 and zeitgeist8. HUNTR/X became the first K-pop girl group to reach #1 on Billboard’s Hot 100, the album recently went platinum, and characters from the film are the top 5 most-searched9 Halloween costumes. We are actively expanding the KPop Demon Hunters universe, bringing fans new experiences and products worldwide. Earlier today, we announced10 Mattel and Hasbro have each been named a global co-master toy licensee for KPop Demon Hunters. These unprecedented licensing partnerships will help meet the massive fan demand for toys and games inspired by this smash hit. We continue to release apparel on the Netflix Shop and at leading retailers like Amazon, Zara, Target, Gap, Old Navy, and Hot Topic. And we’re excited about incremental opportunities for KPop Demon Hunters in live experiences, publishing, beauty, lifestyle, and food11 and beverage. We can’t wait for our members to experience our Q4 slate, which includes: •Returning seasons including the epic final season of Stranger Things, The Diplomat S3, The Witcher S4, Nobody Wants This S2, Emily in Paris S5, Love is Blind S9, Squid Game: The Challenge S2, Selling Sunset S9, Culinary Class Wars S2 from South Korea, The Believers S2 from Thailand, The Accident S2 from Mexico, Envious S3 from Argentina, and Delhi Crime S3 from India. •New series such as Death by Lightning from executive producers David Benioff and D.B. Weiss, The Beast in Me starring Matthew Rhys and Claire Danes, Simon Cowell: The Next Act, Last Samurai Standing from Japan, Physical: Asia from South Korea, Juan Gabriel: I Must, I Can, I Will from Mexico, Heweliusz from Poland, The Monster of Florence from Italy, and Single Papa from India. •A big slate of films including Guillermo del Toro’s Frankenstein, Kathryn Bigelow’s A HOUSE OF DYNAMITE, Rian Johnson's Wake Up Dead Man: A Knives Out Mystery, documentary The Perfect Neighbor, Train Dreams, Noah Baumbach’s Jay Kelly starring George Clooney and Adam Sandler, Troll 2 from Norway, Edward Berger’s Ballad of a Small Player from the UK, and Raat Akeli Hai 2 from India. •Exciting live events like our NFL Christmas Gameday doubleheader (Dallas Cowboys vs. Washington Commanders and Detroit Lions vs. Minnesota Vikings) and a boxing match between Jake Paul and Gervonta “Tank” Davis on November 14th. •More Kids and Family programming with Sesame Street, the animated film In Your Dreams, two new Dr. Seuss shows, Mark Rober12’s experiments, and a new season of Gabby’s Dollhouse. •New stand-up comedy specials from Kevin Hart, Leanne Morgan, Matt Rife, Tom Segura, and Ricky Gervais. •New games with an exciting group of party games including Boggle Party, Pictionary: Game Night, LEGO® Party!, and Tetris Time Warp. These games are designed to be an evolution of family game night–on the TV, with friends and family playing together at home, using the phone as a game controller. __________________________________ 7 https://www.instagram.com/reel/DOJGlnzjefz/?utm_source=ig_web_copy_link&igsh=aDF0dTU4Z2o4eWVm 8 https://x.com/nbcsnl/status/1974697962807685365 9 https://www.usatoday.com/story/money/2025/10/09/halloween-2025-top-costumes-kpop-demon-hunters-labubu/86605507007/ 10 https://about.netflix.com/en/news/netflix-kpop-demon-hunters-forge-master-toy-partnership-with-mattel-and-hasbro 11 https://www.prnewswire.com/news-releases/nongshim-shin-ramyun-becomes-part-of-the-k-culture-wave-with-netflixs-k-pop-demon-hunters-302533345.html 12 https://www.netflix.com/tudum/articles/mark-rober-netflix 4 Product + Innovation Netflix has a rich history of leveraging cutting-edge technology to deliver a best-in-class entertainment experience for members. Our new TV UI is a good example—we’ve rolled it out to 85% of TV devices and results so far have exceeded our prelaunch expectations. For many years now, ML and AI have been powering our title recommendations as well as production and promotion technology. Given our significant data assets and at-scale products and business processes, we are very well positioned to effectively leverage ongoing advances in AI. We believe Generative AI presents a significant opportunity for us to deliver benefits to our members, creators, and business, including: We’re leveraging GenAI to further enhance the member experience by improving the quality of our recommendations and content discovery features. One example is our beta testing of a conversational search experience that allows members to use natural language to explore the catalog and discover the perfect title for that moment. Another is the way we’re using GenAI to localize promotional assets in a variety of languages so titles can more easily travel to audiences who will love them around the globe. We’re empowering creators with a broad set of GenAI tools to help them achieve their visions and deliver even more impactful titles for members. For example, in Happy Gilmore 2, filmmakers used GenAI coupled with ML and Eyeline’s13 proprietary volumetric capture technologies to de-age characters during the opening flashback scene. And the producers of Billionaires’ Bunker used various GenAI tools during pre-production, including for pre-visualization to explore wardrobe and set designs. To help our creative partners use these new technologies responsibly, we recently released production guidance for creators. And in our ads business we are striving to create a better experience for members and help advertisers drive the best results. In Q4, we are using AI to test new ad formats, to generate the most relevant ad creative and placement for members, and for faster development of media plans. With these advancements, we’ll be able to test, iterate, and innovate on dozens of ad formats by 2026. Monetization We’ve come a long way in building our advertising business in less than three years. In that time, we’ve gone from zero members on our ads plan to achieving sufficient scale in all 12 of our ads markets (and we’ll continue to grow from here), building out our ad sales and operations teams, and enhancing our capabilities for advertisers including launching our own first party ad tech stack (Netflix Ads Suite). We have a solid foundation and are increasingly confident in the outlook for our ads business. We are now on track to more than double our ads revenue in 2025 (still off a relatively small base) and we successfully concluded our US upfront with commitments more than doubling this year. With the Netflix Ads Suite fully deployed across all our ads markets for a full quarter, we now have greater opportunities for innovation like enhanced targeting and for integrating additional demand sources. For instance, we recently announced we will integrate Amazon’s DSP globally and AJA’s DSP in Japan into our programmatic offering, with availability beginning in Q4’25. These efforts should help create a better, more relevant experience for our members and help advertisers drive even better results. __________________________________ 13 Eyeline is Netflix's VFX, technology and innovation company. 5 Competition The entertainment business is very broad, very large, and fiercely competitive. In addition to other streaming services, we compete with linear TV, social media, video gaming, theatrical movies, concert going, book reading, music listening, and all the options people have for their leisure time. As a result, we’ve always faced and continue to face intense competition from many formidable companies (local and global) in a dynamic competitive landscape fueled by innovation and occasional consolidation. Through it all, we’ve learned that focus and continuous improvement are the best ways for us to compete and grow our business. To achieve a leadership position in entertainment, we’ve had to build many capabilities including analytics to help optimize our content spend across licensing and internal development, as well as across genres and geographies. We’ve had to build out the people, partnerships, and infrastructure to produce series and films in over 50 countries in many different languages. We’ve learned how to create and nurture big franchises like Stranger Things, Squid Game, and Bridgerton. And we’ve had to continually innovate and evolve our user experience, recommendations, plans and pricing, payments infrastructure, and distribution partnerships across the globe. So, while our strategy of focus and continuous improvement is simple, the execution is not easy. We embrace change and relish and thrive on competition as it pushes us to improve our service even faster for our members. Cash Flow and Capital Structure We prioritize profitable growth by reinvesting in our business, both organically and through selective M&A, while maintaining ample liquidity and returning excess cash to shareholders through share repurchases. Net cash generated from operating activities in Q3 was $2.8B vs. $2.3B in the prior year period. Free cash flow14 in Q3’25 totaled $2.7B vs. $2.2B in Q3’24. We now expect 2025 free cash flow of approximately $9B (+/- a few hundred million dollars), up from our prior forecast of $8B-$8.5B. This new forecast reflects the timing of cash payments and lower content spend. During the quarter we repurchased 1.5M shares for $1.9B, leaving $10.1B remaining under our existing share repurchase authorization. We ended the quarter with gross debt of $14.5B and cash and cash equivalents of $9.3B. Reference For quick reference, our past investor letters can be found here15. ___________________________________ 14 Defined as cash provided by (used in) operating activities less purchases of property and equipment. 15 https://ir.netflix.net/financials/quarterly-earnings/default.aspx 6 Regional Breakdown (in millions) Q3'24 Q4'24 Q1'25 Q2'25 Q3'25 UCAN: Revenue $ 4,322 $ 4,517 $ 4,617 $ 4,929 $ 5,072 Y/Y % Growth 16 % 15 % 9 % 15 % 17 % F/X Neutral Y/Y % Growth 16 % 15 % 9 % 15 % 17 % EMEA: Revenue $ 3,133 $ 3,288 $ 3,405 $ 3,538 $ 3,699 Y/Y % Growth 16 % 18 % 15 % 18 % 18 % F/X Neutral Y/Y % Growth 17 % 16 % 16 % 16 % 15 % LATAM: Revenue $ 1,241 $ 1,230 $ 1,262 $ 1,307 $ 1,371 Y/Y % Growth 9 % 6 % 8 % 9 % 10 % F/X Neutral Y/Y % Growth 46 % 35 % 27 % 23 % 20 % APAC: Revenue $ 1,128 $ 1,212 $ 1,259 $ 1,305 $ 1,369 Y/Y % Growth 19 % 26 % 23 % 24 % 21 % F/X Neutral Y/Y % Growth 21 % 24 % 26 % 23 % 20 % F/X Neutral revenue growth excludes the year over year effect of foreign exchange rate movements and the impact of hedging gains/losses realized as revenues. Assumes foreign exchange rates remained constant with foreign exchange rates from each of the corresponding months of the prior-year period. 7 F/X Neutral Operating Margin Disclosure To provide additional transparency around our operating margin, we disclose each quarter our year-to-date (YTD) operating margin based on F/X rates at the beginning of each year. This will allow investors to see how our operating margin is tracking against our target (which was set in January of 2025 based on F/X rates at that time), absent intra-year fluctuations in F/X. 8 October 21, 2025 Earnings Interview, 1:45pm PT Our live video interview will be on youtube/netflixir16 at 1:45pm PT today. Co-CEOs Greg Peters and Ted Sarandos, CFO Spence Neumann and VP of Finance & Capital Markets Spencer Wang, will all be on the video to answer questions submitted by sellside analysts. IR Contact: PR Contact: Lowell Singer Emily Feingold VP, Investor Relations VP, Corporate Communications 818 434-2141 323 287-0756 __________________________________ 16 https://www.youtube.com/netflixir 9 Use of Non-GAAP Measures This shareholder letter and its attachments include reference to the non-GAAP financial measures of F/X neutral revenue and adjusted operating profit and margin, free cash flow and net debt. Management believes that free cash flow is an important liquidity metric because it measures, during a given period, the amount of cash generated that is available to repay debt obligations, make strategic acquisitions and investments and for certain other activities like stock repurchases. Management believes that F/X neutral revenue and adjusted operating profit and margin allow investors to compare our projected results to our actual results absent year-over-year and intra-year currency fluctuations, respectively, and the impact of restructuring costs. Management believes net debt is a useful measure of the company's liquidity, capital structure, and leverage. However, these non-GAAP financial measures should be considered in addition to, not as a substitute for or superior to, net income, operating income (profit), operating margin, diluted earnings per share and net cash provided by (used in) operating activities, or other financial measures prepared in accordance with GAAP. Reconciliation to the GAAP equivalent of these non-GAAP measures are contained in tabular form on the attached unaudited financial statements and in the F/X neutral operating margin disclosure above. We are not able to reconcile forward-looking non-GAAP financial measures because we are unable to predict without unreasonable effort the exact amount or timing of the reconciling items, including property and equipment, and the impact of changes in currency exchange rates. The variability of these items could have a significant impact on our future GAAP financial results. Forward-Looking Statements This shareholder letter contains certain forward-looking statements within the meaning of the federal securities laws, including statements regarding our expected results for the fiscal quarter and fiscal year ending December 31, 2025; adoption and growth of streaming entertainment; growth strategy and outlook; partnerships; market opportunity; ability to increase our share of engagement; tax expense; impact of, and resolution of, tax matters, including Brazilian non-income tax assessments; competitive landscape and position; entertainment offerings, including TV shows, movies, games, and live programming and content renewals; engagement; consumer products; live experiences; content and technology investments; production infrastructure; slate strength; pricing and plans strategy; ad-supported tier and its prospects; advertising, including sales and our ad-tech platform and growth of our advertising business; product strategy including the use of AI; impact of foreign exchange rates; foreign currency exchange hedging program; stock repurchases; advertising revenue; revenue and revenue growth; membership growth; operating income, operating margin, net income, earnings per share, capital allocation, and free cash flow. The forward-looking statements in this letter are subject to risks and uncertainties that could cause actual results and events to differ, including, without limitation: our ability to attract new members and engage and retain existing members; our ability to compete effectively, including for consumer engagement with different modes of entertainment; failing to improve the variety and quality of entertainment offerings; adoption of the ads plan and paid sharing; maintenance and expansion of device platforms for streaming; fluctuations in consumer usage of our service; service disruptions; production risks; macroeconomic conditions; content slate and timing of content releases. A detailed discussion of these and other risks and uncertainties that could cause actual results and events to differ materially from such forward-looking statements is included in our filings with the Securities and Exchange Commission, including our Annual Report on Form 10-K, filed with the Securities and Exchange Commission (“SEC”) on January 27, 2025. The Company provides internal forecast numbers. Investors should anticipate that actual performance will vary from these forecast numbers based on risks and uncertainties discussed above and in our Annual Report on Form 10-K. We undertake no obligation to update forward-looking statements to reflect events or circumstances occurring after the date of this shareholder letter. 10 Netflix, Inc. Consolidated Statements of Operations (unaudited) (in thousands, except per share data) Three Months Ended Nine Months Ended September 30, June 30, September 30, September 30, September 30, 2025 2025 2024 2025 2024 Revenues $ 11,510,307 $ 11,079,166 $ 9,824,703 $ 33,132,274 $ 28,754,453 Cost of revenues 6,164,250 5,325,311 5,119,884 16,752,708 15,271,100 Sales and marketing 786,295 713,265 642,926 2,187,930 1,941,350 Technology and development 853,584 824,683 735,063 2,501,090 2,148,790 General and administrative 457,931 441,213 417,353 1,320,606 1,248,365 Operating income 3,248,247 3,774,694 2,909,477 10,369,940 8,144,848 Other income (expense): Interest expense (175,294) (182,649) (184,830) (542,115) (526,130) Interest and other income (expense) 36,457 39,630 (21,693) 126,986 212,671 Income before income taxes 3,109,410 3,631,675 2,702,954 9,954,811 7,831,389 Provision for income taxes (562,494) (506,262) (339,445) (1,392,131) (988,365) Net income $ 2,546,916 $ 3,125,413 $ 2,363,509 $ 8,562,680 $ 6,843,024 Earnings per share: Basic $ 6.00 $ 7.35 $ 5.52 $ 20.12 $ 15.91 Diluted $ 5.87 $ 7.19 $ 5.40 $ 19.67 $ 15.56 Weighted-average shares of common stock outstanding: Basic 424,455 425,211 428,239 425,635 430,125 Diluted 434,039 434,883 437,898 435,284 439,757 11 Netflix, Inc. Consolidated Balance Sheets (in thousands) As of September 30, December 31, 2025 2024 (unaudited) Assets Current assets: Cash and cash equivalents $ 9,287,287 $ 7,804,733 Short-term investments 37,105 1,779,006 Other current assets 3,638,543 3,516,640 Total current assets 12,962,935 13,100,379 Content assets, net 32,639,879 32,452,462 Property and equipment, net 1,837,889 1,593,756 Other non-current assets 7,494,132 6,483,777 Total assets $ 54,934,835 $ 53,630,374 Liabilities and Stockholders' Equity Current liabilities: Current content liabilities $ 4,102,640 $ 4,393,681 Accounts payable 793,233 899,909 Accrued expenses and other liabilities 3,111,311 2,156,544 Deferred revenue 1,724,675 1,520,813 Short-term debt — 1,784,453 Total current liabilities 9,731,859 10,755,400 Non-current content liabilities 1,591,973 1,780,806 Long-term debt 14,463,020 13,798,351 Other non-current liabilities 3,193,948 2,552,250 Total liabilities 28,980,800 28,886,807 Stockholders' equity: Common stock 7,080,325 6,252,126 Treasury stock at cost (20,270,631) (13,171,638) Accumulated other comprehensive income (loss) (719,256) 362,162 Retained earnings 39,863,597 31,300,917 Total stockholders' equity 25,954,035 24,743,567 Total liabilities and stockholders' equity $ 54,934,835 $ 53,630,374 Supplemental Information Total streaming content obligations* $ 20,940,900 $ 23,248,931 * Total streaming content obligations are comprised of content liabilities included in "Current content liabilities" and "Non-current content liabilities" on the Consolidated Balance Sheets and obligations that are not reflected on the Consolidated Balance Sheets as they did not yet meet the criteria for recognition. 12 Netflix, Inc. Consolidated Statements of Cash Flows (unaudited) (in thousands) Three Months Ended Nine Months Ended September 30, June 30, September 30, September 30, September 30, 2025 2025 2024 2025 2024 Cash flows from operating activities: Net income $ 2,546,916 $ 3,125,413 $ 2,363,509 $ 8,562,680 $ 6,843,024 Adjustments to reconcile net income to net cash provided by operating activities: Additions to content assets (4,653,935) (3,835,813) (4,016,396) (12,039,405) (11,794,215) Change in content liabilities 24,262 (214,052) (83,585) (601,043) (639,598) Amortization of content assets 4,002,744 3,832,074 3,699,521 11,657,930 11,140,016 Depreciation and amortization of property, equipment and intangibles 87,326 80,013 80,914 247,406 249,375 Stock-based compensation expense 80,986 80,862 65,650 233,825 210,761 Foreign currency remeasurement loss (gain) on debt (1,707) 55,238 104,809 82,078 (68,684) Other non-cash items 142,293 120,139 128,082 377,162 363,851 Deferred income taxes 20,539 (135,755) (200,982) (279,144) (517,446) Changes in operating assets and liabilities: Other current assets (169,597) (176,683) 54,956 (477,647) 64,046 Accounts payable 139,451 11,046 30,597 (125,929) (134,026) Accrued expenses and other liabilities 707,151 (267,235) 179,011 746,329 316,490 Deferred revenue (3,686) 118,635 39,328 203,862 70,079 Other non-current assets and liabilities (97,569) (370,624) (124,313) (550,473) (279,203) Net cash provided by operating activities 2,825,174 2,423,258 2,321,101 8,037,631 5,824,470 Cash flows from investing activities: Purchases of property and equipment (164,719) (155,889) (126,863) (448,885) (280,864) Purchases of investments (3,850) (1,650) (1,742,246) (161,515) (1,742,246) Proceeds from maturities and sales of investments 176,250 962,413 — 1,908,617 — Other investing activities 36,190 (36,190) — — — Net cash provided by (used in) investing activities 43,871 768,684 (1,869,109) 1,298,217 (2,023,110) Cash flows from financing activities: Proceeds from issuance of debt — — 1,794,460 — 1,794,460 Repayments of debt — (1,033,450) — (1,833,450) (400,000) Proceeds from issuance of common stock 70,215 169,066 143,244 590,883 530,875 Repurchases of common stock (1,856,885) (1,654,327) (1,700,000) (7,047,608) (5,299,998) Taxes paid related to net share settlement of equity awards (6,196) (6,114) (2,024) (40,180) (5,732) Other financing activities 55,837 21,957 (9,084) 62,142 (15,334) Net cash provided by (used in) financing activities (1,737,029) (2,502,868) 226,596 (8,268,213) (3,395,729) Effect of exchange rate changes on cash, cash equivalents, and restricted cash (21,721) 287,471 153,452 415,896 (65,061) Net increase in cash, cash equivalents, and restricted cash 1,110,295 976,545 832,040 1,483,531 340,570 Cash, cash equivalents and restricted cash at beginning of period 8,180,573 7,204,028 6,627,045 7,807,337 7,118,515 Cash, cash equivalents and restricted cash at end of period $ 9,290,868 $ 8,180,573 $ 7,459,085 $ 9,290,868 $ 7,459,085 Three Months Ended Nine Months Ended September 30, June 30, September 30, September 30, September 30, 2025 2025 2024 2025 2024 Non-GAAP free cash flow reconciliation: Net cash provided by operating activities $ 2,825,174 $ 2,423,258 $ 2,321,101 $ 8,037,631 $ 5,824,470 Purchases of property and equipment (164,719) (155,889) (126,863) (448,885) (280,864) Non-GAAP free cash flow $ 2,660,455 $ 2,267,369 $ 2,194,238 $ 7,588,746 $ 5,543,606 13 Netflix, Inc. Non-GAAP Information (unaudited) (in thousands, except percentages) The tables below provide a non-GAAP reconciliation of reported and constant currency revenue growth by region for the quarters ended September 30, 2024, December 31, 2024, March 31, 2025, June 30, 2025, and September 30, 2025. The regions presented in the tables below include United States and Canada ("UCAN"), Europe, Middle East, and Africa ("EMEA"), Latin America ("LATAM"), and Asia-Pacific ("APAC"). Three Months Ended Three Months Ended Change September 30, September 30, 2024 2023 Q3'24 vs. Q3'23 Revenues As Reported Constant Currency Adjustment Hedging (Gains) Losses Included in Revenues Constant Currency Revenues As Reported Hedging (Gains) Losses Included in Revenues Less Hedging Impact Reported Change Constant Currency Change UCAN (1) $ 4,322,476 $ 7,898 $ (3,265) $ 4,327,109 $ 3,735,133 $ — $ 3,735,133 16 % 16 % EMEA 3,133,466 31,454 (1,857) 3,163,063 2,693,146 — 2,693,146 16 % 17 % LATAM 1,240,892 456,746 (34,654) 1,662,984 1,142,811 — 1,142,811 9 % 46 % APAC 1,127,869 28,055 (8,408) 1,147,516 948,216 — 948,216 19 % 21 % Three Months Ended Three Months Ended Change December 31, December 31, 2024 2023 Q4'24 vs. Q4'23 Revenues As Reported Constant Currency Adjustment Hedging (Gains) Losses Included in Revenues Constant Currency Revenues As Reported Hedging (Gains) Losses Included in Revenues Less Hedging Impact Reported Change Constant Currency Change UCAN $ 4,517,018 $ 3,153 $ (5,564) $ 4,514,607 $ 3,930,557 $ — $ 3,930,557 15 % 15 % EMEA 3,287,604 (46,338) (12,789) 3,228,477 2,783,530 — 2,783,530 18 % 16 % LATAM 1,229,771 356,709 (28,307) 1,558,173 1,156,023 — 1,156,023 6 % 35 % APAC 1,212,120 (12,752) (7,107) 1,192,261 962,715 — 962,715 26 % 24 % Three Months Ended Three Months Ended Change March 31, March 31, 2025 2024 Q1'25 vs. Q1'24 Revenues As Reported Constant Currency Adjustment Hedging (Gains) Losses Included in Revenues Constant Currency Revenues As Reported Hedging (Gains) Losses Included in Revenues Less Hedging Impact Reported Change Constant Currency Change UCAN $ 4,617,098 $ 23,338 $ (14,552) $ 4,625,884 $ 4,224,315 $ 831 $ 4,225,146 9 % 9 % EMEA 3,404,676 146,975 (105,225) 3,446,426 2,958,193 4,687 2,962,880 15 % 16 % LATAM 1,261,934 243,068 (13,936) 1,491,066 1,165,008 6,266 1,171,274 8 % 27 % APAC 1,259,093 62,243 (31,083) 1,290,253 1,022,924 (543) 1,022,381 23 % 26 % (1) Excludes DVD revenues in the prior year comparative period of September 30, 2023. 14 Three Months Ended Three Months Ended Change June 30, June 30, 2025 2024 Q2'25 vs. Q2'24 Revenues As Reported Constant Currency Adjustment Hedging (Gains) Losses Included in Revenues Constant Currency Revenues As Reported Hedging (Gains) Losses Included in Revenues Less Hedging Impact Reported Change Constant Currency Change UCAN $ 4,929,003 $ 8,036 $ (6,431) $ 4,930,608 $ 4,295,560 $ (3,183) $ 4,292,377 15 % 15 % EMEA 3,538,175 (122,664) 42,049 3,457,560 3,007,772 (15,344) 2,992,428 18 % 16 % LATAM 1,306,735 161,306 14,033 1,482,074 1,204,145 (1,759) 1,202,386 9 % 23 % APAC 1,305,253 (16,166) (12,266) 1,276,821 1,051,833 (13,015) 1,038,818 24 % 23 % Three Months Ended Three Months Ended Change September 30, September 30, 2025 2024 Q3'25 vs. Q3'24 Revenues As Reported Constant Currency Adjustment Hedging (Gains) Losses Included in Revenues Constant Currency Revenues As Reported Hedging (Gains) Losses Included in Revenues Less Hedging Impact Reported Change Constant Currency Change UCAN $ 5,071,781 $ 1,816 $ (2,196) $ 5,071,401 $ 4,322,476 $ (3,265) $ 4,319,211 17 % 17 % EMEA 3,699,052 (199,597) 113,580 3,613,035 3,133,466 (1,857) 3,131,609 18 % 15 % LATAM 1,370,913 53,678 26,300 1,450,891 1,240,892 (34,654) 1,206,238 10 % 20 % APAC 1,368,561 (14,750) (8,319) 1,345,492 1,127,869 (8,408) 1,119,461 21 % 20 % Total Revenues $ 11,510,307 $ (158,853) $ 129,365 $ 11,480,819 $ 9,824,703 $ (48,184) $ 9,776,519 17 % 17 % As of September 30, 2025 Non-GAAP Net Debt reconciliation: Total debt $ 14,463,020 Add: Debt issuance costs and original issue discount 59,480 Less: Cash and cash equivalents (9,287,287) Less: Short-term investments (37,105) Net debt $ 5,198,108 15
+
+## 3. Forward Guidance
+[NO DATA — 0 series]
+
+## 4. Consensus History
+
+Data notes: AV EARNINGS failed for NFLX; AV EARNINGS_ESTIMATES failed for NFLX; AV INCOME_STATEMENT failed for NFLX; Forward estimates not PIT-safe in historical mode
+
+## 5. Prior Financial Trends
+Coverage: 8 quarters | Sources: xbrl=8
+
+### Income Statement Trend
+| Metric           | Q2_FY2025 | Q1_FY2025 | Q4_FY2024 | Q3_FY2024 | Q2_FY2024 | Q1_FY2024 | Q4_FY2023 | Q3_FY2023 |
+|------------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Revenue          | $11.08B   | $10.54B   | $10.25B   | $9.82B    | $9.56B    | $9.37B    | $8.83B    | $8.54B    |
+| Cost of Revenue  | $5.33B    | $5.26B    | $5.77B    | $5.12B    | $5.17B    | $4.98B    | $5.31B    | $4.93B    |
+| SG&A             | $713.3M   | $688.4M   | —         | —         | —         | —         | —         | —         |
+| R&D              | $824.7M   | $822.8M   | $776.5M   | $735.1M   | $711.3M   | $702.5M   | $673.3M   | $657.2M   |
+| D&A              | $80.0M    | $80.1M    | $79.5M    | $80.9M    | $81.2M    | $87.2M    | $86.6M    | $90.7M    |
+| Interest Expense | $182.6M   | $184.2M   | $192.6M   | $184.8M   | $168.0M   | $173.3M   | $175.2M   | $175.6M   |
+| Income Tax       | $506.3M   | $323.4M   | $265.7M   | $339.4M   | $366.6M   | $282.4M   | $210.3M   | $231.6M   |
+| Operating Income | $3.77B    | $3.35B    | $2.27B    | $2.91B    | $2.60B    | $2.63B    | $1.50B    | $1.92B    |
+| Net Income       | $3.13B    | $2.89B    | $1.87B    | $2.36B    | $2.15B    | $2.33B    | $937.8M   | $1.68B    |
+| EPS Diluted      | $7.19     | $6.61     | —         | $5.40     | $4.88     | $5.28     | —         | $3.73     |
+
+### Margins and Efficiency
+| Metric             | Q2_FY2025 | Q1_FY2025 | Q4_FY2024 | Q3_FY2024 | Q2_FY2024 | Q1_FY2024 | Q4_FY2023 | Q3_FY2023 |
+|--------------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Operating Margin % | 34.1%     | 31.7%     | 22.2%     | 29.6%     | 27.2%     | 28.1%     | 16.9%     | 22.4%     |
+| Net Margin %       | 28.2%     | 27.4%     | 18.2%     | 24.1%     | 22.5%     | 24.9%     | 10.6%     | 19.6%     |
+| R&D % Revenue      | 7.4%      | 7.8%      | 7.6%      | 7.5%      | 7.4%      | 7.5%      | 7.6%      | 7.7%      |
+| Effective Tax Rate | 13.9%     | 10.1%     | 12.4%     | 12.6%     | 14.6%     | 10.8%     | 18.3%     | 12.1%     |
+| Diluted Shares     | 434.9M    | 437.0M    | —         | 437.9M    | 439.7M    | 441.7M    | —         | 450.0M    |
+
+### Cash Flow and Capital
+| Metric              | Q2_FY2025 | Q1_FY2025 | Q4_FY2024 | Q3_FY2024 | Q2_FY2024 | Q1_FY2024 | Q4_FY2023 | Q3_FY2023 |
+|---------------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Operating Cash Flow | $2.42B    | $2.79B    | $1.54B    | $2.32B    | $1.29B    | $2.21B    | $1.66B    | $1.99B    |
+| Capex               | $155.9M   | $128.3M   | $158.7M   | $126.9M   | $78.3M    | $75.7M    | $81.6M    | $103.9M   |
+| Free Cash Flow      | $2.27B    | $2.66B    | $1.38B    | $2.19B    | $1.21B    | $2.14B    | $1.58B    | $1.89B    |
+| Buybacks            | $1.65B    | $3.50B    | $963.7M   | $1.70B    | $1.60B    | $2B       | $2.50B    | $2.50B    |
+
+### Balance Sheet
+| Metric               | Q2_FY2025 | Q1_FY2025 | Q4_FY2024 | Q3_FY2024 | Q2_FY2024 | Q1_FY2024 | Q4_FY2023 | Q3_FY2023 |
+|----------------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Cash & Equivalents   | $8.18B    | $7.20B    | $7.80B    | $7.46B    | $6.62B    | $7.02B    | $7.12B    | $7.35B    |
+| Total Assets         | $53.10B   | $52.09B   | $53.63B   | $52.28B   | $49.10B   | $48.83B   | $48.73B   | $49.50B   |
+| Stockholders' Equity | $24.95B   | $24.03B   | $24.74B   | $22.72B   | $22.11B   | $21.37B   | $20.59B   | $22.11B   |
+| Long-Term Debt       | $14.45B   | $14.01B   | $13.80B   | $14.16B   | $12.18B   | $13.22B   | $14.14B   | $13.90B   |
+| Debt / Equity        | 0.58      | 0.58      | 0.56      | 0.62      | 0.55      | 0.62      | 0.69      | 0.63      |
+
+### Revenue Mix — Business Segments
+| Row                | Q2_FY2025 | Q1_FY2025 | Q4_FY2024 | Q3_FY2024 |
+|--------------------|-----------|-----------|-----------|-----------|
+| Reportable Segment | 100.0%    | 100.0%    | —         | —         |
+
+### Derivation notes
+
+**Q4_FY2024**:
+- revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- cost_of_revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- rd_expense: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- depreciation_amortization: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- interest_expense: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- income_tax: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- operating_income: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- net_income: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- operating_cash_flow: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- capex: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+- buybacks: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-25-000044 (10-K), 9m_ytd from 0001065280-24-000287 (10-Q)
+
+**Q4_FY2023**:
+- revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- cost_of_revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- rd_expense: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- depreciation_amortization: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- interest_expense: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- income_tax: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- operating_income: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- net_income: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- operating_cash_flow: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- capex: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+- buybacks: derived via fy_minus_9m_ytd, inputs: annual from 0001065280-24-000030 (10-K), 9m_ytd from 0001065280-23-000273 (10-Q)
+
+Data notes: 1 gaps in packet
+
+## 6. Inter-Quarter Events
+
+Ticker: NFLX | Sector: CommunicationServices | Industry: Entertainment
+Window: 2025-07-17T16:04:28-04:00 → 2025-10-21T16:02:25-04:00 (pit_cutoff)
+Dates: 2025-07-17 → 2025-10-21 | PIT: 2025-10-21T16:02:25-04:00 | Mode: historical
+Schema: inter_quarter_context.v1 | Assembled: 2026-05-03T09:33:31.586135+00:00
+Summary: 66 trading days, 10 significant, 3 gap | 67 news, 1 filings, 0 dividends, 0 splits
+
+### Trading Days
+
+| Date | Trd | Bnd | Close | Ret% | SPY% | Sect% | Adj% | Sig | Gap |
+|---|---|---|---|---|---|---|---|---|---|
+| 2025-07-17 | Y | prev | 1274.17 | 1.91 | 0.61 | 0.35 | 1.3 | — | — |
+| 2025-07-18 | Y | — | 1209.24 | -5.1 | -0.07 | -0.46 | -5.03 | Y | N |
+| 2025-07-21 | Y | — | 123.327 | 1.99 | 0.19 | 1.34 | 1.8 | N | N |
+| 2025-07-22 | Y | — | 1190.08 | -3.5 | 0.01 | 0.23 | -3.51 | Y | Y |
+| 2025-07-23 | Y | — | 117.678 | -1.12 | 0.85 | 0.55 | -1.97 | N | N |
+| 2025-07-24 | Y | — | 118.076 | 0.34 | 0.03 | 0.17 | 0.31 | N | N |
+| 2025-07-25 | Y | — | 118.049 | -0.02 | 0.42 | -0.93 | -0.44 | N | N |
+| 2025-07-28 | Y | — | 117.46 | -0.5 | -0.03 | -0.54 | -0.47 | N | N |
+| 2025-07-29 | Y | — | 116.874 | -0.5 | -0.26 | -0.86 | -0.24 | N | N |
+| 2025-07-30 | Y | — | 118.42 | 1.32 | -0.13 | 0.31 | 1.45 | N | N |
+| 2025-07-31 | Y | — | 115.94 | -2.09 | -0.38 | 0.9 | -1.71 | N | N |
+| 2025-08-01 | Y | — | 115.86 | -0.07 | -1.64 | -1.2 | 1.57 | N | N |
+| 2025-08-02 | N | — | — | — | — | — | — | — | — |
+| 2025-08-04 | Y | — | 117.099 | 1.07 | 1.52 | 1.92 | -0.45 | N | N |
+| 2025-08-05 | Y | — | 114.787 | -1.97 | -0.51 | -0.78 | -1.46 | N | N |
+| 2025-08-06 | Y | — | 117.848 | 2.67 | 0.77 | 0.38 | 1.9 | N | N |
+| 2025-08-07 | Y | — | 118.037 | 0.16 | -0.08 | -0.43 | 0.24 | N | N |
+| 2025-08-08 | Y | — | 121.164 | 2.65 | 0.78 | 0.34 | 1.87 | N | N |
+| 2025-08-11 | Y | — | 121.831 | 0.55 | -0.2 | 0.51 | 0.75 | N | N |
+| 2025-08-12 | Y | — | 122.528 | 0.57 | 1.06 | 1.91 | -0.49 | N | N |
+| 2025-08-13 | Y | — | 120.444 | -1.7 | 0.34 | 0.78 | -2.04 | Y | Y |
+| 2025-08-14 | Y | — | 123.056 | 2.17 | 0.01 | 0.08 | 2.16 | Y | N |
+| 2025-08-15 | Y | — | 123.895 | 0.68 | -0.23 | 0.25 | 0.91 | N | N |
+| 2025-08-18 | Y | — | 124.509 | 0.5 | -0.02 | -0.61 | 0.52 | N | N |
+| 2025-08-19 | Y | — | 121.415 | -2.48 | -0.54 | -0.56 | -1.94 | N | N |
+| 2025-08-20 | Y | — | 121.386 | -0.02 | -0.27 | -0.3 | 0.25 | N | N |
+| 2025-08-21 | Y | — | 120.621 | -0.63 | -0.4 | -0.11 | -0.23 | N | N |
+| 2025-08-22 | Y | — | 120.465 | -0.13 | 1.54 | 1.44 | -1.67 | N | N |
+| 2025-08-25 | Y | — | 121.807 | 1.11 | -0.44 | 0.16 | 1.55 | N | N |
+| 2025-08-26 | Y | — | 122.609 | 0.66 | 0.42 | -0.44 | 0.24 | N | N |
+| 2025-08-27 | Y | — | 122.35 | -0.21 | 0.23 | 0.17 | -0.44 | N | N |
+| 2025-08-28 | Y | — | 123.145 | 0.65 | 0.35 | 0.38 | 0.3 | N | N |
+| 2025-08-29 | Y | — | 120.825 | -1.88 | -0.6 | -0.2 | -1.28 | N | N |
+| 2025-09-02 | Y | — | 121.411 | 0.48 | -0.74 | -0.17 | 1.22 | N | N |
+| 2025-09-03 | Y | — | 122.618 | 0.99 | 0.54 | 1.67 | 0.45 | N | N |
+| 2025-09-04 | Y | — | 125.748 | 2.55 | 0.84 | 0.9 | 1.71 | N | N |
+| 2025-09-05 | Y | — | 124.382 | -1.09 | -0.29 | 0.53 | -0.8 | N | N |
+| 2025-09-08 | Y | — | 124.476 | 0.08 | 0.25 | 0.11 | -0.17 | N | N |
+| 2025-09-09 | Y | — | 126.325 | 1.49 | 0.23 | 0.57 | 1.26 | N | N |
+| 2025-09-10 | Y | — | 124.771 | -1.23 | 0.29 | -0.74 | -1.52 | N | N |
+| 2025-09-11 | Y | — | 120.35 | -3.54 | 0.83 | 1.54 | -4.37 | Y | Y |
+| 2025-09-12 | Y | — | 118.844 | -1.25 | -0.03 | 0.83 | -1.22 | N | N |
+| 2025-09-15 | Y | — | 120.226 | 1.16 | 0.53 | 1.41 | 0.63 | N | N |
+| 2025-09-16 | Y | — | 120.051 | -0.15 | -0.14 | -0.4 | -0.01 | N | N |
+| 2025-09-17 | Y | — | 122.85 | 2.33 | -0.12 | 0.26 | 2.45 | Y | N |
+| 2025-09-18 | Y | — | 120.778 | -1.69 | 0.47 | 0.08 | -2.16 | Y | N |
+| 2025-09-19 | Y | — | 122.697 | 1.59 | 0.22 | 0.41 | 1.37 | N | N |
+| 2025-09-22 | Y | — | 122.737 | 0.03 | 0.47 | -0.7 | -0.44 | N | N |
+| 2025-09-23 | Y | — | 121.847 | -0.73 | -0.54 | -0.14 | -0.19 | N | N |
+| 2025-09-24 | Y | — | 120.395 | -1.19 | -0.32 | -0.83 | -0.87 | N | N |
+| 2025-09-25 | Y | — | 120.824 | 0.36 | -0.46 | -0.34 | 0.82 | N | N |
+| 2025-09-26 | Y | — | 121.061 | 0.2 | 0.57 | 0.97 | -0.37 | N | N |
+| 2025-09-29 | Y | — | 120.641 | -0.35 | 0.28 | 0.32 | -0.63 | N | N |
+| 2025-09-30 | Y | — | 119.892 | -0.62 | 0.38 | -0.15 | -1.0 | N | N |
+| 2025-10-01 | Y | — | 117.09 | -2.34 | 0.34 | -1.4 | -2.68 | Y | N |
+| 2025-10-02 | Y | — | 116.253 | -0.71 | 0.12 | -0.22 | -0.83 | N | N |
+| 2025-10-03 | Y | — | 115.332 | -0.79 | -0.0 | -0.05 | -0.79 | N | N |
+| 2025-10-06 | Y | — | 116.331 | 0.87 | 0.36 | 0.1 | 0.51 | N | N |
+| 2025-10-07 | Y | — | 119.106 | 2.39 | -0.37 | -0.39 | 2.76 | Y | N |
+| 2025-10-08 | Y | — | 121.425 | 1.95 | 0.6 | -0.41 | 1.35 | N | N |
+| 2025-10-09 | Y | — | 123.107 | 1.39 | -0.29 | -0.57 | 1.68 | N | N |
+| 2025-10-10 | Y | — | 122.008 | -0.89 | -2.7 | -1.84 | 1.81 | N | N |
+| 2025-10-13 | Y | — | 121.903 | -0.09 | 1.53 | 0.92 | -1.62 | N | N |
+| 2025-10-14 | Y | — | 121.535 | -0.3 | -0.12 | 0.66 | -0.18 | N | N |
+| 2025-10-15 | Y | — | 120.329 | -0.99 | 0.44 | 0.71 | -1.43 | N | N |
+| 2025-10-16 | Y | — | 118.359 | -1.64 | -0.68 | -1.07 | -0.96 | N | N |
+| 2025-10-17 | Y | — | 119.936 | 1.33 | 0.57 | 0.67 | 0.76 | N | N |
+| 2025-10-20 | Y | — | 123.856 | 3.27 | 1.04 | 1.13 | 2.23 | Y | N |
+| 2025-10-21 | Y | cutoff | 124.135 | 0.23 | -0.0 | 0.35 | 0.23 | N | N |
+
+### News Events (67)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Title | Channels | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|
+| N1 [bz:46480211] | 2025-07-17 | post_market | Netflix Raises FY2025 Sales Guidance from $43.500B-$44.500B to $44.800B-$45.200B vs $44.469B Est | News ; Guidance | 1.16 | -2.49 | -5.04 |
+| N2 [bz:46480329] | 2025-07-17 | post_market | Netflix Sees Q3 Operating Margin 31.5%, Down From 34.1% In Q2 | News ; Guidance | 0.93 | -2.8 | -5.04 |
+| N3 [bz:46480463] | 2025-07-17 | post_market | Netflix Says "Similar To Past Years, We Expect Our Operating Margin In The Second Half Of 2025 Will Be Lower Than The First Half Due To Higher Content Amortization And Sales And Marketing Costs Associated With Our Larger Second Half Slate" | News ; Guidance | 0.85 | -3.01 | -5.04 |
+| N4 [bz:46487427] | 2025-07-18 | pre_market | Needham Reiterates Buy on Netflix, Maintains $1500 Price Target | News ; Price Target ; Reiteration ; Hot ; Analyst Ratings | -0.26 | -3.13 | -5.04 |
+| N5 [bz:46487639] | 2025-07-18 | pre_market | Netflix Sees 'Shockingly Strong' Retention, Subscriber Comeback In Q2 As WWE Stickiness, 'Squid Game' And Ad-Tier Drives Momentum, Analyst Says | Entertainment ; Large Cap ; Markets ; Analyst Ratings ; General | -0.06 | -2.77 | -5.04 |
+| N6 [bz:46489241] | 2025-07-18 | pre_market | Morgan Stanley Maintains Overweight on Netflix, Raises Price Target to $1500 | News ; Price Target ; Hot ; Analyst Ratings | -0.98 | -2.91 | -5.04 |
+| N7 [bz:46490044] | 2025-07-18 | pre_market | Piper Sandler Maintains Overweight on Netflix, Raises Price Target to $1500 | News ; Price Target ; Hot ; Analyst Ratings | -0.16 | -2.02 | -5.04 |
+| N8 [bz:46490069] | 2025-07-18 | pre_market | Rosenblatt Maintains Buy on Netflix, Raises Price Target to $1515 | News ; Price Target ; Hot ; Analyst Ratings | -0.39 | -2.18 | -5.04 |
+| N9 [bz:46490598] | 2025-07-18 | pre_market | TD Cowen Maintains Buy on Netflix, Raises Price Target to $1450 | News ; Price Target ; Hot ; Analyst Ratings | -1.73 | -2.01 | -5.04 |
+| N10 [bz:46490599] | 2025-07-18 | pre_market | TD Cowen Maintains Buy on Netflix, Raises Price Target to $1450 | News ; Price Target ; Hot ; Analyst Ratings | -1.73 | -2.01 | -5.04 |
+| N11 [bz:46491183] | 2025-07-18 | pre_market | These Analysts Boost Their Forecasts On Netflix Following Better-Than-Expected Q2 Results | Earnings ; News ; Price Target ; Markets ; Analyst Ratings ; Trading Ideas | -2.62 | -1.93 | -5.04 |
+| N12 [bz:46495625] | 2025-07-18 | in_market | JP Morgan Maintains Neutral on Netflix, Raises Price Target to $1300 | News ; Price Target ; Hot ; Analyst Ratings | 0.23 | -0.02 | -5.04 |
+| N13 [bz:46498606] | 2025-07-18 | in_market | Netflix's Blockbuster Profits Overshadowed By 'Anemic' Engagement | News ; Price Target ; Reiteration ; Top Stories ; Analyst Ratings ; Movers ; Tech ; Trading Ideas | 0.08 | -0.32 | -5.04 |
+| N14 [bz:46498628] | 2025-07-18 | in_market | Live On CNBC, Kevin Simpson Announces Sold A Netflix Covered Call | Trading Ideas | 0.09 | -0.38 | -5.04 |
+| N15 [bz:46501310] | 2025-07-18 | in_market | UBS Maintains Buy on Netflix, Raises Price Target to $1495 | News ; Price Target ; Hot ; Analyst Ratings | -0.53 | -0.51 | -5.04 |
+| N16 [bz:46502199] | 2025-07-18 | in_market | Bill Ackman Nixes Netflix In 2022: Here's How Much He Could Have Made | Entertainment ; Trading Ideas | -0.15 | -0.11 | -5.04 |
+| N17 [bz:46502255] | 2025-07-18 | in_market | Wells Fargo Maintains Overweight on Netflix, Raises Price Target to $1560 | News ; Price Target ; Hot ; Analyst Ratings | -0.2 | -0.21 | -5.04 |
+| N18 [bz:46515300] | 2025-07-21 | pre_market | Baird Maintains Outperform on Netflix, Raises Price Target to $1500 | News ; Price Target ; Hot ; Analyst Ratings | 0.12 | 0.32 | 1.83 |
+| N19 [bz:46532454] | 2025-07-21 | post_market | 'Netflix Using Startup Runway AI's Video Tools for Production'- Bloomberg | News ; General | -0.0 | -0.46 | -3.53 |
+| N20 [bz:46575394] | 2025-07-23 | in_market | Here's How Much $100 Invested In Netflix 5 Years Ago Would Be Worth Today | News ; Trading Ideas | -0.15 | -0.71 | -1.99 |
+| N21 [bz:46626407] | 2025-07-25 | pre_market | Netflix Climbs 1.5% After Key Trading Signal, Reversing Early Decline | Equities ; Technicals ; Opinion ; Signals ; Trading Ideas | 0.12 | -0.09 | -0.42 |
+| N22 [bz:46657918] | 2025-07-28 | pre_market | How Do Investors Really Feel About Netflix? | Short Sellers ; Short Ideas ; Trading Ideas | 0.98 | 0.87 | -0.49 |
+| N23 [bz:46729590] | 2025-07-30 | in_market | Netflix Hits Records With 'Happy Gilmore 2' Despite Lower Ratings Than Original 1996 Film | Entertainment ; Sports ; Trading Ideas ; General | -0.22 | 1.01 | 1.48 |
+| N24 [bz:46814654] | 2025-08-02 | market_closed | Adam Sandler Says He 'Didn't Want To Bug' Eminem For Happy Gilmore 2 Cameo, But The Rap Icon Said Yes Anyway: Here's How It's Faring For Netflix | Entertainment | -0.16 | 0.59 | -0.43 |
+| N25 [bz:46844396] | 2025-08-04 | post_market | Here's How Much $100 Invested In Netflix 5 Years Ago Would Be Worth Today | News ; Trading Ideas | -0.06 | -0.24 | -1.48 |
+| N26 [bz:46974916] | 2025-08-07 | in_market | This Is What Whales Are Betting On Netflix | Options ; Markets | -0.13 | 0.27 | 0.22 |
+| N27 [bz:47008367] | 2025-08-08 | in_market | Netflix's $6 Billion UK Spend Pays Off With Strong Growth, Membership Gains | Earnings ; News ; Top Stories ; Movers ; Media | -0.04 | 0.31 | 1.88 |
+| N28 [bz:47078667] | 2025-08-12 | post_market | Here's How Much You Would Have Made Owning Netflix Stock In The Last 15 Years | News ; Trading Ideas | -0.14 | 0.34 | -2.05 |
+| N29 [bz:47133221] | 2025-08-14 | in_market | Netflix Rides Global Growth Wave As Squid Game 3, Stranger Things 5 Boost Subscribers | Analyst Color ; News ; Top Stories ; Analyst Ratings ; Movers ; Tech ; Media ; Trading Ideas | -0.8 | -0.77 | 2.21 |
+| N30 [bz:47214094] | 2025-08-19 | in_market | P/E Ratio Insights for Netflix | News ; Intraday Update ; Markets | -0.02 | 0.74 | -1.93 |
+| N31 [bz:47347829] | 2025-08-26 | post_market | Netflix Wants You Off The Couch: Streamer Offers In-Person Games, Food And More Starting In November | Entertainment ; Long Ideas ; Top Stories ; Media ; Trading Ideas | -0.01 | 0.19 | -0.47 |
+| N32 [bz:47366679] | 2025-08-27 | in_market | How Is The Market Feeling About Netflix? | Short Sellers ; Short Ideas ; Trading Ideas | -0.1 | 0.13 | -0.47 |
+| N33 [bz:47403453] | 2025-08-28 | market_closed | Netflix Stock Up 1.4% After Key Trading Signal | Equities ; Technicals ; Opinion ; Signals ; Trading Ideas | 0.16 | -0.12 | -1.3 |
+| N34 [bz:47419732] | 2025-08-29 | in_market | Netflix Doubles Down on Expansion With 'KPop Demon Hunters' Success, Immersive Retail Push | Entertainment ; Large Cap | 0.07 | 0.2 | -1.3 |
+| N35 [bz:47451746] | 2025-09-02 | in_market | What Is Going On With Netflix Stock On Tuesday? | Entertainment ; News ; Media | 0.02 | 0.3 | 1.22 |
+| N36 [bz:47462530] | 2025-09-02 | post_market | $100 Invested In Netflix 5 Years Ago Would Be Worth This Much Today | News ; Trading Ideas | -0.06 | 0.19 | 0.47 |
+| N37 [bz:47590468] | 2025-09-10 | pre_market | Needham Reiterates Buy on Netflix, Maintains $1500 Price Target | News ; Price Target ; Reiteration ; Hot ; Analyst Ratings | -0.08 | -0.26 | -1.52 |
+| N38 [bz:47600065] | 2025-09-10 | in_market | Netflix's High Labor Productivity Is A 'Strong Positive' For Shareholders,' Says Bullish Analyst | Analyst Color ; Reiteration ; Analyst Ratings | -0.27 | -0.48 | -1.52 |
+| N39 [bz:47606508] | 2025-09-10 | in_market | Netflix Stock: A Deep Dive Into Analyst Perspectives (22 Ratings) | Analyst Ratings | -0.48 | -0.56 | -1.52 |
+| N40 [bz:47607653] | 2025-09-10 | in_market | 'Netflix Chief Product Officer Eunice Kim Is Leaving the Company' - Bloomberg News | News ; Management | -0.71 | -0.63 | -1.52 |
+| N41 [bz:47646614] | 2025-09-12 | in_market | If You Invested $100 In Netflix Stock 5 Years Ago, You Would Have This Much Today | News ; Trading Ideas | -0.42 | -0.11 | -1.23 |
+| N42 [bz:47650031] | 2025-09-12 | in_market | Stock Of The Day: Netflix At Crossroads — Can Support Hold This Time? | Technicals ; Trading Ideas | 0.0 | 0.4 | -1.23 |
+| N43 [bz:47710960] | 2025-09-17 | pre_market | Loop Capital Upgrades Netflix to Buy, Raises Price Target to $1350 | News ; Upgrades ; Price Target ; Hot ; Analyst Ratings | 0.34 | 0.32 | 2.43 |
+| N44 [bz:47747728] | 2025-09-18 | in_market | Unpacking the Latest Options Trading Trends in Netflix | Options ; Markets | -0.48 | -0.8 | -2.14 |
+| N45 [bz:47812018] | 2025-09-23 | pre_market | Trump's H1B Visa Fee Is 'Purely Destructive,' Warns Economist Paul Krugman: Knocking Away 'Pillar Supporting American Greatness' | Politics ; Economics ; Markets | 0.04 | 0.13 | -0.2 |
+| N46 [bz:47847963] | 2025-09-24 | in_market | This Is What Whales Are Betting On Netflix | Options ; Markets | -0.31 | 0.17 | -0.87 |
+| N47 [bz:47919866] | 2025-09-29 | in_market | Netflix Stock Is Volatile Following A Truth Social Post From Trump: What's Going On? | News ; Movers | -0.14 | -0.69 | -0.63 |
+| N48 [bz:47967651] | 2025-10-01 | in_market | Netflix Stock Slides As Musk Calls On Followers To 'Cancel' Subscriptions | News ; Social Media ; Movers | 0.25 | -0.45 | -2.69 |
+| N49 [bz:47972540] | 2025-10-01 | in_market | $100 Invested In Netflix 5 Years Ago Would Be Worth This Much Today | News ; Trading Ideas | -0.22 | -0.31 | -2.69 |
+| N50 [bz:47977985] | 2025-10-01 | in_market | Elon Musk Posts On X "Cancel Netflix" | News ; General | -0.28 | -0.39 | -2.69 |
+| N51 [bz:47994250] | 2025-10-02 | in_market | Netflix's Options: A Look at What the Big Money is Thinking | Options ; Markets | 0.65 | 2.0 | -0.83 |
+| N52 [bz:47998497] | 2025-10-02 | in_market | What Does the Market Think About Netflix Inc? | Short Sellers ; Short Ideas ; Trading Ideas | 0.04 | 0.35 | -0.83 |
+| N53 [bz:48018820] | 2025-10-03 | in_market | Citigroup Maintains Neutral on Netflix, Raises Price Target to $1295 | News ; Price Target ; Hot ; Analyst Ratings | 0.92 | 1.06 | -0.8 |
+| N54 [bz:48030257] | 2025-10-03 | post_market | A Glimpse Into The Expert Outlook On Netflix Through 21 Analysts | Analyst Ratings | 0.06 | 0.25 | 0.54 |
+| N55 [bz:48066718] | 2025-10-07 | pre_market | Seaport Global Upgrades Netflix to Buy, Announces $1385 Price Target | News ; Upgrades ; Price Target ; Hot ; Analyst Ratings | 0.12 | 0.92 | 2.75 |
+| N56 [bz:48071386] | 2025-10-07 | pre_market | Itau BBA Initiates Coverage On Netflix with Outperform Rating, Announces Price Target of $1514 | News ; Price Target ; Initiation ; Hot ; Analyst Ratings | 0.02 | 0.81 | 2.75 |
+| N57 [bz:48075510] | 2025-10-07 | in_market | Decoding Netflix's Options Activity: What's the Big Picture? | Options ; Markets | 0.71 | 0.99 | 2.75 |
+| N58 [bz:48103630] | 2025-10-08 | in_market | 'Netflix set to bid for Champions League games in TV rights shake-up' - The Times | News | 0.87 | 0.92 | 1.37 |
+| N59 [bz:48123519] | 2025-10-09 | in_market | Netflix Launches New Party Games This Holiday Season | News | 1.29 | 1.43 | 1.67 |
+| N60 [bz:48131507] | 2025-10-09 | in_market | Live On CNBC, Josh Brown Hosts Segment Titled "Best Stocks In The Market: Netflix" | Trading Ideas | 0.34 | -0.24 | 1.67 |
+| N61 [bz:48232158] | 2025-10-15 | in_market | Netflix Unusual Options Activity For October 15 | Options ; Markets | -0.23 | -0.94 | -1.44 |
+| N62 [bz:48289167] | 2025-10-17 | post_market | Pentagon, Elon Musk Vs. Netflix: Could Battle Against 'Woke Garbage' Hurt Streaming Giant's Stock? | Entertainment ; Government ; Politics | -0.02 | 0.8 | 2.14 |
+| N63 [bz:48301019] | 2025-10-20 | pre_market | Is Netflix Inc Gaining or Losing Market Support? | Short Sellers ; Short Ideas ; Trading Ideas | 1.49 | 0.9 | 2.14 |
+| N64 [bz:48306110] | 2025-10-20 | in_market | If You Invested $100 In Netflix Stock 5 Years Ago, You Would Have This Much Today | News ; Trading Ideas | 0.65 | 0.82 | 2.14 |
+| N65 [bz:48306153] | 2025-10-20 | in_market | Insights Ahead: Netflix's Quarterly Earnings | Earnings | 0.65 | 0.9 | 2.14 |
+| N66 [bz:48316180] | 2025-10-20 | post_market | Netflix Q3 Earnings Preview: Will 'KPop Demon Hunters' Help Streamer Beat Estimates? | Entertainment ; Previews ; Trading Ideas | 0.05 | 0.17 | 0.23 |
+| N67 [bz:48330983] | 2025-10-21 | in_market | What's Going On With Netflix Stock Tuesday? | Earnings ; News ; Previews ; Movers | 0.17 | 0.21 | 0.23 |
+
+### Filing Events (1)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | Content | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2025-07-18 | post_market | 10-Q | 0001065280-25-000323 | — | — | 2025-06-30 | N | — | 0.17 | 0.32 | 1.83 |
+
+## 7. Sector Peer Earnings & Reactions
+
+Industry: Entertainment | Window: 2025-09-06 → 2025-10-21 | Peers: 1
+
+### PLAY — filed 2025-09-15 (post_market), accession 0001525769-25-000009 (FY ends Apr)
+
+Stock move:    Day -16.74%   Sess -8.04%   Hour -7.98%
+Sector-adj:    Day -16.33%   Sess -7.84%   Hour -7.42%   Best -7.42%
+Macro-adj:     Day -16.63%   Sess -8.19%   Hour -7.96%   Best -7.96%
+Headlines:
+- [bz:47679157] 2025-09-15 Dave & Buster's Enter Q2 Adj. EPS $0.40 Misses $0.92 Estimate, Sales $557.41M Miss $562.78M Estimate
+
+## 8. Macro Environment
+
+Session: post_market | Source: polygon | PIT: 2025-10-21
+SPY 671.06 | VIX 18.23 (last settled close)
+Bars: SPY minute≤PIT−60s, SPY daily settled through 2025-10-21
+
+### SPY Trend
+
+| Level | Open→PIT | Last60m | Gap | Today | Yest | 5D | 20D | YTD | MA50 | MA200 | Vs50D | Vs200D | VolRatio |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 671.06 | -0.04 | -0.12 | 0.0 | -0.0 | 1.04 | 1.37 | 1.22 | 14.82 | 656.06 | 605.76 | 2.29 | 10.78 | 1.03 |
+
+### Sector Context
+
+| Sector | ETF | LastRet | Label | Open→PIT | 5D | VsSPY5D |
+|---|---|---|---|---|---|---|
+| CommunicationServices | XLC | 0.35 | today | — | 1.79 | 0.42 |
+
+### Cross-Asset Indicators
+
+| Indicator | Level | LastRet | Label | 5D | YTD |
+|---|---|---|---|---|---|
+| Volatility (VIXY) | 32.84 | -0.51 | today | -6.55 | -28.55 |
+| Rates long (TLT) | 92 | 0.49 | today | 1.25 | 5.06 |
+| Rates short (SHY) | 83.12 | 0.02 | today | 0.11 | 1.42 |
+
+### Macro Catalysts
+
+| Bucket | Date | Time | Title | Channels |
+|---|---|---|---|---|
+| Today | 2025-10-21 | 08:41 | Johnson Redbook Retail Sales Index +5% In Second Week Of Oct. | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2025-10-21 | 04:46 | Stock Market Today: S&P 500, Dow Jones, Nasdaq Futures Climb—Netflix, Coca-Cola And RTX Corp In Focus | Earnings ; Equities ; Market Summary ; Futures ; Commodities ; Economics ; Federal Reserve ; Pre-Market Outlook ; Markets ; Trading Ideas |
+| Today | 2025-10-21 | 09:15 | Federal Reserve Governor Waller Says Fed Staff Studying 'Payment Accounts' To Firms That Currently Rely On Third-Party Banks; Says Payment Accounts Would Have Limited Use Of Fed Services And Receive Streamlined Review; Payment Accounts Would Not Receive Interest, Have Overdraft Privileges, Or Access Discount Window, And May Face Balance Caps | Macro Economic Events ; News ; Economics ; Federal Reserve |
+| Today | 2025-10-21 | 12:06 | 'Europe and Ukraine Prepare 12-Point Proposal to End Russia's War'- Bloomberg | Macro Notification ; News ; Politics ; Economics ; General |
+| Today | 2025-10-21 | 12:35 | President Trump Says Will Discuss A Lot Of Things With China's Xi In Two Weeks; We're Going To Do Well In That Negotiation | Macro Notification ; News ; Politics ; General |
+| Yesterday | 2025-10-20 | 05:15 | Stock Market Today: S&P 500, Nasdaq, Dow Jones Futures Rise— Micron, Bitmine, Coinbase In Focus | Analyst Color ; Asia ; Earnings ; Earnings Beats ; Earnings Misses ; Equities ; Government ; Macro Economic Events ; Macro Notification ; Market Summary ; News ; Regulations ; Bonds ; Broad U.S. Equity ETFs ; Guidance ; Emerging Markets ; Eurozone ; Futures ; Commodities ; Forex ; Treasuries ; Global ; Econ #s ; Top Stories ; Economics ; Federal Reserve ; Pre-Market Outlook ; Markets ; ETFs ; General |
+| Yesterday | 2025-10-20 | 08:55 | White House Economic Adviser Hassett Says On CNBC: Expect Bessent Meetings On China Will Clear Up Misunderstandings | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2025-10-20 | 11:54 | President Trump Says China Has Been Respectful Of Us | Macro Notification ; News ; Politics ; General |
+| Yesterday | 2025-10-20 | 11:59 | President Trump Says Think We'll End Up With Strong Trade Deal With China After South Korea | Macro Economic Events ; Macro Notification ; News ; Politics ; Economics ; General |
+| Yesterday | 2025-10-20 | 09:31 | U.S. Supreme Court To Hear Trump Administration's Defense Of Federal Law That Bars Illegal Drug Users From Owning Guns | Macro Economic Events ; News ; Politics ; Economics ; General |
+| Earlier | 2025-10-17 | 08:12 | President Trump On Fox Business Interview Says: Meeting With Xi In Two Weeks; China Is Always Looking For An Edge; 100 Percent Tariff Is Not Sustainable; Think Will Be Fine With China | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2025-10-17 | 08:57 | Stock Market Today: S&P 500, Nasdaq, Dow Jones Futures Dragged By Financial Stocks—American Express, CSX Corp, Standard Lithium In Focus (UPDATED) | Analyst Color ; Asia ; Earnings ; Earnings Beats ; Earnings Misses ; Equities ; Government ; Macro Economic Events ; Macro Notification ; Market Summary ; News ; Regulations ; Bonds ; Broad U.S. Equity ETFs ; Guidance ; Emerging Markets ; Eurozone ; Futures ; Commodities ; Forex ; Treasuries ; Global ; Econ #s ; Top Stories ; Economics ; Federal Reserve ; Pre-Market Outlook ; Markets ; ETFs ; General |
+| Earlier | 2025-10-17 | 13:03 | U.S. Baker Hughes Oil Rig Count Unchanged At 418 Vs 417 Est.; U.S. Baker Hughes NatGas Rig Count +1 To 121; U.S. Baker Hughes Total Rig Count 548 Vs 547 Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+
+## 9. Reference
+
+### Filing Metadata
+Accession: 0001065280-25-000404 | Form: 8-K | Items: 2.02, 9.01
+CIK: 0001065280 | Periodic: — (10-Q expected) | Amendment: no
+Sections: 2 | Exhibits: EX-99.1
+
+### 8-K Section Text
+
+**FinancialStatementsandExhibits**
+Item 9.01 Financial Statements and Exhibits. 
+
+(d) Exhibits 
+
+  Exhibit Number Description of Exhibit 
+
+99.1 
+
+Letter to Shareholders dated October 21, 2025 
+
+104 Cover Page Interactive Data File (embedded within the Inline XBRL document)
+
+**ResultsofOperationsandFinancialCondition**
+Item 2.02 Results of Operations and Financial Condition. 
+
+On October 21, 2025, Netflix, Inc. (the “Company”) announced its financial results for the quarter ended September 30, 2025. The Letter to Shareholders, which is attached hereto as Exhibit 99.1 and is incorporated herein by reference, includes reference to the non-GAAP financial information. A reconciliation to the GAAP equivalent of non-GAAP measures is contained in tabular form in Exhibit 99.1. We are not able to reconcile forward-looking non-GAAP financial measures because we are unable to predict without unreasonable effort the exact amount or timing of the reconciling items, including property and equipment, and the impact of changes in currency exchange rates. The variability of these items could have a significant impact on our future GAAP financial results. 
+
+The information contained in this Item 2.02 and the accompanying Exhibit 99.1 are “furnished” and shall not be deemed “filed” for purposes of Section 18 of the Securities Exchange Act of 1934, as amended (the “Exchange Act”), or otherwise subject to the liabilities of that section, and shall not be incorporated by reference in any filing under the Securities Act of 1933, as amended, or the Exchange Act regardless of any general incorporation language in such filing, unless expressly incorporated by specific reference in such filing.
+
+## Prior Lessons (from learner)
+
+### Allowed learner reports for this prediction
+
+- earnings-analysis/Companies/AVGO/events/Q4_FY2023/learning/result.md
+- earnings-analysis/Companies/AVGO/events/Q3_FY2023/learning/result.md
+
+
+## Lessons To Label (verbatim, in order)
+
+L1. [macro]
+When VIX is below 13 and SPY is within 3% of a rolling 52-week high on the session following an earnings catalyst, the tape ASYMMETRICALLY amplifies positive surprises (bullish tape compounds the fundamental signal by ~30-50bps vs a neutral tape) but does NOT compound negative surprises to the same degree — factor this tape asymmetry into magnitude ranges rather than treating low-VIX as uniformly supportive.
+
+L2. [macro]
+When a single-stock drawdown of ≥5% occurs on a flat-to-positive sector tape with zero sell-side downgrades and broadly raised price targets (as on AVGO Sept 1, 2023), the move is positioning-driven (crowded-long unwind / profit-taking on a pre-print run-up), not a fundamental re-rating — slow or bullish sell-side reaction is NOT a leading indicator of next-session mean-reversion support and should not be used to narrow downside ranges.
+
+## Context-Only (not labeled)
+
+### Global lesson source events
+- L1 macro — source: AVGO Q4_FY2023 — learner_result: earnings-analysis/Companies/AVGO/events/Q4_FY2023/learning/result.md
+- L2 macro — source: AVGO Q3_FY2023 — learner_result: earnings-analysis/Companies/AVGO/events/Q3_FY2023/learning/result.md

@@ -1,0 +1,32 @@
+# Local API downloads and market-data caches. Existing tracked audit samples
+# stay tracked, but new bulk downloads must not be published accidentally.
+raw/*
+
+# Python and test caches.
+**/__pycache__/
+*.pyc
+.pytest_cache/
+
+# Large reproducible intermediate reports. The compact 63-row matrix and
+# split summary are committed instead.
+results/*_lse_hourly_manifest_*.json
+results/*_massive_targets_*.json
+results/*historical_baskets_*.json
+results/*coverage_sensitivity_*.json
+results/all60_top20_historical_baskets_*.json
+results/all63_benchmark_targets_*.json
+results/all63_market_series_daily_screen_*.json
+results/proxy_pilot_component_targets_*.json
+results/lse_stock_splits_complete_*.json
+
+# Large downloaded SEC/OpenFIGI/catalog working sets. Final ticker maps and
+# the compact result matrix remain publishable.
+inventory/*sec_holdings_*.json
+inventory/*openfigi*.json
+inventory/lse_market_catalog_*.json
+inventory/sec_company_tickers_mf_*.json
+
+# Keep raw result records and working maps local; compact final CSV summaries stay in Git.
+/results/*.json
+/results/*.csv.gz
+/inventory/*.json

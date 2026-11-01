@@ -1,0 +1,14 @@
+{
+  "old_tracker_sha256": "7ea9c0f457bef3acbe2ee2d1f7619eb92948512711a16ab6074bcb0868a67b61",
+  "new_tracker_sha256": "3ed7f28317f87229fcefa89546654b1809de3629a1be670b3b55e53096319e42",
+  "only_two_table_rows_changed": [
+    "3",
+    "8"
+  ],
+  "all_other_rows_and_original_appended_history_preserved": true,
+  "new_correction_section": "\n## 2026-09-25 \u2014 Codex 2431: summary rows 3 and 8 updated; reporting correction (0 calls)\n- Rows 3 and 8 above now show the current candidate results (fuel 3/3 complete chains; tax fresh pair pass) with links to the final\n  snapshot and Root's review. The whole pre-update tracker is kept as TRACKER_before_2431.md (7ea9c0f4...). Every other row and all\n  history below the table are unchanged.\n- Correction to Core 2427 and FINAL_SNAPSHOT_2430.json: \"none of the 191 items / 382 original replies was retested\" is too broad.\n  Four original source targets (T003, T008, T049, T113) WERE tested with the staged candidate; the full 191-target / 382-saved-reply\n  suite was NOT rerun, and no original saved reply was altered. The frozen snapshot and the original reports stay untouched.\n- Correction to Core 2427: for T113 the public reply file is byte-identical to G T113 A02, but only the plan OBJECTS (all 5\n  operations) are equal, not the entire timestamped audit files.\n",
+  "manifest_sha256": "e896f846c7d63b8ab1c2e20b8657621737fbad909d7f78dda16ea9998ae0f200",
+  "manifest_entries": 18710,
+  "manifest_only_changes": "updated TRACKER entry and added historical copy; reversing exactly restores previous reviewed manifest hash",
+  "ledger_unchanged": true
+}

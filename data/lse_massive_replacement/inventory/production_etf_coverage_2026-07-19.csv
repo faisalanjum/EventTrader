@@ -1,0 +1,64 @@
+symbol,roles,groups,csv_company_count,graph_company_count,sector_company_count,industry_company_count,exact_lse_etf,exact_lse_datasets,first_tick,last_tick,ticks,unpinned_status,unpinned_rows,etf_pinned_status,etf_pinned_rows,conclusion
+AMLP,industry,OilAndGasMidstream,8,8,0,8,False,,,,,404,,200,0,required ETF is not available from LSE
+CARZ,industry,AutoAndTruckDealerships|AutoManufacturers|AutoParts,17,17,0,17,False,,,,,404,,200,0,required ETF is not available from LSE
+COMM,industry,Publishing,1,1,0,1,False,,,,,404,,200,0,required ETF is not available from LSE
+CRAK,industry,OilAndGasRefiningAndMarketing,6,6,0,6,False,,,,,404,,200,0,required ETF is not available from LSE
+EATZ,industry,Restaurants,14,14,0,14,False,,,,,404,,200,0,required ETF is not available from LSE
+FCG,industry,UtilitiesRegulatedGas,3,3,0,3,False,,,,,404,,200,0,required ETF is not available from LSE
+FDN,industry,InternetContentAndInformation,10,10,0,10,False,,,,,404,,200,0,required ETF is not available from LSE
+FTXR,industry,Trucking,3,3,0,3,False,,,,,404,,200,0,required ETF is not available from LSE
+GAMR,industry,ElectronicGamingAndMultimedia,3,3,0,3,False,,,,,404,,200,0,required ETF is not available from LSE
+GDX,industry,Gold,1,1,0,1,True,etf|options,2026-04-28 14:41:38.004000,2026-07-18 00:00:00.080505,6268106,200,1,200,1,exact LSE ETF available
+HACK,industry,SecurityAndProtectionServices,1,1,0,1,False,,,,,404,,200,0,required ETF is not available from LSE
+IAI,industry,AssetManagement|CapitalMarkets|FinancialDataAndStockExchanges,35,35,0,35,False,,,,,404,,200,0,required ETF is not available from LSE
+IBB,industry,Biotechnology,52,52,0,52,False,,,,,404,,200,0,required ETF is not available from LSE
+IDU,industry,UtilitiesDiversified|UtilitiesIndependentPowerProducers|UtilitiesRegulatedElectric,19,19,0,19,False,,,,,404,,200,0,required ETF is not available from LSE
+IGV,industry,ConsultingServices|InformationTechnologyServices|SoftwareApplication|SoftwareInfrastructure,101,103,0,101,False,,,,,404,,200,0,required ETF is not available from LSE
+IHE,industry,DrugManufacturersGeneral,6,6,0,6,False,,,,,404,,200,0,required ETF is not available from LSE
+IHF,industry,HealthInformationServices|HealthcarePlans|MedicalCareFacilities|MedicalDistribution,24,26,0,24,False,,,,,404,,200,0,required ETF is not available from LSE
+IHI,industry,DiagnosticsAndResearch|MedicalDevices|MedicalInstrumentsAndSupplies,51,52,0,51,False,,,,,404,,200,0,required ETF is not available from LSE
+INDS,industry,REITIndustrial,3,3,0,3,False,,,,,404,,200,0,required ETF is not available from LSE
+ITA,industry,AerospaceAndDefense,12,12,0,12,False,,,,,404,,200,0,required ETF is not available from LSE
+ITB,industry,ResidentialConstruction,8,8,0,8,False,,,,,404,,200,0,required ETF is not available from LSE
+IYJ,industry,Conglomerates|ElectricalEquipmentAndParts|IndustrialDistribution|RentalAndLeasingServices|SpecialtyBusinessServices|SpecialtyIndustrialMachinery|StaffingAndEmploymentServices|ToolsAndAccessories|WasteManagement,44,45,0,44,False,,,,,404,,200,0,required ETF is not available from LSE
+IYM,industry,SpecialtyChemicals,13,13,0,13,False,,,,,404,,200,0,required ETF is not available from LSE
+IYR,industry,REITOffice|REITSpecialty|RealEstateServices,12,13,0,12,False,,,,,404,,200,0,required ETF is not available from LSE
+IYT,industry,IntegratedFreightAndLogistics|Railroads,13,13,0,13,False,,,,,404,,200,0,required ETF is not available from LSE
+IYW,industry,ComputerHardware|ConsumerElectronics|ElectronicComponents|ElectronicsAndComputerDistribution|ScientificAndTechnicalInstruments,23,23,0,23,False,,,,,404,,200,0,required ETF is not available from LSE
+IYZ,industry,TelecomServices,2,2,0,2,False,,,,,404,,200,0,required ETF is not available from LSE
+JETS,industry,Airlines|TravelServices,12,12,0,12,False,,,,,404,,200,0,required ETF is not available from LSE
+KIE,industry,InsuranceBrokers|InsuranceDiversified|InsuranceLife|InsurancePropertyAndCasualty|InsuranceReinsurance,17,17,0,17,False,,,,,404,,200,0,required ETF is not available from LSE
+MOO,industry,AgriculturalInputs|FarmProducts,8,8,0,8,False,,,,,404,,200,0,required ETF is not available from LSE
+OIH,industry,OilAndGasDrilling|OilAndGasEquipmentAndServices,10,10,0,10,False,,,,,404,,200,0,required ETF is not available from LSE
+PAVE,industry,FarmAndHeavyConstructionMachinery,6,6,0,6,False,,,,,404,,200,0,required ETF is not available from LSE
+PBJ,industry,BeveragesNonAlcoholic|Confectioners|FoodDistribution|PackagedFoods,19,19,0,19,False,,,,,404,,200,0,required ETF is not available from LSE
+PEJ,industry,Entertainment|Leisure|Lodging|PersonalServices|RecreationalVehicles,28,28,0,28,False,,,,,404,,200,0,required ETF is not available from LSE
+PHO,industry,UtilitiesRegulatedWater,1,1,0,1,False,,,,,404,,200,0,required ETF is not available from LSE
+PKB,industry,BuildingMaterials|EngineeringAndConstruction,12,12,0,12,False,,,,,404,,200,0,required ETF is not available from LSE
+REM,industry,REITMortgage,1,1,0,1,False,,,,,404,,200,0,required ETF is not available from LSE
+REZ,industry,REITResidential,7,7,0,7,False,,,,,404,,200,0,required ETF is not available from LSE
+SCHH,industry,REITDiversified,1,1,0,1,False,,,,,404,,200,0,required ETF is not available from LSE
+SLX,industry,Steel,4,5,0,4,False,,,,,404,,200,0,required ETF is not available from LSE
+SOXX,industry,CommunicationEquipment|SemiconductorEquipmentAndMaterials|Semiconductors,32,33,0,32,True,etf|options,2026-04-27 14:45:10.783000,2026-07-17 23:59:28.087195,9096640,200,1,200,1,exact LSE ETF available
+SRET,industry,REITHealthcareFacilities|REITHotelAndMotel|REITRetail,11,11,0,11,False,,,,,404,,200,0,required ETF is not available from LSE
+TAN,industry,Solar|UtilitiesRenewable,8,9,0,8,False,,,,,404,,200,0,required ETF is not available from LSE
+VAW,industry,Chemicals,4,4,0,4,False,,,,,404,,200,0,required ETF is not available from LSE
+VCR,industry,EducationAndTrainingServices,2,2,0,2,False,,,,,404,,200,0,required ETF is not available from LSE
+VDC,industry,GroceryStores|HouseholdAndPersonalProducts|PackagingAndContainers,23,24,0,23,False,,,,,404,,200,0,required ETF is not available from LSE
+VOX,industry,AdvertisingAgencies|FinancialConglomerates,5,5,0,5,False,,,,,404,,200,0,required ETF is not available from LSE
+XHB,industry,BuildingProductsAndEquipment|Furnishings|HomeImprovementRetail,13,14,0,13,False,,,,,404,,200,0,required ETF is not available from LSE
+XLB,sector,BasicMaterials,33,34,33,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLC,sector,CommunicationServices,30,30,30,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLE,sector,Energy,35,35,35,0,True,etf|options,2026-04-27 13:38:17.068000,2026-07-18 00:00:00.004769,3982580,200,1,200,1,exact LSE ETF available
+XLF,sector,FinancialServices,54,54,54,0,True,etf|options,2026-04-28 13:36:40.030000,2026-07-18 00:00:00.141805,1996218,200,1,200,1,exact LSE ETF available
+XLI,sector,Industrials,108,110,108,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLK,sector,Technology,158,162,158,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLP,sector,ConsumerDefensive,44,44,44,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLRE,sector,RealEstate,35,36,35,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLU,sector,Utilities,25,25,25,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLV,sector,Healthcare,141,145,141,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XLY,sector,ConsumerCyclical,120,121,120,0,False,,,,,404,,200,0,required ETF is not available from LSE
+XME,industry,Aluminum|CokingCoal|Copper|OtherPreciousMetalsAndMining,4,4,0,4,False,,,,,404,,200,0,required ETF is not available from LSE
+XOP,industry,OilAndGasEAndP,11,11,0,11,False,,,,,404,,200,0,required ETF is not available from LSE
+XPH,industry,DrugManufacturersSpecialtyAndGeneric,8,9,0,8,False,,,,,404,,200,0,required ETF is not available from LSE
+XRT,industry,ApparelManufacturing|ApparelRetail|DepartmentStores|DiscountStores|FootwearAndAccessories|InternetRetail|SpecialtyRetail,51,51,0,51,False,,,,,404,,200,0,required ETF is not available from LSE

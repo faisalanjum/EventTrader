@@ -36,6 +36,8 @@
 
 **Tools and scope (2026-10-04):** [tested approaches, limitations and next actions](PrepareTools.md). HTML first; skip duplicate PDF processing only after verifying equivalent information. Images inside HTML still need coverage.
 
+**Saved-package reading (Oct 8):** use `driver.prepare.get.acquire.read_package` on the repaired source store, with its saved proofs. The early local `prepare_work/full_run_20261001` copy predates repair. Never infer a complete inventory from `parse_package(...)[1]`: its manifest explicitly lists unproved members omitted from that file map. Account for every returned, unresolved or missing member. [Verified caller contract and audit correction](../../../../../prepare_work/package_inventory_20261008/CODEX_GATE.md).
+
 **Work preservation:** start with [the compaction handoff](/home/faisal/prepare_work/tool_selection_20261004/RESUME.md): worktree recovery archive, main/code differences, successful and rejected approaches, evidence, outstanding gates and PDF/OCR resume commands. [The chronological checkpoint](/home/faisal/prepare_work/tool_selection_20261004/STATUS.md) retains the detailed history. This order does not restart paused jobs.
 
 **Reminder at grader completion (owner, 2026-10-04):** before further tool development, remind the owner to finish the run-35 baseline and follow the [worktree comparison/merge checklist](/home/faisal/prepare_work/tool_selection_20261004/MERGE_PLAN.md#integration-sequence): compare both versions, verify every changed result, preserve both sets of useful tests, then merge small reversible changes only after validation. HTML/XML plus image OCR comes next; dedicated PDF development stays paused.
@@ -233,7 +235,7 @@
 | D13 | Adopt the upkeep rule (P24)? | ✅ Settled: adopt P24 | The owner's requirement |
 | D14 | Repair PDF data and deleted release text (F6/F12)? | ✅ Approved: separate cleanup after preparation is validated, while Driver development continues | Reuse tested rules (P19); the existing predictor's revamp does not set the priority |
 | D15 | 🆕 Where and how to store originals and their records? | Approved SEC representation: lossless compressed package plus manifest/receipt; unpack on demand. Production location and any shared index (e.g. SQLite) remain open after T5 | Avoid permanent duplicate bytes; current implementation has one writer per output directory |
-| D16 | 🆕 Open (owner 2026-10-02): after the swap, does the new prepared text **replace** the old flattened section/exhibit text under each existing Report node, or sit **beside** it? | Decide at Step 5 with D15; applies to live ingestion and historical cleanup alike (Step 9). Report nodes and their links stay either way; the old text stays restorable | Avoids an unplanned overwrite of existing Neo4j content (Step 9 repair rule 3) |
+| D16 | 🆕 Open (owner 2026-10-02): after the swap, does the new prepared text **replace** the old flattened section/exhibit text under each existing Report node, or sit **beside** it? **Pictures decided (owner 2026-10-05):** one new `ImageContent` node per picture beside existing text; see [PrepareTools](PrepareTools.md). | Decide at Step 5 with D15; applies to live ingestion and historical cleanup alike (Step 9). Report nodes and their links stay either way; the old text stays restorable | Avoids an unplanned overwrite of existing Neo4j content (Step 9 repair rule 3) |
 
 ## Sources and review trail
 

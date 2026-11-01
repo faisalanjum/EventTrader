@@ -1,0 +1,36 @@
+{
+  "period": {
+    "start": "2023-01-03",
+    "end": "2026-04-27"
+  },
+  "basket_sizes": [3, 5, 10],
+  "historical_basket_sizes": [3, 5, 10, 20],
+  "historical_minimum_weight_coverages": [0.75, 0.8, 0.85, 0.9],
+  "decision_minimum_weight_coverage": 0.8,
+  "minimum_basket_weight_coverage": 0.9,
+  "direct_candidates": {
+    "IGV": [
+      {"symbol": "NAS100/USD", "dataset": "index", "meaning": "Nasdaq 100 index"},
+      {"symbol": "NQ.F", "dataset": "futures", "meaning": "Nasdaq 100 futures"},
+      {"symbol": "QQQ", "dataset": "etf", "meaning": "Nasdaq 100 ETF"},
+      {"symbol": "ARKK", "dataset": "etf", "meaning": "active innovation ETF"}
+    ],
+    "SOXX": [
+      {"symbol": "SOXX", "dataset": "etf", "meaning": "exact fund control"},
+      {"symbol": "SMH", "dataset": "etf", "meaning": "semiconductor ETF"},
+      {"symbol": "SOX/USD", "dataset": "index", "meaning": "PHLX Semiconductor index"},
+      {"symbol": "NAS100/USD", "dataset": "index", "meaning": "Nasdaq 100 index"}
+    ],
+    "XLE": [
+      {"symbol": "XLE", "dataset": "etf", "meaning": "exact fund control"},
+      {"symbol": "FSTE", "dataset": "futures", "meaning": "European oil and gas sector future"},
+      {"symbol": "WTICO/USD", "dataset": "commodity", "meaning": "WTI crude oil"}
+    ],
+    "XLK": [
+      {"symbol": "NAS100/USD", "dataset": "index", "meaning": "Nasdaq 100 index"},
+      {"symbol": "NQ.F", "dataset": "futures", "meaning": "Nasdaq 100 futures"},
+      {"symbol": "QQQ", "dataset": "etf", "meaning": "Nasdaq 100 ETF"},
+      {"symbol": "ARKK", "dataset": "etf", "meaning": "active innovation ETF"}
+    ]
+  }
+}

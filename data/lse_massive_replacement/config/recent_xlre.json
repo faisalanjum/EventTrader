@@ -1,0 +1,12 @@
+{
+  "period": {
+    "start": "2026-04-28",
+    "end": "2026-07-17"
+  },
+  "basket_sizes": [50],
+  "historical_basket_sizes": [50],
+  "historical_minimum_weight_coverages": [0.8],
+  "decision_minimum_weight_coverage": 0.8,
+  "minimum_basket_weight_coverage": 0.8,
+  "direct_candidates": {}
+}

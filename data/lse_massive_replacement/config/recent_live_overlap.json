@@ -1,0 +1,36 @@
+{
+  "period": {
+    "start": "2026-04-28",
+    "end": "2026-07-17"
+  },
+  "basket_sizes": [
+    20,
+    30,
+    50
+  ],
+  "historical_basket_sizes": [
+    20,
+    30,
+    50
+  ],
+  "historical_minimum_weight_coverages": [
+    0.75,
+    0.8,
+    0.85,
+    0.9
+  ],
+  "decision_minimum_weight_coverage": 0.8,
+  "minimum_basket_weight_coverage": 0.9,
+  "evaluation": {
+    "minimum_observations": 40,
+    "minimum_target_coverage": 0.8,
+    "require_stability": false
+  },
+  "evaluation_periods": {
+    "recent_live_overlap": [
+      "2026-04-28",
+      "2026-07-17"
+    ]
+  },
+  "direct_candidates": {}
+}

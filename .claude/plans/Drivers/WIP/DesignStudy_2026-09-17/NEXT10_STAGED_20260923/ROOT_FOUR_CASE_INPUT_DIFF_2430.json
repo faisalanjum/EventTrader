@@ -1,0 +1,58 @@
+[
+  {
+    "case": "T003",
+    "stage": "TASK_NAME.txt",
+    "sha256": "968657aab1182ceea5d8d8c812ce1adc0d11101b0a0813b95d06071cf1706c1a",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/GENERIC_FIELDS_CONTROLS_2402/cases/T003/TASK_NAME.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  },
+  {
+    "case": "T003",
+    "stage": "TASK_FIELDS_TEMPLATE.txt",
+    "sha256": "f948c9de5b8cd13c700303640250cb4152689c4287fbe5d45de05283de47bb5e",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/GENERIC_FIELDS_CONTROLS_2402/cases/T003/TASK_FIELDS_TEMPLATE.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  },
+  {
+    "case": "T008",
+    "stage": "TASK_NAME.txt",
+    "sha256": "981ff8a43ad7efd9b86a8650cf54cac38e04d1b058473acad861155bd044736b",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/CHANGE_ELIGIBILITY_FIELDS_2400/cases/T008/TASK_NAME.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  },
+  {
+    "case": "T008",
+    "stage": "TASK_FIELDS_TEMPLATE.txt",
+    "sha256": "0a493397c1445ef79c573d95529e1419ff727425c03ab784a7239c25157a86ea",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/CHANGE_ELIGIBILITY_FIELDS_2400/cases/T008/TASK_FIELDS_TEMPLATE.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  },
+  {
+    "case": "T049",
+    "stage": "TASK_NAME.txt",
+    "sha256": "0e855f7f7583e9d8a4519580bbff8e3e0a94a782a8d329ec5e3b18cce4dd6dc7",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/GENERIC_FIELDS_CONTROLS_2402/cases/T049/TASK_NAME.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  },
+  {
+    "case": "T049",
+    "stage": "TASK_FIELDS_TEMPLATE.txt",
+    "sha256": "365fd220900cdecb9f536ec002a043bc49c965df313129a6d4d601851aa96a88",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/GENERIC_FIELDS_CONTROLS_2402/cases/T049/TASK_FIELDS_TEMPLATE.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  },
+  {
+    "case": "T113",
+    "stage": "TASK_NAME.txt",
+    "sha256": "588a61902528cfbea4291524e61b5b5fcf1a46c8628e5dea2f3de869948e304c",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/GENERIC_FIELDS_CONTROLS_2402/cases/T113/TASK_NAME.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  },
+  {
+    "case": "T113",
+    "stage": "TASK_FIELDS_TEMPLATE.txt",
+    "sha256": "ab40509401c67b686c18060c96c9c5433fb7b3a6bcc4f7ecab2a51fb7f9739bf",
+    "base_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/manual_failure_pilot_20260917/next10_staged_20260923/GENERIC_FIELDS_CONTROLS_2402/cases/T113/TASK_FIELDS_TEMPLATE.txt",
+    "change": "exactly the8genericlines; all other bytes identical"
+  }
+]

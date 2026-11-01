@@ -1,0 +1,9 @@
+{
+  "snapshot_sha256": "4ba8badad605a17e8e82d52b6e492b1e5838f0cf39bef198b553d85f0c3085ef",
+  "new_manifest_sha256": "a58736c2330d019f161b7f1c0fd7aaa1d702ef74ea0f2b614e2033bdeb35c015",
+  "manifests_verified": 11,
+  "unique_files_verified": 234,
+  "snapshot_results_code_inputs_outputs_plans_verified": true,
+  "cohort_calls_from_actual_process_artifacts": 15,
+  "documentation_correction": "Snapshot limits says none of191items were retested; precise scope is four original source targets retested via staged candidate, whole191item/382savedreply suite not rerun. No original saved reply was changed. This is a reporting correction, not an extraction failure."
+}

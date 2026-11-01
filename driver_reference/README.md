@@ -84,3 +84,17 @@ is fed by multiple channels. Lane folders would shred one bot across four direct
 - Design law FROZEN: S2 packet spec (owner-approved 2026-07-14) + FinalDesign 01–14/66/95 + kernel v3.4.
 - `core/` build (S3) starts on owner GO — TDD, dry-run default, zero Neo4j writes during testing.
 - Old exploration-era code: archived at `archive/drivers/` (see its ARCHIVED.md).
+
+## Preserved history after the November 2026 cleanup
+
+The recovery branch `recovery/a3-a7-verified` retains the earlier implementation at
+`ac4cf6f28b5a1767610f859160a3623137365606`. Its
+`driver/core/driver_period_resolver.py` and paired test contain later exact-date
+handling absent from this reference copy. Review those differences against the
+new Driver requirements before reuse; cleanup did not qualify or merge them.
+
+The old recovery working folders and retired run payloads were removed after
+preserving selected unique source and examples. Private keepers, original-path
+indexes and verification receipts are outside this repository under
+`/home/faisal/prepare_cleanup_review_20261031/clean_worktree_20261101/`.
+Git history and those keepers preserve selected work, not every historical run.

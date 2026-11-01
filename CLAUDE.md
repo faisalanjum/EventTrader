@@ -15,7 +15,13 @@ For Driver work: say the goal in plain terms BEFORE files, tests, or plans. Neve
 
 **When unsure how a Claude Code tool or CLI behaves:** check `.claude/plans/Infrastructure.md` first — don't guess.
 
+**Extraction closeout (continuing the proof checks):** read `.claude/plans/Drivers/DriversFinal/PrepareTools.md` first. Root (Codex) directs the work, Test (private Codex) runs the checks, and Claude sessions review only. To start the next checks, tell Root.
+
 > **Recap:** crux first · plain words · few sentences (but complete) · small visuals · refresh my memory · explain before writeup.
+
+## IBKR Protection During Cleanup
+
+Read and follow [IBKR Protection in AGENTS.md](AGENTS.md#ibkr-protection--owner-update-2026-11-01) before cleanup involving services or images. The owner reported successful live/paper recovery at **8:10 AM EST on November 1, 2026**. Preserve the IBKR services, login setup and required recovery images; leave IBKR changes to its separately authorized maintenance agent.
 
 ## Anthropic API Key Handling (CRITICAL — read before editing SDK/LLM code)
 

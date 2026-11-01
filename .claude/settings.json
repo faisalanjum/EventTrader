@@ -80,16 +80,6 @@
         ]
       }
     ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/faisal/EventMarketDB/.claude/hooks/notify_done.sh"
-          }
-        ]
-      }
-    ],
     "SubagentStop": [
       {
         "hooks": [
@@ -103,16 +93,6 @@
     "SessionStart": [
       {
         "matcher": "compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/faisal/EventMarketDB/.claude/hooks/comm_style_post_compact.sh"
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
         "hooks": [
           {
             "type": "command",
