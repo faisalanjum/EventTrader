@@ -2,11 +2,11 @@ MANUAL INSTRUCTIONS — activation requires the owner decision; nothing is appli
 CWD: k8s/prepared-extraction/ beneath the repository root. Keep BEFORE_WORKER_REVISION.txt here when R0 creates it.
 Execution prelude: use a Bash subshell with set -euo pipefail. Each API request is capped at 10 seconds; polling budget is 180 seconds. Stop on any non-zero step.
 Namespace processing. NOTHING BELOW IS APPLIED.
-IMAGE (prepared 31 October 2026, private repo; processing/default SA pulls via secret dockerhub-pull):
- faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70 (tag prepared-ocr-20261031-1)
- Built from the checked-in Dockerfile; exact 48-file runtime manifest 2f0928f5 and adapter 3ae3ceb8.
+IMAGE (qualified 1 November 2026, private repo; processing/default SA pulls via secret dockerhub-pull):
+ faisalanjum/report-enricher@sha256:7d057ab66ac7e6ab3b97a31cd2c828b4123df2704a5d395a0e6c17164a089010 (tag prepared-ocr-docs-20261101)
+ Exact 48-file runtime manifest 4a74c64e and adapter 3ae3ceb8; pair with adapter-config.yaml.
  Worker 33db8990, Redis wrapper 0e7ac21d and browser 22d72b58 are unchanged.
- HTML/XML, embedded images and all eight AMG PDF pages were exercised in this exact image.
+ The 1 November image passed recorded adapter checks; its unchanged OCR runtime inherits the 31 October qualification.
  OCR remains unverified model output; see OCR_QUALIFICATION.txt for errors and test limits.
 BEFORE ENABLING OCR: prepare the warm, authenticated server, replace the endpoint in adapter-config.yaml,
  and create the processing/prepared-ocr Secret (api-key) described in README.md. Verify its pinned

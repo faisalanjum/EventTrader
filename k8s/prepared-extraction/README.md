@@ -28,6 +28,10 @@ the bounded OCR findings in
 [OCR_QUALIFICATION.txt](OCR_QUALIFICATION.txt); no new model accuracy claim or
 production activation follows from this documentation rebuild.
 
+The later 1 November `set_filing` fix affects the `event-trader` intake service.
+Rebuild that service's image before restarting intake. The qualified enricher image
+predates this source fix; its worker does not call `set_filing`.
+
 Keep these immutable images available. The base retains the tested native packages,
 Chromium and fonts; the Dockerfile copies the reviewed repository source into their
 existing locations. The Docker-specific allowlist excludes unrelated application
