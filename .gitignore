@@ -135,3 +135,43 @@ data/liquid_social_feed/trackers_events.jsonl
 data/hyperliquid_24x7_prices/*.jsonl
 
 scripts/driver_seed/relocate_probe/inline_html_cache/
+
+# Local learner state, rollback records, and generated volatility data.
+/earnings-analysis/learnings/global.json
+/earnings-analysis/learnings/ticker/FCX.json
+/earnings-analysis/operations/run_ledger.jsonl
+/earnings-analysis/.pre-v3-cutover-backup/
+/scripts/iv/output/
+
+# Historical prototype retained under the Driver reference protection rule.
+/value_forms.py
+
+# Named historical Driver references retained locally pending a separate decision.
+/.claude/plans/Drivers/DriversFinal/PrepareTools.md.before_final_preservation_20261027T184949501787Z
+/.claude/plans/Drivers/DriversFinal/ProductionQualificationPlan.md.before_final_preservation_20261027T184949501787Z
+/.claude/plans/Drivers/WIP/Fiscal_UnitScale_RouteAudit_2026-07-26.md
+/.claude/plans/Drivers/WIP/truth5x50_codex_caller.py
+/.claude/plans/Drivers/WIP/truth5x50_e2e.py
+/.claude/plans/Drivers/WIP/truth5x50_pilot_manifest.json
+/.claude/plans/Drivers/WIP/truth5x50_request_manifest.json
+/.claude/plans/Drivers/WIP/truth5x50_run.py
+/.claude/skills/test-v140-effort-sub/SKILL.md
+/.claude/skills/test-v140-restrict/SKILL.md
+/.claude/skills/test-v172-disallow/SKILL.md
+/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000002488-23-000007__EX-99.1.htm
+/scripts/xbrl_metadata_pilot/evidence/optimized_20260930/ingestion_inventory.json
+/scripts/xbrl_metadata_pilot/evidence/optimized_20260930/ingestion_query_check.json
+/scripts/xbrl_metadata_pilot/evidence/optimized_20260930/resource_ownership_example.json
+
+# Unfinished historical Phase-6 source: preserve locally, not a validated package.
+/.claude/plans/Drivers/WIP/truth5x50_build.py
+/.claude/plans/Drivers/WIP/truth5x50_grade.py
+/.claude/plans/Drivers/WIP/truth5x50_qf01_preflight.py
+/.claude/plans/Drivers/WIP/truth5x50_schema.py
+
+# Retained public source fixtures required by existing Driver tests.
+/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000002488-23-000074__EX-99.1.htm
+/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000006201-26-000008__EX-99.1.htm
+/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000007084-25-000005__EX-99.1.htm
+/scripts/driver_seed/relocate_probe/exhibit_html_cache/0001002910-25-000052__EX-99.1.htm
+/scripts/driver_seed/relocate_probe/exhibit_html_cache/0001158449-25-000268__EX-99.1.htm
