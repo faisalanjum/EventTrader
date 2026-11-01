@@ -12,16 +12,19 @@ consumers must check `fidelity`, not use `status: complete` as an accuracy guara
 
 ## Exact release
 
-- OCR integration image: `faisalanjum/report-enricher@sha256:93707585439aa85f6350e5d430b35a5c65f33aaef48e30c8fea67de7de478260`.
+- OCR integration image: `faisalanjum/report-enricher@sha256:7d057ab66ac7e6ab3b97a31cd2c828b4123df2704a5d395a0e6c17164a089010`.
 - Previous OCR image (31 October qualification): `faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70`.
 - Earlier HTML/XML-only image: `faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b`.
-- Runtime manifest SHA-256: `105890dce16aa9737ada2c71674f4bdaa6510e409f2b45f20213c56049ef5bb2`.
+- Runtime manifest SHA-256: `4a74c64ec8ddceb4f3a9f4a1be2af3423b9091a6825249daf7d5679ab54eb4be`.
 - Environment base: `faisalanjum/report-enricher@sha256:23ca15adc2b1f265ec862a1af2bfa471cc525a6b18b25524049b044803c6236b`.
 
 The 1 November image updates only `driver/prepare/README.md` and its manifest.
-All executable runtime, adapter and worker bytes are unchanged. Its exact 48-file
-inventory and 37 adapter tests, including the three recorded native cases with
-networking disabled, passed. It inherits the bounded OCR findings in
+All executable runtime, adapter and worker bytes are unchanged. They passed
+37 adapter tests, including three recorded native cases with networking disabled.
+After shortening the entry README, the final image's exact 48-file inventory and
+the native extraction/reuse/damage case passed again. Detailed code contracts now
+live in [the code reference](../../docs/prepare-reference.md). This image inherits
+the bounded OCR findings in
 [OCR_QUALIFICATION.txt](OCR_QUALIFICATION.txt); no new model accuracy claim or
 production activation follows from this documentation rebuild.
 

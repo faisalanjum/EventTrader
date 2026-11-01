@@ -14,7 +14,7 @@ data:
      "runtime_root": "/opt/prepared/runtime",
      "runtime_manifest": {
       "path": "/opt/prepared/runtime/RUNTIME_MANIFEST_ROLE.json",
-      "sha256": "105890dce16aa9737ada2c71674f4bdaa6510e409f2b45f20213c56049ef5bb2"
+      "sha256": "4a74c64ec8ddceb4f3a9f4a1be2af3423b9091a6825249daf7d5679ab54eb4be"
      },
      "browser": {
       "executable": "/opt/prepared/browser/chrome-headless-shell-linux64/chrome-headless-shell",
