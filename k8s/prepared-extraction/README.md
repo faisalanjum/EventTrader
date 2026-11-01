@@ -12,10 +12,18 @@ consumers must check `fidelity`, not use `status: complete` as an accuracy guara
 
 ## Exact release
 
-- OCR integration image: `faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70`.
+- OCR integration image: `faisalanjum/report-enricher@sha256:93707585439aa85f6350e5d430b35a5c65f33aaef48e30c8fea67de7de478260`.
+- Previous OCR image (31 October qualification): `faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70`.
 - Earlier HTML/XML-only image: `faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b`.
-- Runtime manifest SHA-256: `2f0928f5435465b522b51b06f4145d02c6cf810df064b1eb445a8e78bc40a9ca`.
+- Runtime manifest SHA-256: `105890dce16aa9737ada2c71674f4bdaa6510e409f2b45f20213c56049ef5bb2`.
 - Environment base: `faisalanjum/report-enricher@sha256:23ca15adc2b1f265ec862a1af2bfa471cc525a6b18b25524049b044803c6236b`.
+
+The 1 November image updates only `driver/prepare/README.md` and its manifest.
+All executable runtime, adapter and worker bytes are unchanged. Its exact 48-file
+inventory and 37 adapter tests, including the three recorded native cases with
+networking disabled, passed. It inherits the bounded OCR findings in
+[OCR_QUALIFICATION.txt](OCR_QUALIFICATION.txt); no new model accuracy claim or
+production activation follows from this documentation rebuild.
 
 Keep these immutable images available. The base retains the tested native packages,
 Chromium and fonts; the Dockerfile copies the reviewed repository source into their

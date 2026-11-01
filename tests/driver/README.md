@@ -1,13 +1,17 @@
 # Driver tests
 
-Run from the repository root:
+Downloader tests, available now, from the repository root:
 
 ```bash
-python3 -B -S -m unittest discover -s tests/driver -t . -v
+python3 -B -S -m unittest discover -s tests/driver/prepare/get -t . -v
 ```
 
 Standard library only; no credentials, network or external fixture directory.
 Missing or damaged fixtures fail. Temporary outputs are removed automatically.
+
+The [Prepare test guide](prepare/README.md) covers HTML/XML, OCR, shared comparison
+and delivery, including the wider suite's commands and dependencies. The downloader
+command above remains independent of those dependencies.
 
 ```text
 Production                         Tests

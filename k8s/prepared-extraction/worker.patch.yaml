@@ -8,7 +8,7 @@ spec:
         kubernetes.io/hostname: minisforum2          # the hostPath below is node-local
       containers:
       - name: enricher
-        image: faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70   # prepared-ocr-20261031-1
+        image: faisalanjum/report-enricher@sha256:93707585439aa85f6350e5d430b35a5c65f33aaef48e30c8fea67de7de478260   # prepared-ocr-docs-20261101
         env:
         - name: PREPARED_EXTRACTION_CONFIG             # unset = today's worker path exactly (seam tests 5/5)
           value: /etc/prepared/adapter_config.json

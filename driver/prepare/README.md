@@ -10,6 +10,16 @@ original package -> get -> exact member bytes
                             `-- pictures -> image inputs + raw readings + packets
 ```
 
+## Where everything lives
+
+| Path | What |
+|---|---|
+| `driver/prepare/` | Extraction and OCR code (this folder). |
+| `redisDB/prepared_filing.py` | Runs this code for one arriving filing when `PREPARED_EXTRACTION_CONFIG` enables it in `redisDB/report_enricher.py`. |
+| `k8s/prepared-extraction/` | Image, deployment, rollout and rollback ([README](../../k8s/prepared-extraction/README.md)). |
+| `tests/driver/prepare/`, `tests/redisDB/` | Offline tests ([how to run](../../tests/driver/prepare/README.md)). |
+| [`PrepareTools.md`](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md) | Current scope and release gates. |
+
 | Code | Responsibility and entry point |
 |---|---|
 | `job.py`, `document.py` | The existing batch and per-document callers: one pinned checkout and interpreter, complete input accounting, bounded children and saved-output verification. See the batch command below. |
@@ -99,8 +109,9 @@ own earlier stage's facts.
 The initial document **and every saved state** must pass the caller's checks.
 Non-GET actions, handlers outside links, unproved copies, unexplored states beyond
 the recorded limits and unstable observations remain incomplete. Hidden controls
-not reached are retained as skipped trials. No job is retried automatically;
-each context reading permits at most three recorded observation attempts.
+not reached are retained as skipped trials. The batch caller itself does not retry
+jobs; the filing adapter separately bounds technical retries with `max_jobs`.
+Each context reading permits at most three recorded observation attempts.
 A browser failure during a selection action keeps the full error and available
 source facts; it cannot qualify that reading. All initial and action attempts,
 including refused or unmatched repeats, feed the same required-file check.
@@ -333,9 +344,11 @@ folder and rerun into a new one. `verified_saved_output` is preservation of save
 Use the pinned [offline test environment and both regression commands](../../tests/driver/prepare/README.md).
 Those checks make no model calls; independent scoring and actual-worker qualification
 remain separate gates. The [current extraction plan](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md)
-records the current scope and release requirements. The native PDF connection
-has offline regression coverage; actual OCR and worker qualification remain
-open. Semantic document trees and downstream drivers are outside this package.
+records the current scope and release requirements. The
+[31 October integration record](../../k8s/prepared-extraction/OCR_QUALIFICATION.txt)
+documents actual self-hosted OCR and worker checks, known reading errors and
+their limits. Production activation and universal OCR accuracy are not established
+by those checks. Semantic document trees and downstream drivers are outside this package.
 
 Reuse native library functionality before extending an adapter. Keep one owner for
 each rule, tests under `tests/driver/prepare/`, and large fixtures and experiments
