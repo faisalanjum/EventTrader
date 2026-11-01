@@ -32,7 +32,7 @@ spec:
         args:
         - |
           set -e
-          pip install --no-cache-dir 'yfinance>=1.2.0' 'mcp[cli]>=1.6.0' 'uvicorn>=0.35.0'
+          pip install --no-cache-dir 'yfinance>=1.2.0' 'mcp[cli]>=1.6.0,<2' 'uvicorn>=0.35.0'
           echo "Starting Yahoo Finance MCP server (HTTP)..."
           python /source/mcp_servers/yahoo_finance_server.py
         env:

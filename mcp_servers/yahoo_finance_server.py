@@ -393,6 +393,8 @@ if __name__ == "__main__":
     transport = os.getenv("MCP_TRANSPORT", "stdio")
     if transport == "http":
         import uvicorn
+        # In-cluster service: newer mcp 1.x rejects non-localhost Host headers (HTTP 421) by default.
+        mcp.settings.transport_security = None
         app = mcp.streamable_http_app()
         print("Starting Yahoo Finance MCP server (HTTP) on port 8000...", flush=True)
         uvicorn.run(app, host="0.0.0.0", port=8000)
