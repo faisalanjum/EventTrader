@@ -171,7 +171,5 @@ scripts/driver_seed/relocate_probe/inline_html_cache/
 
 # Retained public source fixtures required by existing Driver tests.
 /scripts/driver_seed/relocate_probe/exhibit_html_cache/0000002488-23-000074__EX-99.1.htm
-/scripts/driver_seed/relocate_probe/exhibit_html_cache/0000006201-26-000008__EX-99.1.htm
 /scripts/driver_seed/relocate_probe/exhibit_html_cache/0000007084-25-000005__EX-99.1.htm
 /scripts/driver_seed/relocate_probe/exhibit_html_cache/0001002910-25-000052__EX-99.1.htm
-/scripts/driver_seed/relocate_probe/exhibit_html_cache/0001158449-25-000268__EX-99.1.htm

@@ -52,7 +52,7 @@ DECLARED DEFINITIONS (classification from structure, not text punctuation):
               inline_html.py:147 — retained as well).
           Audit history: run 1 omitted both; run 2 added only the certified guard;
           run 3 adds the full-grid rule. Pinned RED-first in
-          test_m1_structure_inventory.py on real AAP/AMD/AA cells.
+          historical AAP/AMD/AA tests (retired with the old experiment; see Git history).
     Everything else in a table body = incomplete/ambiguous.
   * TRANSITION REPORTING (audit item 3): each body-cell verdict is computed under
     BOTH rules — old (any overlapping credit) and strict — and reported as
