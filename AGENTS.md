@@ -88,3 +88,10 @@ keepers and exact original-path indexes are in
 Preserve that directory and the explicitly held local files listed by the cleanup
 record. Unresolved material and unfinished Phase-6 source were not certified or
 published by cleanup. IBKR protection above remains in force.
+
+The remaining `prepare_work` cleanup preserves active fixtures, the OCR base
+environment and unresolved reference material. Keep the release-proof archive in
+`/home/faisal/prepare_cleanup_review_20261031/preserved/SEC_RELEASE_PROOF_20261101.tar.gz`
+and its restore maps; see the operating guide. The exact retention and deletion
+records are in that review directory's `prepare_retention_20261101/` and
+`prepare_retention_execution_20261101/`. Old folder names alone do not mean unused.

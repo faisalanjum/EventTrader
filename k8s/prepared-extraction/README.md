@@ -150,12 +150,14 @@ tests separately proved automatic recovery after a temporary browser crash and
 retention after persistent failure. These proofs do not establish perfect accuracy
 for every future filing or current live-traffic performance.
 
-The immutable detailed evidence is retained outside Git under
-`/home/faisal/prepare_work/extraction_closeout_20261010/production_qualification_20261022/`:
-`ROOT_PRELIVE_HEADER_20261031T121050Z/`, `ROOT_PRELIVE_20261031T043600Z/` and
-`AUTOMATIC_BROWSER_RECOVERY_20261031T114638Z/`. Keep required fixtures in the existing
-`PREPARE_TEST_DATA` store; see `tests/driver/prepare/README.md`. Model weights, raw
-filing collections and trial outputs do not belong in this source commit.
+The detailed evidence is retained outside Git in
+`/home/faisal/prepare_cleanup_review_20261031/preserved/SEC_RELEASE_PROOF_20261101.tar.gz`.
+All 81,141 archived files passed a full restore and hash check. Its `_restore/`
+directory records original paths, runtime sources and separately retained native
+inputs. Extract into an empty review directory; historical replay needs those
+external inputs too. Keep required fixtures in `PREPARE_TEST_DATA`; see
+`tests/driver/prepare/README.md`. Model weights, raw filing collections and trial
+outputs do not belong in this source commit.
 
 The OCR integration adds a 48th runtime file. Its exact image qualification and
 source-comparison results are recorded in `OCR_QUALIFICATION.txt`; known model

@@ -7,12 +7,14 @@ The freshly checked `cf01ed22b` baseline passed 651 permanent and 402 retained g
 tests without skips; later fixes require their own exact-candidate gate. Independent
 scoring, source coverage and actual-machine execution remain separate.
 
-The extraction command uses `prepare-closeout-20261011`: all 74 checked-in package
-pins were verified there on 21 October. The older `prepare-tests` environment lacks
-the pinned `tinycss2` and `webencodings`; it remains the retained grader environment.
+The shared base is `prepare-closeout-20261011`: all 74 checked-in package pins were
+verified there on 21 October. Both commands below now use the OCR overlay at
+`/home/faisal/prepare_cleanup_review_20261031/ocr_env/`. Its 1 November grader
+replacement check passed all 543 tests without skips; the old `prepare-tests`
+environment is no longer needed for that command.
 The reviewed `4e47c9e48` runtime passed 940 extraction and 543 grader tests without
-skips using these environments. Do not repeat the missing-dependency failure or install
-into an environment another agent is using; use the qualified environment below.
+skips using the earlier environments. Do not install into an environment another
+agent is using; use the qualified environment below.
 
 **Historical migration receipt (7 October 2026, branch `ocr-fixture-tests`).** Integrated base
 `5d25539d1` has 384 permanent tests; the shared fixture helper adds 12 and the
@@ -27,7 +29,7 @@ From the repository root, in the approved preparation environment:
 
 ```bash
 export PREPARE_TEST_DATA=/home/faisal/prepare_test_data
-env -u PYTHONPATH /home/faisal/prepare_work/venvs/prepare-closeout-20261011/bin/python -m unittest discover -s tests/driver/prepare -t . -v
+env -u PYTHONPATH PYTHONDONTWRITEBYTECODE=1 /home/faisal/prepare_cleanup_review_20261031/ocr_env/bin/python -m unittest discover -s tests/driver/prepare -t . -v
 ```
 
 `env -u PYTHONPATH`: the shell exports the main checkout; the tests must import only the checkout under test.
@@ -40,6 +42,8 @@ The optional saved OCR stage additionally needs the pinned client packages in
 `k8s/prepared-extraction/requirements-ocr.txt`. Its `test_vllm` tests execute the
 actual Chandra helper and SDK with substituted transport; they never call a model.
 Use the candidate OCR environment for both suites when these tests are present.
+Its `qualified-base.pth` loads packages from `prepare-closeout-20261011`; keep that
+base directory while using the overlay. The base alone lacks these OCR clients.
 `test_saved` checks immutable extraction, all accepted views/source children, PDF
 pages, input/reader identities, publication and saved-result damage. Adapter tests
 keep operational completion distinct from unverified model accuracy. Actual RunPod
@@ -58,7 +62,7 @@ existing archive helper before retiring the historical copies.
 
 ## Approved offline test environment (7 October 2026)
 
-Use a dedicated **Linux x86_64 / CPython 3.11.10** environment, currently
+Use a dedicated **Linux x86_64 / CPython 3.11.10** base environment, currently
 `/home/faisal/prepare_work/venvs/prepare-closeout-20261011/`, recreated from
 [requirements.txt](requirements.txt). This is separate from the application venv,
 Neo4j and GPU production workers. The location is disposable; the checked-in pins
@@ -79,7 +83,7 @@ migration is incomplete. Until their retained assertions are fully reconciled,
 also run from the relevant checkout:
 
 ```bash
-env -u PYTHONPATH /home/faisal/prepare_work/venvs/prepare-tests/bin/python -m unittest discover -s benchmarks/prepare/grader/tests -t . -v
+env -u PYTHONPATH PYTHONDONTWRITEBYTECODE=1 /home/faisal/prepare_cleanup_review_20261031/ocr_env/bin/python -m unittest discover -s benchmarks/prepare/grader/tests -t . -v
 ```
 
 Converter tests are integrated. The OCR saved-fixture tests have
