@@ -57,8 +57,12 @@ Helm release: `ibkr` in mcp-services. Paper resources are standalone kubectl man
 | Secret | Contains |
 |---|---|
 | ibkr-credentials | IB username + password (shared by both gateways) |
-| ibkr-mcp-auth | Live MCP bearer token |
+| ibkr-mcp-auth-static | Live MCP bearer token |
 | ibkr-paper-mcp-auth | Paper MCP bearer token |
+
+The `ibkr-live` and `ibkr-paper` client entries are stored privately in the project-local section of `~/.claude.json` (file permissions `0600`). Their names, SSE transport, and URLs (`http://localhost:31100/mcp` and `http://localhost:31101/mcp`) stay the same. Do not put literal helper tokens in tracked `.mcp.json` or notes.
+
+When changing a helper token, restart only its helper deployment (`ibkr` or `ibkr-paper`) to load the updated Secret. Keep `ibkr-ib-gateway`, `ibkr-paper-gateway`, and `ibkr-credentials` unchanged. Existing Claude Code sessions may need to reconnect the corresponding server through `/mcp`; new sessions use the private local settings.
 
 ## Re-Login (After Pod Restart or Weekly 2FA Expiry)
 

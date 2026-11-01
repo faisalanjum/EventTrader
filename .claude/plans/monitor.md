@@ -107,9 +107,9 @@ livenessProbe: tcpSocket port 4002 every 60s
 
 | Service | Verified URL | Auth |
 |---|---|---|
-| Paper MCP | `http://localhost:31101` (NodePort 31101 → 8000) | `Bearer Lgqn5pk8GRb1504c1k0LOEs6hTqjyva` |
-| Live MCP | `http://localhost:31100` (NodePort 31100 → 8000) | `Bearer oMSIAFhSdgb7I4LTP4c7r6tAb1lZgPn6` |
-| Tokens source | `/home/faisal/EventMarketDB/.mcp.json` |
+| Paper MCP | `http://localhost:31101` (NodePort 31101 → 8000) | Private local client setting |
+| Live MCP | `http://localhost:31100` (NodePort 31100 → 8000) | Private local client setting |
+| Tokens source | Project-local client entries in `~/.claude.json` (private; not tracked in Git) |
 | Health endpoints | `/health` returns `{"status":"ok"}` for both |
 | Gateway status endpoint | `/gateway/status` confirms `connection_status: reachable` |
 
