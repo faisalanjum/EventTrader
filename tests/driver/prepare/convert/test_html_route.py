@@ -232,4 +232,62 @@ class StepTime(unittest.TestCase):
         self.assertEqual(self.timed(given=True), (0, 0.0))
 
 
+class NativeFailureBoundary(unittest.TestCase):
+    def test_direct_and_native_wrapped_failures_keep_the_original_exception(self):
+        from edgar.documents.parser import HTMLParser
+        from edgar.documents.processors.preprocessor import HTMLPreprocessor
+        from driver.prepare.get.acquire import StorageError
+        from tests.driver.prepare.support import FixtureStore
+        import lxml.html
+        simple = b'<p>Independent positive 125 and -7.</p>'
+        for raw in (simple, FixtureStore().read('source_reading_v2/AMG_R1.htm')):
+            pin = hashlib.sha256(raw).hexdigest()
+            positive = eh.convert(raw, 'positive.htm', pin)
+            self.assertEqual(positive['status'], 'OK'); self.assertTrue(positive['units'])
+            if raw == simple: self.assertEqual(positive['units'][0]['text'], 'Independent positive 125 and -7.')
+            for kind in (OSError, StorageError, ImportError, MemoryError, ValueError):
+                for boundary in ('callback', 'preprocessor', 'native_parse', 'lxml'):
+                    for depth in (0, 1, 2):
+                        fault = kind('controlled native failure'); thrown = fault
+                        for _ in range(depth):
+                            wrapper = RuntimeError('explicit wrapper'); wrapper.__cause__ = thrown; thrown = wrapper
+                        def fail(*a, **k): raise thrown
+                        targets = {'preprocessor': (HTMLPreprocessor, 'process'), 'native_parse': (HTMLParser, '_parse_html'),
+                                   'lxml': (lxml.html, 'fromstring')}
+                        context = contextlib.nullcontext() if boundary == 'callback' else patch.object(*targets[boundary], side_effect=fail)
+                        with self.subTest(input=pin, kind=kind.__name__, boundary=boundary, depth=depth), context:
+                            kwargs = dict(parse=fail) if boundary == 'callback' else {}
+                            if kind is ValueError:
+                                self.assertEqual(eh.convert(raw, 'negative.htm', pin, **kwargs)['status'], 'FAILED')
+                            else:
+                                with self.assertRaises(kind) as caught: eh.convert(raw, 'negative.htm', pin, **kwargs)
+                                self.assertIs(caught.exception, fault)
+
+            again = eh.convert(raw, 'positive.htm', pin)
+            positive.pop('seconds'); again.pop('seconds')
+            self.assertEqual(again, positive)  # healthy native retry after removing every injected fault
+
+    def test_cause_cycles_context_false_values_and_cancellation(self):
+        class FalseError(OSError):
+            def __bool__(self): return False
+        for mode in ('empty', 'self_cycle', 'two_cycle', 'implicit', 'suppressed', 'false_error', 'cancel', 'exit'):
+            fault = RuntimeError(mode); thrown = fault
+            if mode == 'self_cycle': fault.__cause__ = fault
+            if mode == 'two_cycle':
+                second = RuntimeError('second'); second.__cause__ = fault; fault.__cause__ = second
+            if mode in ('implicit', 'suppressed'):
+                fault.__context__ = MemoryError('unrelated handled fault'); fault.__suppress_context__ = mode == 'suppressed'
+            if mode in ('false_error', 'cancel', 'exit'):
+                fault = {'false_error': FalseError, 'cancel': KeyboardInterrupt, 'exit': SystemExit}[mode](mode)
+                thrown = fault
+                if mode == 'false_error':
+                    thrown = RuntimeError('wrapped'); thrown.__cause__ = fault
+            def fail(*a, **k): raise thrown
+            with self.subTest(mode=mode):
+                if mode in ('false_error', 'cancel', 'exit'):
+                    with self.assertRaises(type(fault)) as caught: eh.convert(RAW, 'a.htm', SHA, parse=fail)
+                    self.assertIs(caught.exception, fault)
+                else: self.assertEqual(eh.convert(RAW, 'a.htm', SHA, parse=fail)['status'], 'FAILED')
+
+
 if __name__ == '__main__': unittest.main()

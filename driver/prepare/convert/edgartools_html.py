@@ -647,6 +647,17 @@ def version():
     return f"edgartools {md.version('edgartools')}"
 
 
+def _fatal_cause(error):
+    """Recover a machine failure from native explicit wrappers, never unrelated context."""
+    seen = set()
+    while error is not None and id(error) not in seen:
+        if isinstance(error, (OSError, StorageError, ImportError, MemoryError)):
+            return error
+        seen.add(id(error))
+        error = error.__cause__
+    return None
+
+
 def inline_facts(raw, parser):
     """Native facts bound to their own original start tag, not matched by value.
 
@@ -709,9 +720,9 @@ def inline_facts(raw, parser):
             records[code] = {'source_tag': known[code], 'namespace': ns, 'attributes': {k: v for k, v in element.attrib.items() if k != key},
                              'element_text': element.text_content(), 'native_element': element_fields, 'native': asdict(fact)}  # no numeric_value float property
         if accounted != set(known): raise ValueError('native parse did not retain every fact source identity')
-    except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as exc:
-        if isinstance(exc.__cause__, (OSError, StorageError, ImportError, MemoryError)): raise exc.__cause__  # native _parse_html wraps these
+        fatal = _fatal_cause(exc)
+        if fatal is not None: raise fatal
         return {'read': False, 'records': [records[k] for k in known if k in records], 'error': type(exc).__name__ + ': ' + str(exc)[:200]}
     return {'read': True, 'records': [records[k] for k in known if k in records]}
 
@@ -794,8 +805,10 @@ def convert(raw, file_id, sha256, parse=parse, vis=None):
     anchor.check_source(raw, sha256)
     vis = anchor.Visible(raw) if vis is None else vis
     try: tree, seconds, made_by = parse(raw, vis)
-    except (OSError, StorageError, ImportError, MemoryError): raise
-    except Exception as e: return unsupported(file_id, sha256, version(), 'FAILED', repr(e)[:300])
+    except Exception as e:
+        fatal = _fatal_cause(e)
+        if fatal is not None: raise fatal
+        return unsupported(file_id, sha256, version(), 'FAILED', repr(e)[:300])
     route = route_for(tree, raw, file_id, sha256, seconds, made_by, settings(vis), vis)
     if vis.paged: route['page_visibility'] = vis.page
     return route

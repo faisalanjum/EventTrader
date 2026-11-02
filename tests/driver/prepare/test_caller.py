@@ -186,6 +186,45 @@ INVENTORY = json.loads((HERE / 'fixtures/runtime_inventory.json').read_bytes())[
 MARK = b"import os\nopen(os.path.join(os.environ['TMPDIR'], 'UNLISTED_INIT_EXECUTED'), 'a').write('imported\\n')\n"
 
 
+class NativeFailureOutcome(unittest.TestCase):
+    def test_native_wrappers_cannot_turn_machine_failure_into_finished_content(self):
+        from playwright.sync_api import sync_playwright
+        from redisDB import prepared_filing as pf
+        root = HERE.parents[2]
+        exe = os.environ.get('BROWSER_EXECUTABLE', '/home/faisal/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell')
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(executable_path=exe); version = browser.version; browser.close()
+        folder = Path(tempfile.mkdtemp(prefix='native_failure_caller_'))  # keep exact child evidence like Caller
+        manifest = folder / 'MANIFEST.json'
+        manifest.write_text(json.dumps({'files': {str(p.relative_to(root)): sha(p.read_bytes())
+                           for p in sorted((root / 'driver').rglob('*')) if p.is_file() and '__pycache__' not in p.parts}}))
+        simple = b'<p>Independent positive 125 and -7.</p>'
+        inline = b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"><body><p><ix:nonFraction name="x:N" scale="6">7</ix:nonFraction></p></body></html>'
+        cases = [('healthy', None, 'none', 0, simple, 'complete'), ('content', 'ValueError', 'lxml', 0, simple, 'incomplete')]
+        for kind in ('OSError', 'StorageError', 'ImportError', 'MemoryError'):
+            cases.extend([(kind + '_direct', kind, 'direct', 0, simple, 'failed'),
+                          (kind + '_wrapped', kind, 'lxml', 0, simple, 'failed'),
+                          (kind + '_inline', kind, 'inline_only', 2, inline, 'failed')])
+        for name, kind, boundary, depth, raw, expected in cases:
+            with self.subTest(case=name):
+                d = folder / name; d.mkdir(); (d / 'case.html').write_bytes(raw)
+                plan = dict(runtime_root=str(root), runtime_manifest=dict(path=str(manifest), sha256=sha(manifest.read_bytes())),
+                            browser_executable=exe, browser_executable_sha256=sha(Path(exe).read_bytes()), browser_version=version,
+                            source_commands=[dict(file_id='case.html', filename='case.html', source_sha256=sha(raw), dispatch='html', directory=str(d),
+                                                  members={'case.html': dict(sha256=sha(raw), bytes=len(raw))}, base=None, bundle=None)],
+                            audit_fault=dict(kind=kind, boundary=boundary, depth=depth))
+                body = json.dumps(plan).encode(); (d / 'PLAN.json').write_bytes(body)
+                process = subprocess.run([sys.executable, '-I', '-S', '-B', str(root / 'driver/prepare/job.py'), str(d / 'PLAN.json'), sha(body),
+                                          str(d / 'job'), str(HERE / 'fixtures/native_fault_generator.py'), '40'],
+                                         env={'PATH': '/usr/bin:/bin', 'HOME': os.environ['HOME']}, capture_output=True, timeout=150)
+                (d / 'job.stdout').write_bytes(process.stdout); (d / 'job.stderr').write_bytes(process.stderr)
+                result = d / 'job/RESULT.json'; row = json.loads(result.read_bytes())['rows'][0]
+                got, reasons = pf.status(result, sha(body), [dict(filename='case.html', category='html', format_hint='html')])
+                self.assertEqual(got, expected, (reasons, process.stderr[-500:]))
+                self.assertEqual(row['complete_exists'], expected != 'failed')
+                self.assertEqual(row['outcome'], {'complete': 'verified_saved_output', 'incomplete': 'incomplete', 'failed': 'generation_failed'}[expected])
+
+
 class RuntimeInventory(unittest.TestCase):
     """The manifest must be the exact inventory of the runtime's driver tree (Python __pycache__ aside); every listed file stays hash-checked."""
     def setUp(self):

@@ -271,4 +271,37 @@ class InlineFactMetadata(unittest.TestCase):
         self.assertEqual(negative['source_facts']['records'], positive['source_facts']['records'][:1])
 
 
+class NativeFactFailures(unittest.TestCase):
+    def test_native_fact_errors_follow_explicit_causes(self):
+        from edgar.documents.parser import HTMLParser
+        from edgar.documents.strategies.xbrl_extraction import XBRLExtractor
+        from driver.prepare.get.acquire import StorageError
+        import lxml.html
+        raw, positive = route('<p><ix:nonFraction name="x:N" scale="6">7</ix:nonFraction></p>')
+        self.assertEqual(positive['source_facts']['records'][0]['native']['value'], str(7 * 10**6))
+        for kind in (OSError, StorageError, ImportError, MemoryError, ValueError):
+            for target, attribute in ((HTMLParser, '_parse_html'), (lxml.html, 'fromstring'), (XBRLExtractor, 'extract_fact')):
+                for depth in (0, 1, 2):
+                    fault = kind('controlled native fact failure'); thrown = fault
+                    for _ in range(depth):
+                        wrapper = RuntimeError('explicit wrapper'); wrapper.__cause__ = thrown; thrown = wrapper
+                    def fail(*a, **k): raise thrown
+                    with self.subTest(kind=kind.__name__, boundary=attribute, depth=depth), patch.object(target, attribute, side_effect=fail):
+                        if kind is ValueError:
+                            self.assertFalse(eh.inline_facts(raw, HTMLParser())['read'])
+                        else:
+                            with self.assertRaises(kind) as caught: eh.inline_facts(raw, HTMLParser())
+                            self.assertIs(caught.exception, fault)
+        for mode in ('none', 'self_cycle', 'two_cycle', 'implicit', 'suppressed'):
+            fault = RuntimeError(mode)
+            if mode == 'self_cycle': fault.__cause__ = fault
+            if mode == 'two_cycle':
+                second = RuntimeError('second'); second.__cause__ = fault; fault.__cause__ = second
+            if mode in ('implicit', 'suppressed'):
+                fault.__context__ = MemoryError('unrelated'); fault.__suppress_context__ = mode == 'suppressed'
+            with self.subTest(mode=mode), patch.object(XBRLExtractor, 'extract_fact', side_effect=fault):
+                self.assertFalse(eh.inline_facts(raw, HTMLParser())['read'])
+        self.assertEqual(eh.inline_facts(raw, HTMLParser()), positive['source_facts'])
+
+
 if __name__ == '__main__': unittest.main()
