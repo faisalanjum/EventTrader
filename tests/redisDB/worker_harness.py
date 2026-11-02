@@ -1,10 +1,14 @@
 """Runs the isolated report_enricher copy's REAL enrich_worker loop for given events, with its imports replaced by recording fakes
 (no Redis, no logging setup, no ReportProcessor, no network). Prints the ordered call log as JSON.
 Usage: python -B worker_harness.py <enricher.py> '<json: events, existing, legacy_raises, configured>'"""
-import importlib.util, json, os, sys, types
+import hashlib, importlib.util, json, os, sys, tempfile, types
+from pathlib import Path
 
 ENRICHER, ARGS = sys.argv[1], json.loads(sys.argv[2])
 LOG = []
+RECEIPT_DIR = tempfile.TemporaryDirectory(prefix='worker_receipt_')
+RECEIPT = Path(RECEIPT_DIR.name) / 'RECEIPT.json'
+RECEIPT.write_bytes((Path(__file__).parent / 'fixtures/real_receipt.json').read_bytes())
 
 
 def module(name, **attrs):
@@ -67,7 +71,9 @@ class Processor:
     def _process_exhibits(self, ex): LOG.append(['legacy', '_process_exhibits']); return {}
 
 
-def pointer(filing, config_path): LOG.append(['pointer', filing['accessionNo']]); return {'status': 'complete', 'receipt': None}
+def pointer(filing, config_path):
+    LOG.append(['pointer', filing['accessionNo']])
+    return dict(status='complete', reasons=[], receipt=dict(path=str(RECEIPT), sha256=hashlib.sha256(RECEIPT.read_bytes()).hexdigest()))
 
 
 def prepared_done(record): return (record.get('prepared_extraction') or {}).get('status') in ('complete', 'incomplete')

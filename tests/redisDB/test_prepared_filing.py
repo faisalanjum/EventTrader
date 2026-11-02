@@ -4,7 +4,7 @@ F1-F5 each have one test. The runtime under test is this checkout with its deplo
 or ADAPTER_RUNTIME_MANIFEST). Needs PREPARE_TEST_DATA (tests/driver/prepare/README.md).
 The end-to-end event runs only with ADAPTER_E2E=1, ADAPTER_OUT=<new folder on a filesystem with >=16% free> and ADAPTER_RECORDED=<recorded SEC
 responses: responses.sqlite3 + blobs> (pinned job.py: 3 browser rows)."""
-import atexit, functools, gzip, hashlib, json, os, shutil, sqlite3, subprocess, sys, tempfile, unittest
+import atexit, copy, functools, gzip, hashlib, json, os, shutil, sqlite3, subprocess, sys, tempfile, unittest
 from unittest.mock import patch
 from types import SimpleNamespace
 from pathlib import Path
@@ -85,6 +85,122 @@ def by(members, *cats):
     return {d['filename'] for d in members if d['category'] in cats}
 
 
+def pointer_reply(root, receipt, filing=AMG):
+    """Only the child transport is replaced; pointer reads the producer's actual saved bytes."""
+    config = root / 'pointer-config.json'
+    config.write_text(json.dumps(dict(python=sys.executable)))
+    child = subprocess.CompletedProcess([], 0, json.dumps(receipt), '')
+    with patch.object(pf.subprocess, 'run', return_value=child):
+        return pf.pointer(filing, config)
+
+
+class Pointer(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name); self.saved = self.root / 'RECEIPT.json'
+        # Real AMG receipt from the retained November 1 live-filing proof. Only
+        # its plan locator is relocated, in BOTH the saved and returned objects.
+        self.receipt = json.loads((HERE / 'fixtures/real_receipt.json').read_bytes())
+        self.receipt['plan']['path'] = str(self.root / 'PLAN.json')
+        self.body = (json.dumps(self.receipt) + '\n').encode()
+        self.saved.write_bytes(self.body)
+
+    def call(self, receipt=None):
+        return pointer_reply(self.root, self.receipt if receipt is None else receipt)
+
+    def failed(self, receipt):
+        got = self.call(receipt)
+        self.assertEqual(got['status'], 'failed', got)
+        self.assertFalse(pf.prepared_done(dict(prepared_extraction=got)))
+        self.assertTrue(all(isinstance(reason, str) for reason in got['reasons']))
+
+    def test_real_saved_success_read_once_and_optional_byte_pin(self):
+        for explicit, pin in ((False, False), (True, False), (True, True)):
+            with self.subTest(explicit=explicit, pin=pin):
+                receipt = copy.deepcopy(self.receipt)
+                if explicit:
+                    receipt['saved_receipt'] = dict(path=str(self.saved))
+                    if pin: receipt['saved_receipt']['sha256'] = hashlib.sha256(self.body).hexdigest()
+                reads = []; native = Path.read_bytes
+                def read(path):
+                    if path == self.saved: reads.append(path)
+                    return native(path)
+                with patch.object(Path, 'read_bytes', read): got = self.call(receipt)
+                self.assertEqual(got['status'], 'complete')
+                self.assertEqual(got['receipt'], dict(path=str(self.saved), sha256=hashlib.sha256(self.body).hexdigest()))
+                self.assertEqual(reads, [self.saved])
+        self.saved.write_text(json.dumps(self.receipt, indent=4))
+        self.assertEqual(self.call()['status'], 'complete')  # equivalent JSON, no supplied byte pin
+
+    def test_valid_reclassification_reasons_and_failed_without_receipt(self):
+        for stored, returned in (('complete', 'incomplete'), ('incomplete', 'complete')):
+            self.saved.write_text(json.dumps(dict(self.receipt, status=stored)))
+            receipt = dict(self.receipt, status=returned, reasons=['rechecked'] * 23, members=[])
+            got = self.call(receipt)
+            self.assertEqual((got['status'], got['reasons']), (returned, ['rechecked'] * 20))
+        receipt = dict(self.receipt); receipt.pop('reasons')
+        self.assertEqual(self.call(receipt)['reasons'], [])
+        for receipt in (dict(status='failed', reasons=['no package']), dict(self.receipt, status='failed')):
+            self.saved.unlink(missing_ok=True)
+            got = self.call(receipt)
+            self.assertEqual((got['status'], got['receipt']), ('failed', None))
+
+    def test_malformed_child_consumed_fields_fail(self):
+        for value in ([], 'bad', 7, True, {}, dict(status='complete'), dict(status='incomplete')):
+            with self.subTest(value=value): self.failed(value)
+        for key, values in (
+                ('status', [None, [], 'done']), ('reasons', [None, {}, 'error', [7]]),
+                ('plan', [None, {}, [], 'PLAN', dict(path={}), dict(path='')]),
+                ('saved_receipt', [None, {}, [], 'RECEIPT', dict(path={}), dict(path='')])):
+            for value in values:
+                with self.subTest(key=key, value=value): self.failed(dict(self.receipt, **{key: value}))
+
+    def test_bad_declared_pin_fails(self):
+        for pin in (None, '', [], 'bad', '0' * 64):
+            with self.subTest(pin=pin):
+                self.failed(dict(self.receipt, saved_receipt=dict(path=str(self.saved), sha256=pin)))
+
+    def test_receipt_read_failure_stays_inside_boundary(self):
+        native = Path.read_bytes
+        for kind in (FileNotFoundError, PermissionError, IsADirectoryError):
+            def read(path):
+                if path == self.saved: raise kind('controlled receipt read failure')
+                return native(path)
+            with self.subTest(kind=kind), patch.object(Path, 'read_bytes', read): self.failed(self.receipt)
+        self.saved.unlink()
+        self.failed(self.receipt)
+
+    def test_receipt_content_and_each_identity_reference_must_agree(self):
+        for body in (b'', b'{bad', b'[]', b'null', b'7'):
+            self.saved.write_bytes(body)
+            with self.subTest(body=body): self.failed(self.receipt)
+        keys = ('schema', 'accession', 'cik', 'form', 'package_sha256', 'runtime_manifest_sha256',
+                'version', 'manifest', 'plan', 'result')
+        for key in keys:
+            for missing in (False, True):
+                saved = copy.deepcopy(self.receipt)
+                if missing: saved.pop(key)
+                else: saved[key] = 'foreign'
+                self.saved.write_text(json.dumps(saved))
+                with self.subTest(key=key, missing=missing): self.failed(self.receipt)
+        for status in ('failed', 'unknown', None):
+            self.saved.write_text(json.dumps(dict(self.receipt, status=status)))
+            with self.subTest(status=status): self.failed(self.receipt)
+        self.saved.write_bytes(self.body)
+        for key in ('accessionNo', 'cik', 'formType'):
+            got = pointer_reply(self.root, self.receipt, dict(AMG, **{key: 'foreign'}))
+            self.assertEqual(got['status'], 'failed')
+
+    def test_child_exit_bad_output_config_and_cancellation(self):
+        cfg = self.root / 'config.json'; cfg.write_text(json.dumps(dict(python=sys.executable)))
+        for code, body in ((1, '{}'), (0, ''), (0, 'invalid'), (0, 'null')):
+            with self.subTest(code=code, body=body), patch.object(pf.subprocess, 'run', return_value=subprocess.CompletedProcess([], code, body, 'failure')):
+                self.assertEqual(pf.pointer(AMG, cfg)['status'], 'failed')
+        self.assertEqual(pf.pointer(AMG, self.root / 'missing')['status'], 'failed')
+        for kind in (KeyboardInterrupt, SystemExit):
+            with patch.object(pf.subprocess, 'run', side_effect=kind), self.assertRaises(kind): pf.pointer(AMG, cfg)
+
+
 class RecordedTransport(unittest.TestCase):
     def test_recorded_response_folder_accepts_the_environment_string_and_a_path(self):
         body = b'independent recorded SEC transport control'
@@ -161,6 +277,8 @@ class OcrExtension(unittest.TestCase):
         from tests.driver.prepare.pictures.test_join import fakes
         self.fixture = SavedPictures(); self.fixture.setUp(); self.addCleanup(self.fixture.doCleanups)
         self.receipt = self.fixture.filing()
+        from tests.driver.prepare.get.test_acquire import ACCESSION, CIK, FORM
+        self.receipt.update(schema='prepared-filing-receipt/2', accession=ACCESSION, cik=str(CIK), form=FORM)
         self.receipt['members'] = pf.categories(read_package(self.receipt['version'])[0])
         pf.settle(self.receipt['members'], json.loads(Path(self.receipt['result']['path']).read_bytes()))
         self.makers = fakes(self.fixture.calls, html='<div data-bbox="0 0 1000 1000" data-label="Text"><p>FAKE</p></div>')
@@ -218,6 +336,15 @@ class OcrExtension(unittest.TestCase):
         self.assertEqual(len(self.fixture.calls), 3)
         self.assertEqual(result, again)
         self.assertEqual(json.dumps(self.receipt, sort_keys=True), original)
+        filing = dict(accessionNo=result['accession'], cik=result['cik'], formType=result['form'])
+        got = pointer_reply(self.fixture.root, result, filing)
+        self.assertEqual((got['status'], got['receipt'], got['fidelity']), ('complete', result['saved_receipt'], 'unverified'))
+        self.assertEqual(got['ocr'], result['ocr'])
+        for key, value in (('ocr', {}), ('extraction_status', 'incomplete'), ('extraction_status', None), ('status', 'incomplete')):
+            with self.subTest(key=key):
+                self.assertEqual(pointer_reply(self.fixture.root, dict(result, **{key: value}), filing)['status'], 'failed')
+        missing = dict(result); missing.pop('extraction_status')
+        self.assertEqual(pointer_reply(self.fixture.root, missing, filing)['status'], 'failed')
         self.assertTrue(Path(result['saved_receipt']['path']).is_file())
 
     def test_unconsumed_picture_is_explicitly_unread_with_ocr_enabled(self):
@@ -226,6 +353,9 @@ class OcrExtension(unittest.TestCase):
         self.assertEqual(result['status'], 'incomplete')
         self.assertEqual(result['members'][-1]['category'], 'unread')
         self.assertTrue(any('unbound.png' in reason for reason in result['reasons']))
+        filing = dict(accessionNo=result['accession'], cik=result['cik'], formType=result['form'])
+        got = pointer_reply(self.fixture.root, result, filing)
+        self.assertEqual((got['status'], got['fidelity'], got['receipt']), ('incomplete', 'unverified', result['saved_receipt']))
 
     def test_transient_ocr_failure_retries_only_failed_reader_without_html_rerun(self):
         reader = self.makers['chandra'](); normal = reader.read; attempts = []
@@ -506,6 +636,7 @@ class AmgEvent(unittest.TestCase):
         self.assertEqual(by(receipt['members'], 'companion_custody'), {'MetaLinks.json', 'Financial_Report.xlsx', '0001004434-23-000015-xbrl.zip'})
         self.assertEqual(receipt['status'] == 'complete', all(r['outcome'] == V for r in result['rows']) and not by(receipt['members'], 'unread', 'conflict'))
         self.assertEqual(go(), receipt)  # repeat event: native re-verification passes, same receipt, no new job folder
+        self.assertEqual(pointer_reply(root, receipt)['status'], receipt['status'])
         self.assertEqual(len(list(root.glob('runs/*/*/*/job_*/'))), 1)
         cfg, job = e2e_config(root), Path(receipt['result']['path']).parent
 
@@ -627,6 +758,19 @@ class Recovery(unittest.TestCase):  # Root 8:28 PM: bounded automatic recovery i
     def test_cached_complete_repeat_no_job_and_corrupt_saved_output_never_credited(self):
         r, launched = self.event(['verified']); self.assertEqual((r['status'], launched), ('complete', ['job_0']))
         r, launched = self.event([]); self.assertEqual((r['status'], launched), ('complete', []))
+        saved = self.run_dir() / 'RECEIPT.json'; original = saved.read_bytes()
+        for old, current in (('incomplete', 'complete'), ('complete', 'incomplete')):
+            saved.write_text(json.dumps(dict(r, status=old, reasons=['old policy'], members=[])))
+            before = saved.read_bytes()
+            # Real repeat/reverify branch; the status seam represents a changed
+            # current policy. It must not require rewriting the old receipt.
+            with patch.object(pf, 'status', return_value=(current, ['current policy'])):
+                fresh, launched = self.event([])
+            self.assertEqual((fresh['status'], launched, saved.read_bytes()), (current, [], before))
+            self.assertNotEqual(fresh['members'], [])
+            got = pointer_reply(self.dir, fresh)
+            self.assertEqual((got['status'], got['reasons']), (current, ['current policy']))
+        saved.write_bytes(original)
         res = self.run_dir() / 'job_0/RESULT.json'; res.write_text(res.read_text().replace('"incomplete"', '"verified_saved_output"') + ' ')
         r, launched = self.event([]); self.assertEqual((r['status'], launched), ('failed', [])); self.assertIn('result: missing or changed', r['reasons'])
 

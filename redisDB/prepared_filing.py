@@ -331,13 +331,47 @@ def pointer(filing, config_path):
                            capture_output=True, text=True, env=env)
         r = json.loads(p.stdout.strip().splitlines()[-1]) if p.returncode == 0 else None
         if r is None: return dict(status='failed', reasons=[f'adapter exit {p.returncode}: {p.stderr.strip()[-300:]}'])
+        if not isinstance(r, dict) or r.get('status') not in ('complete', 'incomplete', 'failed'):
+            raise ValueError('invalid adapter status')
+        reasons = r.get('reasons', [])
+        if not isinstance(reasons, list) or any(not isinstance(reason, str) for reason in reasons):
+            raise ValueError('adapter reasons must be a list of strings')
+        ref = r['saved_receipt'] if 'saved_receipt' in r else r.get('plan')
+        saved = None
+        if ref is not None or 'saved_receipt' in r:
+            if not isinstance(ref, dict) or not isinstance(ref.get('path'), str) or not ref['path']:
+                raise ValueError('invalid receipt reference')
+            saved = Path(ref['path']) if 'saved_receipt' in r else Path(ref['path']).with_name('RECEIPT.json')
+        body = None
+        if saved is not None:
+            try: body = saved.read_bytes()
+            except FileNotFoundError:
+                if r['status'] != 'failed': raise
+        pin = hashlib.sha256(body).hexdigest() if body is not None else None
+        if 'saved_receipt' in r and 'sha256' in ref and (pin is None or ref['sha256'] != pin):
+            raise ValueError('saved receipt hash differs')
+        if r['status'] != 'failed':
+            stored = json.loads(body) if body is not None else None
+            if not isinstance(stored, dict) or stored.get('status') not in ('complete', 'incomplete'):
+                raise ValueError('successful adapter needs a saved successful receipt')
+            # Repeats re-derive status/reasons/members without rewriting the
+            # receipt. Compare only stable identity and references, not policy.
+            for key in ('schema', 'accession', 'cik', 'form', 'package_sha256', 'runtime_manifest_sha256',
+                        'version', 'manifest', 'plan', 'result'):
+                if not r.get(key) or r[key] != stored.get(key):
+                    raise ValueError(f'saved receipt {key} differs or is missing')
+            if (r['accession'], r['cik'], r['form']) != (filing['accessionNo'], str(filing['cik']), filing['formType']):
+                raise ValueError('receipt is for another filing')
+            if r['schema'] == 'prepared-filing-with-ocr/1' or r.get('extraction_status') is not None:
+                # with_ocr persists the aggregate unchanged, then adds its locator.
+                if any(not r.get(key) or r[key] != stored.get(key) for key in ('ocr', 'extraction_status', 'status')):
+                    raise ValueError('saved OCR aggregate differs')
+        extra = dict(fidelity='unverified', ocr=r.get('ocr')) if r.get('extraction_status') is not None else {}
+        return dict(status=r['status'], reasons=reasons[:20], package_sha256=r.get('package_sha256'),
+                    runtime_manifest_sha256=r.get('runtime_manifest_sha256'),
+                    receipt=dict(path=str(saved), sha256=pin) if body is not None else None, **extra)
     except Exception as e:
         return dict(status='failed', reasons=[f'adapter: {type(e).__name__}: {e}'])
-    saved = Path(r['saved_receipt']['path']) if r.get('saved_receipt') else Path(r['plan']['path']).with_name('RECEIPT.json') if r.get('plan') else None
-    extra = dict(fidelity='unverified', ocr=r.get('ocr')) if r.get('extraction_status') is not None else {}
-    return dict(status=r['status'], reasons=r.get('reasons', [])[:20], package_sha256=r.get('package_sha256'),
-                runtime_manifest_sha256=r.get('runtime_manifest_sha256'),
-                receipt=dict(path=str(saved), sha256=_sha(saved)) if saved and saved.exists() else None, **extra)
 
 
 if __name__ == '__main__':  # the isolated child: filing JSON on stdin, config path as argv[1], the receipt as the last stdout line

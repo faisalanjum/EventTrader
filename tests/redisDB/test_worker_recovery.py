@@ -2,7 +2,7 @@
 RED = the previous worker (ENRICHER_OLD, e.g. b36aa7d2) loses a payload killed mid-work; GREEN = the fix keeps, finishes or retires it.
 DISPOSABLE Redis only: every test runs FLUSHALL. Runs only when REDIS_TEST_PORT (and REDIS_TEST_HOST, default localhost) name a throwaway test server.
 Needs the worker's environment (redis-py), e.g. the report-enricher image."""
-import json, os, signal, subprocess, sys, time, unittest
+import copy, hashlib, json, os, signal, subprocess, sys, tempfile, time, unittest
 from pathlib import Path
 try:
     import redis
@@ -21,10 +21,12 @@ EVENT = {'_original_prefix_type': 'live', '_raw_key': 'reports:live:raw:00010044
 r = redis.Redis(host=HOST, port=PORT, decode_responses=True) if redis and PORT else None
 
 
-def run(enricher, configured=True, crash=None, times=0, settle=2.0, limit=30):
+def run(enricher, configured=True, crash=None, times=0, settle=2.0, limit=30, adapter_reply=None, config=None):
     """Start one worker in its own process group; return its exit code (-9 = killed itself) or None if it went idle (then stopped)."""
     p = subprocess.Popen([sys.executable, '-B', str(HERE / 'redis_harness.py'), enricher,
-                          json.dumps(dict(host=HOST, port=PORT, constants=CONSTANTS, configured=configured, crash=crash, times=times))],
+                          json.dumps(dict(host=HOST, port=PORT, constants=CONSTANTS, configured=configured, crash=crash, times=times,
+                                          real_pointer=adapter_reply is not None, adapter_reply=adapter_reply, config=config or '/configured/adapter.json',
+                                          adapter=os.environ.get('ADAPTER_UNDER_TEST', str(HERE.parents[1] / 'redisDB/prepared_filing.py'))))],
                          start_new_session=True, env={'PATH': '/usr/bin:/bin', 'PYTHONDONTWRITEBYTECODE': '1'}, cwd=str(HERE),
                          stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     end, idle_since = time.time() + limit, None
@@ -145,6 +147,53 @@ class Recovery(unittest.TestCase):
         self.assertEqual([h['item'] for h in handed], [item]); self.assertIn('legacy result published): package: OSError', handed[0]['reason'])
         self.assertEqual(json.loads(r.get(PKEY))['prepared_extraction']['status'], 'failed')
         self.assertEqual((r.llen(DONEQ), r.llen(PROC), r.hlen(DELIV)), (1, 0, 0))  # legacy publication not blocked
+
+    def test_real_pointer_preserves_legacy_and_committed_input_on_receipt_failure(self):
+        for mode in ('complete', 'incomplete', 'missing', 'directory', 'stale_pin', 'invalid_json', 'foreign', 'bad_reasons', 'failed_child'):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(prefix='pointer_transaction_') as folder:
+                r.flushall()
+                root = Path(folder); saved = root / 'RECEIPT.json'; reply = root / 'reply.json'; cfg = root / 'config.json'
+                cfg.write_text(json.dumps(dict(python=sys.executable)))
+                receipt = json.loads((HERE / 'fixtures/real_receipt.json').read_bytes())
+                receipt['plan']['path'] = str(root / 'PLAN.json')
+                if mode == 'incomplete': receipt.update(status='incomplete', reasons=['controlled content limitation'])
+                body = json.dumps(receipt).encode(); saved.write_bytes(body)
+                child = copy.deepcopy(receipt)
+                if mode == 'missing': saved.unlink()
+                if mode == 'directory': saved.unlink(); saved.mkdir()
+                if mode == 'stale_pin': child['saved_receipt'] = dict(path=str(saved), sha256='0' * 64)
+                if mode == 'invalid_json': saved.write_bytes(b'{bad')
+                if mode == 'foreign': saved.write_text(json.dumps(dict(receipt, package_sha256='foreign')))
+                if mode == 'bad_reasons': child['reasons'] = [7]
+                if mode == 'failed_child': child = dict(status='failed', reasons=['no package'])
+                reply.write_text(json.dumps(child))
+                with r.pubsub() as messages:
+                    messages.subscribe('reports:live:processed')
+                    self.assertEqual(messages.get_message(timeout=2)['type'], 'subscribe')
+                    item = push()
+                    self.assertIsNone(run(NEW, adapter_reply=str(reply), config=str(cfg)))
+                    published = messages.get_message(timeout=2)
+                    self.assertEqual((published['type'], published['data']), ('message', PKEY))
+                processed = json.loads(r.get(PKEY)); got = processed['prepared_extraction']
+                success = mode in ('complete', 'incomplete')
+                self.assertEqual(got['status'], mode if success else 'failed')
+                self.assertEqual((processed['enriched'], processed['extracted_sections']), (True, {'s': 1}))
+                self.assertEqual((r.llen(DONEQ), r.llen(PROC), r.hlen(DELIV), calls('legacy')), (1, 0, 0, 1))
+                self.assertEqual([json.loads(x)['item'] for x in r.lrange(DEAD, 0, -1)], [] if success else [item])
+                if success:
+                    self.assertEqual(got['receipt'], dict(path=str(saved), sha256=hashlib.sha256(body).hexdigest()))
+                # Explicit replay: failed extraction is processed again; a valid
+                # complete/incomplete pointer is skipped. No automatic retry claim.
+                push(); self.assertIsNone(run(NEW, adapter_reply=str(reply), config=str(cfg)))
+                self.assertEqual((r.llen(DONEQ), calls('legacy'), r.llen(DEAD)), (1, 1, 0) if success else (2, 2, 2))
+                if not success:
+                    if saved.is_dir(): saved.rmdir()
+                    saved.write_bytes(body); reply.write_text(json.dumps(receipt))
+                    push(); self.assertIsNone(run(NEW, adapter_reply=str(reply), config=str(cfg)))
+                    self.assertEqual(json.loads(r.get(PKEY))['prepared_extraction']['status'], 'complete')
+                    self.assertEqual((r.llen(DONEQ), calls('legacy'), r.llen(PROC), r.llen(DEAD)), (3, 3, 0, 2))
+                    push(); self.assertIsNone(run(NEW, adapter_reply=str(reply), config=str(cfg)))
+                    self.assertEqual((r.llen(DONEQ), calls('legacy')), (3, 3))  # recovered product is now skipped
 
 
     def test_lost_skip_ack_reply_stops_without_a_second_publication(self):

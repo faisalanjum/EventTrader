@@ -1,12 +1,16 @@
 """Runs a report_enricher copy's REAL enrich_worker loop against a REAL Redis (test server), with the repo's REAL queue-name module.
 Only the heavy work (ReportProcessor), the adapter pointer, logging and the lifecycle helper are fakes. Run in its own process group:
 crash modes SIGKILL the WHOLE group. Usage: python -B redis_harness.py <enricher.py> '<json: port, configured, crash, times>'"""
-import importlib.util, json, os, signal, sys, types
+import hashlib, importlib.util, json, os, signal, subprocess, sys, tempfile, types
+from pathlib import Path
 import redis
 
 ENRICHER, ARGS = sys.argv[1], json.loads(sys.argv[2])
 R = redis.Redis(host=ARGS['host'], port=ARGS['port'], decode_responses=True, retry_on_timeout=True, socket_timeout=30.0)  # production settings (redisClasses REDIS_CONN_SETTINGS)
 MODE, TIMES = ARGS.get('crash'), ARGS.get('times', 0)
+RECEIPT_DIR = tempfile.TemporaryDirectory(prefix='redis_receipt_')
+RECEIPT = Path(RECEIPT_DIR.name) / 'RECEIPT.json'
+RECEIPT.write_bytes((Path(__file__).parent / 'fixtures/real_receipt.json').read_bytes())
 
 
 def crash_now():
@@ -48,7 +52,7 @@ class Processor:
 def pointer(filing, config_path):
     R.rpush('test:calls', 'pointer')
     if MODE == 'pointer_failed': return {'status': 'failed', 'reasons': ['package: OSError: no package'], 'receipt': None}
-    return {'status': 'complete', 'receipt': None}
+    return dict(status='complete', reasons=[], receipt=dict(path=str(RECEIPT), sha256=hashlib.sha256(RECEIPT.read_bytes()).hexdigest()))
 
 
 def prepared_done(record):
@@ -81,6 +85,10 @@ module('redisDB.ReportProcessor', ReportProcessor=Processor)
 flags = module('config.feature_flags', FORM_TYPES_REQUIRING_SECTIONS=['8-K'], FORM_TYPES_REQUIRING_XML=['10-K'], PROCESSED_ITEM_KEY_TTL=60)
 module('config', feature_flags=flags)
 if not ARGS.get('real_pointer'): module('prepared_filing', pointer=pointer, prepared_done=prepared_done)  # else the image's real adapter (PYTHONPATH)
+elif ARGS.get('adapter_reply'):  # real pointer and worker; only the child's transport is substituted
+    spec = importlib.util.spec_from_file_location('prepared_filing', ARGS['adapter'])
+    adapter = importlib.util.module_from_spec(spec); sys.modules[spec.name] = adapter; spec.loader.exec_module(adapter)
+    adapter.subprocess.run = lambda *a, **k: subprocess.CompletedProcess([], 0, Path(ARGS['adapter_reply']).read_text(), '')
 if ARGS['configured']: os.environ['PREPARED_EXTRACTION_CONFIG'] = ARGS.get('config', '/configured/adapter.json')
 else: os.environ.pop('PREPARED_EXTRACTION_CONFIG', None)
 spec = importlib.util.spec_from_file_location('enricher_under_test', ENRICHER); enricher = importlib.util.module_from_spec(spec); spec.loader.exec_module(enricher)

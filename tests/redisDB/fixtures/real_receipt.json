@@ -1,0 +1,155 @@
+{
+ "accession": "0001004434-23-000015",
+ "cik": "1004434",
+ "form": "8-K",
+ "job_exit": 0,
+ "manifest": {
+  "path": "/evidence/filing/package/versions/0001004434-23-000015/7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb/manifest.json",
+  "sha256": "f67011c9c5971839cbefffd72370c400b63d3eb747a8931bc543a5c37c613558"
+ },
+ "members": [
+  {
+   "category": "html",
+   "filename": "amg-20230501.htm",
+   "format_hint": "xml",
+   "sha256": "4c13d94bfa9666130403bd80c12fef9d4852788fd243497b10c4631ee53866f4",
+   "type": "8-K"
+  },
+  {
+   "category": "html",
+   "filename": "amgq12023ex991.htm",
+   "format_hint": "html",
+   "sha256": "29d91f8e1ee2c61c95cc03f6a2bce509bfabc774d760ca02e41d5526400bd87a",
+   "type": "EX-99.1"
+  },
+  {
+   "category": "xml",
+   "filename": "amg-20230501.xsd",
+   "format_hint": "xml",
+   "sha256": "f6d33d267a3ca0d30dcfd3b01f7de6634ac4c49d352c07276c860d260b956fad",
+   "type": "EX-101.SCH"
+  },
+  {
+   "category": "xml",
+   "filename": "amg-20230501_def.xml",
+   "format_hint": "xml",
+   "sha256": "3111b376f8972f694d832d88ef06d4294688c24e1bcb4aecba412e21ae4d3d06",
+   "type": "EX-101.DEF"
+  },
+  {
+   "category": "xml",
+   "filename": "amg-20230501_lab.xml",
+   "format_hint": "xml",
+   "sha256": "87ab59dad259412e622be372f8db358e6cb1867c0700b2c023e6b5e8de362486",
+   "type": "EX-101.LAB"
+  },
+  {
+   "category": "xml",
+   "filename": "amg-20230501_pre.xml",
+   "format_hint": "xml",
+   "sha256": "706ee9621083adfa7d57d8da27b2484fb22ee2896ce4b94e34170d8798122d8f",
+   "type": "EX-101.PRE"
+  },
+  {
+   "category": "support",
+   "filename": "amglogoa78a.jpg",
+   "format_hint": "jpeg",
+   "sha256": "d2f170393d3ae90aca6757a9e727caa19e5e4ef9cbf80fcf7daa0bbdeaccabf5",
+   "type": "GRAPHIC"
+  },
+  {
+   "category": "support",
+   "filename": "image5.jpg",
+   "format_hint": "jpeg",
+   "sha256": "2f0fbc8a03b8f6e207e1f1e5c3ea4df427b404ced81d970f8518bb11fce6a8eb",
+   "type": "GRAPHIC"
+  },
+  {
+   "category": "owner_excluded",
+   "filename": "courtesy.pdf",
+   "format_hint": "pdf",
+   "sha256": "f9ac83d13ca1ec9c99e4bed2924e24dbfc10ba46a43cb5378e67c0738c294f7a",
+   "type": "EX-99.1"
+  },
+  {
+   "category": "html",
+   "filename": "R1.htm",
+   "format_hint": "html",
+   "sha256": "a838aa1f302dae9bff95c5db248627c8023a7185566ca5c1992fa10e12efffbf",
+   "type": "XML"
+  },
+  {
+   "category": "xml",
+   "filename": "amg-20230501_htm.xml",
+   "format_hint": "xml",
+   "sha256": "d3c8ab321ee359230dfcb03710badcb463a8246e4f19d21cf776dc6c8fb3714c",
+   "type": "XML"
+  },
+  {
+   "category": "companion_custody",
+   "filename": "Financial_Report.xlsx",
+   "format_hint": "zip",
+   "sha256": "e090ea2609c10ea235ad8ac8831118874e3e7b15cf738dc9a17ec19c3cf0fe09",
+   "type": "EXCEL"
+  },
+  {
+   "category": "support",
+   "filename": "Show.js",
+   "format_hint": "unknown",
+   "sha256": "37b4bcd336d85afa83ee0d5af7fd0c4ca43b0f4388eda9f2ed7e7c9be40999c8",
+   "type": "XML"
+  },
+  {
+   "category": "support",
+   "filename": "report.css",
+   "format_hint": "unknown",
+   "sha256": "c564d6d00dc81a734bd958995c968a220c4e3de896cd48ac52b82a641a40e26f",
+   "type": "XML"
+  },
+  {
+   "category": "xml",
+   "filename": "FilingSummary.xml",
+   "format_hint": "xml",
+   "sha256": "ec3581180947c52198c4d246dc9228ca73d4aa5da68bb89e0ec7cdf79b69ced5",
+   "type": "XML"
+  },
+  {
+   "category": "companion_custody",
+   "filename": "MetaLinks.json",
+   "format_hint": "unknown",
+   "sha256": "20e95fc5975dc375af3f9a89059760e5d43afc37ee54acae4137e1d1c5e569c0",
+   "type": "JSON"
+  },
+  {
+   "category": "companion_custody",
+   "filename": "0001004434-23-000015-xbrl.zip",
+   "format_hint": "zip",
+   "sha256": "a9bfd579b501493e324d082b24851cbc662980b9ecfb9c9f74212a5826d8b752",
+   "type": "ZIP"
+  }
+ ],
+ "package": {
+  "members": 17,
+  "metadata_mismatch": [],
+  "missing": [],
+  "package_bytes": 958519,
+  "package_only": 7,
+  "sha256": "7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb",
+  "status": "OK",
+  "unresolved": []
+ },
+ "package_sha256": "7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb",
+ "plan": {
+  "path": "/evidence/filing/runs/0001004434-23-000015/7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb/4d67b725cce586678078fd1d497a35936894f83b8ea0bbb3838e73ec1f371c0f/PLAN.json",
+  "sha256": "4d67b725cce586678078fd1d497a35936894f83b8ea0bbb3838e73ec1f371c0f"
+ },
+ "reasons": [],
+ "result": {
+  "path": "/evidence/filing/runs/0001004434-23-000015/7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb/4d67b725cce586678078fd1d497a35936894f83b8ea0bbb3838e73ec1f371c0f/job_0/RESULT.json",
+  "sha256": "06adc0a4d3b3ae2fec68e9f4fe462cb4dbdc6908bb500b41225548cd452afdf5"
+ },
+ "runtime_manifest_sha256": "2f0928f5435465b522b51b06f4145d02c6cf810df064b1eb445a8e78bc40a9ca",
+ "schema": "prepared-filing-receipt/2",
+ "status": "complete",
+ "version": "/evidence/filing/package/versions/0001004434-23-000015/7f6812c06b8455d9c33611c9acca9320f1982fd7e3fc49572e3771a80cf935bb"
+}
