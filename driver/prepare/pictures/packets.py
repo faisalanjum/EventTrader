@@ -7,7 +7,7 @@
 #   unresolved - otherwise: Chandra's text, its differences from Sonnet (all of them in the returned record: blocks[i].differences), and
 #                Sonnet's own reading of that region as a separate, unverified alternative with its source pointer.
 #   visual     - Chandra's labels for pictures, charts and diagrams: Chandra's text there may be its own description or
-#                estimates, so none of it is passed on; the region, and Sonnet's reading of that area as unverified.
+#                estimates; retain that text, the region and other readers' evidence explicitly as unverified.
 # Tables pair by content only inside the place the surrounding text allows them, one best each way, never crossing.
 # Every element of Sonnet's reading reaches the packet - inside an agreeing block, as an alternative, or as 'one reader only'
 # in its place - and every Chandra block is shown (text outside Chandra's blocks is a block of its own); both are asserted.

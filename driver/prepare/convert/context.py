@@ -117,6 +117,7 @@ INFRASTRUCTURE = {'0f23ad013f05888115512f5dc6493ac6d6af23358424253090bf565fe81a3
                   '39f3dc5b34f614a78075f1824407dc3de33cffcb5e5e3c5fd59a1356d3385d97': 'sec.gov-injected bot detection (CCL campaign, initiator-identified 10-22)'}
 
 
+# Qualify saved inputs before creating a browser context.
 def qualified_version(evidence, h, url=None):
     """Owner single-version policy: exact inserted-script bytes count as website infrastructure (reviewed versions included, no grandfathering) only
     when (1) THIS file's own acquisition proved them its one server-inserted script (evidence['inserted_script']: bound address and recorded response
@@ -197,6 +198,7 @@ def viewer_template(text):
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+# Native CDP handles keep node identity outside page-writable pointers.
 class Scope:
     """The Context-owned source scope of one owned Page: ONE CDP session, the isolated world named ISO_WORLD registered for every new document of the
     page (so each navigation/attempt rebuilds it), that world's context id tracked from the session's own Runtime events. Every ownership question
@@ -239,7 +241,8 @@ class Scope:
         return out
     def call(self, expr):  # an expression in the isolated world, by value
         if 'iso' not in self.ids: return None, 'no isolated scope context'
-        try: return self._result(self.cdp.send('Runtime.evaluate', {'expression': expr, 'contextId': self.ids['iso'], 'returnByValue': True}))
+        try:
+            return self._result(self.cdp.send('Runtime.evaluate', {'expression': expr, 'contextId': self.ids['iso'], 'returnByValue': True}))
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e: return None, repr(e)[:200]
     def node(self, backend, fn):  # fn called on that node as the isolated world resolves it (DOM.resolveNode by backendNodeId)
@@ -376,6 +379,7 @@ VIEWER_HANDLERS = "Array.from(document.querySelectorAll('#menu > li > a[href=\"#
 VIEWER_ACT = "e => jQuery._data(e, 'events').click[0].handler.call(e)"  # the bound category callback only: no bubbling, default navigation or DOM0 handler
 
 
+# Capture initial/native observations and control effects.
 class Context:
     """One state of one document shown by its observed parent: `evidence` = {parent_url, target_url, observed (Source.observed shape: every recorded
     response, the parent and the target included), selection ({source_anchor}: OCR's recorded parent action), proof (overlay proof of the target
@@ -846,6 +850,7 @@ RENDERER_DOM = """(() => { const sheets = Array.from(document.querySelectorAll('
   return {top: window.top === window, sheets, applied, links, scripts, classes: Array.from(classes).sort(), sup: document.querySelectorAll('sup').length, styles: document.querySelectorAll('style').length, frames: document.querySelectorAll('iframe,frame,object,embed').length}; })()"""
 
 
+# Action gates: supported declarations and proved ownership only.
 def renderer_eligible(raw, vis, links, outside, browser, source):
     """SCRIPTLESS: may this Renderer report page skip the viewer? (reasons, facts). From the native declarations first (no render), then ONE read of the
     owner's JS-disabled page (screen_grid._document; no page script runs): exact plain Show.* forms, no other handler, the page's scripts bound to their
@@ -990,6 +995,7 @@ def optional_controls(raw, route, records, evidence, child):
     return why, facts
 
 
+# Bounded state exploration and final coverage accounting.
 def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=None, prepare=None, max_states=32, max_transitions=128, explore=True, viewer_start=None):
     """The initial route, then each source-owned action once (finite): a trial render first; only an action that proves a useful state (an outer reveal
     of one proved target, or an in-place change inside it, or the same control reopening it) gets full per-state extraction. Every trial keeps its

@@ -45,6 +45,7 @@ def _decoder_js():
             ' return {codePoint: load(' + json.dumps(src['dist/index.js']) + ', () => tables).codePoint, faces: Object.keys(tables.default)}; })();')
 
 
+# Source measurement markers and table geometry.
 def gaps_of(vis, units):
     """Every space the tool added inside a word or number, and every boundary it dropped where a space parts two words or numbers the source reads apart,
     per item: [(item, text start, text end, search-form index before, after)]; a dropped boundary is the empty range at its place (anchor.tool_spaces,
@@ -284,6 +285,7 @@ NATIVE_STATE_JS = """(p) => { const c = document.documentElement.cloneNode(true)
           Math.max(b.scrollHeight || 0, e.scrollHeight, b.offsetHeight || 0, e.offsetHeight, b.clientHeight || 0, e.clientHeight)]}; }"""
 
 
+# Native capture and resource evidence.
 class CaptureError(RuntimeError):
     """The native full-page capture failed or is incomplete: a refusal of that reading, never a viewport-only fallback."""
 
@@ -396,6 +398,7 @@ def _bound(glyphs, text):  # the DOM text a mark reached is exactly its own run'
     return [ch for _, g in glyphs for ch in (g if g is not None else '\ufffd')] == [ch for ch in text if ch not in anchor._SPACE]
 
 
+# Source text, formatting and occurrence owners.
 def symbols(raw, vis, runs, got, units):
     """`source_symbols` records from the page's marks (`SYMBOLS_JS`): each glyph of a run the page sets in a decoder typeface, and each private-use
     glyph in any other, by its own bytes; owners as the source links' (`_holders`), null where hidden or not every character is held. A run its mark
@@ -541,6 +544,7 @@ WITHHELD = {}  # COMPARISON-ONLY (plan.qualification_withhold): {address: {'kind
 RENDERER_CSS_REF = 'include/report.css'  # SCRIPTLESS: the stylesheet reference every Edgar Renderer report page writes (relative to the page)
 
 
+# Bind the browser's document and resource requests to the saved source.
 class Source:
     """The exact evidence one document's renders may use, nothing else: the document's own `path` among its bundle's verified `members`
     ({path: bytes}, from the package reader; `bundle` names that bundle, e.g. its package sha256), read at `base` + path - `base` the bundle's
@@ -569,7 +573,9 @@ class Source:
         self.document = digest
 
     def at(self, address, raw):  # the document's address for a render whose own address is `address`
-        self.bind(raw); self.root = self.base or address; return self.root + urllib.parse.quote(self.path)  # the member path as a URL writes it
+        self.bind(raw)
+        self.root = self.base or address
+        return self.root + urllib.parse.quote(self.path)  # the member path as a URL writes it
 
     def identity(self):  # what the route keeps: the document and the evidence its renders used
         return {'document': {'path': self.path, 'base': self.base, 'bundle': self.bundle, 'sha256': self.document},
@@ -652,6 +658,7 @@ SCOPE_OUTSIDE = """function () { const s = window.__sourceScope; if (!s) return 
   const w = document.createTreeWalker(this, NodeFilter.SHOW_ALL); for (let n = w.nextNode(); n; n = w.nextNode()) { const u = s.outside(n); if (u !== true) return u === false ? false : null; } return true; }"""  # convert.context's scope (proved parent nodes + the bridged hidden original); no scope (no context): null
 
 
+# Generated content retains the browser's evidence and source owners.
 def _generated(page, prefix, scope=None):  # scope: the Context's isolated-world source scope of this page (convert.context.Scope), else no ownership is asked
     """The page's own layout of generated content (CDP DOMSnapshot.captureSnapshot of this very page, no rects): per pseudo element (before, after,
     marker, first-letter, any other), in tree order (CSS's own places: an element's marker, its before, its children, its after), its layout text
@@ -817,6 +824,7 @@ def _generated_owners(raw, vis, runs, marks, gen, units):
     return {'read': True, 'records': out, **({'background_images': images} if images else {}), 'status': 'PARTIAL' if why else 'complete', 'why': sorted(why), 'text_proved': text_proved}
 
 
+# Native browser measurement and final route coverage.
 def measure(marked_html, browser, prefix=None, every=False, decorate=False, raw=None, source=None, refused=None, gap_chars=()):
     """Boxes of every tagged cell as Chrome lays the document out (the document's own styles, a wide window; the document's scripts never run). Only
     table cells are read: a mark names the td/th it stands first in; one the parser moved out of its cell, or a second in one cell, names nothing,

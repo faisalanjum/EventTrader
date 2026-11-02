@@ -1,4 +1,4 @@
-# Table structure from the picture (Codex real336 review, task 1; development, not adopted). When Chandra and Sonnet read a
+# Optional table choice, called by packets when both readings and free-OCR positions exist. When Chandra and Sonnet read a
 # table with the same values but a different structure, each complete reading is put on the picture with the existing position
 # check (ideas_20261005/geometry_columns, ported to the checker's own placement): the free OCR's word positions must place every
 # cell by its exact text (never a fuzzy or bracket-ignoring match), and rows, columns and headings must fit (status(); routing.py

@@ -29,6 +29,7 @@ NO_CODE = object()  # a dumped cell with no `code` field at all (a dump made bef
 _NO_FORMAT = str.maketrans('', '', _CF)
 
 
+# Native nodes -> plain records and ordered route units.
 def _heading_boundary(text, cut):
     """A partial style claim needs whitespace; lost layout gaps are proved later."""
     left, right = text[:cut].translate(_NO_FORMAT), text[cut:].translate(_NO_FORMAT)
@@ -295,6 +296,7 @@ def route_for(tree, raw, file_id, sha256, seconds, version, settings=None, vis=N
             'source_ids': source_ids(vis), **({'source_facts': facts} if facts is not None else {}), **base}
 
 
+# Original source occurrences, pictures and relationships.
 def source_ids(vis):
     """The scanner's own target inventory (anchor.Visible `ids` and `names`: every id of any element and every <a name>, hidden, duplicate and empty ones
     too), in source order: {read: true, records}, each {by: id|name, value as the parser decodes it, start: its element's start tag's first byte, end:
@@ -365,7 +367,9 @@ def _holders(units, vis):
         for x, cell in ([(c, True) for c in u.get('cells') or []] if u.get('kind') == 'table' else [(u, False)]):
             sp = [a for a in anchor.spans(x.get('anchor')) if 'byte_start' in a]
             (pics if u.get('kind') == 'image' else items).extend((a['byte_start'], a['byte_end_exclusive'], (u['id'], sp[0]['byte_start'] if cell else None)) for a in sp)
-    items.sort(); starts = [s for s, _, _ in items]; reach = list(accumulate((e for _, e, _ in items), max))
+    items.sort()
+    starts = [s for s, _, _ in items]
+    reach = list(accumulate((e for _, e, _ in items), max))
     owner = lambda key: {'unit': key[0]} if key[1] is None else {'unit': key[0], 'cell': key[1]}
 
     def held(lo, hi):
@@ -512,8 +516,11 @@ def unsupported(file_id, sha256, version, status='UNSUPPORTED', error='not an HT
             'route': {'name': NAME, 'tool': 'edgartools', 'version': version, 'settings': {}, 'adapter': 'driver/prepare/convert/edgartools_html.py', 'linker': None}, 'units': []}
 
 
+# Pinned native compatibility hooks; installed once in the current process.
 def whole_headings():
-    """A block the tool takes for a heading is read whole — every descendant's text, as the tool reads <h1>–<h6> and as the browser shows it. Its
+    """Preserve whole heading text, inline/block boundaries, source codes and native style isolation.
+
+    A block the tool takes for a heading is read whole — every descendant's text, as the tool reads <h1>–<h6> and as the browser shows it. Its
     `DocumentBuilder._get_element_text` reads a block only to its first child element, and a `HeadingNode` is terminal: `<div><a id="x"></a>Item 1A. Risk
     Factors</div>` read nothing and fell through to a paragraph (seven section headings of one file), `For the quarterly period ended <ix:nonNumeric …>December
     28, 2024</ix:nonNumeric>` lost its date. Two moments, both the tool's own decision and its own <h1> reader: (a) as it reads the block it is deciding on —
@@ -647,6 +654,7 @@ def version():
     return f"edgartools {md.version('edgartools')}"
 
 
+# Native fact reading and its operational failure boundary.
 def _fatal_cause(error):
     """Recover a machine failure from native explicit wrappers, never unrelated context."""
     seen = set()
@@ -727,6 +735,7 @@ def inline_facts(raw, parser):
     return {'read': True, 'records': [records[k] for k in known if k in records]}
 
 
+# Public parsing/conversion boundary: retain native output and source identity.
 def parse(raw, vis):
     """The tool's own parse of the caller's bytes - the pictures' names given as codes (`named`), its reading of headings fixed (`whole_headings`), every
     own row group of a table read (`EveryRowGroup`) - as a plain node dump: (dump, seconds, producing version)."""

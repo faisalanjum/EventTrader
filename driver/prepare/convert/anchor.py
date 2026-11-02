@@ -106,6 +106,7 @@ _FORMATTING = frozenset('a b big code em font i nobr s small strike strong tt u'
 STRUCK = set('del s strike'.split())  # removed or struck text is read apart from its neighbours (redlines): a boundary where the element begins and ends
 
 
+# Decode source characters and attributes without losing their byte addresses.
 def text_reference(token):
     """One character reference as the HTML parser decodes it. html.unescape keeps the standard's named, C1, null and surrogate rules but deletes
     references to control characters and non-characters, which the parser keeps (`&#2;` is U+0002): only its empty result is restored. One token,
@@ -306,6 +307,7 @@ def resolve(decls, prop, valid):
     return value
 
 
+# Source scan and conservative visibility evidence.
 class Visible:
     """Characters a reader sees (hidden subtrees, head, scripts, styles and comments removed), each with its byte span. `certain` is False where
     the source holds something this scanner knows it does not follow — a value it does not evaluate, a stylesheet rule on a hiding property,
@@ -659,6 +661,7 @@ def chain(pairs):
     return out[::-1]
 
 
+# Table ownership and source linking; ambiguous locations stay unresolved.
 def table_places(vis, items, keys):
     """Where the cells of a tool's table may stand when that table is one table of the source — the same texts, each as often, in exactly one table on either side:
     {id(cell): (places in `vis.flat`, the first, the last)}, and those places by text — kept for these cells: no other item may take one (a text the tool lists before
@@ -906,6 +909,7 @@ def link(raw, units, xml=False, vis=None):
 sha256 = lambda b: hashlib.sha256(b).hexdigest()
 
 
+# Source identity checks and retained formatting/spacing evidence.
 def check_source(raw, expected):
     """Refuse a mismatched source identity before parsing or changing a route."""
     if sha256(raw) != expected: raise ValueError("source bytes differ from the declared SHA-256")
