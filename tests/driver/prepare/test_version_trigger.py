@@ -1,7 +1,7 @@
 """job.qualify_first's guards at the native row-result boundary (root-native-automatic-trigger-closeout-20261028t211651877057z): it starts NO child job
 unless the row is held only by its own proved inserted version, no record exists, the plan is an ordinary one with a store, and this caller wins the one
 exclusive claim. Pure: every case below returns before any child job (the end-to-end path is the native fixture test)."""
-import hashlib, json, shutil, tempfile, unittest
+import copy, fcntl, hashlib, json, os, shutil, tempfile, threading, unittest
 from pathlib import Path
 from driver.prepare import job
 
@@ -32,9 +32,9 @@ class TriggerGuards(unittest.TestCase):
         (Path(self.row['attempt']) / 'CONTEXT_ACQUISITION.json').write_text(json.dumps({'record': {'target': {}}})); self.go(); self.untouched()
     def test_an_existing_record_is_reused_never_requalified(self):
         (self.store / (H + '.json')).write_text('{}'); self.go(); self.untouched()
-    def test_a_lost_claim_holds_without_any_child_job(self):  # another job (or an earlier attempt) holds this version's one claim
+    def test_a_kept_hold_before_without_holds_without_any_child_job(self):  # the claim marker is kept only by a completed hold before WITHOUT
         (self.store / (H + '.claim')).write_text(''); r = self.go()
-        self.assertEqual(r['qualification'], {'script_sha256': H, 'outcome': 'held: this version is claimed by another qualification'}); self.assertFalse((self.t / 'out' / 'qualification_0').exists())
+        self.assertEqual(r['qualification'], {'script_sha256': H, 'outcome': 'held: an earlier qualification of this version was held before WITHOUT'}); self.assertFalse((self.t / 'out' / 'qualification_0').exists())
         self.assertEqual((r['outcome'], r['attempt']), ('incomplete', self.row['attempt']))
 
 
@@ -91,10 +91,10 @@ class ChildBoundaryAndRelease(unittest.TestCase):  # job.qualify_first with cont
             with self.subTest(case=str(case)[:80]):
                 self.again(); self.spec['explored'] = case; r = self.go()
                 self.assertEqual(self.ran, ['explored']); self.assertTrue(r['qualification']['outcome'].startswith('held: explored'), r['qualification'])
-                self.assertEqual((r['outcome'], r['native_error'], r['attempt_bytes']), ('incomplete', 'held initial error', 100)); self.assertNotIn('held', r); self.kept_claim_only()
+                self.assertEqual((r['outcome'], r['native_error'], r['attempt_bytes']), ('incomplete', 'held initial error', 100)); self.assertNotIn('held', r); self.kept_no_verdict()
     def test_a_failed_without_child_stops_before_the_comparison(self):
         self.spec['without'] = (1, dict(ROW_PARTIAL, outcome='generation_failed', generate_exit=1)); r = self.go()
-        self.assertEqual(self.ran, ['explored', 'without']); self.assertTrue(r['qualification']['outcome'].startswith('held: without'), r['qualification']); self.kept_claim_only()
+        self.assertEqual(self.ran, ['explored', 'without']); self.assertTrue(r['qualification']['outcome'].startswith('held: without'), r['qualification']); self.kept_no_verdict()
     def test_an_abnormal_release_is_never_bound(self):
         self.spec['release'] = (-9, None); r = self.go(); self.assertEqual(self.ran, ['explored', 'without', 'release'])
         self.assertEqual((r['outcome'], r['native_error'], r['attempt_bytes']), ('incomplete', 'held initial error', 100)); self.assertNotIn('held', r)
@@ -124,7 +124,7 @@ class ChildBoundaryAndRelease(unittest.TestCase):  # job.qualify_first with cont
                          ('route a list', lambda out: (out / 'attempt_0' / 'ROUTE.json').write_text('[]'))):
             with self.subTest(case=case):
                 self.again(); self.after['without'] = fn; r = self.go(); self.assertEqual(self.ran, ['explored', 'without']); self.assertFalse(job.clean_row(r))
-                self.assertEqual((r['qualification']['outcome'], len(r['technical_failures'])), ('held: qualification not comparable', 1)); self.kept_claim_only()
+                self.assertEqual((r['qualification']['outcome'], len(r['technical_failures'])), ('held: qualification not comparable', 1)); self.kept_no_verdict()
     def test_verdicts_and_holds_stay_clean(self):  # the expected diagnostic exit 1, a real comparison hold, a lost claim and a reused record are no technical failure
         self.spec['explored'] = (1, None); r = self.go(); self.assertEqual(r['outcome'], 'verified_saved_output'); self.assertTrue(job.clean_row(r)); self.assertNotIn('technical_failures', r)
         self.again(); self.after['without'] = lambda out: shutil.rmtree(out / 'attempt_0' / 'states'); r = self.go()  # WITHOUT saved no state: the producer's own held record
@@ -132,6 +132,52 @@ class ChildBoundaryAndRelease(unittest.TestCase):  # job.qualify_first with cont
         self.assertEqual(json.loads(Path(q['record']).read_bytes())['outcome'], 'held'); self.assertTrue(job.clean_row(r)); self.assertNotIn('technical_failures', r)
         self.again(); (self.store / (H + '.claim')).write_text(''); r = self.go(); self.assertEqual(self.ran, []); self.assertTrue(job.clean_row(r)); self.assertNotIn('technical_failures', r)
         self.again(); (self.store / (H + '.json')).write_text('{}'); r = self.go(); self.assertEqual(self.ran, []); self.assertNotIn('qualification', r); self.assertTrue(job.clean_row(r))
+
+    # Recoverable qualification (owner goal: successful extraction). One native store lock is held for the whole qualification; only a COMPLETED verdict
+    # is kept (the producer's record, or the claim marker of a hold before WITHOUT). An interrupted or technical stop keeps neither, so the next filing
+    # qualifies again; a live qualification is waited for and never read as a verdict.
+    def kept_no_verdict(self): self.assertEqual(sorted(p.name for p in self.store.iterdir()), [])
+    def next_filing(self, base):  # the next filing's job on the SAME store: its own job folder and its own copy of the held row
+        out = self.t / f'out{len(list(self.t.glob("out*")))}'; shutil.copytree(base['attempt'], out / 'attempt_0'); row = dict(copy.deepcopy(base), attempt=str(out / 'attempt_0'))
+        body = json.dumps(self.plan).encode(); pp = self.t / 'PLAN.json'; pp.write_bytes(body); self.ran.clear()
+        job.qualify_first(json.loads(body), pp, hashlib.sha256(body).hexdigest(), out, {'rows': [row]}, out / 'RESULT.json', row, 0, 'document.py', 900, str(self.t)); return row
+    def test_an_interrupted_qualification_is_recovered_by_the_next_filing(self):
+        base = copy.deepcopy(self.row); self.after['explored'] = lambda out: (_ for _ in ()).throw(KeyboardInterrupt())  # the job is stopped during an arm
+        with self.assertRaises(KeyboardInterrupt): self.go()
+        self.kept_no_verdict(); self.after.clear(); self.spec['explored'] = (1, None)
+        r = self.next_filing(base); self.assertEqual(self.ran, ['explored', 'without', 'release']); self.assertEqual(r['outcome'], 'verified_saved_output')
+    def test_a_technical_stop_is_recovered_by_the_next_filing(self):
+        base = copy.deepcopy(self.row); self.spec['explored'] = (-9, None); r = self.go(); self.assertFalse(job.clean_row(r)); self.kept_no_verdict()
+        self.spec['explored'] = (1, None); r = self.next_filing(base); self.assertEqual(self.ran, ['explored', 'without', 'release']); self.assertEqual(r['outcome'], 'verified_saved_output')
+    def test_a_live_qualification_is_waited_for_and_its_passed_record_releases_this_row(self):
+        base = copy.deepcopy(self.row); self.spec['explored'] = (1, None); self.go()  # the real producer's passed record for this store
+        rec, kept = self.store / (H + '.json'), self.t / 'record.json'; shutil.move(rec, kept)  # ... not yet published: that qualification is still live
+        for p in self.store.iterdir(): p.unlink()  # a live qualifier holds the store lock and has kept no verdict yet
+        lock = os.open(self.store, os.O_RDONLY); fcntl.flock(lock, fcntl.LOCK_EX); got = []
+        th = threading.Thread(target=lambda: got.append(self.next_filing(base))); th.start(); th.join(0.5)
+        self.assertTrue(th.is_alive()); self.assertEqual(self.ran, [])  # waiting: never a verdict, never a clean final incomplete
+        shutil.move(kept, rec); os.close(lock); th.join(30); self.assertFalse(th.is_alive())
+        r = got[0]; self.assertEqual(self.ran, ['release']); self.assertEqual((r['outcome'], r['qualification']['outcome']), ('verified_saved_output', 'passed'))
+    def test_a_hold_before_without_is_kept_and_never_restarted(self):
+        base = copy.deepcopy(self.row); where, _, fn = UNPROVED[0]; mutate(self.fx['explored'], where, fn); r = self.go()
+        self.assertEqual(r['qualification']['outcome'], HELD); self.kept_claim_only()
+        r = self.next_filing(base); self.assertEqual(self.ran, []); self.assertTrue(job.clean_row(r)); self.assertNotIn('technical_failures', r)
+        self.assertEqual(r['qualification']['outcome'], 'held: an earlier qualification of this version was held before WITHOUT')
+    def test_a_record_published_during_generation_retries_the_ordinary_attempt(self):  # the race: never a clean final incomplete
+        base = copy.deepcopy(self.row); self.spec['explored'] = (1, None); self.go()  # the real producer's passed record now exists in this store
+        r = self.next_filing(base)  # ... this row was generated before that record existed
+        self.assertEqual(self.ran, []); self.assertFalse(job.clean_row(r)); self.assertEqual(r['outcome'], 'incomplete')
+        self.assertIn('qualification record became available after this row was generated', r['technical_failures'][0])
+        self.assertEqual(sorted(p.name for p in self.store.iterdir()), [H + '.json'])
+    def test_a_recorded_hold_stays_final_and_clean(self):  # a genuine post-WITHOUT verdict is never retried or requalified
+        base = copy.deepcopy(self.row); self.after['without'] = lambda out: shutil.rmtree(out / 'attempt_0' / 'states'); r = self.go()
+        self.assertEqual(r['qualification']['outcome'], 'held'); self.after.clear()
+        r = self.next_filing(base); self.assertEqual(self.ran, []); self.assertTrue(job.clean_row(r)); self.assertNotIn('qualification', r)
+    def test_a_release_child_never_waits_on_its_parents_lock(self):  # a nested release attempt meets the record while its parent holds the lock
+        base = copy.deepcopy(self.row); self.spec['explored'] = (1, None); self.go()
+        lock = os.open(self.store, os.O_RDONLY); fcntl.flock(lock, fcntl.LOCK_EX)
+        try: th = threading.Thread(target=lambda: self.next_filing(base)); th.start(); th.join(10); self.assertFalse(th.is_alive())  # returned without waiting
+        finally: os.close(lock)
 
 
 # root-bound-native-early-stop-and-damage-checks-20261029t095934395308z: the decision before WITHOUT is the producer's own NORMAL/explored reading and
@@ -191,8 +237,8 @@ class TheProducerHoldsWithoutNeedingWithout(unittest.TestCase):  # the independe
 
 
 class EarlyDecisionOnTheProducersOwnEvidence(unittest.TestCase):  # ChildBoundaryAndRelease's seams and fixtures, not its tests
-    setUp, tearDown, go, again, kept_claim_only = (ChildBoundaryAndRelease.setUp, ChildBoundaryAndRelease.tearDown, ChildBoundaryAndRelease.go, ChildBoundaryAndRelease.again,
-                                                   ChildBoundaryAndRelease.kept_claim_only)
+    setUp, tearDown, go, again, kept_claim_only, kept_no_verdict = (ChildBoundaryAndRelease.setUp, ChildBoundaryAndRelease.tearDown, ChildBoundaryAndRelease.go,
+                                                   ChildBoundaryAndRelease.again, ChildBoundaryAndRelease.kept_claim_only, ChildBoundaryAndRelease.kept_no_verdict)
     def held_early(self, reasons):
         r = self.row; q = r['qualification']; self.assertEqual(self.ran, ['explored']); self.assertEqual((q['outcome'], q['reasons']), (HELD, reasons)); self.assertEqual(q['explored']['exit'], 0)
         self.assertEqual((r['outcome'], r['reasons'], r['native_error'], r['attempt_bytes']), ('incomplete', ['native status PARTIAL'], 'held initial error', 100)); self.assertNotIn('held', r)
@@ -200,7 +246,7 @@ class EarlyDecisionOnTheProducersOwnEvidence(unittest.TestCase):  # ChildBoundar
     def stopped_technical(self):
         r = self.row; q = r['qualification']; self.assertEqual(self.ran, ['explored']); self.assertEqual(q['outcome'], 'held: qualification not comparable'); self.assertNotIn('reasons', q)
         self.assertFalse(job.clean_row(r)); self.assertEqual(len(r['technical_failures']), 1); self.assertTrue(r['technical_failures'][0].startswith('qualification not comparable: '))
-        self.assertEqual((r['outcome'], r['native_error'], r['attempt_bytes']), ('incomplete', 'held initial error', 100)); self.assertNotIn('held', r); self.kept_claim_only()
+        self.assertEqual((r['outcome'], r['native_error'], r['attempt_bytes']), ('incomplete', 'held initial error', 100)); self.assertNotIn('held', r); self.kept_no_verdict()
 
     def test_a_known_unproved_explored_route_is_held_before_without(self):
         for where, case, fn in UNPROVED:
@@ -241,7 +287,7 @@ class EarlyDecisionOnTheProducersOwnEvidence(unittest.TestCase):  # ChildBoundar
         self.again(); self.after['explored'] = other; self.go(); self.held_early(['the arms ran different plans'])
     def test_without_side_damage_after_a_clean_early_decision_stays_technical(self):  # a WITHOUT route that is not an object: the shared failure set, never a crash
         self.after['without'] = lambda out: (out / 'attempt_0' / 'ROUTE.json').write_text('[]'); r = self.go(); self.assertEqual(self.ran, ['explored', 'without'])
-        self.assertEqual((r['qualification']['outcome'], len(r['technical_failures'])), ('held: qualification not comparable', 1)); self.kept_claim_only()
+        self.assertEqual((r['qualification']['outcome'], len(r['technical_failures'])), ('held: qualification not comparable', 1)); self.kept_no_verdict()
 
 
 if __name__ == '__main__':

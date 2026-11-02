@@ -90,7 +90,7 @@ def pointer_reply(root, receipt, filing=AMG):
     config = root / 'pointer-config.json'
     config.write_text(json.dumps(dict(python=sys.executable)))
     child = subprocess.CompletedProcess([], 0, json.dumps(receipt), '')
-    with patch.object(pf.subprocess, 'run', return_value=child):
+    with patch.object(pf, '_adapter_run', return_value=child):
         return pf.pointer(filing, config)
 
 
@@ -194,11 +194,11 @@ class Pointer(unittest.TestCase):
     def test_child_exit_bad_output_config_and_cancellation(self):
         cfg = self.root / 'config.json'; cfg.write_text(json.dumps(dict(python=sys.executable)))
         for code, body in ((1, '{}'), (0, ''), (0, 'invalid'), (0, 'null')):
-            with self.subTest(code=code, body=body), patch.object(pf.subprocess, 'run', return_value=subprocess.CompletedProcess([], code, body, 'failure')):
+            with self.subTest(code=code, body=body), patch.object(pf, '_adapter_run', return_value=subprocess.CompletedProcess([], code, body, 'failure')):
                 self.assertEqual(pf.pointer(AMG, cfg)['status'], 'failed')
         self.assertEqual(pf.pointer(AMG, self.root / 'missing')['status'], 'failed')
         for kind in (KeyboardInterrupt, SystemExit):
-            with patch.object(pf.subprocess, 'run', side_effect=kind), self.assertRaises(kind): pf.pointer(AMG, cfg)
+            with patch.object(pf, '_adapter_run', side_effect=kind), self.assertRaises(kind): pf.pointer(AMG, cfg)
 
 
 class RecordedTransport(unittest.TestCase):

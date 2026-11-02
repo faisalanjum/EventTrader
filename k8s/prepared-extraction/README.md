@@ -10,28 +10,53 @@ correct numbers or complete meaning. Known errors include ratios read as percent
 signs and invented chart values. Preserve the source and reading together; downstream
 consumers must check `fidelity`, not use `status: complete` as an accuracy guarantee.
 
-## Revision 3 candidate and retained published release
+## Qualified release (not activated)
 
-Revision 3 repairs receipt handoff validation and native wrapped machine failures,
-with documentation and local readability changes. It adds no model call, storage
-migration or browser behavior change. Candidate source/image qualification is
-recorded under `/home/faisal/prepare_cleanup_review_20261031/extractor_revision3_20261102T142609Z/proof/`.
-Building and testing the candidate does not activate production. The published
-image and deployment patches below remain the retained release until an owner
-authorizes publication and a separately reviewed matching deployment pair.
+The 2 November build combines receipt and wrapped-error fixes with prompt browser
+crash recovery, one whole-filing deadline and faster package reading. It preserves
+the existing extraction format and OCR integration. Readability changes stay in
+place; there is no new service, model, document format or storage migration.
 
-- Candidate local image ID: `sha256:3df809b094a32944c4db43a19b6994db1b9328de87f0d05cf748a193e0510ed0`.
-- Candidate runtime manifest SHA-256: `450864bd100023f7b6312966cf7669796c6ca7ea097421fb66329c52844357d9`.
-- Qualification is pending until the final receipts are complete. There is no
-  candidate registry digest or production activation. Use this local image ID
-  as `CANDIDATE_IMAGE` for the disposable worker test recipe.
+- Published image: `faisalanjum/report-enricher@sha256:e0fdcab4ebba79308ced6c80b9ba94cc4067a3f90ed1a55147df73425fa09017`.
+- Verified image ID: `sha256:8e17ad0e4a9ffc7cf60e78587c781c7bf87ea1b25834d2118a63b10020edb8fe`.
+- Runtime manifest: `8561062f3d2e5fe7d6ca2118799d212f80917a8d41de477893ddfdaf6ff02454`.
+- Evidence: `/home/faisal/prepare_cleanup_review_20261031/extraction_deferred_20261102T152805Z/proof/`.
+- Registry pull verified this exact image. The review patches pin its matching
+  manifest and command; activation remains a separate owner decision.
+
+Final coverage: 2,305 distinct required methods have passing results across the
+host and native-image checks. The full 1,676-method Prepare run took 3 h 05 m 03 s;
+nine methods failed because three old test browser substitutes lacked `Page.on`.
+Only three missing methods on test substitutes were added; every original assertion stayed unchanged.
+Both complete affected files then passed all 39 tests in 3.659 seconds. The raw
+failed run remains in the evidence; this is a full run plus an affected-file rerun,
+not a claim of one uninterrupted green run. Runtime bytes did not change.
+
+Native adapter, worker and crash-retry checks ran on predecessor image
+`sha256:ecab567d970190df6edd772a8e7c0d52960349b4521777b989d3cb362c4d621a`.
+Its filesystem layers are identical to the final image. The final image restores
+the inherited default worker command; separate checks passed for default startup,
+explicit Kubernetes arguments and exact runtime, adapter and Tini hashes.
+Those command checks use a marker worker; the actual worker passed the tests on
+the identical application files above. Original receipts retain their image identities.
+
+Measured HTML/XML extraction on Mini 2: ordinary 8-K 11.861 seconds, large 8-K
+16.432 seconds, large 10-Q 408.241 seconds, largest 10-K 587.667 seconds.
+All required documents verified. The first three timings use the earlier selective-reader
+candidate; the largest 10-K was rerun on the final runtime. Recorded SEC inputs were used
+with OCR disabled;
+they do not measure live download or full OCR latency. The largest 10-K leaves
+only 12.333 seconds under the 600-second budget. First-time script qualification
+and large OCR filings have no demonstrated whole-filing timing bound for success.
+
+## Retained previous releases
 
 - Storage image: `faisalanjum/report-enricher@sha256:3e0ac53919cb24a0034c18244398e6666374ba83431259557c7236f3b599a242`.
 - Previous table-lookup image: `faisalanjum/report-enricher@sha256:cb980c0daba30dbe61e3d62009daed994a403c50973866af5ccd2af9182d5e6d`.
 - Previous OCR image (1 November documentation rebuild): `faisalanjum/report-enricher@sha256:7d057ab66ac7e6ab3b97a31cd2c828b4123df2704a5d395a0e6c17164a089010`.
 - Previous OCR image (31 October qualification): `faisalanjum/report-enricher@sha256:7d1be4640e4806a526c62b5d5a92808940a7e49fb5367d049502c91ee40ddd70`.
 - Earlier HTML/XML-only image: `faisalanjum/report-enricher@sha256:f72f3a014007e8dca8e4909a5747814c5304315fa1c27b715a0ca925e1455b7b`.
-- Runtime manifest SHA-256: `f0ac7059e617646cd4a51fe87a8915f4e5c6026a9d5800d7af433401c727074e`.
+- Storage-release runtime manifest: `f0ac7059e617646cd4a51fe87a8915f4e5c6026a9d5800d7af433401c727074e`.
 - Environment base: `faisalanjum/report-enricher@sha256:23ca15adc2b1f265ec862a1af2bfa471cc525a6b18b25524049b044803c6236b`.
 
 The table-lookup change reuses a local source-anchor index and preserves
@@ -49,7 +74,7 @@ including all four ControlIdentity methods. Their individual duration was not
 recorded; that pass does not establish acceptable production latency.
 Evidence and the complete test ledger are retained in
 `/home/faisal/prepare_cleanup_review_20261031/storage_review_20261101/`.
-The timeout, extraction content and OCR behavior are unchanged; the bounded model
+In that release the timeout, extraction content and OCR behavior were unchanged; the bounded model
 findings in [OCR_QUALIFICATION.txt](OCR_QUALIFICATION.txt) still apply.
 
 Storage verification compared all 1,780 saved outputs through both legacy and
@@ -78,10 +103,9 @@ A rebuild has its own image identity and is not automatically the qualified imag
 Verify its runtime against `RUNTIME_MANIFEST.json`, plus the worker, Redis wrapper,
 adapter and browser, before changing deployment pins. A source change requires a
 new reviewed manifest/image pair; never combine this image with an older manifest
-configuration. The checked-in deployment patches retain the published image and
-its original manifest pin. They are not deployment instructions for a rebuilt
-candidate; keep the candidate configuration with its qualification evidence until
-publication supplies a reviewed immutable registry digest.
+configuration. The deployment patch and adapter configuration must name the same
+qualified release. Rebuilt images need their own verification; a successful build
+does not authorize activation.
 Before activation, create the configured `script_qualifications` directory for
 this manifest. Keep older directories: their records and claims belong to the
 runtime that created them and must not block qualification of this new runtime.
@@ -124,7 +148,8 @@ retry or reinterpret model content. A cutoff or repetition remains incomplete;
 a dropped stream remains a technical failure. The adapter allows three total
 OCR attempts, retaining good saved readings. Each child's time budget is the
 base `seconds` plus `timeout` for each distinct image input and each PDF page.
-The technical retry does not repeat successful HTML/XML extraction.
+The technical retry does not repeat successful HTML/XML extraction. All these
+attempts share the caller's whole-filing deadline described below.
 
 After an isolated RunPod test, **delete** the Pod and any test-created volume;
 stopping a Pod may retain paid storage. Verify the account has no remaining test
@@ -177,8 +202,24 @@ The worker retains a claimed input until publication and acknowledgement. Adapte
 jobs, OCR requests and crash deliveries each have separate bounded attempts. A
 failed receipt pointer itself schedules no retry: legacy enrichment still publishes,
 and the full original input/reason remains in `reports:queues:enrich:dead` for
-explicit replay. These per-child limits do not establish a whole-filing cutoff;
-qualification can start additional jobs. The original HTML/XML receipt is under
+explicit replay. `filing_seconds` is the total caller budget, starting before
+configuration is read and including acquisition, qualification, all retries, OCR
+and final receipt validation. It defaults to 600 seconds. A positive number or
+form map such as `{"8-K": 120, "default": 600}` is accepted; amendments use the
+base form. The review configuration keeps 600 for all forms, including OCR:
+the retained warm AMG OCR run took about 274 seconds, so a 120-second total would
+reject it. These are safety limits, not guaranteed completion times. Large OCR
+workloads can exceed them and must remain failed; do not count a cutoff as fast
+successful extraction. Actual HTML/XML and complete OCR timings are separate.
+
+At the total deadline the worker stops its owned process tree; the image's native
+Tini process reaps exited descendants. Keep the matching command in the Kubernetes
+patch, since Kubernetes overrides the image entry point. A native renderer crash
+invalidates the attempt promptly and the existing job retries it. Script-check
+ownership uses a local filesystem lock released on exit; only completed verdicts
+remain. Use a new qualification directory for each runtime, as above.
+
+The original HTML/XML receipt is under
 `runs/<accession>/*/*/RECEIPT.json`; with OCR enabled, the published pointer names
 the combined receipt under that run's `ocr/receipts/`. Preserve both receipts,
 original files, OCR records and source/version identities together.

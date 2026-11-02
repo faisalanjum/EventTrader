@@ -21,6 +21,13 @@ RUN rm -rf /app/src/eventtrader /app/venv/src/eventtrader \
     /usr/local/lib/python3.11/site-packages/easy-install.pth \
     /usr/local/lib/python3.11/site-packages/eventtrader.egg-link
 
+# Native PID 1 reaps Chromium's exited children, including after a timeout.
+RUN python -c "from urllib.request import urlretrieve; urlretrieve('https://deb.debian.org/debian/pool/main/t/tini/tini_0.19.0-1+b3_amd64.deb', '/tmp/tini.deb')" \
+ && echo '7d1947665fa40e55f218fefad773dc6de66458d0b39eaa292cdcadfc7c996632  /tmp/tini.deb' | sha256sum -c - \
+ && dpkg -i /tmp/tini.deb && rm /tmp/tini.deb
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["python", "redisDB/report_enricher_pod.py"]
+
 COPY driver/__init__.py driver/README.md /opt/prepared/runtime/driver/
 COPY driver/prepare/ /opt/prepared/runtime/driver/prepare/
 COPY driver/reference_data/ /opt/prepared/runtime/driver/reference_data/

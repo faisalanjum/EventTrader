@@ -1,5 +1,5 @@
 """The per-document generation owner, run by driver/prepare/job.py: argv PLAN PLAN_SHA256 ORDINAL NEW_ATTEMPT_DIR (an existing attempt is refused).
-Before any work it checks the plan pin, every pin of the plan's runtime manifest, the browser executable's sha256 and version, and the row's
+The job checks each complete package seal once. Before document work this generator checks the plan pin, every pin of the plan's runtime manifest, the browser executable's sha256 and version, and the row's
 own source sha256. It then writes one attempt: START; for HTML also SOURCE and RAW_READING with the stored raw reading; ROUTE, prepared inputs and COMPLETE.
 A plan row is either a sealed package (immutable_package_directory, its pinned original metadata, package_sha256) or loose local members
 (`directory` plus `members` {path: {sha256, bytes}}, base and bundle null: no package seal, SEC address or response is claimed). An HTML row may
@@ -189,7 +189,7 @@ def main():
         original_bytes = Path(row['package_metadata_path']).read_bytes()
         assert digest(original_bytes) == row['package_metadata_sha256'], 'original package metadata pin mismatch'
         original_manifest = json.loads(original_bytes)
-        manifest, members = acquire.read_package(row['immutable_package_directory'])
+        manifest, members = acquire.open_package(row['immutable_package_directory'])  # the hot path: package and manifest verified whole, members decoded and hash-checked as this document asks for them
         assert manifest == original_manifest, 'current package differs from original sealed metadata'
         assert manifest['package']['sha256'] == row['package_sha256'], 'package mismatch'
     raw = members[row['filename']]
@@ -292,6 +292,7 @@ def main():
                         prepared = inputs.prepare(raw, route, members, browser, source)
                     finally:
                         save(attempt / 'ROUTE_AFTER_INPUTS.json', route)
+                if not screen_grid.alive(browser): raise RuntimeError('browser lost during this attempt (a renderer crashed): no completion from its renders')  # the attempt's last word: a crash whose first symptom was an ordinary navigation error (its event delivered by a later call) must still end as a technical failure, which the job retries
             finally:
                 browser.close()
     elif row['dispatch'] == 'xml':

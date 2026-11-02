@@ -6,7 +6,7 @@ Status comes only from job.py's RESULT.json rows and the readers' own saved reco
 Every package member gets one category; nothing is dropped from the account.
 The worker runs this file as an isolated child (pointer below), so the worker never imports driver/edgar itself.
 """
-import copy, hashlib, json, os, subprocess, sys
+import copy, hashlib, json, math, os, subprocess, sys, time
 from pathlib import Path
 
 PICTURES = {'jpeg', 'png', 'gif'}
@@ -321,14 +321,50 @@ def prepared_done(record):
     return (record.get('prepared_extraction') or {}).get('status') in ('complete', 'incomplete')
 
 
+def _adapter_run(command, *, input, env, deadline):
+    """Bound the existing adapter and stop its owned process tree before returning."""
+    import psutil  # already pinned by the worker; native PID-reuse-safe process operations
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise TimeoutError('filing deadline expired before adapter launch')
+    # Leave up to two seconds of the total budget for TERM, KILL and reaping.
+    reserve = min(2, remaining / 10)
+    with psutil.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                      stderr=subprocess.PIPE, text=True, env=env, start_new_session=True) as process:
+        try:
+            stdout, stderr = process.communicate(input, timeout=remaining - reserve)
+            return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+        except BaseException:
+            # Capture ownership BEFORE signals can reparent grandchildren. Nested
+            # GNU timeout and Chromium use their own process groups.
+            try: owned = process.children(recursive=True) + [process]
+            except psutil.NoSuchProcess: owned = [process]
+            for child in reversed(owned):
+                try: child.terminate()
+                except psutil.NoSuchProcess: pass
+            _, alive = psutil.wait_procs(owned, timeout=min(1, max(0, (deadline - time.monotonic()) / 2)))
+            for child in alive:
+                try: child.kill()
+                except psutil.NoSuchProcess: pass
+            psutil.wait_procs(alive, timeout=min(1, max(0, deadline - time.monotonic())))
+            raise
+
+
 def pointer(filing, config_path):
     """What the existing worker adds to its processed record: a locator to the durable receipt, never the product itself.
     The adapter runs as an isolated child of the configured pinned interpreter. Any error becomes an honest 'failed' pointer."""
+    started = time.monotonic()
     try:
         config = json.loads(Path(config_path).read_text())
+        seconds = config.get('filing_seconds', 600)
+        if isinstance(seconds, dict):
+            seconds = seconds.get(filing['formType'].split('/', 1)[0], seconds.get('default'))
+        if type(seconds) not in (int, float) or not math.isfinite(seconds) or seconds <= 0:
+            raise ValueError('filing_seconds must select a finite positive number')
+        deadline = started + seconds
         env = {k: os.environ[k] for k in ('HOME', 'VLLM_API_KEY', 'ONNXTR_CACHE_DIR') if k in os.environ}; env['PATH'] = '/usr/bin:/bin'
-        p = subprocess.run([config['python'], '-I', '-B', str(Path(__file__).resolve()), str(config_path)], input=json.dumps(filing),
-                           capture_output=True, text=True, env=env)
+        p = _adapter_run([config['python'], '-I', '-B', str(Path(__file__).resolve()), str(config_path)],
+                         input=json.dumps(filing), env=env, deadline=deadline)
         r = json.loads(p.stdout.strip().splitlines()[-1]) if p.returncode == 0 else None
         if r is None: return dict(status='failed', reasons=[f'adapter exit {p.returncode}: {p.stderr.strip()[-300:]}'])
         if not isinstance(r, dict) or r.get('status') not in ('complete', 'incomplete', 'failed'):
@@ -367,6 +403,8 @@ def pointer(filing, config_path):
                 if any(not r.get(key) or r[key] != stored.get(key) for key in ('ocr', 'extraction_status', 'status')):
                     raise ValueError('saved OCR aggregate differs')
         extra = dict(fidelity='unverified', ocr=r.get('ocr')) if r.get('extraction_status') is not None else {}
+        if time.monotonic() >= deadline:
+            raise TimeoutError('filing deadline expired before receipt validation finished')
         return dict(status=r['status'], reasons=reasons[:20], package_sha256=r.get('package_sha256'),
                     runtime_manifest_sha256=r.get('runtime_manifest_sha256'),
                     receipt=dict(path=str(saved), sha256=pin) if body is not None else None, **extra)

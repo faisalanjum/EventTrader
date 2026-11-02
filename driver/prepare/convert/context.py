@@ -459,7 +459,7 @@ class Context:
         if tv is None or tv[0] != 200: measured, rec['overlay'] = None, {'refused': 'target response refused by the source rule (or not a 200)'}
         else: measured, rec['overlay'] = overlay.measurement_body(tv[2], raw, body, p, ev['proof'], ev.get('before', b''), ev.get('after', b''))
         if measured is not None: rec['target_measured_sha256'] = hashlib.sha256(measured).hexdigest()  # this render's measured body; the original identity stays in the Source record
-        page = browser.new_page(viewport={'width': 1400, 'height': 1000}, service_workers='block', offline=True)  # native: an owned context; Page.close closes it
+        page = sg.watch(browser.new_page(viewport={'width': 1400, 'height': 1000}, service_workers='block', offline=True))  # native: an owned context; Page.close closes it
         if measured is not None and 'window' in rec['overlay']:  # an inserted run (SEC's server adds one to some pages): accepted only where it is node-level (OCR's native proof)
             cs = re.search(r'charset=([^;\s]+)', t.get('content_type') or '', re.I); rec['node_level'] = overlay.node_level(page, measured, rec['overlay'], cs.group(1) if cs else 'utf-8')
         scope = self.scopes[id(page)] = Scope(page, lifetime=self.inventory); page.on('close', lambda _: self.scopes.pop(id(page), None)); page.context.add_init_script(INIT); page.context.add_init_script(acquisition.INIT); rec['inflight'] = acquisition.count_requests(page); served = [False]; got_in, refused_in = set(), set()  # this render's received inputs (OCR facts: delivered identities, refused GETs)
@@ -519,7 +519,7 @@ class Context:
                 got.value.response()
             except (OSError, StorageError, ImportError, MemoryError): raise  # html_route's policy, inside the boundary too
             except Exception as e:
-                if not browser.is_connected(): raise
+                if not sg.alive(browser): raise
                 refuse('the selection did not request the target (' + type(e).__name__ + ')')
             rec['selection_settle'] = _settle(page, rec, self.settle_s)
             if not rec['selection_settle']['settled']: refuse('incomplete observation after selection')
@@ -1026,7 +1026,7 @@ def contextual_routes(raw, file_id, sha256, browser, source, evidence, parse=Non
             finally: pg.close()
         except (OSError, StorageError, ImportError, MemoryError): raise  # html_route's policy: storage, dependency and resource faults propagate
         except Exception as e:
-            if not browser.is_connected(): raise
+            if not sg.alive(browser): raise
             why = repr(e)[:300]
         r = t.records[0] if t.records else {'refused': why}; out['trial_captures'].update(t.captures)
         last = (r.get('inner') or [{}])[-1] if len(t.controls) > 1 else r  # the last action's own record

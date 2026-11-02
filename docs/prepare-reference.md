@@ -41,6 +41,12 @@ empty successful inventory. An older saved parse without this field proves no
 absence. The saved readback carries this source evidence without assigning its
 scale to a whole table or changing any displayed number.
 
+For downstream fact-to-cell matching, a start tag is not a whole fact range and
+an `id` is optional. Whole element ranges are available only when the strict XML
+source reading succeeds; native inline facts alone do not guarantee that child.
+Continuation chains and facts crossing cells need explicit handling. Printed
+units and dates remain saved text even when no exact number binding is available.
+
 For packaged HTML, pass the same `screen_grid.Source` through HTML conversion and
 picture preparation; it binds the document address, package and dependency evidence.
 Inside a qualified context, that Source answers a URL the parent recording observed
@@ -339,8 +345,13 @@ or failed-document result; cancellation is not swallowed.
 The worker still publishes legacy enrichment and retains full failed input with
 its acknowledgment in one transaction. A failed pointer does not schedule an
 automatic retry. Adapter job attempts, OCR attempts and crash deliveries have
-their own bounds. Current per-document and OCR limits do not establish a total
-whole-filing deadline; qualification can also run additional jobs.
+their own bounds within `pointer`'s total `filing_seconds` budget (600 seconds
+by default). It includes acquisition, qualification, retries, OCR and receipt
+validation. On expiry owned processes stop and the pointer stays failed. A form
+map may set different limits; `/A` uses the base form and `default` covers others.
+Keep the image's Tini entry point in the worker command to reap exited children.
+Successful timing and content checks are required separately: a bounded failure
+does not qualify a filing as ready.
 
 ## Running the batch caller
 

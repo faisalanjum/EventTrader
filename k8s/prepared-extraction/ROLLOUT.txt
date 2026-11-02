@@ -2,14 +2,15 @@ MANUAL INSTRUCTIONS — activation requires the owner decision; nothing is appli
 CWD: k8s/prepared-extraction/ beneath the repository root. Keep BEFORE_WORKER_REVISION.txt here when R0 creates it.
 Execution prelude: use a Bash subshell with set -euo pipefail. Each API request is capped at 10 seconds; polling budget is 180 seconds. Stop on any non-zero step.
 Namespace processing. NOTHING BELOW IS APPLIED.
-IMAGE (table lookup and storage checked 1 November 2026; private repo; processing/default SA pulls via secret dockerhub-pull):
- faisalanjum/report-enricher@sha256:3e0ac53919cb24a0034c18244398e6666374ba83431259557c7236f3b599a242 (tag prepared-storage-20261101)
- Exact 48-file runtime manifest f0ac7059 and adapter 7ca92b5e; pair with adapter-config.yaml.
+IMAGE (bounded extraction checked 2 November 2026; private repo; processing/default SA pulls via secret dockerhub-pull):
+ faisalanjum/report-enricher@sha256:e0fdcab4ebba79308ced6c80b9ba94cc4067a3f90ed1a55147df73425fa09017 (tag prepared-bounded-20261102)
+ Exact 48-file runtime manifest 8561062f and adapter 6a325d2d; pair with adapter-config.yaml.
  Worker 33db8990 and browser 22d72b58 are unchanged; Redis wrapper a9ef649f includes the approved duplicate-check fix.
- Storage: 3,560 exact saved-output comparisons and 26 final-image adapter/reserve/recovery/OCR checks passed; no model rerun.
- Its unchanged OCR readers inherit the 31 October qualification. Prior full Prepare run: 1,603/1,604 passed; one browser fixture remains unfinished.
- The storage ledger distinguishes fresh affected checks from retained unchanged checks; see README.md.
- Create the configured script_qualifications/f0ac7059e617 directory before activation; keep the older runtime's records separately.
+ All 2,305 required methods have passing coverage: full run plus the affected-file rerun after three test-double repairs; see README.md for exact receipts.
+ Keep the patch's Tini command and explicit worker arguments. Whole-filing budget is 600 seconds, including retries and OCR.
+ The largest measured HTML/XML filing took 587.667 seconds; first-time script checks and large OCR workloads remain unmeasured.
+ Earlier storage and unchanged OCR qualifications remain separate inherited evidence; see README.md and OCR_QUALIFICATION.txt.
+ Create /data/sec_prepared/script_qualifications/8561062f3d2e before activation; keep the older runtime's records separately.
  OCR remains unverified model output; see OCR_QUALIFICATION.txt for errors and test limits.
 BEFORE ENABLING OCR: prepare the warm, authenticated server, replace the endpoint in adapter-config.yaml,
  and create the processing/prepared-ocr Secret (api-key) described in README.md. Verify its pinned

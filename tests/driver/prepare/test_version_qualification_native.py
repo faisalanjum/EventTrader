@@ -36,8 +36,8 @@ class FirstFileQualifiesAndASecondReuses(unittest.TestCase):
         r = self.rows[1]; self.assertEqual((r['outcome'], r['reasons'], r['native_status']), ('verified_saved_output', [], 'OK')); self.assertNotIn('qualification', r); self.assertNotIn('held', r)
         self.assertTrue(r['attempt'].endswith('out/attempt_1'))  # its own ordinary attempt, no child job
         self.assertEqual(rd(Path(r['attempt']) / 'ROUTE.json')['facts']['optional_controls']['qualified_versions'], [self.f['bot_sha256']])
-    def test_one_claim_one_record_and_the_arms_never_qualify(self):
-        self.assertEqual(sorted(p.name for p in self.f['store'].iterdir()), sorted([self.f['bot_sha256'] + '.claim', self.f['bot_sha256'] + '.json']))
+    def test_one_record_and_the_arms_never_qualify(self):  # a passed verdict keeps only the producer's record; the claim marker is a hold before WITHOUT only
+        self.assertEqual(sorted(p.name for p in self.f['store'].iterdir()), [self.f['bot_sha256'] + '.json'])
         for arm in ('explored', 'without', 'release'): self.assertNotIn('qualification', rd(self.out / 'qualification_0' / arm / 'RESULT.json')['rows'][0])
         self.assertFalse((self.out / 'qualification_1').exists())
 

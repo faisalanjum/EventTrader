@@ -14,8 +14,26 @@ _CF = ''.join(chr(i) for i in range(0x110000) if unicodedata.category(chr(i)) ==
 
 _WS = re.compile('[\\s' + re.escape(_CF) + ']+')
 
-_FOLD = str.maketrans({**{chr(i): ('"' if ('DOUBLE' in unicodedata.name(chr(i), '') or chr(i) == '"') else "'") for i in range(0x110000) if 'QUOTATION MARK' in unicodedata.name(chr(i), '')},
-                       **{chr(i): '-' for i in range(0x110000) if unicodedata.category(chr(i)) == 'Pd' or unicodedata.name(chr(i), '') == 'MINUS SIGN'}})
+class _Fold(dict):
+    """The E8 table for str.translate, filled one character at a time on first use.
+
+    It gives the same answers as the former full table, which scanned every code point twice at import.
+    """
+
+    def __missing__(self, o):
+        c = chr(o)
+        name = unicodedata.name(c, '')
+        if unicodedata.category(c) == 'Pd' or name == 'MINUS SIGN':
+            v = '-'  # every dash and the minus sign become a hyphen; a dash wins over a quotation-mark name, as before
+        elif 'QUOTATION MARK' in name:
+            v = '"' if 'DOUBLE' in name or c == '"' else "'"  # double stays double, single stays single
+        else:
+            v = c  # every other character maps to itself
+        self[o] = v
+        return v
+
+
+_FOLD = _Fold()  # used only through str.translate
 
 def norm(s):
     """Comparison form: glyphs folded (E8), the key's ~~struck~~ marks dropped, whitespace runs -> one space."""

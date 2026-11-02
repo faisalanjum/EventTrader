@@ -18,11 +18,12 @@ import urllib.parse
 import time
 import types
 import unicodedata
+import weakref
 from bisect import bisect_left, bisect_right
 from pathlib import Path
 
 from driver.prepare.convert import anchor, edgartools_html
-from driver.prepare.get.acquire import StorageError
+from driver.prepare.get.acquire import StorageError, Members
 from driver.prepare.get.transport import closes
 from driver.prepare.convert.anchor import Visible
 
@@ -301,7 +302,7 @@ def native_state(page, prefix, blobs=None):
     try:
         png = page.screenshot(**CAPTURE_OPTIONS)
     except PlaywrightError as e:  # only this is a capture refusal; storage, memory, OS, import and programming errors propagate (html_route's policy)
-        if not page.context.browser.is_connected(): raise  # a lost browser is a failure, not a refusal
+        if not alive(page.context.browser): raise  # a lost browser is a failure, not a refusal
         raise CaptureError('native full-page capture failed: ' + repr(e)[:200]) from e
     if png[:8] != b'\x89PNG\r\n\x1a\n': raise CaptureError('native full-page capture is not a PNG')
     w, h, r = int.from_bytes(png[16:20], 'big'), int.from_bytes(png[20:24], 'big'), s['ratio']
@@ -557,10 +558,11 @@ class Source:
         split = urllib.parse.urlsplit(base) if base is not None else None
         if split is not None and not (split.scheme and split.netloc and base.endswith('/')): raise ValueError('base: an absolute address ending in "/", or None')
         if path.startswith('/') or urllib.parse.urlsplit(path).scheme: raise ValueError("path: the document's member path, relative to base")
-        if not all(isinstance(k, str) and type(v) is bytes for k, v in members.items()): raise ValueError('members: verified {path: bytes}')
+        own = type(members) is Members  # only the native package mapping; caller subclasses may own mutable data
+        if not (all(isinstance(k, str) for k in members) if own else all(isinstance(k, str) and type(v) is bytes for k, v in members.items())): raise ValueError('members: verified {path: bytes}')
         if not all(isinstance(o.get('status'), int) and isinstance(o.get('observed_at'), str) for o in (observed or {}).values()): raise ValueError('observed: {url: {status, observed_at, ...}}')
         self.path, self.base, self.bundle = path, base, bundle  # the evidence as given, unchangeable afterwards: a record always names the bytes every render used
-        self.members, self.observed = types.MappingProxyType(dict(members)), types.MappingProxyType({u: types.MappingProxyType(dict(o)) for u, o in (observed or {}).items()})
+        self.members, self.observed = types.MappingProxyType(members if own else dict(members)), types.MappingProxyType({u: types.MappingProxyType(dict(o)) for u, o in (observed or {}).items()})
         self.records, self.refusals, self.root, self.document, self.charset = {}, [], None, None, None
         self.context = context
         self.renderer_css = renderer_css  # never with a context: the Renderer normalization belongs to the script-free path only
@@ -615,6 +617,26 @@ class Source:
         return seen['status'], seen.get('content_type') or 'application/octet-stream', body or b''
 
 
+LOST = weakref.WeakSet()  # browsers whose renderer crashed (Page.crash): the attempt's technical failure, which the job retries - never a content outcome
+
+
+def watch(page):
+    """Every page the step makes (the six factories), and every popup such a page opens: a renderer crash marks the browser lost and closes the
+    crashed page, so a call waiting on it raises now - with the pinned Playwright 1.59 / Chrome 147 a call in flight or made after a crash otherwise
+    never returns (measured: FABLE_BROWSER_CRASH checkpoint probes, 2026-11-02). A popup may run in its own renderer: its crash marks the browser lost
+    too, so the attempt cannot complete on the parent's calls alone (`alive`). The page is returned as made."""
+    def crashed(pg):  # the native Page 'crash' event: the renderer is gone; nothing waiting on this page will answer
+        from playwright.sync_api import Error as PlaywrightError  # the pinned library's public typed error (TargetClosedError included)
+        LOST.add(pg.context.browser)  # the recorded loss: decisive on its own (alive)
+        try: pg.close()  # releases every call waiting on the page (TargetClosedError)
+        except PlaywrightError: pass  # the close's own native error on the already-lost page (a route answered during teardown) adds nothing to the recorded loss; storage, memory and programming errors still propagate
+    page.on('crash', crashed); page.on('popup', watch)
+    return page
+
+
+def alive(browser): return browser.is_connected() and browser not in LOST  # the one 'technical, propagate' test of every catch site (html_route's policy)
+
+
 def _offline_page(browser, asked=None, document=None, source=None):
     """A page as the step opens it: a wide window, the document's scripts never run, nothing fetched - a document's own references are never fetched
     (EDGAR forbids external ones; the step must not depend on that). `asked`: a list that gets the address of every style sheet the page requests
@@ -623,7 +645,7 @@ def _offline_page(browser, asked=None, document=None, source=None):
     charset. `source` (a Source): a request that is no navigation is answered from its evidence only. Every other request is refused - a later
     navigation (a refresh, a frame, a redirect) as cancelled, so that the page stays the one loaded."""
     if source is not None and source.context is not None: return source.context.page(browser, asked, document, source)  # a contextual state: its own qualified page
-    page = browser.new_page(viewport={'width': 1400, 'height': 1000}, java_script_enabled=False); first = [document]
+    page = watch(browser.new_page(viewport={'width': 1400, 'height': 1000}, java_script_enabled=False)); first = [document]
     def answer(route):
         r = route.request
         if first[0] and r.url == first[0][0] and r.is_navigation_request() and r.frame == page.main_frame: (_, body, *named), first[0] = first[0], None; return route.fulfill(status=200, content_type='text/html' + ''.join('; charset=' + c for c in named), body=body)
@@ -969,11 +991,11 @@ def _step(raw, route, browser, vis, t0=None, source=None):  # `step` on a readin
     try: measured, boxes, got = measure(marked, browser, prefix, every=True, decorate=True, raw=raw, source=source, refused=refused, gap_chars=want) if decorate else measure(marked, browser, prefix, every=True, raw=raw, source=source, refused=refused, gap_chars=want)
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e:
-        if not browser.is_connected(): raise
+        if not alive(browser): raise
         err = repr(e)[:200]; route['source_symbols'], route['source_inline'] = {'read': False, 'error': err}, {'read': False, 'error': err}  # content and anchors stay; the failure is said, never an empty success
         route['source_style'] = {'read': False, 'error': err}  # no render, no style: a fallback page's is never a proved original style
         return {'error': repr(e)[:200]}
-    if 'error' in got and not browser.is_connected(): raise RuntimeError('browser disconnected: ' + got['error'])
+    if 'error' in got and not alive(browser): raise RuntimeError('browser disconnected: ' + got['error'])
     marks = None if 'error' in got else got['marks']  # each marked run's own text as this render shows it (`every`)
     bom = next((len(b) for b in (b'\xef\xbb\xbf', b'\xfe\xff', b'\xff\xfe') if raw.startswith(b)), 0)  # the encoding's own mark: no text the page shows (as page_visibility and decorations)
     skip = source.context.label_spans(raw) if source is not None and source.context is not None else ()  # a contextual state reports a control's own replaced label apart

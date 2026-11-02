@@ -68,7 +68,7 @@ def prepare(raw, route, members, browser, source=None):
         try: shots, error = _page(raw, vis, units, members, browser, source), None
         except (OSError, StorageError, ImportError, MemoryError): raise
         except Exception as e:
-            if not browser.is_connected(): raise
+            if not screen_grid.alive(browser): raise
             shots, error = {}, 'page: ' + repr(e)[:200]
         for k, u in enumerate(units):
             got = shots.get(k) or {'error': error or 'no capture'}

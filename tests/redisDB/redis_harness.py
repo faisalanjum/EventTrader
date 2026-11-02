@@ -88,7 +88,7 @@ if not ARGS.get('real_pointer'): module('prepared_filing', pointer=pointer, prep
 elif ARGS.get('adapter_reply'):  # real pointer and worker; only the child's transport is substituted
     spec = importlib.util.spec_from_file_location('prepared_filing', ARGS['adapter'])
     adapter = importlib.util.module_from_spec(spec); sys.modules[spec.name] = adapter; spec.loader.exec_module(adapter)
-    adapter.subprocess.run = lambda *a, **k: subprocess.CompletedProcess([], 0, Path(ARGS['adapter_reply']).read_text(), '')
+    adapter._adapter_run = lambda *a, **k: subprocess.CompletedProcess([], 0, Path(ARGS['adapter_reply']).read_text(), '')
 if ARGS['configured']: os.environ['PREPARED_EXTRACTION_CONFIG'] = ARGS.get('config', '/configured/adapter.json')
 else: os.environ.pop('PREPARED_EXTRACTION_CONFIG', None)
 spec = importlib.util.spec_from_file_location('enricher_under_test', ENRICHER); enricher = importlib.util.module_from_spec(spec); spec.loader.exec_module(enricher)

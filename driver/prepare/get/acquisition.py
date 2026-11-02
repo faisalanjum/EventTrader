@@ -103,7 +103,7 @@ class Selection:
             got = src.answer(q.url, q.resource_type, q.is_navigation_request())
             return route.fulfill(status=got[0], content_type=got[1], body=got[2]) if got else route.abort('aborted')
         rec['pages'] = []; ctx.route('**/*', answer); ctx.on('page', lambda p: rec['pages'].append(p.url))  # context boundary: popups/new windows answered by the same rule, and counted
-        page = ctx.new_page(); page.on('pageerror', lambda e: rec['errors'].append(str(e)))
+        page = sg.watch(ctx.new_page()); page.on('pageerror', lambda e: rec['errors'].append(str(e)))
         self._inflight = getattr(self, '_inflight', {}); self._inflight[id(page)] = count_requests(page)
         if src.observation(self.parent_url, 'document') is None:  # a parent whose recorded bytes are not its recorded identity: a failure, never retried
             ctx.close(); raise AcquisitionError('parent response refused by the source rule: ' + str((src.records.get(self.parent_url) or {}).get('why')))
@@ -150,7 +150,7 @@ class Selection:
                      blocked_non_get_after_action=[r[:2] for r in after if r[0] != 'GET'], refused_by_source=sorted(k for k, v in rec['source'].records.items() if v.get('status') == 'refused'), extra_pages=len(rec['pages']) - 1)
             return a
         except PlaywrightError as e:  # ONE typed boundary for the whole action observation (Root CONTEXT_ACTION_OBSERVATION_REPAIR_20261022T0535): recorded, never qualified/missing/no-op
-            if page.is_closed() or not browser.is_connected(): raise  # page, context or browser loss stays fatal (native state, no class or message list)
+            if page.is_closed() or not sg.alive(browser): raise  # page, context or browser loss stays fatal (native state, no class or message list)
             a.update(state='failed: browser observation during ' + step, error={'type': type(e).__module__ + '.' + type(e).__qualname__, 'name': e.name, 'message': e.message, 'stack': e.stack},
                      pre_action_facts=pre if pre is not None else facts(rec), requests=rec['log'], errors=rec['errors'], extra_pages=len(rec['pages']) - 1)  # only observed values
             if pre is not None: a.update(facts=facts(rec), requests_after_action=rec['log'][mark:])  # after-action facts kept apart from the pre-action reading

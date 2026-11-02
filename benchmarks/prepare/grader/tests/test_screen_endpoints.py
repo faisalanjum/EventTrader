@@ -16,6 +16,7 @@ class Offline(unittest.TestCase):
             def goto(self, url, wait_until=None): calls.append(('goto',))  # the native loader the measure now uses (Source/_document)
             def evaluate(self, js): calls.append(('evaluate',)); return 'UTF-8' if js == 'document.characterSet' else {'cells': [], 'boxes': {}}
             def close(self): calls.append(('close',))
+            def on(self, event, handler): pass  # the native crash/popup watcher (screen_grid.watch) registers here; a seam: nothing fires, nothing is recorded
         class Browser:
             def new_page(self, **kw): return Page()
         screen_grid.measure(b'<p>x</p>', Browser())

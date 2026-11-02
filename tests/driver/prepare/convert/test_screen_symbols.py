@@ -207,6 +207,7 @@ class Faults(unittest.TestCase):
         def new_page(self, **kwargs):
             owner = self
             class Page:
+                def on(self, event, handler): pass  # this test double emits no events
                 def route(self, *args): pass
                 def goto(self, *args, **kwargs): pass  # the native loader the measure now uses (Source/_document)
                 def close(self): owner.closed = True

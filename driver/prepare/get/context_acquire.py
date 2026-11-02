@@ -96,7 +96,7 @@ def _startup_dependencies(fetch, browser, parent, settle_s=3.0):
             if not got: asked.append((q.method, q.url, q.resource_type, q.is_navigation_request()))
             if not got and q.is_navigation_request(): roles.append({'url': q.url, 'top_level': q.frame == page.main_frame, 'frame_name': q.frame.name})  # native frame role (request.frame)
             return route.fulfill(status=got[0], content_type=got[1], body=got[2]) if got else route.abort('aborted')
-        ctx.route('**/*', answer); page = ctx.new_page(); box = count_requests(page)
+        ctx.route('**/*', answer); page = sg.watch(ctx.new_page()); box = count_requests(page)
         try:
             try: page.goto(parent, wait_until='load', timeout=30000); settled = quiet_settle(page, box, settle_s)
             except PlaywrightTimeout: settled = False  # only a load timeout is an observation outcome; any other browser error propagates
@@ -186,7 +186,7 @@ def acquire_context(campaign, browser, version_dir, filename, marked, prefix, re
     body, mrec = overlay.measurement_body(copy, fit[0], marked, prefix, fit[1], before, after); rec['target']['measure'] = {k: v for k, v in mrec.items() if k != 'prefix'}
     if body is None: return {'outcome': 'refused: measurement body', 'evidence': None, 'record': rec}
     if 'window' in mrec:
-        pg = browser.new_page(java_script_enabled=False)
+        pg = sg.watch(browser.new_page(java_script_enabled=False))
         try: nl = overlay.node_level(pg, body, mrec, 'utf-8'); ins = bind_inserted(pg, copy, fit, mrec, nl, target) if nl['node_level'] else {'why': 'inserted run not node-level'}
         finally: pg.close()
         rec['target']['node_level'] = nl; rec['target']['inserted_script'] = ins

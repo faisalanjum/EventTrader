@@ -1,6 +1,6 @@
 # Permanent Prepare regressions
 
-**Current inventory (2 November 2026, Revision 3):** 1,632 Prepare methods and
+**Current inventory (2 November 2026):** 1,676 Prepare methods and
 543 retained grader methods. These are discovery targets, not a passing-run claim.
 Run both suites: retained grader assertions have not been retired. The unchanged
 `2f0c6a4d` host baseline passed all 1,628 earlier Prepare methods in 11,656.657
@@ -9,6 +9,10 @@ seconds; candidate results are recorded separately in the [operating guide](../.
 Use the existing OCR overlay at `/home/faisal/prepare_cleanup_review_20261031/ocr_env/`
 (CPython 3.11.10) and its retained `prepare-closeout-20261011` base. The image lane
 uses CPython 3.11.13. Do not install into these shared qualified environments.
+The final combined checks use the private environment at
+`/home/faisal/prepare_cleanup_review_20261031/extraction_deferred_20261102T152805Z/test_env/`.
+It reuses those qualified packages and adds the worker's pinned `psutil==7.0.0`
+for the six whole-filing deadline tests; shared environments remain unchanged.
 The three lanes are offline Prepare/grader/adapter, native adapter in the exact
 candidate image, and worker tests with disposable Redis. See the
 [adapter/worker instructions](../../redisDB/README.md) for the latter two.
@@ -31,6 +35,11 @@ env -u PYTHONPATH -u ADAPTER_E2E -u REDIS_TEST_HOST -u REDIS_TEST_PORT -u ENRICH
 Keep `unittest`, already used by the downloader and grader. No new test framework,
 scoring engine or orchestration service. The full command includes browser tests,
 saved-reading replays and failure/restart tests; it makes no SEC or model calls.
+Budget the full suite at four hours. Its four `ControlIdentity` methods may run
+as a separate, disjoint part of that same inventory, with a two-hour allowance
+included in the four hours. The measured slow method took about 32 minutes in
+Extractor's candidate; this is test time, not production filing time. Record both
+correctness and elapsed time, and report a timeout as an unfinished check.
 
 The optional saved OCR stage additionally needs the pinned client packages in
 `k8s/prepared-extraction/requirements-ocr.txt`. Its `test_vllm` tests execute the

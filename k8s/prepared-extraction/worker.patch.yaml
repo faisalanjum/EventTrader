@@ -1,6 +1,7 @@
 # REVIEWABLE - NOT APPLIED. Pair with adapter-config.yaml and the exact image in README.md.
 # Prepare the OCR endpoint and Secret before the owner-approved activation.
 spec:
+  replicas: 1
   strategy: {type: Recreate, rollingUpdate: null}   # the processing list has ONE owner: the old pod stops before the new one starts
   template:
     spec:
@@ -8,7 +9,9 @@ spec:
         kubernetes.io/hostname: minisforum2          # the hostPath below is node-local
       containers:
       - name: enricher
-        image: faisalanjum/report-enricher@sha256:3e0ac53919cb24a0034c18244398e6666374ba83431259557c7236f3b599a242   # prepared-storage-20261101
+        command: ["/usr/bin/tini", "--"]
+        args: ["python", "-m", "redisDB.report_enricher_pod"]
+        image: faisalanjum/report-enricher@sha256:e0fdcab4ebba79308ced6c80b9ba94cc4067a3f90ed1a55147df73425fa09017   # prepared-bounded-20261102
         env:
         - name: PREPARED_EXTRACTION_CONFIG             # unset = today's worker path exactly (seam tests 5/5)
           value: /etc/prepared/adapter_config.json

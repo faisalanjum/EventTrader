@@ -39,8 +39,11 @@ filing -> original files -> HTML/XML extraction -> saved output
 - Keep source identities, locations, context and uncertainty with every saved result.
 - Machine failures remain failures through native parser wrappers. Bad content
   keeps its explicit incomplete/unread result. Valid receipts are read once at handoff.
-- Job/OCR retries are bounded. A failed pointer retains input for explicit replay;
-  it does not itself schedule retries. No whole-filing deadline is established.
+- The caller's `filing_seconds` bounds acquisition, extraction, OCR and retries
+  together. A timeout stops owned work and remains failed; it is not completion.
+  A failed pointer retains input for explicit replay; it schedules no extra retry.
+- A crashed browser invalidates its attempt. Fresh jobs retry technical failures;
+  completed script checks are reused, while interrupted checks can run again.
 - Building or pushing does not activate production. Activation remains an owner decision.
 - Mac automation and downstream Driver/Neo4j changes are separate work.
 

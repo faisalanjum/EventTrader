@@ -19,7 +19,7 @@ def visibility(raw, vis, browser, source=None):
     try: return anchor.Visible(raw, page=screen_grid.page_visibility(raw, vis, browser, source)), None
     except (OSError, StorageError, ImportError, MemoryError): raise
     except Exception as e:
-        if not browser.is_connected(): raise
+        if not screen_grid.alive(browser): raise
         return vis, repr(e)[:200]
 
 
@@ -49,7 +49,7 @@ def declarations(vis, browser):
     by_tag = {t: sorted(n) for t, n in by_tag.items() if n}
     if not vis.links and not by_tag: return {}, []
     ctx = browser.new_context()
-    try: protocols, native = ctx.new_page().evaluate(NATIVE_DECLARATIONS, [[l['href'] for l in vis.links], by_tag])
+    try: protocols, native = screen_grid.watch(ctx.new_page()).evaluate(NATIVE_DECLARATIONS, [[l['href'] for l in vis.links], by_tag])
     finally: ctx.close()
     native = {t: set(n) for t, n in native.items()}; links = {}
     for l, protocol in zip(vis.links, protocols):

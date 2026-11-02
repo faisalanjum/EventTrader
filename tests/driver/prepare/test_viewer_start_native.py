@@ -65,7 +65,7 @@ class NativeViewerStart(unittest.TestCase):
         self.assertTrue(row['attempt'].endswith('out/attempt_1'))
         renders = read(Path(row['attempt']) / 'CONTEXT_RENDERS.json')
         self.assertEqual(len([r for r in renders if 'viewer_start' in r]), 1)
-        self.assertEqual(sorted(p.name for p in self.facts['store'].iterdir()), sorted([self.facts['bot_sha256'] + '.claim', self.facts['bot_sha256'] + '.json']))
+        self.assertEqual(sorted(p.name for p in self.facts['store'].iterdir()), [self.facts['bot_sha256'] + '.json'])  # a pass keeps only the record
 
 
 class NativeViewerDamage(unittest.TestCase):

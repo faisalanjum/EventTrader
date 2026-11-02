@@ -1,6 +1,7 @@
 """Acquire one SEC submission package; readability is a later preparation step."""
 import argparse
 import binascii
+from collections.abc import Mapping
 from datetime import datetime
 import errno
 import hashlib
@@ -68,9 +69,12 @@ def _filename(value):
     return value
 
 
+_UU_INVALID_BYTE = re.compile(rb'[^\x20-\x60]')
+
+
 def _uu_invalid(line):
     count = (line[0] - 32) & 63
-    return count > 45 or len(line) > ((count + 2) // 3) * 4 + 1 or any(not 32 <= byte <= 96 for byte in line)
+    return count > 45 or len(line) > ((count + 2) // 3) * 4 + 1 or _UU_INVALID_BYTE.search(line) is not None
 
 
 def _decode(body, filename, dash=False):
@@ -178,13 +182,21 @@ def _format_hint(data):
     return 'unknown'
 
 
-DOCUMENT_BLOCK = re.compile(rb'<DOCUMENT>\r?\n(.*?)<TEXT>\r?\n(.*?)</TEXT>\r?\n</DOCUMENT>\r?\n', re.S)  # the one SEC framing rule (was local to parse_package)
+DOCUMENT_BLOCK = re.compile(rb'<DOCUMENT>\r?\n(.*?)<TEXT>\r?\n(.*)</TEXT>\r?\n</DOCUMENT>\r?\n', re.S)
+_DOCUMENT_END = re.compile(rb'</TEXT>\r?\n</DOCUMENT>\r?\n')
+
+
+def _document(data, start):
+    # Find the first closing pair in native code; bound the greedy TEXT match
+    # there so it cannot swallow the next member of a large package.
+    end = _DOCUMENT_END.search(data, start)
+    return DOCUMENT_BLOCK.match(data, start, end.end()) if end else None
 
 
 def document_parts(data, start):
     """(before, after): a member's exact <DOCUMENT> envelope around its TEXT, as parse_package hands them to _prove; `start` = the member's manifest
     package_range start. AcquisitionError if no block starts there."""
-    match = DOCUMENT_BLOCK.match(data, start)
+    match = _document(data, start)
     if not match:
         raise AcquisitionError('No <DOCUMENT> block at the recorded package range')
     return data[match.start():match.start(2)], data[match.end(2):match.end()]
@@ -225,9 +237,8 @@ def parse_package(data, accession, cik, form, proofs=None, fetch=None):
         # LF/CRLF lines outside every TEXT block are skipped; spaces or any other byte there still fail.
         blank_lines = re.compile(rb'(?:\r?\n)*')
         cursor = blank_lines.match(data, header.end()).end()
-        document = DOCUMENT_BLOCK
         while data.startswith(b'<DOCUMENT>', cursor):
-            match = document.match(data, cursor)
+            match = _document(data, cursor)
             if (not match
                     or not re.fullmatch(rb'(?:<(?:TYPE|SEQUENCE|FILENAME|DESCRIPTION)>[^\r\n]*\r?\n)+', match[1])
                     or re.search(rb'^</?(?:DOCUMENT|TEXT)>\r?$', match[2], re.M)):
@@ -364,6 +375,39 @@ def read_package(path):
         return manifest, files
     except (ValueError, KeyError, TypeError, IndexError) as exc:
         raise AcquisitionError('Invalid cache: ' + str(exc)) from exc
+
+
+class Members(Mapping):
+    """The hot path's members (`open_package`): keys from the verified manifest; a member's bytes framed at its recorded range (`_document`), read by
+    the same decoder (`_readings`), checked against its recorded name, size and hash, and kept - on first use only. Unresolved members (no hash) are
+    absent, as `read_package` leaves them out of its files. Read-only; a name the manifest does not hold is a KeyError, as in a dict."""
+    def __init__(self, data, manifest):
+        self._data, self._got = data, {}
+        self._by_name = {m['filename']: (int(m['package_range'][0]), int(m['package_range'][1]), str(m['sha256']), int(m['bytes']))
+                         for m in manifest['members'] if m.get('sha256')}  # the evidence copied out as plain values: a caller's later change to the manifest it was given cannot reach it
+    def __iter__(self): return iter(self._by_name)
+    def __len__(self): return len(self._by_name)
+    def __getitem__(self, name):
+        if name not in self._got:
+            start, end, sha256, size = self._by_name[name]; match = _document(self._data, start)
+            if not match or match.span() != (start, end) or re.findall(rb'^<FILENAME>([^\r\n]*)', match[1], re.M) != [name.encode()]:
+                raise AcquisitionError('Recorded member range or name does not frame this member: ' + name)
+            readings, _ = _readings(match[2], name)
+            body = next((read for _, read in readings if _hash(read) == sha256), None)
+            if body is None or len(body) != size:
+                raise AcquisitionError('Recorded member hash or size matches no reading: ' + name)
+            self._got[name] = body
+        return self._got[name]
+
+
+def open_package(path):
+    """The document hot path's package: `_read_cache` first, as `read_package` starts (cache layout, package bytes hash == the stored manifest's and
+    the directory name, manifest and receipt readable) - which does NOT re-derive the manifest from the bytes; the stored manifest's own identity is
+    the caller's plan pin (document.py checks the row's package_metadata_sha256 and package_sha256). Then the members decoded one by one as a document
+    asks for them (`Members`), each checked against that manifest - nothing else. `read_package`, which re-derives the whole manifest, stays for the
+    callers that want that re-derivation (publication, resume, the repeat-filing reverify)."""
+    data, stored = _read_cache(Path(path).absolute())
+    return stored, Members(data, stored)
 
 
 def acquire(accession, cik, form, output, *, package=None, sha256=None, live=False,

@@ -8,7 +8,7 @@ reasons), generation_failed (composition skipped). Exit 0 only if every row is v
 Usage: <qualified python> -I -S -B driver/prepare/job.py PLAN PLAN_SHA256 NEW_OUT_DIR [GENERATOR [SECONDS]]. Production runs this checkout's
 own document.py: omit GENERATOR, or pass that exact sibling path (needed to give SECONDS with this positional CLI). Any ALTERNATE generator
 path is test-only (the operating controls' synthetic child) and is not pinned. The manifest must list every file of this runtime's driver tree (Python caches aside). Every child runs with that same interpreter; HOME and CPU affinity come from the launch (e.g. taskset or a systemd scope)."""
-import hashlib, json, os, signal, subprocess, sys, time
+import fcntl, hashlib, json, os, signal, subprocess, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -63,7 +63,7 @@ def decoded(path, row, what):  # a child's JSON output: an explicit recorded tec
 
 
 def kept_captures(folder, documents, what):  # every native capture digest a saved context record names ({'capture': {'sha256'}} at any depth): kept once under captures/, restorable
-    import gzip
+    from driver.prepare.get import archive
     named = set()
     def walk(x):
         if isinstance(x, dict):
@@ -75,9 +75,8 @@ def kept_captures(folder, documents, what):  # every native capture digest a sav
     for d in documents: walk(d)
     bad = []
     for d in sorted(named):
-        try: ok = hashlib.sha256(gzip.decompress((folder / 'captures' / (d + '.gz')).read_bytes())).hexdigest() == d
-        except (OSError, ValueError, EOFError): ok = False
-        if not ok: bad.append(d)
+        try: archive.load_blob(folder / 'captures', d)
+        except (OSError, ValueError): bad.append(d)
     return len(named), [f'{what}native capture not kept or not restorable: {d}' for d in bad]
 
 
@@ -94,6 +93,7 @@ def check_output(folder, logs, expected, seconds, renv, row, result, record, wha
     st['native_status'] = complete['native_status']; st['native_error'] = route.get('error')  # native fields kept as saved
     docs = [decoded(folder / n, row, what + n) for n in ('CONTEXT_RENDERS.json', 'CONTEXT_TRIALS.json', 'CONTEXT_ACQUISITION.json') if (folder / n).exists()]  # a contextual output's records
     st['captures_named'], cap_reasons = kept_captures(folder, docs, what)
+    for reason in cap_reasons: technical(row, reason)
     st['picture_input_errors'] = [u.get('id') for u in route.get('units') or [] if isinstance(u, dict) and isinstance(u.get('input'), dict) and 'error' in u['input']]
     st['reconstruct_exit'] = child(bound(seconds) + [sys.executable, '-B', '-m', 'driver.prepare.reconstruct', str(folder), str(logs / 'R.json')], logs, 'reconstruct', ROOT, renv)
     st['reconstruct_observed'] = observed(logs, 'reconstruct'); live.update(st); save(result, record)  # each child's exit is saved before its output is decoded
@@ -115,7 +115,7 @@ def check_output(folder, logs, expected, seconds, renv, row, result, record, wha
     reasons += [f"picture preparation error: {i}" for i in st['picture_input_errors']]
     reasons += [] if st['reconstruct_exit'] == 0 else [f"reconstruct exit {st['reconstruct_exit']}"]
     reasons += [] if R is None or st.get('verify_exit') == 0 else [f"verify exit {st.get('verify_exit')}"]
-    reasons += cap_reasons + [f'technical failure: {t}' for t in row.get('technical_failures', [])[t0:]]
+    reasons += [f'technical failure: {t}' for t in row.get('technical_failures', [])[t0:]]
     return st, reasons, route
 
 
@@ -138,8 +138,9 @@ def compare_views(a, b):
 
 
 def claim_version(folder, h):
-    """The one exclusive claim per exact bytes, taken BEFORE any expensive qualification run: True for the caller that created it, False when any
-    caller (this job or another) already holds it. Never released or retried: one qualification attempt per version (its record or its absence)."""
+    """The kept marker of a completed hold before WITHOUT, the one verdict without a producer record: written exclusively under qualify_first's store
+    lock (True for the caller that wrote it, False when it already exists) and never removed. It is no longer taken before a run: the store lock alone
+    excludes concurrent qualifications, so an interrupted or technical stop keeps no marker and a later filing qualifies again."""
     from driver.prepare.get import archive
     try: archive.write_record(Path(folder) / (h + '.claim'), b'', mode=0o444); return True
     except FileExistsError: return False
@@ -280,13 +281,15 @@ def technical(row, what):  # a failed qualification child or unreadable comparis
 
 def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, seconds, home):
     """Owner single-version policy (root-native-automatic-trigger-closeout-20261028t211651877057z): the FIRST file held ONLY by its own proved inserted
-    script version (typed counts, no record for those bytes) qualifies that exact version once, inside this job. One exclusive claim
-    (context.claim_version) before any arm; then one-row child jobs of THIS runtime through the native job CLI (-I -S -B, child accounting, the same
+    script version (typed counts, no record for those bytes) qualifies that exact version once, inside this job. One native store lock (flock) for
+    the whole qualification, waited for when another live job holds it, released by the kernel when this job stops or dies; then one-row child jobs of THIS runtime through the native job CLI (-I -S -B, child accounting, the same
     per-child seconds, the enclosing process/STOP boundary): the explored NORMAL (diagnostic continuation); then the producer's own NORMAL/explored
     reading and binding (qualify_arms) and compare_views' text operand on every explored route: damaged evidence is a technical STOP, any reason a held
     version, and either stops here; else the comparison-only WITHOUT, then
     context.qualify_version over a frozen copy of this row's held result; only if it passed, exactly one ordinary attempt of the same file, whose
-    actual row becomes this row's outcome (the held attempt kept). Never from a diagnostic or withhold plan, never twice for the same bytes, no retry."""
+    actual row becomes this row's outcome (the held attempt kept). Never from a diagnostic or withhold plan. A COMPLETED verdict is kept once (the producer's
+    record, or claim_version's marker of a hold before WITHOUT) and never redone; an interrupted or technical stop keeps neither, so a later filing
+    qualifies again. A record a live qualification published while this row waited on the lock releases this row by its ordinary attempt alone."""
     from driver.prepare.get import archive
     store = plan.get('script_qualifications')
     if not store or plan.get('qualification_diagnostic') or plan.get('qualification_withhold'): return
@@ -297,9 +300,31 @@ def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, 
         ins = ((json.loads((a / 'CONTEXT_ACQUISITION.json').read_bytes()).get('record') or {}).get('target') or {}).get('inserted_script') or {}
     except (OSError, ValueError): return
     h = ins.get('response_sha256')
-    if not (h and oc.get('other_objections') == 0 and (oc.get('inserted_version_objections') or 0) > 0) or (Path(store) / (h + '.json')).exists(): return
+    if not (h and oc.get('other_objections') == 0 and (oc.get('inserted_version_objections') or 0) > 0): return
+    if (Path(store) / (h + '.json')).exists():  # a recorded verdict is final, never requalified; a release child of this qualification also stops here, never waiting on its parent's lock
+        if _admits(store, h, ins, plan): technical(row, 'qualification record became available after this row was generated: the ordinary attempt is retried'); save(result, record)  # never a clean final incomplete
+        return
+    lock = os.open(store, os.O_RDONLY)  # ONE native lock per store for the whole qualification; the kernel releases it when this job stops or dies
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX)  # a live qualification is waited for (the caller's filing deadline bounds the wait), never read as a verdict
+        _qualify(plan, plan_path, pin, out, record, result, row, k, generator, seconds, home, store, a, h)
+    finally: os.close(lock)
+
+
+def _admits(store, h, ins, plan):  # the generator's own acceptance of a recorded verdict, so a release attempt is spent only where it can pass
+    from driver.prepare.convert.context import qualified_version
+    return qualified_version({'inserted_script': ins, 'qualifications': {'folder': store, 'runtime_manifest_sha256': plan['runtime_manifest']['sha256']}}, h)[0]
+
+
+def _qualify(plan, plan_path, pin, out, record, result, row, k, generator, seconds, home, store, a, h):  # qualify_first's work, under its store lock
+    from driver.prepare.get import archive
     done = row['qualification'] = {'script_sha256': h}
-    if not claim_version(store, h): done['outcome'] = 'held: this version is claimed by another qualification'; save(result, record); return
+    if (Path(store) / (h + '.claim')).exists(): done['outcome'] = 'held: an earlier qualification of this version was held before WITHOUT'; save(result, record); return
+    steps, rec = QUALIFY_ARMS, Path(store) / (h + '.json')
+    if rec.exists():  # published by the live qualification this row waited for: only an admitted record releases this row, by its ordinary attempt
+        ins = ((json.loads((a / 'CONTEXT_ACQUISITION.json').read_bytes()).get('record') or {}).get('target') or {}).get('inserted_script') or {}
+        if not _admits(store, h, ins, plan): done['outcome'] = 'held: recorded by another qualification'; save(result, record); return
+        done.update(outcome='passed', record=str(rec), record_sha256=hashlib.sha256(rec.read_bytes()).hexdigest()); steps = QUALIFY_ARMS[2:]
     q = out / f'qualification_{k}'; archive.make_dir(q / 'normal', parents=True)
     save(q / 'normal' / 'RESULT.json', {'plan': str(plan_path), 'plan_sha256': pin, 'rows': [dict(row)]})  # the held NORMAL result, frozen as the record's evidence
     one, env, arms = dict(plan, source_commands=[plan['source_commands'][k]]), {'PATH': '/usr/bin:/bin', 'HOME': home}, {}
@@ -308,7 +333,7 @@ def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, 
         ref = {'path': str(a / 'COMPLETE.json'), 'sha256': hashlib.sha256((a / 'COMPLETE.json').read_bytes()).hexdigest()}
         if viewer_start(ref, plan['source_commands'][k], {}) is not None: one['context_viewer_start'] = ref
     except QUALIFY_FAILURES as e: uncomparable(e); save(result, record); return
-    for name, extra in QUALIFY_ARMS:
+    for name, extra in steps:
         if name == 'release' and done.get('outcome') != 'passed': break
         body = json.dumps(dict(one, **extra)).encode(); pp = q / f'{name}_PLAN.json'; archive.write_record(pp, body); logs = q / f'{name}_logs'; archive.make_dir(logs)
         done[name] = {'exit': child([sys.executable, '-I', '-S', '-B', str(HERE / 'job.py'), str(pp), hashlib.sha256(body).hexdigest(), str(q / name), generator, str(seconds)], logs, 'job', ROOT, env),
@@ -321,7 +346,7 @@ def qualify_first(plan, plan_path, pin, out, record, result, row, k, generator, 
                 b = qualify_arms((('normal', q / 'normal'), ('explored', q / 'explored')), row['file_id'], {})
                 held = b['why'] + [f'{lb}: explored text proof not TRUE, so compare_views text_proved fails' for lb, r in [('initial', b['explored_route'])] + list(b['explored_states'].items()) if not compare_views(r, r)['text_proved']]
             except QUALIFY_FAILURES as e: uncomparable(e); break
-            if held: done.update(outcome="held before WITHOUT: the NORMAL/explored evidence already fails the producer's own checks (no WITHOUT can pass it); WITHOUT and release not run", reasons=held); break
+            if held: done.update(outcome="held before WITHOUT: the NORMAL/explored evidence already fails the producer's own checks (no WITHOUT can pass it); WITHOUT and release not run", reasons=held); claim_version(store, h); break  # a completed verdict: kept once
         if name == 'without':
             try:
                 rec = qualify_version(q / 'normal', q / 'explored', q / 'without', store, plan['runtime_manifest']['sha256'], row['file_id'])
@@ -350,6 +375,11 @@ def main(plan_path, pin, out_dir, generator=str(HERE / 'document.py'), seconds=9
     rows = [{'ordinal': k, 'file_id': r.get('file_id'), 'status': 'unstarted'} for k, r in enumerate(plan['source_commands'])]
     record = {'plan': str(plan_path), 'plan_sha256': pin, 'generator': generator, 'reconstruct': str(ROOT / 'driver/prepare/reconstruct.py'), 'rows': rows}
     result = out / 'RESULT.json'; save(result, record)
+    # Validate each complete seal once, including direct CLI plans. Document
+    # children keep checking its pins and decode only the members they use.
+    from driver.prepare.get.acquire import read_package
+    for version in sorted({r['immutable_package_directory'] for r in plan['source_commands'] if 'immutable_package_directory' in r}):
+        read_package(version)
     for row in rows:
         k = row['ordinal']; attempt, logs = out / f'attempt_{k}', out / f'logs_{k}'
         archive.make_dir(logs); archive.make_dir(logs / 'tmp'); archive.make_dir(logs / 'cache')

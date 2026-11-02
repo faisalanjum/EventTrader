@@ -21,10 +21,23 @@ env -u PYTHONPATH -u ADAPTER_E2E PYTHONDONTWRITEBYTECODE=1 \
   /home/faisal/prepare_cleanup_review_20261031/ocr_env/bin/python -B -m unittest tests.redisDB.test_prepared_filing -v
 ```
 
-Revision 3 inventory: 50 offline adapter methods and 3 named `AmgEvent` skips.
+Current inventory: 50 offline adapter methods and 3 named `AmgEvent` skips.
 These are expected counts, not a passing-run claim; close the skips in lane 3.
 Do not install into the shared overlay or its retained base. Current results and
 historical proof are linked by the [operating guide](../../k8s/prepared-extraction/README.md).
+
+Also run the six deadline controls with the private qualified environment described
+in the [Prepare test instructions](../driver/prepare/README.md):
+
+```bash
+env -u PYTHONPATH PYTHONDONTWRITEBYTECODE=1 \
+  /home/faisal/prepare_cleanup_review_20261031/extraction_deferred_20261102T152805Z/test_env/bin/python -B -m unittest tests.redisDB.test_prepared_deadline -v
+```
+
+These check the whole-filing budget and honest late/error outcomes. Native process
+cleanup additionally requires the candidate image's Tini entry point: plain Docker
+or a Kubernetes command overriding it does not prove orphan reaping. Never count a
+timeout as successful extraction, even when all processes stop correctly.
 
 `fixtures/real_receipt.json` is the retained AMG receipt (SHA-256
 `cf1b59858bbb012438e3b05f49327f34bb0d0b255a9d6f0eebfd53d42ea64715`). Its old runtime
@@ -53,13 +66,18 @@ docker run -d --rm --name "$TEST_REDIS" --network "$TEST_NET" --memory 512m \
 timeout 15s sh -c 'until docker exec "$1" redis-cli ping; do sleep 0.2; done' sh "$TEST_REDIS"
 timeout --kill-after=10s 600s docker run --rm --name "$TEST_WORKER" --network "$TEST_NET" --memory 4g --read-only --tmpfs /tmp:rw,size=1g \
   -e REDIS_TEST_HOST="$TEST_REDIS" -e REDIS_TEST_PORT=6379 -e ENRICHER_OLD=/old/report_enricher.py -e PYTHONDONTWRITEBYTECODE=1 \
-  -e ADAPTER_UNDER_TEST=/t/redisDB/prepared_filing.py \
-  -v "$PWD":/t:ro -v "$OLD":/old/report_enricher.py:ro -w /t --entrypoint python \
-  "$CANDIDATE_IMAGE" -B -m unittest tests.redisDB.test_redis_init tests.redisDB.test_worker_order \
+  -e ENRICHER_UNDER_TEST=/app/redisDB/report_enricher.py \
+  -e ADAPTER_UNDER_TEST=/opt/prepared/adapter/prepared_filing.py \
+  -e REDIS_CONSTANTS=/app/redisDB/redis_constants.py \
+  -v "$PWD/tests":/t/tests:ro -v "$OLD":/old/report_enricher.py:ro -w /t \
+  "$CANDIDATE_IMAGE" python -B -m unittest tests.redisDB.test_redis_init tests.redisDB.test_worker_order \
   tests.redisDB.test_worker_recovery tests.redisDB.test_set_filing_dedup -v
 ```
 
 Expected inventory: 27 methods (2 initializer + 5 worker order + 17 recovery + 3 intake).
+The tests-only mount keeps application imports in the actual image. Set all three
+source paths above; otherwise the recovery harness looks for constants beside the
+mounted tests. Keep the image's Tini entry point for native process cleanup.
 Without `ENRICHER_OLD`, the RED proof and the rollback test are skipped.
 A Docker-client timeout does not stop its container; execute the cleanup trap
 and check that the exact owned resources are gone. The real-pointer control

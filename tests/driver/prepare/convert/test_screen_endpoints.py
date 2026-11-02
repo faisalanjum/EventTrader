@@ -10,6 +10,7 @@ class Offline(unittest.TestCase):
     def test_measure_aborts_every_request_before_the_page_is_set(self):
         calls = []
         class Page:
+            def on(self, event, handler): pass  # this test double emits no events
             def route(self, pattern, handler): calls.append(('route', pattern))
             def goto(self, url, wait_until=None): calls.append(('goto',))  # the native loader the measure now uses (Source/_document)
             def evaluate(self, js): calls.append(('evaluate',)); return 'UTF-8' if js == 'document.characterSet' else {'cells': [], 'boxes': {}}
@@ -48,6 +49,7 @@ GEOMETRY = {'cells': [], 'boxes': {'0': [1, 2, 3, 4]}}  # what the page measured
 
 def offline(symbols, connected=True, closed=None):  # a page that measures GEOMETRY and whose symbol reading (SYMBOLS_JS) raises `symbols`
     class Page:
+        def on(self, event, handler): pass  # this test double emits no events
         def route(self, pattern, handler): pass
         def goto(self, url, wait_until=None): pass  # the native loader the measure now uses (Source/_document)
         def evaluate(self, js, *args):

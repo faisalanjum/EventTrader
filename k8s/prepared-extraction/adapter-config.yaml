@@ -14,7 +14,7 @@ data:
      "runtime_root": "/opt/prepared/runtime",
      "runtime_manifest": {
       "path": "/opt/prepared/runtime/RUNTIME_MANIFEST_ROLE.json",
-      "sha256": "f0ac7059e617646cd4a51fe87a8915f4e5c6026a9d5800d7af433401c727074e"
+      "sha256": "8561062f3d2e5fe7d6ca2118799d212f80917a8d41de477893ddfdaf6ff02454"
      },
      "browser": {
       "executable": "/opt/prepared/browser/chrome-headless-shell-linux64/chrome-headless-shell",
@@ -23,13 +23,14 @@ data:
      },
      "python": "/opt/prepared/venv/bin/python",
      "seconds": 240,
+     "filing_seconds": 600,
      "max_jobs": 3,
      "context_campaign": {
       "campaign": "/data/sec_prepared/context_campaign",
       "live": true,
       "max_actions": 4
      },
-     "script_qualifications": "/data/sec_prepared/script_qualifications/f0ac7059e617",
+     "script_qualifications": "/data/sec_prepared/script_qualifications/8561062f3d2e",
      "ocr": {
       "endpoint": "https://REPLACE_WITH_POD_ID-8000.proxy.runpod.net/v1",
       "identity": {
