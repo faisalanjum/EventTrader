@@ -12,7 +12,7 @@ filing -> original files -> HTML/XML extraction -> saved output
 ## Start here
 
 1. Read [PrepareTools](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md)
-   for the requirements and scope.
+   for requirements and preserved planning history, not current release status.
 2. Read the [operating guide](../../k8s/prepared-extraction/README.md)
    for the exact image, configuration, rollout and rollback.
 3. Read the [qualification record](../../k8s/prepared-extraction/OCR_QUALIFICATION.txt)
@@ -22,9 +22,12 @@ filing -> original files -> HTML/XML extraction -> saved output
 
 ## Where the code and tests live
 
-- `driver/prepare/`: acquisition, extraction, picture readers and saved-output checks.
-- `redisDB/prepared_filing.py`: processes a filing when
-  `PREPARED_EXTRACTION_CONFIG` enables it in `redisDB/report_enricher.py`.
+- `get/`: original files and verified package inventory.
+- `job.py`, `document.py`: pinned jobs, bounded children and saved-output checks.
+- `convert/`, `reconstruct.py`: source-linked readings and ordered reconstruction.
+- `pictures/`: image/PDF preparation, native readers and unverified OCR supplements.
+- `redisDB/prepared_filing.py`: filing attempts and durable receipt pointers;
+  `redisDB/report_enricher.py`: delivery, publication and retained failed input.
 - [Prepare tests](../../tests/driver/prepare/README.md): offline extraction and OCR checks.
 - [Adapter and worker tests](../../tests/redisDB/README.md): delivery and retry checks.
 - [Acquisition guide](get/README.md): download and original-file storage contracts.
@@ -34,7 +37,10 @@ filing -> original files -> HTML/XML extraction -> saved output
 - A completed OCR request does **not** prove accurate or complete reading.
   OCR output stays `fidelity: unverified`; preserve originals, errors and disagreements.
 - Keep source identities, locations, context and uncertainty with every saved result.
-- Technical retries are bounded. Exhausted failures remain visible for replay.
+- Machine failures remain failures through native parser wrappers. Bad content
+  keeps its explicit incomplete/unread result. Valid receipts are read once at handoff.
+- Job/OCR retries are bounded. A failed pointer retains input for explicit replay;
+  it does not itself schedule retries. No whole-filing deadline is established.
 - Building or pushing does not activate production. Activation remains an owner decision.
 - Mac automation and downstream Driver/Neo4j changes are separate work.
 

@@ -1,4 +1,15 @@
-# Extraction — current scope and working plan
+# Extraction — requirements and preserved planning history
+
+Current entry (2 November 2026): [extraction overview](../../../../driver/prepare/README.md),
+[operating guide](../../../../k8s/prepared-extraction/README.md) and
+[test instructions](../../../../tests/driver/prepare/README.md).
+The requirements below remain relevant; dated runtime/assignment statements are
+historical. They do not override the current source, release pins or owner scope.
+Retired experiment links are original-path references, not instructions to rebuild
+those directories. Use the release archive and restore maps in the operating guide;
+the cleanup keepers remain under `/home/faisal/prepare_cleanup_review_20261031/clean_worktree_20261101/`.
+
+## Historical snapshot — 27 October 2026
 
 **Current state, 27 October 2026: all 1,000 saved products are accepted for extraction preservation.** The [current checklist](../../../../../prepare_work/extraction_closeout_20261010/CLOSEOUT_TODO.md) supplies the remaining production priorities. Eighteen preservation-only acceptances were added once to 982 historical meaning acceptances. The [last legal review](../../../../../prepare_work/extraction_closeout_20261010/production_qualification_20261022/ROOT_LAST_LEGAL_PRESERVATION_AND_SOURCE32_ACCEPTANCE_20261027T184807209151Z.json) closes all 96 spacing/formatting roles using saved source context and actual current text, formatting records and cell/gap/order relationships. Symbol/font and whole native-record proofs were reused; no new original was read in the final role stage. Downstream interpretation remains evidence-based or unknown.
 

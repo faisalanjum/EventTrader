@@ -10,7 +10,21 @@ correct numbers or complete meaning. Known errors include ratios read as percent
 signs and invented chart values. Preserve the source and reading together; downstream
 consumers must check `fidelity`, not use `status: complete` as an accuracy guarantee.
 
-## Exact release
+## Revision 3 candidate and retained published release
+
+Revision 3 repairs receipt handoff validation and native wrapped machine failures,
+with documentation and local readability changes. It adds no model call, storage
+migration or browser behavior change. Candidate source/image qualification is
+recorded under `/home/faisal/prepare_cleanup_review_20261031/extractor_revision3_20261102T142609Z/proof/`.
+Building and testing the candidate does not activate production. The published
+image and deployment patches below remain the retained release until an owner
+authorizes publication and a separately reviewed matching deployment pair.
+
+- Candidate local image ID: `sha256:3df809b094a32944c4db43a19b6994db1b9328de87f0d05cf748a193e0510ed0`.
+- Candidate runtime manifest SHA-256: `450864bd100023f7b6312966cf7669796c6ca7ea097421fb66329c52844357d9`.
+- Qualification is pending until the final receipts are complete. There is no
+  candidate registry digest or production activation. Use this local image ID
+  as `CANDIDATE_IMAGE` for the disposable worker test recipe.
 
 - Storage image: `faisalanjum/report-enricher@sha256:3e0ac53919cb24a0034c18244398e6666374ba83431259557c7236f3b599a242`.
 - Previous table-lookup image: `faisalanjum/report-enricher@sha256:cb980c0daba30dbe61e3d62009daed994a403c50973866af5ccd2af9182d5e6d`.
@@ -27,9 +41,12 @@ on all three attempts. All 1,780 saved outputs from 19 other filings remain byte
 identical. A larger 32,768-cell, 256-holder case passed its independent checks.
 All 102 affected reconstruction tests, 543 grader tests and three native adapter
 cases passed; the exact image's 48 runtime files match the reviewed source.
-The preceding full Prepare run passed 1,603 of 1,604 tests. One unchanged browser test,
+The earlier full Prepare run passed 1,603 of 1,604 tests. One unchanged browser test,
 `ControlIdentity.test_a_swapped_inner_pointer_never_credits_another_label_change`,
-exceeded its 20-minute test budget; it remains unfinished, not a fresh pass.
+exceeded that run's 20-minute test budget. The unchanged `2f0c6a4d` host baseline
+subsequently passed all 1,628 methods in 11,656.657 seconds on 2 November,
+including all four ControlIdentity methods. Their individual duration was not
+recorded; that pass does not establish acceptable production latency.
 Evidence and the complete test ledger are retained in
 `/home/faisal/prepare_cleanup_review_20261031/storage_review_20261101/`.
 The timeout, extraction content and OCR behavior are unchanged; the bounded model
@@ -61,7 +78,10 @@ A rebuild has its own image identity and is not automatically the qualified imag
 Verify its runtime against `RUNTIME_MANIFEST.json`, plus the worker, Redis wrapper,
 adapter and browser, before changing deployment pins. A source change requires a
 new reviewed manifest/image pair; never combine this image with an older manifest
-configuration. The checked-in deployment patches pair the new image with its exact manifest.
+configuration. The checked-in deployment patches retain the published image and
+its original manifest pin. They are not deployment instructions for a rebuilt
+candidate; keep the candidate configuration with its qualification evidence until
+publication supplies a reviewed immutable registry digest.
 Before activation, create the configured `script_qualifications` directory for
 this manifest. Keep older directories: their records and claims belong to the
 runtime that created them and must not block qualification of this new runtime.
@@ -153,9 +173,12 @@ output is `/data/sec_prepared` in the container, mounted from
 the required access and free-disk reserve. Changing user, ownership, storage paths
 or worker count needs a focused validation; it is not part of source consolidation.
 
-The worker retains a claimed input until publication and acknowledgement. Technical
-failures permit three total attempts; exhausted work keeps the full original input
-and reason in `reports:queues:enrich:dead`. The original HTML/XML receipt is under
+The worker retains a claimed input until publication and acknowledgement. Adapter
+jobs, OCR requests and crash deliveries each have separate bounded attempts. A
+failed receipt pointer itself schedules no retry: legacy enrichment still publishes,
+and the full original input/reason remains in `reports:queues:enrich:dead` for
+explicit replay. These per-child limits do not establish a whole-filing cutoff;
+qualification can start additional jobs. The original HTML/XML receipt is under
 `runs/<accession>/*/*/RECEIPT.json`; with OCR enabled, the published pointer names
 the combined receipt under that run's `ocr/receipts/`. Preserve both receipts,
 original files, OCR records and source/version identities together.

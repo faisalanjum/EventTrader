@@ -15,6 +15,7 @@ for scope, operating instructions and tests.
 | `pictures/pdf.py` | `pages(raw, file_id, sha256)` uses PDFium to return a source-bound route and page pictures for the existing `join` function. |
 | `pictures/join.py` | `read_pictures(raw, route, members, browser, folder, make_readers)` returns the complete route and one entry per picture occurrence. |
 | `pictures/worker.py` | Stores and reuses one reading per input hash and reader settings, with locking, validation and retry behavior. |
+| `pictures/packets.py`, `pictures/table_choice.py` | Present raw reader text with uncertainty. Optional whole-table choice is callable when both readings and free-OCR positions exist; it is not an accuracy certificate. |
 | `compare.py` | Shared text/number comparison; imported by conversion and picture code. |
 | `reconstruct.py` | `readback(route, prepared=None)` composes saved records, relationships and bound assets without reopening the original. `preserved` checks exact records and body structure; `annotations` checks retained uncertainty. |
 
@@ -243,9 +244,11 @@ read the hidden text layer or dispatch an entire filing inventory.
 
 Default picture reading uses Chandra, PP-OCR/RapidOCR and OnnxTR. Sonnet is off by
 default. Raw readings, disagreement, cutoffs and failures remain visible. Reader
-agreement does not establish correctness against the original. `readers.chandra`
-uses Mac MLX; `readers.chandra_vllm` reuses the native Chandra 0.2 client for a
-separately qualified self-hosted server. Mac automation remains separate.
+agreement does not establish correctness against the original. The retained
+`readers.chandra` factory supports Mac MLX; the saved adapter's self-hosted path
+uses `readers.chandra_vllm` and the native Chandra 0.2 client. Earlier Mac/GPU
+planning notes are history; they do not describe current activation. Mac
+automation remains separate.
 
 ### Saved OCR supplements
 
@@ -316,6 +319,28 @@ retain failure and uncertainty signals, and stop expansion on a new material reg
 Independent source review belongs to release validation and separate periodic audits,
 not a required step for each production document. Fix a demonstrated class at its
 existing owner and rerun the relevant controls before resuming expansion.
+
+## Filing receipts and failure handling
+
+`redisDB/prepared_filing.py` invokes the pinned batch caller and optionally OCR.
+Its worker-facing `pointer` checks the child status and reasons, reads the saved
+receipt once, and checks its JSON identity/references and any supplied byte hash.
+Complete/incomplete requires a valid saved receipt; failed custody/configuration
+may have none. This handoff does not reconstruct products or certify content.
+Ordinary repeat runs re-derive status/reasons/members without rewriting the old
+receipt, so complete/incomplete reclassification remains valid. OCR saves its
+aggregate before adding the `saved_receipt` locator; its fidelity is unverified.
+
+Both HTML conversion and native fact reading propagate original disk, storage,
+dependency and memory exceptions through explicit native causes. Unrelated
+exception context is not a cause. Ordinary content failures retain their unread
+or failed-document result; cancellation is not swallowed.
+
+The worker still publishes legacy enrichment and retains full failed input with
+its acknowledgment in one transaction. A failed pointer does not schedule an
+automatic retry. Adapter job attempts, OCR attempts and crash deliveries have
+their own bounds. Current per-document and OCR limits do not establish a total
+whole-filing deadline; qualification can also run additional jobs.
 
 ## Running the batch caller
 

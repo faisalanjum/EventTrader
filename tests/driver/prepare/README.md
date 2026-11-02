@@ -1,35 +1,29 @@
 # Permanent Prepare regressions
 
-**Current execution (21 October 2026).** The permanent suite includes acquisition,
-HTML/XML conversion, picture integration and saved-reading replay. Run both commands
-below: retained grader assertions have not all been reconciled for retirement.
-The freshly checked `cf01ed22b` baseline passed 651 permanent and 402 retained grader
-tests without skips; later fixes require their own exact-candidate gate. Independent
-scoring, source coverage and actual-machine execution remain separate.
+**Current inventory (2 November 2026, Revision 3):** 1,632 Prepare methods and
+543 retained grader methods. These are discovery targets, not a passing-run claim.
+Run both suites: retained grader assertions have not been retired. The unchanged
+`2f0c6a4d` host baseline passed all 1,628 earlier Prepare methods in 11,656.657
+seconds; candidate results are recorded separately in the [operating guide](../../../k8s/prepared-extraction/README.md).
 
-The shared base is `prepare-closeout-20261011`: all 74 checked-in package pins were
-verified there on 21 October. Both commands below now use the OCR overlay at
-`/home/faisal/prepare_cleanup_review_20261031/ocr_env/`. Its 1 November grader
-replacement check passed all 543 tests without skips; the old `prepare-tests`
-environment is no longer needed for that command.
-The reviewed `4e47c9e48` runtime passed 940 extraction and 543 grader tests without
-skips using the earlier environments. Do not install into an environment another
-agent is using; use the qualified environment below.
+Use the existing OCR overlay at `/home/faisal/prepare_cleanup_review_20261031/ocr_env/`
+(CPython 3.11.10) and its retained `prepare-closeout-20261011` base. The image lane
+uses CPython 3.11.13. Do not install into these shared qualified environments.
+The three lanes are offline Prepare/grader/adapter, native adapter in the exact
+candidate image, and worker tests with disposable Redis. See the
+[adapter/worker instructions](../../redisDB/README.md) for the latter two.
 
-**Historical migration receipt (7 October 2026, branch `ocr-fixture-tests`).** Integrated base
-`5d25539d1` has 384 permanent tests; the shared fixture helper adds 12 and the
-ported OCR fixture tests add 15: **411 pass, no skips**, on the primary and the
-restored fixture roots with the original research folders hidden (Codex gate
-`prepare_work/prepare_accuracy_20261007/OCR_FIXTURE_GATE.md`). The 506-input OCR
-fixtures and 576 saved-packet data are pinned and restored from a separate machine.
-This command is not yet the complete Prepare acceptance gate: the fresh combined
-converter/image/context check and actual-machine execution remain separate.
+Record fresh, inherited, skipped and unexecuted outcomes separately. Ten skip
+sites exist across these suites (seven decorators and three dependency checks);
+every required gated test needs its designated lane. Historical qualification
+is indexed by the [operating guide's preservation record](../../../k8s/prepared-extraction/README.md#qualification-record),
+not by obsolete test counts or retired experiment paths.
 
 From the repository root, in the approved preparation environment:
 
 ```bash
 export PREPARE_TEST_DATA=/home/faisal/prepare_test_data
-env -u PYTHONPATH PYTHONDONTWRITEBYTECODE=1 /home/faisal/prepare_cleanup_review_20261031/ocr_env/bin/python -m unittest discover -s tests/driver/prepare -t . -v
+env -u PYTHONPATH -u ADAPTER_E2E -u REDIS_TEST_HOST -u REDIS_TEST_PORT -u ENRICHER_OLD PYTHONDONTWRITEBYTECODE=1 /home/faisal/prepare_cleanup_review_20261031/ocr_env/bin/python -B -m unittest discover -s tests/driver/prepare -t . -v
 ```
 
 `env -u PYTHONPATH`: the shell exports the main checkout; the tests must import only the checkout under test.
@@ -60,13 +54,13 @@ three exact input files, 129,268 bytes. No old `ocr_no_click` directory is requi
 by `test_source_reading_v2`. Provision and restore those pinned blobs with the
 existing archive helper before retiring the historical copies.
 
-## Approved offline test environment (7 October 2026)
+## Approved offline test environment
 
 Use a dedicated **Linux x86_64 / CPython 3.11.10** base environment, currently
 `/home/faisal/prepare_work/venvs/prepare-closeout-20261011/`, recreated from
 [requirements.txt](requirements.txt). This is separate from the application venv,
-Neo4j and GPU production workers. The location is disposable; the checked-in pins
-are the record. Initial setup may install packages; test runs make no downloads,
+Neo4j and GPU production workers. The retained base is required by the overlay;
+the checked-in pins record versions. Provisioning is separate; test runs make no downloads,
 SEC requests or model calls.
 
 Pins include EdgarTools 5.60.0, Playwright 1.59.0, RapidOCR 3.9.2, OnnxTR 0.9.0,
@@ -77,13 +71,11 @@ Chromium during provisioning, not from the test command. Tests of OCR engines
 use their real loader/configuration code with model execution/downloads replaced.
 No MLX, Chandra weights or GPU are needed for this offline suite.
 
-An earlier qualification used a pinned copy of `d4639b096`: 363 permanent tests and
-398 retained grader/converter tests pass with no skips. The suites overlap while
-migration is incomplete. Until their retained assertions are fully reconciled,
-also run from the relevant checkout:
+Retained grader assertions still cover independent preservation rules. Until
+their retirement is explicitly justified, also run from the candidate checkout:
 
 ```bash
-env -u PYTHONPATH PYTHONDONTWRITEBYTECODE=1 /home/faisal/prepare_cleanup_review_20261031/ocr_env/bin/python -m unittest discover -s benchmarks/prepare/grader/tests -t . -v
+env -u PYTHONPATH PYTHONDONTWRITEBYTECODE=1 /home/faisal/prepare_cleanup_review_20261031/ocr_env/bin/python -B -m unittest discover -s benchmarks/prepare/grader/tests -t . -v
 ```
 
 Converter tests are integrated. The OCR saved-fixture tests have
@@ -93,9 +85,8 @@ routes). They preserve saved behaviour; they are not OCR accuracy, and their fro
 regenerated. `pictures/test_join.py` checks current conversion, picture preparation,
 archiving and reader composition with controlled readers. It does not qualify actual
 model execution or independently score the full output.
-Environment and validation evidence:
-`prepare_work/prepare_regression_20261006/codex_port_review_20261007/` and
-`prepare_work/convert_extract_20261007/codex_review/`.
+Historical environment/validation records are indexed by the operating guide's
+preservation maps. Original experiment paths are history, not runtime dependencies.
 
 ## Location and scope
 
@@ -204,8 +195,8 @@ retain the original when layout, byte offsets or image geometry require it.
 
 Use **`PREPARE_TEST_DATA`**, provisioned once, for large immutable fixture bytes.
 The local location is `/home/faisal/prepare_test_data/`, outside git and
-`prepare_work`. The main manifest has 2,330 asset references; the observed-controls
-manifest has another 100. Together they require 2,340 unique blobs (173,586,617
+`prepare_work`. The main manifest has 2,333 asset references; the observed-controls
+manifest has another 100. Together they require 2,343 unique blobs (173,715,885
 original bytes). Both checked-in manifests pin the provisioned bytes; draft-status
 text records the inventory's creation, not current provisioning. Reuse get's content-addressed
 gzip format and `archive.load_blob`: `blobs/<original-sha256>.gz`. No Git LFS,
@@ -233,8 +224,14 @@ backed up on **minisforum2** on 31 October 2026, under
 All 2,340 blobs were restored from that machine into an empty directory and checked
 against both manifests using stdlib gzip/hashlib and the native loader. The primary
 store was not used during restoration. The earlier October 7 backup remains intact.
-Evidence: `prepare_work/extraction_closeout_20261010/production_qualification_20261022/CLAUDE_SEC_GIT_PUBLICATION_20261031/FIXTURE_BACKUP_20261031/`
-(`BACKUP.json`, `RESTORE.json`). The backup is on a different machine from the primary
+That historical restoration covered 2,340 blobs. The three newer source-reading
+blobs have their own independently checked backup receipt at
+`/home/faisal/prepare_cleanup_review_20261031/preserved/THREE_FIXTURES_INDEPENDENT_BACKUP.json`.
+The November 2 local census checked all 2,343 current blobs; it did not recheck the
+remote backup. Original `BACKUP.json`/`RESTORE.json` paths are indexed by
+`/home/faisal/prepare_cleanup_review_20261031/prepare_retention_20261101/CODEX_PROOF_RESTORE_MAP.jsonl.gz`.
+Use the [preserved release archive](../../../k8s/prepared-extraction/README.md#qualification-record)
+and restore maps; do not recreate retired experiment directories. The backup is on a different machine from the primary
 store on minisforum; its host directory persists after the helper pod is removed.
 A directory name or symlink alone is not a backup. Retain old evidence until all
 required ports and clean-checkout checks pass. Unreleased held-out answers do not
