@@ -1,72 +1,48 @@
 # Claude Cached Reads
 
-Organized 13 November 2026 (America/Toronto, EST). This is the single current plan for Claude Code subscription reading.
+Updated 13 November 2026 (America/Toronto, EST). The [Driver rules](DRIVER_RULES_Categorized.md) remain authoritative: a Driver is a reusable cause or measure; a Driver update is one stated fact about it. Cache reuse has been tested; complete Driver accuracy and the full output implementation have not.
 
-**The validated breakthrough is one fixed base session plus independent copies: keep the whole source visible while dividing the work and reusing cached input.** This is not validation of the complete Driver pipeline. The [Driver rules](DRIVER_RULES_Categorized.md) remain authoritative. A Driver is a reusable cause or measure; a Driver update is one stated fact about it.
-
-Read the [agreed workflow](#final-plan), [input requirements](#what-the-ai-should-see), [open decisions](#what-remains-undecided) and [checks](#evidence-and-result-checks) first. The [independent test](#complete-independent-cache-experiment-record), [follow-up](#complete-follow-up-experiment-review), [cost calculations](#work-and-cost-calculations) and [retired proposal](#retired-jev-packaging-proposal) preserve the supporting detail once.
+The build plan comes first. [Reference only: evidence and history](#reference-only-evidence-and-history) contains the supporting record and unapproved alternatives.
 
 ## Final plan
 
-**Start with one reader for the whole filing; add parallel readers only when faster completion is needed. Test medium reasoning effort first, then high.** The capacity checks below still apply: an answer that cannot fit must be split into manageable assignments, even if they run sequentially. More readers are not an assumed accuracy improvement. See the [reported real 10-K comparison](#reported-autodesk-10-k-reader-comparison).
+**Start with one reader for the whole filing. Add parallel readers when faster completion is needed. Test medium reasoning effort, then high.** Split an oversized answer into manageable assignments even if they run sequentially; additional readers are not an assumed accuracy improvement.
 
-1. **Preserve the source.** Reuse existing extracted units and readback. Code retains original content, IDs, files, ordering, source locations and versions. Identify the company, source type, publication time and included files. Show the compact reading view specified below; do not create a new extraction system.
-2. **Check usable capacity.** Count actual tokens, instructions, IDs, images and other request content; reserve reasoning/output room for the chosen task. Advertised maximum context is not an accuracy result, and longer inputs can reduce recall; see [Claude's context guidance](https://platform.claude.com/docs/en/build-with-claude/context-windows). Do not silently truncate, omit images or rely on compaction to retain exact evidence.
-3. **Assign the work.** A source unit is an existing piece; a reading view is everything visible; a work package is the statements assigned to one call. Use consecutive whole-unit ranges with one primary assignment per unit. Choose the nearest permitted unit gap to the work target, with a consistent tie rule. A cut assigns work; it does not assert semantic independence. If an oversized unit fits, retain it whole; if its answer would be too large, use existing finer addresses such as table rows while keeping the whole table visible. Do not invent parsing merely to hit a size target.
-4. **Load one base.** Supply the complete source and common instructions, obtain a brief useful response such as source identity, wait for completion, then freeze the session. If one call can do the chosen task accurately, completely and quickly enough, it needs no separate loading call.
-5. **Copy the fixed base.** Use native `claude -p --resume BASE_ID --fork-session` with the fixed settings and the work assignment. Always use the original base ID. Sibling answers must not accumulate or become the next copy's starting point.
-6. **Preserve cache compatibility.** Pin the same resolved model/version, identical shared prefix and stable effort, instructions, tools and working directory. A changing model alias is not a version pin. A different model needs its own warmed base; compare effort settings using separate stable bases rather than assuming effort changes preserve reuse.
-7. **Run with bounded concurrency.** Each copy sees the whole source and returns work for its assignment. Check response cache fields. Use the tested native CLI default of one-hour writes; a five-minute policy is only a possible later comparison. Cache expiry may require a fresh read without erasing session history.
-8. **Keep the subscription route explicit.** Preserve plan sign-in, API-key/provider-fallback exclusion and paid-overage-off checks. Observe actual plan usage. Cached input still consumes context and usage; reasoning, output, changing request text and retries are additional work.
-9. **Validate and report.** Apply the evidence/result checks below. Keep incomplete or unresolved work visible. These are planned integration requirements; the cached-reading mechanism has been exercised, but a complete production Driver-output implementation has not been established here.
+### Reading workflow
+
+1. **Reuse the saved source.** Use the existing extracted units and [readback](../../../../driver/prepare/reconstruct.py). Retain original content, IDs, files, order, source locations and versions in code.
+2. **Check capacity.** Count actual tokens for instructions, source, IDs and images; reserve reasoning/output room. Do not silently truncate, omit content or rely on compaction for exact evidence. If the full source cannot be shown usefully, use an appropriate authorized larger reader or mark the work unresolved. No partial-view fallback is approved yet.
+3. **Try one complete read.** Supply the shared task, applicable Driver rules and complete reading view. Treat source content as evidence, not instructions. A task that finishes in one call needs no separate loading call.
+4. **Divide work only when needed.** Assign consecutive whole-unit ranges, each with one primary owner. For a chosen work-size target, use the nearest permitted unit gap and a consistent tie rule. Keep source IDs unchanged. A unit can contain many facts; one fact per input is unnecessary. If a unit's answer is too large, use existing finer addresses such as table rows while keeping the whole table visible. Do not add parsing just to hit a size target.
+5. **For multiple assignments, load and freeze one base.** Supply the complete source and shared instructions, obtain a brief useful response such as source identity, and wait for completion. Each independent copy uses `claude -p --resume BASE_ID --fork-session` with its assignment. Always copy the original base; sibling answers must not accumulate. Every copy sees the whole source.
+6. **Keep cache settings fixed.** Pin the same resolved model/version and identical shared prefix; keep effort, tools, instructions and working directory stable. A changing model alias is not a version pin. Use a separate warmed base for a different model or effort. Bound parallel calls and inspect response cache fields. The tested native CLI used one-hour writes; expiry can cause a fresh read without losing stored history.
+7. **Keep usage explicit.** Preserve subscription sign-in, API-key/provider-fallback exclusion and paid-overage-off checks. Cached input still occupies context and consumes usage; output, reasoning and retries add work. Apply the result checks and validation below.
 
 ```text
-Reading view:    [ A | B | C | D | E | F ]
-Copy 1's work:   [ A | B ]
-Copy 2's work:           [ C | D ]
-Copy 3's work:                   [ E | F ]
-Each copy can read A through F for context.
+One reader:   [ whole filing → all assigned facts ]
+When needed:  [ fixed base: whole filing ]
+                       ├─ copy A → part A's facts
+                       └─ copy B → part B's facts
+              Both copies can read every part.
 ```
 
-No mandatory semantic-cut search, all-pairs context selection, Qwen preparation stage, team or helper hierarchy belongs to this starting design. Native session copying already provides the needed mechanism.
+### What the AI should see
 
-### Starting settings
-
-| Setting | Status |
+| Show the AI | Keep in code |
 | --- | --- |
-| Filing starting point | **One reader for the whole filing**, subject to usable input/output capacity; add parallel readers when speed requires it |
-| 10-K speed comparison | Twelve remains a candidate to compare when speed is needed. The earlier owner-approved starting default of 12 is superseded by the one-reader starting point |
-| Packages for other source types | Undecided |
-| Simultaneous copies | One initially; increased concurrency is a speed choice, separate from assignment count. The earlier suggestion of six was never finalized |
-| Assignment size | Adjust for accuracy, output completeness, total usage and completion time; fewer calls can lower overhead but serialize long answers |
-| Model and reasoning effort | **Test medium, then high** on the chosen model, using a separate stable base for each effort setting. No production winner chosen; xhigh was an earlier possible comparison, not part of this first sequence |
-| Reader output and later model roles | Suggestions only; see What remains undecided |
-| Exact table display format | Undecided; complete readable table structure is required |
+| Original words/numbers in order, including titles, speakers, periods, scales, conditions and notes | Original content, file/version mapping and saved source locations |
+| Short, unambiguous IDs; qualify by file where needed, e.g. `F1:u7` | Byte offsets, hashes, parser internals and storage paths |
+| Complete tables: addressable cells, actual headers, merged spans, captions and note markers | Original cell records and coordinates |
+| Actual source images with IDs in source order, or an extracted representation that preserves their needed content; explicit missing-content markers when unavailable | Image assets, their identity and source placement |
+| Source-established relationships: caption ownership, table grouping, lists and paragraph continuation | Guessed `heading`/`text` kinds and guessed levels; hide these guesses, not the source words |
+| Company, document identity, publication time and file boundaries once where needed | Repeated storage metadata |
+| When XML/XBRL values are included: field/concept names and relevant entity, period, unit and dimension context | Raw bytes and storage details |
 
-Reducing jobs does not require merging source-unit identities. One fact per input is optional; a unit or work package may hold several facts.
+The exact display format is undecided; these are information requirements. Hiding metadata must not remove meaning or a known source gap. Publication time does not establish a fact's reporting period.
 
-## What the AI should see
+#### Example reading view
 
-Keep the complete record in code. The reading view contains source meaning and short evidence references; the exact table display format is still undecided.
-
-| Item | In the AI's reading view? | Rule |
-| --- | --- | --- |
-| Original words and numbers | Yes | Keep statements, titles, speaker introductions, dates, scales, conditions and notes in source order. Do not remove text because of its extracted kind. |
-| Short unit ID | Yes | Use an unambiguous ID within the complete view. When files reuse IDs, qualify them with a short file alias, such as `F1:u7`. Code maps it back to the original file, unit and version. |
-| Table rows, columns and content | Yes | Include addressable cells and their actual row/column headings, units, periods and note markers. Keep the structure that connects them, including merged spans or an equivalent faithful layout. Coordinates alone do not express all that meaning. |
-| An image | Its content, when it is part of the source | Supply the actual image to a suitable reader, or an adequate extracted representation where that preserves the needed content. Keep its ID and placement. If its content is unavailable, show an explicit unread-image marker and retain the gap; a filename or marker is not a reading of the image. |
-| Guessed `heading` / `text` kind and guessed heading level | No, by default | Keep the words in place. These parser labels are not authoritative meanings. Do not turn a guessed label into a new section boundary or decide fact eligibility from it. |
-| Source-established structure that affects meaning | Yes, in readable form | Preserve actual caption ownership, list/paragraph continuation, table grouping and other meaningful structure. Do not discard such relationships merely because code originally stored them as metadata. Do not present inferred ownership as source-established. |
-| Byte offsets, hashes, parser internals and storage paths | No for the fact-reading task | Code retains them and resolves them from the returned reference. They belong in verification and storage, not in every model-visible unit label. |
-| Company, document identity and file boundaries | Once, where needed | Show enough to distinguish sources and understand scope. Use a short file heading/alias rather than repeating a long filename and all metadata per unit. Publication time does not establish a fact's reporting period. |
-| XML/XBRL field names and context | When those fields are shown for interpretation | Values such as `false` or `2023-05-01` need their field meaning and relevant context. Keep concept/field names and applicable entity, period, unit or dimension relationships. Raw bytes can stay hidden. Whether a run performs XBRL linking remains undecided. |
-| Missing or unresolved source content | Yes, when it limits the assignment | A compact status is enough. Hiding storage metadata must not hide a known evidence gap. |
-
-These are information requirements, not a fixed field allowlist. Removing storage metadata must preserve meaning.
-
-### Example reading view
-
-This is a **fictional excerpt illustrating the proposed input**, not an implemented or finalized prompt/table format. The actual request includes the shared task and applicable Driver rules, the complete source view and the work assignment. The instructions distinguish source evidence from instructions to the model. One reader's assignment is the whole filing; copies, when needed, receive their own assigned IDs after the same shared source.
+Fictional excerpt, not a finalized prompt format. The real input contains the full source plus shared instructions; an assignment follows that shared content.
 
 ```text
 Company: ExampleCo
@@ -92,11 +68,46 @@ r3   | Operating profit | 20   | 18   |
 Work assignment: all units in F1.
 ```
 
-The image line above represents a real image input, not text to send instead of it. If unavailable, show `F1:img1 — image content unavailable` and record unresolved coverage. Exact image delivery/cache behavior still needs validation. The simple table demonstrates cell addresses; real tables must retain merged cells, captions and notes where present.
+The image placeholder above stands for an actual image input. If unavailable, show `F1:img1 — image content unavailable` and retain unresolved coverage. Image delivery/cache behavior still needs validation.
 
-The reader can propose 2025 revenue of USD 100 million and cite `F1:t1/r2/c2` for `100`, `F1:t1/r2/c1` for `Revenue`, `F1:t1/r1/c2` for `2025`, and `F1:u2` for the scale/currency. Code copies those original fragments separately. A correct lookup does not prove the model chose the right supporting fragments.
+A proposed 2025 revenue fact can cite `F1:t1/r2/c2` (`100`), `F1:t1/r2/c1` (`Revenue`), `F1:t1/r1/c2` (`2025`) and `F1:u2` (scale/currency). Code maps each reference to its original location and copies the fragments separately. A unit ID permits copying the whole unit; a shorter quotation needs an exact span or cell, not a code guess about which words matter.
 
-**Kept in code, not repeated in the AI view:** each visible ID maps to the original source file/version, saved unit or cell, and available source location such as byte range, page or coordinates. For example, `F1:t1/r2/c2` maps to that saved cell's original location. Guessed kind/heading level, hashes and storage paths stay there too. Actual source words that establish meaning remain visible. A unit ID alone permits copying the whole unit; a shorter quotation needs a precise span or cell reference, not a code guess about which words matter.
+### What remains undecided
+
+- **Output contract — TBD:** the suggested first output is every eligible stated fact, its proposed Driver name and type together, evidence references, and source-stated subject, value/unit, period and conditions. Leave missing or ambiguous details explicit. Additional fields, catalog matching and XBRL links are undecided. This proposes updates; it does not approve a new Driver or match one automatically.
+- **Model/settings:** medium → high is the agreed test sequence, not a production winner. Twelve readers remains a possible 10-K speed comparison; assignment size, parallelism for other source types and the exact table display remain open.
+- **Other model roles:** Jev has no assigned stage; Qwen review remains postponed. Independent identity/duplicate checks required by rules 8.1–8.2 still apply. The proposing reader cannot approve its own identity.
+
+### Evidence and result checks
+
+These are **planned output checks**, not a completed checker or finalized schema. Reuse existing saved-input preservation checks; they do not certify model answers.
+
+| Code check | Required behavior and limit |
+| --- | --- |
+| References | Resolve IDs, cells and spans unambiguously against the saved file/version; reject missing references and out-of-bounds spans. A valid reference may still be irrelevant. |
+| Exact evidence | Copy the referenced original text; compare any model-supplied quotation exactly. Keep separate fragments separate. Exact copying does not prove OCR fidelity or correct interpretation. |
+| Missing work | Every source unit has an assignment and outcome: facts, no eligible fact, or unresolved. Flag missing responses and statement anchors outside the assignment. Supporting references may come from anywhere in the visible source. Unit coverage does not prove fact recall. |
+| Repeated deliveries | Do not count the same job result twice after a retry; flag identical records for review. Several facts may cite one unit. Semantic duplicates need judgment. |
+| Output/failures | Validate agreed fields/types; detect failed requests, output-limit stops and missing responses. Preserve completed work and explicit unresolved reasons; reduce unfinished assignments or use a suitable larger route. Never treat an incomplete answer as empty. |
+
+Unresolved cases need explanations; every empty unit does not. Source checks retain file identity, order and content. Model/reviewer checks must still establish:
+
+- **Meaning:** subject, period, scale, conditions and the applicability of notes/definitions, including references on shared titles, headers and sections. Context may be distant or lack an explicit marker; one exhibit's scope does not automatically govern another.
+- **Eligibility:** qualitative facts remain eligible under the Driver rules; no numbers is not a valid rejection by itself. Preserve existing admission requirements.
+- **Ownership:** a spanning statement belongs where it begins, not to an earlier supporting heading/note. Choosing that anchor requires interpretation. Supporting copies create no new fact occurrences.
+
+Report unresolved coverage separately and perform independent checks required by the rules. Neither exact quotes nor complete unit accounting proves complete fact recall, correct meaning or that every original published item was extracted.
+
+### Next validation
+
+1. Settle the output contract and freeze independent reference answers before candidate runs. Use fresh complete sources: an earnings filing, a longer real 10-K, a call and news. AMG is regression evidence, not an unseen holdout; retain disputed/unreadable cases.
+2. Test the real structured input and chosen output with one reader at medium, then high. If speed requires it, compare additional readers with the same source/output. Score complete facts: qualitative recall, names, qualifications, exact evidence, locations and duplicates. Check full dates/durations and point-in-time meaning, not just year strings; unresolved eligible facts count as misses.
+3. Measure the complete workflow: loading, input/output, cache writes/reads, verification, retries, queues, completion time and sustained historical throughput. Use response-local usage so inherited base totals are not counted repeatedly. API price estimates are not subscription quota measurements.
+4. Include distant qualifications, similar inapplicable notes, three-passage dependencies, continuous text, large tables and images, with positive controls. Preserve scope when moving text in test variants. Add a preparation stage or model role only for a demonstrated need; no finite test proves 100% accuracy on future sources.
+
+## Reference only: evidence and history
+
+Everything below supports review and traceability. It adds no build requirements; unapproved approaches remain unapproved.
 
 ### Independent AMG check
 
@@ -107,78 +118,17 @@ Checked the linked [AMG extraction units](https://app.notion.com/p/416a0a3f31068
 - In `t54`, row 3 column 8 contains the dollar sign; column 9 contains `79.5`. The reader must be able to return the number's cell address, such as `F1:t54/r3/c9`. Above it are the original period heading and scale. The earlier partial-view experiment's wrong-column results are a reason to preserve clear cell references.
 - The page shows image filenames/placeholders. That does not prove those images were supplied to a vision-capable reader. The prior cache tests did not test actual image understanding.
 - The page's XML values include repeated dates, identifiers and booleans. Removing their field names/context would remove meaning, not just storage detail.
-- Existing [readback](../../../../driver/prepare/reconstruct.py) already separates retained records from composed order and relationships. Its preservation check is about saved input; it does not certify that a new compact prompt is faithful or that the model interprets it correctly. The [HTML conversion code](../../../../driver/prepare/convert/edgartools_html.py) records parser heading evidence separately from source text and distinguishes source table-header markup from a header guess. Reuse these distinctions; do not build another semantic classifier to hide metadata.
+- Existing [readback](../../../../driver/prepare/reconstruct.py) already separates retained records from composed order and relationships. Its preservation check is about saved input; it does not certify that a new compact prompt is faithful or that the model interprets it correctly. The [HTML conversion code](../../../../driver/prepare/convert/edgartools_html.py) records parser heading evidence separately from source text and distinguishes source table-header markup from a header guess.
 
 **Image correction:** “image” does not mean “the AI cannot read it.” It means there is image content to supply or explicitly account for as unavailable. [Claude's image documentation](https://platform.claude.com/docs/en/build-with-claude/vision) describes actual image inputs; it does not validate this plan's exact CLI image-caching setup. [TypeSafe's input guidance](https://docs.typesafe.ai/concepts/state) likewise distinguishes judgment content from the questions asked about it; it is not proof that any particular minimal payload is sufficient.
 
-The source details and code were checked; equal or better extraction accuracy with slimmer labels remains unmeasured. This review added no model calls or reader implementation.
+The source details and code were checked; equal or better extraction accuracy with slimmer labels remains unmeasured.
 
-## What remains undecided
-
-**Suggested first extraction output — TBD, not finalized:** find every eligible stated fact in the assignment; propose its Driver name and type together; return evidence references plus the source-stated subject, value/unit, period and conditions. Meaning comes first. A separate name-first/type-first sequence is unnecessary for this suggestion. Missing or ambiguous details stay explicit. Extra fields, catalog matching and XBRL links remain open.
-
-This would be a proposal for a Driver update, carrying a proposed Driver name/type. Matching it to an existing Driver or approving a new one is a later step. Code would copy exact evidence from references; the AI's interpreted fields are not the evidence itself.
-
-**Jev — also TBD:** give it no mandatory task merely because it is available. First candidates are narrow checks against original evidence: does the proposed type fit, or does the passage state that one fact caused/offset another? Supply the relevant source context, not just Claude's answer. Such checks cannot recover facts Claude never proposed by themselves, and another model can also be wrong.
-
-A fixed-choice field could instead move from Claude to Jev if the complete workflow becomes better or cheaper. Having both models fill every field is not the starting recommendation. Exact quote matching, reference lookup, arithmetic and schema checks belong in code. No mandatory Jev stage does **not** waive the required independent identity/duplicate checks: the proposing reader cannot approve its own identity, and this suggestion assigns Jev no final authority over identity or links (rules 8.1–8.2). Qwen review remains postponed.
-
-More fields in the same read may avoid later calls, but add reasoning/output and may require smaller assignments. A cache does not supply completed answers for free. No division of fields between Claude and Jev is finalized. The [rough design](rough_design.md) is older background with its existing supersession notice, not an adopted division of work.
-
-## Evidence and result checks
-
-These are **planned extraction-result checks**, not a claim that an end-to-end checker or output schema is already built. Existing readback code checks preservation of saved input, its stated relationships and recorded unresolved items; it does not certify a model's Driver answers. Reuse those source checks and add only the result checks required by the agreed output.
-
-| What code checks | Concrete example | Limit |
-| --- | --- | --- |
-| Reference exists and resolves unambiguously in the saved source version | `F1:t1/r2/c2` exists; reject an absent unit, cell or out-of-bounds span | Existence does not prove that the reference supports the claim |
-| Evidence is copied exactly | Fetch `100` from that cell and the separate scale statement from `F1:u2`; if the model supplies a quotation, compare it exactly with the referenced text | Do not join separate fragments into a fabricated continuous quote; exact copying does not prove OCR fidelity or interpretation |
-| Work is accounted for | Every assigned unit has a returned outcome: facts, no eligible fact found, or unresolved; flag a missing response or out-of-assignment statement reference | A unit can contain several facts; a response for every unit does not prove every fact was found |
-| Repeated deliveries are handled | Do not count the same job result twice after a retry; flag identical result records for review | Do not merge facts merely because they cite the same unit; differently worded or differently located semantic duplicates require judgment |
-| Output is usable and unfinished work stays visible | Validate the agreed fields/types; detect failed requests, output-limit stops and missing required responses; retain explicit unresolved cases with their reasons | Code cannot detect every confidently wrong answer or infer every hidden uncertainty |
-
-Source preservation checks also retain file identity, saved order and content. No prose explanation is required for every empty unit; unresolved cases do need an explanation. Preserve completed work after a failure, then reduce the unfinished assignment or use a suitable larger route. Do not accept an incomplete answer as an empty result.
-
-The following still require interpretation and review under the Driver rules:
-
-- **Meaning and scope:** use all visible context for assigned statements. Preserve subject, period, scale and qualifications. Publication time is not the reporting period; one exhibit's scope is not automatically the whole filing. Follow references on statements, rows, shared headers, titles and sections to the applicable original note/definition. A similar note is not necessarily applicable, and explicit markers do not cover every dependency.
-- **Eligibility:** a unit can contain zero, one or many facts. Assess qualitative statements under the actual Driver rules; absence of figures is not enough to reject a unit. Existing qualitative-proposal admission requirements remain.
-- **Ownership:** a spanning statement belongs to the assignment containing its beginning, not the earliest supporting heading/note. Identifying that anchor still requires interpretation. Context copies retain their original identity and do not create new occurrences. Do not collapse all facts sharing a unit ID; semantic duplicates at different source locations need a separate judgment.
-
-Report unresolved coverage separately; a second model is not required for every result but must meet any independent checks mandated by the rules.
-
-Code can check preservation and accounting, conditional on correct implementation and complete saved input. It cannot certify semantic recall, correct context applicability or truth merely from exact quotes. All saved units being present does not establish all original published content was extracted, or that every eligible fact was found.
-
-## If the whole source cannot be shown usefully
-
-**Candidate fallback, not validated; build only if actual capacity/quality requires it.** First consider an available, authorized reader that can handle the complete source within the task's accuracy, usage and time requirements. If impractical:
-
-1. Form broad consecutive views at whole-unit boundaries with neighbours and explicit structural context. Give every statement one work assignment. Overlap helps local continuity but cannot guarantee distant context.
-2. Read all views, keeping facts provisional. Collect IDs of original passages that may govern other parts and explicit unresolved references; retain originals rather than replacing them with summaries.
-3. Gather those passages and reconsider **every** range jointly with its original view, including ranges initially yielding no facts. Do not depend only on an initial “needs context” flag.
-4. Check applicability. A subsidiary currency note may not govern a parent table. If joint review reveals another needed passage, retrieve its original and reconsider the combined context; do not blindly inherit all support from its containing package.
-5. If required material cannot fit, use a suitable larger route or retain an unresolved review. Do not trim context to fit. An explicit runtime/usage budget ends with unfinished work recorded. Apply the same evidence/accounting checks and record use of partial views.
-
-This needs original references and rereading, not a permanent dependency graph. It can still confidently omit a governing passage from the collected list; a three-passage dependency may never be jointly visible. It may cost more than whole-view reading. Neither this nor the retired pair search establishes guaranteed semantic completeness.
-
-## Next validation
-
-First settle the requested output. Then test complete results against independent reference answers frozen before candidate outputs, using a fresh complete earnings filing, a longer real filing, a call and news, with multiple assignments represented. Keep AMG as regression evidence, not an unseen holdout; leave disputed/unreadable cases visible.
-
-1. **Compare complete workflows:** same reader and requested output, whole-view assignments versus compact packages; include partial views only when needed. An oracle package using known true evidence screens potential but omits the real selector's errors and cost.
-2. **Score complete eligible facts:** omissions, wrong qualifications, names, source locations, duplicates, qualitative recall and exact quotations. Grade full period meaning—date/duration and instant versus period—not merely a year string. Unresolved eligible facts count against recall; unit counts, selected number cells and note co-occurrence are not substitutes.
-3. **Measure total work:** preparation, every model input/output, cache writes/reads, copied context, verification, retries, local queues, live completion time and sustained historical throughput. Outputs need not be equal across designs.
-4. **Challenge the failure modes:** distant qualifications, similar inapplicable notes, three-passage dependencies, continuous text, large tables and images, with positive controls. Preserve source scope in moved-text challenges. Add a model role or semantic-cut stage only to address a demonstrated gap.
-
-Equal accuracy with lower total usage or time can justify packaging; a perfect-package comparison need not show an accuracy gain to be useful. Conversely, a cheaper preliminary reader can hide facts it never proposes. Selector and reader errors interact, so multiplying two isolated accuracy percentages is not a valid general estimate.
-
-Full Driver accuracy, contextual scope, final naming, the best assignment size/effort, Jev thresholds, current Qwen performance on this task, partial-view completeness and the cheapest/fastest full workflow remain unproved. No experiment proves 100% performance on arbitrary future sources.
-
-## Complete independent cache experiment record
+### Complete independent cache experiment record
 
 Run 12 November 2026, 6:12–6:15 PM EST (America/Toronto); account snapshots span 6:10–6:15 PM EST. Raw UTC instants remain in the evidence. This was a cache/source-access experiment with short quotations.
 
-### Fixed setup
+#### Fixed setup
 
 - Native Claude Code **2.1.323**, resolved model **claude-fable-5-2**, **low** effort, standard speed; no model fallback.
 - Existing Claude Max 20x plan sign-in. Pre-run authentication reported `claude.ai` and `firstParty`; no API key was used. Live account snapshots showed extra usage disabled. Every response reported `isUsingOverage: false` and `overageDisabledReason: org_level_disabled`.
@@ -192,7 +142,7 @@ Run 12 November 2026, 6:12–6:15 PM EST (America/Toronto); account snapshots sp
 
 The installed CLI's native help and current official documentation were inspected before running it. Native session copying and cache controls satisfied the task; only a temporary invocation/measurement script was needed.
 
-### Measured results
+#### Measured results
 
 | Measure | 25 cached children | 25 cache-disabled children |
 | --- | ---: | ---: |
@@ -217,7 +167,7 @@ The first cached child took 3.123 seconds as an isolated check; the remaining 24
 
 Both conditions' twelfth assignment returned the same exact 13-word quotation despite a 12-word instruction. That is a response-limit failure and remains recorded. The test proves source access and cache operation on these requests, not general instruction compliance or final fact accuracy.
 
-### Subscription meter observations
+#### Subscription meter observations
 
 The existing `scripts/claude_usage_fetch.py` read the account's usage endpoint. These are fresh responses, not stale local cache results.
 
@@ -231,11 +181,11 @@ The observed movement was **+4 percentage points** for the first interval and **
 
 Response-local usage is used for token totals. Native child `modelUsage`, dollar estimates and API-duration fields inherited base-session totals; summing those would count the base repeatedly. API list-price estimates are not subscription charges.
 
-### Cache-lifetime correction
+#### Cache-lifetime correction
 
 The base and all cached children wrote `ephemeral_1h_input_tokens`; none wrote five-minute cache tokens. Thus **these CLI `--resume --fork-session` copies used one-hour writes**. Do not assume that every operation called a “fork” is an in-process fork or subagent with the same default lifetime. Inspect the actual response fields. The 51-request test did not wait for expiry and does not experimentally establish expiration or renewal timing.
 
-### Scope and evidence
+#### Scope and evidence
 
 This experiment did not test full Driver facts, qualifications/naming, actual images, higher effort, expiry, retries, sustained throughput, compact packages or genuinely large sources. The CLI reported a 1,000,000-token context window and a 128,000-token output ceiling; only about 17,000 input tokens and short answers were exercised. The follow-up below covers some additional mechanics, not those general accuracy claims.
 
@@ -248,21 +198,17 @@ This experiment did not test full Driver facts, qualifications/naming, actual im
 - [Claude Code caching](https://code.claude.com/docs/en/prompt-caching): native prefix reuse and cache-disable controls.
 - [Claude Code cost guidance](https://code.claude.com/docs/en/costs): session dollar estimates differ from subscription usage.
 
-No production code, global settings, account billing switches, Neo4j data or running services were changed.
+### Complete follow-up experiment review
 
-## Complete follow-up experiment review
+Reviewed 12 November 2026, 7:05 PM EST (America/Toronto), with the later X/X2 evidence considered afterward. Existing results were read and preserved; no new model calls were made.
 
-Reviewed 12 November 2026, 7:05 PM EST (America/Toronto), with the later X/X2 evidence considered afterward. Existing results were read and preserved; no new model calls, production changes or account-setting changes were made. The original temporary files were unchanged.
-
-### Evidence inspected and preserved
+#### Evidence inspected and preserved
 
 The supplied `mech_run1` contains 86 native CLI invocations: 84 resolved to Sonnet 5.5 and two to Opus 5.5. All 86 raw result streams agree with their summaries: successful CLI outcome, no API-key source, and response rate-limit records reporting no paid overage use. Some invocations include multiple turns or helper requests, so 86 is not the total count of underlying inference requests.
 
 The frozen snapshot contains the two scripts and 493 files beneath `mech_run1`, preserved in [raw_evidence.tar.gz](research_notes/context_reader_followup_2026-11-12/raw_evidence.tar.gz), with hashes in [SHA256SUMS.json](research_notes/context_reader_followup_2026-11-12/SHA256SUMS.json). Eight additional X/X2 cross-model calls appeared while the temporary source was being reviewed. They are preserved separately from the original 86-call comparison and assessed below following the owner's additional message. The [audited results](research_notes/context_reader_followup_2026-11-12/audited_results.json) retain all 94 call measurements, all supplied extraction scores, and usage-only records from the four existing project helpers. Private project prompt histories from those four helpers were not copied into this archive; their source paths and hashes are recorded.
 
-The scripts were read, not executed. No model result was repeated to obtain a preferred answer.
-
-### Mechanics and cache reuse
+#### Mechanics and cache reuse
 
 The native Sonnet cache-only exercises, including the larger repeated inputs, used Sonnet 5.5 at low effort. They establish client behaviour, not low-effort extraction quality; the other helper and mixed-model configurations are distinguished below.
 
@@ -282,7 +228,7 @@ Inherited message histories must not be counted as fresh child requests. The sav
 
 The larger tests repeated the same AMG material: 206,890 characters in six repeats and 1,000,025 in 29 repeats. The children reused 97,088 and 467,848 tokens respectively. This demonstrates capacity and cache operation on repeated content. It cannot show reliable extraction from a genuinely complex large filing, and identical repeated passages cannot prove that a quoted answer came from the requested copy.
 
-### Same-model requirement: X/X2 controls
+#### Same-model requirement: X/X2 controls
 
 The two additional groups each used a Fable 5.2 base and three Sonnet 5.5 copies, but their controls matter:
 
@@ -291,7 +237,7 @@ The two additional groups each used a Fable 5.2 base and three Sonnet 5.5 copies
 
 The controls distinguish a cache already warmed under the target model from transfer between models. Both mixed-model groups retained source access.
 
-### Extraction: scopes and reasoning effort
+#### Extraction: scopes and reasoning effort
 
 The ad hoc extraction task used 68 press-release units, six manually chosen ranges and its own instructions, not the complete Driver rules. The main whole-view six-job run, partial-view six-job comparison and single-call comparison all used **Sonnet 5.5 at medium effort**. All three answered 68/68 units. The whole-view jobs returned 297/297 selected pure-number cells in **33.4 seconds**, versus 293/297 with partial views and 297/297 in **115.2 seconds** for one call. Fewer calls therefore did not mean faster completion in this test.
 
@@ -306,7 +252,7 @@ Note-reference checks improved, but the later scopes were smaller:
 
 Full visibility made the notes available; the weaker settings still failed to cite many. Availability and correct use remain separate.
 
-### Corrections to the automatic scores
+#### Corrections to the automatic scores
 
 1. **“Zero period errors” means zero failures of a year-only check.** The grader searches for the expected year string; it does not establish the right quarter, exact date, duration or point-in-time meaning.
 2. **“297/297” covers a selected numeric-cell domain.** The grader excludes prose-containing cells, column-zero cells and year-shaped text. It does not count all eligible facts or all numbers appearing in prose. Five `bad_pointer` entries in the whole-view/single-call runs refer to real `t4` cells containing prose and numbers that the numeric-only grader excludes; they are not nonexistent cell addresses.
@@ -317,11 +263,11 @@ Full visibility made the notes available; the weaker settings still failed to ci
 
 The qualitative rule is in [DRIVER_RULES_Categorized.md](DRIVER_RULES_Categorized.md), including the metric definition and the rule permitting qualitative/action proposals subject to their existing admission requirements. This review does not relax those requirements.
 
-### Preserved files
+#### Preserved files
 
 The archive contains the original `probe.py` and `extract.py`. See the [manifest](research_notes/context_reader_followup_2026-11-12/manifest.json), [archived-file hashes](research_notes/context_reader_followup_2026-11-12/source_file_hashes.json) and linked results/checks above.
 
-## Reported Autodesk 10-K reader comparison
+### Reported Autodesk 10-K reader comparison
 
 **Owner-supplied side-run report; raw responses, scorer and timing were not independently audited in this review.** Source: Autodesk's real 10-K, approximately 417,000 characters. Every reader saw the whole report and used Sonnet 5.5 at medium effort. The task was to return numbers in the discussion section, not complete Driver updates. Each arm reported outcomes for 230/230 units.
 
@@ -333,103 +279,42 @@ The archive contains the original `probe.py` and `extract.py`. See the [manifest
 
 In this test, 12 readers were four times faster, found slightly fewer numbers and cost about twice as much **for the reading stage alone**. Including the same reported loading cost, the total was about 24% higher. These are price-list equivalents, not measured subscription quota charges. A standalone one-call route need not incur a separate loading call, so this comparison does not establish its total cost.
 
-Limits: one run per setting; roughly 11 additional omissions in the multi-reader runs were reported in flattened table lines mixed with explanatory text. The database text did not preserve the actual extraction's table rows/columns, so this does not isolate the cause of the misses or predict results with the intended input. The denominator excluded 16 non-quantity numbers such as the `7` in `Item 7` and is approximate. Meaning, period, scale, Driver names/types and qualitative facts were not scored. This supports testing more readers for speed, not assuming better completeness; it does not prove that one reader is universally more accurate. No new experiment was run while adding this report.
+Limits: one run per setting; roughly 11 additional omissions in the multi-reader runs were reported in flattened table lines mixed with explanatory text. The database text did not preserve the actual extraction's table rows/columns, so this does not isolate the cause of the misses or predict results with the intended input. The denominator excluded 16 non-quantity numbers such as the `7` in `Item 7` and is approximate. Meaning, period, scale, Driver names/types and qualitative facts were not scored. This supports testing more readers for speed, not assuming better completeness; it does not prove that one reader is universally more accurate.
 
-## Work and cost calculations
+### If the whole source cannot be shown usefully
 
-These are calculations under explicit assumptions, not observed runtimes or bills.
+**Unapproved fallback idea:** broad consecutive views with neighbouring material; collect original passages that may govern other views, then reconsider every range, including ranges that initially produced no facts. Recheck combined context and applicability rather than blindly following package links. Overlap covers local continuity but does not guarantee distant context; a confidently missed passage or three-way dependency may remain invisible. This could cost more than whole-source reading. It needs design and validation only if the chosen whole-source route proves impractical.
 
-Assume base packages average exactly 8,000 characters, all pairs fit one request, both directions share the pair input, and there are four characters per token solely for illustration. Exclude instructions, IDs, questions, images, output and retries.
+### Suggested later model roles
 
-| Former pair-search design | 200,000 characters | 1,000,000 characters |
-| --- | ---: | ---: |
-| Packages, N | 25 | 125 |
-| Unordered pairs, N(N−1)/2 | 300 | 7,750 |
-| Body characters across pair requests, D(N−1) | 4.8 million | 124 million |
-| Illustrative body tokens | 1.2 million | 31 million |
-| Body-only Jev input charge at $0.042/million tokens | $0.0504 | $1.302 |
+Possible Jev work included source-grounded fixed-choice fields or checks such as whether a proposed type fits, or whether one fact explicitly caused/offset another. These require original evidence and can themselves be wrong; they cannot recover facts the first reader never proposed by themselves. Do not automatically make two models fill every field. Additional fields in the original read may save later calls but add reasoning/output and can require smaller assignments. A cache does not provide completed answers for free.
 
-With U units, the former questions number U(N−1), before retries. If there are 20 units per package, that is 12,000 and 310,000 questions respectively. Batching avoids charging the shared pair body once per question; it does not remove the questions or their tokens. The rate is documented in the [TypeSafe batching cookbook](https://docs.typesafe.ai/cookbooks/parallel_questions), checked for this review; it is not an authorization to make paid calls.
+### Retired Jev packaging proposal
 
-For full-view reading, let R be the number of extraction requests:
+The 12 November 2026, 4:51 PM EST proposal used semantic boundary judgments near an 8,000-character target, then selected support units by comparing all package pairs. For N packages this is N(N−1)/2 pairs, not factorial. It was never validated as a complete workflow and is not part of the build.
 
-- Without reuse, source input is R × D. Showing the million-character source to 125 assignments is 125 source copies, not 25.
-- With a first cache-write multiplier w and later cache-hit multiplier c, the ideal source-input charge is equivalent to [w + c(R−1)] fresh source reads. This assumes every later request hits the same live cache and excludes output and changing request material.
-- For illustration only, the five-minute API-write assumption w = 1.25 and c = 0.05–0.10 produces 2.45–3.65 fresh-read equivalents for R = 25, or 7.45–13.65 for R = 125. The tested CLI default instead used one-hour writes, whose API list-price write multiplier is 2.0. Neither multiplier establishes the subscription-quota weight; use the actual measured usage and keep the model-specific hit rate separate.
-- Reading five 200,000-character views 25 times each supplies 25 full-source equivalents before overlap. It provides partial views, not the full million-character context.
-- The corrected design does not require R = D/8,000. Fewer sufficiently complete assignments can materially change these costs.
+Reasons it was not adopted:
 
-A 1% inclusion of each package's outside source adds 24% body input at N = 25 and 124% at N = 125. This is an illustrative support volume, not an observed error rate. Under equal unit sizes, extraneous support equals one base package at an outside-unit inclusion rate of 1/(N−1): about 4.17% and 0.81% in those examples. Genuine support and wrong support must also be distinguished.
+- Pairwise comparisons do not establish complete context. A says “The portfolio returned 8%”; B says “Returns for Series X are before fees”; C defines “the portfolio” as Series X. A–B may miss the link without C, and A–C need not select B.
+- Package links do not prove which support applies to which fact. Following all links can import unrelated notes or most of the document; attaching uncertainty cannot catch confident wrong exclusions.
+- Work boundaries need not make passages self-sufficient when every reader sees the whole source. No generic structural rule was found for every semantic dependency: actual HTML caption ownership is usable; nearby text has no equivalent guarantee. Distant dependencies were not measured as less than 1%.
 
-The [Claude caching documentation](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) describes exact-prefix reuse and model-dependent rates. [Claude Code cost guidance](https://code.claude.com/docs/en/costs) distinguishes API-price estimates from subscription usage. The completed experiment measured the cached route and an uncached control, but its rounded account-wide snapshots do not establish a precise recurring quota formula.
+[TypeSafe batching](https://docs.typesafe.ai/cookbooks/parallel_questions) supports shared-state judgments and [Noul](https://docs.typesafe.ai/primitives/noul) provides yes/no probabilities, but neither validates this task or its thresholds. The [Qdrant](https://qdrant.tech/blog/jevjitsu/#semantic-chunking) and [Supermemory](https://supermemory.ai/blog/jev-memory-context-engineering/) articles concern retrieval, not complete context for every financial fact; the latter also describes meaning lost through sentence filtering.
 
-The complete measurement scope is in Next validation. A lower preparation bill alone does not establish a cheaper workflow.
+The earlier [Astra](https://app.notion.com/p/416a0a3f310681b4a4bce916a873fb30), [Opus](https://app.notion.com/p/416a0a3f3106814fb4c2c5cf54c6c639) and [Fable](https://app.notion.com/p/416a0a3f310681d4b04df245e59a3210) AMG exercises used older Qwen runtimes and keys shaped after earlier outputs. They show selected successes, misses and broad direct support selection, not measured dependency closure, current Qwen performance or Jev's error rate. [AMG units](https://app.notion.com/p/416a0a3f3106818cb2e9c7a0341cfeb9) and the [rebuilt view](https://app.notion.com/p/416a0a3f3106813bae2ad0b1470b3cfb) remain examples; the 68-unit press release is one file, not the whole filing.
 
-## Retired Jev packaging proposal
+A compact-package comparison, including an oracle package built from known true evidence, was another suggested experiment. It omits real selection errors/cost and is not required before building the chosen workflow. Equal accuracy at lower total cost or time could still justify preparation; selector and reader accuracy percentages cannot generally be multiplied because their errors interact.
 
-**Historical only:** the direction recorded 12 November 2026, 4:51 PM EST, before adopting cached whole-view reads. It was not implemented or validated as a complete workflow. Shared preservation/accounting requirements are covered above; this section keeps the proposal's distinct mechanics, questions and unresolved choices.
+### Superseded settings and archived detail
 
-### Boundary search
+The earlier 12-package 10-K starting default was replaced by one reader first. Six simultaneous copies was only a suggestion. Xhigh remains outside the agreed medium → high test sequence. More fields, Jev/Qwen roles and the [rough design](rough_design.md) were never adopted as a complete division of work.
 
-- A base package was consecutive whole units; a finished package added selected or possible support from elsewhere. The body target was configurable, illustrated by **8,000 characters of the model-visible source representation**, excluding unrelated wrappers. It was not a hard final-package/token limit.
-- Starting at the first unassigned unit, keep the remainder as the final package if it fits both target and actual capacity. Otherwise consider gaps that advance the start and satisfy permitted size/capacity limits; do not split a paragraph/table to meet the target.
-- Rank gaps by **absolute character distance**, not unit count. Begin with the closest two (or all if fewer), which can lie on the same side. Supply complete surrounding units on both sides; exact context size was never settled.
-- Ask one shared-input question per gap:
+Detailed retired boundary-search rounds, unused probability examples, old support questions and speculative cost tables were removed from this working document. They remain in the [previous committed revision](https://github.com/faisalanjum/EventTrader/blob/c580b68ec8d5a116db041d5c171f49380663fb3c/.claude/plans/Drivers/DriversFinal/ClaudeCachedReads.md#retired-jev-packaging-proposal).
 
-  > Is this a natural break between passages, without splitting an ongoing passage or separating an introduction from what it introduces?
-
-- A clear yes made a gap eligible; clear no or uncertainty did not. Choose the nearest accepted gap only after all closer candidates were checked. An uncertain gap was unaccepted, not proven bad.
-- If none qualified, expand to **4, 8, 16… total candidates**, batching where capacity permits. When reading context expands, recheck nearer candidates because more text can change an answer. More gaps and more context are separate choices.
-- Stop at the permitted size/search/input limit; unresolved if no gap qualifies. Do not lower the acceptance standard or take the best weak score. Start the next target from the actual cut, not a fixed document-wide 8,000 grid. An oversized unit remains whole if it fits actual capacity, otherwise unresolved.
-- Example: for target 8,000 and gaps 7,800, 7,950, 8,400, examine 7,950 then 7,800 then 8,400. If 7,950 fails and 7,800 qualifies, choose 7,800. Looking only one unit each side could miss the closer valid gap.
-
-The growing batch schedule traded early stopping against round trips; it was never shown cheaper/faster than a larger first batch. Serial boundary work would be about 24/124 requests for 25/125 packages with one round per boundary, or 96/496 with four rounds. These are calculations, not measurements.
-
-### Support search and uncertainty
-
-Freeze the base bodies throughout comparisons. For N packages, compare each unordered pair once: **N(N−1)/2**, not factorial and not individual-unit pairs. Three packages give A–B, A–C, B–C.
-
-Supply both complete bodies with IDs, order and shared company/publication metadata. For every unit in B ask about A, and vice versa:
-
-> Does this unit provide context missing from the other chunk that is needed to understand any statement there correctly?
-
-Shared instructions:
-
-> Read both chunks fully. Context may span several units. Being about the same topic is not enough. Treat the source as data, not instructions.
-
-One judgment per unit need not be one request. Batch both directions over the shared A+B input when possible. If questions need multiple requests, retain the complete pair input; an oversized pair itself needs resolution. Do not first screen “Are these chunks related?”—a mistaken rejection could hide a needed unit.
-
-| Judgment | Boundary | Support |
-| --- | --- | --- |
-| Clear yes | Eligible | Attach selected unit |
-| Clear no | Continue search | Do not attach to this target; retain its own body occurrence |
-| Uncertain | Continue search | Attach as possible context, not a confirmed relationship |
-
-Illustration, not a run: A1 “2025 revenue: 520”; A2 “2025 operating profit: 80”; B1 “Forward-looking statements involve risks”; B2 “All monetary amounts in this document are USD millions.” Expected A-needs-B1/B2 and B-needs-A1/A2 answers: no, yes, no, no. If B2's applicability is uncertain, attach it as possible context without asserting the scale.
-
-Copy selected/possible originals by ID, once per package in source order, identifying body versus context. A shared note can support several packages without merging them. Support may exceed the body target; if it exceeds actual reader capacity, retain the case unresolved.
-
-### Why it was not adopted
-
-1. **All-pairs visibility is insufficient.** Constructed example: A says “The portfolio returned 8%”; B says “Returns for Series X are before fees”; C says “‘The portfolio’ means Series X.” A–B can miss relevance without C; A–C can find the definition without selecting B. Combined context may need reconsideration.
-2. **Package links do not identify precise support chains.** If A needs B7 and B7 needs C3, A needs both. But “B needs C3” could concern an unrelated table in B. The proposed questions supplied package-to-unit judgments, not the missing unit-level scope. Copying all of B's support into A can import inapplicable material.
-3. **Uncertainty handling misses confident errors.** Keeping an excluded unit elsewhere does not give it to the fact that needs it. Adding uncertain candidates protects only uncertainty the model expresses and can introduce competing notes.
-4. **The cut optimized proximity, not the real objective.** A continuous answer may lack a nearby semantic break. With a whole reading view, work boundaries need not assert self-sufficiency; under limited views semantic cuts could still help, but their value is unmeasured.
-5. **Source and semantic completeness differ.** No generic deterministic rule was found linking every unit to every necessary passage. Actual HTML caption ownership is usable; nearby ordinary text has no equivalent ownership guarantee. There is no measured basis here for claiming distant dependencies affect less than 1%.
-
-Unsettled then: yes/no/uncertain probability ranges separately for cuts and support (0.80 examples were never adopted), permitted body sizes/search extent, actual capacities after questions/support, surrounding context per round, precise support-of-support handling, and complete accuracy/usage/runtime on fresh documents. Qwen review was postponed.
-
-### Earlier evidence and review corrections
-
-[TypeSafe batching](https://docs.typesafe.ai/cookbooks/parallel_questions) documents shared-state independent questions; [Noul](https://docs.typesafe.ai/primitives/noul) supplies yes/no probabilities. Neither establishes this task's answers or thresholds. [Qdrant](https://qdrant.tech/blog/jevjitsu/#semantic-chunking) evaluates semantic boundaries for retrieval, not complete financial-fact context or this outward search. [Supermemory](https://supermemory.ai/blog/jev-memory-context-engineering/) likewise discusses retrieval and meaning lost through sentence filtering.
-
-The older [Astra](https://app.notion.com/p/416a0a3f310681b4a4bce916a873fb30), [Opus](https://app.notion.com/p/416a0a3f3106814fb4c2c5cf54c6c639) and [Fable](https://app.notion.com/p/416a0a3f310681d4b04df245e59a3210) AMG exercises used older Qwen runtimes and reference keys shaped after earlier outputs. They show selected successes, missed links and very broad support—not current Qwen performance or Jev's error rate. Broad packages came from direct model selections, not a measured dependency-closure implementation. The [AMG units](https://app.notion.com/p/416a0a3f3106818cb2e9c7a0341cfeb9) and [rebuilt view](https://app.notion.com/p/416a0a3f3106813bae2ad0b1470b3cfb) are concrete examples; the 68-unit press release is one file, not the whole filing.
-
-## Related records and retention
+### Related records and retention
 
 - [DriverEngineScratchpad.md](DriverEngineScratchpad.md): separate history of input-code decisions, pending work, reader drafts and Jev experiments; retained, not another cached-reading plan.
 - [rough_design.md](rough_design.md): older whole-pipeline proposal; retained unchanged. Neither overrides the current Driver rules.
 - The two earlier ContextPackaging plan files were removed after consolidation. Evidence-folder READMEs are indexes to this file, not competing plans. Earlier wording remains in Git history.
 - Keep the five Driver input tests: they check real acceptance/refusal and protect accepted inputs from mutation or consumption. Exploratory model runs are not a production test suite.
 - The two evidence archives total about **1.06 MB** and preserve originals, measurements and failed controls. Three byte-identical loose experiment scripts were removed after comparison; their originals remain inside. Manifests, readable results and checksums remain beside the archives.
-- This organization pass changes documentation only. It introduces no model calls, new tests, implementation, database writes or service changes.
