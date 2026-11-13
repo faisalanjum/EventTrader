@@ -8,6 +8,8 @@ Read the [agreed workflow](#final-plan), [input requirements](#what-the-ai-shoul
 
 ## Final plan
 
+**Start with one reader for the whole filing; add parallel readers only when faster completion is needed. Test medium reasoning effort first, then high.** The capacity checks below still apply: an answer that cannot fit must be split into manageable assignments, even if they run sequentially. More readers are not an assumed accuracy improvement. See the [reported real 10-K comparison](#reported-autodesk-10-k-reader-comparison).
+
 1. **Preserve the source.** Reuse existing extracted units and readback. Code retains original content, IDs, files, ordering, source locations and versions. Identify the company, source type, publication time and included files. Show the compact reading view specified below; do not create a new extraction system.
 2. **Check usable capacity.** Count actual tokens, instructions, IDs, images and other request content; reserve reasoning/output room for the chosen task. Advertised maximum context is not an accuracy result, and longer inputs can reduce recall; see [Claude's context guidance](https://platform.claude.com/docs/en/build-with-claude/context-windows). Do not silently truncate, omit images or rely on compaction to retain exact evidence.
 3. **Assign the work.** A source unit is an existing piece; a reading view is everything visible; a work package is the statements assigned to one call. Use consecutive whole-unit ranges with one primary assignment per unit. Choose the nearest permitted unit gap to the work target, with a consistent tie rule. A cut assigns work; it does not assert semantic independence. If an oversized unit fits, retain it whole; if its answer would be too large, use existing finer addresses such as table rows while keeping the whole table visible. Do not invent parsing merely to hit a size target.
@@ -32,11 +34,12 @@ No mandatory semantic-cut search, all-pairs context selection, Qwen preparation 
 
 | Setting | Status |
 | --- | --- |
-| 10-K work packages | **Owner-approved test default: 12**, discussed for a hypothetical one-million-character filing; not a measured optimum or a requirement to force 12 onto every source |
+| Filing starting point | **One reader for the whole filing**, subject to usable input/output capacity; add parallel readers when speed requires it |
+| 10-K speed comparison | Twelve remains a candidate to compare when speed is needed. The earlier owner-approved starting default of 12 is superseded by the one-reader starting point |
 | Packages for other source types | Undecided |
-| Simultaneous copies | Separate from package count; **six suggested**, not finalized or established as optimal |
+| Simultaneous copies | One initially; increased concurrency is a speed choice, separate from assignment count. The earlier suggestion of six was never finalized |
 | Assignment size | Adjust for accuracy, output completeness, total usage and completion time; fewer calls can lower overhead but serialize long answers |
-| Model and reasoning effort | No production winner chosen; consider high or xhigh if supported and affordable. Measured settings are recorded with each experiment below |
+| Model and reasoning effort | **Test medium, then high** on the chosen model, using a separate stable base for each effort setting. No production winner chosen; xhigh was an earlier possible comparison, not part of this first sequence |
 | Reader output and later model roles | Suggestions only; see What remains undecided |
 | Exact table display format | Undecided; complete readable table structure is required |
 
@@ -61,33 +64,50 @@ Keep the complete record in code. The reading view contains source meaning and s
 
 These are information requirements, not a fixed field allowlist. Removing storage metadata must preserve meaning.
 
+### Example reading view
+
+This is a **fictional excerpt illustrating the proposed input**, not an implemented or finalized prompt/table format. The actual request includes the shared task and applicable Driver rules, the complete source view and the work assignment. The instructions distinguish source evidence from instructions to the model. One reader's assignment is the whole filing; copies, when needed, receive their own assigned IDs after the same shared source.
+
+```text
+Company: ExampleCo
+Document: 2025 annual report; published 2026-02-20
+File F1: annual report
+
+[F1:u1]
+Demand increased in Europe during 2025.
+
+[F1:u2]
+Amounts in the following table are in USD millions.
+
+[F1:t1]
+     | c1               | c2   | c3   |
+-----|------------------|------|------|
+r1   | Measure          | 2025 | 2024 |
+r2   | Revenue          | 100  | 90   |
+r3   | Operating profit | 20   | 18   |
+
+[F1:img1]
+<actual source image supplied here>
+
+Work assignment: all units in F1.
+```
+
+The image line above represents a real image input, not text to send instead of it. If unavailable, show `F1:img1 — image content unavailable` and record unresolved coverage. Exact image delivery/cache behavior still needs validation. The simple table demonstrates cell addresses; real tables must retain merged cells, captions and notes where present.
+
+The reader can propose 2025 revenue of USD 100 million and cite `F1:t1/r2/c2` for `100`, `F1:t1/r2/c1` for `Revenue`, `F1:t1/r1/c2` for `2025`, and `F1:u2` for the scale/currency. Code copies those original fragments separately. A correct lookup does not prove the model chose the right supporting fragments.
+
+**Kept in code, not repeated in the AI view:** each visible ID maps to the original source file/version, saved unit or cell, and available source location such as byte range, page or coordinates. For example, `F1:t1/r2/c2` maps to that saved cell's original location. Guessed kind/heading level, hashes and storage paths stay there too. Actual source words that establish meaning remain visible. A unit ID alone permits copying the whole unit; a shorter quotation needs a precise span or cell reference, not a code guess about which words matter.
+
 ### Independent AMG check
 
 Checked the linked [AMG extraction units](https://app.notion.com/p/416a0a3f3106818cb2e9c7a0341cfeb9) and the existing source-handling code on 12 November 2026, approximately 7:48 PM EST:
 
 - Unit `u7` is labelled `heading (level 1)`, but its text introduces Jay C. Horgen as the speaker. Unit `u14`, “Capital Management,” is labelled `text`. Both examples are present as described. They show that the label is not a dependable semantic category; they do not prove that removing it improves model accuracy.
 - The AUM scale is in `t23`, separately from tables `t24` and `t25`. Hiding kind/byte labels must not remove that title or its words.
-- In `t54`, row 3 column 8 contains the dollar sign; column 9 contains `79.5`. The reader must be able to return the number's cell address. Above it are the original period heading and scale. The earlier partial-view experiment's wrong-column results are a reason to preserve clear cell references.
+- In `t54`, row 3 column 8 contains the dollar sign; column 9 contains `79.5`. The reader must be able to return the number's cell address, such as `F1:t54/r3/c9`. Above it are the original period heading and scale. The earlier partial-view experiment's wrong-column results are a reason to preserve clear cell references.
 - The page shows image filenames/placeholders. That does not prove those images were supplied to a vision-capable reader. The prior cache tests did not test actual image understanding.
 - The page's XML values include repeated dates, identifiers and booleans. Removing their field names/context would remove meaning, not just storage detail.
 - Existing [readback](../../../../driver/prepare/reconstruct.py) already separates retained records from composed order and relationships. Its preservation check is about saved input; it does not certify that a new compact prompt is faithful or that the model interprets it correctly. The [HTML conversion code](../../../../driver/prepare/convert/edgartools_html.py) records parser heading evidence separately from source text and distinguishes source table-header markup from a header guess. Reuse these distinctions; do not build another semantic classifier to hide metadata.
-
-A minimal text-unit display can therefore be:
-
-```text
-File F1: AMG press release
-
-[F1:u7]
-Jay C. Horgen, President and Chief Executive Officer of AMG, said:
-
-[F1:u8]
-(original statement, unchanged)
-
-[F1:u14]
-Capital Management
-```
-
-The parenthesized line is an illustration placeholder, not a proposed replacement for source text. The model sees the words and their order; code retains the original kind, byte range, hash and file mapping. For a numeric citation, an address such as `F1:t54/r3/c9` identifies the original number cell without exposing its byte offsets.
 
 **Image correction:** “image” does not mean “the AI cannot read it.” It means there is image content to supply or explicitly account for as unavailable. [Claude's image documentation](https://platform.claude.com/docs/en/build-with-claude/vision) describes actual image inputs; it does not validate this plan's exact CLI image-caching setup. [TypeSafe's input guidance](https://docs.typesafe.ai/concepts/state) likewise distinguishes judgment content from the questions asked about it; it is not proof that any particular minimal payload is sufficient.
 
@@ -107,14 +127,25 @@ More fields in the same read may avoid later calls, but add reasoning/output and
 
 ## Evidence and result checks
 
-These are requirements for evaluating an extraction workflow, not a finalized output schema.
+These are **planned extraction-result checks**, not a claim that an end-to-end checker or output schema is already built. Existing readback code checks preservation of saved input, its stated relationships and recorded unresolved items; it does not certify a model's Driver answers. Reuse those source checks and add only the result checks required by the agreed output.
+
+| What code checks | Concrete example | Limit |
+| --- | --- | --- |
+| Reference exists and resolves unambiguously in the saved source version | `F1:t1/r2/c2` exists; reject an absent unit, cell or out-of-bounds span | Existence does not prove that the reference supports the claim |
+| Evidence is copied exactly | Fetch `100` from that cell and the separate scale statement from `F1:u2`; if the model supplies a quotation, compare it exactly with the referenced text | Do not join separate fragments into a fabricated continuous quote; exact copying does not prove OCR fidelity or interpretation |
+| Work is accounted for | Every assigned unit has a returned outcome: facts, no eligible fact found, or unresolved; flag a missing response or out-of-assignment statement reference | A unit can contain several facts; a response for every unit does not prove every fact was found |
+| Repeated deliveries are handled | Do not count the same job result twice after a retry; flag identical result records for review | Do not merge facts merely because they cite the same unit; differently worded or differently located semantic duplicates require judgment |
+| Output is usable and unfinished work stays visible | Validate the agreed fields/types; detect failed requests, output-limit stops and missing required responses; retain explicit unresolved cases with their reasons | Code cannot detect every confidently wrong answer or infer every hidden uncertainty |
+
+Source preservation checks also retain file identity, saved order and content. No prose explanation is required for every empty unit; unresolved cases do need an explanation. Preserve completed work after a failure, then reduce the unfinished assignment or use a suitable larger route. Do not accept an incomplete answer as an empty result.
+
+The following still require interpretation and review under the Driver rules:
 
 - **Meaning and scope:** use all visible context for assigned statements. Preserve subject, period, scale and qualifications. Publication time is not the reporting period; one exhibit's scope is not automatically the whole filing. Follow references on statements, rows, shared headers, titles and sections to the applicable original note/definition. A similar note is not necessarily applicable, and explicit markers do not cover every dependency.
 - **Eligibility:** a unit can contain zero, one or many facts. Assess qualitative statements under the actual Driver rules; absence of figures is not enough to reject a unit. Existing qualitative-proposal admission requirements remain.
 - **Ownership:** a spanning statement belongs to the assignment containing its beginning, not the earliest supporting heading/note. Identifying that anchor still requires interpretation. Context copies retain their original identity and do not create new occurrences. Do not collapse all facts sharing a unit ID; semantic duplicates at different source locations need a separate judgment.
-- **Evidence:** references must identify original units and, where available, exact spans or cells. Code resolves references and copies the source. Keep separate supporting fragments separate; never fabricate a continuous quote. Correct copying of extracted text does not prove OCR fidelity.
-- **Accounting:** every source unit needs an assignment and returned outcome: facts found, no eligible fact found, or unresolved. Explain unresolved cases; a prose explanation for every empty unit is unnecessary. Validate IDs, file identity, order, copied text and missing assignments.
-- **Failures:** detect failed requests, truncation and output-limit stops. Preserve completed work, then reduce the unfinished assignment or use a suitable larger route. Do not accept an incomplete answer as an empty result. Report unresolved coverage separately; a second model is not required for every result but must meet any independent checks mandated by the rules.
+
+Report unresolved coverage separately; a second model is not required for every result but must meet any independent checks mandated by the rules.
 
 Code can check preservation and accounting, conditional on correct implementation and complete saved input. It cannot certify semantic recall, correct context applicability or truth merely from exact quotes. All saved units being present does not establish all original published content was extracted, or that every eligible fact was found.
 
@@ -289,6 +320,20 @@ The qualitative rule is in [DRIVER_RULES_Categorized.md](DRIVER_RULES_Categorize
 ### Preserved files
 
 The archive contains the original `probe.py` and `extract.py`. See the [manifest](research_notes/context_reader_followup_2026-11-12/manifest.json), [archived-file hashes](research_notes/context_reader_followup_2026-11-12/source_file_hashes.json) and linked results/checks above.
+
+## Reported Autodesk 10-K reader comparison
+
+**Owner-supplied side-run report; raw responses, scorer and timing were not independently audited in this review.** Source: Autodesk's real 10-K, approximately 417,000 characters. Every reader saw the whole report and used Sonnet 5.5 at medium effort. The task was to return numbers in the discussion section, not complete Driver updates. Each arm reported outcomes for 230/230 units.
+
+| Readers | Reported run time | Numbers found, approximate denominator | Reader-stage price-list equivalent | Including reported $0.55 loading cost |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 76 seconds | 532/533 | $0.19 | $0.74 |
+| 4 | 37 seconds | 521/533 | $0.24 | $0.79 |
+| 12 | 19 seconds | 520/533 | $0.37 | $0.92 |
+
+In this test, 12 readers were four times faster, found slightly fewer numbers and cost about twice as much **for the reading stage alone**. Including the same reported loading cost, the total was about 24% higher. These are price-list equivalents, not measured subscription quota charges. A standalone one-call route need not incur a separate loading call, so this comparison does not establish its total cost.
+
+Limits: one run per setting; roughly 11 additional omissions in the multi-reader runs were reported in flattened table lines mixed with explanatory text. The database text did not preserve the actual extraction's table rows/columns, so this does not isolate the cause of the misses or predict results with the intended input. The denominator excluded 16 non-quantity numbers such as the `7` in `Item 7` and is approximate. Meaning, period, scale, Driver names/types and qualitative facts were not scored. This supports testing more readers for speed, not assuming better completeness; it does not prove that one reader is universally more accurate. No new experiment was run while adding this report.
 
 ## Work and cost calculations
 
