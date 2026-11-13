@@ -1,5 +1,9 @@
 # ANTHROPIC BILLING — SUBSCRIPTION vs API — CRITICAL (read before any SDK/LLM or pipeline change)
 
+> **Current correction — 12 November 2026, 6:15 PM EST (America/Toronto).** The June 15 billing split described below was paused. [Anthropic's October 7 update](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan) says Agent SDK and `claude -p` still draw from subscription limits when signed in with the Claude plan; an API key uses the separate linked API arrangement. The later claims here that programmatic subscription access ended are historical and superseded. Preserve the API-key exclusion and fail-closed safeguards.
+>
+> A [51-request local cache experiment](Drivers/DriversFinal/research_notes/context_cache_probe_2026-11-12/README.md) used the Max plan sign-in with no API key. Fresh account snapshots showed extra usage disabled, and every response reported no overage use. Native session copies reused source input. Session API-dollar estimates are not subscription charges or a formula for the five-hour/weekly limits. This dated check does not assume that future account settings stay unchanged.
+
 > **Canonical source of truth** for "will the EarningsTrigger / Guidance extraction pipelines get
 > charged after Anthropic's June 15 2026 subscription change, and how do I keep them on subscription /
 > $0." Everything here is **empirically tested on this machine** (commands included so anyone can

@@ -1,0 +1,313 @@
+{
+  "created_at_local": "2026-11-12T18:12:41.020051-05:00",
+  "source_path": "/tmp/driver_context_linking_brief/amg_units.txt",
+  "source_chars": 34460,
+  "source_sha256": "034283eb7f458b863d1253f3a18b55f38a16f0f8727819df67603958d1404027",
+  "source_scope": "Saved AMG press-release and XBRL field units; image placeholders only",
+  "work_ranges": 25,
+  "units": 118,
+  "model_alias": "fable",
+  "effort": "low",
+  "max_concurrency": 4,
+  "max_turns": 1,
+  "per_request_timeout_seconds": 120,
+  "automatic_retries": 0,
+  "cache_setting": "CLI default; control DISABLE_PROMPT_CACHING=1",
+  "base_session_id": "7a249f02-867e-4360-942d-f820277cedc3",
+  "tasks": [
+    {
+      "index": 1,
+      "ids": [
+        "p1067",
+        "t0",
+        "u1",
+        "u2"
+      ],
+      "expected_id": "t0",
+      "source_text": "<b>#2 \u00b7 t0 \u00b7 table</b> \u00b7 bytes 1429\u20132474 \u00b7 25 cells, 3 with text\n\n```javascript\nr1: [c5] Exhibit 99.1\nr2: [c5] Investor Relations: Media Relations: \u00b7 [c11] Patricia Figueroa Ann Imes +1 (617) 747-3300 ir@amg.com pr@amg.com\n```"
+    },
+    {
+      "index": 2,
+      "ids": [
+        "u3",
+        "p4522",
+        "t4",
+        "p5058",
+        "p5580"
+      ],
+      "expected_id": "u3",
+      "source_text": "<b>#5 \u00b7 u3 \u00b7 heading (level 1)</b> \u00b7 bytes 3712\u20133780<br />Company reports EPS of \\$3.47, Economic EPS of \\$4.18 in first quarter"
+    },
+    {
+      "index": 3,
+      "ids": [
+        "u5",
+        "u6",
+        "u7",
+        "u8",
+        "u9"
+      ],
+      "expected_id": "u5",
+      "source_text": "<b>#10 \u00b7 u5 \u00b7 heading (level 1)</b> \u00b7 bytes 6398\u20136443<br />WEST PALM BEACH, FL, May 1, 2023 \u2014"
+    },
+    {
+      "index": 4,
+      "ids": [
+        "u10",
+        "t11",
+        "u12",
+        "u13"
+      ],
+      "expected_id": "u10",
+      "source_text": "<b>#15 \u00b7 u10 \u00b7 text</b> \u00b7 bytes 8231\u20138756<br />\u201cWith thirty years of experience in partnering with independent firms, our reputation as a strategic partner across market cycles, and our strong and flexible balance sheet, we are uniquely positioned to execute on our opportunity set. Given our proven ability to invest in attractive growth opportunities in existing and new Affiliates, while also returning excess capital to shareholders through a disciplined capital allocation framework, we are confident in our ability to create long-term shareholder value.\u201d"
+    },
+    {
+      "index": 5,
+      "ids": [
+        "u14",
+        "u15",
+        "u16",
+        "u17",
+        "u18"
+      ],
+      "expected_id": "u14",
+      "source_text": "<b>#19 \u00b7 u14 \u00b7 text</b> \u00b7 bytes 30563\u201330581<br />Capital Management"
+    },
+    {
+      "index": 6,
+      "ids": [
+        "u19",
+        "u20",
+        "u21",
+        "u22",
+        "t23"
+      ],
+      "expected_id": "u19",
+      "source_text": "<b>#24 \u00b7 u19 \u00b7 text</b> \u00b7 bytes 33794\u201334051<br />A conference call will be held with AMG\u2019s management at 8:30 a.m. Eastern time today. Parties interested in listening to the conference call should dial 1-877-407-8291 (U.S. calls) or 1-201-689-8345 (non-U.S. calls) shortly before the call begins."
+    },
+    {
+      "index": 7,
+      "ids": [
+        "t24",
+        "t25",
+        "u26",
+        "t27",
+        "t28"
+      ],
+      "expected_id": "t24",
+      "source_text": "<b>#29 \u00b7 t24 \u00b7 table</b> \u00b7 bytes 37873\u201359232 \u00b7 153 cells, 70 with text\n\n```javascript\nr1: [c0] BY STRATEGY - QUARTER TO DATE \u00b7 [c3] Alternatives \u00b7 [c6] Global Equities \u00b7 [c9] U.S. Equities \u00b7 [c12] Multi-Asset & Fixed Income \u00b7 [c15] Total\nr3: [c0] AUM, December 31, 2022 \u00b7 [c3] $ \u00b7 [c4] 220.9 \u00b7 [c6] $ \u00b7 [c7] 186.1 \u00b7 [c9] $ \u00b7 [c10] 133.3 \u00b7 [c12] $ \u00b7 [c13] 110.5 \u00b7 [c15] $ \u00b7 [c16] 650.8\nr4: [c0] Client cash inflows and commitments \u00b7 [c3] 10.1 \u00b7 [c6] 4.8 \u00b7 [c9] 5.0 \u00b7 [c12] 5.0 \u00b7 [c15] 24.9\nr5: [c0] Client cash outflows \u00b7 [c3] (6.3) \u00b7 [c6] (9.9) \u00b7 [c9] (7.3) \u00b7 [c12] (4.6) \u00b7 [c15] (28.1)\nr6: [c0] Net client cash flows \u00b7 [c3] 3.8 \u00b7 [c6] (5.1) \u00b7 [c9] (2.3) \u00b7 [c12] 0.4 \u00b7 [c15] (3.2)\nr9: [c0] Market changes \u00b7 [c3] (0.0) \u00b7 [c6] 10.8 \u00b7 [c9] 5.8 \u00b7 [c12] 3.6 \u00b7 [c15] 20.2\nr10: [c0] Foreign exchange \u00b7 [c3] 0.7 \u00b7 [c6] 0.8 \u00b7 [c9] 0.2 \u00b7 [c12] 0.0 \u00b7 [c15] 1.7\nr11: [c0] Realizations and distributions (net) \u00b7 [c3] (1.4) \u00b7 [c6] (0.0) \u00b7 [c9] (0.0) \u00b7 [c12] (0.1) \u00b7 [c15] (1.5)\nr13: [c0] Other \u00b7 [c3] (0.3) \u00b7 [c6] 0.0 \u00b7 [c9] 0.0 \u00b7 [c12] 0.3 \u00b7 [c15] (0.0)\nr14: [c0] AUM, March 31, 2023 \u00b7 [c3] $ \u00b7 [c4] 223.7 \u00b7 [c6] $ \u00b7 [c7] 192.6 \u00b7 [c9] $ \u00b7 [c10] 137.0 \u00b7 [c12] $ \u00b7 [c13] 114.7 \u00b7 [c15] $ \u00b7 [c16] 668.0\n```"
+    },
+    {
+      "index": 8,
+      "ids": [
+        "t29",
+        "t30",
+        "u31",
+        "u32"
+      ],
+      "expected_id": "t29",
+      "source_text": "<b>#34 \u00b7 t29 \u00b7 table</b> \u00b7 bytes 109248\u2013109472 \u00b7 16 cells, 1 with text\n\n```javascript\nr1: [c0] RECONCILIATIONS OF SUPPLEMENTAL PERFORMANCE MEASURES(2)\n```"
+    },
+    {
+      "index": 9,
+      "ids": [
+        "t33",
+        "t34",
+        "u35",
+        "u36",
+        "u37"
+      ],
+      "expected_id": "t33",
+      "source_text": "<b>#38 \u00b7 t33 \u00b7 table</b> \u00b7 bytes 134164\u2013134190 \u00b7 16 cells, 1 with text\n\n```javascript\nr1: [c0] CONSOLIDATED BALANCE SHEET\n```"
+    },
+    {
+      "index": 10,
+      "ids": [
+        "u38",
+        "u39",
+        "u40",
+        "t41",
+        "u42"
+      ],
+      "expected_id": "u38",
+      "source_text": "<b>#43 \u00b7 u38 \u00b7 text</b> \u00b7 bytes 173406\u2013173756<br />We assume the settlement of all of our Redeemable non-controlling interests using the maximum number of shares permitted under our arrangements. The issuance of shares and the related income acquired are excluded from the calculation if an assumed purchase of Redeemable non-controlling interests would be anti-dilutive to diluted earnings per share."
+    },
+    {
+      "index": 11,
+      "ids": [
+        "t43",
+        "u44",
+        "u45",
+        "u46"
+      ],
+      "expected_id": "t43",
+      "source_text": "<b>#48 \u00b7 t43 \u00b7 table</b> \u00b7 bytes 193030\u2013222331 \u00b7 239 cells, 103 with text\n\n```javascript\nr1: [c6] Year Ended December 31, \u00b7 [c18] Three Months Ended\nr2: [c0] (in millions) \u00b7 [c6] 2020 \u00b7 [c10] 2021 \u00b7 [c14] 2022 \u00b7 [c18] 3/31/2022\nr3: [c0] Adjusted EBITDA (controlling interest) - As reported \u00b7 [c6] $ \u00b7 [c7] 795.3 \u00b7 [c10] $ \u00b7 [c11] 1,045.6 \u00b7 [c14] $ \u00b7 [c15] 1,053.8 \u00b7 [c18] $ \u00b7 [c19] 240.0\nr4: [c0] Adjusted EBITDA (controlling interest) - Prior definition \u00b7 [c6] 798.8 \u00b7 [c10] 1,058.6 \u00b7 [c14] 1,060.3 \u00b7 [c18] 255.3\nr5: [c0] Change \u00b7 [c6] $ \u00b7 [c7] (3.5) \u00b7 [c10] $ \u00b7 [c11] (13.0) \u00b7 [c14] $ \u00b7 [c15] (6.5) \u00b7 [c18] $ \u00b7 [c19] (15.3)\nr6: [c0] % Change \u00b7 [c6] (0.4) \u00b7 [c8] % \u00b7 [c10] (1.2) \u00b7 [c12] % \u00b7 [c14] (0.6) \u00b7 [c16] % \u00b7 [c18] (6.0) \u00b7 [c20] %\nr8: [c0] Economic net income (controlling interest) - As reported \u00b7 [c6] $ \u00b7 [c7] 621.7 \u00b7 [c10] $ \u00b7 [c11] 770.0 \u00b7 [c14] $ \u00b7 [c15] 797.2 \u00b7 [c18] $ \u00b7 [c19] 178.5\nr9: [c0] Economic net income (controlling interest) - Prior definition \u00b7 [c6] 624.4 \u00b7 [c10] 779.8 \u00b7 [c14] 802.1 \u00b7 [c18] 190.0\nr10: [c0] Change \u00b7 [c6] $ \u00b7 [c7] (2.7) \u00b7 [c10] $ \u00b7 [c11] (9.8) \u00b7 [c14] $ \u00b7 [c15] (4.9) \u00b7 [c18] $ \u00b7 [c19] (11.5)\nr11: [c0] % Change \u00b7 [c6] (0.4) \u00b7 [c8] % \u00b7 [c10] (1.3) \u00b7 [c12] % \u00b7 [c14] (0.6) \u00b7 [c16] % \u00b7 [c18] (6.1) \u00b7 [c20] %\nr13: [c0] Economic earnings per share - As reported \u00b7 [c6] $ \u00b7 [c7] 13.30 \u00b7 [c10] $ \u00b7 [c11] 18.05 \u00b7 [c14] $ \u00b7 [c15] 20.02 \u00b7 [c18] $ \u00b7 [c19] 4.36\nr14: [c0] Economic earnings per share - Prior definition \u00b7 [c6] 13.36 \u00b7 [c10] 18.28 \u00b7 [c14] 20.14 \u00b7 [c18] 4.65\nr15: [c0] Change \u00b7 [c6] $ \u00b7 [c7] (0.06) \u00b7 [c10] $ \u00b7 [c11] (0.23) \u00b7 [c14] $ \u00b7 [c15] (0.12) \u00b7 [c18] $ \u00b7 [c19] (0.29)\nr16: [c0] % Change \u00b7 [c6] (0.4) \u00b7 [c8] % \u00b7 [c10] (1.3) \u00b7 [c12] % \u00b7 [c14] (0.6) \u00b7 [c16] % \u00b7 [c18] (6.2) \u00b7 [c20] %\n```"
+    },
+    {
+      "index": 12,
+      "ids": [
+        "u47",
+        "u48",
+        "u49",
+        "u50",
+        "t51"
+      ],
+      "expected_id": "u47",
+      "source_text": "<b>#52 \u00b7 u47 \u00b7 text</b> \u00b7 bytes 223820\u2013224631<br />Adjusted EBITDA (controlling interest) represents our performance before our share of interest expense, income and certain non-income based taxes, depreciation, amortization, impairments, gains and losses related to the BPEA Transaction, and non-cash items such as certain Affiliate equity activity, gains and losses on our contingent payment obligations, and unrealized gains and losses on seed capital, general partner commitments, and other strategic investments. Adjusted EBITDA (controlling interest) is also adjusted to include realized economic gains and losses related to these seed capital, general partner commitments, and other strategic investments. We believe that many investors use this non-GAAP measure when assessing the financial performance of companies in the investment management industry."
+    },
+    {
+      "index": 13,
+      "ids": [
+        "u52",
+        "u53",
+        "t54",
+        "u55",
+        "u56"
+      ],
+      "expected_id": "u52",
+      "source_text": "<b>#57 \u00b7 u52 \u00b7 text</b> \u00b7 bytes 234920\u2013235308<br />These non-GAAP performance measures are provided in addition to, but not as a substitute for, Net income (controlling interest), Earnings per share, or other GAAP performance measures. For additional information on our non-GAAP measures, see our most recent Annual and Quarterly Reports on Form 10-K and 10-Q, respectively, which are accessible on the SEC\u2019s website at [www.sec.gov](http://www.sec.gov)."
+    },
+    {
+      "index": 14,
+      "ids": [
+        "u57",
+        "u58",
+        "u59",
+        "u60",
+        "u61"
+      ],
+      "expected_id": "u57",
+      "source_text": "<b>#62 \u00b7 u57 \u00b7 text</b> \u00b7 bytes 244081\u2013245301<br />Certain matters discussed in this press release may constitute forward-looking statements within the meaning of the federal securities laws. These statements include, but are not limited to, statements related to our expectations regarding the performance of our business, our financial results, our liquidity and capital resources, and other non-historical statements. You can identify these forward-looking statements by the use of words such as \u201coutlook,\u201d \u201cguidance,\u201d \u201cbelieves,\u201d \u201cexpects,\u201d \u201cpotential,\u201d \"preliminary,\" \u201ccontinues,\u201d \u201cmay,\u201d \u201cwill,\u201d \u201cshould,\u201d \u201cseeks,\u201d \u201capproximately,\u201d \u201cpredicts,\u201d \u201cprojects,\u201d \u201cpositioned,\u201d \u201cprospects,\u201d \u201cintends,\u201d \u201cplans,\u201d \u201cestimates,\u201d \u201cpending investments,\u201d \u201canticipates,\u201d or the negative version of these words or other comparable words. Actual results and the timing of certain events could differ materially from those projected in or contemplated by the forward-looking statements due to a number of factors, including changes in the"
+    },
+    {
+      "index": 15,
+      "ids": [
+        "u62",
+        "u63",
+        "f0",
+        "f1"
+      ],
+      "expected_id": "u62",
+      "source_text": "<b>#67 \u00b7 u62 \u00b7 text</b> \u00b7 bytes 248005\u2013248314<br />From time to time, AMG may use its website as a distribution channel of material Company information. AMG routinely posts financial and other important information regarding the Company in the Investor Relations section of its website at [www.amg.com](http://www.amg.com) and encourages investors to consult that section regularly."
+    },
+    {
+      "index": 16,
+      "ids": [
+        "f2",
+        "f3",
+        "f4",
+        "f5",
+        "f6"
+      ],
+      "expected_id": "f2",
+      "source_text": "| 3 | f2 | xbrli:endDate | xbrli:context \u203a xbrli:period | 2023-05-01 | bytes 720\u2013739 |"
+    },
+    {
+      "index": 17,
+      "ids": [
+        "f7",
+        "f8",
+        "f9",
+        "f10",
+        "f11"
+      ],
+      "expected_id": "f7",
+      "source_text": "| 8 | f7 | xbrli:identifier | xbrli:context \u203a xbrli:entity | 0001004434 | bytes 1389\u20131443 |"
+    },
+    {
+      "index": 18,
+      "ids": [
+        "f12",
+        "f13",
+        "f14",
+        "f15"
+      ],
+      "expected_id": "f12",
+      "source_text": "| 13 | f12 | xbrldi:explicitMember | xbrli:context \u203a xbrli:entity \u203a xbrli:segment | amg:FourPointSeventyFiveJuniorSubordinatedNotesDue2060Member | bytes 2040\u20132169 |"
+    },
+    {
+      "index": 19,
+      "ids": [
+        "f16",
+        "f17",
+        "f18",
+        "f19",
+        "f20"
+      ],
+      "expected_id": "f16",
+      "source_text": "| 17 | f16 | xbrldi:explicitMember | xbrli:context \u203a xbrli:entity \u203a xbrli:segment | amg:FourPointTwoJuniorSubordinatedNotesDue2061Member | bytes 2580\u20132701 |"
+    },
+    {
+      "index": 20,
+      "ids": [
+        "f21",
+        "f22",
+        "f23",
+        "f24",
+        "f25"
+      ],
+      "expected_id": "f21",
+      "source_text": "| 22 | f21 | dei:DocumentType |  | 8-K | bytes 3876\u20134255 |"
+    },
+    {
+      "index": 21,
+      "ids": [
+        "f26",
+        "f27",
+        "f28",
+        "f29",
+        "f30"
+      ],
+      "expected_id": "f26",
+      "source_text": "| 27 | f26 | dei:EntityTaxIdentificationNumber |  | 04-3218510 | bytes 6084\u20136553 |"
+    },
+    {
+      "index": 22,
+      "ids": [
+        "f31",
+        "f32",
+        "f33",
+        "f34"
+      ],
+      "expected_id": "f31",
+      "source_text": "| 32 | f31 | dei:CityAreaCode |  | 800 | bytes 8347\u20138726 |"
+    },
+    {
+      "index": 23,
+      "ids": [
+        "f35",
+        "f36",
+        "f37",
+        "f38",
+        "f39"
+      ],
+      "expected_id": "f35",
+      "source_text": "| 36 | f35 | dei:PreCommencementTenderOffer |  | false | bytes 10138\u201310599 |"
+    },
+    {
+      "index": 24,
+      "ids": [
+        "f40",
+        "f41",
+        "f42",
+        "f43",
+        "f44"
+      ],
+      "expected_id": "f40",
+      "source_text": "| 41 | f40 | dei:Security12bTitle |  | 5.875% Junior Subordinated Notes due 2059 | bytes 12609\u201313096 |"
+    },
+    {
+      "index": 25,
+      "ids": [
+        "f45",
+        "f46",
+        "f47",
+        "f48",
+        "f49"
+      ],
+      "expected_id": "f45",
+      "source_text": "| 46 | f45 | dei:SecurityExchangeName |  | NYSE | bytes 15068\u201315522 |"
+    }
+  ],
+  "quality_scope": "Short source access/copy check only; no Driver recall certification"
+}

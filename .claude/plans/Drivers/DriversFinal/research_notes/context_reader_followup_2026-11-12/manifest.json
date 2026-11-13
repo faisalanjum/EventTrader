@@ -1,0 +1,26 @@
+{
+  "frozen_at_local": "2026-11-12T19:09:51.189706-05:00",
+  "external_source": "/tmp/claude-1000/-home-faisal-EventMarketDB/459b76be-13f7-4e19-bccc-fb059b71f0a3/scratchpad",
+  "preserved_files": 495,
+  "reported_cli_invocations": 86,
+  "additional_cli_invocations_saved": 8,
+  "additional_labels": [
+    "X2_copy1_sonnet",
+    "X2_copy2_sonnet",
+    "X2_copy3_sonnet",
+    "X2_seed_fable",
+    "X_copy1_sonnet",
+    "X_copy2_sonnet",
+    "X_copy3_sonnet",
+    "X_seed_fable"
+  ],
+  "note": "Eight cross-model X/X2 calls appeared in the live temporary folder during review. They are preserved separately and not used to rewrite the original reported comparisons.",
+  "external_scripts_unmodified_by_review": true,
+  "new_model_calls_by_review": 0,
+  "scope": "86 reported saved CLI invocations plus usage-only evidence from four existing project helper transcripts; additional later invocations preserved separately",
+  "reported_models": {
+    "claude-sonnet-5-5": 84,
+    "claude-opus-5-5": 2
+  },
+  "additional_calls_review": "X and X2 reviewed following the owner follow-up: X shares the earlier Sonnet seed prompt and has hits; fresh-prefix X2 has zero hits in all three Sonnet copies from a Fable base."
+}

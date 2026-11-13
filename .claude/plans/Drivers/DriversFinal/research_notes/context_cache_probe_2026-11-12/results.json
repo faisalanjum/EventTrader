@@ -1,0 +1,231 @@
+{
+  "source_chars": 34460,
+  "units": 118,
+  "seed_usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 16796,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 48,
+    "output_tokens_details": {
+      "thinking_tokens": 0
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 16796,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "seed_elapsed_seconds": 3.458,
+  "groups": {
+    "cached": {
+      "totals": {
+        "input_tokens": 100,
+        "cache_creation_input_tokens": 12433,
+        "cache_read_input_tokens": 412175,
+        "output_tokens": 899
+      },
+      "total_input": 424708,
+      "cache_read_fraction": 0.970490313344698,
+      "median_wall_seconds": 3.315,
+      "min_wall_seconds": 3.036,
+      "max_wall_seconds": 3.662,
+      "mean_wall_seconds": 3.31812,
+      "unit_id_pass": 25,
+      "exact_quote_pass": 25,
+      "word_limit_pass": 24,
+      "check_failures": [
+        {
+          "label": "cached_12",
+          "unit_id_correct": true,
+          "quote_exact": true,
+          "word_limit_ok": false,
+          "quote": "Adjusted EBITDA (controlling interest) represents our performance before our share of interest expense"
+        }
+      ],
+      "read_tokens_per_request": [
+        16487
+      ],
+      "creation_ttls": [
+        {
+          "ephemeral_1h_input_tokens": 496,
+          "ephemeral_5m_input_tokens": 0
+        }
+      ],
+      "batches": [
+        {
+          "mode": "cached",
+          "start": 1,
+          "end": 1,
+          "batch_elapsed_seconds": 3.123,
+          "completed": 1
+        },
+        {
+          "mode": "cached",
+          "start": 2,
+          "end": 25,
+          "batch_elapsed_seconds": 20.308,
+          "completed": 24
+        }
+      ]
+    },
+    "uncached": {
+      "totals": {
+        "input_tokens": 424708,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 896
+      },
+      "total_input": 424708,
+      "cache_read_fraction": 0.0,
+      "median_wall_seconds": 3.336,
+      "min_wall_seconds": 2.934,
+      "max_wall_seconds": 3.899,
+      "mean_wall_seconds": 3.33284,
+      "unit_id_pass": 25,
+      "exact_quote_pass": 25,
+      "word_limit_pass": 24,
+      "check_failures": [
+        {
+          "label": "uncached_12",
+          "unit_id_correct": true,
+          "quote_exact": true,
+          "word_limit_ok": false,
+          "quote": "Adjusted EBITDA (controlling interest) represents our performance before our share of interest expense"
+        }
+      ],
+      "read_tokens_per_request": [
+        0
+      ],
+      "creation_ttls": [
+        {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        }
+      ],
+      "batches": [
+        {
+          "mode": "uncached",
+          "start": 1,
+          "end": 25,
+          "batch_elapsed_seconds": 22.943,
+          "completed": 25
+        }
+      ]
+    }
+  },
+  "usage_snapshots": {
+    "usage_before": {
+      "fetched_at_utc": "2026-11-12T23:10:00.881370+00:00",
+      "fetched_at_local": "2026-11-12 06:10 PM EST",
+      "cached": false,
+      "source": "https://api.anthropic.com/api/oauth/usage",
+      "five_hour": {
+        "name": "5-hour",
+        "percent": 25.0,
+        "resets_at_utc": "2026-11-13T01:59:59.800583+00:00",
+        "resets_at_local": "2026-11-12 08:59 PM EST"
+      },
+      "seven_day": {
+        "name": "7-day (all)",
+        "percent": 30.0,
+        "resets_at_utc": "2026-11-17T23:59:59.800604+00:00",
+        "resets_at_local": "2026-11-17 06:59 PM EST"
+      },
+      "seven_day_sonnet": {
+        "name": "7-day (Sonnet)",
+        "percent": null,
+        "resets_at_utc": null,
+        "resets_at_local": null
+      },
+      "seven_day_opus": {
+        "name": "7-day (Opus)",
+        "percent": null,
+        "resets_at_utc": null,
+        "resets_at_local": null
+      },
+      "extra_usage_enabled": false,
+      "extra_usage_used_credits": null,
+      "extra_usage_monthly_limit": null
+    },
+    "usage_after_cached": {
+      "fetched_at_utc": "2026-11-12T23:14:30.603144+00:00",
+      "fetched_at_local": "2026-11-12 06:14 PM EST",
+      "cached": false,
+      "source": "https://api.anthropic.com/api/oauth/usage",
+      "five_hour": {
+        "name": "5-hour",
+        "percent": 29.0,
+        "resets_at_utc": "2026-11-13T01:59:59.548240+00:00",
+        "resets_at_local": "2026-11-12 08:59 PM EST"
+      },
+      "seven_day": {
+        "name": "7-day (all)",
+        "percent": 30.0,
+        "resets_at_utc": "2026-11-17T23:59:59.548259+00:00",
+        "resets_at_local": "2026-11-17 06:59 PM EST"
+      },
+      "seven_day_sonnet": {
+        "name": "7-day (Sonnet)",
+        "percent": null,
+        "resets_at_utc": null,
+        "resets_at_local": null
+      },
+      "seven_day_opus": {
+        "name": "7-day (Opus)",
+        "percent": null,
+        "resets_at_utc": null,
+        "resets_at_local": null
+      },
+      "extra_usage_enabled": false,
+      "extra_usage_used_credits": null,
+      "extra_usage_monthly_limit": null
+    },
+    "usage_after_uncached": {
+      "fetched_at_utc": "2026-11-12T23:15:19.127759+00:00",
+      "fetched_at_local": "2026-11-12 06:15 PM EST",
+      "cached": false,
+      "source": "https://api.anthropic.com/api/oauth/usage",
+      "five_hour": {
+        "name": "5-hour",
+        "percent": 39.0,
+        "resets_at_utc": "2026-11-13T02:00:00.079194+00:00",
+        "resets_at_local": "2026-11-12 09:00 PM EST"
+      },
+      "seven_day": {
+        "name": "7-day (all)",
+        "percent": 31.0,
+        "resets_at_utc": "2026-11-18T00:00:00.079220+00:00",
+        "resets_at_local": "2026-11-17 07:00 PM EST"
+      },
+      "seven_day_sonnet": {
+        "name": "7-day (Sonnet)",
+        "percent": null,
+        "resets_at_utc": null,
+        "resets_at_local": null
+      },
+      "seven_day_opus": {
+        "name": "7-day (Opus)",
+        "percent": null,
+        "resets_at_utc": null,
+        "resets_at_local": null
+      },
+      "extra_usage_enabled": false,
+      "extra_usage_used_credits": null,
+      "extra_usage_monthly_limit": null
+    }
+  },
+  "overage_used_in_any_response": false,
+  "response_counts": 51,
+  "all_api_key_sources_none": true,
+  "unique_child_sessions": 50,
+  "manifest_sha256": "1c660ac9df4130f4c575cd14634bcac31198351434320134b33bc3e5bef0b1b2",
+  "runner_sha256": "212e30099340214f9f8df60057e29b07b2b320285c3612f88ba517e0a03f3001"
+}

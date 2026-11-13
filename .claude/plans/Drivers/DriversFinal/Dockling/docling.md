@@ -116,7 +116,7 @@ Docling `VlmPipeline` + `ApiVlmOptions` → ollama `http://localhost:11434/v1/ch
 
 | Test | Result |
 |---|---|
-| Model | `qwen3.8:27b-mlx`, the model **already loaded**; `reasoning_effort: none`, `timeout: 900` |
+| Model | `qwen3.8:27b-mlx`, the model **already loaded** at the time (since 2026-11-12 the loaded default is `qwen3.8:27b-fast` at `localhost:11435`, so asking for `-mlx` swaps models; see `LeftOverSteps/QwenInference.md`); `reasoning_effort: none`, `timeout: 900` |
 | One slide image | 18 s; 4 correct headings |
 | Two AMD press-release pages | 38 s (~19 s/page); clean 9 × 4 table; key figures match the release (43% GM, $149M operating loss, $0.69 non-GAAP EPS) |
 

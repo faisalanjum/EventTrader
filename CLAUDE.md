@@ -32,6 +32,15 @@ Read and follow [IBKR Protection in AGENTS.md](AGENTS.md#ibkr-protection--owner-
 > the local AI + Haiku/Sonnet/Luna candidate pool, testing bar, escalation, and
 > owner approval. This is only a pointer; do not create a second policy here.
 
+> 📌 **Local model (free Qwen on the owner's Mac):** any bot here can call it through
+> `config/local_llm.py` (`from config import local_llm as L`, then `L.generate(prompt)` or
+> `L.structured(prompt, schema)`). Since 2026-11-12 the default is `qwen3.8:27b-fast` at
+> `localhost:11435` (reverse SSH tunnel to the Mac): about 2–6× faster, JSON format
+> enforced, same calls. Older model: `LOCAL_LLM_MODEL=qwen3.8:27b-mlx` (only one loads at
+> a time). New runtime, so re-check earlier Qwen results before relying on them. Is it up?
+> `venv/bin/python -c "from config import local_llm as L; print(L.health())"` (no AI call).
+> Runbook: `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md` (2026-11-12 note). Phase 6 above still governs experiment runs.
+
 **The `ANTHROPIC_API_KEY` is NOT in `.env` by design.** It was removed on 2026-04-16 after a root-cause analysis showed it was being silently injected into every `claude -p` subprocess spawned by `claude_agent_sdk`, causing ~$22/day of API charges that should have been covered by the user's Claude Code Max subscription.
 
 ### Where the key lives now

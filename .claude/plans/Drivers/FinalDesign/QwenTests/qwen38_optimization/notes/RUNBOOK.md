@@ -1,5 +1,9 @@
 # Qwen3.8-27B on the M4 Pro MacBook — verified fastest 100%-accurate setup (v2, 2026-08-16)
 
+> **Out of date (note added 2026-11-12).** Kept as history only. The local model now
+> defaults to `qwen3.8:27b-fast` at `localhost:11435`; current how-to:
+> `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md`.
+
 Result so far: choice_v2 93/93, row_v3 93/93, qf01 19/19 — all precision 1.0
 (development sets with opened answers: strong signal, NOT certification).
 Everything below is measured on THIS machine; numbers elsewhere will differ.

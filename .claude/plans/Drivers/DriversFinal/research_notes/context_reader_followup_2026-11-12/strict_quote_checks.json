@@ -1,0 +1,50 @@
+[
+  {
+    "file": "extract_F.facts.json",
+    "quotes": 3,
+    "exact": 3,
+    "failed": []
+  },
+  {
+    "file": "extract_N.facts.json",
+    "quotes": 8,
+    "exact": 8,
+    "failed": []
+  },
+  {
+    "file": "extract_N2.facts.json",
+    "quotes": 3,
+    "exact": 3,
+    "failed": []
+  },
+  {
+    "file": "extract_O.facts.json",
+    "quotes": 8,
+    "exact": 8,
+    "failed": []
+  },
+  {
+    "file": "extract_W.facts.json",
+    "quotes": 9,
+    "exact": 9,
+    "failed": []
+  },
+  {
+    "file": "extract_W2.facts.json",
+    "quotes": 3,
+    "exact": 3,
+    "failed": []
+  },
+  {
+    "file": "extract_W2h.facts.json",
+    "quotes": 3,
+    "exact": 3,
+    "failed": []
+  },
+  {
+    "file": "extract_W2o.facts.json",
+    "quotes": 6,
+    "exact": 6,
+    "failed": []
+  }
+]

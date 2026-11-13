@@ -688,6 +688,10 @@ The interval is sampling error only; the unit definition adds −4% to +21% call
 
 ### 6.10 Local Qwen3.8 on the same tests (2026-09-30; local, no dollar cost)
 
+> 2026-11-12: these ran on `qwen3.8:27b-mlx`. The default local model is now `qwen3.8:27b-fast`
+> (a new runtime), so re-check before relying on these numbers. How to call it:
+> `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md`.
+
 - **Setup:** `qwen3.8:27b-mlx` (Ollama 0.34.2, 14" M4 Pro, 48 GB) through `config/local_llm.py`. Context 32,768, temperature 0, reasoning off, one call at a time, instructions first and the item last, no schema. Runner and raw results: `FinalDesign/QwenTests/qwen38_optimization/exams/jev_replication/`.
 - **Observed limits:** the MLX build now answers HTTP 501 to a `format` schema (the guide says it was ignored), so answers are parsed in code. The live server held the GGUF build, not the MLX build the guide names. `config/preflight.py`'s oversized-prompt check is GGUF-only; on MLX it ran 8+ minutes and was stopped. Documented limits: about 29.5k tokens per call (memory), input budget about 30.7k on MLX and 16.4k on GGUF, about 95 tokens/s in and 22–31 out. A concept menu is about 4 characters per token (263 concepts = 6,913 tokens).
 - **Log-probabilities:** Ollama 0.34.2 returns them on the MLX build, so a confidence flag is possible (first token of the answer).

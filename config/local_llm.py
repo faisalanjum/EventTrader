@@ -15,6 +15,11 @@ the plumbing bulletproof, independent of any task:
   * Addressed by mDNS name (survives Deloitte DHCP IP changes); IP is fallback.
 
 Model choice (one at a time; VRAM holds one):
+  * qwen3.8:27b-q8 (DEFAULT since 2026-11-12) — llama.cpp + Unsloth UD-Q8_K_XL + MTP behind the Mac's
+                                      Ollama-compatible adapter (port 11435; ~/Developer/local-llm). Grammar-enforces
+                                      format; refuses oversize prompts instead of truncating. Lighter option:
+                                      LOCAL_LLM_MODEL=qwen3.8:27b-q4 (UD-Q4_K_XL; lower recall on long extraction).
+                                      The Ollama models below are being retired (2026-11-12).
   * qwen3.8:27b-mlx  (MLX, default) — 27.8B dense, nvfp4, ~27 t/s. Format is NOT
                                       grammar-enforced (MLX), but measured 19/19
                                       schema-valid on the QF-01 aligned set
@@ -33,7 +38,7 @@ import http.client
 import socket
 import urllib.request
 
-MODEL = os.getenv("LOCAL_LLM_MODEL", "qwen3.8:27b-mlx")   # MLX default (see notes above)
+MODEL = os.getenv("LOCAL_LLM_MODEL", "qwen3.8:27b-q8")    # default (see notes above)
 NUM_CTX = int(os.getenv("LOCAL_LLM_NUM_CTX", "32768"))    # fixed -> no reload thrash
 THINK_DEFAULT = os.getenv("LOCAL_LLM_THINK", "0").lower() in ("1", "true", "yes")
 TIMEOUT_DEFAULT = int(os.getenv("LOCAL_LLM_TIMEOUT", "1800"))  # s; cold prefill of a
@@ -42,6 +47,7 @@ TIMEOUT_DEFAULT = int(os.getenv("LOCAL_LLM_TIMEOUT", "1800"))  # s; cold prefill
 
 HOSTS = [h for h in (
     os.getenv("LOCAL_LLM_HOST"),
+    "http://localhost:11435",           # Mac adapter via the reverse SSH tunnel
     "http://CA-K429CXLGF9.local:11434",
     "http://192.168.40.147:11434",
 ) if h]
@@ -61,13 +67,18 @@ def _is_mlx(model: str) -> bool:
     return "mlx" in model.lower()
 
 
+def _reads_full_prompt(model: str) -> bool:
+    """MLX and the adapter models never drop the front of a long prompt."""
+    return _is_mlx(model) or model in ("qwen3.8:27b-q8", "qwen3.8:27b-q4")
+
+
 def _input_budget(num_ctx: int, model: str) -> int:
     """Max prompt tokens before the backend truncates.
 
     GGUF/llama.cpp reserves ~half of num_ctx for generation (verified: a 7k-token
     prompt at num_ctx=8192 was cut to ~4098). MLX reads the full input.
     """
-    if _is_mlx(model):
+    if _reads_full_prompt(model):
         # MLX reads the full prompt (no half-ctx reserve), but it is still
         # bounded by num_ctx. The old hard-coded 200_000 disabled the guard
         # entirely and allowed silent overflow once num_ctx was right-sized.
@@ -231,7 +242,7 @@ def generate(
     budget = _input_budget(num_ctx, MODEL)
 
     # --- silent INPUT truncation: GGUF caps the prompt near num_ctx//2 ---
-    trunc_in = (not _is_mlx(MODEL)) and pec >= budget - 8
+    trunc_in = (not _reads_full_prompt(MODEL)) and pec >= budget - 8
     if trunc_in and not allow_truncation:
         raise TruncatedInputError(
             f"prompt truncated: {pec} tokens processed at the ~{budget}-token "

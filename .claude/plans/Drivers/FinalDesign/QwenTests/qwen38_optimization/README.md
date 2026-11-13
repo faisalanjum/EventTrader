@@ -1,5 +1,9 @@
 # qwen38_optimization — Qwen3.8-27B local inference: 100% accuracy + speed work
 
+> **Out of date (note added 2026-11-12).** Kept as history only. The local model now
+> defaults to `qwen3.8:27b-fast` at `localhost:11435`; current how-to:
+> `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md`.
+
 **Implementing agents: read `QWEN_INFERENCE_GUIDE.md` first — it is the complete usage contract.**
 
 Self-contained record of the Qwen3.8 (qwen3.8:27b-mlx, Ollama MLX engine on the

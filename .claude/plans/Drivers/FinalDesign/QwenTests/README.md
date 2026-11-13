@@ -1,5 +1,9 @@
 # Qwen tests — narrow task qualification plan
 
+> **Out of date (note added 2026-11-12).** Kept as history only. The local model now
+> defaults to `qwen3.8:27b-fast` at `localhost:11435`; current how-to:
+> `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md`.
+
 > **Status: ACTIVE DIAGNOSTICS — 2026-07-24. QF-01 row-v3 passed its opened
 > development set: 93/93 exact cells. This is not unseen certification. No
 > graph write, production activation, or model-role change is authorized by

@@ -515,7 +515,7 @@ reader is WP4; it must not silently enlarge WP2.
   calls, accepted facts, and local compute where applicable. Do not invent token,
   dollar, or local-compute costs.
 - Haiku/Sonnet calls use the Claude Code subscription only; no API key / API billing.
-  Local AI uses the owner-installed local runtime. Luna transport/billing remains
+  Local AI uses the owner-installed local runtime (how to call it: `QwenInference.md`). Luna transport/billing remains
   owner-supplied and undecided. BEFORE Phase 6 runs, reverify every selected
   transport: SDK / `claude -p` is documented as a SEPARATE programmatic pool, not
   ordinary subscription usage

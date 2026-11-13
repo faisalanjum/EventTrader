@@ -30,6 +30,17 @@ Use the TypeSafe skill for relevant AI work in this project. Read
 `.agents/skills/typesafe-ai/SKILL.md` and follow its guidance, including checking
 the current TypeSafe docs before designing or changing an integration.
 
+## Local Model (Qwen on the owner's Mac)
+
+- Any agent on this machine can call the free local model through `config/local_llm.py`:
+  `from config import local_llm as L`, then `L.generate(prompt)` or `L.structured(prompt, schema)`.
+- Since 2026-11-12 the default is `qwen3.8:27b-fast` at `localhost:11435` (reverse SSH tunnel
+  to the Mac): about 2–6× faster, JSON format enforced, same calls. Older model:
+  `LOCAL_LLM_MODEL=qwen3.8:27b-mlx`; only one model loads at a time.
+- It is a new runtime: re-check earlier Qwen results before relying on them.
+- Check it is up (no AI call): `venv/bin/python -c "from config import local_llm as L; print(L.health())"`.
+- Runbook: `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md` (2026-11-12 note). FinalPlan Phase 6 still governs experiment runs.
+
 ## Scope Discipline - Highest Priority
 
 These standing requirements apply to every step and future session: minimal, generic,

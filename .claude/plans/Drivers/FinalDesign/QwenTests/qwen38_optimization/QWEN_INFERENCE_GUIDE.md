@@ -1,5 +1,9 @@
 # Qwen local inference — how to use it (for implementing agents)
 
+> **Out of date (note added 2026-11-12).** Kept as history only. The local model now
+> defaults to `qwen3.8:27b-fast` at `localhost:11435`; current how-to:
+> `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md`.
+
 Status 2026-08-17: UP AND RUNNING. Nothing to install. Read this whole page (5 min).
 
 ## 1. What it is

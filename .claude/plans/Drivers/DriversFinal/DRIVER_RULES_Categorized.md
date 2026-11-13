@@ -1,5 +1,8 @@
-# Driver rules, categorized
+### Do not implement the ones below yet, since it needs to be rethought
 
+  1. Spreading a withdrawal to the earlier forecasts it covers (4.18–4.21).
+
+# Driver rules, categorized
 Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories. Nothing is reworded: every original line appears here exactly once, and rule numbers are unchanged (3.2 here is 3.2 there). The only new lines are headings, this introduction, the study order and index, table headers where a table was split (the Word list and the Parking list), fold markers around switched-off features, and a few short notes and pointers. The original's summaries, navigation and layout are kept in the Overview at the end.
 
 **Edited 2026-10-01 (owner-approved):** 8.10 (smaller reads), 1.17 (original files as evidence), 3.3 table (new `source_location` field: 25 fields) and the §6 XBRL warning (withdrawn 8-K figure). Reasons: [PrepareStep.md](PrepareStep.md) D10, D9, P20, F18.

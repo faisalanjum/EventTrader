@@ -3,6 +3,22 @@
 **Owner-facing status line: 2026-08-20. Qwen runs no Driver role today. It is not
 authorized for the unfinished Step 1 run.**
 
+**Runtime update, 2026-11-12:** `config/local_llm.py` now defaults to `qwen3.8:27b-q8` (llama.cpp +
+Unsloth UD-Q8_K_XL + MTP; `format` is grammar-enforced; oversize prompts are refused, never truncated),
+reached at `localhost:11435` through the Mac's Ollama-compatible adapter (reverse-tunnelled). Lighter option:
+`LOCAL_LLM_MODEL=qwen3.8:27b-q4` (UD-Q4_K_XL); one model is loaded at a time. Re-run 12 Nov on q8: choice_v2 93/93,
+row_v3 93/93, qf01 19/19, identity 158/160 (wrong-SAME 0), reader either-recall 50.7% (q4: 39.5%; old
+q4_K_M 50.0%). The Ollama models (qwen3.8:27b-mlx, -mtp-q4_K_M) are being retired; earlier results do not
+transfer to the new runtime. Details: Mac `~/Developer/local-llm/AGENTS.md`. Previous clients: `~/local_llm.py.bak-2026-11-12`
+(original) and `~/local_llm.py.fast-2026-11-12`.
+
+**Context size, 2026-11-12 (owner's test):** `qwen3.8:27b-fast` works at a 65K context. It read a
+60,605-token prompt and correctly found a fact hidden at the very top; nothing was truncated.
+693 s, with 33K new tokens to read (the rest was reused from the earlier test). Memory 22.2 GB,
+about the same as at 28K. The best old model was proven to about 28K tokens; the new one is
+proven to about 60K, more than double. The client default is still `num_ctx=32768`, so a bigger
+input needs a larger `num_ctx` (argument or `LOCAL_LLM_NUM_CTX`).
+
 ---
 
 ## 1. Start here
@@ -101,7 +117,8 @@ repository, all code, all harnesses, all documentation and all results live ther
 
 - Ollama itself and its launchd plist `~/Library/LaunchAgents/com.faanjum.ollama.plist`;
 - which model is resident, keep-alive, and parallelism;
-- the autossh reverse tunnel that exposes `localhost:11434` on the Minisforum.
+- the autossh reverse tunnel that exposes `localhost:11434` on the Minisforum (since
+  2026-11-12 also `localhost:11435`, the adapter serving `qwen3.8:27b-fast`; see the top note).
 
 Mac scratch files are disposable. **No repository work happens on the Mac** — see §13.11,
 where the old Mac-side exam recipes are retired.
@@ -162,9 +179,11 @@ SDK or compatibility layer may be introduced.
     sha256  836e5722ec01c5e1ef53b8eeb2675beb4fcb58d9e10b22570afc3c00daf80b66
     lines   388
     (hash verified 2026-08-20; re-verify before every run and record it)
+    (stale: the file changed on 2026-11-12, so hash and line count must be re-measured)
 
 The module contains no API key, no provider SDK and no external endpoint. `resolve_host()`
-tries `LOCAL_LLM_HOST`, then `http://CA-K429CXLGF9.local:11434`, then
+tries `LOCAL_LLM_HOST`, then `http://localhost:11435` (added 2026-11-12), then
+`http://CA-K429CXLGF9.local:11434`, then
 `http://192.168.40.147:11434`, and raises `ConnectionError` if none answer. That is host
 resolution on the LAN, not provider substitution; there is no fallback arm.
 
@@ -174,7 +193,7 @@ them at run time:
 
 | Identity | Where it comes from | Last recorded value |
 |---|---|---|
-| model | `LOCAL_LLM_MODEL` | `qwen3.8:27b-mlx` |
+| model | `LOCAL_LLM_MODEL` | `qwen3.8:27b-mlx` (default since 2026-11-12: `qwen3.8:27b-fast`) |
 | host | `LOCAL_LLM_HOST` / mDNS / IP | resolved at call time |
 | thinking default | `LOCAL_LLM_THINK` | `0` (off) |
 | num_ctx default | `LOCAL_LLM_NUM_CTX` | `32768` |
@@ -682,7 +701,7 @@ stated or implied elsewhere.
 | Artifact | Purpose | Path | Identity |
 |---|---|---|---|
 | This ledger | the only current Qwen document | `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md` | pre-migration file was untracked; tracked when landed |
-| Client | the only local entry point | `config/local_llm.py` | sha256 `836e5722…`, 388 lines |
+| Client | the only local entry point | `config/local_llm.py` | sha256 `836e5722…`, 388 lines (stale: changed 2026-11-12) |
 | Server plist | Ollama launchd config (Mac) | `~/Library/LaunchAgents/com.faanjum.ollama.plist` | last recorded — verify before running; copy in `qwen38_optimization/server/` |
 | Shadow tree | where development happens | `/tmp/qwen38_bench/EventMarketDB` | rebuilt as needed |
 

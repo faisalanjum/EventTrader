@@ -39,6 +39,12 @@
 #
 # =============================================================================
 # CONSTRAINTS THE CALLING BOT MUST RESPECT
+# NOTE 2026-11-12: config/local_llm.py now defaults to qwen3.8:27b-fast at
+#   localhost:11435 (JSON enforced, reads the full input, about 2-6x faster).
+#   Older model: LOCAL_LLM_MODEL=qwen3.8:27b-mlx. Items 1, 3, 4 and 9 below
+#   describe the old qwen3.6 setup. Current runbook:
+#   .claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md
+#
 # =============================================================================
 # 1. INPUT SIZE BUDGET = ~16,000 tokens per case (num_ctx 32768 / 2).
 #    The GGUF backend gives the prompt only HALF of num_ctx and silently drops

@@ -1,5 +1,9 @@
 # Local Qwen connection handoff
 
+> **Out of date (note added 2026-11-12).** Kept as history only. The local model now
+> defaults to `qwen3.8:27b-fast` at `localhost:11435`; current how-to:
+> `.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md`.
+
 > **Status:** Reference supplied by the owner on 2026-07-24. This records how
 > Qwen-specific test runners should call the shared local client. It does not
 > authorize a model run. Re-run the preflight and freeze the live model,
