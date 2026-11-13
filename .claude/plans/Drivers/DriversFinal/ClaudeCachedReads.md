@@ -90,6 +90,8 @@ These are **planned output checks**, not a completed checker or finalized schema
 | Repeated deliveries | Do not count the same job result twice after a retry; flag identical records for review. Several facts may cite one unit. Semantic duplicates need judgment. |
 | Output/failures | Validate agreed fields/types; detect failed requests, output-limit stops and missing responses. Preserve completed work and explicit unresolved reasons; reduce unfinished assignments or use a suitable larger route. Never treat an incomplete answer as empty. |
 
+**Safety-stop check:** inspect any reported safety-stop counter and unit coverage; a stop or missing required responses means incomplete even if status is `success`. Preserve available partial output; probe recovery later.
+
 Unresolved cases need explanations; every empty unit does not. Source checks retain file identity, order and content. Model/reviewer checks must still establish:
 
 - **Meaning:** subject, period, scale, conditions and the applicability of notes/definitions, including references on shared titles, headers and sections. Context may be distant or lack an explicit marker; one exhibit's scope does not automatically govern another.
@@ -108,6 +110,8 @@ Report unresolved coverage separately and perform independent checks required by
 ## Reference only: evidence and history
 
 Everything below supports review and traceability. It adds no build requirements; unapproved approaches remain unapproved.
+
+**Owner-reported stop, not independently audited:** 212/679 pieces returned despite `success`; the same stop was 1/154 calls initially and 1/182 after later runs. Whether long answers increase risk remains unproven.
 
 ### Independent AMG check
 
@@ -280,6 +284,26 @@ The archive contains the original `probe.py` and `extract.py`. See the [manifest
 In this test, 12 readers were four times faster, found slightly fewer numbers and cost about twice as much **for the reading stage alone**. Including the same reported loading cost, the total was about 24% higher. These are price-list equivalents, not measured subscription quota charges. A standalone one-call route need not incur a separate loading call, so this comparison does not establish its total cost.
 
 Limits: one run per setting; roughly 11 additional omissions in the multi-reader runs were reported in flattened table lines mixed with explanatory text. The database text did not preserve the actual extraction's table rows/columns, so this does not isolate the cause of the misses or predict results with the intended input. The denominator excluded 16 non-quantity numbers such as the `7` in `Item 7` and is approximate. Meaning, period, scale, Driver names/types and qualitative facts were not scored. This supports testing more readers for speed, not assuming better completeness; it does not prove that one reader is universally more accurate.
+
+### Reported Installed Building Products 10-K follow-up
+
+**Owner-supplied results; raw records and grading were not independently audited here.** Every Sonnet 5.5 reader saw the full report. The task covered 1,366 table numbers in the discussion and financial statements, not complete Driver updates. Counts below include the reported code repairs to column references; preserve raw and corrected scores separately when auditing.
+
+| Readers / effort | Reported time | Table numbers returned | Reported issue |
+| --- | ---: | ---: | --- |
+| 1 / medium | 5 minutes | 267/1,366 | Safety stop |
+| 1 / medium, repeat | 6.4 minutes | 1,366/1,366 | None in this check |
+| 4 / medium | 2 minutes | 1,366/1,366 | None in this check |
+| 4 / medium, repeat | 1.2 minutes | 1,311/1,366 | One empty table |
+| 12 / medium | 30 seconds | 1,087/1,366 | Six empty tables |
+| 12 / medium, repeat | 32 seconds | 1,240/1,366 | Four empty/skipped tables |
+| 12 / high | 63 seconds | 1,366/1,366 | None in this check |
+
+Reported follow-up: one focused retry per short table brought all four incomplete runs to 1,366/1,366; each retry took 21–37 seconds. Code repaired 33–245 wrong column references per run. Against company data tags, 1,209 checked numbers had no wrong values/scales but up to seven doubtful periods. Prose-number recall used a rough key: 88–92% with recorded thinking, 48–68% without. Empty-table calls were 4/30 without recorded thinking and 0/16 with it; all 12 high-effort calls recorded thinking. This association does not prove causation or guarantee that high effort will prevent omissions; absence of a visible thinking record does not establish absence of internal reasoning.
+
+One chart in the base was reportedly visible and reused in three copies: about 276 read versus about 277 shown. This is limited evidence for approximate chart reading and image reuse, not exact visual extraction. Reported list-price equivalents were $0.79 to load, then $0.59–$0.88 per medium run or $1.30 at high; these are not subscription charges. Evidence is one report/model, two runs per medium setting and one high run. Retain raw records before temporary storage disappears; no location was supplied or new archive made in this review.
+
+**Proposals, not adopted implementation:** bound assigned work by expected answer size/completion time while retaining full-source visibility; no numeric limit is established. For a task requiring every table number, compare expected source-cell IDs with returned coverage, not just totals, and retry only missing work. Driver eligibility must be settled before every numeric cell can be treated as a required output. Repair a column reference only when the original row/value and other evidence identify exactly one cell; ambiguous cases need review. Matched totals and repaired references alone do not prove correct meaning or complete fact recall.
 
 ### If the whole source cannot be shown usefully
 
