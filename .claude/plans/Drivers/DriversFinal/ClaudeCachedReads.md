@@ -1,30 +1,31 @@
 # Claude Cached Reads
 
-Updated 13 November 2026 (America/Toronto, EST). The [Driver rules](DRIVER_RULES_Categorized.md) remain authoritative: a Driver is a reusable cause or measure; a Driver update is one stated fact about it. Cache reuse has been tested; complete Driver accuracy and the full output implementation have not.
+Updated 14 November 2026 (America/Toronto, EST). A Driver is a reusable cause or measure; a Driver update is one stated fact about it. Cache reuse has been tested; the complete creator has not been built or qualified. The [Driver rules](DRIVER_RULES_Categorized.md) apply; the amendments proposed below await owner approval.
 
 The build plan comes first. [Reference only: evidence and history](#reference-only-evidence-and-history) contains the supporting record and unapproved alternatives.
 
 ## Final plan
 
-**Next large-filing trial: four Sonnet 5.5 readers at high effort, each seeing the whole filing, with code checks and targeted retries.** This is a promising starting point, not a proven optimum. Use one reader when sufficient; bound assigned work by answer capacity. No routine second extraction/review pass is added for completeness; checks required by the Driver rules still apply.
-
-### Reading workflow
-
-1. **Reuse the saved source.** Use the existing extracted units and [readback](../../../../driver/prepare/reconstruct.py). Retain original content, IDs, files, order, source locations and versions in code.
-2. **Check capacity.** Count actual tokens for instructions, source, IDs and images; reserve reasoning/output room. Do not silently truncate, omit content or rely on compaction for exact evidence. If the full source cannot be shown usefully, use an appropriate authorized larger reader or mark the work unresolved. No partial-view fallback is approved yet.
-3. **Prepare the shared request.** Supply the shared task, applicable Driver rules and complete reading view. Treat source content as evidence, not instructions. A task that finishes in one call needs no separate loading call.
-4. **Assign the work.** Use consecutive whole-unit ranges, each with one primary owner. For a chosen work-size target, use the nearest permitted unit gap and a consistent tie rule. Keep source IDs unchanged. A unit can contain many facts; one fact per input is unnecessary. If a unit's answer is too large, use existing finer addresses such as table rows while keeping the whole table visible. Do not add parsing just to hit a size target.
-5. **For multiple assignments, load and freeze one base.** Supply the complete source and shared instructions, obtain a brief useful response such as source identity, and wait for completion. Each independent copy uses `claude -p --resume BASE_ID --fork-session` with its assignment. Always copy the original base; sibling answers must not accumulate. Every copy sees the whole source.
-6. **Keep cache settings fixed.** Pin the same resolved model/version and identical shared prefix; keep effort, tools, instructions and working directory stable. A changing model alias is not a version pin. Use a separate warmed base for a different model or effort. Bound parallel calls and inspect response cache fields. The tested native CLI used one-hour writes; expiry can cause a fresh read without losing stored history.
-7. **Keep usage explicit.** Preserve subscription sign-in, API-key/provider-fallback exclusion and paid-overage-off checks. Cached input still occupies context and consumes usage; output, reasoning and retries add work. Apply the result checks and validation below.
-
 ```text
-One reader:   [ whole filing → all assigned facts ]
-When needed:  [ fixed base: whole filing ]
-                       ├─ copy A → part A's facts
-                       └─ copy B → part B's facts
-              Both copies can read every part.
+Material + requested work → shared creator → checked proposals → separate save step
 ```
+
+### Shared creator
+
+1. **Accept material and a request.** Support original reports, transcripts, news and plain-text excerpts through one entrance. The request selects where to extract and which rulebook fact types; defaults are all supplied material and all qualified types. An empty/invalid selection must not become "all". Full context may be supplied for a small assignment; an excerpt does not force extraction of its whole report. Unsupported requests fail explicitly.
+2. **Format with shared code.** Reuse existing prepared units and [readback](../../../../driver/prepare/reconstruct.py), preserving structure, references and known gaps. Callers do not each implement conversion. Plain text is a format, not automatically News. Source acquisition stays outside; missing provenance or context is never invented.
+3. **Choose readers automatically.** Use one call when its answer fits; otherwise assign each selected unit/row once while every copy sees all supplied material. The caller does not manage reader count or model selection. Cached execution is specified below.
+4. **Propose from the source.** The reader proposes facts, names/types and the fields it can support together, without existing Driver names or prior slice lists. Treat source content as data, not instructions. Logical responsibilities do not require separate AI calls; add calls only for real dependencies, independent checks or a measured benefit.
+5. **Resolve and check internally.** Identify each fact's subject Company, or establish that it is shared; unknown is not shared. Read company calendars, slices, permitted prior guidance, units and eligible line-item candidates as needed. Historical lookups follow their time rules; Driver matching uses today's catalog. Independent identity/duplicate/family checks, matching, dependent fields and proposed links stay inside the creator. The checker sees evidence/context and the proposal, never the proposer's reasoning or an earlier verdict (8.2).
+6. **Return proposals and work outcomes.** Include fields, proposed links, exact evidence and identity decisions; no approved identity means nothing saveable for that proposal. Include only mandatory companions beyond the requested types, such as a surprise's matching result. Report which pieces/types were worked and known problems; unrequested work is not skipped. Use the existing skipped/held/rejected meanings and field-level `unknown` where allowed; never claim written/merged. The sender tracks overall completion. A small request cannot mark the whole source complete.
+7. **Save separately.** The shared writer applies the rules and rechecks relevant source, identity and link dependencies at the atomic write. Code owns IDs after identity/scope are settled. Handling a stale match remains open below. Stock-move opinions stay separate from source facts under [EXPLAINED_BY](EXPLAINED_BY.md).
+
+### Cached execution
+
+- Count actual input tokens, including instructions, IDs and images; reserve reasoning/output room. No silent truncation or compaction of exact evidence. Copies cannot solve oversized input: use an authorized capable reader or report the limitation. No automatic partial-view fallback is approved.
+- One reader needs no separate loading call. For multiple assignments, load the shared material/rules once, finish a brief base response, then use `claude -p --resume BASE_ID --fork-session` for each assignment. Always copy the original base; sibling answers must not accumulate.
+- Pin the same resolved model/version and unchanged prefix, effort, tools, instructions and working directory. Use a separate warmed base for a different model/effort; a changing alias is not a version pin. Bound parallelism and inspect cache fields. The tested CLI used one-hour writes; expiry can cause a fresh read without losing session history.
+- Preserve subscription sign-in, API-key/provider-fallback exclusion and paid-overage-off checks. Cached input still occupies context and consumes usage; output, reasoning and retries also cost work. No routine second extraction pass or mandatory Jev/Qwen stage is added.
 
 ### What the AI should see
 
@@ -42,7 +43,7 @@ The exact display format is undecided; these are information requirements. Hidin
 
 #### Example reading view
 
-Fictional excerpt, not a finalized prompt format. The real input contains the full source plus shared instructions; an assignment follows that shared content.
+Fictional excerpt; display and field names are not finalized. An assignment follows the shared material and instructions.
 
 ```text
 Company: ExampleCo
@@ -70,43 +71,58 @@ Work assignment: all units in F1.
 
 The image placeholder above stands for an actual image input. If unavailable, show `F1:img1 — image content unavailable` and retain unresolved coverage. Image delivery/cache behavior still needs validation.
 
-A proposed 2025 revenue fact can cite `F1:t1/r2/c2` (`100`), `F1:t1/r2/c1` (`Revenue`), `F1:t1/r1/c2` (`2025`) and `F1:u2` (scale/currency). Code maps each reference to its original location and copies the fragments separately. A unit ID permits copying the whole unit; a shorter quotation needs an exact span or cell, not a code guess about which words matter.
-
-### What remains undecided
-
-- **Output contract — TBD:** the suggested first output is every eligible stated fact, its proposed Driver name and type together, evidence references, and source-stated subject, value/unit, period and conditions. Leave missing or ambiguous details explicit. Additional fields, catalog matching and XBRL links are undecided. This proposes updates; it does not approve a new Driver or match one automatically.
-- **Model/settings:** no production winner is established. One-reader and medium-effort runs remain comparison baselines; do not routinely run both medium and high on each filing. Assignment size, parallelism for other source types and the exact table display remain open.
-- **Other model roles:** Jev has no assigned stage; Qwen review remains postponed. Independent identity/duplicate checks required by rules 8.1–8.2 still apply. The proposing reader cannot approve its own identity.
+**Proposed evidence, pending rule approval:** the 2025 revenue fact can cite `F1:t1/r2/c2` (`100`), `F1:t1/r2/c1` (`Revenue`), `F1:t1/r1/c2` (`2025`) and `F1:u2` (scale/currency). Code copies the separately located original fragments. A shorter quotation within a unit/cell needs an exact span or occurrence.
 
 ### Evidence and result checks
 
-These are **planned output checks**, not a completed checker or finalized schema. Reuse existing saved-input preservation checks; they do not certify model answers.
+These checks are planned. Reuse source-preservation checks and validate the reading view's structure and locations, not only its words. Separate evidence fragments are the proposed representation below; their acceptance requires the listed rule amendments.
 
 | Code check | Required behavior and limit |
 | --- | --- |
 | Effort diagnostics | Record configured effort and available runtime reasoning indicators. These do not prove correctness; absence of a visible thinking log alone is not a retry trigger. |
 | References | Resolve IDs, cells and spans unambiguously against the saved file/version; reject missing references and out-of-bounds spans. A valid reference may still be irrelevant. |
-| Exact evidence | Copy the referenced original text; compare any model-supplied quotation exactly. Keep separate fragments separate. Exact copying does not prove OCR fidelity or correct interpretation. |
-| Missing work | Every source unit has an assignment and outcome: facts, no eligible fact, or unresolved. Flag missing responses and statement anchors outside the assignment. Supporting references may come from anywhere in the visible source. Unit coverage does not prove fact recall. |
-| Repeated deliveries | Do not count the same job result twice after a retry; flag identical records for review. Several facts may cite one unit. Semantic duplicates need judgment. |
-| Output/failures | Validate agreed fields/types; detect failed requests, output-limit stops and missing responses. Preserve valid work; use bounded retries only for failed, missing or unresolved work, then retain persistent failures explicitly. Reduce oversized assignments or use a suitable larger route. Never treat an incomplete answer as empty. |
+| Exact evidence | Copy preserved source text, never added display labels; compare any model quotation exactly. Keep fragments separate. Check each printed number against its address; equal numbers elsewhere do not justify relocating it. |
+| Missing work | Account for selected text units/turns, native table rows, images and other units: proposals or a reason for none, with detected problems retained. Flag missing responses and anchors outside the assignment, except explicit required companions. Context may come from anywhere supplied; one answered row does not prove all its facts were found. |
+| Repeated deliveries | Do not count the same job result twice after a retry. Apply shared duplicate rules; several facts may cite one unit, and semantic duplicates need judgment. |
+| Output/failures | Validate agreed fields/types and required links; detect failed requests, output-limit stops and missing responses. Preserve valid work; bound and record technical/incomplete retries under 8.12. A valid "no" or "unsure" is not a failed call. Reduce oversized assignments when needed; never treat an incomplete answer as empty. |
 
 **Safety-stop check:** inspect any reported safety-stop counter and unit coverage; a stop or missing required responses means incomplete even if status is `success`. Preserve available partial output; probe recovery later.
 
-Unresolved cases need explanations; every empty unit does not. Source checks retain file identity, order and content. Model/reviewer checks must still establish:
+Model/reviewer checks must still establish:
 
 - **Meaning:** subject, period, scale, conditions and the applicability of notes/definitions, including references on shared titles, headers and sections. Context may be distant or lack an explicit marker; one exhibit's scope does not automatically govern another.
 - **Eligibility:** qualitative facts remain eligible under the Driver rules; no numbers is not a valid rejection by itself. Preserve existing admission requirements.
 - **Ownership:** a spanning statement belongs where it begins, not to an earlier supporting heading/note. Choosing that anchor requires interpretation. Supporting copies create no new fact occurrences.
 
-Report unresolved coverage separately and perform independent checks required by the rules. Neither exact quotes nor complete unit accounting proves complete fact recall, correct meaning or that every original published item was extracted.
+Neither exact quotes nor complete unit/row accounting proves complete fact recall, correct meaning, OCR fidelity or complete extraction of the published source.
+
+### Rule amendments proposed for owner approval
+
+**No rule is changed by this plan.** The following amendments are needed before the affected behavior is implemented. Preserve source identity, exact evidence, eligibility and atomic saving.
+
+| Rule | Proposed amendment |
+| --- | --- |
+| 1.17 | Let each printed number be supported by its exact fragment and separately located context from the same source/version. Keep the whole filing as the source event; selecting work does not redefine it. |
+| 1.24 | Allow several exact fragments to retain all meaning-changing words instead of skipping merely because one contiguous quote cannot contain them. Their joint applicability must be established. |
+| 3.29 | Permit a separately located, applicable unit/scale fragment instead of requiring it inside the same quote. Proximity alone remains insufficient; exact scaling stays unchanged. |
+| 3.3 evidence fields; 2.1 and 3.53 dependent definitions | Align the output, frozen Driver evidence and stated-cause link evidence with that fragment representation. Exact field names remain open; preserve 8.8's prohibition on rewritten quotes. If reused, staged ChannelContract Part II §§7–8 and quote-local validators also need alignment. |
+| 8.10 | Permit a creator call to process selected pieces/types. The sender accounts for whole-source coverage across calls; supplied context remains distinct from requested work. |
+| 8.14 | Define outcomes for selected work, including native table rows, and distinguish creator proposals from writer outcomes. Unrequested material is not skipped; an incomplete assignment cannot masquerade as complete. Preserve atomic saving for the assigned job. |
+| 8.15 | Reconcile retries with selected pieces/types and the assigned-job boundary. Which unchanged work may be reused after a stale match remains open; no matching-only retry is approved here. |
+| 4.15, retaining 4.14 | Allow a selected surprise request to return its required supported home fact without requiring extraction of every other fact. If the home is missing, do not bypass the current full-event reread requirement without an explicit amendment. |
+
+### Open decisions
+
+- **First type set and source kind:** open. Qualify the actual request/configuration under 8.13; a supported combination is not established by testing one type alone.
+- **Exact input/output field names and representation:** open, including evidence, work selection, identity decisions, gaps and links. Reuse current rulebook fields and reviewed helpers; today's text-only `Asset` and staged `PreparedFactV2` are not complete drop-in formats.
+- **Redoing an out-of-date match:** open. Reusing a completed read could avoid repeated discovery only if its inputs and interpretation remain valid; matching and dependent checks may change. The exact trigger, retained state and retry scope still need agreement.
+- **Models and execution sizes:** open. Matching candidate search, judgment batching and cost need validation; logical tasks need no per-field service or AI model-router. One-reader/medium is a baseline; four Sonnet 5.5 readers/high remains a large-filing trial candidate, not a proven optimum. Jev/Qwen roles, assignment sizes and other effort settings are unqualified. Do not routinely run both medium and high on each source.
 
 ### Next validation
 
-1. Settle the output contract and freeze independent reference answers before candidate runs. Use fresh complete sources: an earnings filing, a longer real 10-K, a call and news. AMG is regression evidence, not an unseen holdout; retain disputed/unreadable cases.
-2. Test the proposed setting on real structured input against the existing one-reader/medium baselines using the same source and requested output. Score complete facts: qualitative recall, names, qualifications, exact evidence, locations and duplicates. Check full dates/durations and point-in-time meaning, not just year strings; unresolved eligible facts count as misses.
-3. Measure the complete workflow: loading, input/output, cache writes/reads, verification, retries, queues, completion time and sustained historical throughput. Use response-local usage so inherited base totals are not counted repeatedly. API price estimates are not subscription quota measurements.
-4. Include distant qualifications, similar inapplicable notes, three-passage dependencies, continuous text, large tables and images, with positive controls. Preserve scope when moving text in test variants. Add a preparation stage or model role only for a demonstrated need; no finite test proves 100% accuracy on future sources.
+1. Settle the open contract/rule decisions and freeze independent expected answers before model runs (8.13, 8.17). Use fresh sources for each activated source kind, including full/partial and selected-type requests. AMG is regression evidence, not an unseen holdout.
+2. Score complete meanings, qualitative/numeric recall, names, subjects, periods, evidence and duplicates. Include distant/inapplicable notes, three-passage dependencies, large tables, images and failures, with positive controls. Count eligible misses/refusals/unscorable cases; row coverage and exact quotes are not accuracy scores.
+3. Measure total loading, cache/input/output, reasoning, checks, retries, queues and historical/live throughput. Use response-local usage to avoid recounting the base; price-list estimates are not subscription charges. Add stages only for demonstrated benefit; no finite test proves 100% future accuracy.
 
 ## Reference only: evidence and history
 
@@ -304,7 +320,7 @@ Reported follow-up: one focused retry per short table brought all four incomplet
 
 One chart in the base was reportedly visible and reused in three copies: about 276 read versus about 277 shown. This is limited evidence for approximate chart reading and image reuse, not exact visual extraction. Reported list-price equivalents were $0.79 to load, then $0.59–$0.88 per medium run or $1.30 for the 12-reader high run; these are not subscription charges. This earlier group covered one report/model, two runs per medium setting and one 12-reader high run. Retain raw records before temporary storage disappears; no location was supplied or new archive made in this review.
 
-**Later owner-reported comparison:** about four high-effort readers, all with recorded thinking, returned 1,366/1,366 table numbers and 143/150 sentence numbers with no bad quotes. The many-reader comparison without recorded thinking returned 68/150 sentence numbers, empty tables and altered quotes. Seven of 150 sentence numbers were still missed (about 4.7%). The claimed comparable cost/best result has no separate timing or usage breakdown supplied here and is not independently verified. Trust remains one report/model and one or two runs per setting; recorded thinking is associated with these results, not a correctness guarantee. This supports the next trial and source-based spot-check proposal, not complete Driver validation.
+**Correction supplied by Fable:** the earlier combined four-reader/high claim was wrong. **143/150 sentence numbers**, with no bad quotes reported, came from a four-reader/high **sentences-only** run. **1,366/1,366 table numbers** came from other configurations, including twelve/high and four/medium above. Four/high on tables has not been run according to that correction. The comparison without recorded thinking returned 68/150 sentence numbers; seven were still missed in the four/high sentence run (about 4.7%). Raw records for this correction were not independently audited here; it establishes no complete Driver accuracy or proven four/high cost advantage.
 
 **Spot-check proposal:** sample original passages per report with their context and independently identify eligible facts before comparing outputs. Checking returned answers alone cannot reveal omissions. Small samples give a noisy signal, not a per-report recall guarantee; audit cost and method remain to be settled.
 
@@ -336,7 +352,7 @@ A compact-package comparison, including an oracle package built from known true 
 
 ### Superseded settings and archived detail
 
-The earlier 12-package 10-K default was replaced by one reader first and medium → high testing; the later IBP report prompted the current four-reader/high next trial. These are evolving trial choices, not demonstrated universal defaults. Six simultaneous copies was only a suggestion; xhigh is not in the current trial. More fields, Jev/Qwen roles and the [rough design](rough_design.md) were never adopted as a complete division of work.
+The earlier 12-package 10-K default was replaced by one reader first and medium → high testing; the later IBP report prompted the four-reader/high trial candidate. These are evolving trial choices, not demonstrated universal defaults. Six simultaneous copies was only a suggestion; xhigh is not in the current trial. More fields, Jev/Qwen roles and the [rough design](rough_design.md) were never adopted as a complete division of work.
 
 Detailed retired boundary-search rounds, unused probability examples, old support questions and speculative cost tables were removed from this working document. They remain in the [previous committed revision](https://github.com/faisalanjum/EventTrader/blob/c580b68ec8d5a116db041d5c171f49380663fb3c/.claude/plans/Drivers/DriversFinal/ClaudeCachedReads.md#retired-jev-packaging-proposal).
 
