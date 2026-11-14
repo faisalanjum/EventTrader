@@ -1,6 +1,19 @@
 ### Do not implement the ones below yet, since it needs to be rethought
 
   1. Spreading a withdrawal to the earlier forecasts it covers (4.18–4.21).
+  2. See EXPLAINED_BY.md and thats the current design for everything related to it.  
+  Also inspired by NewsMultipleSymbols.md which will be added when we restart news subscription (from Massive this time).                
+
+  Resolved: use Date for daily explanations, with the affected company on EXPLAINED_BY; a fact may explain several companies/days (A2). No DailyCompanyMoveEvent is needed.
+
+### The ones below should be thought out and switched on
+
+  1. SAME_AS
+  2. Everything is ON for this version (since there is only one target version) unless I agree - overrides anywhere it says for any item - its switched off or later release since no later release
+
+### Options to consider
+
+  1. (:ContinuationClaim) † (the rename note for a slice label or measurement tag, 6.13): link it to its company with an edge (e.g. `FOR_COMPANY` → (:Company)) and drop its company property (`company_cik` in the older design). Alternative: link it to its source filing and reach the company through that.
 
 # Driver rules, categorized
 Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories. Nothing is reworded: every original line appears here exactly once, and rule numbers are unchanged (3.2 here is 3.2 there). The only new lines are headings, this introduction, the study order and index, table headers where a table was split (the Word list and the Parking list), fold markers around switched-off features, and a few short notes and pointers. The original's summaries, navigation and layout are kept in the Overview at the end.
@@ -8,6 +21,7 @@ Everything in `DRIVER_RULES_Simplified.md` (same folder), sorted into categories
 **Edited 2026-10-01 (owner-approved):** 8.10 (smaller reads), 1.17 (original files as evidence), 3.3 table (new `source_location` field: 25 fields) and the §6 XBRL warning (withdrawn 8-K figure). Reasons: [PrepareStep.md](PrepareStep.md) D10, D9, P20, F18.
 
 **Edited 2026-10-02 (owner-approved):** new 1.22–1.26, 3.53, 3.54, 5.9, 9.11 and 10.5; changed 2.33, 3.28, 3.31, 4.8, 5.2's example, 9.1 and parking note P3: a switched-off `expectation` type, type boundaries (1.23), cause links between facts (`CAUSED_BY`, `OFFSET_BY`, each with its own quote), meaning-changing words kept in the quote, no outcome in prediction inputs, other monetary denominations and official-list units (never exchanged or converted), protection for `unknown` units, analyst questions in transcripts (1.26), and a parked question on forecasts of outside decisions (10.5). Reasons: [fact_types.md](Archive/fact_types_2026-10-02.md) (owner decisions; archived).
+**Edited 2026-11-14 (owner-approved):** reconciled with [EXPLAINED_BY.md](EXPLAINED_BY.md) and [NewsMultipleSymbols.md](NewsMultipleSymbols.md): fact company link (3.2, 3.3, 3.9, 4.14, 5.9 and their copies), daily explanations (3.12, A2.1–A2.8, 9.7, 10.1), timing and outcome rules (1.14, 1.17, 7.6, Public time), sources (1.4, 9.5), pictures, tables and Start here; P3, P4, P5 and P7 removed. Still open: EXPLAINED_BY.md §7–8.
 
 **Study order:** S1 (read briefly first) → Driver 1 → 2a → 2b → 2c → 3 → DriverUpdate U1a → U1b → U1c → U1d → U2a → U2b → U2c → U3a → U3b → System S2 → S3 → S4 → S5.
 
@@ -39,8 +53,8 @@ flowchart LR
     DR2["<b>(:Driver)</b><br/>another Driver"]
     CC["<b>(:ContinuationClaim)</b> † release 2<br/>a renamed slice label or measurement tag (6.13)<br/>matched by value, no edge"]
     RP["<b>(:Report)</b> = one filing<br/>8-K · 10-Q · 10-K · created = public time · isAmendment (5.7)"]
-    TR["<b>(:Transcript)</b> = one call<br/>conference_datetime = public time"]
-    NW["<b>(:News)</b> = one story<br/>created = public time · tags"]
+    TR["<b>(:Transcript)</b> = one call<br/>conference_datetime = call start;<br/>not full-transcript availability"]
+    NW["<b>(:News)</b> = one story<br/>publication/version times · tags"]
     OG["<b>Old Guidance nodes</b><br/>evidence only; never bridged into Driver facts (8.11)"]
     CN["<b>(:Concept)</b> = official line item<br/>picture C"]
     MB["<b>(:Member)</b> = one breakdown value<br/>picture C"]
@@ -82,30 +96,25 @@ flowchart TB
     SC["<b>(:Sector)</b>"]
     MI["<b>(:MarketIndex)</b>"]
     DT["<b>(:Date)</b> = one day"]
-    DC["<b>(:DailyCompanyMoveEvent)</b> †<br/>one per company and<br/>trading day (A2.7)<br/>a verdict target only,<br/>never a source (A2.8)"]
-    DU["<b>(:DriverUpdate)</b> = one fact<br/>EXPLAINED_BY = a verdict,<br/>an edge from any of<br/>the four (A2.2, 3.12)<br/>properties: table below (A2.3)<br/>9.7 says off; owner: on (P5)"]
+    DU["<b>(:DriverUpdate)</b> = one fact<br/>EXPLAINED_BY = a judgment<br/>from Date for company_id (A2.2)<br/>properties: table below (A2.3)"]
 
     RP -->|"PRIMARY_FILER · the owner (3.9)<br/>price returns on it:<br/>daily_stock … (1.14, A2.5)"| CO
     RP -->|"REFERENCED_IN<br/>companies named in it,<br/>not owners"| CO
     CO -->|"HAS_TRANSCRIPT (3.9)"| TR
     TR -->|"INFLUENCES · price returns"| CO
-    NW -->|"INFLUENCES<br/>price returns; a tag,<br/>not an owner (P4)"| CO
+    NW -->|"INFLUENCES or MENTIONS (9.5)<br/>price returns; tags,<br/>not fact ownership"| CO
     CO -->|"BELONGS_TO (1.20, 2.42)"| IN
     IN -->|"BELONGS_TO"| SC
     SC -->|"BELONGS_TO"| MI
     DT -->|"HAS_PRICE<br/>open, close, daily_return …<br/>(A2.7)"| CO
     DT -->|"HAS_PRICE"| MI
     DT -->|"NEXT"| DT
-    DC -->|"FOR_COMPANY †"| CO
-    DC -->|"ON_DATE †"| DT
-    DC -->|"EXPLAINED_BY †"| DU
-    RP -->|"EXPLAINED_BY †"| DU
-    TR -->|"EXPLAINED_BY †"| DU
-    NW -->|"EXPLAINED_BY †"| DU
+    DU -->|"FOR_COMPANY · subject (3.9),<br/>may differ from company_id"| CO
+    DT -->|"EXPLAINED_BY · company_id (A2.2)"| DU
 
     classDef fact fill:#ffffff,stroke:#3c4043,stroke-width:2px,color:#3c4043
     classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
-    class DU,DC fact
+    class DU fact
     class CO,IN,SC,MI,RP,TR,NW,DT old
 ```
 
@@ -161,12 +170,13 @@ flowchart LR
 | `SAME_AS` | (:Driver) → (:Driver) | none for now | off | 1.19, 6.20, 9.9 |
 | `CONTINUES_AS` (company_cik, source_event_id, evidence_quote, declared_at, created) | (:Driver) → (:Driver), old → new | at most 1 active per old label, per company | release 2 | 6.13–6.19, 9.10 |
 | `(:ContinuationClaim)` † (kind, old, new …), a node | a renamed slice label or measurement tag | one per declared rename | release 2 | 6.13 |
-| `EXPLAINED_BY` † (producer, stock_impact, weightage, confidence, mode) | (:Report), (:Transcript), (:News) or (:DailyCompanyMoveEvent) → (:DriverUpdate) | 1 fact per key: target + Driver + scope + producer; 0 to many verdicts per fact; several moves may share one fact (P3) | planned, not built yet · 9.7 says off; owner decision 2026-09-29: on in release 1 (P5, P7) | 3.12, A2.1–A2.6 |
-| `FOR_COMPANY` † · `ON_DATE` † | (:DailyCompanyMoveEvent) → (:Company) · (:Date) | 1 each | new | A2.7, A2.8 |
-| `PRIMARY_FILER` | (:Report) → (:Company) | exactly 1 owner; the price returns after the filing sit on it (daily_stock, session_stock …) | exists | 3.9, 1.14, A2.5 |
+| `EXPLAINED_BY` (company_id, reason, stock_impact, weightage, confidence, llm_producer, produced_mode, created) | (:Date) → (:DriverUpdate) | 1 latest judgment per Date + affected Company ID + DriverUpdate ID + producer | planned, not built yet | 3.12, A2.1–A2.8 |
+| `FOR_COMPANY` | (:DriverUpdate) → (:Company) | exactly 1 for a company-specific fact; 0 for a shared fact | planned, not built yet | 3.9 |
+| `PRIMARY_FILER` | (:Report) → (:Company) | exactly 1 owner; the price returns sit on it (daily_stock, session_stock …) | exists | 3.9, 1.14, A2.5 |
 | `REFERENCED_IN` | (:Report) → (:Company) | other companies the filing names, not owners; same return fields | exists | 3.9 |
 | `HAS_TRANSCRIPT` | (:Company) → (:Transcript) |  | exists | 3.9 |
-| `INFLUENCES` | (:Transcript), (:News) → (:Company); all three sources → (:Industry), (:Sector), (:MarketIndex) | price returns (daily_stock …); for news the company link is a tag, not an owner (P4) | exists | 1.14, A2.5, P4 |
+| `INFLUENCES` | (:Transcript), (:News) → (:Company); all three sources → (:Industry), (:Sector), (:MarketIndex) | price returns (daily_stock …); for news the company link is a tag, not an owner (3.9); News uses INFLUENCES only for one distinct total ticker, tracked; 2+ use MENTIONS to tracked companies (9.5) | exists | 1.14, A2.5, 3.9, 9.5 |
+| `MENTIONS` | (:News) → each tracked (:Company) | 2+ distinct total tickers with at least 1 tracked; per-company stock/sector/industry/market returns, no direct sector/industry/market links | planned, not built yet | 9.5 |
 | `BELONGS_TO` | (:Company) → (:Industry) → (:Sector) → (:MarketIndex) |  | exists | 1.20, 2.42 |
 | `HAS_PRICE` (open, close, daily_return …) | (:Date) → (:Company), (:MarketIndex) | one per trading day; (:Date) → `NEXT` → (:Date) | exists | A2.7 |
 | `HAS_XBRL` · `REPORTS` · `HAS_CONCEPT` · `FACT_MEMBER` · `FACT_DIMENSION` · `HAS_PERIOD` · `IN_CONTEXT` · `HAS_UNIT` · `FOR_COMPANY` | the tagged-data structure in picture C |  | exists | 6.7, 6.9, 3.16 |
@@ -177,12 +187,12 @@ flowchart LR
 |---|---|---|---|
 | family | (:Driver) ⇢ (:Driver) | read from the name | 1.18, 2.26 |
 | birth fact | (:Driver) ⇢ its first (:DriverUpdate) | id, quote and needed context stored as properties on the Driver | 2.1, 2.35 |
-| home fact | a surprise fact ⇢ its metric or guidance fact, same event | matched by family, period, slice, measurement and value | 4.14 |
+| home fact | a surprise fact ⇢ its metric or guidance fact, same event | matched by subject company, family, period, slice, measurement and value | 4.14 |
 | inherited line item | a guidance or surprise fact ⇢ its base metric's (:Concept) | worked out when read | 6.2 |
 | slice values offered | the company's earlier (:Member)s plus values already used ⇢ the reader's list | cut at public time | 3.17, 3.19 |
 | 8-K pairing | an earnings 8-K ⇢ its 10-Q or 10-K | routing only | 3.44 |
 | read-time grouping | two labels with the same axis and member, all their linked facts agreeing ⇢ one display group | within one company and slice part | 7.9 |
-| never | fact → company directly · action fact → line item · old Guidance data → Driver facts · a day's move as a source |  | 3.9, 6.2, 8.11, A2.8 |
+| never | action fact → line item · old Guidance data → Driver facts · a day's move as a source |  | 3.9, 6.2, 8.11, A2.8 |
 `SAME_AS` = same meaning (reversible; none created for now, 6.20) · `CONTINUES_AS` = a company's declared rename (dated; from release 2) · Family: read from the name (`revenue_guidance` belongs to `revenue`), not stored.
 
 - 1.19 Synonym link = same meaning, reversible; none is created for now (6.20). Family = related flavors, read from the name (1.18). Never use one in place of the other; passing the family check (2.26) never creates or implies a synonym link. In a synonym group, one name is the current representative (the "head"): the earliest, then alphabetical order. Example chain: `net_sales_guidance` → (same family, by name) → `net_sales` → synonym → `revenue`. A missing synonym link costs a missed comparison, never a wrong merged number.
@@ -298,7 +308,7 @@ flowchart LR
 
   A customer is a slice only when it is the company's own customer population. There is no vendor slice. *Why:* treating an unclear outside cause as a slice can merge two different causes; keeping it in the name may over-split and miss valid groupings.
 - 2.14 **Portions.** Population words like `current`, `funded` or `fee_earning` stay in the name and make a different Driver from the bare one.
-  - Only a fact about the true whole company has no slice.
+  - For company-specific metrics, guidance and surprises, only the true whole company has no slice (3.15).
   - Network-wide, systemwide, GMV (gross merchandise value) and other curated subsets are *not* the whole company, so they keep their qualifying word in the Driver name.
   - Leftovers the source states ("Other", "Corporate") may be company-specific slices.
   - Accounting eliminations and consolidation artifacts (bookkeeping lines that exist only to add the parts up to the company total) are neither names nor slices: drop and log the artifact and keep the real metric fact.
@@ -430,11 +440,11 @@ flowchart LR
   - An earlier source never uses a later one as evidence: a later 10-Q may help *find* things during backfill, but the older source must prove its own quote, value, unit, label, period, slice, measurement and meaning; nothing is borrowed from the later source.
   - Every stored number must appear, as printed, in its own quote.
   - An 8-K source event is the whole filing (all sections and exhibits, without duplicates), never just the press-release exhibit.
-  - Evidence is the original filed file: the HTML itself, or a filed PDF or image, its extracted text checked against it. A flattened text or our own converted copy never counts; unsupported formats fail closed.
+  - Evidence is the original published/filed file: the HTML itself, or a published/filed PDF or image, its extracted text checked against it. A flattened text or our own converted copy never counts; unsupported formats fail closed.
 
 - 3.1 A fact's identity = source event + Driver + scope. The extractor (a person or a model) is never part of it. Once written, the identity and the stored scope never change. *Why:* two readers of the same fact then reach the same record.
-- 3.2 The scope parts, each only when present: period · slices · measurement tags · surprise comparison kind (surprise facts only; required there) · a tie-breaker used only for true conflicts (5.3) and for facts protected by 5.9. A whole-company fact has no slice; "total" is never stored as a slice. Formatting may be tidied (e.g. lowercase), but different words are never treated as the same value. *Why a surprise kind:* two different expectation gaps on one Driver and period can both be true, so identity must keep them apart.
-- 3.3 A new scope part may be added only if it defines identity for that fact type, can't be worked out from the existing parts, and is never compared across fact types.
+- 3.2 The scope parts, each only when present: `subject_company=<Company.id>` (required for company-specific facts, absent for shared facts) · period · slices · measurement tags · surprise comparison kind (surprise facts only; required there) · a tie-breaker used only for true conflicts (5.3) and for facts protected by 5.9. A whole-company fact has no slice; "total" is never stored as a slice. Formatting may be tidied (e.g. lowercase), but different words are never treated as the same value. *Why a surprise kind:* two different expectation gaps on one Driver and period can both be true, so identity must keep them apart.
+- 3.3 A new scope part may be added only if it defines identity for that fact type, can't be worked out from the existing parts, and is never compared across fact types. Exception: `subject_company` applies across fact types and must match for a surprise and its home fact (4.14).
 
 | Field | Meaning | Values and notes |
 |---|---|---|
@@ -445,7 +455,7 @@ flowchart LR
 | `source_type` | The kind of document the quote truly came from (a press-release quote belongs to the 8-K, never a later 10-Q) | `8k` · `transcript` · `10q` · `10k` · `news`; anything else fails closed |
 | `quote` | The exact source words | Always required |
 | `source_location` | Where the proof sits in the original: file, version (fingerprint), exact passage or table cells | Always required; never changes (1.17) |
-| `date` | The source's full public timestamp | |
+| `date` | The cited source version's full public timestamp | |
 | `created` | When the fact was written | Set only at creation |
 | **Meaning:** what happened | | |
 | `driver_state` | The state (§3 States; forecasts and surprises: §4) | From the fact type's list |
@@ -480,10 +490,14 @@ flowchart LR
 
 - 3.7 Metric, surprise and action facts are written from the source text alone, never from past facts. Only guidance may look at earlier facts when written, and only at those public before the source's public time (e.g. to copy a withdrawn forecast's series unit, 3.35, or to spread a withdrawal, 4.18). A guidance movement the source doesn't state is still worked out when read, never stored (4.4).
 
-- 3.9 Exactly one link to its Driver, and exactly one link to its source event (a filing, transcript or news story). The company is reached through the source event, not a direct link. A source event must belong to exactly one company, found through ownership, never by counting mentions; otherwise it is held.
+- 3.9 Every fact has exactly one `OF_DRIVER` to its Driver and one `FROM_SOURCE` to a Report, Transcript or News. A Report retains one filer, and a Transcript one call company, found through ownership rather than mention counts; otherwise that Report/Transcript is held. News needs no company owner.
+  - A company-specific fact has exactly one immutable `FOR_COMPANY` to an existing Company, proven by its quote/context, even when the source has one owner. A genuinely shared fact has none. An unresolved company-specific subject is skipped/held with a reason, never stored as shared or assigned a placeholder Company.
+  - The link's Company ID must equal the subject in the fact's scope (3.2). Processing may carry `subject_company_id`; do not store it as a fact property. Save the fact and required links together; validate their counts and ID agreement on creation and reuse. A mismatch is held, never silently relinked or given a second subject.
+  - In fact rules, “company” means this subject, not the source owner or the affected stock. Use it for periods, fiscal calendars, slices, history, guidance confirmation/withdrawal, surprise matching and XBRL. Source dates must apply to the fact; XBRL matches must also prove the correct source, period, measure, units and slice. Shared facts borrow no participant's fiscal calendar.
+  - A missing link on a company-scoped fact is invalid, not shared.
 - 3.10 One link to its period (3.36), when it has one.
 
-- 3.12 Optional verdict links from a source event or daily move event that the fact helps explain (folded Part A2).
+- 3.12 Optional `Date → EXPLAINED_BY → DriverUpdate` links record supported judgments about an affected company’s daily move (A2). Facts may exist without them.
 - 3.53 **Stated causes link two facts from the same source event:** `CAUSED_BY` (result → what drove it, including a stated share of it) and `OFFSET_BY` (result → what pushed against it); zero to many per fact. Each link carries its own `quote`: the smallest exact passage that states the link, under the same quote rules (8.8, 1.24); a link without one is skipped and counted. It is saved together with both facts. "Includes" alone is not a cause. Links are not part of identity (3.1) and are not `EXPLAINED_BY` (why the stock moved). `conditions` (4.8) holds assumptions only, never causes. Causes the Learner guesses are kept elsewhere, marked as guesses.
 
 **Words used here** (from the original Word list)
@@ -494,15 +508,6 @@ flowchart LR
 | **Source event** | The one whole document a fact comes from: one SEC filing (all its sections and exhibits), one earnings-call transcript, or one news story. Every fact has exactly one. |
 | **Quote** | The exact words in the source that state the fact. |
 
-**Parking-list items** (from the original Parking list)
-
-| # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
-|---|---|---|---|---|---|
-| P4 | 3.9 | A news story has a company tag, not an owner → read strictly, every news fact (macro ones too) is held | All but 1 of 348,670 stories have exactly one tag (checked 2026-09-29; query: note P4) | Does the tag count as an owner? Decide when news is admitted (9.5) | `driver_reference/core/driver_neo4j_adapter.py:5` "News currently has no proper ownership edge" |
-
-- **P4 query** (Neo4j): `MATCH (n:News) WITH n, COUNT { (n)-[:INFLUENCES]->(:Company) } AS k RETURN k, count(*)` → 1 story with 0 companies; 348,669 with exactly 1.
-
-*To trace these references, see “How to trace a reference” in the Overview.*
 
 #### U1b · Period
 
@@ -549,7 +554,7 @@ flowchart LR
   - plus the safe fallback `unknown`.
   - *Why:* the tests work for any metric and match how XBRL breaks data down; a fixed set of kinds keeps slices checkable while values stay open.
 - 3.14 A real slice is a business population where "revenue or earnings from ___" makes sense. Accounting labels (fair-value levels, a term loan, stock awards, reconciling items) are not slices. Leftovers the source states ("Other", "Corporate Unallocated") are allowed as company-specific slices, marked as not continuous when read. Pure eliminations, fair-value levels and consolidation artifacts are dropped and logged, never stored as slices; blended leftovers follow 3.21.
-- 3.15 A brand is not a kind; the axis it sits on, or its role in the prose, decides (Taco Bell → segment; Kraft → product), because the same word can be a segment at one company and a product at another. A fact may have several slice parts; all are kept, never dropped. Slices apply to all four fact types. A period is never a slice. No slice = the whole company (metric, guidance, surprise) or no applicable part (action).
+- 3.15 A brand is not a kind; the axis it sits on, or its role in the prose, decides (Taco Bell → segment; Kraft → product), because the same word can be a segment at one company and a product at another. A fact may have several slice parts; all are kept, never dropped. Slices apply to all four fact types. A period is never a slice. For company-specific facts, no slice = the whole subject company (metric, guidance, surprise) or no applicable part (action). A shared fact has no company owner.
 - 3.16 **Which XBRL breakdown axes count as slices is decided offline, by looking at an axis's *members*, never its name.**
   - *Why:* axis names mislead in about 20% of cases.
   - When facts are processed, an axis is one of three things: a known slice axis (use its kind), a known non-slice axis (ignore that part), or an unknown axis (a provisional slice, never silently dropped).
@@ -595,7 +600,7 @@ flowchart LR
 
 | Word | Meaning |
 |---|---|
-| **Slice** | The part of the company a fact is about: a segment, product, geography, customer group, sales channel or owned stake, e.g. `geography:china`. No slice = the whole company. |
+| **Slice** | The part of the company a fact is about: a segment, product, geography, customer group, sales channel or owned stake, e.g. `geography:china`. No slice follows 3.15; it does not establish company ownership. |
 | **Measurement tag** | How a number was measured, e.g. `adjusted`, `diluted`, `constant_currency`. |
 | **GAAP, non-GAAP** | GAAP = the official US accounting rules. Non-GAAP = a company's own adjusted figures outside those rules (e.g. "adjusted EPS"). |
 | **Axis** (XBRL) | A breakdown dimension in a filing, e.g. "by segment" or "by region". A member is one value on it. |
@@ -760,7 +765,7 @@ flowchart LR
 | A re-run of the same input | Changes nothing | 5.4 |
 | A newly published amendment | Becomes a new fact at its own public time | 5.7 |
 | A later company confirmation of guidance | Becomes a new fact; history is never rewritten | 4.9 |
-| A link | Never deleted; from release 2, a wrong rename link is switched off by the mechanical checks | 6.18 |
+| A link | Never deleted or switched off except under 6.18 | 6.18 |
 | A saved fact | Never hidden or deleted; no audit or repair runs after saving | 6.20 |
 | A guidance movement worked out when read | Never written back | 4.4 |
 
@@ -784,10 +789,11 @@ flowchart LR
 - 5.5 A stored value is never corrected in place; a later source adds its own fact (5.3). Other fields: the last write wins, and it's logged. A blank never erases a stored value: a re-read with less detail is taken to have missed it; nothing clears a field. Late history is never re-keyed; two identical facts from a race read as one. Within one group, at most one fact has no tie-breaker, and every pair of facts must disagree on at least one filled value (exception: 5.9).
 
 - 5.9 **An `unknown` unit never proves two amounts equal.** A fact with a number in an `unknown` unit (value, comparison, change or range bound) carries, from its first save, a tie-breaker naming where each such number sits in the original (file, version, exact number occurrences; never quote wording or reading-window positions). Combining, filling blanks and removing duplicates involving such a fact need the same protected locations as well as the usual scope and value checks; a missing or different location never matches. If combining would add or change that protection on a saved fact, the incoming fact is kept separately; a saved fact is never re-keyed. Re-running unchanged input changes nothing (5.4); conflicting values still follow 5.3. This is the exception to 5.5, and reads must not collapse facts this rule keeps apart.
+  - Apply the same location protection to shared facts and discrete actions, using their existing `source_location` (original file, version and exact passage/cells) in scope from the first save. The same occurrence keeps its ID on replay; ambiguous occurrences need refinement or rejection. Different occurrences remain separate even when values match; repeated reporting at different locations may remain initially, without counting as independent support. Location identifies the occurrence, not a history series across sources.
 
 - 5.7 An amendment is a new fact at its own public time; the "latest wins" read rule (7.5) makes it win naturally. An amended filing is a new report, never a silent rewrite.
 - *See also:* A correction with no business-change wording never reads as a raise or a cut: 4.5.
-- 5.8 A fact is saved only if everything its decision relied on still holds at that moment: the check and the write happen together, protected against conflicting changes (plain code). If a relevant change invalidates the approved save, nothing is saved and the event is held (8.14). A test run uses the same checks.
+- 5.8 A fact is saved only if everything its decision relied on still holds at that moment: the check and the write happen together, protected against conflicting changes (plain code). If a relevant change invalidates the approved save, nothing is saved and the assigned job is held (8.14). A test run uses the same checks.
 
 **Words used here** (from the original Word list)
 
@@ -813,7 +819,7 @@ flowchart LR
 - 3.11 Optional links to XBRL data (§6): at most one official line item (metric facts only; the same one named in `xbrl_qname`), and any number of breakdown members (any fact type), each saying which slice part it supports.
 
 - 6.1 Attach the exact company-reported line item, or attach nothing. A wrong link does silent damage that nothing undoes after saving (6.18); a missing link fills itself in on a later run at no risk.
-- 6.2 Only a base metric gets a direct link. Guidance and surprise facts inherit the line-item link of the metric Driver named by their base (1.18), only when that Driver has facts public before the read's date; actions never link; a non-GAAP measurement blocks inheritance. *Why:* a forecast or surprise has no XBRL line of its own; the line lives on the metric. Otherwise they get no link for now; a direct guidance or surprise link is never written to fill the gap.
+- 6.2 Only a base metric gets a direct link. Guidance and surprise facts inherit the line-item link of the metric Driver named by their base (1.18), only when that Driver has facts for the same subject company public before the read's date; actions never link; a non-GAAP measurement blocks inheritance. *Why:* a forecast or surprise has no XBRL line of its own; the line lives on the metric. Otherwise they get no link for now; a direct guidance or surprise link is never written to fill the gap.
 - 6.3 A fact's measurement tags count as GAAP-compatible only when they are empty or exactly one of `gaap`, `basic`, `diluted`, `reported`, `as_reported`. Anything else, including any combination, → no link.
 - 6.4 Never linked, as a principle and not a word list: events and macro causes (resignation, buyback, oil price, interest rates, tariffs, weather…); ratios, derived and growth figures (margins, growth, return on invested capital, EBITDA, free cash flow, per-square-foot, mix…); non-GAAP or adjusted figures. Tax rates are real GAAP line items and may link.
 - 6.5 A match must be the same metric: cost of revenue ≠ revenue, a subtotal ≠ its total, basic ≠ diluted. Refuse anything related-but-different: GAAP vs non-GAAP, gross vs net, subtotal vs total, the wrong statement, or a breakdown instead of the consolidated line. When two candidates are equally good, take the more widely used one. When unsure, refuse.
@@ -826,7 +832,7 @@ flowchart LR
   *Why:* measured on 274 companies, these checks cut wrong links from 42 to 1, with no loss of good links.
 - 6.7 The candidates are the company's own consolidated numeric line items, cut at the fact's public time for history (live may use the latest). The chosen item must be exactly on that list. Only 10-K and 10-Q filings (and their amendments) carry XBRL; 8-Ks never do.
 - 6.8 A line item missing from the database never blocks the fact; the link fills in later.
-- 6.9 A link to a breakdown member needs both its axis and its member. It's valid only when it matches one real tagged fact exactly: the line item, duration or instant, exact dates, and the complete set of breakdowns (including "none"). Two different breakdown sets are never combined; that would invent a combination no filing has.
+- 6.9 A link to a breakdown member needs both its axis and its member. It's valid only when it matches one real tagged fact exactly: the subject company, line item, duration or instant, exact dates, and the complete set of breakdowns (including "none"). Two different breakdown sets are never combined; that would invent a combination no filing has.
 - 6.10 When a source supplies XBRL data, it always includes the exact reporting context (the dates, and whether the value covers a span or a single moment); every breakdown carries both axis and member; and "no breakdowns" is sent only as an explicit, checked statement. A missed extraction must never pass as the consolidated whole.
 - 6.11 Only text can create Drivers or non-metric facts. Tagged filing data never decides meaning or identity; it may add numeric metric facts only after the Driver and the company's link to that line item are already admitted, and that route is switched off for now (6.12).
 - 6.12 **Facts from tagged filing data:** an approved design, switched off until its proofs pass; its full rules are in folded Part A1.
@@ -843,7 +849,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - **Never:** create a name or a Driver, work out a missing quarter, rewrite percentages, infer a value, create a surprise automatically, replace source text, or loosely match a line item. Tagged text blocks never create anything; the full source text stays the baseline.
 - **What is stored:** the value exactly as tagged, with state `reported`; any direction is worked out when read, never written back. A quarter or year-to-date figure is compared with the same period a year earlier (give or take 7 days), and an annual figure with the previous annual value; with no clear comparison it stays `reported`, and so, pending testing, does a single-moment figure. A figure for the filing's own period is always written; a figure for an earlier period only if no fact exists yet for it or its value changed (a restatement).
 - **Repeats and conflicts inside one filing:** exact repeats are dropped; if repeated values agree within their stated precision, the most precise one is kept; if they disagree beyond it, the whole group is held, never picked. It reopens only if that filing's tagged data changes; an amended filing is a new source.
-- **Text and tagged versions of one fact:** they are the same fact only when they share the event, Driver, period, slice and measurement (matched as below) and their values agree within the text's own stated precision; then the text copy is skipped whole, and a tagged fact arriving after its text twin upgrades it in place (see Record). If they differ in period, slice or measurement, both are kept as separate facts; a same-value near-match that differs only in period or slice is also logged, never merged or relabeled. If they share all of these but the values conflict, the written fact stands and the later one is skipped. Within one event and series, reads prefer the tagged fact.
+- **Text and tagged versions of one fact:** they are the same fact only when they share the subject company, event, Driver, period, slice and measurement (matched as below) and their values agree within the text's own stated precision; then the text copy is skipped whole, and a tagged fact arriving after its text twin upgrades it in place (see Record). If they differ in period, slice or measurement, both are kept as separate facts; a same-value near-match that differs only in period or slice is also logged, never merged or relabeled. If they share all of these but the values conflict, the written fact stands and the later one is skipped. Within one event and series, reads prefer the tagged fact.
 - **Measurement:** tagged facts carry no measurement tags. When matching, blank, `gaap`, `reported` and `as_reported` count as the same, plus the line item's own basic or diluted tag; basic and diluted never count as the same.
 - **Record:** each fact records that it came from tagged data, and through which link. Upgrading a text fact to a tagged one is recorded.
 - **Timing:** when a new link becomes active, all of that company's eligible filings are processed, including the current one; text work never waits for this.
@@ -864,7 +870,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 7.3 Within one event: combine pieces before settling conflicts (5.2). Clean stated parts beat a vague `mixed` fact. A whole-company fact exists only when it is itself stated.
 - 7.4 Display order: value → signed change → comparison → guidance words → the trimmed quote (last resort). Duplicates are judged by the stated value or range and its unit, or by the tidied guidance words for qualitative facts; never by the quote; facts protected by 5.9 are never collapsed. A citation is the Driver name, plus the scope when needed.
 - 7.5 Same company, series and day: rank `8k` > `transcript` > `10q` > `10k` > `news`; then the later timestamp, then the source ID. Across days, the latest is the current view and earlier facts stay as history. "Day" means US Eastern time. The same number stated in different sources (e.g. an 8-K, then a 10-Q) is stored as separate facts on separate events; only reads pick one.
-- 7.6 History reads use strictly "before the as-of date"; live reads see the current data. Realized returns are never exposed (1.14).
+- 7.6 History reads use strictly "before the as-of date"; live reads see the current data. Predictions and historical explanations follow A2.5.
 
 - 7.8 A direction plus basis points or percentage points, without "to X", is a change, not a level (3.50). "Narrowed" is worked out when read from consecutive closed ranges, never stored.
 - *See also:* Guidance movement is worked out when read: 4.4.
@@ -927,7 +933,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 4.11 **Surprise, when it's `beat` or `missed`:** a judgment of the whole phrase, aware of negation, direction and scope. Never assume higher is better, and never map "above" to beat. Words like "above", "below", "exceeded", "ahead of" or "beat the budget" never count as good or bad on their own; they take the same test. An actual range that overlaps the expectation unclearly → `unknown`, unless the source says good or bad.
 - 4.12 A result outside the range with no good/bad words needs a stated basis for which direction is good: either the source's own framing, or the metric's meaning. The metric's normal meaning (e.g. more revenue is good) may be used only when there's no common opposite story; capex, R&D, inventory, hiring and cash burn always have one, so they need the source's own framing. Circular, market-reaction, strategy-guess or single-keyword reasons don't count. No valid basis → `unknown`.
 - 4.13 Good or bad (beat or miss) is never assigned from the sign of a number; meaning decides.
-- 4.14 Every grounded surprise (one tied to a specific metric or forecast, unlike a generic "results beat") needs a matching home fact in the same event: a result surprise → its metric fact; a `guidance_vs_consensus` surprise → its guidance fact. They must match on family, period, period kind, slice, measurement and, when there are values, the tidied value and unit. A numberless surprise needs a numberless home. The home fact must itself be accepted for writing; a held or rejected home doesn't count. The home fact must belong to the surprise's family by name: for a result surprise, the metric Driver of its base (born in the same save if new); for `guidance_vs_consensus`, the guidance Driver of its base (no metric Driver needed).
+- 4.14 Every grounded surprise (one tied to a specific metric or forecast, unlike a generic "results beat") needs a matching home fact in the same event: a result surprise → its metric fact; a `guidance_vs_consensus` surprise → its guidance fact. They must match on subject company, family, period, period kind, slice, measurement and, when there are values, the tidied value and unit. A numberless surprise needs a numberless home. The home fact must itself be accepted for writing; a held or rejected home doesn't count. The home fact must belong to the surprise's family by name: for a result surprise, the metric Driver of its base (born in the same save if new); for `guidance_vs_consensus`, the guidance Driver of its base (no metric Driver needed).
 - 4.15 An ungrounded "results beat" is held. A result surprise before its period has ended is rejected. A missing home fact means the whole event is read again, never just the surprise alone.
 - 4.16 When a source states several comparisons, the home fact keeps exactly one main baseline (e.g. the prior-year headline). An expectation comparison stated alongside is never added to the home fact. The reader must spot it in the source itself (never from an already-stored comparison) and record it as its own surprise fact, where the expectation is stored.
 - 4.17 On a surprise, the change is usually empty because it can be worked out from the two values. It is stored only when the source states a difference that can't be worked out and its sign is clear. "Beat by X" with an unclear sign stays empty (the quote carries it). Otherwise it's worked out when read as result − expectation, with good or bad applied at that point.
@@ -949,7 +955,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 1.15 Never delete or re-key Drivers or facts to make history look cleaner. True duplicates are never merged: at most they are joined with a reversible synonym link (none is created for now, 6.20).
 - 1.16 Missing links are safer than wrong links.
 
-- 6.18 **Links after saving.** Nothing switches a link off after saving, except, from release 2, the mechanical rename checks (6.16, 6.19). A link is never deleted.
+- 6.18 **Links after saving.** Nothing switches a link off after saving, except, from release 2, the mechanical rename checks (6.16, 6.19). A link is never deleted. Exceptions: latest EXPLAINED_BY judgments may be replaced or explicitly withdrawn (A2.2), and newer News versions remove obsolete source links under NewsMultipleSymbols.md. Neither exception deletes or re-keys Driver facts.
 
 - 6.20 **No audit or repair after saving.** No background process reviews or hides saved facts or Drivers, or adds same-meaning links between Drivers. With instant linking also off (9.9), no same-meaning link is created for now; the rules about them (1.15, 1.19, 2.4, 5.6, 7.1) apply only if a later design adds one. Normal saving still follows the existing rules (5.1). A Driver's name, type and frozen defining evidence never change (2.1, 2.2). Apart from release 2's rename checks (6.18), all protection comes from the checks before saving (sections 1–5) and the launch test (8.17). A mistake that slips through stays, so the checks before saving must be strict, and when unsure they keep things separate (1.12).
 - 6.21 Never delete, re-key or move history (1.15).
@@ -982,9 +988,9 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 ### S2 · Purpose, sources & companies
 
 - 1.3 The loop it serves: extract facts → explain price moves → learn which Drivers matter → predict → trade. *Why not just list events:* services like RavenPack only list that an event happened; this system grades each cause against what the stock actually did.
-- 1.4 Drivers come from earnings reports (8-Ks, transcripts), news (mostly macro, sector or industry) and fiscal.ai data (10-K, 10-Q, presentations); the first release starts with fiscal.ai data only (9.5). The earnings predictor only *reads* Driver tags, to find relevant past reports and to know what moves prices; it never creates Drivers.
+- 1.4 Drivers come from earnings reports (8-Ks, transcripts), news (mostly macro, sector or industry) and fiscal.ai data (10-K, 10-Q, presentations). The earnings predictor only *reads* Driver tags, to find relevant past reports and to know what moves prices; it never creates Drivers.
 
-- **In:** the project's graph database already holds SEC filings (8-K, 10-Q, 10-K, with every section and exhibit), the XBRL data tagged in 10-Q and 10-K filings, earnings-call transcripts, news stories, companies with their official industry and sector, and daily stock prices and returns. The old Guidance data is evidence only (8.11). The first release uses one channel, fiscal.ai, which points to figures inside SEC filings (9.5).
+- **In:** the project's graph database already holds SEC filings (8-K, 10-Q, 10-K, with every section and exhibit), the XBRL data tagged in 10-Q and 10-K filings, earnings-call transcripts, news stories, companies with their official industry and sector, and daily stock prices and returns. The old Guidance data is evidence only (8.11).
 - **Flow:** a source event → the AI reader proposes facts and Driver names → the core decides: reuse a Driver, create one with its first fact, hold, skip or reject → the fact is written → metric facts get links to official filing data (§6) → reads, as of any date (§7).
 - **Out:** the earnings predictor reads Driver facts (1.4). Verdicts (folded Part A2) tie facts to price moves, so the system can learn which Drivers matter. Users of the old Guidance data move to Driver facts.
 - ⚠ **Database quirks:** numbers stored as text, the literal text 'null' as a date, comma-formatted values, about 12,900 facts with no context link.
@@ -998,39 +1004,31 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 8.11 Old Guidance data is evidence only: it is never converted, replayed or bridged into Driver facts, and never used to fill a history gap. Whether to accept a measured temporary history gap or wait for fresh Driver history is decided only when the old data is retired. A read with no Driver facts returns an empty result, never old Guidance data. Retiring the old Guidance system keeps a complete, restorable copy; only explicitly approved parts are removed.
 
 - 9.4 **No 8-K item-number categories.** An 8-K's item number is information only. It may not create, merge, type, rank or route a Driver or fact. Reopen only for a named user with a testable need, and never with a hand-written item map, a meaning shortcut or a second reader.
-- 9.5 **One source to start:** fiscal.ai data. News and every other source stay off; a later source needs a new explicit owner decision. Every source, fiscal.ai included, must pass its own certification before going live. Each later source's own open questions are decided only when that source is admitted.
+- 9.5 **Target sources:** Reports, Transcripts and News; every channel must pass its certification before activation. The starting source/channel set and ongoing coverage remain to be agreed (10.1); other source formats are not automatically admitted. News saving, ticker links, edits, return updates, readers and activation prerequisites follow [NewsMultipleSymbols.md](NewsMultipleSymbols.md). Selected original research articles may be saved without tracked tickers; new ordinary feed stories without tracked tickers remain skipped. Research-found filings/calls retain their Report/Transcript types.
 
 **Words used here** (from the original Word list)
 
 | Word | Meaning |
 |---|---|
 | **Old Guidance system** | An earlier, separate system that extracted and stored company guidance; Driver facts replace it. |
-| **fiscal.ai** | An outside data vendor, used as a *channel*: each row points to one company figure (a label, a value and a period) inside an SEC filing, sometimes with the figure's XBRL tag. The filing is the source event, not fiscal.ai. It is the first release's only channel (9.5). |
+| **fiscal.ai** | An outside data vendor, used as a *channel*: each row points to one company figure (a label, a value and a period) inside an SEC filing, sometimes with the figure's XBRL tag. The filing is the source event, not fiscal.ai. |
 | **Reader** | The AI step that reads a source and proposes facts and names. |
 
-**Parking-list items** (from the original Parking list)
-
-| # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
-|---|---|---|---|---|---|
-| P5 | Start here, 1.4, 9.5 | They say release 1 = fiscal.ai only → your plan is Fiscal AI + Predictor/Learner | Nothing yet | Update them (and 9.7, if release 1 has verdicts); see note P5 | scratchpad "Releases fixed (replaces D19's list)" (row D20) |
-
-- **P5 audit note (2026-09-29):** 1.4 now says "earnings reports" where v1.1 said "earnings-learner reports" (the earnings learner is one of your channels); when fixing P5, consider restoring "earnings-learner".
-
-*To trace these references, see “How to trace a reference” in the Overview.*
 
 ### S3 · Processing, timing & retries
 
-- 1.14 **No look-ahead.** A historical run may see only facts that were public before its cutoff; names follow today's catalog (see below).
+- 1.14 **No look-ahead.** A historical run may see only facts that were public before its cutoff (historical explanations: A2.5); names follow today's catalog (see below).
   - A new fact uses only its own source: it proves its own meaning and details (1.17), and a later source never fills a gap in it.
   - The order that prevents anchoring: when the reader proposes new facts and names, it reads the source without seeing any existing names; only then is each proposal checked independently against the whole current catalog, whatever the source's date (2.43); then it is saved. A targeted search for a known Driver's history or updates (8.16) may name that Driver, but each match is still proven from the source alone. Company slice lists (3.17) and filing line-item candidates (6.7) stay cut at the source's public time.
   - In views, a Driver appears from the public time of its earliest fact.
   - History reads use "strictly before the as-of date"; live use sees everything current.
-  - Never show the realized stock return to whatever produces a fact or a verdict.
+  - Never show the realized stock return to whatever produces a fact. Historical explanations follow A2.5; predictions never see the outcome they predict (1.25).
   - Never assume which kind of source arrives first; process each at its real public time.
   - Names decide which facts are grouped, so matching with today's catalog puts some hindsight into historical series. Historical runs show today's reading of past documents, not what the system knew then; trading performance is judged only on decisions recorded as new documents arrive.
 - 1.25 **A prediction never sees the outcome it predicts, even inside a source's own text** (e.g. a story that reports the price move). Adds to 1.14.
 
 - 8.14 **Every item ends in one of five recorded outcomes.** Nothing disappears silently.
+  - One job may cover the whole source; separate company jobs are optional. If split, company must be in selection, lock, completion and saved-result keys. One company's work must not block, overwrite or falsely complete another's. A whole source is complete only when all required work has a recorded outcome; retain full-source coverage (8.10).
 
 | Outcome | Means |
 |---|---|
@@ -1042,7 +1040,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 
 - "Not found" is a final skip only when every expected source was present and searched without errors; an incomplete search is held, not skipped. Such a skip reopens only on a new source, a repaired source collection, or a certified upgrade to how evidence is located.
 - For each source item it reads, the AI reader returns either one or more facts or exactly one stated reason for returning none, never both and never neither; a rename proposal (6.13) counts as neither. The reader returns several facts only when the item states distinct facts, for example a result and its comparison with expectations (4.1). Withdrawal expansion follows 4.18.
-- If writing an event fails, nothing from it is left half-written and nothing is reported as written; its facts are held.
+- If writing a job fails, nothing from that job is left half-written and nothing is reported as written; its facts are held.
 - An item that both breaks a rule and waits on a trigger is rejected, not held.
 
 - 8.15 **A held item is retried only when a specific, checkable event could change the result.**
@@ -1050,9 +1048,10 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
   - "Wait for more evidence", time passing, a guessed future filing, vague meaning or a refused identity is not a trigger; with no trigger, the outcome is final (skip, reject or keep separate).
   - A later source is processed as its own event.
   - It may reopen an older event only when a rule proves the exact connection, and the older event still uses only its own evidence.
-  - A retry always re-processes the whole event, never one held fact alone.
+  - A retry re-processes the whole assigned job with its full source context (8.10), never one held fact alone.
 - 8.16 **Running rules already decided:**
-  - When a metric Driver gets its first accepted fact, the company's earlier sources are searched for its history, oldest first. When a new source arrives, it is searched for updates to Drivers already known.
+  - When a metric Driver gets its first accepted fact, its subject company's earlier sources are searched for its history, oldest first. Relevant new sources update known Drivers and may introduce new ones, whether or not prices moved.
+  - Significant observed moves also trigger the same update process: reuse saved facts/evidence first, research gaps when needed, including moves with no useful publication, and save only supported daily judgments (A2). Initial company context and historical sources use this same process; source coverage, significance settings and research limits remain open (10.1, 10.3).
   - A fact found this way still needs its own source's evidence (1.17): a known value, period or official tag may only help find candidates, never prove anything. A value may help find the same period's figure in another document, never a different period's figure. At most one suggested Driver may come with it (several → fail closed); the core re-checks the match from the old source alone, and a mismatch never forces it.
   - An older source found late is processed as history at its own public time; it is never dropped.
   - History work never starves live work: it stays off until its limits are set from measured capacity.
@@ -1066,7 +1065,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 
 | Word | Meaning |
 |---|---|
-| **Public time** | When the source was released to the public. |
+| **Public time** | When the cited source version became public. A later edit is not earlier knowledge; call start does not prove full-transcript availability. Unverified availability cannot support an earlier prediction. |
 | **Hold** ("park") | Keep an item unwritten until a specific, checkable event can change the outcome. |
 | **Skip** | A final, counted "not written". |
 | **Live, backfill** | Live = handling new events as they arrive; backfill = filling in past events. |
@@ -1110,43 +1109,38 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 
 ### S5 · Price-move explanations (active in release 1)
 
-*Your decision (2026-09-29): price moves are part of release 1. The original wording below stays unchanged until parking item P5 (in S2) is fixed.*
 
-- 9.7 **No price-move verdicts yet.** No source that submits them is switched on in the first release (A2.1). A verdict links a source event, or a day's stock move, to the fact that helps explain it. The Driver system itself never judges what moved a price: it only stores, checks and logs judgments that a separately approved source submits, and it never shows the realized return to whatever produces a verdict. Full rules: folded Part A2.
+- 9.7 **Daily price explanations are in this target version.** AI supplies judgments and code validates/saves them under A2.1–A2.8. Approval of this design does not certify or activate a producer.
 
-- 10.1 **Price moves:** how big a daily move must be to count; where a purely macro fact comes from; what to do when two independent causes explain one move. *Affects:* price-move verdicts only, which are off for now. *Decide when:* a price-move source is switched on (9.7).
+- 10.1 **Still to choose:** significant-move benchmarks, thresholds and measured intervals, including moves without a source; starting/ongoing source coverage, history limits and research budgets. Before returns drive triggers or trading evaluation, complete [EXPLAINED_BY.md §8](EXPLAINED_BY.md#8-return-measurements--open-checks-for-the-next-bot) or exclude unverified measurements. Missing/unusable returns remain unknown, never zero. *Affects:* source coverage, deeper research and return-based evaluation. *Decide when:* before each is enabled.
 
-- A2.1 The Driver system makes no judgment about what moved a price: no attribution prompt, model, rule of thumb or meaning rule. A separately approved future source may submit such judgments. The core only checks, records, plans, stores and logs them, through the same door and core steps as every source; that source may not copy any of the core's checking, planning, writing or logging steps.
-- A2.2 A verdict connects a move target (a source event or a daily move event) to the fact that helps explain it. Its key is the move target + Driver + scope + producer, so two producers may each record their own, disagreeing verdict. One verdict key points at exactly one fact, never at two competing facts from the same day (e.g. the same figure from both the 8-K and the call). Live verdicts win over backfilled ones.
+- A2.1 The shared update process uses AI to judge which source-backed facts contributed to an observed move and why (8.16). Code validates the fact/source references, existing affected Company ID, trading Date and required fields, then saves through the existing shared validation/writing path. Timestamps alone never prove causation. A producer does not copy the core's validation or writing steps.
+- A2.2 A daily judgment is `Date → EXPLAINED_BY → DriverUpdate`, keyed by Date + affected Company ID + DriverUpdate ID + `llm_producer`. Separate facts and producers keep separate links; repeated claims from different sources are allowed.
+  - Keep only the latest valid completed result per key, ordered by its fixed `created` time, regardless of `live`/`backfill`. Replace all judgment fields; clear optional values now unknown. Exact retries change nothing, older results cannot overwrite newer ones, and conflicting equal-time results are held.
+  - Change only reassessed keys. Remove a judgment only on explicit withdrawal; omission, failure or incomplete work removes nothing. The existing job/write path must prevent delayed results from restoring withdrawn judgments; verify this before activation.
+  - No explanation-version history is stored here. A judgment produced after a trading decision cannot enter that decision's view. Overwritten earlier judgments are unavailable; historical trading evaluation needs decisions/inputs recorded before their outcomes.
 - A2.3 A verdict has three independent parts:
   - `stock_impact`: `long` or `short` — the Driver's push, not necessarily the net move.
   - `weightage`: 0.1 to 1.0 in steps of 0.1, or none. An independent force, never a share, never summed to 100%. None = the direction is known but not the size.
   - `confidence`: 0 to 100 in steps of 10, meaning how sure the attribution is.
 
-  Also recorded: the producer, and whether it's `live` or `backfill`.
-- A2.4 Reads may work out a share (weightage ÷ total weightage, within one move target — a source event or a daily move event — and producer) and a signed force (weightage × direction). These are never stored as true causal shares, and a move may be partly unexplained. If every weight is empty, both are empty; never divide by zero or invent a weight.
-- A2.5 Never show the realized return to whatever produces a verdict (as in 1.14).
-- A2.6 Grade verdicts as a set: the net direction and size, plus relative ranking. Never grade a "true share" per Driver, because reality gives only one net return.
-- A2.7 **Daily move event:** one record per company and trading day. The realized return stays in the price data; the trading day comes from the returns data. If a filing event exists that day, the move is linked to the filing alone and the daily move event is ignored, but never deleted: its news verdicts are kept and the case is logged; no "superseded" flag is stored. A late filing sorts this out automatically.
-- A2.8 Every fact comes from a source event; news is the source for macro facts. A daily move event is only a verdict target, never a source. A purely macro fact with no source is held.
+  Also recorded: `company_id` (the affected existing `Company.id`), `reason` (a short reason for this company/day), `llm_producer`, `produced_mode` (`live` or `backfill`) and `created` (when the current judgment became available). Code stamps each completed result once; replacements use their new time and retries retain it. Never backdate a judgment to its source or explained Date. The source quote stays on the fact.
+- A2.4 Reads may work out a share (weightage ÷ total weightage, within one Date + affected company + producer) and a signed force (weightage × direction). These are never stored as true causal shares, and a move may be partly unexplained. If every weight is empty, both are empty; never divide by zero or invent a weight. Do not treat link counts or summed weights as independent trading support.
+- A2.5 Historical explanations may use observed returns and later evidence, but predictions must use only information available at the decision time, and later explanations must never be presented as earlier predictions.
+- A2.6 Grade verdicts as a set: the net direction and size, plus relative ranking. Never grade a "true share" per Driver, because reality gives only one net return. An explanation is a judgment, not proven causation; no link means no recorded explanation, not no effect. Evaluate trading usefulness using decisions recorded before their outcomes, including unsuccessful signals and quiet days; explanations collected only after large moves are insufficient.
+- A2.7 **Daily target:** use the existing Date at the end of the previous trading day's regular close → this trading day's regular close. Its `HAS_PRICE` to the affected Company supplies the daily return: `round(100 * (current_close / previous_close - 1), 2)`, using the existing split-adjusted closes; add no separate after-hours return. No DailyCompanyMoveEvent is needed. Neither a filing's presence nor source ranking suppresses a supported explanation.
+  - For newly public information, first consider the first regular close strictly after that version became public, using timezone-aware times and the existing calendar's actual closes. This is a candidate, not a publication-window filter.
+  - A fact may explain several days or companies, including companies absent from the source; each link needs a supported reason for that company/day. Older facts and later reporting may support a day; a later event cannot cause an earlier move, and later evidence is not earlier trading knowledge. One analysis may support several dates; never copy unsupported links or require a separate investigation per day.
+  - The judgment records pressure, not the entire daily return or profit after publication; its direction may oppose the net return. Publication itself cannot cause earlier movement. Retain source hourly/session intervals; an intraday trigger or a window crossing a close does not automatically justify daily links.
+- A2.8 Every fact comes from a source event; news is the source for macro facts. Date is only a verdict target, never a source. A purely macro fact with no source is held.
 
 **Words used here** (from the original Word list)
 
 | Word | Meaning |
 |---|---|
 | **Verdict** | A stored claim that a fact helps explain a stock move. |
-| **Daily move event** | A record of a stock's move on a trading day, used as a target for verdicts. |
+| **Daily target** | The existing trading Date whose close ends the daily return window; EXPLAINED_BY identifies the affected company (A2.7). |
 
-**Parking-list items** (from the original Parking list)
-
-| # | Rules | Issue → why it matters | Resolved | Not resolved | Refs |
-|---|---|---|---|---|---|
-| P3 | A2.7 | Misses two locked points → can read as "every company, every day", and hides that one macro (economy-wide) fact can explain many companies' moves | Locked 2026-07-02/03: only significant moves; several companies' moves may point at one fact · 2026-10-02 owner decision: reusing one economy-wide fact across several companies awaits the owner's rethink; the older sharing proposal is not current implementation approval | Add the significant-move condition; economy-wide fact reuse awaits the owner's rethink. The rest stays in 10.1 (draft: note P3) | `archive/99_Codex_Decision_Audit.md:1237` "may point to the same DriverUpdate" · `archive/11_TrackB_DriverUpdate_Census.md:82` "a DCM is created only for a significant company/date move" |
-| P7 | 1.14, A2.1, A2.5 | The Learner is the planned verdict producer, but its prompt already receives the actual stock return (ACTUAL_RETURN), which 1.14 and A2.5 forbid for whatever produces a verdict → as built, its explanations cannot be stored as verdicts; grading against a return the producer already saw is not an independent test (A2.6) | Nothing yet | Decide before the Learner is connected to EXPLAINED_BY: keep verdict production blind to the return (the Learner's after-the-event learning stays a separate role), or allow after-the-event explanations as verdicts and change 1.14 and A2.5 | `scripts/earnings/earnings_orchestrator.py:3151` "ACTUAL_RETURN:" · `FinalDesign/FINAL_DESIGN.md:273` "EXPLAINED_BY verdict = an edge" |
-
-- **P3 draft**, after A2.7's first sentence: "It is made only for a significant move on a day with no filing event. Several companies' daily move events may point at the same fact (e.g. one Fed decision moving AAPL, MSFT and NVDA)." The second sentence is deferred: economy-wide fact reuse awaits the owner's rethink (2026-10-02).
-
-*To trace these references, see “How to trace a reference” in the Overview.*
 
 ## Overview
 
@@ -1162,7 +1156,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 - One small fold in §1 holds the exact locked wording of the four fact types (the meaning authority); everything else in §1–§10 is open to read.
 - To print everything, expand the two folds first (the exact wording in §1, and Part A).
 - *Why* lines give reasons; ⚠ lines mark known risks. History, sources and rejected ideas are kept outside this file, in `DRIVER_RULES.md` (version 1.1) and `WORKFLOW_SCRATCHPAD.md` (section “Archived: approved no-stages proposal — 2026-09-28”).
-- This file wins over every older document. Where it is silent and older documents disagree, the order in `DRIVER_RULES.md` (Part C4, "Which source wins") decides.
+- This file wins over every older document. For fact subjects, News and daily explanations, use EXPLAINED_BY.md/NewsMultipleSymbols.md; FINAL_DESIGN.md is unmaintained background for this revision. For other unresolved conflicts between older documents, use `DRIVER_RULES.md` Part C4, “Which source wins”.
 
 ### Start here
 
@@ -1173,10 +1167,10 @@ Everything already decided about Drivers and their facts, in plain words: the st
 2. **Four fact types**, one per Driver, fixed forever: `metric` (a standing level you can read again) · `guidance` (the company's own forecast) · `surprise` (a result compared with the analysts' consensus or the company's own earlier forecast, or a forecast compared with the consensus) · `action_event` (a one-time happening). Exact locked wording: 1.5.
 3. **Name versus fact.** Name the reusable thing or cause precisely; keep a stated "per X" term, a benchmark and a final `_guidance` or `_surprise` (the name ending that marks those two types). The company's own measured parts (segments, products, regions…) go in **slices**; measurement versions (adjusted, diluted…) go in **measurement tags**; the value, date and state go on the fact.
 4. **Evidence.** Store only what the source states, with its exact quote; numbers stay exact and are never invented. The one fact the system writes on its own: spreading a clear withdrawal to the forecasts it covers (4.18).
-5. **Identity.** A fact is its source event + its Driver + its scope (period, slices, tags and, for a surprise, the comparison kind). It never changes once written.
+5. **Identity.** A fact is its source event + its Driver + its scope (subject company when company-specific, period, slices, tags, surprise kind and required occurrence/conflict distinctions: 3.2, 5.9). It never changes once written.
 6. **The one law.** Merging different meanings does permanent damage; keeping one meaning split can miss valid comparisons. When unsure, keep separate.
 7. **Time.** A view of the past sees only facts that were public then; names follow today's catalog (1.14).
-8. **History.** Nothing is deleted: an amended filing adds new facts, and no audit or repair process runs after saving (6.20).
+8. **History.** Driver/fact history is not deleted: an amended filing adds new facts, and no audit or repair process runs after saving (6.20). Latest explanations and News source-link edits follow A2.2/6.18.
 9. **Who decides.** AI judges meaning; fixed rules check structure; whatever proposes an answer never approves it.
 
 **One worked example** (Best Buy's earnings call, fiscal Q4 2026)
@@ -1198,7 +1192,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 | On | Off for now |
 |---|---|
-| fiscal.ai as the only channel · US dollars and other currencies (kept as stated, never exchanged) · company-confirmed guidance | news and other sources · third-party guidance · outside forecasts (`expectation`, 9.11) · comparing slices across companies · 8-K item categories · a financial-classification field · price-move verdicts · facts from tagged filing data · text values on metrics and conditions on actions · instant linking of new names · declared company renames (on in release 2) |
+| Reports, Transcripts and News via certified channels · daily price explanations · US dollars and other currencies (kept as stated, never exchanged) · company-confirmed guidance | third-party guidance · outside forecasts (`expectation`, 9.11) · comparing slices across companies · 8-K item categories · a financial-classification field · facts from tagged filing data · text values on metrics and conditions on actions · instant linking of new names · declared company renames (on in release 2) |
 
 **Your design map** (the topics below, in order; "yours to decide" is where your design freedom is)
 
@@ -1213,7 +1207,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 | 7 | How are facts read back? | Exact series match; a same-day source rank; point-in-time views; reconciled views only on request | query and storage design |
 | 8 | What must every build respect? | AI judges meaning and code checks structure; fail closed; fewer than 1% wrong, measured at launch; five outcomes; retry only on an exact trigger | components, models, schedules |
 | 9 | What is off for now? | The list above, each with its reopen condition | when to reopen one |
-| 10 | What is still open? | Five questions; only one (price moves) waits on a switched-off feature, and none blocks designing basic facts | the answers |
+| 10 | What is still open? | Five questions; none blocks designing basic facts | the answers |
 
 ### Section intros
 
@@ -1233,15 +1227,15 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 *Answers: the rules any new build must respect, whatever its design.*
 
-*Answers: what the first release leaves out, and what it takes to reopen each. These are the decisions that can wait (together with 10.1, the one open question tied to a switched-off feature).*
+*Answers: what the first release leaves out, and what it takes to reopen each. These are the decisions that can wait.*
 
-*Answers: the undecided questions about what the system must do (newer ones: Parking list, at the end). Each says what it affects and when to decide. Only 10.1 waits on a switched-off feature; the others come up when you design live Driver creation, plan how the system runs, and design the reader. None blocks designing basic facts. One rule where this file had to choose between two written versions is flagged where it applies: 3.50.*
+*Answers: the undecided questions about what the system must do (newer ones: Parking list, at the end). Each says what it affects and when to decide. These come up when you design live Driver creation, plan how the system runs, and design the reader. None blocks designing basic facts. One rule where this file had to choose between two written versions is flagged where it applies: 3.50.*
 
 ### Lead-in lines
 
 *Look terms up here as you need them.*
 
-**That's everything you need to design.** Folded below: Part A, the full rules for switched-off features.
+**That's everything you need to design.** Part A1 remains folded in U2b; the current daily-explanation rules are A2 in S5.
 (In this file: A1 is folded in U2b; A2 is in S5.)
 
 **Parking list:** open issues found after version 2. Only a rule proven wrong or a decision proven missing reopens this file. Fix the rule, then delete its row and note.
