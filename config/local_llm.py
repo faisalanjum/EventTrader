@@ -20,6 +20,8 @@ Model choice (one at a time; VRAM holds one):
                                       format; refuses oversize prompts instead of truncating. Lighter option:
                                       LOCAL_LLM_MODEL=qwen3.8:27b-q4 (UD-Q4_K_XL; lower recall on long extraction).
                                       The Ollama models below are being retired (2026-11-12).
+  * pplx-decider-v1.3:8bit (2026-11-14) — Perplexity Decider (MLX 8-bit) on the same adapter: classifier and
+                                      exact-span finder, not chat. Call decide() (end of file).
   * qwen3.8:27b-mlx  (MLX, default) — 27.8B dense, nvfp4, ~27 t/s. Format is NOT
                                       grammar-enforced (MLX), but measured 19/19
                                       schema-valid on the QF-01 aligned set
@@ -36,6 +38,7 @@ import os
 import time
 import http.client
 import socket
+import urllib.error
 import urllib.request
 
 MODEL = os.getenv("LOCAL_LLM_MODEL", "qwen3.8:27b-q8")    # default (see notes above)
@@ -388,6 +391,43 @@ def reason(prompt: str, system: str | None = None, **kw):
     kw["think"] = True
     kw.setdefault("timeout", 900)
     return generate(prompt, system, **kw)
+
+
+# --- Perplexity Decider v1.3 (added 2026-11-14) -----------------------------------------------------------------
+DECIDER_MODEL = "pplx-decider-v1.3:8bit"
+
+
+def decide(state, questions: dict, mode: str = "isolated", temperature: float | None = None,
+           timeout: int = TIMEOUT_DEFAULT) -> dict:
+    """Perplexity Decider v1.3 on the Mac (MLX 8-bit): classification and exact-span extraction, no text generation.
+
+    state: the text to judge (or any JSON value). questions: {id: question}, each one of
+      {"type": "choice", "instructions": str|None, "criteria": {option: description|None}}   (1-255 options)
+      {"type": "noul",   "instructions": str|None, "criteria": {"true": str, "false": str}|None}
+      {"type": "score",  "instructions": str|None, "criteria": [level, ...]}  (2-255 levels, lowest first)
+      {"type": "locate", "instructions": str|None}  (label to find; text state only; <= 128 per request)
+    mode: "isolated" (default; the text is read once for all questions of a type, ~3x faster with several questions,
+      answers can shift slightly with the set of questions) or "separate" (one pass per question; Perplexity's
+      evaluated computation, answers independent of the other questions).
+    Returns {"model", "answers": {id: answer}, "usage"}. Answers: choice -> "choice", "probabilities", "confidence";
+    noul -> "noul" = P(true); score -> "score", "probabilities", "legend", "confidence"; locate -> "spans": [{"start",
+    "end", "text", "score"}] with state[start:end] == text.
+    Limits: <= 32,768 tokens per sequence (refused, never cut); ~85 input tokens/s per pass (8k tokens ~85 s);
+    one model in memory on the Mac, so a call here unloads Qwen and the first call after a switch also loads the model.
+    Separate mode on long texts: raise timeout (time x number of questions).
+    Full guide: ~/Developer/local-llm/decider/USAGE.md on the Mac.
+    """
+    host = resolve_host()
+    body = {"model": DECIDER_MODEL, "state": state, "questions": questions, "mode": mode}
+    if temperature is not None:
+        body["temperature"] = temperature
+    req = urllib.request.Request(f"{host}/api/decide", data=json.dumps(body).encode(),
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"decide failed ({e.code}) at {host}: {e.read().decode(errors='replace')}") from None
 
 
 if __name__ == "__main__":
